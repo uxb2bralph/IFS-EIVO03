@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<menuItem value="" url="" default="true">
+  <menuItem value="採購作業" url="~/SCM/PurchaseOrderManagement.aspx" />
+  <menuItem value="採購審核作業" url="~/SCM/PurchaseOrderVerify.aspx" />
+  <menuItem value="採購退貨作業" url="~/SCM/PurchaseOrderReturnedMangement.aspx" />
+  <menuItem value="入庫作業" url="~/SCM/WarehouseWarrantManagement.aspx">
+    <workItem value="" url="~/SCM/WarehouseWarrantManagementFromPO.aspx" />
+    <workItem value="" url="~/SCM/WarehouseWarrantManagementFromReturn.aspx" />
+    <workItem value="" url="~/SCM/WarehouseWarrantManagementFromExchange.aspx" />
+    <workItem value="" url="~/SCM/EditGoodsReceipt.aspx" />
+    <workItem value="" url="~/SCM/PreviewGoodsReceipt.aspx" />
+  </menuItem>
+  <menuItem value="訂單作業" url="~/SCM/BuyerOrderManagement.aspx">
+    <workItem value="" url="~/SCM/EditBuyerOrder.aspx" />
+    <workItem value="" url="~/SCM/PreviewBuyerOrder.aspx" />
+  </menuItem>
+  <menuItem value="出貨作業" url="~/SCM/ShipmentManagement.aspx" />
+  <menuItem value="退貨作業" url="~/SCM/ReturnedGoodsManagement.aspx" />
+  <menuItem value="換貨作業" url="~/SCM/ExchangeGoodsManagement.aspx" />
+  <menuItem value="買受人郵寄資料匯出" url="" />
+  <menuItem value="庫存異動查詢" url="~/SCM/QueryWarehouseAmount.aspx" />
+  <menuItem value="庫存異動查詢" url="~/sam/country_list_page.aspx" />
+  <workItem value="" url="~/MainPage.aspx" />
+</menuItem>

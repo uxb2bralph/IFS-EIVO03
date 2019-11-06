@@ -1,0 +1,26 @@
+
+
+@{ Register Src="~/Views/InvoiceQuery/Module/InvoiceReport.ascx" TagPrefix="uc1" TagName="InvoiceReport" }
+@using eIVOGo.Helper
+@section headContent { 
+ 
+}
+<uc1:InvoiceReport runat="server" ID="InvoiceReport" />
+<script runat="server">
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        ViewBag.ActionName = "首頁 > 資料管理";
+    }
+
+    //public override void Dispose()
+    //{
+    //    var models = TempData.GetGenericModelSource();
+    //    if (models != null)
+    //        models.Dispose();
+
+    //    base.Dispose();
+    //}
+
+</script>

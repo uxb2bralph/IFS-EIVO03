@@ -1,0 +1,24 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using Model.Locale
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using eIVOGo.Controllers
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+}
+<option value="7">一般稅額計算之電子發票</option>
+<option value="8">特種稅額計算之電子發票</option>
+
+
+

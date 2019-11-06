@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="big5"?>
+<menuItem value="" url="">
+  <menuItem value="待辦事項" url="~/EIVO/CheckTodoList.aspx">
+    <workItem value="" url="~/EIVO/ReceiveAllowanceCancellation.aspx" />
+    <workItem value="" url="~/SAM/register_msg.aspx" />
+    <workItem value="" url="~/EIVO/IssueInvoice.aspx" />
+  </menuItem>
+  <menuItem value="帳號管理" url="~/SAM/EditMyself.aspx">
+    <workItem value="" url="~/SAM/register_msg.aspx" />
+    <workItem value="" url="~/MainPage.aspx" />
+    <workItem value="" url="~/SAM/CreateOrganizationEntrustingCertificate.aspx" />
+  </menuItem>
+  <!--<menuItem value="用戶端憑證授權" url="~/SAM/ActivateOrganizationToken.aspx">
+  </menuItem>-->
+  <!--<menuItem value="相對營業人資料維護" url="~/SAM/MaintainBusinessRelationship.aspx">
+    <workItem value="" url="~/SAM/ImportCounterpartBusiness.aspx" />
+  </menuItem>-->
+  <!--<menuItem value="統一發票專用章管理" url="~/SAM/ImportInvoiceSignature.aspx">
+  </menuItem>-->
+  <menuItem value="查詢發票/折讓" url="~/EIVO/InquireInvoiceItem.aspx">
+    <workItem value="" url="~/EIVO/InquireInvoiceAllowance.aspx" />
+    <workItem value="" url="~/EIVO/InquireInvoiceCancellation.aspx" />
+    <workItem value="" url="~/EIVO/InquireAllowanceCancellation.aspx" />
+    <workItem value="" url="~/EIVO/InquireReceiptItem.aspx" />
+  </menuItem>
+  <!--<menuItem value="進項發票/折讓查詢/&lt;br/&gt;開立/接收" url="~/EIVO/ReceiveInvoice.aspx">
+  </menuItem>
+  <menuItem value="進項發票/折讓查詢/&lt;br/&gt;列印" url="~/EIVO/MasterBusinessPrintInvoiceForIncome.aspx">
+  </menuItem>-->
+  <menuItem value="銷項發票/折讓查詢/&lt;br/&gt;列印" url="~/EIVO/PrintInvoiceForSale.aspx">
+    <workItem value="" url="~/EIVO/PrintInvoiceAllowanceForSale.aspx" />
+  </menuItem>
+  <workItem value="首頁" url="~/MainPage.aspx" />
+  <workItem value="站務新聞" url="~/SAM/publish_system_event_page.aspx" />
+  <workItem value="發票內容" url="~/Visitor/newInvalidInvoicePreview.aspx" />
+  <workItem value="" url="~/EIVO/CheckTodoList.aspx" />
+  <workItem value="" url="~/EIVO/ReceiveAllowanceCancellation.aspx" />
+</menuItem>

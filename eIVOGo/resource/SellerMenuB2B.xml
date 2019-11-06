@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="big5"?>
+<menuItem value="" url="">
+  <menuItem value="帳號管理" url="~/SAM/EditMyself.aspx">
+    <workItem value="" url="~/SAM/register_msg.aspx" />
+    <workItem value="" url="~/MainPage.aspx" />
+  </menuItem>
+  <menuItem value="查詢發票/折讓" url="~/Visitor/queryInvoiceAndAllowance.aspx" />
+  <menuItem value="查詢中獎清冊" url="~/Visitor/queryBonus.aspx" />
+  <menuItem value="採購作業" url="~/SCM/PurchaseOrderMangement.aspx">
+    <workItem value="" url="~/SAM/PurchaseOrder.aspx" />
+  </menuItem>
+  <workItem value="首頁" url="~/MainPage.aspx" />
+  <workItem value="站務新聞" url="~/SAM/publish_system_event_page.aspx" />    
+</menuItem>

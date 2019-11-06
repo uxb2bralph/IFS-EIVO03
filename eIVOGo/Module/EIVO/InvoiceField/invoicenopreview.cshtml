@@ -1,0 +1,8 @@
+
+@using Model.DataEntity
+@using Uxnet.Web.Module.Common
+
+<a href='#' onclick='@{ # "javascript:showInvoiceModal(" + DataItem.DocID.ToString() + ");"}
+'>@{ # DataItem.InvoiceItem.GetMaskInvoiceNo()}
+</a>
+

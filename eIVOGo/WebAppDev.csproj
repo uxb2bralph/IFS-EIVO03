@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DDB8907C-F09C-44A2-AF0E-153B5AFDF8B6}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>eIVOGo</RootNamespace>
+    <AssemblyName>WebAppDev</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <UseIISExpress>true</UseIISExpress>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=4.1.40412.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Business, Version=1.0.4357.26520, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Model.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Uxnet.Com.Net4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Uxnet.Com.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="Uxnet.Web.Net4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Uxnet.Web.Net4.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\Allowance\cancel_eivo.css" />
+    <Content Include="App_Themes\Login\login.css" />
+    <Content Include="App_Themes\Paper\eivo.css" />
+    <Content Include="App_Themes\Print\table.css" />
+    <Content Include="App_Themes\Visitor\body.css" />
+    <Content Include="App_Themes\Visitor\content.css" />
+    <Content Include="App_Themes\Visitor\header.css" />
+    <Content Include="App_Themes\Visitor\images\ui-bg_flat_75_aaaaaa_40x100.png" />
+    <Content Include="App_Themes\Visitor\images\ui-bg_glass_100_f5f0e5_1x400.png" />
+    <Content Include="App_Themes\Visitor\images\ui-bg_glass_25_cb842e_1x400.png" />
+    <Content Include="App_Themes\Visitor\images\ui-bg_glass_70_ede4d4_1x400.png" />
+    <Content Include="App_Themes\Visitor\images\ui-bg_highlight-hard_100_f4f0ec_1x100.png" />
+    <Content Include="App_Themes\Visitor\images\ui-bg_highlight-hard_65_fee4bd_1x100.png" />
+    <Content Include="App_Themes\Visitor\images\ui-bg_highlight-hard_75_f5f5b5_1x100.png" />
+    <Content Include="App_Themes\Visitor\images\ui-bg_inset-soft_100_f4f0ec_1x100.png" />
+    <Content Include="App_Themes\Visitor\images\ui-icons_c47a23_256x240.png" />
+    <Content Include="App_Themes\Visitor\images\ui-icons_cb672b_256x240.png" />
+    <Content Include="App_Themes\Visitor\images\ui-icons_f08000_256x240.png" />
+    <Content Include="App_Themes\Visitor\images\ui-icons_f35f07_256x240.png" />
+    <Content Include="App_Themes\Visitor\images\ui-icons_ff7519_256x240.png" />
+    <Content Include="App_Themes\Visitor\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="App_Themes\Visitor\jquery-ui-1.8.14.custom.css" />
+    <Content Include="App_Themes\Visitor\left-menu.css" />
+    <Content Include="App_Themes\Visitor\paper.css" />
+    <Content Include="App_Themes\Visitor\StyleSheet.css" />
+    <Content Include="App_Themes\Visitor\table.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Module\EIVO\InvoiceAllowanceCancellationSellerGroupList.ascx" />
+    <Content Include="Module\EIVO\InvoiceAllowanceSellerGroupList.ascx" />
+    <Content Include="Module\EIVO\InvoiceCancellationSellerGroupList.ascx" />
+    <Content Include="Module\EIVO\InvoiceItemSellerGroupList.ascx" />
+    <Content Include="Module\Inquiry\InvoiceAndAllowanceReportList.ascx" />
+    <Content Include="Module\SAM\ExceptionLogList.ascx" />
+    <Content Include="Module\SAM\InvoiceClientStatusList.ascx" />
+    <Content Include="Module\SAM\SystemMonitorControl.ascx" />
+    <Content Include="Module\SAM\CheckSequentialNo.ascx" />
+    <Content Include="Module\UI\FunctionTitleBar.ascx" />
+    <Content Include="Module\UI\PageAction.ascx" />
+    <Content Include="Module\UI\SellerSelector.ascx" />
+    <Content Include="Published\eInvoiceService.asmx" />
+    <Content Include="Published\TestPage.aspx" />
+    <Content Include="Published\TestPagingControl.aspx" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Module\EIVO\InvoiceAllowanceCancellationSellerGroupList.ascx.cs">
+      <DependentUpon>InvoiceAllowanceCancellationSellerGroupList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\EIVO\InvoiceAllowanceSellerGroupList.ascx.cs">
+      <DependentUpon>InvoiceAllowanceSellerGroupList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\EIVO\InvoiceCancellationSellerGroupList.ascx.cs">
+      <DependentUpon>InvoiceCancellationSellerGroupList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\EIVO\InvoiceItemSellerGroupList.ascx.cs">
+      <DependentUpon>InvoiceItemSellerGroupList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\EIVO\InvoiceItemSellerGroupList.ascx.designer.cs">
+      <DependentUpon>InvoiceItemSellerGroupList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Inquiry\InvoiceAndAllowanceReportList.ascx.cs">
+      <DependentUpon>InvoiceAndAllowanceReportList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Inquiry\InvoiceAndAllowanceReportList.ascx.designer.cs">
+      <DependentUpon>InvoiceAndAllowanceReportList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\SAM\ExceptionLogList.ascx.cs">
+      <DependentUpon>ExceptionLogList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\SAM\ExceptionLogList.ascx.designer.cs">
+      <DependentUpon>ExceptionLogList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\SAM\InvoiceClientStatusList.ascx.cs">
+      <DependentUpon>InvoiceClientStatusList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\SAM\InvoiceClientStatusList.ascx.designer.cs">
+      <DependentUpon>InvoiceClientStatusList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\SAM\SystemMonitorControl.ascx.cs">
+      <DependentUpon>SystemMonitorControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\SAM\SystemMonitorControl.ascx.designer.cs">
+      <DependentUpon>SystemMonitorControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\SAM\CheckSequentialNo.ascx.cs">
+      <DependentUpon>CheckSequentialNo.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\SAM\CheckSequentialNo.ascx.designer.cs">
+      <DependentUpon>CheckSequentialNo.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\UI\FunctionTitleBar.ascx.cs">
+      <DependentUpon>FunctionTitleBar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\UI\FunctionTitleBar.ascx.designer.cs">
+      <DependentUpon>FunctionTitleBar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\UI\PageAction.ascx.cs">
+      <DependentUpon>PageAction.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\UI\PageAction.ascx.designer.cs">
+      <DependentUpon>PageAction.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\UI\SellerSelector.ascx.cs">
+      <DependentUpon>SellerSelector.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\UI\SellerSelector.ascx.designer.cs">
+      <DependentUpon>SellerSelector.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs" />
+    <Compile Include="Published\eInvoiceService.asmx.cs">
+      <DependentUpon>eInvoiceService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Published\TestPagingControl.aspx.cs">
+      <DependentUpon>TestPagingControl.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Published\TestPagingControl.aspx.designer.cs">
+      <DependentUpon>TestPagingControl.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="services\Class1.cs" />
+    <Compile Include="services\ServiceWorkItem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\Visitor\Visitor.skin" />
+    <Content Include="App_Themes\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>1374</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:1374/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

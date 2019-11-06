@@ -1,0 +1,101 @@
+
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+
+    ModelSource<InvoiceItem> models;
+    InvoiceAllowance _model;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (InvoiceAllowance)this.Model;
+}
+
+@if (_model != null)
+{
+    var details = _model.InvoiceAllowanceDetails.Select(d => d.InvoiceAllowanceItem).First();
+    <div style="page-break-after: always; width: 5.5cm; margin-left: 0cm; margin-right: 0cm">
+        <div class="container" style="border-top: 0px; border-bottom: 0px; font-size:small;">
+            @if (_model.InvoiceAllowanceSeller.Organization.LogoURL != null)
+            {
+                <img id="logo" style="max-width:5.2cm;max-height:1.7cm;" src='@(eIVOGo.Properties.Settings.Default.WebApDomain + VirtualPathUtility.ToAbsolute("~/" +_model.InvoiceAllowanceSeller.Organization.LogoURL))' />
+            }
+            else
+            {
+                <p style="text-align:center;max-width:5cm;">@(_model.InvoiceAllowanceSeller.CustomerName)</p>
+            }
+            <p style="text-align:center">營業人銷貨退回、進貨退出<Br />或折讓證明單</p>
+            <p style="text-align:center">@(String.Format("{0:yyyy-MM-dd}", _model.AllowanceDate))</p>
+            <p>
+                賣方統編：@(_model.InvoiceAllowanceSeller.ReceiptNo)<br />
+                賣方名稱：@(_model.InvoiceAllowanceSeller.CustomerName)<br />
+                發票開立日期：@(String.Format("{0:yyyy-MM-dd}", details.InvoiceDate))<br />
+                @(details.InvoiceNo.Substring(0, 2))-@(details.InvoiceNo.Substring(2))<br />
+                買方統編：@(!_model.InvoiceAllowanceBuyer.IsB2C() ? _model.InvoiceAllowanceBuyer.ReceiptNo : null)<br />
+                買方名稱：@(!_model.InvoiceAllowanceBuyer.IsB2C() ? _model.InvoiceAllowanceBuyer.CustomerName : null)<br />
+            </p>
+            <p></p>
+            <p>
+                @{ 
+                    var items = _model.InvoiceAllowanceDetails.Select(d => d.InvoiceAllowanceItem);
+                    bool specialTaxType = false;
+                }
+                @foreach (var d in items)
+                {
+                    bool withTax = d.TaxType == (byte)Naming.TaxTypeDefinition.特種稅率;
+                    if (withTax)
+                    {
+                        specialTaxType = withTax;
+                    }
+                    <text>品名：@(d.OriginalDescription)</text><br />
+                    <text>數量：@(String.Format("{0:##,###,###,##0.##}", d.Piece))</text><br />
+                    <br />
+                    if (withTax)
+                    {
+                        <text>金額(含稅)：</text>
+                    }
+                    else
+                    {
+                        <text>金額(不含稅)：</text>
+
+                    }
+                    @(String.Format("{0:##,###,###,##0.##}", d.Amount))<br />
+                    <text>課稅別：@((d.TaxType == (byte)Naming.TaxTypeDefinition.零稅率 || d.TaxType == (byte)Naming.TaxTypeDefinition.零稅率) ? "TZ" : "TX")</text>
+                }
+            </p>
+            <p>
+                營業稅額合計：@(String.Format("{0:##,###,###,##0.##}", _model.TaxAmount))<br />
+                @if (specialTaxType)
+                {
+                    <text>金額(含稅)合計：</text>
+                }
+                else
+                {
+                    <text>金額(不含稅)合計：</text>
+                }
+                @(String.Format("{0:##,###,###,##0.##}", _model.TotalAmount))<br />
+            </p>
+            <p></p>
+            <p>
+                簽收人：
+            </p>
+        </div>
+    </div>
+}
+
+
+
+

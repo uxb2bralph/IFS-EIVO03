@@ -1,0 +1,7 @@
+
+@if (ViewBag.Message != null)
+{ 
+<script>
+    alert('@Html.Raw(HttpUtility.JavaScriptStringEncode(ViewBag.Message))');
+</script>
+}

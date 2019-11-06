@@ -1,0 +1,49 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+
+    models = ViewContext.Controller.DataSource();
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
+@{
+    Naming.FieldDisplayType? displayType = (Naming.FieldDisplayType?)ViewBag.DisplayType;
+}
+@switch (displayType)
+{
+    case Naming.FieldDisplayType.Header:
+        <text>折讓單狀態</text>
+        break;
+    case Naming.FieldDisplayType.DataItem:
+        InvoiceAllowance item = this.Model as InvoiceAllowance;
+        <text>@(item.InvoiceAllowanceCancellation!=null ? "已作廢" : null)</text>
+        break;
+    case Naming.FieldDisplayType.SortBy:
+        break;
+    case Naming.FieldDisplayType.Query:
+        Html.RenderPartial("~/Views/InquireInvoice/ByCancellation.cshtml");
+        break;
+    default:
+        break;
+}
+
+

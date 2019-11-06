@@ -1,0 +1,11 @@
+
+@using Business.Helper
+
+<script runat="server">
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        Context.Logout();
+        Response.Redirect(FormsAuthentication.LoginUrl);
+    }
+</script>

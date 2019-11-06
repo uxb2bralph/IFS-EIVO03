@@ -1,0 +1,27 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@using eIVOGo.Helper
+
+@section headContent { 
+ 
+}
+@{ Html.RenderPartial("~/Views/UserProfile/EditUserProfile.ascx");}
+
+<script runat="server">
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        ViewBag.ActionName = "首頁 > 會員管理";
+    }
+
+</script>

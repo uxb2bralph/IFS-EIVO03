@@ -1,0 +1,31 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using Model.Locale
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using eIVOGo.Controllers
+<select name="year">
+    @for (int y = DateTime.Today.Year; y >= _startYear; y--)
+        {
+            <option value="@(y)">@(y)</option>
+    }
+</select>
+
+
+<script runat="server">
+
+    ModelStateDictionary _modelState;
+    int _startYear = 2012;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    }
+
+</script>

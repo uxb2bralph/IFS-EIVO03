@@ -1,0 +1,51 @@
+﻿
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Business.Helper
+@using Uxnet.Web.WebUI
+@{
+    ModelSource<InvoiceItem> models;
+    IQueryable<DocumentPrintQueue> _model;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<DocumentPrintQueue>)this.Model;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>電子發票系統</title>
+    <link href="@VirtualPathUtility.ToAbsolute("~/App_Themes/Ver2016/eivo.css")" rel="stylesheet" type="text/css" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body style="font-family:KaiTi">
+    <form id="theForm" runat="server">
+        @{ 
+            var profile = Context.GetUser();
+            DocumentPrintQueue item;
+        }
+        @while ((item = _model.FirstOrDefault()) != null)
+        {
+            Html.RenderPartial("~/Views/DataView/Module/D0401.cshtml", item.CDS_Document.InvoiceAllowance);
+            models.MarkPrintedLog(item.CDS_Document.InvoiceAllowance, profile);
+        }
+    </form>
+</body>
+</html>
+<script>
+    window.onload = function () {
+        window.print();
+    };
+</script>

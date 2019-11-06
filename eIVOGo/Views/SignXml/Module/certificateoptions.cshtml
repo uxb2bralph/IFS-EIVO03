@@ -1,0 +1,26 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using System.Security.Cryptography.X509Certificates
+@using eIVOGo.Controllers
+@foreach (var item in _model)
+    {
+<option>@(item.Subject)</option>
+}
+<script runat="server">
+
+    ModelStateDictionary _modelState;
+    CertQueryViewModel _viewModel;
+    IEnumerable<X509Certificate2> _model;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        _viewModel = (CertQueryViewModel)ViewBag.ViewModel;
+        _model = (IEnumerable<X509Certificate2>)this.Model;
+    }
+
+</script>

@@ -1,0 +1,13 @@
+
+@{ @ Register Src="~/Module/Common/CalendarInputDatePicker.ascx" TagName="CalendarInputDatePicker"
+    TagPrefix="uc1"}
+
+@using System.Linq.Expressions
+@using Model.DataEntity
+@using Utility
+<script runat="server">
+    public override Expression<Func<InvoiceItem, bool>> BuildQueryExpression(Expression<Func<InvoiceItem, bool>> queryExpr)
+    {
+        return queryExpr.And(i => i.InvoiceWinningNumber == null);
+    }
+</script>

@@ -1,0 +1,42 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using Model.Locale
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using eIVOGo.Controllers
+
+@if (_model != null)
+    {
+<div>
+    折讓證明單已開立，<br />
+    號碼：@(_model.AllowanceNumber)<br />
+    <a href="@(Url.Action("PrintSingleAllowanceAsPDF", "DataView", new { keyID = _model.AllowanceID.EncryptKey() }))" target="_blank">列印資料下載</a>
+    <br />
+    <a href="@(Url.Action("ShowAllowance", "DataView", new { keyID = _model.AllowanceID.EncryptKey(), ResultMode = Naming.DataResultMode.Print }))" target="_blank">立即檢視列印</a>
+    <br />
+</div>
+}
+<script>
+    $global.removeTab('issueAllowance');
+</script>
+
+<script runat="server">
+
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    InvoiceAllowance _model;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        _model = (InvoiceAllowance)this.Model;
+    }
+
+</script>

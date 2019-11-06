@@ -1,0 +1,6 @@
+
+@using Model.DataEntity
+@using Uxnet.Web.Module.Common
+<a href='#' onclick='@{ # "javascript:showAllowanceModal(" + DataItem.DocID.ToString() + ");"}
+'>@{ # DataItem.InvoiceAllowance.AllowanceNumber}
+</a>

@@ -1,0 +1,165 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="InvoiceClient.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="UploadInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Invoice</Value>
+    </Setting>
+    <Setting Name="UploadInvoiceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CancelInvoice</Value>
+    </Setting>
+    <Setting Name="WelfareInfoFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SWA</Value>
+    </Setting>
+    <Setting Name="OutputEncoding" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">utf-8</Value>
+    </Setting>
+    <Setting Name="DownloadDataFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">傳送大平台資料</Value>
+    </Setting>
+    <Setting Name="UploadAllowanceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Allowance</Value>
+    </Setting>
+    <Setting Name="UploadAllowanceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CancelAllowance</Value>
+    </Setting>
+    <Setting Name="DownloadInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">傳送大平台資料\發票</Value>
+    </Setting>
+    <Setting Name="DownloadInvoiceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">傳送大平台資料\作廢發票</Value>
+    </Setting>
+    <Setting Name="DownloadAllowanceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">傳送大平台資料\折讓</Value>
+    </Setting>
+    <Setting Name="DownloadAllowanceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">傳送大平台資料\作廢折讓</Value>
+    </Setting>
+    <Setting Name="DownloadWinningFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">BonusInvoice</Value>
+    </Setting>
+    <Setting Name="OutputEncodingWithoutBOM" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DownloadDataInAbsolutePath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="AppTitle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">電子發票－商家用戶端</Value>
+    </Setting>
+    <Setting Name="B2BUploadInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SellerInvoice</Value>
+    </Setting>
+    <Setting Name="B2BUploadBuyerInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">BuyerInvoice</Value>
+    </Setting>
+    <Setting Name="B2BUploadAllowanceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2BAllowance</Value>
+    </Setting>
+    <Setting Name="B2BUploadInvoiceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2BCancelInvoice</Value>
+    </Setting>
+    <Setting Name="B2BUploadAllowanceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2BCancelAllowance</Value>
+    </Setting>
+    <Setting Name="UploadA1401" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">A1401</Value>
+    </Setting>
+    <Setting Name="UploadB1401" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B1401</Value>
+    </Setting>
+    <Setting Name="UploadA0501" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">A0501</Value>
+    </Setting>
+    <Setting Name="UploadB0501" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B0501</Value>
+    </Setting>
+    <Setting Name="UploadA0401" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">A0401</Value>
+    </Setting>
+    <Setting Name="UploadB0401" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B0401</Value>
+    </Setting>
+    <Setting Name="DisableWelfareTab" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DisableInvoiceCenterTab" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DisableEIVOPlatformTab" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DisableB2CInvoiceCenterTab" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DisablePhysicalChannelTab" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DisableReceiptUploadTab" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="B2BUploadReceiptFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Receipt</Value>
+    </Setting>
+    <Setting Name="B2BUploadReceiptCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CancelReceipt</Value>
+    </Setting>
+    <Setting Name="UploadCsvInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Invoice_csv</Value>
+    </Setting>
+    <Setting Name="UploadCsvInvoiceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CancelInvoice_csv</Value>
+    </Setting>
+    <Setting Name="CsvEncoding" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Big5</Value>
+    </Setting>
+    <Setting Name="DisableB2BAutoReceiving" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ActivationKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">56A8B4ED-867F-49AB-9AB5-8A4DDDCE8EDF</Value>
+    </Setting>
+    <Setting Name="DisableCsvInvoiceCenterTab" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="InvoiceClient_WS_Invoice_eInvoiceService" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:9125/Published/eInvoiceService.asmx</Value>
+    </Setting>
+    <Setting Name="UploadAttachment" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:9125/Published/UploadAttachment.ashx</Value>
+    </Setting>
+    <Setting Name="UploadCheckedStatementFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CheckedStatement</Value>
+    </Setting>
+    <Setting Name="DisableCheckedStatementTab" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="InvoiceTxnPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\UXB2B_EIVO</Value>
+    </Setting>
+    <Setting Name="SignerSubjectName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">UXSigner</Value>
+    </Setting>
+    <Setting Name="SignerCspName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SignerKeyPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SellerReceiptNo" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="AutoWelfareInterval" Type="System.String" Scope="User">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
+    <Setting Name="IsAutoWelfare" Type="System.String" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="IsAutoInvService" Type="System.String" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AutoInvServiceInterval" Type="System.String" Scope="User">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

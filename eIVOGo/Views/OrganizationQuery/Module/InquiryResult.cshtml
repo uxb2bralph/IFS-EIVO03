@@ -1,0 +1,54 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+
+    ModelSource<InvoiceItem> models;
+    Model.Security.MembershipManagement.UserProfileMember _profile;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _profile = Business.Helper.WebPageUtility.UserProfile;
+
+}
+@{ 
+    Html.RenderPartial("~/Views/OrganizationQuery/Module/InquireOrganization.cshtml");
+}
+
+@if (!models.InquiryHasError)
+{
+    @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "查詢結果");}
+
+    <div class="border_gray">
+        @{ Html.RenderPartial("~/Views/Module/OrganizationList.ascx", models);}
+
+        <!--按鈕-->
+    </div>
+    @if (models.Items.Count() <= 10000)
+    {
+        <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="Bargain_btn">
+                    @{ Html.RenderPartial("~/Views/Module/PrintData.ascx");}
+
+                    <input type="button" value="CSV下載" name="btnCsv" class="btn" onclick="$('form').prop('action', '@(Url.Action("DownloadCSV"))    ').submit();" />
+                    <input type="button" value="Excel下載" name="btnXlsx" class="btn" onclick="$('form').prop('action', '@(Url.Action("CreateXlsx"))    ').submit();" />
+                </td>
+            </tr>
+        </table>
+    }
+}

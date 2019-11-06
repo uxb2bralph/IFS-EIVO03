@@ -1,0 +1,114 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+
+    IQueryable<Organization> _model = (IQueryable<Organization>)this.Model;
+    _model = _model.Skip((int)ViewBag.PageIndex * Uxnet.Web.Properties.Settings.Default.PageSize).Take(Uxnet.Web.Properties.Settings.Default.PageSize);
+
+}
+@functions
+{
+    bool checkCompany(Model.DataEntity.Organization Org)
+    {
+        return Org.OrganizationCategory.Any(c => c.CategoryID == (int)Naming.B2CCategoryID.店家發票自動配號
+            || c.CategoryID == (int)Naming.B2CCategoryID.開立發票店家代理
+            || c.CategoryID == (int)Naming.B2CCategoryID.店家
+            || c.CategoryID == (int)Naming.B2CCategoryID.境外電商);
+    }
+
+}
+<table class="table table-small-font table-bordered table-striped table01 companyList">
+    <thead>
+        <tr>
+            <th style="min-width: 250px">店家名稱</th>
+            <th style="min-width: 80px">統一編號</th>
+            <th style="min-width: 120px">負責人姓名</th>
+            <th style="min-width: 250px">電子郵件</th>
+            @*<th style="min-width: 200px">社福機構</th>*@
+            <th style="min-width: 80px">店家狀態</th>
+            <th style="min-width: 150px">管理</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int idx = 0;}
+        @foreach (var item in _model)
+        {
+            idx++;
+            <tr>
+                <td>@(item.CompanyName)</td>
+                <td>@(item.ReceiptNo)</td>
+                <td>@(item.UndertakerName)</td>
+                <td><pre>@(item.ContactEmail)</pre></td>
+                @*<td>@{ var welfare = item.InvoiceWelfareAgencies.FirstOrDefault();}
+                    @{ if (welfare != null)
+                                           Writer.Write(welfare.Organization.CompanyName);}
+
+                               </td>*@
+                <td>@(item.OrganizationStatus != null ? item.OrganizationStatus.LevelExpression.Description : null)</td>
+                <td>
+                    <div class="btn-group @(idx > 2 ? "dropup" : "dropdown")" data-toggle="dropdown">
+                        <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">請選擇功能</button>
+                        <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            @if (item.OrganizationStatus.CurrentLevel != (int)Naming.MemberStatusDefinition.Mark_To_Delete)
+                            {
+                                <li><a class="btn" onclick="editCompany('@Html.Raw(item.CompanyID.EncryptKey())');">編輯</a></li>
+                                <li><a class="btn" onclick="disableCompany(@(item.CompanyID));">停用</a></li>
+                                @*<li><a class="btn" onclick="applyWelfare(@(item.CompanyID));">設定社福機構</a></li>*@
+                                <li><a class="btn" onclick="actionHandler('@Html.Raw(Url.Action("GatewaySettings","Organization",new { KeyID=item.CompanyID.EncryptKey() }))', null, null, 640, 'auto');">用戶端G/W設定</a></li>
+                                if (checkCompany(item))
+                                {
+                                    <li><a class="btn" onclick="applyAgency('@Html.Raw(item.CompanyID.EncryptKey())');">設定發票代理店家</a></li>
+                                }
+                                <li><a class="btn" onclick="applyPOS(@(item.CompanyID));">設定POS機號</a></li>
+                                if (!item.IsEnterpriseGroupMember())
+                                {
+                                    <li><a class="btn" onclick="applyRelationship(@(item.CompanyID));">設定為B2B營業人</a></li>
+                                }
+                                <li><a class="btn" onclick="inquireUser(@(item.CompanyID));">管理使用者</a></li>
+                                String clientTool = "~/resource/Cooperation/" + item.ReceiptNo + ".zip";
+                                if (File.Exists(Server.MapPath(clientTool)))
+                                {
+                                    <li><a class="btn" onclick="window.location.href = '@(VirtualPathUtility.ToAbsolute(clientTool))';">下載G/W</a></li>
+                                }
+                            }
+                            else
+                            {
+                                <li><a class="btn" onclick="enableCompany(@(item.CompanyID));">啟用</a></li>
+                            }
+                        </ul>
+                    </div>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+    @*@if (_model.Count() == 1)
+        {*@
+    <tfoot>
+        <tr>
+            <td colspan="7" style="height:200px;">
+                <a class="btn" onclick="createCompany();">新增開立人</a>
+            </td>
+        </tr>
+    </tfoot>
+    @*}*@
+</table>
+
+
+

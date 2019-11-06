@@ -1,0 +1,147 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+<!--交易畫面標題-->
+@{ 
+    TaxMediaQueryViewModel _viewModel = (TaxMediaQueryViewModel)ViewBag.ViewModel;
+}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "發票媒體申報檔查詢／匯出");}
+
+<div class="border_gray">
+    <!--表格 開始-->
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
+        <tr>
+            <th colspan="2" class="Head_style_a">
+                查詢條件
+            </th>
+        </tr>
+        <tr>
+            <th>
+                發票開立人性質
+            </th>
+            <td class="tdleft">
+                <input type="radio" name="BusinessBorder" value="@((int)Naming.B2CCategoryID.店家)" />一般營業人
+                <input type="radio" name="BusinessBorder" value="@((int)Naming.B2CCategoryID.境外電商)" />境外電商
+                <script>
+                    $(function () {
+                        $('input[name="BusinessBorder"][value="@((int?)_viewModel.BusinessBorder)"]').prop('checked', true);
+                        $('input[name="BusinessBorder"]').on('click', function (event) {
+                            var event = event || window.event;
+                            var $target = $(event.target);
+                            $('').launchDownload('@(Url.Action("InvoiceMediaReport","InvoiceQuery"))', { 'BusinessBorder': $target.val() });
+                        });
+                    });
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                發票開立人
+            </th>
+            <td class="tdleft">
+                @{ Html.RenderAction("SellerSelector", "DataFlow");}
+
+                <script>
+                    $(function () {
+                        function getTaxNo(sellerID) {
+                            $.post('@(Url.Action("OrganizationExtension", "DataEntity"))', { 'id': sellerID }, function (data) {
+                                if (data) {
+                                    $('input[name="TaxNo"]').val(data.TaxNo);
+                                }
+                            });
+                        }
+                        $('input[name="SellerID"]').on('change', function (evt) {
+                            getTaxNo($(this).val())
+                        });
+
+                        //getTaxNo($('select[name="SellerID"]').val());
+
+                    });
+                </script>
+            </td>
+        </tr>
+        @if (_viewModel.BusinessBorder == Naming.B2CCategoryID.店家)
+        {
+            <tr>
+                <th>
+                    稅籍編號
+                </th>
+                <td class="tdleft">
+                    <input type="text" name="TaxNo" value="@(_viewModel.TaxNo)" />
+                </td>
+            </tr>
+        }
+        <tr>
+            <th>
+                發票年度
+            </th>
+            <td class="tdleft">
+                @{ Html.RenderPartial("~/Views/Shared/YearSelector.ascx");}
+
+            </td>
+        </tr>
+        <tr>
+            <th>
+                發票期別
+            </th>
+            <td class="tdleft">
+                <select name="periodNo">
+                    @for (int y = 1; y < 7; y++)
+                    {
+                        <option value="@(y)">@(String.Format("{0:00}-{1:00}月", y * 2 - 1, y * 2))</option>
+                    }
+                </select>
+                <script>
+                    $(function(){
+                        $('select[name="periodNo"]').val('@((DateTime.Today.Month + 1) / 2)');
+                    });
+                </script>
+            </td>
+        </tr>
+        @*<tr>
+            <th>
+                混合稅率重新計算稅額
+            </th>
+            <td class="tdleft">
+                <input type="radio" name="AdjustTax" value="@($"{true}")" />是
+                <input type="radio" name="AdjustTax" value="@($"{false}")" />否
+            </td>
+        </tr>*@
+    </table>
+    <!--表格 結束-->
+</div>
+@{ 
+    //((CommonInquiry<InvoiceItem>)this.Model).RenderAlert(Html);
+}
+
+<!--按鈕-->
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td class="Bargain_btn">
+            <input type="button" value="查詢" name="btnQuery" class="btn" onclick="uiMediaReport.download();" />
+        </td>
+    </tr>
+</table>
+<script>
+    var uiMediaReport;
+    $(function () {
+        uiMediaReport = {
+
+            download: function () {
+
+                var $postForm = $('#theForm');
+                $postForm.prop('action', '@(Url.Action("InquireInvoiceMedia","InvoiceQuery"))').submit();
+                //showLoading();
+            },
+        };
+    });
+</script>

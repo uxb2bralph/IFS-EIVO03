@@ -1,0 +1,31 @@
+
+@{ @ Register Src="~/Module/Common/CalendarInputDatePicker.ascx" TagName="CalendarInputDatePicker"
+    TagPrefix="uc1"}
+
+@using System.Linq.Expressions
+@using Model.DataEntity
+@using Utility
+<tr>
+    <th>列印顯示筆數
+    </th>
+    <td class="tdleft">
+        <input type="text" size="8" name="queryPageSize" value="@(Request["queryPageSize"])" />
+        <font color="red">*預設10筆</font>
+    </td>
+</tr>
+<script runat="server">
+
+    public override Expression<Func<InvoiceItem, bool>> BuildQueryExpression(Expression<Func<InvoiceItem, bool>> queryExpr)
+    {
+        return queryExpr;
+    }
+
+    public int PageSize
+    {
+        get
+        {
+            int size;
+            return Request.GetRequestValue("queryPageSize",out size) ? size : 10;
+        }
+    }
+</script>

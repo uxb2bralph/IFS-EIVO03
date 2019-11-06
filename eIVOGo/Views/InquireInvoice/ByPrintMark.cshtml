@@ -1,0 +1,30 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
+<tr>
+    <th>列印註記</th>
+    <td class="tdleft">
+        <select name="PrintMark" class="form-control">
+            <option value="">全部</option>
+            <option value="Y">Y</option>
+            <option value="N">N</option>
+        </select>
+    </td>
+</tr>
+

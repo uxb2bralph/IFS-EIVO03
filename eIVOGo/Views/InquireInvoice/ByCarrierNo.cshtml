@@ -1,0 +1,27 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
+<tr>
+    <th>載具號碼</th>
+    <td class="tdleft">
+        <input type="text" name="CarrierNo" size="48" maxlength="48" value="@(_viewModel?.CarrierNo)" class="form-control" />
+    </td>
+</tr>
+
+

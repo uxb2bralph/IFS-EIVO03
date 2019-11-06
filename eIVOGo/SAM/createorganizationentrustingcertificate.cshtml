@@ -1,0 +1,21 @@
+
+@{ Register src="../Module/Entity/OrganizationEntrustingTokenItem.ascx" tagname="OrganizationEntrustingTokenItem" tagprefix="uc1" }
+@using Uxnet.Web.WebUI
+@section headContent { 
+ 
+}
+@section mainContent { 
+<uc1:OrganizationEntrustingTokenItem ID="orgToken" runat="server" /> 
+}
+<script runat="server">
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        orgToken.Done += new EventHandler(orgToken_Done);
+    }
+
+    void orgToken_Done(object sender, EventArgs e)
+    {
+        this.AjaxAlertAndRedirect("憑證設定完成!!",VirtualPathUtility.ToAbsolute("~/UserProfile/EditMySelf"));
+    }
+</script>

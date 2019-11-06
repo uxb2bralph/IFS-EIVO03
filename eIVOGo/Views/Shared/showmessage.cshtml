@@ -1,0 +1,29 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using Model.DataEntity
+@using System.Web.Optimization
+
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <title>電子發票系統</title>
+    @{ Html.RenderPartial("~/Module/Common/CommonScriptInclude.ascx");}
+
+</head>
+<body>
+</body>
+</html>
+@{ Html.RenderPartial("~/Views/Shared/GlobalScript.ascx");}
+
+@{ Html.RenderPartial("~/Views/Shared/AlertMessage.ascx");}
+
+<script runat="server">
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+    }
+
+</script>

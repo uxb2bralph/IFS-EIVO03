@@ -1,0 +1,184 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+    ViewBag.ActionName = "首頁 > 系統管理維護";
+}
+<!--交易畫面標題-->
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "店家資料維護");}
+
+<!--路徑名稱-->
+<div class="border_gray">
+    <!--表格 開始-->
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
+        <tr>
+            <th colspan="2" class="Head_style_a">
+                查詢條件
+            </th>
+        </tr>
+        <tr>
+            <th nowrap="nowrap" width="120">
+                統編
+            </th>
+            <td class="tdleft">
+                <input name="receiptNo" type="text" value="@(Request["receiptNo"])" />
+            </td>
+        </tr>
+        <tr>
+            <th nowrap="nowrap" width="120">
+                店家名稱
+            </th>
+            <td class="tdleft">
+                <input name="companyName" type="text" value="@(Request["companyName"])" />
+            </td>
+        </tr>
+        <tr>
+            <th nowrap="nowrap" width="120">
+                店家狀態
+            </th>
+            <td class="tdleft">
+                <select name="organizationStatus">
+                    <option value="">全部</option>
+                    <option value="1103">已啟用</option>
+                    <option value="1101">已停用</option>
+                </select>
+                @if (Request["organizationStatus"] != null)
+                {
+                    <script>
+                    $(function () {
+                        $('select[name="organizationStatus"]').val('@(Request["organizationStatus"])');
+                    });
+                    </script>
+                }
+            </td>
+        </tr>
+    </table>
+    <!--表格 結束-->
+</div>
+
+<!--按鈕-->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="queryAction">
+    <tr>
+        <td class="Bargain_btn">
+            <input type="button" value="查詢" name="btnQuery" class="btn" onclick="inquireCompany()" />
+        </td>
+    </tr>
+</table>
+<script>
+    var $result;
+    function inquireCompany(pageNum, onPaging) {
+        $('form').ajaxForm({
+            url: "@(Url.Action("InquireCompany","OrganizationQuery"))" + "?pageIndex=" + pageNum,
+            beforeSubmit: function () {
+                showLoading();
+            },
+            success: function (data) {
+                if (data) {
+                    if (onPaging) {
+                        onPaging(data);
+                    } else {
+                        if ($result)
+                            $result.remove();
+                        $result = $(data);
+                        $('.queryAction').after($result);
+                    }
+                }
+                hideLoading();
+            },
+            error: function () {
+                hideLoading();
+            }
+        }).submit();
+    }
+
+    function editCompany(value) {
+        $.post('@(Url.Action("EditItem", "Organization"))', { 'keyID': value }, function (data) {
+            $global.createTab('editOrganization', '營業人管理', data, true);
+        });
+    }
+
+    function disableCompany(value) {
+        if (confirm('確認停用此筆資料?')) {
+            invokeAction('@(VirtualPathUtility.ToAbsolute("~/Handling/DisableCompany"))',
+                { 'companyID': value },
+                function () {
+                    inquireCompany(pageNum, function (data) {
+                        $('.companyList').html(data);
+                    });
+                });
+        }
+    }
+
+    function enableCompany(value) {
+        if (confirm('確認啟用此筆資料?')) {
+            invokeAction('@(VirtualPathUtility.ToAbsolute("~/Handling/EnableCompany"))',
+                { 'companyID': value },
+                function () {
+                    inquireCompany(pageNum, function (data) {
+                        $('.companyList').html(data);
+                    });
+                });
+        }
+    }
+
+    function applyWelfare(value) {
+
+    }
+
+    function applyCertificate(value) {
+        window.open('@(VirtualPathUtility.ToAbsolute("~/SAM/CreateCertificateIdentity.aspx"))' + '?companyID=' + value, '', 'toolbar=no,scrollbars=1,width=640,height=200');
+    }
+
+    function applyAgency(value) {
+        $.post('@(Url.Action("ApplyIssuerAgent", "Organization"))', { 'keyID': value }, function (data) {
+            $global.createTab('applyIssuerAgent', '發票代傳管理', data, true);
+        });
+    }
+
+    function applyPOS(value) {
+        actionHandler('@(Url.Action("ApplyPOSDevice", "InvoiceBusiness"))',
+            { 'id': value },
+            function () {
+            }, 800, 560);
+    }
+
+    function applyRelationship(value) {
+        if (confirm('確認設定此開立人為B2B營業人?')) {
+            invokeAction('@(VirtualPathUtility.ToAbsolute("~/Handling/ApplyRelationship"))',
+                { 'companyID': value },
+                function () {
+                    inquireCompany(pageNum, function (data) {
+                        $('.companyList').html(data);
+                    });
+                });
+        }
+    }
+
+    function inquireUser(value) {
+        $.post('@(Url.Action("AccountIndex", "Account", new { showTab = true }))', { 'sellerID': value }, function (data) {
+            $global.createTab('@("listUser" + DateTime.Now.Ticks)', '使用者管理', data, true);
+        });
+    }
+
+    function createCompany(keyID) {
+
+        $.post('@(Url.Action("EditItem", "Organization"))', { 'keyID': keyID }, function (data) {
+            $global.createTab('editOrganization', '營業人管理', data, true);
+        });
+    }
+</script>
+

@@ -1,0 +1,23 @@
+
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using Model.DataEntity
+@using System.Web.Optimization
+
+@RenderSection("headContent", false)
+
+<div class="container-fluid">
+    <h2>
+        <br />
+    </h2>
+    <form runat="server" role="form" enctype="multipart/form-data">
+        @RenderSection("formContent", false)
+    </form>
+    <div class="row">
+        @RenderBody()
+    </div>
+    <!-- /.row -->
+</div>
+

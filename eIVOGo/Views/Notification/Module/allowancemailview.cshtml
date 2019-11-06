@@ -1,0 +1,40 @@
+
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+
+@{ Html.RenderPartial("~/Views/DataView/Module/Allowance.ascx", _model);}
+
+@{ Html.RenderPartial("~/Module/SYS/Info/ServiceNotation.ascx");}
+
+
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+    InvoiceAllowance _model;
+    DocumentQueryViewModel _viewModel;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        _model = (InvoiceAllowance)this.Model;
+        _viewModel = (DocumentQueryViewModel)ViewBag.ViewModel;
+    }
+
+
+</script>

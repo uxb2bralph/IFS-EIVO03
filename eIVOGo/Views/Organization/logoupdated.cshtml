@@ -1,0 +1,34 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using Model.Locale
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using eIVOGo.Controllers
+
+<script>
+    $(function () {
+        $('#logo').prop('src', '@(VirtualPathUtility.ToAbsolute("~/" + _model.LogoURL))');
+        alert('LOGO已更新!!');
+    });
+</script>
+
+<script runat="server">
+
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    Organization _model;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        _model = (Organization)this.Model;
+    }
+
+</script>

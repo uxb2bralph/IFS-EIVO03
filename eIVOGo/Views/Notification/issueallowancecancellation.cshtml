@@ -1,0 +1,54 @@
+
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+
+@if (_model.InvoiceAllowanceSeller.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.CancellingAllowance))
+    {
+        var mailing = models.GetUserListByCompanyID(_model.InvoiceAllowanceBuyer.BuyerID)
+                .Select(u => u.EMail).ToList();
+
+        mailing.Add(_model.InvoiceAllowanceBuyer.EMail);
+        var mailTo = String.Join(",",
+            mailing.Where(m => m != null));
+
+        if (!String.IsNullOrEmpty(mailTo))
+        {
+            var enterprise = _model.InvoiceAllowanceSeller.Organization.EnterpriseGroupMember.FirstOrDefault();
+
+            String Subject = $"{(enterprise?.EnterpriseGroup.EnterpriseName)} 折讓證明作廢通知(折讓證明單號碼:{_model.AllowanceNumber})";
+            String body = Html.Partial("~/Views/Notification/Module/IssuedAllowanceCancellation.ascx", _model).ToString();
+
+            body.SendMailMessage(mailTo, Subject);
+        }
+    }
+
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+    InvoiceAllowance _model;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        _model = (InvoiceAllowance)this.Model;
+    }
+
+
+</script>

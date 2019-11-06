@@ -1,0 +1,51 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ViewContext.Controller.DataSource();
+    IQueryable<ProcessRequest> _model = (IQueryable<ProcessRequest>)this.Model;
+    ProcessRequestQueryViewModel _viewModel = (ProcessRequestQueryViewModel)ViewBag.ViewModel;
+}
+@{
+    String currentID = $"table{DateTime.Now.Ticks}";
+    ViewBag.TableColumns = new string[]
+    {
+            "~/Views/ProcessRequest/DataField/Sender.cshtml",
+            "~/Views/ProcessRequest/DataField/SubmitDate.cshtml",
+            "~/Views/ProcessRequest/DataField/ProcessStart.cshtml",
+            "~/Views/ProcessRequest/DataField/ProcessComplete.cshtml",
+            "~/Views/ProcessRequest/DataField/ProcessDescription.cshtml",
+            "~/Views/ProcessRequest/DataField/RequestPath.cshtml",
+            "~/Views/ProcessRequest/DataField/ResponsePath.cshtml",
+            "~/Views/ProcessRequest/DataField/ExceptionContent.cshtml",
+            "~/Views/ProcessRequest/DataField/ProcessAction.cshtml",
+            };
+}
+@if (_viewModel.PageIndex.HasValue)
+{
+    Html.RenderPartial("~/Views/Common/Module/TableBody.cshtml", _model);
+}
+else
+{
+    ViewBag.TableFooter = "~/Views/ProcessRequest/Module/ProcessRequestTableFooter.cshtml";
+    Html.RenderPartial("~/Views/Common/Module/TableSkeleton.cshtml", _model);
+}
+

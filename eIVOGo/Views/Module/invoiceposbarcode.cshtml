@@ -1,0 +1,30 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using Model.Locale
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using eIVOGo.Controllers
+
+@if (_item != null)
+    {
+<img id="barcode" alt="" height="22" src="@(eIVOGo.Properties.Settings.Default.mailLinkAddress + VirtualPathUtility.ToAbsolute("~/Published/GetBarCode39.ashx")+"?"+String.Format("{0:000}{1:00}{2}{3}{4}", _item.InvoiceDate.Value.Year - 1911, _item.InvoiceDate.Value.Month, _item.TrackCode, _item.No, _item.RandomNo))" width="160" />
+}
+
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+    InvoiceViewModel _item;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        _item = (InvoiceViewModel)ViewBag.ViewModel;
+    }
+
+</script>

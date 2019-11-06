@@ -1,0 +1,41 @@
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using System.Xml
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Schema.EIVO
+@using Utility
+@using Uxnet.Web.WebUI
+
+@{ ViewBag.MailTitle = "電子發票作廢通知";
+    Html.RenderPartial("~/Views/Notification/Module/MailTitle.ascx", _model.Organization);}
+
+
+@{ Html.RenderPartial("~/Views/DataView/Module/Invoice.ascx", _model);}
+
+
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+    InvoiceItem _model;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        _model = (InvoiceItem)this.Model;
+
+    }
+
+</script>

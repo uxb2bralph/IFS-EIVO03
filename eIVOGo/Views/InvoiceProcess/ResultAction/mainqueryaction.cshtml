@@ -1,0 +1,44 @@
+
+@{ Register Src="~/Module/Common/PagingControl.ascx" TagName="PagingControl" TagPrefix="uc2" }
+@{ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" }
+@{ Register Src="~/Module/Common/ActionHandler.ascx" TagName="ActionHandler" TagPrefix="uc1" }
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using Model.DataEntity
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Utility
+@using eIVOGo.Helper
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Business.Helper
+
+    <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td class="Bargain_btn">
+                @{ Html.RenderPartial("~/Views/InvoiceProcess/ResultAction/PrintAction.ascx");}
+
+                <input type="button" class="btn" name="btnPrint" value="Excel下載" onclick="uiInvoiceQuery.download();" />
+                @if (_profile.IsSystemAdmin())
+                    {
+                <input type="button" class="btn" name="btnBuyer" value="下載買受人資料" onclick="uiInvoiceQuery.saveBuyer();" />
+                }
+            </td>
+        </tr>
+    </table>
+
+
+<script runat="server">
+
+    UserProfileMember _profile;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _profile = Context.GetUser();
+    }
+
+</script>
+

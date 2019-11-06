@@ -1,0 +1,68 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ViewContext.Controller.DataSource();
+    IQueryable<InvoiceAllowance> _model = (IQueryable<InvoiceAllowance>)this.Model;
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
+@{
+    String currentID = $"table{DateTime.Now.Ticks}";
+    String[] columns = (string[])ViewBag.TableColumns;
+}
+<table id="@currentID" class="table01 itemList" cellspacing="0" cellpadding="0" style="width: 100%;">
+    <thead>
+        <tr>
+            @{
+                ViewBag.DisplayType = Naming.FieldDisplayType.Header;
+            }
+            @foreach (var c in columns)
+            {
+                <th>@{ Html.RenderPartial(c, _model.FirstOrDefault()); }</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            Html.RenderPartial("~/Views/InvoiceAudit/Module/AllowanceTableBody.cshtml", _model);
+        }
+    </tbody>
+    <tfoot>
+        @{
+            if (ViewBag.TableFooter != null)
+            {
+                Html.RenderPartial((String)ViewBag.TableFooter, _model);
+            }
+        }
+    </tfoot>
+</table>
+<script>
+    $(function () {
+
+        $inquiryAgent.onBodyLoad = function () {
+            var $table = $('#@currentID');
+            $table.find('tr:odd').addClass('OldLace');
+        };
+
+        //$inquiryAgent.onBodyLoad();
+    });
+</script>
+

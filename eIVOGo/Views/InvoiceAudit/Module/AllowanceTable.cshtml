@@ -1,0 +1,53 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ViewContext.Controller.DataSource();
+    IQueryable<InvoiceAllowance> _model = (IQueryable<InvoiceAllowance>)this.Model;
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
+@{
+    String currentID = $"table{DateTime.Now.Ticks}";
+    ViewBag.TableColumns = new string[]
+    {
+            "~/Views/InvoiceAudit/AllowanceField/AllowanceDate.cshtml",
+            "~/Views/InvoiceAudit/AllowanceField/AllowanceNo.cshtml",
+            "~/Views/InvoiceAudit/AllowanceField/IssuerReceiptNo.cshtml",
+            "~/Views/InvoiceAudit/AllowanceField/IssuerName.cshtml",
+            "~/Views/InvoiceAudit/AllowanceField/SaleAmount.cshtml",
+            "~/Views/InvoiceAudit/AllowanceField/TaxAmount.cshtml",
+            "~/Views/InvoiceAudit/AllowanceField/TotalAmount.cshtml",
+            "~/Views/InvoiceAudit/AllowanceField/BuyerReceiptNo.cshtml",
+            "~/Views/InvoiceAudit/AllowanceField/CustomerName.cshtml",
+            "~/Views/InvoiceAudit/AllowanceField/CustomerID.cshtml",
+            "~/Views/InvoiceAudit/AllowanceField/Cancellation.cshtml",
+            };
+}
+@if (_viewModel.PageIndex.HasValue)
+{
+    Html.RenderPartial("~/Views/InvoiceAudit/Module/AllowanceTableBody.cshtml", _model);
+}
+else
+{
+    ViewBag.TableFooter = "~/Views/InvoiceAudit/Module/AllowanceTableFooter.cshtml";
+    Html.RenderPartial("~/Views/InvoiceAudit/Module/AllowanceTableSkeleton.cshtml", _model);
+}
+

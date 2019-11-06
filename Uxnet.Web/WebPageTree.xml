@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<web>
+  <directory name="D1">
+    <file name="F1"></file>
+  </directory>
+  <directory name="D2">
+    <directory name="D3">
+      <file name="F4"></file>
+    </directory>
+  </directory>
+  <file name="F2"></file>
+  <file name="F3"></file>
+</web>

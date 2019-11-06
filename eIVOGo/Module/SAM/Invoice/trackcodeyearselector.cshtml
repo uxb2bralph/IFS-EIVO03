@@ -1,0 +1,14 @@
+
+
+<asp:DropDownList ID="selector" runat="server" EnableViewState="false">
+</asp:DropDownList>
+<script runat="server">
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        if (!this.IsPostBack)
+        {
+            selector.SelectedValue = DateTime.Now.Year.ToString();
+        }
+    }
+</script>

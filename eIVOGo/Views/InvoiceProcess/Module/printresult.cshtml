@@ -1,0 +1,47 @@
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Business.Helper
+@using Uxnet.Web.WebUI
+
+<div>
+    <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401
+            ? "PrintA0401AsPDF"
+            : "PrintC0401AsPDF","DataView",_viewModel))" target="_blank">列印資料下載</a>
+    <br />
+    <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401
+            ? "PrintA0401"
+            : "PrintC0401","DataView",_viewModel))" target="_blank">網頁列印</a>
+    @if(_viewModel.PrintBack == true)
+            {
+    <br />
+    <span style="color: blue;">***列印時請記得選取雙面列印模式***</span>
+    }
+</div>
+
+
+<script runat="server">
+
+    RenderStyleViewModel _viewModel;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _viewModel = (RenderStyleViewModel)ViewBag.ViewModel;
+        _viewModel.PrintCuttingLine = true;
+    }
+
+</script>

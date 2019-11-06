@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="big5"?>
+<menuItem value="" url="">
+  <menuItem value="帳號管理" url="~/SAM/EditMyself.aspx">
+    <workItem value="" url="~/SAM/register_msg.aspx" />
+    <workItem value="" url="~/MainPage.aspx" />
+  </menuItem>
+  <menuItem value="採購作業" url="~/SCM/PurchaseOrderMangement.aspx">
+    <workItem value="" url="~/SAM/PurchaseOrder.aspx" />
+  </menuItem>
+  <menuItem value="採購審核作業" url="~/SCM/PurchaseOrderVerify.aspx" />
+  <menuItem value="採購退貨作業" url="~/SCM/PurchaseOrderReturnedMangement.aspx" />  
+  <menuItem value="入庫作業" url="~/SCM/" />
+  <menuItem value="訂單作業" url="~/SCM/" />
+  <menuItem value="出貨作業" url="~/SCM/" />
+  <menuItem value="退貨作業" url="~/SCM/" />
+  <menuItem value="換貨作業" url="~/SCM/" />
+  <workItem value="" url="~/MainPage.aspx" />
+</menuItem>

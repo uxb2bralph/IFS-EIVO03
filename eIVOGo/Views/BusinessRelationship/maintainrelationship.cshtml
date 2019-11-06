@@ -1,0 +1,34 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using Model.Locale
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using eIVOGo.Controllers
+
+@section headContent { 
+ 
+}
+@{ Html.RenderPartial("~/Views/BusinessRelationship/Module/MaintainBusinessRelationship.ascx");}
+
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+    ModelStateDictionary _modelState;
+
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        ViewBag.ActionName = "首頁 > 相對營業人管理";
+    }
+
+
+
+</script>

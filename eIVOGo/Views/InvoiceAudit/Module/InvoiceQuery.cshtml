@@ -1,0 +1,119 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+
+    models = ViewContext.Controller.DataSource();
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
+<!--交易畫面標題-->
+@{ 
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "發票資料");
+}
+@{
+    ViewBag.DisplayType = Naming.FieldDisplayType.Query;
+}
+<div class="border_gray">
+    <table style="width:100%;" border="0" cellpadding="0" cellspacing="0" class="left_title" id="queryArea">
+        <tr>
+            <th colspan="2" class="Head_style_a">查詢條件</th>
+        </tr>
+        <tr>
+            <th style="width:136px;">
+                查詢項目
+            </th>
+            <td class="tdleft">
+                <input type="radio" name="DocType" value="@((int)Naming.DocumentTypeDefinition.E_Invoice)" @(_viewModel.DocType==Naming.DocumentTypeDefinition.E_Invoice ? "checked" : null) onchange="window.location.href='@(Url.Action("QueryIndex","InvoiceAudit"))';" />發票
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="DocType" value="@((int)Naming.DocumentTypeDefinition.E_Invoice)" @(_viewModel.DocType==Naming.DocumentTypeDefinition.E_Allowance ? "checked" : null) onchange="window.location.href='@(Url.Action("AllowanceIndex","InvoiceAudit"))';" />折讓單
+            </td>
+        </tr>
+        @{
+            Html.RenderPartial("~/Views/InvoiceAudit/DataField/ProcessType.cshtml");
+            Html.RenderPartial("~/Views/InvoiceAudit/DataField/BuyerReceiptNo.cshtml");
+            Html.RenderPartial("~/Views/InvoiceAudit/DataField/CustomerName.cshtml");
+            Html.RenderPartial("~/Views/InvoiceAudit/DataField/CustomerID.cshtml");
+            Html.RenderPartial("~/Views/InvoiceAudit/DataField/InvoiceDate.cshtml");
+            Html.RenderPartial("~/Views/InvoiceAudit/DataField/InvoiceNo.cshtml");
+            Html.RenderPartial("~/Views/InvoiceAudit/DataField/WinningInvoice.cshtml");
+            Html.RenderPartial("~/Views/InvoiceAudit/DataField/Cancellation.cshtml");
+            Html.RenderPartial("~/Views/InvoiceAudit/DataField/PrintMark.cshtml");
+            Html.RenderPartial("~/Views/InvoiceAudit/DataField/CarrierType.cshtml");
+            Html.RenderPartial("~/Views/InvoiceAudit/DataField/CarrierNo.cshtml");
+        }
+        <tr>
+            <td colspan="2" style="text-align:center;">
+                <input name="btnQuery" class="btn" type="button" value="查詢" onclick="$inquiryAgent.initQuery = true; $inquiryAgent.inquire();" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    $(function () {
+        $inquiryAgent.inquire = function (pageNum) {
+            var $this = $inquiryAgent;
+            var $placement = $('input[value="查詢"]').closest('table');
+            var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
+
+            if (isNaN(pageNum)) {
+                $inquiryAgent.viewModel.PageIndex = null;
+            }
+            else {
+                $inquiryAgent.viewModel.PageIndex = pageNum;
+            }
+            $formData = $.extend($inquiryAgent.viewModel, $formData);
+
+            showLoading();
+            $.post('@Html.Raw(Url.Action("InquireInvoice", "InvoiceAudit"))', $formData, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
+                } else {
+                    if ($this.initQuery) {
+                        if ($this.$queryResult) {
+                            $this.$queryResult.remove();
+                        }
+
+                        $this.$queryResult = $(data);
+                        $('#queryArea').after($this.$queryResult);
+                        $this.initQuery = false;
+
+                    } else {
+                        $this.doPage(data);
+                    }
+                }
+            });
+        };
+    });
+
+</script>
+@if (_viewModel.StartQuery == true)
+{
+    <script>
+        $(function () {
+            $('input[name="btnQuery"]').click();
+        });
+    </script>
+}
+

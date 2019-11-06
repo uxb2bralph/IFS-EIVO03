@@ -1,0 +1,37 @@
+
+
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+
+@section headContent { 
+ 
+}
+@section mainContent { 
+查詢條件：
+    @{ ((CommonInquiry<InvoiceItem>)this.Model).RenderQueryMessage(Html);
+        Html.RenderPartial("~/Views/Module/HidePostData.ascx");
+       Html.RenderPartial("~/Views/Module/DonatedInvoiceReport.ascx", models);}
+ 
+}
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        models.DataSourcePath = VirtualPathUtility.ToAbsolute("~/DonatedInvoice/ReportGridPage");
+    }
+
+    //public override void Dispose()
+    //{
+    //    if (models != null)
+    //        models.Dispose();
+
+    //    base.Dispose();
+    //}
+
+</script>

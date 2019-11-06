@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Uxnet.Web.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="PageSize" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="SignableObjectUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">~/published/Signable.exe</Value>
+    </Setting>
+    <Setting Name="Uxnet_Web_WS_DocumentService_DocumentCreator" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:2013/DocumentCreator.asmx</Value>
+    </Setting>
+    <Setting Name="MailServer" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">mail.uxb2b.com</Value>
+    </Setting>
+    <Setting Name="HostUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://eivo.uxifs.com</Value>
+    </Setting>
+    <Setting Name="WebMaster" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">網際優勢 &lt;invoice_services05@uxb2b.com&gt;</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

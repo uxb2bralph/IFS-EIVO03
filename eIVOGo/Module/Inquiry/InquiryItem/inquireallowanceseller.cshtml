@@ -1,0 +1,25 @@
+
+@{ Register Src="~/Module/UI/InvoiceSellerSelector.ascx" TagName="InvoiceSellerSelector" TagPrefix="uc4" }
+@using System.Linq.Expressions
+@using Model.DataEntity
+@using Utility
+<tr>
+    <th>統編
+    </th>
+    <td class="tdleft">
+        <uc4:InvoiceSellerSelector ID="SellerID" runat="server" SelectorIndication="全部" />
+    </td>
+</tr>
+<script runat="server">
+
+    public override Expression<Func<InvoiceAllowance, bool>> BuildQueryExpression(Expression<Func<InvoiceAllowance, bool>> queryExpr)
+    {
+        var qExpr = queryExpr;
+        if (!String.IsNullOrEmpty(SellerID.SelectedValue))
+        {
+            HasSet = true;
+            qExpr = qExpr.And(d => d.InvoiceAllowanceSeller.SellerID == int.Parse(SellerID.SelectedValue));
+        }
+        return qExpr;
+    }
+</script>

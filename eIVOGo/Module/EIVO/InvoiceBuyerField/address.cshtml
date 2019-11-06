@@ -1,0 +1,30 @@
+
+@using Model.DataEntity
+@using Utility
+@{ # ((CDS_Document)((GridViewRow)Container).DataItem).InvoiceItem.InvoiceBuyer.Address}
+
+@{ # bindData(Container)}
+
+<script runat="server">
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        this.DataBinding += module_eivo_invoicebuyerfield_address_ascx_DataBinding;
+    }
+
+    void module_eivo_invoicebuyerfield_address_ascx_DataBinding(object sender, EventArgs e)
+    {
+        
+    }
+
+    public override void DataBind()
+    {
+        base.DataBind();
+    }
+
+    String bindData(Object contaner)
+    {
+        return null;
+    }
+</script>

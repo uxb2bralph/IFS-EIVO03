@@ -1,0 +1,9 @@
+
+@using Utility
+<li>
+    <a href='@{ # String.IsNullOrEmpty(_dataItem.url) ? "#" : VirtualPathUtility.ToAbsolute(_dataItem.url)}
+'>
+        <i class="fa fa-gift fa-lg"></i>@{ # _dataItem.value}
+
+    </a>
+</li>

@@ -1,0 +1,73 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ViewContext.Controller.DataSource();
+    IQueryable<InvoiceAllowance> _model = (IQueryable<InvoiceAllowance>)this.Model;
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
+@{
+    String currentID = $"table{DateTime.Now.Ticks}";
+    int pageIndex = _viewModel.PageIndex ?? 0;
+    int pageSize = _viewModel.PageSize ?? 10;
+    IQueryable<InvoiceAllowance> items;
+    String[] columns = (string[])ViewBag.TableColumns;
+
+    TempData["SortedItems"] = null;
+}
+@if (_viewModel.SortName != null && _viewModel.SortName.Length > 0)
+{
+    ViewBag.DisplayType = Naming.FieldDisplayType.SortBy;
+    foreach (var c in columns)
+    {
+        Html.RenderPartial(c, _model);
+    }
+}
+@if (TempData["SortedItems"] == null)
+{
+    items = _model
+        .Skip(pageIndex * pageSize)
+        .Take(pageSize);
+}
+else
+{
+    items = ((IQueryable<InvoiceAllowance>)TempData["SortedItems"])
+    .Skip(pageIndex * pageSize)
+    .Take(pageSize);
+}
+@{
+    ViewBag.DisplayType = Naming.FieldDisplayType.DataItem;
+}
+@foreach (var item in items)
+{
+    <tr>
+        @foreach (var c in columns)
+        {
+            <td>@{ Html.RenderPartial(c, item); }</td>
+        }
+    </tr>
+}
+@*<script>
+        $(function () {
+            $inquiryAgent.onBodyLoad();
+        });
+    </script>*@
+

@@ -1,0 +1,23 @@
+
+@{ Register src="../Module/SYS/EditMemberMenuItem.ascx" tagname="EditMemberMenuItem" tagprefix="uc1" }
+@section headContent { 
+ 
+}
+@section mainContent { 
+<uc1:EditMemberMenuItem ID="memberMenu" runat="server" /> 
+}
+<script runat="server">
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        this.Load += new EventHandler(published_testeditingmenudoc_aspx_Load);
+    }
+
+    void published_testeditingmenudoc_aspx_Load(object sender, EventArgs e)
+    {
+        if (!Page.IsPostBack && Page.PreviousPage != null && Page.PreviousPage.Items["roleID"] != null)
+        {
+            memberMenu.RoleID = (int)Page.PreviousPage.Items["roleID"];
+        }
+    }
+</script>

@@ -1,0 +1,43 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ViewContext.Controller.DataSource();
+    IQueryable<InvoiceAllowance> _model = (IQueryable<InvoiceAllowance>)this.Model;
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
+
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果"); }
+
+<div class="border_gray">
+    @{
+        var recordCount = _model.Count();
+        if (recordCount > 0)
+        {
+            Html.RenderPartial("~/Views/InvoiceAudit/Module/AllowanceQueryPaging.cshtml", _model);
+        }
+        else
+        {
+            <font color="red">查無資料!!</font>
+        }
+    }
+</div>
+

@@ -1,0 +1,32 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ViewContext.Controller.DataSource();
+    IQueryable<ProcessRequest> _model = (IQueryable<ProcessRequest>)this.Model;
+    ProcessRequestQueryViewModel _viewModel = (ProcessRequestQueryViewModel)ViewBag.ViewModel;
+}
+@{
+    String[] columns = (string[])ViewBag.TableColumns;
+}
+<tr>
+    <td colspan="@(columns.Length)"></td>
+</tr>

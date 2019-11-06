@@ -1,0 +1,48 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+
+    models = ViewContext.Controller.DataSource();
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
+@{
+    Naming.FieldDisplayType? displayType = (Naming.FieldDisplayType?)ViewBag.DisplayType;
+}
+@switch (displayType)
+{
+    case Naming.FieldDisplayType.Header:
+        break;
+    case Naming.FieldDisplayType.DataItem:
+        break;
+    case Naming.FieldDisplayType.SortBy:
+        break;
+    case Naming.FieldDisplayType.Query:
+        ViewBag.QueryAll = true;
+        Html.RenderPartial("~/Views/InquireInvoice/ByAllowanceConsumption.cshtml");
+        break;
+    default:
+        break;
+}
+
+
+

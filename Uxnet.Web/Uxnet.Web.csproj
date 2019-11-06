@@ -1,0 +1,705 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{44839C05-8A69-4331-89EB-761509CD68EB}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Uxnet.Web</RootNamespace>
+    <AssemblyName>Uxnet.Web</AssemblyName>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <TargetFrameworkProfile />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\eFACTOR-I\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit">
+      <HintPath>..\packages\AjaxControlToolkit.18.1.0\lib\net40\AjaxControlToolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AjaxMin">
+      <HintPath>..\packages\AjaxMin.5.14.5506.26202\lib\net40\AjaxMin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AspNet.ScriptManager.bootstrap">
+      <HintPath>..\packages\AspNet.ScriptManager.bootstrap.3.2.0\lib\net45\AspNet.ScriptManager.bootstrap.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\IFS-EAR\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Data.Edm">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.2.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData">
+      <HintPath>..\packages\Microsoft.Data.OData.5.2.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage">
+      <HintPath>..\packages\WindowsAzure.Storage.2.1.0.4\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\IFS-EAR\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Spatial">
+      <HintPath>..\packages\System.Spatial.5.2.0\lib\net40\System.Spatial.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Extensions.Design" />
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="css\js-fields.css" />
+    <Content Include="css\jsgrid-theme.css" />
+    <Content Include="css\jsgrid-theme.eivo.css" />
+    <Content Include="css\jsgrid-theme.min.css" />
+    <Content Include="css\jsgrid.css" />
+    <Content Include="css\jsgrid.min.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Module\Ajax\PagingControl.ascx" />
+    <Content Include="Module\Common\ActionHandler.ascx" />
+    <Content Include="Module\Common\AntiForgery.ascx" />
+    <Content Include="Module\Common\calendar.gif" />
+    <Content Include="Module\Common\calendar.htm" />
+    <Content Include="Module\Common\CalendarInput.ascx" />
+    <Content Include="Module\Common\CalendarInputDatePicker.ascx" />
+    <Content Include="Module\Common\ChooseMultiple.ascx" />
+    <Content Include="Module\Common\ClearInputField.ascx" />
+    <Content Include="Module\Common\CrossPageMessage.ascx" />
+    <Content Include="Module\Common\downloadingbutton.ascx" />
+    <Content Include="Module\Common\DownloadingButton2.ascx" />
+    <Content Include="Module\Common\exceptionhandler.ascx" />
+    <Content Include="Module\Common\FunctionKeyTrigger.ascx" />
+    <Content Include="Module\Common\ConfirmationDialog.ascx" />
+    <Content Include="Module\Common\HtmlSelectWrapper.ascx" />
+    <Content Include="Module\Common\ImageUploader.ascx" />
+    <Content Include="Module\Common\OpenPrintingButton.ascx" />
+    <Content Include="Module\Common\PageAnchor.ascx" />
+    <Content Include="Module\Common\PageBag.aspx" />
+    <Content Include="Module\Common\pageprintingbutton.ascx" />
+    <Content Include="Module\Common\PrintingButton3.ascx" />
+    <Content Include="Module\Common\PromptButton.ascx" />
+    <Content Include="Module\Common\SignContext.ascx" />
+    <Content Include="Module\Common\PagingList.ascx" />
+    <Content Include="Module\Common\printingbutton.ascx" />
+    <Content Include="Module\Common\SealView.ascx" />
+    <Content Include="Module\Common\ReturnButton.ascx" />
+    <Content Include="Module\Common\SelectHelper.ascx" />
+    <Content Include="Module\Common\RealSizeImage.ascx" />
+    <Content Include="Module\Common\WebPageTreeView.ascx" />
+    <Content Include="Module\Common\ROCCalendarInput.ascx" />
+    <Content Include="Module\Common\ROC_calendar.htm" />
+    <Content Include="Module\Common\SignXmlContext.ascx" />
+    <Content Include="Module\Common\CreatePDFButton.ascx" />
+    <Content Include="Module\DataModel\DataModelCache.ascx" />
+    <Content Include="Module\DataModel\DataModelContainer.ascx" />
+    <Content Include="Module\DataModel\MasterEntity.ascx" />
+    <Content Include="Module\DataModel\DetailEntity.ascx" />
+    <Content Include="Module\Equipment\MaintainMenuNodes.ascx" />
+    <Content Include="Module\jQuery\EnumSelector.ascx" />
+    <Content Include="Module\jQuery\HtmlSelector.ascx" />
+    <Content Include="Module\JsGrid\JsGrid.ascx" />
+    <Content Include="Module\JsGrid\JsGridInitialization.ascx" />
+    <Content Include="Module\SiteAction\FunctionItem.ascx" />
+    <Content Include="Module\SiteAction\SiteMenuBar.ascx" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="Module\SiteAction\SiteMenuData.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Web References\WS_DocumentService\DocumentCreator.disco" />
+    <Content Include="Module\SiteAction\ComposedFunctionItem.ascx" />
+    <Content Include="Scripts\jquery-ui-1.11.4.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
+    <Content Include="Scripts\jsgrid.js" />
+    <Content Include="Scripts\jsgrid.min.js" />
+    <Content Include="Scripts\jsgrid-init.js" />
+    <Content Include="Web.config" />
+    <Content Include="WebPageTree.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\SampleController.cs" />
+    <Compile Include="Helper\ExtensionMethods.cs" />
+    <Compile Include="Module\Ajax\PagingControl.ascx.cs">
+      <DependentUpon>PagingControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Ajax\PagingControl.ascx.designer.cs">
+      <DependentUpon>PagingControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\ActionHandler.ascx.cs">
+      <DependentUpon>ActionHandler.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\ActionHandler.ascx.designer.cs">
+      <DependentUpon>ActionHandler.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\BaseWebPageUtility.cs" />
+    <Compile Include="Module\Common\CalendarInput.ascx.cs">
+      <DependentUpon>CalendarInput.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\CalendarInput.ascx.designer.cs">
+      <DependentUpon>CalendarInput.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\CalendarInputDatePicker.ascx.cs">
+      <DependentUpon>CalendarInputDatePicker.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\CalendarInputDatePicker.ascx.designer.cs">
+      <DependentUpon>CalendarInputDatePicker.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\ChooseMultiple.ascx.cs">
+      <DependentUpon>ChooseMultiple.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\ChooseMultiple.ascx.designer.cs">
+      <DependentUpon>ChooseMultiple.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\CrossPageMessage.ascx.cs">
+      <DependentUpon>CrossPageMessage.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\CrossPageMessage.ascx.designer.cs">
+      <DependentUpon>CrossPageMessage.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\DownloadingButton.ascx.cs">
+      <DependentUpon>downloadingbutton.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\DownloadingButton.ascx.designer.cs">
+      <DependentUpon>downloadingbutton.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\DownloadingButton2.ascx.cs">
+      <DependentUpon>DownloadingButton2.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\DownloadingButton2.ascx.designer.cs">
+      <DependentUpon>DownloadingButton2.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\ExceptionHandler.ascx.cs">
+      <DependentUpon>exceptionhandler.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\ExceptionHandler.ascx.designer.cs">
+      <DependentUpon>exceptionhandler.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\ExtensionMethods.cs" />
+    <Compile Include="Module\Common\FunctionKeyTrigger.ascx.cs">
+      <DependentUpon>FunctionKeyTrigger.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\FunctionKeyTrigger.ascx.designer.cs">
+      <DependentUpon>FunctionKeyTrigger.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\ConfirmationDialog.ascx.cs">
+      <DependentUpon>ConfirmationDialog.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\HtmlSelectWrapper.ascx.cs">
+      <DependentUpon>HtmlSelectWrapper.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\HtmlSelectWrapper.ascx.designer.cs">
+      <DependentUpon>HtmlSelectWrapper.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\ImageUploader.ascx.cs">
+      <DependentUpon>ImageUploader.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\ImageUploader.ascx.designer.cs">
+      <DependentUpon>ImageUploader.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\InvokeFrame.ascx.cs">
+      <DependentUpon>InvokeFrame.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\InvokeFrame.ascx.designer.cs">
+      <DependentUpon>InvokeFrame.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\LinkImageButton.cs" />
+    <Compile Include="Module\Common\OpenPrintingButton.ascx.cs">
+      <DependentUpon>OpenPrintingButton.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\OpenPrintingButton.ascx.designer.cs">
+      <DependentUpon>OpenPrintingButton.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\PageAnchor.ascx.cs">
+      <DependentUpon>PageAnchor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\PageAnchor.ascx.designer.cs">
+      <DependentUpon>PageAnchor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\PageBag.aspx.cs">
+      <DependentUpon>PageBag.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\PageBag.aspx.designer.cs">
+      <DependentUpon>PageBag.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\PagePrintingButton.ascx.cs">
+      <DependentUpon>pageprintingbutton.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\PagingControl.ascx.cs">
+      <DependentUpon>PagingControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\PagingControl.ascx.designer.cs">
+      <DependentUpon>PagingControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\PrintingButton2.ascx.cs">
+      <DependentUpon>PrintingButton2.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\PrintingButton3.ascx.cs">
+      <DependentUpon>PrintingButton3.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\PrintProxy.cs" />
+    <Compile Include="Module\Common\PromptButton.ascx.cs">
+      <DependentUpon>PromptButton.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\PromptButton.ascx.designer.cs">
+      <DependentUpon>PromptButton.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\SignContext.ascx.cs">
+      <DependentUpon>SignContext.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\SignContext.ascx.designer.cs">
+      <DependentUpon>SignContext.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\PagingList.ascx.cs">
+      <DependentUpon>PagingList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\PagingList.ascx.designer.cs">
+      <DependentUpon>PagingList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\PrintingButton.ascx.cs">
+      <DependentUpon>printingbutton.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\PrintingButton.ascx.designer.cs">
+      <DependentUpon>printingbutton.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\SealView.ascx.cs">
+      <DependentUpon>SealView.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\SealView.ascx.designer.cs">
+      <DependentUpon>SealView.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\ReturnButton.ascx.cs">
+      <DependentUpon>ReturnButton.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\ReturnButton.ascx.designer.cs">
+      <DependentUpon>ReturnButton.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\SelectHelper.ascx.cs">
+      <DependentUpon>SelectHelper.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\SelectHelper.ascx.designer.cs">
+      <DependentUpon>SelectHelper.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\RealSizeImage.ascx.cs">
+      <DependentUpon>RealSizeImage.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\RealSizeImage.ascx.designer.cs">
+      <DependentUpon>RealSizeImage.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\WebPageTreeView.ascx.cs">
+      <DependentUpon>WebPageTreeView.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\WebPageTreeView.ascx.designer.cs">
+      <DependentUpon>WebPageTreeView.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\LinkImagePrintButton.cs" />
+    <Compile Include="Module\Common\ROCCalendarInput.ascx.cs">
+      <DependentUpon>ROCCalendarInput.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\SignXmlContext.ascx.cs">
+      <DependentUpon>SignXmlContext.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\SignXmlContext.ascx.designer.cs">
+      <DependentUpon>SignXmlContext.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Common\CreatePDFButton.ascx.cs">
+      <DependentUpon>CreatePDFButton.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Common\SaveAsExcelButton.cs" />
+    <Compile Include="Module\DataModel\ItemSelectorV2.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\DataModel\DataModelCache.ascx.cs">
+      <DependentUpon>DataModelCache.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\DataModel\DataModelCache.ascx.designer.cs">
+      <DependentUpon>DataModelCache.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\DataModel\DataModelContainer.ascx.cs">
+      <DependentUpon>DataModelContainer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\DataModel\DataModelContainer.ascx.designer.cs">
+      <DependentUpon>DataModelContainer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\DataModel\EntityDataSource.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\DataModel\EnumSelector.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\DataModel\ItemSelector.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\DataModel\ListControlSelector.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\DataModel\ListControlSelectorV2.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\DataModel\MasterEntity.ascx.cs">
+      <DependentUpon>MasterEntity.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\DataModel\MasterEntity.ascx.designer.cs">
+      <DependentUpon>MasterEntity.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\DataModel\DetailEntity.ascx.cs">
+      <DependentUpon>DetailEntity.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\DataModel\DetailEntity.ascx.designer.cs">
+      <DependentUpon>DetailEntity.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Equipment\MaintainMenuNodes.ascx.cs">
+      <DependentUpon>MaintainMenuNodes.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Equipment\MaintainMenuNodes.ascx.designer.cs">
+      <DependentUpon>MaintainMenuNodes.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\Helper\AutoCompleteDataField.ascx.cs">
+      <DependentUpon>AutoCompleteDataField.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\Helper\AutoCompleteDataField.ascx.designer.cs">
+      <DependentUpon>AutoCompleteDataField.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\jQuery\EnumSelector.ascx.cs">
+      <DependentUpon>EnumSelector.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\jQuery\EnumSelector.ascx.designer.cs">
+      <DependentUpon>EnumSelector.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\jQuery\HtmlSelector.ascx.cs">
+      <DependentUpon>HtmlSelector.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\jQuery\HtmlSelector.ascx.designer.cs">
+      <DependentUpon>HtmlSelector.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\JsGrid\JsGridHelper.cs" />
+    <Compile Include="Module\JsGrid\JsGridInitialization.ascx.cs">
+      <DependentUpon>JsGridInitialization.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\JsGrid\JsGridInitialization.ascx.designer.cs">
+      <DependentUpon>JsGridInitialization.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\SiteAction\FunctionItem.ascx.cs">
+      <DependentUpon>FunctionItem.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\SiteAction\FunctionItem.ascx.designer.cs">
+      <DependentUpon>FunctionItem.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\SiteAction\SiteMenuBar.ascx.cs">
+      <DependentUpon>SiteMenuBar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\SiteAction\SiteMenuBar.ascx.designer.cs">
+      <DependentUpon>SiteMenuBar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\SiteAction\ComposedFunctionItem.ascx.cs">
+      <DependentUpon>ComposedFunctionItem.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Module\SiteAction\ComposedFunctionItem.ascx.designer.cs">
+      <DependentUpon>ComposedFunctionItem.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\SiteAction\SiteMenuData.cs">
+      <DependentUpon>SiteMenuData.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Mvc\DataModel\EntityDataSource.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs" />
+    <Compile Include="Web References\WS_DocumentService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="WebUI\DataModelCache.cs" />
+    <Compile Include="WebUI\FindPageControl.cs" />
+    <Compile Include="WebUI\HttpContextDataModelCache.cs" />
+    <Compile Include="WebUI\ItemTemplateCreator.cs" />
+    <Compile Include="WebUI\WebMessageBox.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Module\Common\SignContext.ascx.resx">
+      <DependentUpon>SignContext.ascx.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Module\Common\SignXmlContext.ascx.resx">
+      <DependentUpon>SignXmlContext.ascx.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Module\Common\InvokeFrame.ascx" />
+    <Content Include="Module\Common\PagingControl.ascx" />
+    <Content Include="Module\Common\PrintingButton2.ascx" />
+    <Content Include="Module\Helper\AutoCompleteDataField.ascx" />
+    <None Include="Web References\WS_DocumentService\DocumentCreator.wsdl" />
+    <None Include="Web References\WS_DocumentService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Uxnet.Com\Uxnet.Com.csproj">
+      <Project>{72EDD90C-E7FE-44F4-8B9B-C9512F02D547}</Project>
+      <Name>Uxnet.Com</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://localhost:2013/DocumentCreator.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\WS_DocumentService\</RelPath>
+      <UpdateFromURL>http://localhost:2013/DocumentCreator.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Uxnet_Web_WS_DocumentService_DocumentCreator</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>1710</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+</Project>

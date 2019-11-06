@@ -1,0 +1,21 @@
+
+@using System.Linq.Expressions
+@using Model.DataEntity
+@using Model.Locale
+@using Utility
+<tr>
+    <th>附件檔 
+    </th>
+    <td class="tdleft">
+        <select name="attachment">
+            <option value="">全部</option>
+            <option value="1">有</option>
+            <option value="0">無</option>
+        </select>
+    </td>
+</tr>
+<script>
+    $(function () {
+        $('select[name="attachment"]').val('@(Request["attachment"])');
+    });
+</script>

@@ -1,0 +1,27 @@
+
+@{ @ Register Src="~/Module/Common/CalendarInputDatePicker.ascx" TagName="CalendarInputDatePicker"
+    TagPrefix="uc1"}
+
+@using System.Linq.Expressions
+@using Model.DataEntity
+@using Utility
+<tr>
+    <th>買受人統編</th>
+    <td class="tdleft">
+        <input name="receiptNo" type="text" value="@(Request["receiptNo"])" />
+    </td>
+</tr>
+<script runat="server">
+
+    public override Expression<Func<InvoiceItem, bool>> BuildQueryExpression(Expression<Func<InvoiceItem, bool>> queryExpr)
+    {
+        var qExpr = queryExpr;
+        if (!String.IsNullOrEmpty(Request["receiptNo"]))
+        {
+            HasSet = true;
+            qExpr = qExpr.And(i => i.InvoiceBuyer.ReceiptNo == Request["receiptNo"].Trim());
+        }
+
+        return qExpr;
+    }
+</script>

@@ -1,0 +1,59 @@
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Business.Helper
+@using Uxnet.Web.WebUI
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>電子發票系統</title>
+    <link href="~/App_Themes/Ver2016/eivo.css" rel="stylesheet" type="text/css" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body style="font-family:KaiTi">
+    <form id="theForm" runat="server">
+        @{ var profile = Context.GetUser();
+            DocumentPrintQueue item;}
+ @while((item = _model.FirstOrDefault())!=null)
+            {
+                Html.RenderPartial("~/Views/DataView/Module/InvoiceView2016.ascx", item.CDS_Document.InvoiceItem);
+                models.MarkPrintedLog(item.CDS_Document.InvoiceItem, profile);
+            }
+    </form>
+</body>
+</html>
+
+<script>
+    window.onload = function () {
+        window.print();
+    };
+</script>
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+    IQueryable<DocumentPrintQueue> _model;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        _model = (IQueryable<DocumentPrintQueue>)this.Model;
+    }
+
+
+</script>

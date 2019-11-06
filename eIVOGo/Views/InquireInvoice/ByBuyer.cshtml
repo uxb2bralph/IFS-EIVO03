@@ -1,0 +1,28 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
+<tr>
+    <th>
+        買受人統編
+    </th>
+    <td class="tdleft">
+        <input name="BuyerReceiptNo" type="text" value="@(_viewModel?.BuyerReceiptNo)" placeholder="查詢個人發票請輸入0000000000" maxlength="11" size="32" class="form-control" />
+    </td>
+</tr>
+

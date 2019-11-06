@@ -1,0 +1,86 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using DataAccessLayer.basis;
+using Model.DataEntity;
+using Model.InvoiceManagement.InvoiceProcess;
+using Model.Locale;
+using Model.Resource;
+using Model.Schema.EIVO;
+
+namespace Model.InvoiceManagement.Validator
+{
+    public class GoogleInvoiceRootInvoiceValidator : InvoiceRootInvoiceValidator
+    {
+        public GoogleInvoiceRootInvoiceValidator(GenericManager<EIVOEntityDataContext> mgr, Organization owner)
+            : base(mgr, owner)
+        {
+
+        }
+
+        protected override Exception checkBusiness()
+        {
+            Exception ex = base.checkBusiness();
+            if (ex != null)
+            {
+                return ex;
+            }
+
+            if (String.IsNullOrEmpty(_invItem.GoogleId))
+            {
+                return new Exception(MessageResources.AlertGoogleId);
+            }
+            else if (_invItem.GoogleId.Length > 64)
+            {
+                return new Exception(String.Format("GoogleId can not be over 64 characters，TAG:< GoogleId />"));
+            }
+
+            return null;
+        }
+
+        public InvoiceItem SaveRootInvoice(InvoiceRootInvoice invItem, bool forTerms, String invoiceClientID, int? channelID, out Exception exception)
+        {
+            if ((exception = this.Validate(invItem)) != null)
+            {
+                return null;
+            }
+
+            InvoiceItem newItem = this.InvoiceItem;
+            newItem.CDS_Document.DocumentOwner.ClientID = invoiceClientID;
+            newItem.CDS_Document.ChannelID = channelID;
+            if (forTerms)
+            {
+                newItem.CDS_Document.CustomerDefined = new CustomerDefined { };
+            }
+            //else
+            //{
+            //    C0401Handler.PushStepQueueOnSubmit(_mgr, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+            //}
+
+            _mgr.GetTable<InvoiceItem>().InsertOnSubmit(newItem);
+            C0401Handler.PushStepQueueOnSubmit(_mgr, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+
+            _mgr.SubmitChanges();
+
+            if (forTerms)
+            {
+
+            }
+            else
+            {
+                if (_isCrossBorderMerchant)
+                {
+                    newItem.CDS_Document.DocumentSubscriptionQueue = new DocumentSubscriptionQueue { };
+                }
+                else
+                {
+                    C0401Handler.PushStepQueueOnSubmit(_mgr, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                }
+                _mgr.SubmitChanges();
+            }
+
+            return newItem;
+        }
+    }
+}

@@ -1,0 +1,43 @@
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    ModelSource<InvoiceItem> models;
+    Organization _model;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (Organization)this.Model;
+
+}
+@if (_model.OrganizationStatus?.NotificationFooterView != null)
+{
+    Html.RenderPartial(_model.OrganizationStatus?.NotificationFooterView, _model);
+}
+else
+{
+    <p>
+        若您尚有需要服務的地方，隨時歡迎來電或來信電子發票客服信箱。
+    </p>
+    <p>
+        委外客服信箱：<span class="blue">ifs_service@uxb2b.com</span>
+    </p>
+    <p>
+        委外客服電話：<span class="blue">0800-010-626</span>
+    </p>
+    <p class="red">
+        ※此信件為系統發出信件，請勿直接回覆。
+    </p>
+}

@@ -1,0 +1,9 @@
+
+@{ Register assembly="Model" namespace="Model.DocumentFlowManagement" tagprefix="cc1" }
+@using Model.DocumentFlowManagement
+<asp:DropDownList ID="selector" runat="server" DataTextField="FlowName" DataSourceID="dsEntity"
+    DataValueField="FlowID" EnableViewState="false" OnDataBound="selector_DataBound">
+</asp:DropDownList>
+<cc1:DocumentFlowDataSource ID="dsEntity" runat="server">
+</cc1:DocumentFlowDataSource>
+

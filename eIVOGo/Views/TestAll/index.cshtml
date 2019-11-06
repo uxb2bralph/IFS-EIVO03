@@ -1,0 +1,46 @@
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+
+@section headContent { 
+ 
+}
+@*@{ Html.RenderAction("ApplyPOSDevice", "InvoiceBusiness", new { id = 2364 });}
+*@
+        @*@{ Html.RenderPartial("~/Views/Forms/SimpleInvoice.ascx");}
+*@
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        doTask();
+    }
+
+    void doTask()
+    {
+        switch(Request["task"])
+        {
+            case "issuingNotice":
+                var items = models.GetTable<InvoiceItem>().Where(i => i.SellerID == 2359 && i.InvoiceDate >= DateTime.Today)
+                        .Select(i => i.InvoiceID).ToArray();
+                items.SendIssuingNotification(true);
+                break;
+        }
+    }
+
+</script>

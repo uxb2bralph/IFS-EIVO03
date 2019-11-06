@@ -1,0 +1,49 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    ModelSource<InvoiceItem> models;
+    IQueryable<InvoiceAllowance> _model;
+    InquireInvoiceViewModel _viewModel;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+
+    _model = (IQueryable<InvoiceAllowance>)this.Model;
+}
+@if (_viewModel != null)
+{
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td class="Bargain_btn">
+                @if (_viewModel.ProcessType == Naming.InvoiceProcessType.B0401)
+                {
+                    <button type="button" class="btn" name="paperStyle" value="A4" onclick="uiAllowanceQuery.print('A4');">A4格式列印</button>
+                }
+                else if (_viewModel.ProcessType == Naming.InvoiceProcessType.D0401)
+                {
+                    <button type="button" class="btn" name="paperStyle" value="POS" onclick="uiAllowanceQuery.print('POS');">熱感紙規格列印</button>
+                }
+                <input type="button" class="btn" name="btnPrint" value="Excel下載" onclick="uiAllowanceQuery.download();" />
+                <button type="button" class="btn" name="btnNotify" onclick="uiAllowanceQuery.notify();">重送開立通知</button>
+                @{ 
+                    Html.RenderPartial("~/Views/AllowanceProcess/Module/DoVoidAllowance.cshtml");
+                }
+            </td>
+        </tr>
+    </table>
+}
+
+
+

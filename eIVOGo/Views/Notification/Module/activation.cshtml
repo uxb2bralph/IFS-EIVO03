@@ -1,0 +1,56 @@
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using System.Xml
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Schema.EIVO
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+
+    ModelSource<InvoiceItem>
+    models;
+    UserProfile _model;
+    UserProfileViewModel _viewModel;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (UserProfile)this.Model;
+    _viewModel = (UserProfileViewModel)ViewBag.ViewModel;
+}
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form>
+        本信件由 電子發票系統 寄出，@(_viewModel.ResetPass == true ? "為本站之密碼變更通知信" : "為本站之會員註冊確認信")。<br />
+        <br />
+        (本信件為系統自動發出，請勿回覆本信件。)<br />
+        請立即透過下面帳號啟用連結登入 電子發票系統 變更密碼 。<br />
+        <br />
+        @if (_viewModel.ResetPass == true)
+        {
+            <span>密碼變更連結：</span><a href='@($"{eIVOGo.Properties.Settings.Default.WebApDomain}{Url.Action("ResetPassword","UserProfile",new { _viewModel.ResetID })}")'> 會員密碼變更 </a>
+        }
+        else
+        {
+            <span>帳號啟用連結：</span><a href='@($"{eIVOGo.Properties.Settings.Default.WebApDomain}{Url.Action("ResetPassword","UserProfile",new { _viewModel.ResetID })}")'> 會員帳號啟用 </a>
+        }
+        <br />
+        <br />
+        電子發票系統 感謝您的加入
+    </form>
+</body>
+</html>
+
+

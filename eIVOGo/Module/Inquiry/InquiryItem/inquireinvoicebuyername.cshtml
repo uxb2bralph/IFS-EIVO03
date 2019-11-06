@@ -1,0 +1,27 @@
+
+@{ @ Register Src="~/Module/Common/CalendarInputDatePicker.ascx" TagName="CalendarInputDatePicker"
+    TagPrefix="uc1"}
+
+@using System.Linq.Expressions
+@using Model.DataEntity
+@using Utility
+<tr>
+    <th>買受人名稱</th>
+    <td class="tdleft">
+        <input name="buyerName" type="text" value="@(Request["buyerName"])" size="64" />
+    </td>
+</tr>
+<script runat="server">
+
+    public override Expression<Func<InvoiceItem, bool>> BuildQueryExpression(Expression<Func<InvoiceItem, bool>> queryExpr)
+    {
+        var qExpr = queryExpr;
+        if (!String.IsNullOrEmpty(Request["buyerName"]))
+        {
+            HasSet = true;
+            qExpr = qExpr.And(i => i.InvoiceBuyer.CustomerName.Contains(Request["buyerName"].Trim()));
+        }
+
+        return qExpr;
+    }
+</script>

@@ -1,0 +1,58 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using Model.Locale
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Security.MembershipManagement
+@using eIVOGo.Controllers
+@using Business.Helper
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    IQueryable<Organization> _model;
+    SellerSelectorViewModel _viewModel = (SellerSelectorViewModel)ViewBag.ViewModel;
+
+    if(_viewModel==null)
+    {
+        _viewModel = new SellerSelectorViewModel { };
+    }
+
+    String _fieldName;
+    String _contentID = "id" + DateTime.Now.Ticks;
+    String _valueID = "value" + DateTime.Now.Ticks;
+    UserProfileMember _profile;
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<Organization>)this.Model;
+    _fieldName = _viewModel.FieldName ?? "SellerID";
+    _profile = Context.GetUser();
+}
+
+@if (_profile.IsSystemAdmin())
+{
+    Html.RenderPartial("~/Views/Home/Module/CompanyQuickSearch.cshtml", _model);
+}
+else
+{
+    <select class="form-control" name="@(_fieldName)">
+        @if (ViewBag.SelectorIndication != null)
+        {
+            <option value="@(ViewBag.SelectorIndicationValue ?? "")">@(ViewBag.SelectorIndication)</option>
+        }
+        @foreach (var o in _model.OrderBy(o => o.ReceiptNo))
+        {
+            <option value="@(_viewModel.Encrypt==true ? o.CompanyID.EncryptKey() : o.CompanyID.ToString())">@(String.Format("{0} {1}", o.ReceiptNo, o.CompanyName))</option>
+        }
+    </select>
+}
+
+
+
+

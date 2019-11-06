@@ -1,0 +1,27 @@
+
+
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+
+@section headContent { 
+ 
+}
+@section mainContent { 
+<asp:PlaceHolder ID="plContent" runat="server"></asp:PlaceHolder> 
+}
+<script runat="server">
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        if(!String.IsNullOrEmpty(Request["control"]))
+        {
+            UserControl control = (UserControl)this.LoadControl(Request["control"]);
+            control.InitializeAsUserControl(Page);
+            plContent.Controls.Add(control);
+        }
+    }
+
+</script>

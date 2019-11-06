@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="big5"?>
+<menuItem value="" url="#">
+  <menuItem value="系統管理維護" url="">
+    <menuItem value="會員管理" url="~/SAM/MemberManager.aspx">
+      <workItem value="" url="~/SAM/AddMember.aspx" />
+      <workItem value="" url="~/SAM/ModifyMember.aspx" />
+      <workItem value="" url="~/SAM/CreateConsumerMember.aspx" />
+      <workItem value="" url="~/SAM/register_msg.aspx" />
+      <workItem value="" url="~/SAM/EditMember.aspx" />
+      <workItem value="" url="~/MainPage.aspx" />
+      <workItem value="" url="~/SAM/memberManager.aspx" />
+      <workItem value="" url="~/SAM/UserProfileManager.aspx" />
+      <workItem value="" url="~/SAM/EditUserProfile.aspx" />
+    </menuItem>
+    <menuItem value="企業資料維護" url="~/SAM/CompanyManager.aspx">
+      <workItem value="" url="~/SAM/AddCompany.aspx" />
+      <workItem value="" url="~/SAM/EditCompany.aspx" />
+      <workItem value="" url="~/SAM/register_msg.aspx" />
+      <workItem value="" url="~/SAM/ImportInvoiceSignature.aspx" />
+    </menuItem>
+    <menuItem value="相對營業人資料維護" url="~/SAM/MaintainBusinessRelationship.aspx">
+      <workItem value="" url="~/SAM/ImportCounterpartBusiness.aspx" />
+    </menuItem>
+    <menuItem value="查詢集團營業人資料" url="~/SAM/InquireBusinessRelationship.aspx">
+            <workItem value="" url="~/SAM/ImportInvoiceSignature.aspx" />
+        </menuItem>
+    <menuItem value="電子發票字軌維護" url="~/EIVO/track_number_list.aspx">
+      <workItem value="" url="~/EIVO/track_number_list.aspx" />
+      <workItem value="" url="~/SAM/AddInvoiceTrackCode.aspx" />
+      <workItem value="" url="~/SAM/EditInvoiceTrackCode.aspx" />
+    </menuItem>
+    <menuItem value="查詢發票/折讓" url="~/EIVO/OP/InquireInvoiceItem.aspx">
+      <workItem value="" url="~/EIVO/OP/InquireInvoiceAllowance.aspx" />
+      <workItem value="" url="~/EIVO/OP/InquireInvoiceCancellation.aspx" />
+      <workItem value="" url="~/EIVO/OP/InquireAllowanceCancellation.aspx" />
+      <workItem value="" url="~/EIVO/OP/InquireReceiptItem.aspx" />
+    </menuItem>
+    <menuItem value="查詢憑證使用記錄" url="~/SAM/queryCALog_list.aspx">
+      <workItem value="" url="~/SAM/queryCALog_list.aspx" />
+    </menuItem>
+    <menuItem value="系統服務監控" url="~/SAM/SystemMonitor.aspx">
+    </menuItem>
+    <menuItem value="角色定義維護" url="~/SYS/MaintainUserRoleDefinition.aspx" />
+    <menuItem value="組織單位類別維護" url="~/SYS/MaintainCategoryDefinition.aspx" />
+    <menuItem value="工作選單維護" url="~/SYS/MaintainMenuControl.aspx">
+      <workItem value="" url="~/SYS/EditMenuNodes.aspx" />
+    </menuItem>
+    <menuItem value="工作選單套用維護" url="~/SYS/ApplyUserMenu.aspx" />
+    <menuItem value="公司類別套用維護" url="~/SYS/MaintainOrganizationCategory.aspx" />
+    <menuItem value="使用者角色維護" url="~/SYS/MaintainUserProfile.aspx">
+      <workItem value="" url="~/SYS/MaintainUserRole.aspx" />
+    </menuItem>
+    <menuItem value="建立系統簽章憑證" url="~/SYS/CreateDefaultSigner.aspx" />
+    <menuItem value="發票流程維護" url="~/SYS/MaintainDocumentFlow.aspx">
+      <workItem value="" url="~/SYS/ApplyFlowControl.aspx" />
+    </menuItem>
+    <menuItem value="設定發票處理流程" url="~/SYS/MaintainDocumentTypeFlow.aspx">
+    </menuItem>
+  </menuItem>
+  <menuItem value="統計報表" url="">
+    <menuItem value="發票/折讓統計表 " url="~/Visitor/InvoiceAndAllowanceReport_list.aspx" />
+  </menuItem>
+  <workItem value="首頁" url="~/MainPage.aspx" />
+  <workItem value="站務新聞" url="~/SAM/publish_system_event_page.aspx" />
+  <workItem value="" url="~/SYS/ApplyFlowControl.aspx" />
+  <workItem value="" url="~/SYS/MaintainDocumentFlow.aspx" />
+  <workItem value="" url="~/SYS/MaintainDocumentTypeFlow.aspx" />
+</menuItem>

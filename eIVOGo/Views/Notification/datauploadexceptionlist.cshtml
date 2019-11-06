@@ -1,0 +1,30 @@
+
+
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+
+@section headContent { 
+ 
+}
+@section dataContent { 
+@{ Html.RenderPartial("~/Views/Notification/Module/UploadDataExceptionNotification.ascx", _model);}
+ 
+}
+
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+    IQueryable<ExceptionLog> _model;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+
+        _model = (IQueryable<ExceptionLog>)this.Model;
+
+    }
+</script>

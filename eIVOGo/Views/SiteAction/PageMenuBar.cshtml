@@ -1,0 +1,22 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@{
+    Model.Security.MembershipManagement.UserProfileMember _userProfile;
+    String _menuView = null;
+    _userProfile = Business.Helper.WebPageUtility.UserProfile;
+    if (_userProfile == null)
+    {
+        Response.Redirect(FormsAuthentication.LoginUrl);
+    }
+    else
+    {
+        _menuView = "~/Views/SiteAction/" + Path.GetFileNameWithoutExtension(_userProfile.CurrentSiteMenu) + ".cshtml";
+    }
+}
+@if (_menuView != null)
+{
+    Html.RenderPartial(_menuView);
+}
+

@@ -1,0 +1,44 @@
+
+@using System.Web.Script.Serialization
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Utility
+
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+    
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        
+        JavaScriptSerializer serializer = new JavaScriptSerializer();
+        IQueryable<InvoiceItem> items = (IQueryable<InvoiceItem>)Model;
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+
+        Response.CsvDownload(GetCsvResult(items), null, "text/csv");
+    }
+
+    public IEnumerable<object> GetCsvResult(IQueryable<InvoiceItem> items)
+    {
+        return items.Select(d => new
+        {
+            愛心碼 = d.InvoiceDonation != null ? d.InvoiceDonation.AgencyCode : "",
+            開立發票營業人 = d.InvoiceSeller.CustomerName,
+            發票號碼 = d.TrackCode + d.No,
+            是否中獎 = d.InvoiceWinningNumber != null ? "是" : "否"
+
+        });
+    }      
+
+    public override void Dispose()
+    {
+        if (models != null)
+            models.Dispose();
+        
+        base.Dispose();
+    }
+
+</script>

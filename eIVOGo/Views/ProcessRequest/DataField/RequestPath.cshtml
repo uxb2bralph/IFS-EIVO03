@@ -1,0 +1,49 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@using ApplicationResource
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+
+    models = ViewContext.Controller.DataSource();
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    ProcessRequestQueryViewModel _viewModel = (ProcessRequestQueryViewModel)ViewBag.ViewModel;
+}
+@{
+    Naming.FieldDisplayType? displayType = (Naming.FieldDisplayType?)ViewBag.DisplayType;
+}
+@switch (displayType)
+{
+    case Naming.FieldDisplayType.Header:
+        <text>請求檔</text>
+        break;
+    case Naming.FieldDisplayType.DataItem:
+        ProcessRequest item = this.Model as ProcessRequest;
+        if (item.RequestPath != null)
+        {
+            <a href="@($"/{eIVOGo.Properties.Settings.Default.TaskCenter}/InvoiceData/GetResource?path={HttpUtility.UrlEncode(item.RequestPath.EncryptData())}")">@(Path.GetFileName(item.RequestPath))</a>
+        }
+        break;
+
+    default:
+        break;
+}
+
+

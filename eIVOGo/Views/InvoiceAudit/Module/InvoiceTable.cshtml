@@ -1,0 +1,57 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ViewContext.Controller.DataSource();
+    IQueryable<InvoiceItem> _model = (IQueryable<InvoiceItem>)this.Model;
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
+@{
+    String currentID = $"table{DateTime.Now.Ticks}";
+    ViewBag.TableColumns = new string[]
+    {
+            "~/Views/InvoiceAudit/DataField/InvoiceDate.cshtml",
+            "~/Views/InvoiceAudit/DataField/InvoiceNo.cshtml",
+            "~/Views/InvoiceAudit/DataField/IssuerReceiptNo.cshtml",
+            "~/Views/InvoiceAudit/DataField/IssuerName.cshtml",
+            "~/Views/InvoiceAudit/DataField/SaleAmount.cshtml",
+            "~/Views/InvoiceAudit/DataField/TaxAmount.cshtml",
+            "~/Views/InvoiceAudit/DataField/TotalAmount.cshtml",
+            "~/Views/InvoiceAudit/DataField/BuyerReceiptNo.cshtml",
+            "~/Views/InvoiceAudit/DataField/CustomerName.cshtml",
+            "~/Views/InvoiceAudit/DataField/CustomerID.cshtml",
+            "~/Views/InvoiceAudit/DataField/WinningInvoice.cshtml",
+            "~/Views/InvoiceAudit/DataField/Cancellation.cshtml",
+            "~/Views/InvoiceAudit/DataField/PrintMark.cshtml",
+            "~/Views/InvoiceAudit/DataField/CarrierType.cshtml",
+            "~/Views/InvoiceAudit/DataField/CarrierNo.cshtml",
+            };
+}
+@if (_viewModel.PageIndex.HasValue)
+{
+    Html.RenderPartial("~/Views/InvoiceAudit/Module/InvoiceTableBody.cshtml", _model);
+}
+else
+{
+    ViewBag.TableFooter = "~/Views/InvoiceAudit/Module/InvoiceTableFooter.cshtml";
+    Html.RenderPartial("~/Views/InvoiceAudit/Module/InvoiceTableSkeleton.cshtml", _model);
+}
+

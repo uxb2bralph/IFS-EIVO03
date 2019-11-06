@@ -1,0 +1,86 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using Model.Locale
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Security.MembershipManagement
+@using eIVOGo.Controllers
+@using Business.Helper
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    IQueryable<Organization> _model;
+    SellerSelectorViewModel _viewModel = (SellerSelectorViewModel)ViewBag.ViewModel;
+
+    if (_viewModel == null)
+    {
+        _viewModel = new SellerSelectorViewModel { };
+    }
+
+    String _fieldName;
+    String _contentID = "id" + DateTime.Now.Ticks;
+    String _valueID = "value" + DateTime.Now.Ticks;
+    UserProfileMember _profile;
+    Organization _item;
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<Organization>)this.Model;
+    _fieldName = _viewModel.FieldName ?? "SellerID";
+    _profile = Context.GetUser();
+    _item = _model.Where(c => c.CompanyID == _viewModel.SellerID).FirstOrDefault();
+}
+
+<input type="text" class="form-control" size="40" id="@(_contentID)" value="@(_item!=null ? $"{_item.ReceiptNo} {_item.CompanyName}" : null)" placeholder="請輸入檢索關鍵字" />
+<input type="hidden" id="@(_valueID)" name="@(_fieldName)" value="@(_viewModel.SellerID)" />
+<script>
+        $(function () {
+            debugger;
+            var $input = $('#@(_contentID)');
+            $input.on('change', function (evt) {
+                if ($input.val() == '') {
+                    $('#@(_valueID)').val('');
+                }
+            });
+            $input.autocomplete({
+                source: '@(Url.Action("SearchCompany", "Home",new { _viewModel.Encrypt }))',
+                select: function (event, ui) {
+                    $input.val(ui.item.label);
+                    $('#@(_valueID)').val(ui.item.value);
+                    event.preventDefault();
+                @if (_viewModel.JS_OnSelect != null)
+                {
+                    <text>@Html.Raw(_viewModel.JS_OnSelect)</text>
+                }
+                else
+                {
+                    <text>$('#@(_valueID)').trigger('change');</text>
+                }
+                },
+                close: function (event, ui) {
+                    if ($input.val() == '') {
+                        $('#@(_valueID)').val('');
+                    }
+                },
+            });
+        });
+
+    @*@if (Request[_fieldName] != null)
+    {
+        <text>
+            $(function() {
+                $('#@(_valueID)').val('@(Request[_fieldName])');
+            });
+        </text>
+    }*@
+</script>
+
+
+
+

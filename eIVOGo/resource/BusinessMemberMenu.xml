@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="big5"?>
+<menuItem value="" url="">
+  <menuItem value="待辦事項" url="~/EIVO/CheckTodoList.aspx">
+    <workItem value="" url="~/EIVO/IssueInvoiceAllowance.aspx" />
+    <workItem value="" url="~/EIVO/IssueAllowanceCancellation.aspx" />
+    <workItem value="" url="~/EIVO/ReceiveInvoiceCancellation.aspx" />
+    <workItem value="" url="~/EIVO/ReceiveReceiptCancellation.aspx" />
+    <workItem value="" url="~/EIVO/ReceiveReceipt.aspx" />
+    <workItem value="" url="~/SAM/register_msg.aspx" />
+  </menuItem>
+  <menuItem value="帳號管理" url="~/SAM/EditMyself.aspx">
+    <workItem value="" url="~/SAM/register_msg.aspx" />
+    <workItem value="" url="~/MainPage.aspx" />
+    <workItem value="" url="~/SAM/CreateMemberCertificate.aspx" />
+  </menuItem>
+  <!--<menuItem value="統一發票專用章管理" url="~/SAM/ImportInvoiceSignature.aspx">
+  </menuItem>-->
+  <!--<menuItem value="電子發票號碼維護" url="~/SAM/MaintainInvoiceNoInterval.aspx">
+    <workItem value="" url="~/SAM/CreateInvoiceNoInterval.aspx" />
+    <workItem value="" url="~/SAM/EditInvoiceNoInterval.aspx" />
+  </menuItem>-->
+  <menuItem value="查詢發票/折讓" url="~/EIVO/InquireInvoiceItem.aspx">
+    <workItem value="" url="~/EIVO/InquireInvoiceAllowance.aspx" />
+    <workItem value="" url="~/EIVO/InquireInvoiceCancellation.aspx" />
+    <workItem value="" url="~/EIVO/InquireAllowanceCancellation.aspx" />
+    <workItem value="" url="~/EIVO/InquireReceiptItem.aspx" />
+  </menuItem>
+  <!--<menuItem value="銷項發票/折讓查詢/&lt;br/&gt;開立/接收" url="~/EIVO/IssueInvoice.aspx">
+    <workItem value="" url="~/EIVO/ReceiveInvoiceAllowance.aspx" />
+    <workItem value="" url="~/EIVO/IssueInvoiceCancellation.aspx" />
+    <workItem value="" url="~/EIVO/ReceiveAllowanceCancellation.aspx" />
+  </menuItem>
+  <menuItem value="銷項發票/折讓查詢/&lt;br/&gt;列印" url="~/EIVO/PrintInvoiceForSale.aspx">
+    <workItem value="" url="~/EIVO/PrintInvoiceAllowanceForSale.aspx" />
+  </menuItem>-->
+  <menuItem value="進項發票/折讓查詢/&lt;br/&gt;開立/接收" url="~/EIVO/ReceiveInvoice.aspx">
+    <workItem value="" url="~/EIVO/IssueInvoiceAllowance.aspx" />
+    <workItem value="" url="~/EIVO/ReceiveInvoiceCancellation.aspx" />
+    <workItem value="" url="~/EIVO/IssueAllowanceCancellation.aspx" />
+    <workItem value="" url="~/EIVO/ReceiveReceipt.aspx" />
+  </menuItem>
+  <menuItem value="進項發票/折讓查詢/&lt;br/&gt;列印" url="~/EIVO/PrintInvoiceForIncome.aspx">
+    <workItem value="" url="~/EIVO/PrintInvoiceAllowanceForIncome.aspx" />
+    <workItem value="" url="~/EIVO/PrintReceiptForIncome.aspx" />
+  </menuItem>
+  <workItem value="首頁" url="~/MainPage.aspx" />
+  <workItem value="站務新聞" url="~/SAM/publish_system_event_page.aspx" />
+  <workItem value="發票內容" url="~/Visitor/newInvalidInvoicePreview.aspx" />
+  <workItem value="" url="~/EIVO/CheckTodoList.aspx" />
+  <workItem value="" url="~/EIVO/ReceiveReceipt.aspx" />
+</menuItem>

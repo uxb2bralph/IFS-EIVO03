@@ -1,0 +1,66 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Model.DataEntity
+@using Model.Locale
+@using Utility
+@using Newtonsoft.Json
+
+@{
+    IQueryable<InvoiceItem> _model;
+    _model = (IQueryable<InvoiceItem>
+        )this.Model;
+}
+
+@functions {
+    public class _PackItem
+    {
+        public int PackageID { get; set; }
+        public int InvoiceID { get; set; }
+        public String CustomerID { get; set; }
+        public String InvoiceNo { get; set; }
+        public String ContactName { get; set; }
+        public String Address { get; set; }
+        public String Remark { get; set; }
+    }
+}
+<script>
+    $(function () {
+        if (!uiHandling.items) {
+            uiHandling.items = [];
+        }
+
+        @if (_model.Count() > 0)
+        {
+            var items = _model.ToList()
+                .Select(i =>
+                new _PackItem
+                {
+                    PackageID = i.InvoiceID,
+                    InvoiceID = i.InvoiceID,
+                    CustomerID = i.InvoiceBuyer.CustomerID,
+                    InvoiceNo = i.TrackCode + i.No,
+                    ContactName = i.InvoiceBuyer.ContactName,
+                    Address = i.InvoiceBuyer.Address,
+                    Remark = ""
+                }).ToList();
+            var preItem = items[0];
+            for (int i = 1; i < items.Count; i++)
+            {
+                var current = items[i];
+                if (current.ContactName == preItem.ContactName && current.Address == preItem.Address)
+                {
+                    current.PackageID = preItem.PackageID;
+                }
+                preItem = current;
+            }
+    <text>
+        var newItems = @(Html.Raw(JsonConvert.SerializeObject(items)));
+        uiHandling.items = uiHandling.items.concat(newItems);
+        uiHandling.showDetails();
+    </text>
+        }
+    });
+</script>
+
+

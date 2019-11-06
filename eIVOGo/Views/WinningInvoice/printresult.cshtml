@@ -1,0 +1,26 @@
+
+
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+
+@section headContent { 
+ 
+}
+@section mainContent { 
+查詢條件：
+    @{ ((CommonInquiry<InvoiceItem>)this.Model).RenderQueryMessage(Html);
+        Html.RenderPartial("~/Views/Module/HidePostData.ascx");
+       Html.RenderPartial("~/Views/Module/WinningInvoiceReport.ascx", models);}
+ 
+}
+<script runat="server">
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        ViewBag.ActionName = "首頁 > 發票作業";
+    }
+
+</script>

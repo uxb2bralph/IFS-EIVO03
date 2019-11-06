@@ -1,0 +1,30 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+    IQueryable<Organization> _model = (IQueryable<Organization>)this.Model;
+    SellerSelectorViewModel _viewModel = (SellerSelectorViewModel)ViewBag.ViewModel;
+}
+<tr>
+    <th>@(ViewBag.Title ?? "開立人統編")</th>
+    <td class="tdleft">
+        @{ 
+            ViewBag.SelectorIndication = "全部";
+            Html.RenderPartial("~/Views/DataFlow/SellerSelector.cshtml", _model);
+        }
+    </td>
+</tr>
+

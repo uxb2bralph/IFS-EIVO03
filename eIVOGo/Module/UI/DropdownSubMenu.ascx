@@ -1,0 +1,6 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="DropdownSubMenu.ascx.cs" Inherits="Uxnet.Web.Module.ForBootstrap.DropdownSubMenu" %>
+
+<li data-toggle="collapse" data-target="#<%# _menuBlock.ClientID %>" class="collapsed active">
+    <a href="#"><i class="fa fa-gift fa-lg"></i><%# _dataItem.value %> <span class="arrow"></span></a>
+</li>
+<asp:PlaceHolder ID="subMenu" runat="server" EnableViewState="false"></asp:PlaceHolder>

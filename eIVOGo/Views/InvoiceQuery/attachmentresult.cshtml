@@ -1,0 +1,22 @@
+
+
+
+@using eIVOGo.Helper
+
+@section headContent { 
+ 
+}
+@{ Html.RenderPartial("Module/AttachmentResult", Model);}
+
+<script runat="server">
+
+    public override void Dispose()
+    {
+        var models = TempData.GetGenericModelSource();
+        if (models != null)
+            models.Dispose();
+        
+        base.Dispose();
+    }
+
+</script>

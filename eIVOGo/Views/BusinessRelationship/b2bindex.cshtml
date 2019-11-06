@@ -1,0 +1,35 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using Model.Locale
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using eIVOGo.Controllers
+
+@{ Register src="~/Module/SAM/Business/MaintainBusinessRelationship.ascx" tagname="MaintainBusinessRelationship" tagprefix="uc1" }
+@section headContent { 
+ 
+}
+@section mainContent { 
+<uc1:MaintainBusinessRelationship ID="MaintainBusinessRelationship1" 
+        runat="server" /> 
+}
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+    ModelStateDictionary _modelState;
+
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        ViewBag.ActionName = "首頁 > B2B相對營業人管理";
+    }
+
+</script>

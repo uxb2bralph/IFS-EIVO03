@@ -1,0 +1,54 @@
+﻿@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    TaxMediaQueryViewModel _viewModel;
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _viewModel = (TaxMediaQueryViewModel)ViewBag.ViewModel;
+
+    Response.Clear();
+    Response.ClearContent();
+    Response.ClearHeaders();
+    Response.AddHeader("Cache-control", "max-age=1");
+    Response.ContentType = "application/octet-stream";
+    Response.AddHeader("Content-Disposition", $"attachment;filename={DateTime.Today:yyyy-MM-dd}.csv");
+
+    DateTime dateFrom = new DateTime(_viewModel.Year.Value, _viewModel.PeriodNo.Value * 2 - 1, 1);
+
+    <text>格式代號,資料所屬期別(年月),幣別,銷售總計金額,匯率,換算後銷售總計金額,銷售額,銷項稅額,交易筆數,統一發票字軌,發票起號,發票迄號</text>
+
+    for (int idx = 0; idx < 2; idx++)
+    {
+        var invoiceItems = models.DataContext.GetInvoiceReport(_viewModel.SellerID, dateFrom, dateFrom.AddMonths(1));
+        var allowanceItems = models.DataContext.GetAllowanceReport(_viewModel.SellerID, dateFrom, dateFrom.AddMonths(1));
+
+        foreach (var g in invoiceItems)
+        {
+<text>35,@(dateFrom.Year - 1911)@($"{dateFrom.Month:00}"),@(g.CurrencyID == 0 ? "NTD" : g.AbbrevName ),@(g.TotalAmount),,,,,@(g.RecordCount),@(g.TrackCode),@($"{g.StartNo:00000000}"),@($"{g.EndNo:00000000}")</text>
+        }
+
+        foreach (var g in allowanceItems)
+        {
+<text>33,@(dateFrom.Year - 1911)@($"{dateFrom.Month:00}"),@(g.CurrencyID == 0 ? "NTD" : g.AbbrevName ),@(g.TotalAmount),,,,,@(g.RecordCount),@(g.TrackCode),@($"{g.StartNo:00000000}"),@($"{g.EndNo:00000000}")</text>
+        }
+
+        dateFrom = dateFrom.AddMonths(1);
+    }
+}
+

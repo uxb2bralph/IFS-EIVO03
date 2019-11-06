@@ -1,0 +1,115 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+
+    models = ViewContext.Controller.DataSource();
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+
+    ProcessRequestQueryViewModel _viewModel = (ProcessRequestQueryViewModel)ViewBag.ViewModel;
+}
+<!--交易畫面標題-->
+@{ 
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "工作清單");
+}
+@{
+    ViewBag.DisplayType = Naming.FieldDisplayType.Query;
+}
+<div class="border_gray">
+    <table style="width:100%;" border="0" cellpadding="0" cellspacing="0" class="left_title" id="queryArea">
+        <tr>
+            <th colspan="2" class="Head_style_a">查詢條件</th>
+        </tr>
+        @{
+            Html.RenderPartial("~/Views/ProcessRequest/DataField/Sender.cshtml");
+            Html.RenderPartial("~/Views/ProcessRequest/DataField/SubmitDate.cshtml");
+            Html.RenderPartial("~/Views/ProcessRequest/DataField/ProcessStart.cshtml");
+            Html.RenderPartial("~/Views/ProcessRequest/DataField/ProcessComplete.cshtml");
+        }
+        <tr>
+            <td colspan="2" style="text-align:center;">
+                <input name="btnQuery" class="btn" type="button" value="查詢" onclick="$inquiryAgent.initQuery = true; $inquiryAgent.inquire();" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    $(function () {
+        $inquiryAgent.inquire = function (pageNum) {
+            var $this = $inquiryAgent;
+            var $placement = $('input[value="查詢"]').closest('table');
+            var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
+
+            if (isNaN(pageNum)) {
+                $inquiryAgent.viewModel.PageIndex = null;
+            }
+            else {
+                $inquiryAgent.viewModel.PageIndex = pageNum;
+            }
+            $formData = $.extend($inquiryAgent.viewModel, $formData);
+
+            showLoading();
+            $.post('@Html.Raw(Url.Action("InquireRequest", "ProcessRequest"))', $formData, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
+                } else {
+                    if ($this.initQuery) {
+                        if ($this.$queryResult) {
+                            $this.$queryResult.remove();
+                        }
+
+                        $this.$queryResult = $(data);
+                        $('#queryArea').after($this.$queryResult);
+                        $this.initQuery = false;
+
+                    } else {
+                        $this.doPage(data);
+                    }
+                }
+            });
+        };
+        $inquiryAgent.deleteItem = function (keyID) {
+            if (confirm('確定刪除此項目?')) {
+                var event = event || window.event;
+                var $tr = $(event.target).closest('tr');
+                $.post('@($"/{eIVOGo.Properties.Settings.Default.TaskCenter}/InvoiceData/DeleteProcessRequest")', { 'keyID': keyID }, function (data) {
+                    if (data.result) {
+                        alert('資料已刪除!!')
+                        $tr.remove();
+                    } else {
+                        reportError(data);
+                    }
+                });
+            }
+        };
+    });
+
+</script>
+@if (_viewModel.StartQuery == true)
+{
+    <script>
+        $(function () {
+            $('input[name="btnQuery"]').click();
+        });
+    </script>
+}
+

@@ -1,0 +1,49 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Locale
+@using eIVOGo.Controllers
+@using Business.Helper
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    String _dataRole;
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _dataRole = (String)ViewBag.DataRole;
+}
+
+@if (_modelState != null && !_modelState.IsValid)
+{
+    <script>
+        $(function () {
+            console.log('@(_modelState.ErrorMessage())');
+                @foreach (var key in _modelState.Keys.Where(k => _modelState[k].Errors.Count > 0))
+                {
+                    if (String.IsNullOrEmpty(_dataRole))
+                    {
+                        <text>
+            $('[name="@(key)"]').addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+            $('[name="@(key)"][data-role="@(_dataRole)"]').addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
+                        </text>
+                        }
+                    }
+        });
+    </script>
+}
+
+

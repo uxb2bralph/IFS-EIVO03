@@ -1,0 +1,21 @@
+
+
+@using eIVOGo.Helper
+@{ Register Src="~/Views/DataExchange/Module/DataIndex.ascx" TagPrefix="uc1" TagName="DataIndex" }
+
+@section headContent { 
+ 
+}
+<uc1:DataIndex runat="server" ID="DataIndex" />
+<script runat="server">
+
+    public override void Dispose()
+    {
+        var models = TempData.GetGenericModelSource();
+        if (models != null)
+            models.Dispose();
+        
+        base.Dispose();
+    }
+
+</script>

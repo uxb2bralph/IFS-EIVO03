@@ -1,0 +1,274 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="InvoiceClient.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SignerSubjectName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">UXSigner</Value>
+    </Setting>
+    <Setting Name="SignerCspName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SignerKeyPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UploadInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Invoice</Value>
+    </Setting>
+    <Setting Name="UploadInvoiceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CancelInvoice</Value>
+    </Setting>
+    <Setting Name="AutoWelfareInterval" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
+    <Setting Name="WelfareInfoFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SWA</Value>
+    </Setting>
+    <Setting Name="IsAutoWelfare" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="OutputEncoding" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">utf-8</Value>
+    </Setting>
+    <Setting Name="DownloadDataFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">傳送大平台資料</Value>
+    </Setting>
+    <Setting Name="IsAutoInvService" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AutoInvServiceInterval" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
+    <Setting Name="UploadAllowanceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Allowance</Value>
+    </Setting>
+    <Setting Name="UploadAllowanceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CancelAllowance</Value>
+    </Setting>
+    <Setting Name="DownloadInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">傳送大平台資料\發票</Value>
+    </Setting>
+    <Setting Name="DownloadInvoiceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">傳送大平台資料\作廢發票</Value>
+    </Setting>
+    <Setting Name="DownloadAllowanceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">傳送大平台資料\折讓</Value>
+    </Setting>
+    <Setting Name="DownloadAllowanceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">傳送大平台資料\作廢折讓</Value>
+    </Setting>
+    <Setting Name="DownloadWinningFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">BonusInvoice</Value>
+    </Setting>
+    <Setting Name="OutputEncodingWithoutBOM" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DownloadDataInAbsolutePath" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="AppTitle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">電子發票傳輸服務－店家用戶端</Value>
+    </Setting>
+    <Setting Name="UploadCsvInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Invoice_csv</Value>
+    </Setting>
+    <Setting Name="UploadCsvInvoiceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CancelInvoice_csv</Value>
+    </Setting>
+    <Setting Name="DownloadInvoiceMapping" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">InvoiceMap</Value>
+    </Setting>
+    <Setting Name="CsvEncoding" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Big5</Value>
+    </Setting>
+    <Setting Name="RootCA" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">UXB2B Certificate Center.cer</Value>
+    </Setting>
+    <Setting Name="UploadBranchTrackFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">InvoiceNoAssignment</Value>
+    </Setting>
+    <Setting Name="UploadSellerInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SellerInvoice</Value>
+    </Setting>
+    <Setting Name="UploadPreInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">PreInvoice</Value>
+    </Setting>
+    <Setting Name="UploadAttachmentFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Attachment</Value>
+    </Setting>
+    <Setting Name="DownloadSaleInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">InvoicePDF</Value>
+    </Setting>
+    <Setting Name="DownloadInvoiceMailTracking" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">InvoiceMailTracking</Value>
+    </Setting>
+    <Setting Name="DownloadInvoiceReturnedMail" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ReturnedMail</Value>
+    </Setting>
+    <Setting Name="SellerReceiptNo" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="InvoiceTxnPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\UXB2B_EIVO</Value>
+    </Setting>
+    <Setting Name="MainTabs" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">
+                    InvoiceClient.MainContent.SystemConfigTab, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                </Value>
+    </Setting>
+    <Setting Name="UploadC0501InvoiceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CancelInvoice_C0501</Value>
+    </Setting>
+    <Setting Name="UploadC0401SellerInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SellerInvoice_C0401</Value>
+    </Setting>
+    <Setting Name="UploadInvoiceEnterprise" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Enterprise</Value>
+    </Setting>
+    <Setting Name="TrackCodeFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">InvoiceTrackCode</Value>
+    </Setting>
+    <Setting Name="VacantInvoiceNoFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">VacantInvoiceNo</Value>
+    </Setting>
+    <Setting Name="ServiceName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">EIVO03ClientService(Product)</Value>
+    </Setting>
+    <Setting Name="ResponseUpload" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PGPWaitingForExitInMilliSeconds" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">30000</Value>
+    </Setting>
+    <Setting Name="ClientID" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UploadCsvBuyerFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2B相對營業人_csv</Value>
+    </Setting>
+    <Setting Name="UploadAttachment" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://eceivo.uxifs.com/eivo03/Published/UploadAttachmentForGoogle.ashx</Value>
+    </Setting>
+    <Setting Name="ActivationKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="InvoiceClient_WS_Invoice_eInvoiceService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:2598/Published/eInvoiceService.asmx</Value>
+    </Setting>
+    <Setting Name="UploadCsvAllowanceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Allowance_csv</Value>
+    </Setting>
+    <Setting Name="UploadCsvAllowanceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CancelAllowance_csv</Value>
+    </Setting>
+    <Setting Name="AutoRetry" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="WS_TimeoutInMilliSeconds" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">300000</Value>
+    </Setting>
+    <Setting Name="EnableFailedUploadAlert" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="UploadCustomerCsvInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">InvoiceFull_csv</Value>
+    </Setting>
+    <Setting Name="B2BUploadInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2BSellerInvoice</Value>
+    </Setting>
+    <Setting Name="B2BUploadBuyerInvoiceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">BuyerInvoice</Value>
+    </Setting>
+    <Setting Name="B2BUploadAllowanceFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2BAllowance</Value>
+    </Setting>
+    <Setting Name="B2BUploadInvoiceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2BCancelInvoice</Value>
+    </Setting>
+    <Setting Name="B2BUploadAllowanceCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2BCancelAllowance</Value>
+    </Setting>
+    <Setting Name="B2BCounterpartBusinessFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">B2B相對營業人</Value>
+    </Setting>
+    <Setting Name="B2BUploadReceiptFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Receipt</Value>
+    </Setting>
+    <Setting Name="B2BUploadReceiptCancellationFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CancelReceipt</Value>
+    </Setting>
+    <Setting Name="EnableB2BAutoReceiving" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="TransferManager" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">
+                  InvoiceClient.TransferManagement.CsvInvoiceTransferManagerV2, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.TransferManagement.InvoiceTransferManagerForAgent, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.TransferManagement.InvoiceBusinessTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.TransferManagement.BranchTrackTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.TransferManagement.B2BInvoiceTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                </Value>
+    </Setting>
+    <Setting Name="ProcessCount" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ProcessArrayCount" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ProcessArrayIndex" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="RetryOnConnectException" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="FileWatcherProcessCount" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="RetryCancellationWhenInvoiceNotFound" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DisplayName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">電子發票用戶端傳輸服務(EIVO03)</Value>
+    </Setting>
+    <Setting Name="InvoicePDFZipPrefix" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">taiwan_uxb2b_scanned_gui_pdf_</Value>
+    </Setting>
+    <Setting Name="ZipInvoice" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ZipInvoice</Value>
+    </Setting>
+    <Setting Name="PDFGeneratorOutput" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">E:\UXB2B_EIVO_GOOGLE\ZipInvoice</Value>
+    </Setting>
+    <Setting Name="ClearTxnPath" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ServerInspector" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">
+                  InvoiceClient.Agent.VacantInvoiceNoInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoiceMappingInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.B2BInvoiceInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoiceMailTrackingInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoicePDFInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.AllowancePDFGenerator, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoiceServerInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                </Value>
+    </Setting>
+    <Setting Name="PackerCycleDelayInSeconds" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="ConvertDataToAllowance" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:2598/DataView/ConvertDataToAllowance</Value>
+    </Setting>
+    <Setting Name="MaxFileCountInPDFZip" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1024</Value>
+    </Setting>
+    <Setting Name="WaitForInvoicePDFInSeconds" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">300</Value>
+    </Setting>
+    <Setting Name="MaxWaitingTurns" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="AppCulture" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">en-US</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

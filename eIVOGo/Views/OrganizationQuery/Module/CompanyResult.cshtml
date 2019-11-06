@@ -1,0 +1,70 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+
+    ModelSource<InvoiceItem> models;
+    Model.Security.MembershipManagement.UserProfileMember _profile;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _profile = Business.Helper.WebPageUtility.UserProfile;
+    models.DataSourcePath = VirtualPathUtility.ToAbsolute("~/OrganizationQuery/GridPage");
+    IQueryable<Organization> _model = (IQueryable<Organization>)this.Model;
+}
+@if (!models.InquiryHasError)
+{
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");
+
+    <div class="container border_gray" style="overflow-x: auto;">
+        @{ var recordCount = _model.Count();}
+        @if (recordCount > 0)
+        {
+            Html.RenderPartial("~/Views/OrganizationQuery/Module/CompanyList.cshtml", _model);
+
+            <nav aria-label="Page navigation">
+                <ul class="pagination" id="compPagination"></ul>
+            </nav>
+            <script>
+                var pageNum = 0;
+                $(function () {
+                    var obj = $('#compPagination').twbsPagination({
+                        totalPages: @((recordCount + Uxnet.Web.Properties.Settings.Default.PageSize - 1) / Uxnet.Web.Properties.Settings.Default.PageSize),
+                        visiblePages: 10,
+                        initiateStartPageClick: false,
+                        first: '最前',
+                        prev: '上頁',
+                        next: '下頁',
+                        last: '最後',
+                        onPageClick: function (event, page) {
+                            pageNum = page;
+                            inquireCompany(page, function (data) {
+                                $('.companyList').html(data);
+                            });
+                        }
+                    });
+                });
+
+            </script>
+        }
+        else
+        {
+            <font color="red">查無資料!!</font>
+            <a class="btn" onclick="createCompany();">新增營業人</a>
+        }
+    </div>
+}
+
