@@ -21,13 +21,13 @@ namespace InvoiceClient.MainContent
         private void btnReceiptNo_Click(object sender, EventArgs e)
         {
             Settings.Default["SellerReceiptNo"] = SellerReceiptNo.Text;
-            MessageBox.Show("設定完成!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Setup is complete!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnServerUrl_Click(object sender, EventArgs e)
         {
             Settings.Default["InvoiceClient_WS_Invoice_eInvoiceService"] = ServerUrl.Text;
-            MessageBox.Show("設定完成!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Setup is complete!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public string TabName
@@ -37,7 +37,7 @@ namespace InvoiceClient.MainContent
 
         public string TabText
         {
-            get { return "系統設定"; }
+            get { return "System Setting"; }
         }
 
         private void SystemConfigTab_VisibleChanged(object sender, EventArgs e)
@@ -59,7 +59,7 @@ namespace InvoiceClient.MainContent
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     Settings.Default["InvoiceTxnPath"] = dialog.SelectedPath;
-                    MessageBox.Show("設定完成!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Setup is complete!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }

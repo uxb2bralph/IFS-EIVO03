@@ -509,7 +509,7 @@ namespace eIVOGo.Module.Common
                     }
                 }
             }
-
+            //TODO:yuki Delete三行註解
             SmtpClient smtpclient = new SmtpClient(Uxnet.Web.Properties.Settings.Default.MailServer);
             smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
             smtpclient.Send(message);

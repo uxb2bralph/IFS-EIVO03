@@ -10,18 +10,15 @@ namespace eIVOGo.Models.ViewModel
 {
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Please enter {0}")]
         [Display(Name = "PID")]
         //[EmailAddress]
-        public string PID { get; set; }
-
-        [Display(Name = "ValidCode")]
-        [CaptchaValidation("EncryptedCode", ErrorMessage = "驗證碼錯誤!!")]
-        public string ValidCode { get; set; }
+        public string PID { get; set; }        
 
         [Display(Name = "EncryptedCode")]
         public string EncryptedCode { get; set; }
 
+        [Required(ErrorMessage = "Please enter {0}")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }

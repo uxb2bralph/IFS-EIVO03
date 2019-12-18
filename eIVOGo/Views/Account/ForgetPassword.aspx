@@ -28,14 +28,14 @@
     -->
     </script>
 </head>
-<body>
+<body class="forget">
     <div class="get_pw">
         <form class="getmail" id="form1" runat="server">
             <table border="0" cellspacing="0" cellpadding="0" class="sign_in">
                 <tr>
                     <td>
                         <span>帳號：</span><br />
-                        <input name="PID" type="text" placeholder="請輸入帳號!!" required />
+                        <input name="PID" type="text" placeholder="請輸入帳號!!" class="form-control" required />
                     </td>
                     <td>
                         <a onclick="javascript:login();">
@@ -62,7 +62,7 @@
     <div class="copyright" style="position: absolute; top: 290px; left: 50%;">
         &copy; 2011
         <script type="text/javascript" language="javascript">            show_date();</script>
-        UXB2B. All rights reserved. [ <a href="<%= Url.Action("Login","Account") %>">回登入頁</a> ]
+        UXB2B. All rights reserved. [ <a href="<%= Url.Action("CbsLogin","Account") %>">回登入頁</a> ]
     </div>
 </body>
 </html>

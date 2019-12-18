@@ -101,11 +101,11 @@ namespace InvoiceClient
 
         private bool initializeActivation()
         {
-            String actKey = Microsoft.VisualBasic.Interaction.InputBox("新輸入識別代碼:", "啟用系統");
+            String actKey = Microsoft.VisualBasic.Interaction.InputBox("New input identification code:", "Enable the system");
             if (!String.IsNullOrEmpty(actKey) && InvoiceClient.Helper.AppSigner.ResetCertificate(actKey))
             {
                 InvoiceClient.Helper.AppSigner.InstallRootCA();
-                MessageBox.Show("連線服務已啟用!!", "啟用系統", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("New input identification code!!", "Enable the system", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return true;
             }
             return false;
@@ -126,7 +126,7 @@ namespace InvoiceClient
             {
                 if (!initializeActivation())
                 {
-                    MessageBox.Show("無法建立識別資料!!", "啟用失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Could not create identification!!", "Activation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     this.Close();
                     return;
                 }
@@ -160,12 +160,12 @@ namespace InvoiceClient
 
         private void miActivate_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("請確定是否以新的識別代碼建立連線服務?", "啟用系統", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Please determine whether to establish the connection service with the new identification code?", "Enable the system", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                String actKey = Microsoft.VisualBasic.Interaction.InputBox("新輸入識別代碼:", "啟用系統");
+                String actKey = Microsoft.VisualBasic.Interaction.InputBox("New input identification code:", "Enable the system");
                 if (!String.IsNullOrEmpty(actKey) && InvoiceClient.Helper.AppSigner.ResetCertificate(actKey))
                 {
-                    MessageBox.Show("連線服務已啟用!!", "啟用系統", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Connection service is enabled!!", "Enable the system", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }

@@ -136,9 +136,8 @@
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.Spatial, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -149,14 +148,19 @@
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.7\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.7\lib\net45\System.Web.Http.Cors.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
@@ -248,6 +252,7 @@
     <Content Include="bin\Ionic_Utils_Zip_license.txt" />
     <Content Include="bin\License.txt" />
     <Content Include="bin\MessagingToolkit.QRCode.dll" />
+    <Content Include="bin\QREncrypter.dll" />
     <Content Include="bin\ThirdParties.dll" />
     <Content Include="bin\ThirdParties.pdb" />
     <Content Include="bin\ThoughtWorks.QRCode.dll" />
@@ -364,6 +369,8 @@
     <Content Include="EIVO\WebUploadMailMessage.aspx" />
     <Content Include="EIVO\WebUploadReturnMailMessage.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="images\e-GUIplatform%28360%29.png" />
+    <Content Include="images\e-GUIplatform%28500%29.png" />
     <Content Include="logs\ORCodeKey.txt" />
     <Content Include="Published\eInvoiceServiceGoogleCBM.asmx" />
     <Content Include="Scripts\FileSaver.min.js" />
@@ -375,6 +382,7 @@
     <Content Include="Helper\invoice-common.js" />
     <Content Include="Helper\RenderContent.aspx" />
     <Content Include="Helper\ShowAllowanceModal.aspx" />
+    <Content Include="Views\Account\Login.aspx" />
     <Content Include="Views\AllowanceProcess\Module\PrintResult.ascx" />
     <Content Include="Views\BusinessRelationship\Module\CounterpartBusinessXmlResult.ascx" />
     <Content Include="Views\BusinessRelationship\Module\GroupMemberOptions.ascx" />
@@ -1042,7 +1050,7 @@
     <Content Include="SYS\MaintainAnnouncement.aspx" />
     <Content Include="SYS\MaintainDocumentFlow.aspx" />
     <Content Include="SYS\MaintainDocumentTypeFlow.aspx" />
-    <Content Include="Views\Account\Login.aspx" />
+    <Content Include="Views\Account\CbsLogin.aspx" />
     <Content Include="logout.aspx" />
     <Content Include="Views\DataFlow\UserRoleSelector.ascx" />
     <Content Include="Views\Handling\MailTracking\PackedItemList.ascx" />

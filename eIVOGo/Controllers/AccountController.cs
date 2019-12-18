@@ -37,14 +37,14 @@ namespace eIVOGo.Controllers
         // GET: Account
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> Login(LoginViewModel viewModel, string returnUrl)
+        public async Task<ActionResult> CbsLogin(LoginViewModel viewModel, string returnUrl)
         {
             ViewBag.ViewModel = viewModel;
             ViewBag.ModelState = this.ModelState;
 
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Account/Login.aspx");
+                return View("~/Views/Account/CbsLogin.aspx");
             }
 
             LoginHandler login = new LoginHandler();
@@ -52,15 +52,15 @@ namespace eIVOGo.Controllers
             if (!login.ProcessLogin(viewModel.PID, viewModel.Password, out msg))
             {
                 ModelState.AddModelError("PID", msg);
-                return View("~/Views/Account/Login.aspx");
+                return View("~/Views/Account/CbsLogin.aspx");
             }
             returnUrl = viewModel.ReturnUrl.GetEfficientString();
-            return Redirect(returnUrl ?? msg ?? "~/Account/Login");
+            return Redirect(returnUrl ?? msg ?? "~/Account/CbsLogin");
 
         }
 
         [AllowAnonymous]
-        public ActionResult Login()
+        public ActionResult CbsLogin()
         {
             //UserProfile profile = HttpContext.GetUser();
             //if (profile == null)
@@ -70,7 +70,7 @@ namespace eIVOGo.Controllers
             this.HttpContext.Logout();
             Session.Abandon();
 
-            return View("~/Views/Account/Login.aspx");
+            return View("~/Views/Account/CbsLogin.aspx");
         }
 
         public ActionResult ForgetPassword()

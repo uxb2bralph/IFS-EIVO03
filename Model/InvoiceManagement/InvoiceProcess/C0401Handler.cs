@@ -150,9 +150,22 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     CDS_Document = docItem,
                     DispatchDate = DateTime.Now,
                     StepID = (int)stepID
-                });
+                });           
 
+            //yuki加一筆到DataProcessLog
             docItem.PushLogOnSubmit(models, stepID, Naming.DataProcessStatus.Ready);
+        }
+
+        //TODO:yuki加一筆到ProcessRequestDocument
+        public static void PushProcessRequestDocumentOnSubmit(GenericManager<EIVOEntityDataContext> models, CDS_Document docItem, int? taskID)
+        {            
+            models.GetTable<ProcessRequestDocument>().InsertOnSubmit(
+                            new ProcessRequestDocument
+                            {
+                                CDS_Document = docItem,
+                                TaskID = taskID,
+                                CreateDate = DateTime.Now
+                            });            
         }
 
         private static Task __Turnkey;

@@ -54,7 +54,7 @@ namespace InvoiceClient.MainContent
         {
             Settings.Default["IsAutoInvService"] = cbAutoInvService.Checked;
             _inspector.StartUp();
-            MessageBox.Show("設定完成!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Setup is complete!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
 
@@ -65,11 +65,11 @@ namespace InvoiceClient.MainContent
             {
                 Settings.Default["AutoInvServiceInterval"] = interval;
                 _inspector.StartUp();
-                MessageBox.Show("設定完成!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Setup is complete!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                MessageBox.Show("請輸入整數的間隔數值!!", "自動下載電子發票資料", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("Please enter an integer interval value!!", "Download electronic invoice information automatically", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 AutoInvServiceInterval.Focus();
             }
 
@@ -81,7 +81,7 @@ namespace InvoiceClient.MainContent
             _inspector.ExecutiveService(pathInfo);
             if (pathInfo.Count > 0)
             {
-                if (MessageBox.Show("有新的發票資料下載完成!\r\n是否開啟資料夾檢視?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                if (MessageBox.Show("New invoice information downloaded!\r\nWhether to open folder view?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                 {
                     foreach (var item in pathInfo)
                     {
@@ -91,7 +91,7 @@ namespace InvoiceClient.MainContent
             }
             else
             {
-                MessageBox.Show("沒有新的發票資料!!", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("No new invoice information!!", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -102,7 +102,7 @@ namespace InvoiceClient.MainContent
 
         public string TabText
         {
-            get { return "服務設定"; }
+            get { return "Service Settings"; }
         }
 
         private void InvoiceServerConfig_VisibleChanged(object sender, EventArgs e)

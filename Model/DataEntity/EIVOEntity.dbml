@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="EIVO03" Class="EIVOEntityDataContext" Serialization="Unidirectional" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=192.168.200.23\sqlexpress,1433;Initial Catalog=EIVO03;Integrated Security=True" SettingsObjectName="Model.Properties.Settings" SettingsPropertyName="eInvoiceConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost\sqlexpress;Initial Catalog=EIVO03;Integrated Security=True" SettingsObjectName="Model.Properties.Settings" SettingsPropertyName="EIVO03ConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Organization" Member="Organization">
     <Type Name="Organization">
       <Column Name="ContactName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
@@ -156,6 +156,7 @@
       <Association Name="CDS_Document_B0201DispatchQueue" Member="B0201DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="B0201DispatchQueue" />
       <Association Name="CDS_Document_B0202DispatchQueue" Member="B0202DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="B0202DispatchQueue" />
       <Association Name="CDS_Document_DocumentPrintQueue" Member="DocumentPrintQueue" ThisKey="DocID" OtherKey="DocID" Type="DocumentPrintQueue" Cardinality="One" />
+      <Association Name="CDS_Document_ProcessRequestDocument" Member="ProcessRequestDocument" ThisKey="DocID" OtherKey="DocID" Type="ProcessRequestDocument" Cardinality="One" />
       <Association Name="DocumentType_CDS_Document" Member="DocumentType" ThisKey="DocType" OtherKey="TypeID" Type="DocumentType" IsForeignKey="true" />
       <Association Name="LevelExpression_CDS_Document" Member="LevelExpression" ThisKey="CurrentStep" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
     </Type>
@@ -1639,10 +1640,20 @@
       <Column Name="LogID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="ProcessRequest_ProcessRequestQueue" Member="ProcessRequestQueue" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessRequestQueue" Cardinality="One" />
       <Association Name="ProcessRequest_ProcessCompletionNotification" Member="ProcessCompletionNotification" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessCompletionNotification" Cardinality="One" />
+      <Association Name="ProcessRequest_ProcessRequestDocument" Member="ProcessRequestDocument" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessRequestDocument" />
       <Association Name="ExceptionLog_ProcessRequest" Member="ExceptionLog" ThisKey="LogID" OtherKey="LogID" Type="ExceptionLog" IsForeignKey="true" />
       <Association Name="Organization_ProcessRequest" Member="Organization" ThisKey="AgentID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
       <Association Name="ProcessRequestType_ProcessRequest" Member="ProcessRequestType" ThisKey="ProcessType" OtherKey="ProcessType" Type="ProcessRequestType" IsForeignKey="true" />
       <Association Name="UserProfile_ProcessRequest" Member="UserProfile" ThisKey="Sender" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="[proc].ProcessRequestDocument" Member="ProcessRequestDocument">
+    <Type Name="ProcessRequestDocument">
+      <Column Name="TaskID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DocID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="CDS_Document_ProcessRequestDocument" Member="CDS_Document" ThisKey="DocID" OtherKey="DocID" Type="CDS_Document" IsForeignKey="true" />
+      <Association Name="ProcessRequest_ProcessRequestDocument" Member="ProcessRequest" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessRequest" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.MatchDocumentAttachment" Method="MatchDocumentAttachment">

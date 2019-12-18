@@ -388,6 +388,7 @@
     <Compile Include="Security\MembershipManagement\UserProfileFactory.cs" />
     <Compile Include="Security\MembershipManagement\UserProfileImpl.cs" />
     <Compile Include="Security\MembershipManagement\UserProfileManager.cs" />
+    <Compile Include="TaskManagement\TaskManager.cs" />
     <Compile Include="UIType.cs" />
     <Compile Include="UploadManagement\CsvUploadManager.cs" />
     <Compile Include="UploadManagement\ICsvUploadManager.cs" />
@@ -651,6 +652,7 @@
       <Name>Uxnet.Web</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

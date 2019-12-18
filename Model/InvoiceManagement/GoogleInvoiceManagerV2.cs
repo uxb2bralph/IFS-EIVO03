@@ -23,6 +23,7 @@ namespace Model.InvoiceManagement
 {
     public partial class GoogleInvoiceManagerV2 : GoogleInvoiceManager
     {
+        public int TaskID { get; set; }
 
         public GoogleInvoiceManagerV2()
             : base()
@@ -45,15 +46,16 @@ namespace Model.InvoiceManagement
                 EventItems = null;
                 List<InvoiceItem> eventItems = new List<InvoiceItem>();
                 bool forTerms = ChannelID.HasValue && ChannelID == (int)Naming.ChannelIDType.ForGoogleTerms;
-
+                //TODO:yuki大檔案處理
                 bool countInfo = item.Invoice.Length > 1000;
-                if(countInfo)
+                if (countInfo)
                 {
                     Console.WriteLine($"Large file process:{item.Invoice.Length}");
                 }
 
                 int count = 0, dbCheckCount = 180;
                 InvoiceManager workingMgr = new InvoiceManager();
+
                 GoogleInvoiceRootInvoiceValidator validator = new GoogleInvoiceRootInvoiceValidator(workingMgr, owner.Organization)
                 {
                     UseDefaultCrossBorderMerchantCarrier = true,
@@ -78,7 +80,7 @@ namespace Model.InvoiceManagement
                     {
                         var invItem = item.Invoice[idx];
 
-                        InvoiceItem newItem = validator.SaveRootInvoice(invItem, forTerms, InvoiceClientID, ChannelID, out Exception ex);
+                        InvoiceItem newItem = validator.SaveRootInvoice(invItem, forTerms, InvoiceClientID, ChannelID, TaskID, out Exception ex);
                         if (countInfo)
                         {
                             Console.Write("+");
@@ -130,7 +132,7 @@ namespace Model.InvoiceManagement
         public override Dictionary<int, Exception> SaveUploadAllowance(AllowanceRoot item, OrganizationToken owner)
         {
             Dictionary<int, Exception> result = new Dictionary<int, Exception>();
-            if(item!=null && item.Allowance!=null&&item.Allowance.Length>0)
+            if (item != null && item.Allowance != null && item.Allowance.Length > 0)
             {
                 AllowanceRootAllowanceValidator validator = new AllowanceRootAllowanceValidator(this, owner.Organization);
                 var table = this.GetTable<InvoiceAllowance>();
@@ -138,7 +140,7 @@ namespace Model.InvoiceManagement
                 this.EventItems_Allowance = null;
                 List<InvoiceAllowance> eventItems = new List<InvoiceAllowance>();
 
-                for(int idx = 0;idx < item.Allowance.Length;idx++)
+                for (int idx = 0; idx < item.Allowance.Length; idx++)
                 {
                     try
                     {
@@ -160,7 +162,7 @@ namespace Model.InvoiceManagement
                         eventItems.Add(newItem);
 
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Logger.Error(ex);
                         result.Add(idx, ex);

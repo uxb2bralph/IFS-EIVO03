@@ -56,37 +56,37 @@
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.groupBox3.Location = new System.Drawing.Point(0, 290);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(805, 155);
+            this.groupBox3.Size = new System.Drawing.Size(1049, 162);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "電子發票作業";
+            this.groupBox3.Text = "Electronic Invoice Operation";
             // 
             // btnInvService
             // 
             this.btnInvService.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnInvService.Location = new System.Drawing.Point(548, 87);
+            this.btnInvService.Location = new System.Drawing.Point(672, 94);
             this.btnInvService.Name = "btnInvService";
-            this.btnInvService.Size = new System.Drawing.Size(135, 39);
+            this.btnInvService.Size = new System.Drawing.Size(299, 39);
             this.btnInvService.TabIndex = 16;
-            this.btnInvService.Text = "立即下載";
+            this.btnInvService.Text = "Download Now Button";
             this.btnInvService.UseVisualStyleBackColor = true;
             this.btnInvService.Click += new System.EventHandler(this.btnInvService_Click);
             // 
             // btnAutoInvService
             // 
             this.btnAutoInvService.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnAutoInvService.Location = new System.Drawing.Point(598, 34);
+            this.btnAutoInvService.Location = new System.Drawing.Point(839, 36);
             this.btnAutoInvService.Name = "btnAutoInvService";
-            this.btnAutoInvService.Size = new System.Drawing.Size(84, 39);
+            this.btnAutoInvService.Size = new System.Drawing.Size(132, 39);
             this.btnAutoInvService.TabIndex = 15;
-            this.btnAutoInvService.Text = "確定";
+            this.btnAutoInvService.Text = "Confirm";
             this.btnAutoInvService.UseVisualStyleBackColor = true;
             this.btnAutoInvService.Click += new System.EventHandler(this.btnAutoInvService_Click);
             // 
             // AutoInvServiceInterval
             // 
             this.AutoInvServiceInterval.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.AutoInvServiceInterval.Location = new System.Drawing.Point(405, 34);
+            this.AutoInvServiceInterval.Location = new System.Drawing.Point(731, 38);
             this.AutoInvServiceInterval.Name = "AutoInvServiceInterval";
             this.AutoInvServiceInterval.Size = new System.Drawing.Size(87, 35);
             this.AutoInvServiceInterval.TabIndex = 14;
@@ -97,9 +97,9 @@
             this.cbAutoInvService.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.cbAutoInvService.Location = new System.Drawing.Point(2, 34);
             this.cbAutoInvService.Name = "cbAutoInvService";
-            this.cbAutoInvService.Size = new System.Drawing.Size(438, 33);
+            this.cbAutoInvService.Size = new System.Drawing.Size(723, 33);
             this.cbAutoInvService.TabIndex = 13;
-            this.cbAutoInvService.Text = "自動下載電子發票資料，間隔(分鐘)：";
+            this.cbAutoInvService.Text = "Automatic download of electronic invoice data, interval of mins：";
             this.cbAutoInvService.UseVisualStyleBackColor = true;
             this.cbAutoInvService.CheckedChanged += new System.EventHandler(this.cbAutoInvService_CheckedChanged);
             // 
@@ -113,10 +113,10 @@
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.groupBox2.Location = new System.Drawing.Point(0, 145);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(805, 145);
+            this.groupBox2.Size = new System.Drawing.Size(1049, 145);
             this.groupBox2.TabIndex = 15;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "啟用／停用";
+            this.groupBox2.Text = "Enable / Disable";
             // 
             // btnStop
             // 
@@ -125,9 +125,9 @@
             this.btnStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnStop.Location = new System.Drawing.Point(0, 72);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(323, 44);
+            this.btnStop.Size = new System.Drawing.Size(423, 44);
             this.btnStop.TabIndex = 12;
-            this.btnStop.Text = "停止電子發票用戶端服務";
+            this.btnStop.Text = "Stop Electronic Invoice Client Service";
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
@@ -138,9 +138,9 @@
             this.btnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnRun.Location = new System.Drawing.Point(0, 26);
             this.btnRun.Name = "btnRun";
-            this.btnRun.Size = new System.Drawing.Size(323, 44);
+            this.btnRun.Size = new System.Drawing.Size(401, 44);
             this.btnRun.TabIndex = 11;
-            this.btnRun.Text = "執行電子發票用戶端服務";
+            this.btnRun.Text = "Perform E-Invoicing Client Services";
             this.btnRun.UseVisualStyleBackColor = true;
             this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
             // 
@@ -154,10 +154,10 @@
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(805, 145);
+            this.groupBox1.Size = new System.Drawing.Size(1049, 145);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "安裝／移除";
+            this.groupBox1.Text = "Install / Remove";
             // 
             // btnUninstall
             // 
@@ -165,9 +165,9 @@
             this.btnUninstall.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnUninstall.Location = new System.Drawing.Point(0, 72);
             this.btnUninstall.Name = "btnUninstall";
-            this.btnUninstall.Size = new System.Drawing.Size(272, 44);
+            this.btnUninstall.Size = new System.Drawing.Size(355, 44);
             this.btnUninstall.TabIndex = 12;
-            this.btnUninstall.Text = "從Windows服務移除";
+            this.btnUninstall.Text = "Remove from Windows service";
             this.btnUninstall.UseVisualStyleBackColor = true;
             this.btnUninstall.Click += new System.EventHandler(this.btnUninstall_Click);
             // 
@@ -177,9 +177,9 @@
             this.btnInstall.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnInstall.Location = new System.Drawing.Point(0, 26);
             this.btnInstall.Name = "btnInstall";
-            this.btnInstall.Size = new System.Drawing.Size(272, 44);
+            this.btnInstall.Size = new System.Drawing.Size(315, 44);
             this.btnInstall.TabIndex = 11;
-            this.btnInstall.Text = "安裝至Windows服務";
+            this.btnInstall.Text = "Install to Windows Services";
             this.btnInstall.UseVisualStyleBackColor = true;
             this.btnInstall.Click += new System.EventHandler(this.btnInstall_Click);
             // 
@@ -191,7 +191,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "InvoiceServerConfig";
-            this.Size = new System.Drawing.Size(805, 643);
+            this.Size = new System.Drawing.Size(1049, 643);
             this.VisibleChanged += new System.EventHandler(this.InvoiceServerConfig_VisibleChanged);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();

@@ -28,7 +28,7 @@ namespace InvoiceClient.MainContent
             btnSend.Enabled  = false;
             btnPause.Enabled = true;
             InvoiceClientTransferManager.StartUp(Settings.Default.InvoiceTxnPath);
-            JobStatus.Text = "系統狀態：執行中...";
+            JobStatus.Text = "System status: In progress...";
         }
 
         private void btnPause_Click(object sender, EventArgs e)
@@ -36,7 +36,7 @@ namespace InvoiceClient.MainContent
             btnSend.Enabled = true;
             btnPause.Enabled = false;
             _transferMgr.PauseAll();
-            JobStatus.Text = "系統狀態：已停止...";
+            JobStatus.Text = "System status: Stopped...";
         }
 
         private void btnRetry_Click(object sender, EventArgs e)
@@ -44,7 +44,7 @@ namespace InvoiceClient.MainContent
             _transferMgr.SetRetry();
             FailedInvoiceInfo.Text = String.Empty;
             btnRetry.Enabled = false;
-            MessageBox.Show("已重新執行!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Re-executed!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -71,7 +71,7 @@ namespace InvoiceClient.MainContent
 
         public string TabText
         {
-            get { return "Excel電子發票"; }
+            get { return "Excel Electronic Invoice"; }
         }
 
     }

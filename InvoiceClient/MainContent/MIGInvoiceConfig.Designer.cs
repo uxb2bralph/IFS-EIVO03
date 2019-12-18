@@ -42,11 +42,11 @@
             // 
             this.btnRefresh.AutoSize = true;
             this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnRefresh.Location = new System.Drawing.Point(570, 47);
+            this.btnRefresh.Location = new System.Drawing.Point(620, 45);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(134, 44);
             this.btnRefresh.TabIndex = 18;
-            this.btnRefresh.Text = "重新整理";
+            this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
@@ -68,9 +68,9 @@
             this.FailedInvoiceInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.FailedInvoiceInfo.Location = new System.Drawing.Point(0, 0);
             this.FailedInvoiceInfo.Name = "FailedInvoiceInfo";
-            this.FailedInvoiceInfo.Size = new System.Drawing.Size(217, 29);
+            this.FailedInvoiceInfo.Size = new System.Drawing.Size(304, 29);
             this.FailedInvoiceInfo.TabIndex = 9;
-            this.FailedInvoiceInfo.Text = "發票資料傳送失敗!!";
+            this.FailedInvoiceInfo.Text = "Invoice data transfer failed!!";
             // 
             // btnRetry
             // 
@@ -78,20 +78,20 @@
             this.btnRetry.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnRetry.Location = new System.Drawing.Point(473, 45);
             this.btnRetry.Name = "btnRetry";
-            this.btnRetry.Size = new System.Drawing.Size(84, 39);
+            this.btnRetry.Size = new System.Drawing.Size(132, 39);
             this.btnRetry.TabIndex = 16;
-            this.btnRetry.Text = "重送";
+            this.btnRetry.Text = "Retry";
             this.btnRetry.UseVisualStyleBackColor = true;
             this.btnRetry.Click += new System.EventHandler(this.btnRetry_Click);
             // 
             // btnPause
             // 
             this.btnPause.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnPause.Location = new System.Drawing.Point(570, 0);
+            this.btnPause.Location = new System.Drawing.Point(620, 0);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(84, 39);
             this.btnPause.TabIndex = 15;
-            this.btnPause.Text = "暫停";
+            this.btnPause.Text = "Pause";
             this.btnPause.UseVisualStyleBackColor = true;
             this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
             // 
@@ -101,9 +101,9 @@
             this.btnSend.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnSend.Location = new System.Drawing.Point(473, 0);
             this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(84, 39);
+            this.btnSend.Size = new System.Drawing.Size(132, 39);
             this.btnSend.TabIndex = 14;
-            this.btnSend.Text = "執行";
+            this.btnSend.Text = "Start Up";
             this.btnSend.UseVisualStyleBackColor = true;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
@@ -113,11 +113,11 @@
             this.JobStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.JobStatus.Location = new System.Drawing.Point(1, 0);
             this.JobStatus.Name = "JobStatus";
-            this.JobStatus.Size = new System.Drawing.Size(133, 29);
+            this.JobStatus.Size = new System.Drawing.Size(188, 29);
             this.JobStatus.TabIndex = 13;
-            this.JobStatus.Text = "系統狀態：";
+            this.JobStatus.Text = "System Status：";
             // 
-            // B2CInvoiceCenterConfig
+            // MIGInvoiceConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

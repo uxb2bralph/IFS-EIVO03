@@ -26,16 +26,16 @@ namespace eIVOGo.Helper
 
         public bool ProcessLogin(string pid, string password, out string msg)
         {
-             UserProfileMember up = UserProfileFactory.CreateInstance(pid, password);
-             bool auth =  processLoginUsingRole(out msg, up);
-             //if (up != null)
-             //{
-             //   if (up.Profile.UserProfileStatus.CurrentLevel == (int)Naming.MemberStatusDefinition.Wait_For_Check)
-             //   {
-             //       up.CurrentSiteMenu = "WaitForCheckMenu.xml";
-             //       msg = VirtualPathUtility.ToAbsolute("~/UserProfile/EditMySelf?forCheck=True");
-             //   }
-             //}
+            UserProfileMember up = UserProfileFactory.CreateInstance(pid, password);
+            bool auth = processLoginUsingRole(out msg, up);
+            //if (up != null)
+            //{
+            //   if (up.Profile.UserProfileStatus.CurrentLevel == (int)Naming.MemberStatusDefinition.Wait_For_Check)
+            //   {
+            //       up.CurrentSiteMenu = "WaitForCheckMenu.xml";
+            //       msg = VirtualPathUtility.ToAbsolute("~/UserProfile/EditMySelf?forCheck=True");
+            //   }
+            //}
             return auth;
         }
 
@@ -139,13 +139,15 @@ namespace eIVOGo.Helper
                     else
                     {
                         bAuth = false;
-                        msg = "使用者角色尚未被核定!!";
+                        msg = "User role has not been approved!!";
+                        //msg = "使用者角色尚未被核定!!";
                     }
                 }
             }
             else
             {
-                msg = "系統找不到您的資料，請重新登入!!";
+                msg = "We could not find your information. Please sign in again";
+                //msg = "系統找不到您的資料，請重新登入!!";
             }
 
             return bAuth;

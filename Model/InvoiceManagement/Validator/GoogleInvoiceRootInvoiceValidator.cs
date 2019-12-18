@@ -39,7 +39,7 @@ namespace Model.InvoiceManagement.Validator
             return null;
         }
 
-        public InvoiceItem SaveRootInvoice(InvoiceRootInvoice invItem, bool forTerms, String invoiceClientID, int? channelID, out Exception exception)
+        public InvoiceItem SaveRootInvoice(InvoiceRootInvoice invItem, bool forTerms, String invoiceClientID, int? channelID, int? taskID,out Exception exception)
         {
             if ((exception = this.Validate(invItem)) != null)
             {
@@ -58,8 +58,14 @@ namespace Model.InvoiceManagement.Validator
             //    C0401Handler.PushStepQueueOnSubmit(_mgr, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
             //}
 
+            //yuki 儲存發票
             _mgr.GetTable<InvoiceItem>().InsertOnSubmit(newItem);
+
+            //yuki 加一筆到Queue、DataProcessLog
             C0401Handler.PushStepQueueOnSubmit(_mgr, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+
+            //yuki 加一筆到ProcessRequestDocument
+            C0401Handler.PushProcessRequestDocumentOnSubmit(_mgr, newItem.CDS_Document, taskID);
 
             _mgr.SubmitChanges();
 

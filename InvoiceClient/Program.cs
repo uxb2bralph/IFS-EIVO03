@@ -9,6 +9,7 @@ using System.ServiceProcess;
 using System.IO;
 using InvoiceClient.Properties;
 using System.Threading;
+using InvoiceClient.Agent;
 
 namespace InvoiceClient
 {
@@ -18,12 +19,21 @@ namespace InvoiceClient
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
-        {
+        static void Main(string[] args)
+        {     
+            
+            String fullPath = Settings.Default.InvoiceTxnPath;
+
+            //啟動偵錯工具，並將其附加至處理序
+            System.Diagnostics.Debugger.Launch();
+
             /// SSL憑證信任設定
             System.Net.ServicePointManager.ServerCertificateValidationCallback = (s, certificate, chain, sslPolicyErrors) => true;
 
-            if(!String.IsNullOrEmpty(Settings.Default.AppCulture))
+            var _PreInvoiceWatcher = new InvoicePGPWatcherForGoogleExpress(Path.Combine(fullPath, Settings.Default.UploadPreInvoiceFolder));
+            _PreInvoiceWatcher.StartUp();
+
+            if (!String.IsNullOrEmpty(Settings.Default.AppCulture))
             {
                 Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(Settings.Default.AppCulture);
             }

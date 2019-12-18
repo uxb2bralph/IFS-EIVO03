@@ -44,9 +44,9 @@
             this.btnReceiptNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnReceiptNo.Location = new System.Drawing.Point(596, 170);
             this.btnReceiptNo.Name = "btnReceiptNo";
-            this.btnReceiptNo.Size = new System.Drawing.Size(84, 39);
+            this.btnReceiptNo.Size = new System.Drawing.Size(154, 39);
             this.btnReceiptNo.TabIndex = 34;
-            this.btnReceiptNo.Text = "確定";
+            this.btnReceiptNo.Text = "Confirm";
             this.btnReceiptNo.UseVisualStyleBackColor = true;
             // 
             // SellerReceiptNo
@@ -63,18 +63,18 @@
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label7.Location = new System.Drawing.Point(0, 145);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(181, 29);
+            this.label7.Size = new System.Drawing.Size(188, 29);
             this.label7.TabIndex = 32;
-            this.label7.Text = "店家統一編號：";
+            this.label7.Text = "Store Number：";
             // 
             // btnTxnPath
             // 
             this.btnTxnPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnTxnPath.Location = new System.Drawing.Point(596, 98);
             this.btnTxnPath.Name = "btnTxnPath";
-            this.btnTxnPath.Size = new System.Drawing.Size(84, 39);
+            this.btnTxnPath.Size = new System.Drawing.Size(154, 39);
             this.btnTxnPath.TabIndex = 22;
-            this.btnTxnPath.Text = "設定";
+            this.btnTxnPath.Text = "Set";
             this.btnTxnPath.UseVisualStyleBackColor = true;
             this.btnTxnPath.Click += new System.EventHandler(this.btnTxnPath_Click);
             // 
@@ -82,20 +82,20 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.label2.Location = new System.Drawing.Point(0, 69);
+            this.label2.Location = new System.Drawing.Point(0, 74);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(253, 29);
+            this.label2.Size = new System.Drawing.Size(435, 29);
             this.label2.TabIndex = 21;
-            this.label2.Text = "電子發票交易資料夾：";
+            this.label2.Text = "Electronic Invoice Transaction Folder：";
             // 
             // btnServerUrl
             // 
             this.btnServerUrl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnServerUrl.Location = new System.Drawing.Point(596, 26);
             this.btnServerUrl.Name = "btnServerUrl";
-            this.btnServerUrl.Size = new System.Drawing.Size(84, 39);
+            this.btnServerUrl.Size = new System.Drawing.Size(154, 39);
             this.btnServerUrl.TabIndex = 20;
-            this.btnServerUrl.Text = "確定";
+            this.btnServerUrl.Text = "Confirm";
             this.btnServerUrl.UseVisualStyleBackColor = true;
             // 
             // ServerUrl
@@ -112,9 +112,9 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(205, 29);
+            this.label1.Size = new System.Drawing.Size(306, 29);
             this.label1.TabIndex = 18;
-            this.label1.Text = "伺服端服務網址：";
+            this.label1.Text = "Server-Side Service URL：";
             // 
             // InvoiceTxnPath
             // 

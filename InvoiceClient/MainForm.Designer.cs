@@ -48,31 +48,32 @@
             // 
             // contextMenu
             // 
+            this.contextMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miRestore,
             this.miClose,
             this.miActivate});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(153, 88);
+            this.contextMenu.Size = new System.Drawing.Size(153, 94);
             // 
             // miRestore
             // 
             this.miRestore.Name = "miRestore";
-            this.miRestore.Size = new System.Drawing.Size(152, 28);
+            this.miRestore.Size = new System.Drawing.Size(152, 30);
             this.miRestore.Text = "還原";
             this.miRestore.Click += new System.EventHandler(this.miRestore_Click);
             // 
             // miClose
             // 
             this.miClose.Name = "miClose";
-            this.miClose.Size = new System.Drawing.Size(152, 28);
+            this.miClose.Size = new System.Drawing.Size(152, 30);
             this.miClose.Text = "結束";
             this.miClose.Click += new System.EventHandler(this.miClose_Click);
             // 
             // miActivate
             // 
             this.miActivate.Name = "miActivate";
-            this.miActivate.Size = new System.Drawing.Size(152, 28);
+            this.miActivate.Size = new System.Drawing.Size(152, 30);
             this.miActivate.Text = "重新啟用";
             this.miActivate.Click += new System.EventHandler(this.miActivate_Click);
             // 
@@ -82,7 +83,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(746, 489);
+            this.tabControl1.Size = new System.Drawing.Size(1041, 522);
             this.tabControl1.TabIndex = 1;
             // 
             // invoiceClientServiceController
@@ -93,7 +94,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(746, 489);
+            this.ClientSize = new System.Drawing.Size(1041, 522);
             this.Controls.Add(this.tabControl1);
             this.Name = "MainForm";
             this.Text = "電子發票－店家用戶端";

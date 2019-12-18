@@ -16,11 +16,13 @@ using Model.Locale;
 using InvoiceClient.WS_Invoice;
 using Model.InvoiceManagement;
 using Model.DataEntity;
+using Model.TaskManagement;
 
 namespace InvoiceClient.Agent
 {
     public class InvoicePGPWatcherForGoogleExpress : InvoicePGPWatcherForGoogle
     {
+        public int TaskID { get; set; }
 
         public InvoicePGPWatcherForGoogleExpress(String fullPath) : base(fullPath)
         {
@@ -48,49 +50,69 @@ namespace InvoiceClient.Agent
             if (fullPath.EndsWith(".gpg", StringComparison.CurrentCultureIgnoreCase)
                     || fullPath.EndsWith(".pgp", StringComparison.CurrentCultureIgnoreCase))
             {
-                processPGP(fullPath);
+                processPGP(fullPath);//Yuki 解密檔名就離開
                 return;
             }
 
-            Root result = new Root();
-            try
+            using (GoogleInvoiceManagerV2 mgr = new GoogleInvoiceManagerV2 { InvoiceClientID = Settings.Default.ClientID, ChannelID = (int)_channelID, IgnoreDuplicateDataNumberException = true })
             {
-                XmlDocument docInv = prepareInvoiceDocument(fullPath);
-
-                result = processUpload(null, docInv);
-
-                if (result.Result.value != 1)
+                ///憑證資料檢查
+                ///
+                var token = mgr.GetTable<OrganizationToken>().Where(t => t.Thumbprint == AppSigner.SignerCertificate.Thumbprint).FirstOrDefault();
+                if (token != null)
                 {
-                    if (result.Response != null && result.Response.InvoiceNo != null && result.Response.InvoiceNo.Length > 0)
+                    Root result = new Root();
+
+                    try
                     {
-                        processError(result.Response.InvoiceNo, docInv, fileName);
-                        storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
+                        //Yuki ProcessRequest儲存
+                        TaskManager taskMgr = new TaskManager();
+
+                        TaskID = taskMgr.SaveUploadTask(mgr, fullPath, Naming.InvoiceProcessType.C0501_Xlsx).TaskID;
+
+                        XmlDocument docInv = prepareInvoiceDocument(fullPath);
+
+                        result = processUpload(null, docInv);
+
+                        if (result.Result.value != 1)
+                        {
+                            if (result.Response != null && result.Response.InvoiceNo != null && result.Response.InvoiceNo.Length > 0)
+                            {
+                                processError(result.Response.InvoiceNo, docInv, fileName);
+                                storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
+                            }
+                            else
+                            {
+                                processError(result.Result.message, docInv, fileName);
+                                storeFile(fullPath, Path.Combine(_failedTxnPath, fileName));
+                            }
+                        }
+                        else
+                        {
+                            storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        processError(result.Result.message, docInv, fileName);
+                        Logger.Error(ex);
                         storeFile(fullPath, Path.Combine(_failedTxnPath, fileName));
                     }
-                }
-                else
-                {
-                    storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-                storeFile(fullPath, Path.Combine(_failedTxnPath, fileName));
-            }
-            finally
-            {
-                if (result.Automation != null)
-                {
-                    Automation auto = new Automation { Item = result.Automation };
-                    String responseName = fileName.Replace("request", "response")
-                            .Replace("_OUT_", "_IN_");
-                    responseName = Path.Combine(_ResponsedPath, responseName);
-                    auto.ConvertToXml().Save(responseName);
+                    finally
+                    {
+                        if (result.Automation != null)
+                        {
+                            Automation auto = new Automation { Item = result.Automation };
+                            String responseName = fileName.Replace("request", "response")
+                                    .Replace("_OUT_", "_IN_");
+                            responseName = Path.Combine(_ResponsedPath, responseName);
+                            auto.ConvertToXml().Save(responseName);
+                            //yuki upadte ProcessRequest 
+                            var processRequest = mgr.GetTable<ProcessRequest>().Where(t => t.TaskID == TaskID).FirstOrDefault();
+                            processRequest.ResponsePath = responseName;
+                            processRequest.ProcessComplete = DateTime.Now;
+                            if (processRequest != null) mgr.SubmitChanges();                            
+                        }
+                    }
                 }
             }
         }
@@ -116,63 +138,60 @@ namespace InvoiceClient.Agent
                 ///憑證資料檢查
                 ///
                 var token = mgr.GetTable<OrganizationToken>().Where(t => t.Thumbprint == AppSigner.SignerCertificate.Thumbprint).FirstOrDefault();
-                if (token != null)
+
+                List<AutomationItem> automation = new List<AutomationItem>();
+
+                mgr.TaskID = TaskID;
+
+                var items = mgr.SaveUploadInvoiceAutoTrackNo(invoice, token);
+                if (items.Count > 0)
                 {
-                    List<AutomationItem> automation = new List<AutomationItem>();
-                    var items = mgr.SaveUploadInvoiceAutoTrackNo(invoice, token);
-                    if (items.Count > 0)
+                    result.Response = new RootResponse
                     {
-                        result.Response = new RootResponse
+                        InvoiceNo =
+                        items.Select(d => new RootResponseInvoiceNo
                         {
-                            InvoiceNo =
-                            items.Select(d => new RootResponseInvoiceNo
-                            {
-                                Value = invoice.Invoice[d.Key].DataNumber,
-                                Description = d.Value.Message,
-                                ItemIndexSpecified = true,
-                                ItemIndex = d.Key,
-                            }).ToArray()
-                        };
-
-                        //失敗Response
-                        automation.AddRange(items.Select(d => new AutomationItem
-                        {
+                            Value = invoice.Invoice[d.Key].DataNumber,
                             Description = d.Value.Message,
-                            Status = 0,
-                            Invoice = new AutomationItemInvoice
-                            {
-                                DataNumber = invoice.Invoice[d.Key].DataNumber
-                            }
-                        }));
-                    }
-                    else
-                    {
-                        result.Result.value = 1;
-                    }
+                            ItemIndexSpecified = true,
+                            ItemIndex = d.Key,
+                        }).ToArray()
+                    };
 
-                    //成功Response
-                    if (mgr.EventItems != null && mgr.EventItems.Count > 0)
+                    //失敗Response
+                    automation.AddRange(items.Select(d => new AutomationItem
                     {
-                        automation.AddRange(mgr.EventItems.Select(i => new AutomationItem
+                        Description = d.Value.Message,
+                        Status = 0,
+                        Invoice = new AutomationItemInvoice
                         {
-                            Description = "",
-                            Status = 1,
-                            Invoice = new AutomationItemInvoice
-                            {
-                                InvoiceNumber = i.TrackCode + i.No,
-                                DataNumber = i.InvoicePurchaseOrder.OrderNo,
-                                InvoiceDate = String.Format("{0:yyyy/MM/dd}", i.InvoiceDate),
-                                InvoiceTime = String.Format("{0:HH:mm:ss}", i.InvoiceDate),
-                            }
-                        }));
-                    }
-
-                    result.Automation = automation.ToArray();
+                            DataNumber = invoice.Invoice[d.Key].DataNumber
+                        }
+                    }));
                 }
                 else
                 {
-                    result.Result.message = "Merchant evidence does not match the validation!!";
+                    result.Result.value = 1;
                 }
+
+                //成功Response
+                if (mgr.EventItems != null && mgr.EventItems.Count > 0)
+                {
+                    automation.AddRange(mgr.EventItems.Select(i => new AutomationItem
+                    {
+                        Description = "",
+                        Status = 1,
+                        Invoice = new AutomationItemInvoice
+                        {
+                            InvoiceNumber = i.TrackCode + i.No,
+                            DataNumber = i.InvoicePurchaseOrder.OrderNo,
+                            InvoiceDate = String.Format("{0:yyyy/MM/dd}", i.InvoiceDate),
+                            InvoiceTime = String.Format("{0:HH:mm:ss}", i.InvoiceDate),
+                        }
+                    }));
+                }
+
+                result.Automation = automation.ToArray();
             }
 
             Console.WriteLine($"total seconds: {(DateTime.Now - ts).TotalSeconds}");

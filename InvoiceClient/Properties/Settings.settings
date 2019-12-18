@@ -66,7 +66,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="AppTitle" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">電子發票傳輸服務－店家用戶端</Value>
+      <Value Profile="(Default)">Electronic Invoice Transmission Service-Store Client</Value>
     </Setting>
     <Setting Name="UploadCsvInvoiceFolder" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Invoice_csv</Value>
@@ -151,9 +151,6 @@
     <Setting Name="ActivationKey" Type="System.String" Scope="Application">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="InvoiceClient_WS_Invoice_eInvoiceService" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://localhost:2598/Published/eInvoiceService.asmx</Value>
-    </Setting>
     <Setting Name="UploadCsvAllowanceFolder" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Allowance_csv</Value>
     </Setting>
@@ -198,15 +195,6 @@
     </Setting>
     <Setting Name="EnableB2BAutoReceiving" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="TransferManager" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">
-                  InvoiceClient.TransferManagement.CsvInvoiceTransferManagerV2, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.TransferManagement.InvoiceTransferManagerForAgent, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.TransferManagement.InvoiceBusinessTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.TransferManagement.BranchTrackTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.TransferManagement.B2BInvoiceTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                </Value>
     </Setting>
     <Setting Name="ProcessCount" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">0</Value>
@@ -269,6 +257,14 @@
     </Setting>
     <Setting Name="AppCulture" Type="System.String" Scope="Application">
       <Value Profile="(Default)">en-US</Value>
+    </Setting>
+    <Setting Name="InvoiceClient_WS_Invoice_eInvoiceService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:2598/Published/eInvoiceService.asmx</Value>
+    </Setting>
+    <Setting Name="TransferManager" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">
+                InvoiceClient.TransferManagement.XlsxInvoiceTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+              </Value>
     </Setting>
   </Settings>
 </SettingsFile>
