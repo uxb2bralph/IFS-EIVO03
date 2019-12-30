@@ -197,6 +197,7 @@
     <Compile Include="Helper\MvcExtensions.cs" />
     <Compile Include="Helper\Validation\CaptchaValidationAttribute.cs" />
     <Compile Include="Helper\WebPageUtility.cs" />
+    <Compile Include="Helper\InvoiceProcessor\InvoiceManagerExtensions.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -246,7 +247,9 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>

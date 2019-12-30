@@ -117,9 +117,9 @@ namespace Model.InvoiceManagement.Validator
                 InvoiceAmountType = new InvoiceAmountType
                 {
                     DiscountAmount = _c0401Item.Amount.DiscountAmount,
-                    SalesAmount = (_c0401Item.Amount.TaxType == TaxTypeEnum.Item1) ? _c0401Item.Amount.SalesAmount :
-                                  (_c0401Item.Amount.TaxType == TaxTypeEnum.Item2) ? _c0401Item.Amount.ZeroTaxSalesAmount :
-                                  (_c0401Item.Amount.TaxType == TaxTypeEnum.Item3) ? _c0401Item.Amount.FreeTaxSalesAmount : _c0401Item.Amount.SalesAmount,
+                    SalesAmount =  _c0401Item.Amount.SalesAmount,
+                    FreeTaxSalesAmount =  _c0401Item.Amount.FreeTaxSalesAmount,
+                    ZeroTaxSalesAmount =  _c0401Item.Amount.ZeroTaxSalesAmount,
                     TaxAmount = _c0401Item.Amount.TaxAmount,
                     TaxRate = _c0401Item.Amount.TaxRate,
                     TaxType = (byte)_c0401Item.Amount.TaxType,
