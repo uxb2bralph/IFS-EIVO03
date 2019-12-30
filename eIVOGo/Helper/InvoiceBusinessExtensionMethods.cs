@@ -121,5 +121,20 @@ namespace eIVOGo.Helper
 
         }
 
+        public static IQueryable<ProductCatalog> FilterProductCatalogByRole(this EIVOEntityDataContext models, UserProfileMember profile, IQueryable<ProductCatalog> items)
+        {
+            switch ((Naming.CategoryID)profile.CurrentUserRole.OrganizationCategory.CategoryID)
+            {
+                case Naming.CategoryID.COMP_SYS:
+                    return items;
+
+                default:
+                    var agentID = profile.CurrentUserRole.OrganizationCategory.CompanyID;
+                    return items.Where(i => i.ProductSupplier.Any(s => s.SupplierID == agentID));
+
+            }
+
+        }
+
     }
 }

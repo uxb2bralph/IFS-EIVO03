@@ -20,6 +20,7 @@ using eIVOGo.Properties;
 using eIVOGo.template;
 using MessagingToolkit.QRCode.Codec;
 using Model.DataEntity;
+using Model.Helper;
 using Model.Locale;
 using Model.Security.MembershipManagement;
 using Utility;
@@ -638,7 +639,7 @@ namespace eIVOGo.Helper
         {
             var buyer = item.InvoiceBuyer;
 
-            string finalEncryData = BuildEncryptedData(item);
+            string finalEncryData = item.BuildEncryptedData();
 
             StringBuilder sb = new StringBuilder();
             sb.Append(item.TrackCode + item.No);
@@ -679,15 +680,6 @@ namespace eIVOGo.Helper
             sb.Append(Convert.ToBase64String(Encoding.Default.GetBytes(details.ToString())));
 
             return sb.ToString();
-        }
-
-        public static string BuildEncryptedData(this InvoiceItem item)
-        {
-            String key = File.ReadAllText(Path.Combine(Logger.LogPath, "ORCodeKey.txt"));
-            String EncryptContent = item.TrackCode + item.No + item.RandomNo;
-            com.tradevan.qrutil.QREncrypter qrencrypter = new com.tradevan.qrutil.QREncrypter();
-            String finalEncryData = qrencrypter.AESEncrypt(EncryptContent, key);
-            return finalEncryData;
         }
 
         public static int InvoiceTypeToFormat(this int type)
