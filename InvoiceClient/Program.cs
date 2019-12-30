@@ -33,6 +33,12 @@ namespace InvoiceClient
             var _PreInvoiceWatcher = new InvoicePGPWatcherForGoogleExpress(Path.Combine(fullPath, Settings.Default.UploadPreInvoiceFolder));
             _PreInvoiceWatcher.StartUp();
 
+            var _InvoicePDF = new InvoicePDFGeneratorForGooglePlay();
+            _InvoicePDF.StartUp();
+
+            var _XlsxInvoiceWatcher = new XlsxInvoiceWatcher(Path.Combine(fullPath, Settings.Default.UploadXlsxInvoiceFolder));
+            _XlsxInvoiceWatcher.StartUp();
+
             if (!String.IsNullOrEmpty(Settings.Default.AppCulture))
             {
                 Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(Settings.Default.AppCulture);

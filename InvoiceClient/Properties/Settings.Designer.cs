@@ -683,7 +683,7 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("E:\\UXB2B_EIVO_GOOGLE\\ZipInvoice")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\UXB2B_EIVO_GOOGLE\\ZipInvoice")]
         public string PDFGeneratorOutput {
             get {
                 return ((string)(this["PDFGeneratorOutput"]));
@@ -788,6 +788,18 @@ namespace InvoiceClient.Properties {
         public string TransferManager {
             get {
                 return ((string)(this["TransferManager"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Invoice_Xlsx")]
+        public string UploadXlsxInvoiceFolder {
+            get {
+                return ((string)(this["UploadXlsxInvoiceFolder"]));
+            }
+            set {
+                this["UploadXlsxInvoiceFolder"] = value;
             }
         }
     }

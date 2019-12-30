@@ -12,7 +12,7 @@
       <Value Profile="(Default)">http://localhost:2013/DocumentCreator.asmx</Value>
     </Setting>
     <Setting Name="MailServer" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">mail.uxb2b.com</Value>
+      <Value Profile="(Default)">127.0.0.1:25</Value>
     </Setting>
     <Setting Name="HostUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://eivo.uxifs.com</Value>
