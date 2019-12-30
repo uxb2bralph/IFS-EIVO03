@@ -509,6 +509,7 @@ namespace Model.Locale
             C0401_Xlsx_Allocation_ByVAC = 201,
             C0401_Xlsx_Allocation_ByIssuer = 301,
             C0401_Xlsx_CBE = 401,
+            C0401_Xml_CBE = 501,
             C0501_Xlsx = 102,
             D0401_Xlsx = 103,
             D0501_Xlsx = 104,
@@ -536,6 +537,7 @@ namespace Model.Locale
             IssuingAllowance = 0x08,
             CancellingAllowance = 0x10,
             UseCustomStyle = 0x20,
+            UseCBEStyle = 0x40,
         }
 
         public enum FieldDisplayType
@@ -545,6 +547,8 @@ namespace Model.Locale
             Handler = 3,
             SortBy = 4,
             Query = 5,
+            Edit = 6,
+            Create = 7,
         }
 
         public enum SortType
