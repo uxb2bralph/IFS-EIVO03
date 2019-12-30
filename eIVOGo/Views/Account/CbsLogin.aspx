@@ -40,7 +40,7 @@ function show_date(){
                     
 			    	<form id="form1" runat="server" accept-charset="UTF-8" role="form">
                     <fieldset>
-                        <img class="mx-auto d-block logosize" src="../../images/e-GUIplatform(360).png" alt="">                                         
+                        <img class="mx-auto d-block logosize" src="../images/e-GUIplatform.png" alt="">                                         
 			    	  	<div class="form-group prompt">
                             <label for="user_login">ID</label>
 			    		    <input class="form-control" name="PID" type="text" required autofocus>
