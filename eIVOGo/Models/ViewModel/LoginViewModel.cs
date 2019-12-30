@@ -8,15 +8,12 @@ using Business.Helper.Validation;
 
 namespace eIVOGo.Models.ViewModel
 {
-    public class LoginViewModel
+    public class CbsLoginViewModel
     {
         [Required(ErrorMessage = "Please enter {0}")]
         [Display(Name = "PID")]
         //[EmailAddress]
-        public string PID { get; set; }        
-
-        [Display(Name = "EncryptedCode")]
-        public string EncryptedCode { get; set; }
+        public string PID { get; set; }
 
         [Required(ErrorMessage = "Please enter {0}")]
         [DataType(DataType.Password)]
@@ -27,5 +24,16 @@ namespace eIVOGo.Models.ViewModel
         public bool RememberMe { get; set; }
 
         public String ReturnUrl { get; set; }
+    }
+    public class LoginViewModel : CbsLoginViewModel
+    {
+
+        [Display(Name = "ValidCode")]
+        [CaptchaValidation("EncryptedCode", ErrorMessage = "驗證碼錯誤!!")]
+        public string ValidCode { get; set; }
+
+        [Display(Name = "EncryptedCode")]
+        public string EncryptedCode { get; set; }
+
     }
 }

@@ -25,6 +25,7 @@ using Uxnet.Com.Security.UseCrypto;
 using System.IO;
 using System.Data;
 using Model.InvoiceManagement.ErrorHandle;
+using Business.Helper.InvoiceProcessor;
 
 namespace eIVOGo.Published
 {
@@ -103,125 +104,14 @@ namespace eIVOGo.Published
         public virtual XmlDocument UploadInvoiceAutoTrackNoV2(XmlDocument uploadData)
         {
             Root result = createMessageToken();
-            try
+            using (InvoiceManagerV3 manager = new InvoiceManagerV3 { InvoiceClientID = _clientID })
             {
-                CryptoUtility crypto = new CryptoUtility();
-                uploadData.PreserveWhitespace = true;
-                if (crypto.VerifyXmlSignature(uploadData))
+                OrganizationToken token;
+                manager.UploadInvoiceAutoTrackNo(uploadData, result, out token);
+                if (token!=null && manager.HasItem && token.Organization.OrganizationStatus.PrintAll == true)
                 {
-                    InvoiceRoot invoice = uploadData.TrimAll().ConvertTo<InvoiceRoot>();
-                    using (InvoiceManagerV3 mgr = new InvoiceManagerV3 { InvoiceClientID = _clientID })
-                    {
-                        ///憑證資料檢查
-                        ///
-                        var token = mgr.GetTable<OrganizationToken>().Where(t => t.Thumbprint == crypto.SignerCertificate.Thumbprint).FirstOrDefault();
-                        if (token != null)
-                        {
-                            mgr.IgnoreDuplicateDataNumberException = token.Organization.OrganizationStatus?.IgnoreDuplicatedDataNumber == true;
-                            List<AutomationItem> automation = new List<AutomationItem>();
-                            var items = mgr.SaveUploadInvoiceAutoTrackNo(invoice, token);
-                            if (items.Count > 0)
-                            {
-                                result.Response = new RootResponse
-                                {
-                                    InvoiceNo =
-                                    items.Select(d => new RootResponseInvoiceNo
-                                    {
-                                        Value = invoice.Invoice[d.Key].DataNumber,
-                                        Description = d.Value.Message,
-                                        ItemIndexSpecified = true,
-                                        ItemIndex = d.Key
-                                    }).ToArray()
-                                };
-
-                                //失敗Response
-                                automation.AddRange(items.Select(d => new AutomationItem
-                                {
-                                    Description = d.Value.Message,
-                                    Status = 0,
-                                    Invoice = new AutomationItemInvoice
-                                    {
-                                        DataNumber = invoice.Invoice[d.Key].DataNumber,
-                                        SellerId = invoice.Invoice[d.Key].SellerId
-                                    }
-                                }));
-
-                                ThreadPool.QueueUserWorkItem(ExceptionNotification.SendNotification,
-                                    new ExceptionInfo
-                                    {
-                                        Token = token,
-                                        ExceptionItems = items,
-                                        InvoiceData = invoice
-                                    });
-                            }
-                            else
-                            {
-                                result.Result.value = 1;
-                            }
-
-                            //成功Response
-                            if (mgr.EventItems != null && mgr.EventItems.Count > 0)
-                            {
-                                if (token.Organization.OrganizationStatus.DownloadDataNumber == true)
-                                {
-                                    automation.AddRange(mgr.EventItems.Select(i => new AutomationItem
-                                    {
-                                        Description = "",
-                                        Status = 1,
-                                        Invoice = new AutomationItemInvoice
-                                        {
-                                            SellerId = i.InvoiceSeller.ReceiptNo,
-                                            InvoiceNumber = i.TrackCode + i.No,
-                                            DataNumber = i.InvoicePurchaseOrder.OrderNo,
-                                            InvoiceDate = String.Format("{0:yyyy/MM/dd}", i.InvoiceDate),
-                                            InvoiceTime = String.Format("{0:HH:mm:ss}", i.InvoiceDate),
-                                            EncData = i.BuildEncryptedData(),
-                                        }
-                                    }));
-                                }
-                                else
-                                {
-                                    automation.AddRange(mgr.EventItems.Select(i => new AutomationItem
-                                    {
-                                        Description = "",
-                                        Status = 1,
-                                        Invoice = new AutomationItemInvoice
-                                        {
-                                            SellerId = i.InvoiceSeller.ReceiptNo,
-                                            InvoiceNumber = i.TrackCode + i.No,
-                                            DataNumber = i.InvoicePurchaseOrder.OrderNo,
-                                            InvoiceDate = String.Format("{0:yyyy/MM/dd}", i.InvoiceDate),
-                                            InvoiceTime = String.Format("{0:HH:mm:ss}", i.InvoiceDate),
-                                        }
-                                    }));
-                                }
-                            }
-
-                            result.Automation = automation.ToArray();
-
-                            if (mgr.HasItem && token.Organization.OrganizationStatus.PrintAll == true)
-                            {
-                                SharedFunction.SendMailMessage(token.Organization.CompanyName + "電子發票已匯入,請執行發票列印作業!!", Settings.Default.WebMaster, token.Organization.CompanyName + "電子發票開立郵件通知");
-                            }
-                        }
-                        else
-                        {
-                            result.Result.message = "營業人憑證資料驗證不符!!";
-                        }
-                    }
+                    SharedFunction.SendMailMessage(token.Organization.CompanyName + "電子發票已匯入,請執行發票列印作業!!", Settings.Default.WebMaster, token.Organization.CompanyName + "電子發票開立郵件通知");
                 }
-                else
-                {
-                    result.Result.message = "發票資料簽章不符!!";
-                }
-
-                EIVOPlatformFactory.Notify();
-                GovPlatformFactory.Notify();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-                result.Result.message = ex.Message;
             }
             return result.ConvertToXml();
         }

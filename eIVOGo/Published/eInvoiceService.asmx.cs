@@ -412,8 +412,6 @@ namespace eIVOGo.Published
                     }
                 };
 
-            EIVOPlatformFactory.BuildEncryptedData = eIVOGo.Helper.ExtensionMethods.BuildEncryptedData;
-
             AddOn();
 
         }
