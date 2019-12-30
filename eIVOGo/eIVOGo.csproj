@@ -1092,6 +1092,7 @@
     <Content Include="Views\DataView\Module\C0401_CBE.cshtml" />
     <Content Include="Views\DataView\Module\Invoice.cshtml" />
     <Content Include="Views\DataView\Module\InvoiceContent.cshtml" />
+    <Content Include="Views\Common\Module\TableRow.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="Views\Home\MainPage.aspx" />
     <Content Include="Module\Ajax\PagingControl.ascx" />
@@ -2020,6 +2021,21 @@
     <Content Include="Views\Organization\Module\GatewaySettings.cshtml" />
     <Content Include="Views\ProcessRequest\DataField\ExceptionContent.cshtml" />
     <Content Include="Views\Notification\Module\IssuedC0401.cshtml" />
+    <Content Include="Views\Shared\JsAlert.cshtml" />
+    <Content Include="Views\ProductCatalog\DataField\Barcode.cshtml" />
+    <Content Include="Views\ProductCatalog\DataField\PieceUnit.cshtml" />
+    <Content Include="Views\ProductCatalog\DataField\ProcessAction.cshtml" />
+    <Content Include="Views\ProductCatalog\DataField\ProductName.cshtml" />
+    <Content Include="Views\ProductCatalog\DataField\Remark.cshtml" />
+    <Content Include="Views\ProductCatalog\DataField\SalePrice.cshtml" />
+    <Content Include="Views\ProductCatalog\DataField\Spec.cshtml" />
+    <Content Include="Views\ProductCatalog\Module\ProductCatalogQuery.cshtml" />
+    <Content Include="Views\ProductCatalog\Module\ProductCatalogTable.cshtml" />
+    <Content Include="Views\ProductCatalog\Module\ProductCatalogTableFooter.cshtml" />
+    <Content Include="Views\ProductCatalog\Module\ProductQuickSearch.cshtml" />
+    <Content Include="Views\Notification\NotifyProcessException.cshtml" />
+    <Content Include="Views\Notification\Module\NotifyProcessException.cshtml" />
+    <Content Include="Views\Notification\Module\IssuedCBE.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">
@@ -2044,6 +2060,7 @@
     <Compile Include="Controllers\InvoiceProcessController.cs" />
     <Compile Include="Controllers\InvoiceXmlServiceController.cs" />
     <Compile Include="Controllers\IssuerController.cs" />
+    <Compile Include="Controllers\Merchandise\ProductCatalogController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Controllers\OrganizationQueryController.cs" />

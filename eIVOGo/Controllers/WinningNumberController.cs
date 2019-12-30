@@ -108,7 +108,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "中獎號碼資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "中獎號碼資料錯誤!!");
             }
 
             return View("~/Views/WinningNumber/Module/DataItem.ascx", item);

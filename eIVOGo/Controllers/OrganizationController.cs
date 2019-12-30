@@ -102,7 +102,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "開立人資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "開立人資料錯誤!!");
             }
 
             return View("~/Views/Organization/Module/ApplyIssuerAgent.ascx", item);

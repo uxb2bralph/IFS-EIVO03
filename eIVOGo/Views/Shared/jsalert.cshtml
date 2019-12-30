@@ -1,20 +1,14 @@
+@{
+    String _message;
+    _message = (this.Model as String) ?? (String)ViewBag.Message ?? Request["Message"];
+}
 
 @if (_message != null)
-    {
+{
 <script>
     alert('@(HttpUtility.JavaScriptStringEncode(_message))');
-    @if (ViewBag.CloseWindow == true)
-        {
-    window.close();
+    @if (ViewBag.CloseWindow == true) {
+        <text>window.close();</text>
     }
 </script>
 }
-<script runat="server">
-    String _message;
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _message = (this.Model as String) ?? (String)ViewBag.Message ?? Request["Message"];
-    }
-
-</script>

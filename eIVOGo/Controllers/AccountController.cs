@@ -271,7 +271,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "帳號資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "帳號資料錯誤!!");
             }
 
             return View("~/Views/Account/Module/DataItem.ascx", item);

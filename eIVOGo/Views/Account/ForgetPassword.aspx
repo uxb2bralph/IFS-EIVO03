@@ -67,7 +67,7 @@
 </body>
 </html>
 <%  Html.RenderPartial("~/Views/Shared/ReportInputError.ascx"); %>
-<%  Html.RenderPartial("~/Views/Shared/JsAlert.ascx"); %>
+<%  Html.RenderPartial("~/Views/Shared/JsAlert.cshtml"); %>
 <script>
     $(function () {
         $('input:text').addClass('form-control textfield');
