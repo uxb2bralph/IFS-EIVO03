@@ -224,7 +224,7 @@
       <Value Profile="(Default)">ZipInvoice</Value>
     </Setting>
     <Setting Name="PDFGeneratorOutput" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\UXB2B_EIVO_GOOGLE\ZipInvoice</Value>
+      <Value Profile="(Default)">E:\UXB2B_EIVO_GOOGLE\ZipInvoice</Value>
     </Setting>
     <Setting Name="ClearTxnPath" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
@@ -265,9 +265,6 @@
       <Value Profile="(Default)">
                 InvoiceClient.TransferManagement.XlsxInvoiceTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
               </Value>
-    </Setting>
-    <Setting Name="UploadXlsxInvoiceFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Invoice_Xlsx</Value>
     </Setting>
   </Settings>
 </SettingsFile>

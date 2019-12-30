@@ -494,7 +494,7 @@ namespace eIVOGo.Module.Common
             {
                 mailTo = $"{mailTo}@uxb2b.com"; 
             }
-            message.To.Add("anna@uxb2b.com");//TODO:yuki mailTo改為"tingni99@gmail.com"
+            message.To.Add(mailTo);
             message.Subject = subject;
             message.IsBodyHtml = true;
             message.Body = body;
@@ -509,16 +509,10 @@ namespace eIVOGo.Module.Common
                     }
                 }
             }
-
+            //TODO:yuki Delete三行註解
             SmtpClient smtpclient = new SmtpClient(Uxnet.Web.Properties.Settings.Default.MailServer);
-            smtpclient.Host = "127.0.0.1";
-            smtpclient.Port = 25;
             smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
             smtpclient.Send(message);
-            //TODO:yuki Delete三行註解
-            //SmtpClient smtpclient = new SmtpClient(Uxnet.Web.Properties.Settings.Default.MailServer);            
-            //smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
-            //smtpclient.Send(message);
 
         }
 

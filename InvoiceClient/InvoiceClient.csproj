@@ -200,12 +200,6 @@
     <Compile Include="MainContent\B2BInvoiceCenterConfig.Designer.cs">
       <DependentUpon>B2BInvoiceCenterConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainContent\PhysicalChannelConfig.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MainContent\PhysicalChannelConfig.Designer.cs">
-      <DependentUpon>PhysicalChannelConfig.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainContent\XlsxInvoiceCenterConfig.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -288,6 +282,12 @@
     </Compile>
     <Compile Include="MainContent\B2CInvoiceCenterConfig.Designer.cs">
       <DependentUpon>B2CInvoiceCenterConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainContent\PhysicalChannelConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MainContent\PhysicalChannelConfig.Designer.cs">
+      <DependentUpon>PhysicalChannelConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="MainContent\CsvInvoiceCenterConfig.cs">
       <SubType>UserControl</SubType>
