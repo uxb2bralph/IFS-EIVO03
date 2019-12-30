@@ -104,7 +104,7 @@ namespace Model.InvoiceManagement.enUS
             Void_Date,
             Remark
         }
-        public static Exception VoidAllowance(this DataRow item, GenericManager<EIVOEntityDataContext> models, Organization owner,ref InvoiceAllowanceCancellation voidItem,ref DerivedDocument p)
+        public static Exception VoidAllowance(this DataRow item, GenericManager<EIVOEntityDataContext> models, Organization owner,ref InvoiceAllowanceCancellation voidItem,ref DerivedDocument p,ref Organization expectedSeller)
         {
             InvoiceAllowance allowance = models.GetTable<InvoiceAllowance>().Where(a => a.AllowanceNumber == item.GetString((int)VoidAllowanceField.Void_AllowanceNo)).FirstOrDefault();
             if (allowance == null)
@@ -129,6 +129,8 @@ namespace Model.InvoiceManagement.enUS
             {
                 return new Exception(String.Format("Seller ID does not exist, Seller ID: {0}, Incorrect TAG:< SellerId />", item.GetString((int)VoidAllowanceField.Seller_ID)));
             }
+
+            expectedSeller = seller;
 
             //if (seller.CompanyID != owner.CompanyID)
             //{

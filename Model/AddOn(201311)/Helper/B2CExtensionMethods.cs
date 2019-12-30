@@ -5,6 +5,8 @@ using System.Text;
 using Model.Schema.EIVO;
 using Model.DataEntity;
 using Utility;
+using Model.Locale;
+
 namespace Model.Helper
 {
     public static class B2CExtensionMethods
@@ -12,6 +14,11 @@ namespace Model.Helper
         public static decimal ToFix(this decimal decVal,int decimals = 2)
         {
             return Math.Round(decVal, decimals);
+        }
+
+        public static decimal ToFix(this decimal? decVal, int decimals = 2)
+        {
+            return decVal.HasValue ? Math.Round(decVal.Value, decimals) : 0;
         }
 
         public static Model.Schema.TurnKey.C0401.Invoice CreateC0401(this InvoiceItem item)
@@ -87,14 +94,13 @@ namespace Model.Helper
                     DiscountAmountSpecified = item.InvoiceAmountType.DiscountAmount.HasValue,
                     ExchangeRateSpecified = false,
                     OriginalCurrencyAmountSpecified = false,
-                    //SalesAmount = item.InvoiceAmountType.SalesAmount.HasValue ? item.InvoiceAmountType.SalesAmount.Value.ToFix() : 0,
-                    SalesAmount = item.InvoiceBuyer.ReceiptNo == "0000000000" ? item.InvoiceAmountType.TotalAmount.Value.ToFix() : item.InvoiceAmountType.SalesAmount.Value.ToFix(),
-                    FreeTaxSalesAmount = (item.InvoiceAmountType.TaxType == 3) ? item.InvoiceAmountType.SalesAmount.Value.ToFix() : 0,
-                    ZeroTaxSalesAmount = (item.InvoiceAmountType.TaxType == 2) ? item.InvoiceAmountType.SalesAmount.Value.ToFix() : 0,
-                    TaxAmount = item.InvoiceBuyer.ReceiptNo == "0000000000" ? 0 : item.InvoiceAmountType.TaxAmount.HasValue ? item.InvoiceAmountType.TaxAmount.Value.ToFix() : 0,
-                    TaxRate = item.InvoiceAmountType.TaxRate.HasValue ? item.InvoiceAmountType.TaxRate.Value.ToFix() : 0.05m,
+                    SalesAmount = item.InvoiceBuyer.IsB2C() && item.InvoiceAmountType.TaxType == (byte)Naming.TaxTypeDefinition.應稅 ? item.InvoiceAmountType.TotalAmount.ToFix() : item.InvoiceAmountType.SalesAmount.ToFix(),
+                    FreeTaxSalesAmount = item.InvoiceAmountType.FreeTaxSalesAmount.ToFix(),
+                    ZeroTaxSalesAmount = item.InvoiceAmountType.ZeroTaxSalesAmount.ToFix(),
+                    TaxAmount = item.InvoiceBuyer.IsB2C() ? 0 : item.InvoiceAmountType.TaxAmount.ToFix(),
+                    TaxRate = item.InvoiceAmountType.TaxRate.HasValue ? item.InvoiceAmountType.TaxRate.ToFix() : 0.05m,
                     TaxType = (Schema.TurnKey.C0401.TaxTypeEnum)((int)item.InvoiceAmountType.TaxType.Value),
-                    TotalAmount = item.InvoiceAmountType.TotalAmount.HasValue ? item.InvoiceAmountType.TotalAmount.Value.ToFix() : 0
+                    TotalAmount = item.InvoiceAmountType.TotalAmount.ToFix()
                 }
             };
             if(item.InvoiceAmountType.CurrencyID.HasValue)

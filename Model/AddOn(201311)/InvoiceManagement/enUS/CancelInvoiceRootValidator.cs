@@ -113,7 +113,7 @@ namespace Model.InvoiceManagement.enUS
             Return_Tax_Document_No,
             Remark
         }
-        public static Exception VoidInvoice(this DataRow item, GenericManager<EIVOEntityDataContext> models, Organization owner, ref InvoiceCancellation voidItem, ref DerivedDocument p)
+        public static Exception VoidInvoice(this DataRow item, GenericManager<EIVOEntityDataContext> models, Organization owner, ref InvoiceCancellation voidItem, ref DerivedDocument p,ref Organization expectedSeller)
         {
             InvoiceItem invoice = null;
 
@@ -133,6 +133,7 @@ namespace Model.InvoiceManagement.enUS
 
             String sellerID = item.GetString((int)VoidInvoiceField.Seller_ID);
             invoice = models.GetTable<InvoiceItem>().Where(i => i.No == invNo && i.TrackCode == trackCode).FirstOrDefault();
+            expectedSeller = models.GetTable<Organization>().Where(o => o.ReceiptNo == sellerID).FirstOrDefault();
 
             if (invoice == null)
             {

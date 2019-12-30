@@ -309,6 +309,16 @@ namespace Model.DataEntity
                 .Select(r => r.UserProfile);
         }
 
+        public static IQueryable<UserProfile> GetUserListByCompanyID(this GenericManager<EIVOEntityDataContext> models, int[] companyID,IQueryable<UserRoleDefinition> rolesFilter = null)
+        {
+            var roles = rolesFilter ?? models.GetTable<UserRoleDefinition>();
+            return models.GetTable<OrganizationCategory>()
+                .Where(c => companyID.Contains(c.CompanyID))
+                .Join(models.GetTable<UserRole>().Join(roles, u => u.RoleID, r => r.RoleID, (u, r) => u),
+                    c => c.OrgaCateID, r => r.OrgaCateID, (c, r) => r)
+                .Select(r => r.UserProfile);
+        }
+
         public static IQueryable<Organization> GetQueryByAgent(this GenericManager<EIVOEntityDataContext> mgr, int agentID)
         {
             return mgr.GetTable<Organization>().Where(o => o.CompanyID == agentID
