@@ -1,0 +1,56 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+
+    models = ViewContext.Controller.DataSource();
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    ProductCatalogQueryViewModel _viewModel = (ProductCatalogQueryViewModel)ViewBag.ViewModel;
+}
+@{
+    Naming.FieldDisplayType? displayType = (Naming.FieldDisplayType?)ViewBag.DisplayType;
+}
+@switch (displayType)
+{
+    case Naming.FieldDisplayType.Header:
+        <text>備註</text>
+        break;
+    case Naming.FieldDisplayType.DataItem:
+        ProductCatalog item = this.Model as ProductCatalog;
+        <text>@(item?.Remark)</text>
+        break;
+
+    case Naming.FieldDisplayType.Edit:
+        item = this.Model as ProductCatalog;
+        <text>
+            @editField(_viewModel, item)
+        </text>
+        break;
+    default:
+        break;
+}
+
+@helper editField(ProductCatalogQueryViewModel _viewModel, ProductCatalog item)
+{
+    <input name="Remark" class="form-control" type="text" value="@(item?.Remark)" />
+}
+
+

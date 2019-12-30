@@ -1,0 +1,65 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@using ApplicationResource
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+
+    models = ViewContext.Controller.DataSource();
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    ProductCatalogQueryViewModel _viewModel = (ProductCatalogQueryViewModel)ViewBag.ViewModel;
+}
+@{
+    Naming.FieldDisplayType? displayType = (Naming.FieldDisplayType?)ViewBag.DisplayType;
+}
+@switch (displayType)
+{
+    case Naming.FieldDisplayType.Header:
+        <text>管理</text>
+        break;
+    case Naming.FieldDisplayType.DataItem:
+        ProductCatalog item = this.Model as ProductCatalog;
+        <div class="btn-group dropdown" data-toggle="dropdown">
+            <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">請選擇功能</button>
+            <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a class="btn" onclick="$inquiryAgent.editItem('@(item.ProductID.EncryptKey())');">修改</a></li>
+                <li><a class="btn" onclick="$inquiryAgent.deleteItem('@(item.ProductID.EncryptKey())');">刪除</a></li>
+            </ul>
+        </div>
+        break;
+
+    case Naming.FieldDisplayType.Edit:
+        item = this.Model as ProductCatalog;
+        <a class="btn" onclick="$inquiryAgent.commitItem('@(item?.ProductID.EncryptKey())');">確定</a>
+        <a class="btn" onclick="$inquiryAgent.dataItem('@(item?.ProductID.EncryptKey())');">取消</a>
+        break;
+
+    case Naming.FieldDisplayType.Create:
+        item = this.Model as ProductCatalog;
+        <a class="btn" onclick="$inquiryAgent.editItem('@((-1).EncryptKey())');">新增</a>
+        break;
+
+    default:
+        break;
+}
+
+
+

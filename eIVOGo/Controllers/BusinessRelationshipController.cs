@@ -275,7 +275,7 @@ namespace eIVOGo.Controllers
 
             if (item.ReceiptNo == "0000000000")
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "修改完成!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "修改完成!!");
             }
 
             return View("~/Views/BusinessRelationship/Module/DataItem.ascx", model);
@@ -341,7 +341,7 @@ namespace eIVOGo.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
+                return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
             var file = Request.Files[0];

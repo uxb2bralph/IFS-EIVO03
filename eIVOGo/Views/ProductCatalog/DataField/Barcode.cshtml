@@ -1,0 +1,99 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+
+    models = ViewContext.Controller.DataSource();
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    ProductCatalogQueryViewModel _viewModel = (ProductCatalogQueryViewModel)ViewBag.ViewModel;
+}
+@{
+    Naming.FieldDisplayType? displayType = (Naming.FieldDisplayType?)ViewBag.DisplayType;
+    ProductCatalog item = null;
+}
+@switch (displayType)
+{
+    case Naming.FieldDisplayType.Header:
+        <a href="javascript:void(0);" onclick="$inquiryAgent.sort('Barcode',this);">條碼</a>
+        break;
+    case Naming.FieldDisplayType.DataItem:
+        item = this.Model as ProductCatalog;
+        <text>@(item?.Barcode)</text>
+        break;
+    case Naming.FieldDisplayType.SortBy:
+        ProductCatalogQueryViewModel viewModel = (ProductCatalogQueryViewModel)ViewBag.ViewModel;
+        if (viewModel.SortName != null)
+        {
+            int idx = System.Array.IndexOf(viewModel.SortName, "Barcode");
+            if (idx >= 0)
+            {
+                if (viewModel.SortType[idx] == (int)Naming.SortType.ASC)
+                {
+                    if (TempData["SortedItems"] != null)
+                    {
+                        TempData["SortedItems"] = ((IOrderedQueryable<ProductCatalog>)TempData["SortedItems"]).ThenBy(p => p.Barcode);
+                    }
+                    else
+                    {
+                        TempData["SortedItems"] = ((IQueryable<ProductCatalog>)this.Model).OrderBy(p => p.Barcode);
+                    }
+                }
+                else if (viewModel.SortType[idx] == (int)Naming.SortType.DESC)
+                {
+                    if (TempData["SortedItems"] != null)
+                    {
+                        TempData["SortedItems"] = ((IOrderedQueryable<ProductCatalog>)TempData["SortedItems"]).ThenByDescending(p => p.Barcode);
+                    }
+                    else
+                    {
+                        TempData["SortedItems"] = ((IQueryable<ProductCatalog>)this.Model).OrderByDescending(p => p.Barcode);
+                    }
+                }
+            }
+        }
+        break;
+    case Naming.FieldDisplayType.Query:
+        <tr>
+            <th>
+                條碼
+            </th>
+            <td class="tdleft">
+                @editField(_viewModel, null)
+            </td>
+        </tr>
+        break;
+
+    case Naming.FieldDisplayType.Edit:
+        item = this.Model as ProductCatalog;
+        <text>
+            @editField(_viewModel, item)
+        </text>
+        break;
+    default:
+        break;
+}
+
+@helper editField(ProductCatalogQueryViewModel _viewModel, ProductCatalog item)
+{
+    <input name="Barcode" class="form-control" type="text" value="@(item!=null ? item.Barcode : _viewModel?.Barcode)" />
+}
+
+

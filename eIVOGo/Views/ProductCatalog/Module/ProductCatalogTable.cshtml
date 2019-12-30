@@ -1,0 +1,62 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ViewContext.Controller.DataSource();
+    IQueryable<ProductCatalog> _model = (IQueryable<ProductCatalog>)this.Model;
+    ProductCatalogQueryViewModel _viewModel = (ProductCatalogQueryViewModel)ViewBag.ViewModel;
+}
+@{
+    ViewBag.TableColumns = new string[]
+    {
+            "~/Views/ProductCatalog/DataField/ProductName.cshtml",
+            "~/Views/ProductCatalog/DataField/Spec.cshtml",
+            "~/Views/ProductCatalog/DataField/Barcode.cshtml",
+            "~/Views/ProductCatalog/DataField/SalePrice.cshtml",
+            "~/Views/ProductCatalog/DataField/PieceUnit.cshtml",
+            "~/Views/ProductCatalog/DataField/Remark.cshtml",
+            "~/Views/ProductCatalog/DataField/ProcessAction.cshtml",
+            };
+
+    Naming.FieldDisplayType? displayType = (Naming.FieldDisplayType?)ViewBag.DisplayType;
+}
+@if (displayType.HasValue)
+{
+    var item = _model.FirstOrDefault();
+    if (item == null)
+    {
+        item = new ProductCatalog { };
+    }
+    Html.RenderPartial("~/Views/Common/Module/TableRow.cshtml", item);
+}
+else
+{
+    if (_viewModel.PageIndex.HasValue)
+    {
+        Html.RenderPartial("~/Views/Common/Module/TableBody.cshtml", _model);
+    }
+    else
+    {
+        ViewBag.TableFooter = "~/Views/ProductCatalog/Module/ProductCatalogTableFooter.cshtml";
+        Html.RenderPartial("~/Views/Common/Module/TableSkeleton.cshtml", _model);
+    }
+}
+
