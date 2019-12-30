@@ -1517,8 +1517,10 @@ namespace Utility
 
                 DataTable dt = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
 
-                foreach (DataRow row in dt.Rows)
+                //                foreach (DataRow row in dt.Rows)
+                for (int idx = dt.Rows.Count - 1; idx >= 0; idx--)
                 {
+                    var row = dt.Rows[idx];
                     string sheet = row["TABLE_NAME"].ToString();
 
                     OleDbCommand cmd = new OleDbCommand($"SELECT * FROM [{sheet}]", conn);

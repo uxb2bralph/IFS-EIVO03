@@ -125,6 +125,7 @@
     <Compile Include="DocmentServer\PdfDocument.cs" />
     <Compile Include="Helper\DefaultTools\PdfUtility.cs" />
     <Compile Include="Helper\DefaultTools\Program.cs" />
+    <Compile Include="Helper\DynamicQueryStringParameter.cs" />
     <Compile Include="Helper\JobScheduler.cs" />
     <Compile Include="Helper\LogTextWriter.cs" />
     <Compile Include="Helper\QueuedProcessHandler.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="Win32\Winspool.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="_test\_testWebControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataAccessLayer\basis\dsQueryCondition.xsd">
