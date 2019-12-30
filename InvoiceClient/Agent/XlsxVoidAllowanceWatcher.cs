@@ -19,7 +19,7 @@ using Utility;
 
 namespace InvoiceClient.Agent
 {
-    public class XlsxVoidAllowanceWatcher : XlsxInvoiceWatcher
+    public class XlsxVoidAllowanceWatcher : ProcessRequestWatcher
     {
 
         public XlsxVoidAllowanceWatcher(String fullPath)

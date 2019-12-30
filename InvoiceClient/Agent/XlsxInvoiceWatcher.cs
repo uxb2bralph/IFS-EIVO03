@@ -17,10 +17,11 @@ using Model.Schema.EIVO.B2B;
 using Model.Schema.TXN;
 using Newtonsoft.Json;
 using Utility;
+using Uxnet.Com.Helper;
 
 namespace InvoiceClient.Agent
 {
-    public class XlsxInvoiceWatcher : InvoiceWatcher
+    public class XlsxInvoiceWatcher : ProcessRequestWatcher
     {
 
         public XlsxInvoiceWatcher(String fullPath)
@@ -29,96 +30,10 @@ namespace InvoiceClient.Agent
 
         }
 
-        protected override void prepareStorePath(string fullPath)
-        {
-            _ResponsedPath = fullPath + "(Response)";
-            _ResponsedPath.CheckStoredPath();
-
-            _failedTxnPath = fullPath + "(Failure)";
-            _failedTxnPath.CheckStoredPath();
-
-            if (__FailedTxnPath != null)
-            {
-                __FailedTxnPath.Add(_failedTxnPath);
-            }
-
-            _inProgressPath = Path.Combine(Logger.LogPath, Path.GetFileName(fullPath), $"{Process.GetCurrentProcess().Id}");
-            _inProgressPath.CheckStoredPath();
-        }
-
-        protected override void processFile(string invFile)
-        {
-            System.Diagnostics.Debugger.Launch();
-            if (!File.Exists(invFile))
-                return;
-
-            String fileName = Path.GetFileName(invFile);
-            String fullPath = Path.Combine(_inProgressPath, fileName);
-            try
-            {
-                File.Move(invFile, fullPath);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-                return;
-            }
-
-            try
-            {
-                var result = processUpload(fullPath);
-
-                if (result.result != true)
-                {
-                    storeFile(fullPath, Path.Combine(_failedTxnPath, fileName));
-                }
-                else
-                {
-                    storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-                storeFile(fullPath, Path.Combine(_failedTxnPath, fileName));
-            }
-        }
-
-        protected JsonResult UploadTo(String requestFile,String url)
-        {
-            using (WebClientEx client = new WebClientEx())
-            {
-                client.Timeout = 43200000;
-
-                byte[] data = client.UploadFile(url, requestFile);
-                return JsonConvert.DeserializeObject<JsonResult>(client.Encoding.GetString(data));
-
-                //using (var write = client.OpenWrite(url))
-                //{
-                //    using (var file = File.OpenRead(requestFile))
-                //    {
-                //        file.CopyTo(write);
-                //    }
-
-                //    var response = client.Response;
-                //    using (StreamReader reader = new StreamReader(response.GetResponseStream(), client.Encoding))
-                //    {
-                //        return JsonConvert.DeserializeObject<JsonResult>(reader.ReadToEnd());
-                //    }
-                //}
-            }
-        }
-
-        protected virtual JsonResult processUpload(String requestFile)
+        protected override JsonResult processUpload(String requestFile)
         {
             return UploadTo(requestFile, $"{ServerInspector.ServiceInfo.TaskCenterUrl}/InvoiceData/UploadInvoiceRequestXlsx?keyID={HttpUtility.UrlEncode(ServerInspector.ServiceInfo.AgentToken)}&sender={ServerInspector.ServiceInfo.AgentUID}&processType={(int?)ServerInspector.ServiceInfo.DefaultProcessType}");
         }
 
-    }
-
-    public class JsonResult
-    {
-        public bool? result { get; set; }
-        public String message { get; set; }
     }
 }

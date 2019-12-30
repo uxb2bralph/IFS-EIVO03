@@ -19,7 +19,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>D:\工作相關_網際優勢\publish\</PublishUrl>
+    <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -29,11 +29,9 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <AutorunEnabled>true</AutorunEnabled>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -81,8 +79,9 @@
       <HintPath>..\packages\CsvHelper.12.1.2\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Uxnet.Web\bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
@@ -92,25 +91,12 @@
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.7\lib\net45\System.Web.Cors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.7\lib\net45\System.Web.Http.Cors.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -138,7 +124,9 @@
     <Compile Include="Agent\CsvAllowanceCancellationWatcher.cs" />
     <Compile Include="Agent\CsvAllowanceWatcher.cs" />
     <Compile Include="Agent\CsvInvoiceCancellationWatcherForCrossBorderMerchant.cs" />
-    <Compile Include="Agent\ExcelResponseInspector.cs" />
+    <Compile Include="Agent\XmlProcessRequestWatcher.cs" />
+    <Compile Include="Agent\ProcessResponseInspector.cs" />
+    <Compile Include="Agent\ProcessRequestWatcher.cs" />
     <Compile Include="Agent\XlsxVoidAllowanceWatcher.cs" />
     <Compile Include="Agent\XlsxAllowanceWatcher.cs" />
     <Compile Include="Agent\XlsxVoidInvoiceWatcher.cs" />
@@ -199,6 +187,12 @@
     </Compile>
     <Compile Include="MainContent\B2BInvoiceCenterConfig.Designer.cs">
       <DependentUpon>B2BInvoiceCenterConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainContent\CBEXmlInvoiceCenterConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MainContent\CBEXmlInvoiceCenterConfig.Designer.cs">
+      <DependentUpon>CBEXmlInvoiceCenterConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="MainContent\XlsxInvoiceCenterConfig.cs">
       <SubType>UserControl</SubType>
@@ -308,6 +302,7 @@
     <Compile Include="TransferManagement\B2CInvoiceTransferManager.cs" />
     <Compile Include="TransferManagement\BranchTrackTransferManager.cs" />
     <Compile Include="TransferManagement\CsvInvoiceTransferManagerForCBM.cs" />
+    <Compile Include="TransferManagement\XmlInvoiceTransferManagerForCBE.cs" />
     <Compile Include="TransferManagement\XlsxInvoiceTransferManager.cs" />
     <Compile Include="TransferManagement\InvoiceBusinessTransferManager.cs" />
     <Compile Include="TransferManagement\CsvInvoiceTransferManagerV2.cs" />
@@ -333,8 +328,9 @@
     <EmbeddedResource Include="MainContent\B2BInvoiceCenterConfig.resx">
       <DependentUpon>B2BInvoiceCenterConfig.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainContent\PhysicalChannelConfig.resx">
-      <DependentUpon>PhysicalChannelConfig.cs</DependentUpon>
+    <EmbeddedResource Include="MainContent\CBEXmlInvoiceCenterConfig.resx">
+      <DependentUpon>CBEXmlInvoiceCenterConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MainContent\XlsxInvoiceCenterConfig.resx">
       <DependentUpon>XlsxInvoiceCenterConfig.cs</DependentUpon>
@@ -446,6 +442,10 @@
     <Folder Include="InvoiceTXN\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Business\Business.csproj">
+      <Project>{8cf5d523-2ab2-4a61-9660-5ab9e36f48d6}</Project>
+      <Name>Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{2f1547b6-2dd4-4a57-a40f-258103591603}</Project>
       <Name>Model</Name>
