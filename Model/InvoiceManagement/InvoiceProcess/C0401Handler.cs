@@ -62,9 +62,8 @@ namespace Model.InvoiceManagement.InvoiceProcess
                         item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
                         models.SubmitChanges();
 
-                        if ((/*item.CDS_Document.ChannelID == (int)Naming.ChannelIDType.ForCrossBorderMerchant
-                            || */(!invoiceItem.InvoiceBuyer.IsB2C() && invoiceItem.Organization.OrganizationStatus.SubscribeB2BInvoicePDF == true
-                                && item.CDS_Document.ChannelID != (int)Naming.ChannelIDType.FromWeb))
+                        if (invoiceItem.Organization.OrganizationStatus.SubscribeB2BInvoicePDF == true
+                            && (!invoiceItem.InvoiceBuyer.IsB2C() || invoiceItem.Organization.OrganizationStatus.PrintAll == true)
                             && item.CDS_Document.DocumentSubscriptionQueue == null)
                         {
                             models.ExecuteCommand(
@@ -150,23 +149,22 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     CDS_Document = docItem,
                     DispatchDate = DateTime.Now,
                     StepID = (int)stepID
-                });           
+                });
 
-            //yuki加一筆到DataProcessLog
             docItem.PushLogOnSubmit(models, stepID, Naming.DataProcessStatus.Ready);
         }
 
         //TODO:yuki加一筆到ProcessRequestDocument
-        public static void PushProcessRequestDocumentOnSubmit(GenericManager<EIVOEntityDataContext> models, CDS_Document docItem, int? taskID)
-        {            
-            models.GetTable<ProcessRequestDocument>().InsertOnSubmit(
-                            new ProcessRequestDocument
-                            {
-                                CDS_Document = docItem,
-                                TaskID = taskID,
-                                CreateDate = DateTime.Now
-                            });            
-        }
+        //public static void PushProcessRequestDocumentOnSubmit(GenericManager<EIVOEntityDataContext> models, CDS_Document docItem, int? taskID)
+        //{            
+        //    models.GetTable<ProcessRequestDocument>().InsertOnSubmit(
+        //                    new ProcessRequestDocument
+        //                    {
+        //                        CDS_Document = docItem,
+        //                        TaskID = taskID,
+        //                        CreateDate = DateTime.Now
+        //                    });            
+        //}
 
         private static Task __Turnkey;
         public static void WriteToTurnkeyInBatches()

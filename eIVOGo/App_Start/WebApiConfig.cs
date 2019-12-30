@@ -10,7 +10,7 @@ namespace eIVOGo
         public static void Register(HttpConfiguration config)
         {
             // New code
-            config.EnableCors();
+            //config.EnableCors();
 
             // Web API configuration and services
 
