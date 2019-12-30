@@ -24,8 +24,7 @@ namespace Model.InvoiceManagement
     {
         public InvoiceManagerV3() : base() { }
         public InvoiceManagerV3(GenericManager<EIVOEntityDataContext> mgr) : base(mgr) { }
-
-
+        public bool HasError { get; set; }
         public override Dictionary<int, Exception> SaveUploadInvoice(InvoiceRoot item, OrganizationToken owner)
         {
             Dictionary<int, Exception> result = new Dictionary<int, Exception>();
@@ -247,6 +246,24 @@ namespace Model.InvoiceManagement
             }
 
             return result;
+        }
+
+        protected void PushProcessExceptionNotification(ProcessRequest requestItem,Organization notified)
+        {
+            if (requestItem != null && notified != null)
+            {
+                if (!this.GetTable<ProcessExceptionNotification>().Any(n => n.TaskID == requestItem.TaskID && n.CompanyID == notified.CompanyID))
+                {
+                    this.GetTable<ProcessExceptionNotification>().InsertOnSubmit(
+                        new ProcessExceptionNotification
+                            {
+                                TaskID = requestItem.TaskID,
+                                CompanyID = notified.CompanyID,
+                            }
+                        );
+                    this.SubmitChanges();
+                }
+            }
         }
     }
 }

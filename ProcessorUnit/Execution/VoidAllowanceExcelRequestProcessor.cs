@@ -13,11 +13,11 @@ namespace ProcessorUnit.Execution
         public VoidAllowanceExcelRequestProcessor()
         {
             appliedProcessType = Naming.InvoiceProcessType.D0501_Xlsx;
-            processDataSet = (ds, agent) =>
+            processDataSet = (ds, requestItem) =>
             {
                 using (VoidAllowanceDataSetManager manager = new VoidAllowanceDataSetManager(models))
                 {
-                    return manager.SaveUploadAllowanceCancellation(ds, agent);
+                    return manager.SaveUploadAllowanceCancellation(ds, requestItem);
                 }
             };
         }

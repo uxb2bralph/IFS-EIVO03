@@ -38,9 +38,10 @@ namespace TaskCenter.Controllers
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
 
         }
-        public ActionResult UploadInvoiceRequestXlsx(InvoiceRequestViewModel viewModel)
+
+        public ActionResult UploadProcessRequest(InvoiceRequestViewModel viewModel)
         {
-            ProcessRequest item = viewModel.SaveProcessRequest(this, viewModel.ProcessType ?? Naming.InvoiceProcessType.C0401_Xlsx);
+            ViewBag.DataItem = viewModel.SaveProcessRequest(this);
 
             if (!ModelState.IsValid)
             {
@@ -48,42 +49,35 @@ namespace TaskCenter.Controllers
             }
 
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UploadInvoiceRequestXlsx(InvoiceRequestViewModel viewModel)
+        {
+            if (!viewModel.ProcessType.HasValue)
+            {
+                viewModel.ProcessType = Naming.InvoiceProcessType.C0401_Xlsx;
+            }
+
+            return UploadProcessRequest(viewModel);
+
         }
 
         public ActionResult UploadVoidInvoiceRequestXlsx(InvoiceRequestViewModel viewModel)
         {
-            ProcessRequest item = viewModel.SaveProcessRequest(this, Naming.InvoiceProcessType.C0501_Xlsx);
-
-            if (!ModelState.IsValid)
-            {
-                return Json(new { result = false, errorCode = ModelState.AllErrorKey() }, JsonRequestBehavior.AllowGet);
-            }
-
-            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+            viewModel.ProcessType = Naming.InvoiceProcessType.C0501_Xlsx;
+            return UploadProcessRequest(viewModel);
         }
 
         public ActionResult UploadAllowanceRequestXlsx(InvoiceRequestViewModel viewModel)
         {
-            ProcessRequest item = viewModel.SaveProcessRequest(this, Naming.InvoiceProcessType.D0401_Xlsx);
-
-            if (!ModelState.IsValid)
-            {
-                return Json(new { result = false, errorCode = ModelState.AllErrorKey() }, JsonRequestBehavior.AllowGet);
-            }
-
-            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+            viewModel.ProcessType = Naming.InvoiceProcessType.D0401_Xlsx;
+            return UploadProcessRequest(viewModel);
         }
 
         public ActionResult UploadVoidAllowanceRequestXlsx(InvoiceRequestViewModel viewModel)
         {
-            ProcessRequest item = viewModel.SaveProcessRequest(this, Naming.InvoiceProcessType.D0501_Xlsx);
-
-            if (!ModelState.IsValid)
-            {
-                return Json(new { result = false, errorCode = ModelState.AllErrorKey() }, JsonRequestBehavior.AllowGet);
-            }
-
-            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+            viewModel.ProcessType = Naming.InvoiceProcessType.D0501_Xlsx;
+            return UploadProcessRequest(viewModel);
         }
 
         public ActionResult GetResource(String path)

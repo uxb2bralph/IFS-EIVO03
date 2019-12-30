@@ -13,11 +13,11 @@ namespace ProcessorUnit.Execution
         public AllowanceExcelRequestProcessor()
         {
             appliedProcessType = Naming.InvoiceProcessType.D0401_Xlsx;
-            processDataSet = (ds, agent) =>
+            processDataSet = (ds, requestItem) =>
             {
                 using (AllowanceDataSetManager manager = new AllowanceDataSetManager(models))
                 {
-                    return manager.SaveUploadAllowance(ds, agent);
+                    return manager.SaveUploadAllowance(ds, requestItem);
                 }
             };
         }

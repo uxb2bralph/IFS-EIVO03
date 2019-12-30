@@ -38,8 +38,10 @@ namespace Model.InvoiceManagement
             return table;
         }
 
-        public virtual DataTable SaveUploadAllowance(DataSet item, Organization owner)
+        public virtual DataTable SaveUploadAllowance(DataSet item, ProcessRequest request)
         {
+            Organization owner = request.Organization;
+
             AllowanceDataSetValidator validator = new AllowanceDataSetValidator(this, owner);
             DataTable result = InitializeAllowanceResponseTable();
 
@@ -105,6 +107,11 @@ namespace Model.InvoiceManagement
                 }
 
                 EventItems_Allowance = eventItems;
+
+                if (this.HasError == true)
+                {
+                    this.PushProcessExceptionNotification(request, validator.ExpectedSeller ?? owner);
+                }
             }
 
             return result;
@@ -121,6 +128,7 @@ namespace Model.InvoiceManagement
                 row[(int)ResultField.AllowanceNo] = source[validator.AllowanceField.Allowance_No];
             }
             result.Rows.Add(row);
+            HasError = true;
         }
 
         protected void ReportSuccess(DataTable result, InvoiceAllowance target)

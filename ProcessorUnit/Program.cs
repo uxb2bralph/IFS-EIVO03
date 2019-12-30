@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Utility;
 using Model.ProcessorUnitHelper;
+using System.Threading;
 
 namespace ProcessorUnit
 {
@@ -18,6 +19,10 @@ namespace ProcessorUnit
         {
             Logger.OutputWritter = Console.Out;
             Logger.Info($"Process start at {DateTime.Now}");
+
+            /// SSL憑證信任設定
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = (s, certificate, chain, sslPolicyErrors) => true;
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
 
             InitializeApp.StartUp();
             ConsoleKeyInfo key;
@@ -55,25 +60,71 @@ namespace ProcessorUnit
             //Process proc = Process.GetCurrentProcess();
             //proc.EnableRaisingEvents = true;
             //proc.Exited += Proc_Exited;
-            (new InvoiceExcelRequestProcessor
+            //(new InvoiceExcelRequestProcessor
+            //{
+            //    ChainedExecutor = new InvoiceExcelRequestForCBEProcessor
+            //    {
+            //        ChainedExecutor = new InvoiceExcelRequestForVACProcessor
+            //        {
+            //            ChainedExecutor = new InvoiceExcelRequestForIssuerProcessor
+            //            {
+            //                ChainedExecutor = new VoidInvoiceExcelRequestProcessor
+            //                {
+            //                    ChainedExecutor = new AllowanceExcelRequestProcessor
+            //                    {
+            //                        ChainedExecutor = new VoidAllowanceExcelRequestProcessor { },
+            //                    },
+            //                }
+            //            }
+            //        }
+            //    }
+            //}).ReadyToGo();
+
+            ExecutorForeverBase processorStart = new InvoiceExcelRequestProcessor
             {
-                ChainedExecutor = new InvoiceExcelRequestForCBEProcessor
-                {
-                    ChainedExecutor = new InvoiceExcelRequestForVACProcessor
-                    {
-                        ChainedExecutor = new InvoiceExcelRequestForIssuerProcessor
-                        {
-                            ChainedExecutor = new VoidInvoiceExcelRequestProcessor
-                            {
-                                ChainedExecutor = new AllowanceExcelRequestProcessor
-                                {
-                                    ChainedExecutor = new VoidAllowanceExcelRequestProcessor { },
-                                },
-                            }
-                        }
-                    }
-                }
-            }).ReadyToGo();
+
+            };
+
+            ExecutorForeverBase chainedProcessor =  new InvoiceExcelRequestForCBEProcessor
+            {
+
+            };
+
+            processorStart.ChainedExecutor = chainedProcessor;
+
+            chainedProcessor.ChainedExecutor = new InvoiceExcelRequestForVACProcessor
+            {
+                
+            };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
+            chainedProcessor.ChainedExecutor = new InvoiceExcelRequestForIssuerProcessor
+            {
+                
+            };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
+            chainedProcessor.ChainedExecutor = new VoidInvoiceExcelRequestProcessor
+            {
+                
+            };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
+            chainedProcessor.ChainedExecutor = new AllowanceExcelRequestProcessor
+            {
+                
+            };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
+            chainedProcessor.ChainedExecutor = new VoidAllowanceExcelRequestProcessor { };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
+            chainedProcessor.ChainedExecutor = new ProcessExceptionNotificationProcessor { };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
+            processorStart.ReadyToGo();
+
+
         }
 
         //private static void Proc_Exited(object sender, EventArgs e)

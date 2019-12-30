@@ -18,7 +18,7 @@ namespace TaskCenter.Helper.RequestAction
 {
     public static class UploadDataExtensions
     {
-        public static ProcessRequest SaveProcessRequest(this InvoiceRequestViewModel viewModel, SampleController controller, Naming.InvoiceProcessType processType)
+        public static ProcessRequest SaveProcessRequest(this InvoiceRequestViewModel viewModel, SampleController controller)
         {
             var ModelState = controller.ModelState;
             var ViewBag = controller.ViewBag;
@@ -55,11 +55,17 @@ namespace TaskCenter.Helper.RequestAction
                 file.SaveAs(path);
             }
 
+            if(!viewModel.ProcessType.HasValue)
+            {
+                ModelState.AddModelError("E1004", ErrorMessage.E1004);
+            }
+
             if (!ModelState.IsValid)
             {
                 return null;
             }
 
+            Naming.InvoiceProcessType processType = viewModel.ProcessType.Value;
             var processItem = new ProcessRequest
             {
                 AgentID = item.CompanyID,

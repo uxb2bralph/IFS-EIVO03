@@ -19,7 +19,7 @@ namespace Model.Resource {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class MessageResources {
@@ -597,6 +597,15 @@ namespace Model.Resource {
         public static string InvalidPrintMark {
             get {
                 return ResourceManager.GetString("InvalidPrintMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 發票品項單價、數量金額合計不符.
+        /// </summary>
+        public static string InvalidProductAmount {
+            get {
+                return ResourceManager.GetString("InvalidProductAmount", resourceCulture);
             }
         }
         

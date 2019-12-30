@@ -100,12 +100,6 @@ namespace Model.InvoiceManagement
             set;
         }
 
-        public static Func<InvoiceItem,String> BuildEncryptedData
-        {
-            get;
-            set;
-        }
-
         static EIVOPlatformFactory()
         {
             lock (typeof(EIVOPlatformFactory))

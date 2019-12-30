@@ -491,11 +491,11 @@ namespace Model.Helper
                     DiscountAmountSpecified = item.InvoiceAmountType.DiscountAmount.HasValue,
                     ExchangeRateSpecified = false,
                     OriginalCurrencyAmountSpecified = false,
-                    SalesAmount = item.InvoiceAmountType.SalesAmount.HasValue ? (long)item.InvoiceAmountType.SalesAmount.Value : 0,
-                    TaxAmount = item.InvoiceAmountType.TaxAmount.HasValue ? (long)item.InvoiceAmountType.TaxAmount.Value : 0,
-                    TaxRate = item.InvoiceAmountType.TaxRate.HasValue ? item.InvoiceAmountType.TaxRate.Value : 0.05m,
+                    SalesAmount = item.InvoiceAmountType.SalesAmount ?? 0,
+                    TaxAmount = item.InvoiceAmountType.TaxAmount ?? 0,
+                    TaxRate = item.InvoiceAmountType.TaxRate ?? 0.05m,
                     TaxType = (Schema.TurnKey.A0401.TaxTypeEnum)((int)item.InvoiceAmountType.TaxType.Value),
-                    TotalAmount = item.InvoiceAmountType.TotalAmount.HasValue ? (long)item.InvoiceAmountType.TotalAmount : 0
+                    TotalAmount = item.InvoiceAmountType.TotalAmount ?? 0
                 }
             };
 
@@ -640,10 +640,10 @@ namespace Model.Helper
                 InvoiceNumber = String.Format("{0}{1}", item.TrackCode, item.No),
                 InvoiceItem = buildSellerInvoiceRootDetails(item),
                 //DiscountAmount = item.InvoiceAmountType.DiscountAmount.HasValue ? item.InvoiceAmountType.DiscountAmount.Value : 0,
-                SalesAmount = item.InvoiceAmountType.SalesAmount.HasValue ? Decimal.Parse(String.Format("{0:0}", item.InvoiceAmountType.SalesAmount.Value)) : 0,
-                TaxAmount = item.InvoiceAmountType.TaxAmount.HasValue ? Decimal.Parse(String.Format("{0:0}", item.InvoiceAmountType.TaxAmount.Value)) : 0,
+                SalesAmount = item.InvoiceAmountType.SalesAmount ?? 0,
+                TaxAmount = item.InvoiceAmountType.TaxAmount ?? 0,
                 TaxType = item.InvoiceAmountType.TaxType.Value,
-                TotalAmount = item.InvoiceAmountType.TotalAmount.HasValue ? Decimal.Parse(String.Format("{0:0}", item.InvoiceAmountType.TotalAmount.Value)) : 0,
+                TotalAmount = item.InvoiceAmountType.TotalAmount ?? 0,
                 //ExtraRemark = buildSellerInvoiceExtraRemark(item)
             }).ToArray();
         }

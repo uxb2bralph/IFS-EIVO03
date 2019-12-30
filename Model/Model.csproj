@@ -44,6 +44,10 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="QREncrypter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\QREncrypter.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
@@ -73,7 +77,10 @@
     <Compile Include="Helper\DataStoreExtensionMethods.cs" />
     <Compile Include="Helper\InvoiceExtensionMethods.cs" />
     <Compile Include="InvoiceManagement\AllowanceDataSetManager.cs" />
+    <Compile Include="InvoiceManagement\InvoiceManagerForCBE.cs" />
+    <Compile Include="InvoiceManagement\InvoiceManagerV2.cs" />
     <Compile Include="InvoiceManagement\Validator\AllowanceDataSetValidator.cs" />
+    <Compile Include="InvoiceManagement\Validator\InvoiceRootInvoiceValidatorForCBE.cs" />
     <Compile Include="InvoiceManagement\VoidInvoiceDataSetManager.cs" />
     <Compile Include="InvoiceManagement\VoidAllowanceDataSetManager.cs" />
     <Compile Include="InvoiceManagement\InvoiceDataSetManager.cs" />
@@ -93,7 +100,6 @@
     <Compile Include="AddOn%28201311%29\InvoiceManagement\zhTW\CancelInvoiceRootValidator.cs" />
     <Compile Include="AddOn%28201311%29\InvoiceManagement\EIVOPlatformFactory.cs" />
     <Compile Include="AddOn%28201311%29\InvoiceManagement\enUS\InvoiceRootValidator.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\InvoiceManagerV2.cs" />
     <Compile Include="InvoiceManagement\Validator\C0501Validator.cs" />
     <Compile Include="AddOn%28201311%29\InvoiceManagement\zhTW\Check_CarrierType_PrintMark_DonateMark.cs" />
     <Compile Include="AddOn%28201311%29\InvoiceManagement\zhTW\InvoiceRootValidator.cs" />
@@ -388,7 +394,6 @@
     <Compile Include="Security\MembershipManagement\UserProfileFactory.cs" />
     <Compile Include="Security\MembershipManagement\UserProfileImpl.cs" />
     <Compile Include="Security\MembershipManagement\UserProfileManager.cs" />
-    <Compile Include="TaskManagement\TaskManager.cs" />
     <Compile Include="UIType.cs" />
     <Compile Include="UploadManagement\CsvUploadManager.cs" />
     <Compile Include="UploadManagement\ICsvUploadManager.cs" />
@@ -652,7 +657,11 @@
       <Name>Uxnet.Web</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="bin\Debug\QREncrypter.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -297,6 +297,9 @@
   <data name="InvalidPrintMark" xml:space="preserve">
     <value>電子發票證明聯已列印註記錯誤，TAG:&lt; PrintMark /&gt;</value>
   </data>
+  <data name="InvalidProductAmount" xml:space="preserve">
+    <value>發票品項單價、數量金額合計不符</value>
+  </data>
   <data name="InvalidProductDescription" xml:space="preserve">
     <value>品項名稱不可空白長度不得大於256，傳送資料：{0}，TAG:&lt; Description /&gt;</value>
   </data>

@@ -26,6 +26,8 @@ namespace Model.InvoiceManagement.Validator
 
         }
 
+        public Organization ExpectedSeller { get; set; }
+
         internal AllowanceFieldIndex AllowanceField = new AllowanceFieldIndex { };
         internal class AllowanceFieldIndex
         {
@@ -97,6 +99,8 @@ namespace Model.InvoiceManagement.Validator
             {
                 return new Exception(String.Format(MessageResources.AlertInvalidSeller, _allowanceItem.GetString(AllowanceField.Seller_ID)));
             }
+
+            ExpectedSeller = _seller;
 
             if (_seller.CompanyID != _owner.CompanyID && !models.GetTable<InvoiceIssuerAgent>().Any(a => a.AgentID == _owner.CompanyID && a.IssuerID == _seller.CompanyID))
             {

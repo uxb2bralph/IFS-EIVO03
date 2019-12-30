@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.basis;
 using Model.DataEntity;
+using Model.Helper;
 using Model.InvoiceManagement.enUS;
 using Model.InvoiceManagement.ErrorHandle;
 using Model.InvoiceManagement.InvoiceProcess;
@@ -55,6 +56,7 @@ namespace Model.InvoiceManagement
                 row[(int)ResultField.SellerID] = source[validator.InvoiceField.Seller_ID];
             }
             result.Rows.Add(row);
+            this.HasError = true;
         }
 
         protected void ReportSuccess(DataTable result, InvoiceItem target)
@@ -65,33 +67,31 @@ namespace Model.InvoiceManagement
             row[(int)ResultField.DataID] = target.InvoicePurchaseOrder?.OrderNo;
             row[(int)ResultField.InvoiceDate] = target.InvoiceDate;
             row[(int)ResultField.StatusCode] = 1;
-            if (EIVOPlatformFactory.BuildEncryptedData != null)
-            {
-                row[(int)ResultField.EncData] = EIVOPlatformFactory.BuildEncryptedData(target);
-            }
+            row[(int)ResultField.EncData] = target.BuildEncryptedData();
             result.Rows.Add(row);
         }
 
-        public DataTable SaveUploadInvoiceAutoTrackNoForCBE(DataSet item, Organization owner)
+        public DataTable SaveUploadInvoiceAutoTrackNoForCBE(DataSet item, ProcessRequest request)
         {
+            Organization owner = request.Organization;
             InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, Naming.InvoiceProcessType.C0401_Xlsx_CBE);
 
             DataTable result = InitializeInvoiceResponseTable();
 
             IEnumerable<DataRow> invoiceItems = item.Tables["Invoice"].Rows.Cast<DataRow>();
             IEnumerable<DataRow> details = item.Tables["Details"].Rows.Cast<DataRow>();
-            String dataID = "";
-            foreach (DataRow row in details)
-            {
-                if (row.IsNull(validator.DetailsField.Data_ID) || String.IsNullOrEmpty((String)row[validator.DetailsField.Data_ID]))
-                {
-                    row[validator.DetailsField.Data_ID] = dataID;
-                }
-                else
-                {
-                    dataID = (String)row[validator.DetailsField.Data_ID];
-                }
-            }
+            //String dataID = "";
+            //foreach (DataRow row in details)
+            //{
+            //    if (row.IsNull(validator.DetailsField.Data_ID) || String.IsNullOrEmpty((String)row[validator.DetailsField.Data_ID]))
+            //    {
+            //        row[validator.DetailsField.Data_ID] = dataID;
+            //    }
+            //    else
+            //    {
+            //        dataID = (String)row[validator.DetailsField.Data_ID];
+            //    }
+            //}
 
             if (invoiceItems.Count() > 0)
             {
@@ -106,14 +106,19 @@ namespace Model.InvoiceManagement
                     HasItem = true;
                 }
                 EventItems = eventItems;
+
+                if (this.HasError == true)
+                {
+                    this.PushProcessExceptionNotification(request, validator.ExpectedSeller ?? owner);
+                }
             }
 
             return result;
         }
 
-        public DataTable SaveUploadInvoiceAutoTrackNoForVAC(DataSet item, Organization owner)
+        public DataTable SaveUploadInvoiceAutoTrackNoForVAC(DataSet item, ProcessRequest request)
         {
-            return SaveUploadInvoiceAutoTrackNo(item, owner, Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC);
+            return SaveUploadInvoiceAutoTrackNo(item, request, Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC);
         }
 
         void processAutoTrackInvoiceNo(IEnumerable<DataRow> items, IEnumerable<DataRow> details, Naming.InvoiceTypeDefinition indication, InvoiceDataSetValidator validator,ref int invSeq, List<InvoiceItem> eventItems, DataTable result)
@@ -174,8 +179,9 @@ namespace Model.InvoiceManagement
             validator.EndAutoTrackNo();
         }
 
-        public DataTable SaveUploadInvoiceAutoTrackNo(DataSet item, Organization owner, Naming.InvoiceProcessType processType = Naming.InvoiceProcessType.C0401_Xlsx)
+        public DataTable SaveUploadInvoiceAutoTrackNo(DataSet item, ProcessRequest request, Naming.InvoiceProcessType processType = Naming.InvoiceProcessType.C0401_Xlsx)
         {
+            Organization owner = request.Organization;
             InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, processType);
 
             DataTable result = InitializeInvoiceResponseTable();
@@ -222,13 +228,20 @@ namespace Model.InvoiceManagement
                     HasItem = true;
                 }
                 EventItems = eventItems;
+
+                if (this.HasError == true)
+                {
+                    this.PushProcessExceptionNotification(request, validator.ExpectedSeller ?? owner);
+                }
             }
 
             return result;
         }
 
-        public DataTable SaveUploadInvoice(DataSet item, Organization owner)
+        public DataTable SaveUploadInvoice(DataSet item, ProcessRequest request)
         {
+            Organization owner = request.Organization;
+
             InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer);
 
             DataTable result = InitializeInvoiceResponseTable();
@@ -321,6 +334,11 @@ namespace Model.InvoiceManagement
                     HasItem = true;
                 }
                 EventItems = eventItems;
+
+                if (this.HasError == true)
+                {
+                    this.PushProcessExceptionNotification(request, validator.ExpectedSeller ?? owner);
+                }
             }
 
             return result;

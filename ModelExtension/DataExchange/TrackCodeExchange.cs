@@ -127,9 +127,9 @@ namespace ModelExtension.DataExchange
                         }
 
                         cell = dataRow.Cell((int)ColumnIndex.發票類別);
-                        if (!cell.IsEmpty() && cell.GetString() != "7")
+                        if (cell.IsEmpty() || !(cell.GetString() == "7" || cell.GetString() == "8"))
                         {
-                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = "只接受發票類別07";
+                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = "只接受發票類別07、08";
                             continue;
                         }
 

@@ -11,36 +11,12 @@ using Utility;
 
 namespace ProcessorUnit.Execution
 {
-    public class ExecutorForever
+    public class ExecutorForever : ExecutorForeverBase
     {
-        public int TaskDelayInMilliseconds { get; set; } = 5000;
-        public void ReadyToGo()
-        {
-            var t = Task.Run(() =>
-            {
-                DoSomething();
-            });
 
-            t = t.ContinueWith(ts =>
-            {
-                if(ts.IsFaulted)
-                {
-                    Logger.Error(ts.Exception);
-                }
-
-                Task.Delay(TaskDelayInMilliseconds).ContinueWith(ts1 =>
-                {
-                    ReadyToGo();
-                });
-            });
-        }
-
-        public ExecutorForever ChainedExecutor { get; set; }
-
-        protected GenericManager<EIVOEntityDataContext> models;
         protected ProcessRequestQueue queueItem;
         protected Naming.InvoiceProcessType? appliedProcessType;
-        protected virtual void DoSomething()
+        protected override void DoSomething()
         {
             int? taskID = null;
             using (models = new ModelSource<InvoiceItem>())
@@ -70,15 +46,7 @@ namespace ProcessorUnit.Execution
                 }
             }
 
-            if (ChainedExecutor != null)
-            {
-                ChainedExecutor.DoSomething();
-            }
-
-            //else
-            //{
-            //    Console.WriteLine($"{DateTime.Now}: Do something...");
-            //}
+            base.DoSomething();
         }
 
         protected virtual void ProcessRequestItem()

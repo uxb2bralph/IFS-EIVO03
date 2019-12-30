@@ -20,11 +20,11 @@ namespace ProcessorUnit.Execution
         public InvoiceExcelRequestForVACProcessor() : base()
         {
             appliedProcessType = Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC;
-            processDataSet = (ds, agent) =>
+            processDataSet = (ds, requestItem) =>
             {
                 using (InvoiceDataSetManager manager = new InvoiceDataSetManager(models))
                 {
-                    return manager.SaveUploadInvoiceAutoTrackNoForVAC(ds, agent);
+                    return manager.SaveUploadInvoiceAutoTrackNoForVAC(ds, requestItem);
                 }
             };
         }

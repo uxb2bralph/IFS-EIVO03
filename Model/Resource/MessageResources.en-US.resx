@@ -304,6 +304,9 @@ CarrierID2: {2}limit. </value>
   <data name="InvalidPrintMark" xml:space="preserve">
     <value>[E0060]:PrintMark can not be blank, TAG:&lt; PrintMark /&gt;</value>
   </data>
+  <data name="InvalidProductAmount" xml:space="preserve">
+    <value>[E0075]:Product unit price and quantity do not fit cost amount.</value>
+  </data>
   <data name="InvalidProductDescription" xml:space="preserve">
     <value>[E0061]:Description should not exceed 256 characters, Incorrect Description: {0}, Incorrect TAG:&lt; Description /&gt;</value>
   </data>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
@@ -533,6 +534,15 @@ namespace Model.Helper
             return name != null && Regex.IsMatch(name, "^[A-Za-z0-9]{4}$")
                                 ? name
                                 : ValueValidity.GenerateRandomCode(4);
+        }
+
+        public static string BuildEncryptedData(this InvoiceItem item)
+        {
+            String key = File.ReadAllText(Path.Combine(Logger.LogPath, "ORCodeKey.txt"));
+            String EncryptContent = item.TrackCode + item.No + item.RandomNo;
+            com.tradevan.qrutil.QREncrypter qrencrypter = new com.tradevan.qrutil.QREncrypter();
+            String finalEncryData = qrencrypter.AESEncrypt(EncryptContent, key);
+            return finalEncryData;
         }
 
     }

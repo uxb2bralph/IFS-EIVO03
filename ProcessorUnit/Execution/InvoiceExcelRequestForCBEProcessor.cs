@@ -20,11 +20,11 @@ namespace ProcessorUnit.Execution
         public InvoiceExcelRequestForCBEProcessor() 
         {
             appliedProcessType = Naming.InvoiceProcessType.C0401_Xlsx_CBE;
-            processDataSet = (ds, agent) =>
+            processDataSet = (ds, requestItem) =>
             {
                 using (InvoiceDataSetManager manager = new InvoiceDataSetManager(models))
                 {
-                    return manager.SaveUploadInvoiceAutoTrackNoForCBE(ds, agent);
+                    return manager.SaveUploadInvoiceAutoTrackNoForCBE(ds, requestItem);
                 }
             };
         }

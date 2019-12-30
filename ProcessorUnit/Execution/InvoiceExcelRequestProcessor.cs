@@ -20,16 +20,16 @@ namespace ProcessorUnit.Execution
         public InvoiceExcelRequestProcessor()
         {
             appliedProcessType = Naming.InvoiceProcessType.C0401_Xlsx;
-            processDataSet = (ds, agent) => 
+            processDataSet = (ds, requestItem) => 
             {
                 using (InvoiceDataSetManager manager = new InvoiceDataSetManager(models))
                 {
-                    return manager.SaveUploadInvoiceAutoTrackNo(ds, agent);
+                    return manager.SaveUploadInvoiceAutoTrackNo(ds, requestItem);
                 }
             };
         }
 
-        protected Func<DataSet, Organization, DataTable> processDataSet;
+        protected Func<DataSet, ProcessRequest, DataTable> processDataSet;
 
         protected override void ProcessRequestItem()
         {
@@ -46,32 +46,32 @@ namespace ProcessorUnit.Execution
                     int idx = 1;
                     foreach(var t in ds.Tables.Cast<DataTable>().ToArray())
                     {
-                        if(t.TableName.StartsWith("Invoice$"))
-                        {
-                            t.TableName = "Invoice";
-                        }
-                        else if (t.TableName.StartsWith("Details$"))
+                        if (t.TableName.Contains("Details"))
                         {
                             t.TableName = "Details";
                         }
-                        else if (t.TableName.StartsWith("Allowance$"))
-                        {
-                            t.TableName = "Allowance";
-                        }
-                        else if (t.TableName.StartsWith("Void_Invoice$"))
+                        else if (t.TableName.Contains("Void_Invoice"))
                         {
                             t.TableName = "Void_Invoice";
                         }
-                        else if (t.TableName.StartsWith("Void_Allowance$"))
+                        else if (t.TableName.Contains("Invoice"))
+                        {
+                            t.TableName = "Invoice";
+                        }
+                        else if (t.TableName.Contains("Void_Allowance"))
                         {
                             t.TableName = "Void_Allowance";
                         }
-                        else
+                        else if (t.TableName.Contains("Allowance"))
+                        {
+                            t.TableName = "Allowance";
+                        }
+                        else 
                         {
                             t.TableName = $"unused_{idx++}";
                         }
                     }
-                    var result = processDataSet(ds, agent);
+                    var result = processDataSet(ds, requestItem);
                     result.TableName = "Process Result";
                     ds.Tables.Add(result);
 

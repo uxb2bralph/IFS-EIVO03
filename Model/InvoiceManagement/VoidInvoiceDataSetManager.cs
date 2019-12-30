@@ -46,6 +46,7 @@ namespace Model.InvoiceManagement
             row[(int)ResultField.StatusCode] = 0;
 
             result.Rows.Add(row);
+            HasError = true;
         }
 
         private void ReportSuccess(DataTable result, InvoiceCancellation target)
@@ -58,8 +59,10 @@ namespace Model.InvoiceManagement
             result.Rows.Add(row);
         }
 
-        public DataTable SaveUploadInvoiceCancellation(DataSet item, Organization owner)
+        public DataTable SaveUploadInvoiceCancellation(DataSet item, ProcessRequest request)
         {
+            Organization owner = request.Organization;
+
             DataTable result = InitializeVoidInvoiceResponseTable();
             IEnumerable<DataRow> items = item.Tables[0].Rows.Cast<DataRow>();
 
@@ -68,6 +71,7 @@ namespace Model.InvoiceManagement
                 EventItems = null;
                 EventItems_Allowance = null;
                 List<InvoiceItem> eventItems = new List<InvoiceItem>();
+                Organization expectedSeller = null;
                 int invSeq = 0;
                 for (int idx = 0; idx < items.Count(); idx++, invSeq++)
                 {
@@ -78,7 +82,7 @@ namespace Model.InvoiceManagement
                         InvoiceCancellation voidItem = null;
                         DerivedDocument p = null;
 
-                        if ((ex = row.VoidInvoice(this, owner, ref voidItem, ref p)) != null)
+                        if ((ex = row.VoidInvoice(this, owner, ref voidItem, ref p,ref expectedSeller)) != null)
                         {
                             ReportError(result, ex);
                             continue;
@@ -101,6 +105,11 @@ namespace Model.InvoiceManagement
                 }
 
                 EventItems = eventItems;
+
+                if (this.HasError == true)
+                {
+                    this.PushProcessExceptionNotification(request, expectedSeller ?? owner);
+                }
             }
             return result;
         }

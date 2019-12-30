@@ -150,6 +150,7 @@ namespace Model.Models.ViewModel
         public String EndNo { get; set; }
         public int? DeliveryStatus { get; set; }
         public Naming.ChannelIDType? ChannelID { get; set; }
+        public int? Attachment { get; set; }
 
     }
 
@@ -174,6 +175,7 @@ namespace Model.Models.ViewModel
         public String ResultView { get; set; }
         public bool? Encrypt { get; set; }
         public String QuickSearch { get; set; }
+        public Naming.FieldDisplayType? DisplayType { get; set; }
 
     }
 
@@ -245,12 +247,25 @@ namespace Model.Models.ViewModel
 
     public class ProcessRequestQueryViewModel : QueryViewModel
     {
+        public int? TaskID { get; set; }
         public DateTime? SubmitDateFrom { get; set; }
         public DateTime? SubmitDateTo { get; set; }
         public DateTime? ProcessStartFrom { get; set; }
         public DateTime? ProcessStartTo { get; set; }
         public DateTime? ProcessCompleteFrom { get; set; }
         public DateTime? ProcessCompleteTo { get; set; }
+    }
+
+    public class ProductCatalogQueryViewModel : QueryViewModel
+    {
+        public int? ProductID { get; set; }
+        public string Barcode { get; set; }
+        public string ProductName { get; set; }
+        public string Spec { get; set; }
+        public string PieceUnit { get; set; }
+        public string Remark { get; set; }
+        public decimal? SalePrice { get; set; }
+        public int? SupplierID { get; set; }
     }
 
 

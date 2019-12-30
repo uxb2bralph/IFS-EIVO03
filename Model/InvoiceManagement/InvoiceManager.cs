@@ -825,9 +825,9 @@ namespace Model.InvoiceManagement
                             InvoiceAmountType = new InvoiceAmountType
                             {
                                 DiscountAmount = invItem.DiscountAmount,
-                                SalesAmount = (invItem.TaxType == 1) ? invItem.SalesAmount :
-                                        (invItem.TaxType == 2) ? invItem.ZeroTaxSalesAmount :
-                                        (invItem.TaxType == 3) ? invItem.FreeTaxSalesAmount : invItem.SalesAmount,
+                                SalesAmount = invItem.SalesAmount,
+                                FreeTaxSalesAmount = invItem.FreeTaxSalesAmount,
+                                ZeroTaxSalesAmount = invItem.ZeroTaxSalesAmount,
                                 TaxAmount = invItem.TaxAmount,
                                 TaxRate = invItem.TaxRate,
                                 TaxType = invItem.TaxType,

@@ -22,6 +22,8 @@ namespace Model.InvoiceManagement.Validator
         protected new DataRow _invItem;
         protected IEnumerable<DataRow> _details;
 
+        public Organization ExpectedSeller { get; set; }
+
         internal InvoiceFieldIndex InvoiceField = new InvoiceFieldIndex { };
         internal class InvoiceFieldIndex
         {
@@ -527,13 +529,13 @@ namespace Model.InvoiceManagement.Validator
 
                 if (currentItem != null)
                 {
-                    if (currentItem.SellerID == _seller.CompanyID && currentItem.RandomNo == randomNo)
-                    {
-                        DuplicateProcess = true;
-                        _newItem = currentItem;
-                        return null;
-                    }
-                    else
+                    //if (currentItem.SellerID == _seller.CompanyID && currentItem.RandomNo == randomNo)
+                    //{
+                    //    DuplicateProcess = true;
+                    //    _newItem = currentItem;
+                    //    return null;
+                    //}
+                    //else
                     {
                         return new Exception(MessageResources.AlertInvoiceDuplicated);
                     }
@@ -616,6 +618,8 @@ namespace Model.InvoiceManagement.Validator
                 {
                     return new Exception(String.Format(MessageResources.AlertInvalidSeller, SellerID()));
                 }
+
+                ExpectedSeller = _seller;
 
                 if (_seller.CompanyID != _owner.CompanyID && !_mgr.GetTable<InvoiceIssuerAgent>().Any(a => a.AgentID == _owner.CompanyID && a.IssuerID == _seller.CompanyID))
                 {
@@ -772,7 +776,7 @@ namespace Model.InvoiceManagement.Validator
                     {
                         _carrier = new InvoiceCarrier
                         {
-                            CarrierType = "5G0001",
+                            CarrierType = __CROSS_BORDER_MURCHANT,
                             CarrierNo = carrierID
                         };
                     }
@@ -927,7 +931,7 @@ namespace Model.InvoiceManagement.Validator
                 CostAmount = GetDetails<decimal>(i, DetailsField.Amount),
                 Piece = GetDetails<decimal>(i, DetailsField.Quantity),
                 PieceUnit = GetString(i, DetailsField.Unit),
-                UnitCost = GetDetails<decimal>(i, DetailsField.Amount),
+                UnitCost = GetDetails<decimal>(i, DetailsField.Unit_Price),
                 Remark = GetString(i, DetailsField.Remark),
                 TaxType = processType==Naming.InvoiceProcessType.C0401_Xlsx_CBE
                             ? (byte)Naming.TaxTypeDefinition.應稅
@@ -960,6 +964,13 @@ namespace Model.InvoiceManagement.Validator
                     return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
                 }
 
+                if (product.CostAmount.HasValue && product.UnitCost.HasValue && product.Piece.HasValue)
+                {
+                    if (product.CostAmount != product.UnitCost * product.Piece)
+                    {
+                        return new Exception(MessageResources.InvalidProductAmount);
+                    }
+                }
             }
             return null;
         }
