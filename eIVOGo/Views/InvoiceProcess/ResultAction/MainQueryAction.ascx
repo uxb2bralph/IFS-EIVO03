@@ -19,10 +19,10 @@
         <tr>
             <td class="Bargain_btn">
                 <%  Html.RenderPartial("~/Views/InvoiceProcess/ResultAction/PrintAction.ascx"); %>
-                <input type="button" class="btn" name="btnPrint" value="Excel下載" onclick="uiInvoiceQuery.download();" />
+                <input type="button" class="btn" name="btnPrint" value="Excel下載" onclick="uiInvoiceQuery.download();" style="display:none" />
                 <%  if (_profile.IsSystemAdmin())
                     { %>
-                <input type="button" class="btn" name="btnBuyer" value="下載買受人資料" onclick="uiInvoiceQuery.saveBuyer();" />
+                <input type="button" class="btn" name="btnBuyer" value="下載買受人資料" onclick="uiInvoiceQuery.saveBuyer();" style="display:none"/>
                 <%  } %>
             </td>
         </tr>
