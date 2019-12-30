@@ -95,5 +95,14 @@ namespace ApplicationResource {
                 return ResourceManager.GetString("P104", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xml格式發票開立請求檔(境外電商).
+        /// </summary>
+        public static string P501 {
+            get {
+                return ResourceManager.GetString("P501", resourceCulture);
+            }
+        }
     }
 }
