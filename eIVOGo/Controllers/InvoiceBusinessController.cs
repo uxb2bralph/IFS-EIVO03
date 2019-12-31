@@ -48,17 +48,17 @@ namespace eIVOGo.Controllers
         {
             var orgItem = models.GetTable<Organization>().Where(o => o.CompanyID == id).FirstOrDefault();
             if (orgItem == null)
-                return View("~/Views/SiteAction/Alert.ascx", model: "營業人資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
 
             POSNo = POSNo.GetEfficientString();
             if (POSNo == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "POS機編號錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "POS機編號錯誤!!");
             }
 
             if (orgItem.POSDevice.Any(p => p.POSNo == POSNo && p.DeviceID != deviceID))
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "已存在相同的POS機編號!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "已存在相同的POS機編號!!");
             }
 
             var item = models.GetTable<POSDevice>().Where(p => p.CompanyID == id && p.DeviceID == deviceID).FirstOrDefault();
@@ -97,7 +97,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "POS機編號錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "POS機編號錯誤!!");
             }
 
             return View("~/Views/InvoiceBusiness/POSDevice/EditItem.ascx", item);
@@ -110,7 +110,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "POS機編號錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "POS機編號錯誤!!");
             }
 
             return View("~/Views/InvoiceBusiness/POSDevice/DataItem.ascx", item);
@@ -141,7 +141,7 @@ namespace eIVOGo.Controllers
             var seller = models.GetTable<Organization>().Where(o => o.CompanyID == viewModel.SellerID).FirstOrDefault();
             if (seller == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "發票開立人錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "發票開立人錯誤!!");
             }
 
             viewModel.SellerName = seller.CompanyName;
@@ -151,7 +151,7 @@ namespace eIVOGo.Controllers
             //{
             //    if (!mgr.ApplyInvoiceDate(viewModel.InvoiceDate.Value))
             //    {
-            //        return View("~/Views/SiteAction/Alert.ascx", model: String.Format(MessageResources.AlertNullTrackNoInterval, seller.ReceiptNo));
+            //        return View("~/Views/Shared/JsAlert.cshtml", model: String.Format(MessageResources.AlertNullTrackNoInterval, seller.ReceiptNo));
             //    }
 
             //    viewModel.TrackCode = mgr.InvoiceNoInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode;
@@ -162,7 +162,7 @@ namespace eIVOGo.Controllers
             var exception = validator.Validate(viewModel);
             if (exception != null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: exception.Message);
+                return View("~/Views/Shared/JsAlert.cshtml", model: exception.Message);
             }
 
             InvoiceItem newItem = validator.InvoiceItem;
@@ -182,7 +182,7 @@ namespace eIVOGo.Controllers
             var seller = models.GetTable<Organization>().Where(o => o.CompanyID == viewModel.SellerID).FirstOrDefault();
             if (seller == null)
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "發票開立人錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "發票開立人錯誤!!");
             }
 
             return View(seller);

@@ -395,7 +395,7 @@ namespace eIVOGo.Controllers
             if(!viewModel.SellerID.HasValue)
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.ascx", model: "請選擇開立人!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "請選擇開立人!!");
             }
 
             models.Inquiry = createModelInquiry();
@@ -405,7 +405,7 @@ namespace eIVOGo.Controllers
             if (items.Count() <= 0)
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.ascx", model: "查無資料!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "查無資料!!");
             }
 
             using (DataSet ds = new DataSet())

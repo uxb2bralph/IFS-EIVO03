@@ -129,4 +129,7 @@
   <data name="P104" xml:space="preserve">
     <value>Excel格式作廢折讓單請求檔</value>
   </data>
+  <data name="P501" xml:space="preserve">
+    <value>Xml格式發票開立請求檔(境外電商)</value>
+  </data>
 </root>

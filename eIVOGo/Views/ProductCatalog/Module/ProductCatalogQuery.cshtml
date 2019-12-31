@@ -1,0 +1,190 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+
+    models = ViewContext.Controller.DataSource();
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+
+    ProductCatalogQueryViewModel _viewModel = (ProductCatalogQueryViewModel)ViewBag.ViewModel;
+}
+<!--交易畫面標題-->
+@{ 
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "發票品名");
+}
+@{
+    ViewBag.DisplayType = Naming.FieldDisplayType.Query;
+}
+<div class="border_gray">
+    <table style="width:100%;" border="0" cellpadding="0" cellspacing="0" class="left_title" id="queryArea">
+        <tr>
+            <th colspan="2" class="Head_style_a">查詢條件</th>
+        </tr>
+        <tr>
+            <th>營業人</th>
+            <td>
+                @{
+                    ViewBag.FieldName = "SupplierID";
+                    Html.RenderPartial("~/Views/DataFlow/SellerSelector.cshtml", _profile.InitializeOrganizationQuery(models));
+                }
+            </td>
+        </tr>
+        @{
+            Html.RenderPartial("~/Views/ProductCatalog/DataField/ProductName.cshtml");
+            Html.RenderPartial("~/Views/ProductCatalog/DataField/Barcode.cshtml");
+            Html.RenderPartial("~/Views/ProductCatalog/DataField/Spec.cshtml");
+        }
+        <tr>
+            <td colspan="2" style="text-align:center;">
+                <input name="btnQuery" class="btn" type="button" value="查詢" onclick="$inquiryAgent.initQuery = true; $inquiryAgent.inquire();" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    $(function () {
+        $inquiryAgent.inquire = function (pageNum) {
+            var $this = $inquiryAgent;
+            var $placement = $('input[value="查詢"]').closest('table');
+            var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
+
+            if (isNaN(pageNum)) {
+                $inquiryAgent.viewModel.PageIndex = null;
+            }
+            else {
+                $inquiryAgent.viewModel.PageIndex = pageNum;
+            }
+            $formData = $.extend($inquiryAgent.viewModel, $formData);
+
+            showLoading();
+            $.post('@Html.Raw(Url.Action("InquireProduct", "ProductCatalog"))', $formData, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
+                } else {
+                    if ($this.initQuery) {
+                        if ($this.$queryResult) {
+                            $this.$queryResult.remove();
+                        }
+
+                        $this.$queryResult = $(data);
+                        $('#queryArea').after($this.$queryResult);
+                        $this.initQuery = false;
+
+                    } else {
+                        $this.doPage(data);
+                    }
+                }
+            });
+        };
+        $inquiryAgent.deleteItem = function (keyID) {
+            if (confirm('確定刪除此項目?')) {
+                var event = event || window.event;
+                var $tr = $(event.target).closest('tr');
+                $.post('@Html.Raw(Url.Action("DeleteItem","ProductCatalog",new { displayType = (int)Naming.FieldDisplayType.Edit }))', { 'keyID': keyID }, function (data) {
+                    if (data.result) {
+                        alert('資料已刪除!!')
+                        $tr.remove();
+                    } else {
+                        alert(data.message);
+                    }
+                });
+            }
+        };
+
+        $inquiryAgent.editItem = function (keyID) {
+            var event = event || window.event;
+            var $tr = $(event.target).closest('tr');
+            $global.$scope = $tr;
+            var viewModel = $tr.find('input,select,textArea').serializeObject();
+            viewModel.keyID = keyID;
+            viewModel.supplierID = $('#queryArea [name="SupplierID"]').val();
+            viewModel.displayType = @((int)Naming.FieldDisplayType.Edit);
+            $inquiryAgent.loadItem(viewModel, function (data) {
+                $tr.after(data).remove();
+            });
+        };
+
+        $inquiryAgent.dataItem = function (keyID, scope, done) {
+            var event = event || window.event;
+            var $tr = scope || $(event.target).closest('tr');
+            $global.$scope = $tr;
+            var viewModel = $tr.find('input,select,textArea').serializeObject();
+            viewModel.keyID = keyID;
+            viewModel.supplierID = $('#queryArea [name="SupplierID"]').val();
+            viewModel.displayType = @((int)Naming.FieldDisplayType.DataItem);
+            $inquiryAgent.loadItem(viewModel, function (data) {
+                $tr.after(data).remove();
+                if (done) {
+                    done();
+                }
+            });
+        };
+
+        $inquiryAgent.loadItem = function (viewModel, onload) {
+            showLoading();
+            $.post('@Html.Raw(Url.Action("ProcessDataItem","ProductCatalog"))', viewModel, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
+                } else {
+                    onload(data);
+                }
+            });
+        };
+
+        $inquiryAgent.commitItem = function (keyID) {
+            var event = event || window.event;
+            var $tr = $(event.target).closest('tr');
+            $global.$scope = $tr;
+            var $parent = $tr.parent();
+            var viewModel = $tr.find('input,select,textArea').serializeObject();
+            viewModel.keyID = keyID;
+            viewModel.supplierID = $('#queryArea [name="SupplierID"]').val();
+            clearErrors();
+            $.post('@Html.Raw(Url.Action("CommitItem","ProductCatalog"))', viewModel, function (data) {
+                if ($.isPlainObject(data)) {
+                    if (data.result) {
+                        $inquiryAgent.dataItem(data.keyID, $tr, function () {
+                            $inquiryAgent.loadItem({ 'displayType':@((int)Naming.FieldDisplayType.Create), 'keyID': '@((-1).EncryptKey())' }, function (d) {
+                                $parent.append(d);
+                            });
+                        });
+                    } else {
+                        alert(data.message);
+                    }
+                } else {
+                    $(data).appendTo($('body')).remove();
+                }
+            });
+        };
+    });
+
+</script>
+@if (_viewModel.StartQuery == true)
+{
+    <script>
+        $(function () {
+            $('input[name="btnQuery"]').click();
+        });
+    </script>
+}
+

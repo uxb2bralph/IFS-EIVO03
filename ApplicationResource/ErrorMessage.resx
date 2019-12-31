@@ -126,4 +126,7 @@
   <data name="E1003" xml:space="preserve">
     <value>營業人錯誤</value>
   </data>
+  <data name="E1004" xml:space="preserve">
+    <value>未指定處理類型</value>
+  </data>
 </root>

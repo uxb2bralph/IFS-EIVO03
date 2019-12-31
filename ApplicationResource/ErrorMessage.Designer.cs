@@ -86,5 +86,14 @@ namespace ApplicationResource {
                 return ResourceManager.GetString("E1003", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 未指定處理類型.
+        /// </summary>
+        public static string E1004 {
+            get {
+                return ResourceManager.GetString("E1004", resourceCulture);
+            }
+        }
     }
 }

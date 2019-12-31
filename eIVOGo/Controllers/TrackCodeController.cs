@@ -76,7 +76,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "發票字軌資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "發票字軌資料錯誤!!");
             }
 
             return View("~/Views/TrackCode/Module/EditItem.ascx", item);
@@ -104,7 +104,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "發票字軌資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "發票字軌資料錯誤!!");
             }
             
             return View("~/Views/TrackCode/Module/DataItem.ascx", item);

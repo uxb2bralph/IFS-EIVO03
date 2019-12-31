@@ -47,7 +47,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<InvoiceAllowance>().Where(a => a.AllowanceID == viewModel.id).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
 
 
@@ -80,7 +80,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<InvoiceItem>().Where(a => a.InvoiceID == viewModel.id).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
 
             return View(item);
@@ -126,7 +126,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
 
             if (item.ResetUserPassword == null)
@@ -173,7 +173,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
 
             return View(item);
@@ -193,7 +193,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
 
             return View(item);

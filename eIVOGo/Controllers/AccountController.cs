@@ -44,7 +44,7 @@ namespace eIVOGo.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Account/CbsLogin.aspx");
+                return View("~/Views/Account/CbsLogin.cshtml");
             }
 
             LoginHandler login = new LoginHandler();
@@ -52,7 +52,7 @@ namespace eIVOGo.Controllers
             if (!login.ProcessLogin(viewModel.PID, viewModel.Password, out msg))
             {
                 ModelState.AddModelError("PID", msg);
-                return View("~/Views/Account/CbsLogin.aspx");
+                return View("~/Views/Account/CbsLogin.cshtml");
             }
             returnUrl = viewModel.ReturnUrl.GetEfficientString();
             return Redirect(returnUrl ?? msg ?? "~/Account/CbsLogin");
@@ -70,7 +70,7 @@ namespace eIVOGo.Controllers
             this.HttpContext.Logout();
             Session.Abandon();
 
-            return View("~/Views/Account/CbsLogin.aspx");
+            return View("~/Views/Account/CbsLogin.cshtml");
         }
 
         public ActionResult ForgetPassword()
@@ -271,7 +271,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "帳號資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "帳號資料錯誤!!");
             }
 
             return View("~/Views/Account/Module/DataItem.ascx", item);
@@ -284,10 +284,10 @@ namespace eIVOGo.Controllers
             if (item != null)
             {
                 item.NotifyToActivate();
-                return View("~/Views/SiteAction/Alert.ascx", model: "確認信已送出!!");
+                return View("~/Views/SiteAction/JsAlert.cshtml", model: "確認信已送出!!");
             }
 
-            return View("~/Views/Shared/JsAlert.ascx", model: "帳號資料錯誤!!");
+            return View("~/Views/Shared/JsAlert.cshtml", model: "帳號資料錯誤!!");
         }
 
         public ActionResult Deactivate(int? id)

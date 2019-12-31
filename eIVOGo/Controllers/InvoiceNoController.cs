@@ -345,14 +345,14 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "配號區間資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "配號區間資料錯誤!!");
             }
 
             var profile = HttpContext.GetUser();
             if(!profile.IsSystemAdmin())
             {
                 if(item.InvoiceTrackCodeAssignment.SellerID!=profile.CurrentUserRole.OrganizationCategory.CompanyID)
-                    return View("~/Views/SiteAction/Alert.ascx", model: "配號區間資料錯誤!!");
+                    return View("~/Views/Shared/JsAlert.cshtml", model: "配號區間資料錯誤!!");
             }
 
             return View("~/Views/InvoiceNo/Module/EditItem.ascx", item);

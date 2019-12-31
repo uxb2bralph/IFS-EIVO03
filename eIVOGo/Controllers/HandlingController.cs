@@ -221,13 +221,13 @@ namespace eIVOGo.Controllers
             if (items == null || items.Length == 0)
             {
                 ViewBag.Message = "請選擇郵寄項目!!";
-                return View("~/Views/Shared/JsAlert.ascx");
+                return View("~/Views/Shared/JsAlert.cshtml");
             }
 
             if (!deliveryStatus.HasValue)
             {
                 ViewBag.Message = "請選擇郵寄過程!!";
-                return View("~/Views/Shared/JsAlert.ascx");
+                return View("~/Views/Shared/JsAlert.cshtml");
             }
 
             bool result = true;
@@ -286,7 +286,7 @@ namespace eIVOGo.Controllers
             {
                 ViewBag.CloseWindow = true;
                 ViewBag.Message = "請選擇郵寄項目!!";
-                return View("~/Views/Shared/JsAlert.ascx");
+                return View("~/Views/Shared/JsAlert.cshtml");
             }
 
             Response.Clear();

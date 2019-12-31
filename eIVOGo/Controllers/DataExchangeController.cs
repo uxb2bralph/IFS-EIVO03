@@ -126,7 +126,7 @@ namespace eIVOGo.Controllers
 
             if (Request.Files.Count <= 0)
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "請選擇匯入檔!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "請選擇匯入檔!!");
             }
 
             var file = Request.Files[0];

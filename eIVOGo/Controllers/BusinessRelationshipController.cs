@@ -186,7 +186,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<BusinessRelationship>().Where(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "營業人資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
             }
 
             item.CurrentLevel = (int)Naming.MemberStatusDefinition.Mark_To_Delete;
@@ -200,7 +200,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<BusinessRelationship>().Where(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "營業人資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
             }
 
             item.CurrentLevel = (int)Naming.MemberStatusDefinition.Checked;
@@ -214,7 +214,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<BusinessRelationship>().Where(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "營業人資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
             }
 
             item.Counterpart.OrganizationStatus.Entrusting = status;
@@ -228,7 +228,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<BusinessRelationship>().Where(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "營業人資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
             }
 
             item.Counterpart.OrganizationStatus.EntrustToPrint = status;
@@ -262,7 +262,7 @@ namespace eIVOGo.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
-                return View("~/Views/SiteAction/Alert.ascx", model: null);
+                return View("~/Views/Shared/JsAlert.cshtml", model: null);
             }
 
             UserProfile userProfile;
@@ -275,7 +275,7 @@ namespace eIVOGo.Controllers
 
             if (item.ReceiptNo == "0000000000")
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "修改完成!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "修改完成!!");
             }
 
             return View("~/Views/BusinessRelationship/Module/DataItem.ascx", model);
@@ -341,7 +341,7 @@ namespace eIVOGo.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
+                return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
             var file = Request.Files[0];
@@ -424,7 +424,7 @@ namespace eIVOGo.Controllers
 
             if (mgr == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "連線逾時，請重新匯入資料!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "連線逾時，請重新匯入資料!!");
             }
 
             return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessList.ascx");
@@ -450,7 +450,7 @@ namespace eIVOGo.Controllers
 
             if (mgr == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "連線逾時，請重新匯入資料!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "連線逾時，請重新匯入資料!!");
             }
 
             return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessCsvList.ascx");
@@ -476,7 +476,7 @@ namespace eIVOGo.Controllers
 
             if (mgr == null)
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "連線逾時，請重新匯入資料!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "連線逾時，請重新匯入資料!!");
             }
 
             return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessXmlList.ascx");

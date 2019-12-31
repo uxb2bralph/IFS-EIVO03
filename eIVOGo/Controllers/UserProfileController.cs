@@ -100,7 +100,7 @@ namespace eIVOGo.Controllers
             UserProfile item = result.Model as UserProfile;
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
                
             if((new LoginHandler()).ProcessLogin(item.PID))
@@ -110,7 +110,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
         }
 
@@ -257,7 +257,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                return View("~/Views/SiteAction/Alert.ascx", model: "資料已修改!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料已修改!!");
             }
         }
 
