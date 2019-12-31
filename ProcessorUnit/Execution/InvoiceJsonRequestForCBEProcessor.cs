@@ -64,7 +64,7 @@ namespace ProcessorUnit.Execution
 
                 var uploadData = prepareDocument(requestFile);
                 var result = processRequest(uploadData, requestItem);
-                String responseName = $"{Path.GetFileNameWithoutExtension(requestFile)}_Response.xml";
+                String responseName = $"{Path.GetFileNameWithoutExtension(requestFile)}_Response.json";
                 String responsePath = Path.Combine(Path.GetDirectoryName(requestFile), responseName);
 
                 if (SettingsHelper.Instance.ResponsePath != null)

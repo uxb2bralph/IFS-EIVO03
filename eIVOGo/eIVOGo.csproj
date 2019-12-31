@@ -294,6 +294,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="css\CBSLogin.css" />
     <Content Include="css\eivo.css" />
     <Content Include="css\eivo_qrcode.css" />
     <Content Include="css\jsgrid-theme.eivo.css" />
