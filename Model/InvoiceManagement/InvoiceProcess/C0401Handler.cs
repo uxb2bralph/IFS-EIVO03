@@ -44,63 +44,65 @@ namespace Model.InvoiceManagement.InvoiceProcess
                 _table
                     .Where(q => q.DocID > docID && q.StepID == (int)Naming.InvoiceStepDefinition.已開立)
                     .OrderBy(d => d.DocID);
-
-            var buffer = (procIdx >= 0 && totalProc > 0)
-                    ? queryItems.Where(d => (d.DocID % totalProc.Value) == procIdx.Value).Take(4096).ToList()
-                    : queryItems.Take(4096).ToList();
-            while (buffer.Count > 0)
+            if (!queryItems.Equals(null))
             {
-                foreach (var item in buffer)
+                var buffer = (procIdx >= 0 && totalProc > 0)
+                        ? queryItems.Where(d => (d.DocID % totalProc.Value) == procIdx.Value).Take(4096).ToList()
+                        : queryItems.Take(4096).ToList();
+                while (buffer.Count > 0)
                 {
-                    docID = item.DocID;
-                    var invoiceItem = item.CDS_Document.InvoiceItem;
-                    try
+                    foreach (var item in buffer)
                     {
-                        var fileName = Path.Combine(Settings.Default.C0401Outbound, $"C0401-{DateTime.Now:yyyyMMddHHmmssf}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
-                        invoiceItem.CreateC0401().ConvertToXml().Save(fileName);
-
-                        item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
-                        models.SubmitChanges();
-
-                        if (invoiceItem.Organization.OrganizationStatus.SubscribeB2BInvoicePDF == true
-                            && (!invoiceItem.InvoiceBuyer.IsB2C() || invoiceItem.Organization.OrganizationStatus.PrintAll == true)
-                            && item.CDS_Document.DocumentSubscriptionQueue == null)
+                        docID = item.DocID;
+                        var invoiceItem = item.CDS_Document.InvoiceItem;
+                        try
                         {
-                            models.ExecuteCommand(
-                                @"INSERT INTO DocumentSubscriptionQueue
+                            var fileName = Path.Combine(Settings.Default.C0401Outbound, $"C0401-{DateTime.Now:yyyyMMddHHmmssf}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
+                            invoiceItem.CreateC0401().ConvertToXml().Save(fileName);
+
+                            item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
+                            models.SubmitChanges();
+
+                            if (invoiceItem.Organization.OrganizationStatus.SubscribeB2BInvoicePDF == true
+                                && (!invoiceItem.InvoiceBuyer.IsB2C() || invoiceItem.Organization.OrganizationStatus.PrintAll == true)
+                                && item.CDS_Document.DocumentSubscriptionQueue == null)
+                            {
+                                models.ExecuteCommand(
+                                    @"INSERT INTO DocumentSubscriptionQueue
                                 (DocID)
                             SELECT  {0}
                             WHERE   (NOT EXISTS
                                     (SELECT NULL
                                         FROM DocumentSubscriptionQueue
                                         WHERE (DocID = {0})))", item.DocID);
-                        }
+                            }
 
 
-                        if (invoiceItem.Organization.OrganizationStatus.DownloadDataNumber == true)
-                        {
-                            models.ExecuteCommand(@"INSERT INTO DocumentMappingQueue
+                            if (invoiceItem.Organization.OrganizationStatus.DownloadDataNumber == true)
+                            {
+                                models.ExecuteCommand(@"INSERT INTO DocumentMappingQueue
                                             (DocID)
                                         SELECT  {0}
                                         WHERE   (NOT EXISTS
                                                 (SELECT NULL
                                                     FROM DocumentMappingQueue
                                                     WHERE (DocID = {0})))", invoiceItem.InvoiceID);
+                            }
+
+                            models.ExecuteCommand("delete [proc].C0401DispatchQueue where DocID={0} and StepID={1}",
+                                item.DocID, item.StepID);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error(ex);
                         }
 
-                        models.ExecuteCommand("delete [proc].C0401DispatchQueue where DocID={0} and StepID={1}",
-                            item.DocID, item.StepID);
-
                     }
-                    catch (Exception ex)
-                    {
-                        Logger.Error(ex);
-                    }
-
+                    buffer = (procIdx >= 0 && totalProc > 0)
+                        ? queryItems.Where(d => (d.DocID % totalProc.Value) == procIdx.Value).Take(4096).ToList()
+                        : queryItems.Take(4096).ToList();
                 }
-                buffer = (procIdx >= 0 && totalProc > 0)
-                    ? queryItems.Where(d => (d.DocID % totalProc.Value) == procIdx.Value).Take(4096).ToList()
-                    : queryItems.Take(4096).ToList();
             }
         }
 
@@ -112,8 +114,8 @@ namespace Model.InvoiceManagement.InvoiceProcess
             IQueryable<C0401DispatchQueue> queryItems =
                 _table
                     .Where(q => q.DocID > docID && q.StepID == (int)Naming.InvoiceStepDefinition.已接收資料待通知);
-
-            while ((item = queryItems.FirstOrDefault()) != null)
+            item = queryItems.FirstOrDefault();
+            while (item.Equals(null))
             {
                 docID = item.DocID;
                 var invoiceItem = item.CDS_Document.InvoiceItem;
