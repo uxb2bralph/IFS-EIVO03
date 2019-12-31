@@ -21,17 +21,8 @@ namespace InvoiceClient
         [STAThread]
         static void Main(string[] args)
         {     
-            
-            String fullPath = Settings.Default.InvoiceTxnPath;
-
-            //啟動偵錯工具，並將其附加至處理序
-            System.Diagnostics.Debugger.Launch();
-
             /// SSL憑證信任設定
             System.Net.ServicePointManager.ServerCertificateValidationCallback = (s, certificate, chain, sslPolicyErrors) => true;
-
-            var _PreInvoiceWatcher = new InvoicePGPWatcherForGoogleExpress(Path.Combine(fullPath, Settings.Default.UploadPreInvoiceFolder));
-            _PreInvoiceWatcher.StartUp();
 
             if (!String.IsNullOrEmpty(Settings.Default.AppCulture))
             {

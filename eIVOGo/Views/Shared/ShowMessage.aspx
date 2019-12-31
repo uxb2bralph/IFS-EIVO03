@@ -9,7 +9,7 @@
 <html lang="en">
 <head runat="server">
     <title>電子發票系統</title>
-    <%  Html.RenderPartial("~/Module/Common/CommonScriptInclude.ascx"); %>
+    <%  Html.RenderPartial("~/Views/Shared/CommonScriptInclude.cshtml"); %>
 </head>
 <body>
 </body>

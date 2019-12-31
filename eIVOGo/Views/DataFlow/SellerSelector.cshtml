@@ -16,11 +16,12 @@
     ModelStateDictionary _modelState;
     ModelSource<InvoiceItem> models;
     IQueryable<Organization> _model;
-    SellerSelectorViewModel _viewModel = (SellerSelectorViewModel)ViewBag.ViewModel;
+    SellerSelectorViewModel _viewModel = ViewBag.ViewModel as SellerSelectorViewModel;
 
-    if(_viewModel==null)
+    if (_viewModel == null)
     {
-        _viewModel = new SellerSelectorViewModel { };
+        ViewBag.ViewModel = _viewModel = new SellerSelectorViewModel { };
+        _viewModel.FieldName = ViewBag.FieldName ?? "SellerID";
     }
 
     String _fieldName;
@@ -31,7 +32,7 @@
     _modelState = (ModelStateDictionary)ViewBag.ModelState;
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _model = (IQueryable<Organization>)this.Model;
-    _fieldName = _viewModel.FieldName ?? "SellerID";
+    _fieldName = _viewModel.FieldName ?? ViewBag.FieldName ?? "SellerID";
     _profile = Context.GetUser();
 }
 

@@ -37,7 +37,7 @@ namespace eIVOGo.Controllers
         // GET: Account
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> CbsLogin(LoginViewModel viewModel, string returnUrl)
+        public async Task<ActionResult> CbsLogin(CbsLoginViewModel viewModel, string returnUrl)
         {
             ViewBag.ViewModel = viewModel;
             ViewBag.ModelState = this.ModelState;

@@ -122,8 +122,10 @@ namespace ProcessorUnit
             chainedProcessor.ChainedExecutor = new ProcessExceptionNotificationProcessor { };
             chainedProcessor = chainedProcessor.ChainedExecutor;
 
-            processorStart.ReadyToGo();
+            chainedProcessor.ChainedExecutor = new InvoiceJsonRequestForCBEProcessor { };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
 
+            processorStart.ReadyToGo();
 
         }
 

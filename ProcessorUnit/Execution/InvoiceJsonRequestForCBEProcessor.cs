@@ -16,46 +16,41 @@ using System.Xml;
 using Model.Schema.TXN;
 using Business.Helper.InvoiceProcessor;
 using ProcessorUnit.Helper;
+using Newtonsoft.Json;
+using Model.Schema.EIVO;
 
 namespace ProcessorUnit.Execution
 {
-    public class InvoiceXmlRequestForCBEProcessor : ExecutorForever
+    public class InvoiceJsonRequestForCBEProcessor : ExecutorForever
     {
-        public InvoiceXmlRequestForCBEProcessor()
+        public InvoiceJsonRequestForCBEProcessor()
         {
-            appliedProcessType = Naming.InvoiceProcessType.C0401_Xml_CBE;
-            processRequest = (uploadData, requestItem) => 
+            System.Diagnostics.Debugger.Launch();
+            appliedProcessType = Naming.InvoiceProcessType.C0401_Json_CBE;
+            processRequest = (jsonData, requestItem) => 
             {
                 Root result = this.CreateMessageToken();
+                InvoiceRoot invoice = JsonConvert.DeserializeObject<InvoiceRoot>(jsonData);
                 using (InvoiceManagerForCBE manager = new InvoiceManagerForCBE())
                 {
-                    manager.UploadInvoiceAutoTrackNo(uploadData, result, out OrganizationToken token);
-                    manager.BindProcessedItem(requestItem);
+                    var token = manager.GetTable<OrganizationToken>().Where(t => t.CompanyID == requestItem.AgentID).FirstOrDefault();
+                    if(token!=null)
+                    {
+                        manager.UploadInvoiceAutoTrackNo(result, token, invoice);
+                        manager.BindProcessedItem(requestItem);
+                    }
                 }
-                return result.ConvertToXml();
-
+                return JsonConvert.SerializeObject(result);
             };
         }
 
-        protected virtual XmlDocument prepareDocument(String invoiceFile)
+        protected virtual String prepareDocument(String invoiceFile)
         {
-            XmlDocument docInv = new XmlDocument();
-            docInv.Load(invoiceFile);
-
-            ///去除"N/A"資料
-            ///
-            var nodes = docInv.SelectNodes("//*[text()='N/A']");
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                var node = nodes.Item(i);
-                node.RemoveChild(node.SelectSingleNode("text()"));
-            }
-            ///
-            return docInv;
+            return File.ReadAllText(invoiceFile);
         }
 
 
-        protected Func<XmlDocument, ProcessRequest, XmlDocument> processRequest;
+        protected Func<String, ProcessRequest, String> processRequest;
 
         protected override void ProcessRequestItem()
         {
@@ -67,7 +62,7 @@ namespace ProcessorUnit.Execution
                 requestItem.ProcessStart = DateTime.Now;
                 models.SubmitChanges();
 
-                XmlDocument uploadData = prepareDocument(requestFile);
+                var uploadData = prepareDocument(requestFile);
                 var result = processRequest(uploadData, requestItem);
                 String responseName = $"{Path.GetFileNameWithoutExtension(requestFile)}_Response.xml";
                 String responsePath = Path.Combine(Path.GetDirectoryName(requestFile), responseName);
@@ -77,7 +72,7 @@ namespace ProcessorUnit.Execution
                     responsePath = responsePath.Replace(StorePathExtensions.AppRoot, SettingsHelper.Instance.ResponsePath);
                 }
 
-                result.Save(responsePath);
+                File.WriteAllText(responsePath, result);
                 requestItem.ProcessComplete = DateTime.Now;
                 requestItem.ResponsePath = responsePath;
                 if (requestItem.ProcessCompletionNotification == null)

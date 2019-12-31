@@ -1,5 +1,21 @@
+@using System.IO
+@using System.Linq.Expressions
 
-<script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/jquery-1.11.3.js"))"></script>
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+<script type="text/javascript" src="~/Scripts/jquery-1.11.3.js"></script>
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/jquery-ui-1.11.3.js"))"></script>
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/bootstrap.js"))"></script>
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/jquery.ui.datepicker-zh-TW.js"))"></script>
@@ -11,6 +27,7 @@
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/sb-admin-2.js"))"></script>
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/math.min.js"))"></script>
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/jquery.blockUI.js"))"></script>
+<script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/jquery.cookie.js"))"></script>
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/linq.js"))"></script>
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/linq.jquery.js"))"></script>
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/stringformat-1.11.min.js"))"></script>
@@ -74,16 +91,26 @@
         return o;
     };
 
-    $.fn.launchDownload = function (url, params, target) {
+    $.fn.launchDownload = function (url, params, target, loading) {
 
         var data = this.serializeObject();
         if (params) {
             $.extend(data, params);
         }
 
+        if (loading) {
+            token = (new Date()).getTime();
+            data.FileDownloadToken = token;
+        }
+
         var form = $('<form></form>').attr('action', url).attr('method', 'post');//.attr('target', '_blank');
         if (target) {
             form.attr('target', target);
+            if (window.frames[target] == null) {
+                $('<iframe>')
+                    .css('display', 'none')
+                    .attr('name', target).appendTo($('body'));
+            }
         }
 
         Object.keys(data).forEach(function (key) {
@@ -99,15 +126,30 @@
 
         });
 
+        if (loading) {
+            showLoading();
+            fileDownloadCheckTimer = window.setInterval(function () {
+                var cookieValue = $.cookie('FileDownloadToken');
+                if (cookieValue == token)
+                    finishDownload();
+            }, 1000);
+        }
+
         //send request
         form.appendTo('body').submit().remove();
     };
+
+    function finishDownload() {
+        window.clearInterval(fileDownloadCheckTimer);
+        $.removeCookie('fileDownloadToken'); //clears this cookie value
+        hideLoading();
+    }
 
 
 
     function showLoading(autoHide,onBlock) {
         $.blockUI({
-            message:  '<img src="@(VirtualPathUtility.ToAbsolute("~/images/loading.gif"))" /><h1>Loading</h1>', 
+            message:  '<img src="@(VirtualPathUtility.ToAbsolute("~/images/loading.gif"))" /><h1>Loading</h1>',
             css: {
                 border: 'none',
                 padding: '15px',
@@ -118,10 +160,10 @@
                 color: '#fff'
             },
             // 背景圖層
-            overlayCSS:  { 
-                backgroundColor: '#3276B1', 
-                opacity:         0.6, 
-                cursor:          'wait' 
+            overlayCSS:  {
+                backgroundColor: '#3276B1',
+                opacity:         0.6,
+                cursor:          'wait'
             },
             onBlock: onBlock
         });
@@ -252,11 +294,15 @@
         });
     }
 
+    function datepicker($items) {
+        $items.datepicker({ showButtonPanel: true, changeYear: true, changeMonth: true, yearRange: '2012:+1' });
+    }
+
     $(function () {
         $('input[type="button"]').addClass('btn');
         $('button').addClass('btn');
         //$.datepicker.setDefaults($.datepicker.regional['zh-tw']);
-        $('.form_date').datepicker({ showButtonPanel: true, changeYear: true, changeMonth: true, yearRange: '2012:+1' });;
+        datepicker($('.form_date'));
     });
 
     $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {

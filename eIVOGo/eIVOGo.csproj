@@ -1093,6 +1093,7 @@
     <Content Include="Views\DataView\Module\Invoice.cshtml" />
     <Content Include="Views\DataView\Module\InvoiceContent.cshtml" />
     <Content Include="Views\Common\Module\TableRow.cshtml" />
+    <Content Include="Views\Account\CbsLogin.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="Views\Home\MainPage.aspx" />
     <Content Include="Module\Ajax\PagingControl.ascx" />
@@ -2036,6 +2037,7 @@
     <Content Include="Views\Notification\NotifyProcessException.cshtml" />
     <Content Include="Views\Notification\Module\NotifyProcessException.cshtml" />
     <Content Include="Views\Notification\Module\IssuedCBE.cshtml" />
+    <Content Include="Views\Shared\CommonScriptInclude.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

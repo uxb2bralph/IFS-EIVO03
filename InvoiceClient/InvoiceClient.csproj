@@ -188,6 +188,12 @@
     <Compile Include="MainContent\B2BInvoiceCenterConfig.Designer.cs">
       <DependentUpon>B2BInvoiceCenterConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="MainContent\JsonInvoiceCenterConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MainContent\JsonInvoiceCenterConfig.Designer.cs">
+      <DependentUpon>JsonInvoiceCenterConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainContent\CBEXmlInvoiceCenterConfig.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -302,6 +308,7 @@
     <Compile Include="TransferManagement\B2CInvoiceTransferManager.cs" />
     <Compile Include="TransferManagement\BranchTrackTransferManager.cs" />
     <Compile Include="TransferManagement\CsvInvoiceTransferManagerForCBM.cs" />
+    <Compile Include="TransferManagement\JsonInvoiceTransferManagerForCBE.cs" />
     <Compile Include="TransferManagement\XmlInvoiceTransferManagerForCBE.cs" />
     <Compile Include="TransferManagement\XlsxInvoiceTransferManager.cs" />
     <Compile Include="TransferManagement\InvoiceBusinessTransferManager.cs" />
@@ -327,6 +334,10 @@
     </Compile>
     <EmbeddedResource Include="MainContent\B2BInvoiceCenterConfig.resx">
       <DependentUpon>B2BInvoiceCenterConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainContent\JsonInvoiceCenterConfig.resx">
+      <DependentUpon>JsonInvoiceCenterConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MainContent\CBEXmlInvoiceCenterConfig.resx">
       <DependentUpon>CBEXmlInvoiceCenterConfig.cs</DependentUpon>

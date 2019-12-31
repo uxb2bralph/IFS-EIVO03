@@ -73,12 +73,14 @@
     <Compile Include="Execution\InvoiceExcelRequestForIssuerProcessor.cs" />
     <Compile Include="Execution\InvoiceExcelRequestForVACProcessor.cs" />
     <Compile Include="Execution\InvoiceExcelRequestForCBEProcessor.cs" />
+    <Compile Include="Execution\InvoiceJsonRequestForCBEProcessor.cs" />
     <Compile Include="Execution\InvoiceXmlRequestForCBEProcessor.cs" />
     <Compile Include="Execution\ProcessExceptionNotificationProcessor.cs" />
     <Compile Include="Execution\InvoiceExcelRequestProcessor.cs" />
     <Compile Include="Execution\VoidInvoiceExcelRequestProcessor.cs" />
     <Compile Include="Execution\AllowanceExcelRequestProcessor.cs" />
     <Compile Include="Execution\VoidAllowanceExcelRequestProcessor.cs" />
+    <Compile Include="Helper\ProcessorExtensions.cs" />
     <Compile Include="Models\AppSettings.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -96,9 +98,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helper\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">
       <Project>{8cf5d523-2ab2-4a61-9660-5ab9e36f48d6}</Project>

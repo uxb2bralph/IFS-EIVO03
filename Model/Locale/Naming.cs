@@ -513,6 +513,10 @@ namespace Model.Locale
             C0501_Xlsx = 102,
             D0401_Xlsx = 103,
             D0501_Xlsx = 104,
+            C0401_Json_CBE = 601,
+            C0501_Json = 202,
+            D0401_Json = 203,
+            D0501_Json = 204,
         }
 
         public enum AllowanceTypeDefinition

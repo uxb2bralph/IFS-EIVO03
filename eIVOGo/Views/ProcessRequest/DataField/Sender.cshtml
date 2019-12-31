@@ -35,7 +35,7 @@
         break;
     case Naming.FieldDisplayType.DataItem:
         ProcessRequest item = this.Model as ProcessRequest;
-        <text>@(item.UserProfile.PID)</text>
+        <text>@(item.UserProfile?.PID)</text>
         break;
     case Naming.FieldDisplayType.SortBy:
         ProcessRequestQueryViewModel viewModel = (ProcessRequestQueryViewModel)ViewBag.ViewModel;
