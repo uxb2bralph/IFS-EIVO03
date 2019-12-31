@@ -84,9 +84,7 @@ namespace Model.InvoiceManagement.InvoiceProcess
                 _table
                     .Where(q => q.DocID > docID && q.StepID == (int)Naming.InvoiceStepDefinition.已接收資料待通知);
 
-            item = queryItems.FirstOrDefault();
-
-            while (!item.Equals(null))
+            while ((item = queryItems.FirstOrDefault()) != null)
             {
                 docID = item.DocID;
                 var allowance = item.CDS_Document.InvoiceAllowance;
