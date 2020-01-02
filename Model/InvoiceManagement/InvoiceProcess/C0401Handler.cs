@@ -102,7 +102,6 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     ? queryItems.Where(d => (d.DocID % totalProc.Value) == procIdx.Value).Take(4096).ToList()
                     : queryItems.Take(4096).ToList();
             }
-
         }
 
         public void NotifyIssued()
@@ -127,7 +126,6 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     models.ExecuteCommand("delete [proc].C0401DispatchQueue where DocID={0} and StepID={1}",
                         item.DocID, item.StepID);
 
-                    item = queryItems.FirstOrDefault();
                 }
                 catch (Exception ex)
                 {

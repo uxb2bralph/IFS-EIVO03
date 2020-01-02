@@ -82,12 +82,10 @@ namespace Model.InvoiceManagement.InvoiceProcess
             int docID = 0;
             IQueryable<D0401DispatchQueue> queryItems =
                 _table
-                    .Where(q => q.DocID > docID && q.StepID == (int)Naming.InvoiceStepDefinition.已接收資料待通知);            
+                    .Where(q => q.DocID > docID && q.StepID == (int)Naming.InvoiceStepDefinition.已接收資料待通知);
 
-            while (queryItems.Any())
+            while ((item = queryItems.FirstOrDefault()) != null)
             {
-                item = queryItems.FirstOrDefault();
-
                 docID = item.DocID;
                 var allowance = item.CDS_Document.InvoiceAllowance;
 
