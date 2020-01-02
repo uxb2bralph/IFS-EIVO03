@@ -8,6 +8,7 @@ using Model.InvoiceManagement.InvoiceProcess;
 using Model.Locale;
 using Model.Resource;
 using Model.Schema.EIVO;
+using Utility;
 
 namespace Model.InvoiceManagement.Validator
 {
@@ -35,6 +36,64 @@ namespace Model.InvoiceManagement.Validator
 
             return null;
         }
+
+        protected override Exception checkMandatoryFields()
+        {
+            _invItem.DonateMark = "0";
+            _invItem.PrintMark = "N";
+            _invItem.InvoiceType = ((byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票).ToString();
+
+            return null;
+        }
+
+        protected override Exception checkAmount()
+        {
+            //應稅銷售額
+            if (_invItem.SalesAmount < 0 /*|| decimal.Floor(_invItem.SalesAmount) != _invItem.SalesAmount*/)
+            {
+                return new Exception(String.Format(MessageResources.InvalidSellingPrice, _invItem.SalesAmount));
+            }
+
+            if (_invItem.FreeTaxSalesAmount < 0 /*|| decimal.Floor(_invItem.FreeTaxSalesAmount) != _invItem.FreeTaxSalesAmount*/)
+            {
+                return new Exception(String.Format(MessageResources.InvalidFreeTaxAmount, _invItem.FreeTaxSalesAmount));
+            }
+
+            if (_invItem.ZeroTaxSalesAmount < 0 /*|| decimal.Floor(_invItem.ZeroTaxSalesAmount) != _invItem.ZeroTaxSalesAmount*/)
+            {
+                return new Exception(String.Format(MessageResources.InvalidZeroTaxAmount, _invItem.ZeroTaxSalesAmount));
+            }
+
+
+            if (_invItem.TaxAmount < 0 /*|| decimal.Floor(_invItem.TaxAmount) != _invItem.TaxAmount*/)
+            {
+                return new Exception(String.Format(MessageResources.InvalidTaxAmount, _invItem.TaxAmount));
+            }
+
+            if (_invItem.TotalAmount < 0 /*|| decimal.Floor(_invItem.TotalAmount) != _invItem.TotalAmount*/)
+            {
+                return new Exception(String.Format(MessageResources.InvalidTotalAmount, _invItem.TotalAmount));
+            }
+
+            //課稅別
+            _invItem.TaxType = (byte)Naming.TaxTypeDefinition.應稅;
+            _invItem.TaxRate = 0.05m;
+
+            _invItem.Currency = _invItem.Currency.GetEfficientString();
+            _currency = null;
+            if (_invItem.Currency!=null)
+            {
+                _currency = _mgr.GetTable<CurrencyType>().Where(c => c.AbbrevName == _invItem.Currency).FirstOrDefault();
+                if (_currency == null)
+                {
+                    return new Exception($"Invalid currency code：{_invItem.Currency}，TAG：<Currency/>");
+                }
+            }
+
+            return null;
+        }
+
+
 
         public InvoiceItem SaveRootInvoice(InvoiceRootInvoice invItem, out Exception exception)
         {

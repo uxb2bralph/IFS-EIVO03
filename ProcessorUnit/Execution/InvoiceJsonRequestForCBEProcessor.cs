@@ -23,14 +23,23 @@ namespace ProcessorUnit.Execution
 {
     public class InvoiceJsonRequestForCBEProcessor : ExecutorForever
     {
+        static JsonSerializerSettings _JSON_Settings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore
+        };
+
         public InvoiceJsonRequestForCBEProcessor()
         {
-            System.Diagnostics.Debugger.Launch();
             appliedProcessType = Naming.InvoiceProcessType.C0401_Json_CBE;
             processRequest = (jsonData, requestItem) => 
             {
                 Root result = this.CreateMessageToken();
-                InvoiceRoot invoice = JsonConvert.DeserializeObject<InvoiceRoot>(jsonData);
+                dynamic json = JsonConvert.DeserializeObject(jsonData);
+                var s = JsonConvert.SerializeObject((object)json.InvoiceRoot.Invoice);
+                InvoiceRoot invoice = new InvoiceRoot 
+                {
+                    Invoice = JsonConvert.DeserializeObject<InvoiceRootInvoice[]>(s)
+                }; 
                 using (InvoiceManagerForCBE manager = new InvoiceManagerForCBE())
                 {
                     var token = manager.GetTable<OrganizationToken>().Where(t => t.CompanyID == requestItem.AgentID).FirstOrDefault();
@@ -40,7 +49,7 @@ namespace ProcessorUnit.Execution
                         manager.BindProcessedItem(requestItem);
                     }
                 }
-                return JsonConvert.SerializeObject(result);
+                return JsonConvert.SerializeObject(result, _JSON_Settings);
             };
         }
 

@@ -529,6 +529,7 @@ namespace Model.InvoiceManagement.Validator
 
             }
 
+            _invItem.BuyerId = _invItem.BuyerId.GetEfficientString();
             if (_invItem.BuyerId == "0000000000")
             {
                 //if (_invItem.BuyerName == null || Encoding.GetEncoding(950).GetBytes(_invItem.BuyerName).Length != 4)
@@ -536,7 +537,18 @@ namespace Model.InvoiceManagement.Validator
                 //    return new Exception(String.Format(MessageResources.InvalidBuyerName, _invItem.BuyerName));
                 //}
             }
-            else if (_invItem.BuyerId == null || !Regex.IsMatch(_invItem.BuyerId, "^[0-9]{8}$"))
+            else if (_invItem.BuyerId == null)
+            {
+                if (_isCrossBorderMerchant)
+                {
+                    _invItem.BuyerId = "0000000000";
+                }
+                else
+                {
+                    return new Exception(String.Format(MessageResources.InvalidBuyerId, _invItem.BuyerId));
+                }
+            }
+            else if (!Regex.IsMatch(_invItem.BuyerId, "^[0-9]{8}$"))
             {
                 return new Exception(String.Format(MessageResources.InvalidBuyerId, _invItem.BuyerId));
             }
@@ -820,7 +832,7 @@ namespace Model.InvoiceManagement.Validator
                 }
             }
 
-            //_invItem.Currency = _invItem.Currency.GetEfficientString();
+            _invItem.Currency = _invItem.Currency.GetEfficientString();
             _currency = null;
             if (!String.IsNullOrEmpty(_invItem.Currency))
             {
