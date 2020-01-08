@@ -10,6 +10,7 @@ using System.IO;
 using InvoiceClient.Properties;
 using System.Threading;
 using InvoiceClient.Agent;
+using System.Diagnostics;
 
 namespace InvoiceClient
 {
@@ -20,7 +21,9 @@ namespace InvoiceClient
         /// </summary>
         [STAThread]
         static void Main(string[] args)
-        {     
+        {
+            //System.Diagnostics.Debugger.Launch();
+
             /// SSL憑證信任設定
             System.Net.ServicePointManager.ServerCertificateValidationCallback = (s, certificate, chain, sslPolicyErrors) => true;
 
@@ -29,6 +32,12 @@ namespace InvoiceClient
                 Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(Settings.Default.AppCulture);
             }
 
+            var _PreInvoiceWatcher = new InvoicePGPWatcherForGoogleExpress(Path.Combine(Settings.Default.InvoiceTxnPath, Settings.Default.UploadPreInvoiceFolder));
+            _PreInvoiceWatcher.StartUp();
+
+            //var _PDFInvoiceWatcher = new InvoicePDFGeneratorForGooglePlay();
+            //_PDFInvoiceWatcher.StartUp();
+            //_PDFInvoiceWatcher.GetSaleInvoices(1);
             if (Environment.UserInteractive /*|| Debugger.IsAttached*/)
             {
                 if (Settings.Default.ClearTxnPath
@@ -46,7 +55,7 @@ namespace InvoiceClient
                     };
                 ServiceBase.Run(services);
             }
-            
+           
         }
 
         internal static void Install(bool undo, string[] args)
