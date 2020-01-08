@@ -765,17 +765,6 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\r\n                InvoiceClient.TransferManagement.XlsxInvoiceTransferManager, In" +
-            "voiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;\r\n           " +
-            "   ")]
-        public string TransferManager {
-            get {
-                return ((string)(this["TransferManager"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"
                   InvoiceClient.Agent.VacantInvoiceNoInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
                   InvoiceClient.Agent.InvoiceMappingInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
@@ -793,10 +782,22 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool IsLocalMachine {
             get {
                 return ((bool)(this["IsLocalMachine"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"
+                  InvoiceClient.TransferManagement.XlsxInvoiceTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.TransferManagement.InvoiceTransferManagerV2ForGoogle, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                ")]
+        public string TransferManager {
+            get {
+                return ((string)(this["TransferManager"]));
             }
         }
     }

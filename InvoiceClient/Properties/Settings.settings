@@ -250,11 +250,6 @@
     <Setting Name="InvoiceClient_WS_Invoice_eInvoiceService" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://localhost:2598/Published/eInvoiceService.asmx</Value>
     </Setting>
-    <Setting Name="TransferManager" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">
-                InvoiceClient.TransferManagement.XlsxInvoiceTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-              </Value>
-    </Setting>
     <Setting Name="ServerInspector" Type="System.String" Scope="Application">
       <Value Profile="(Default)">
                   InvoiceClient.Agent.VacantInvoiceNoInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
@@ -267,7 +262,13 @@
                 </Value>
     </Setting>
     <Setting Name="IsLocalMachine" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="TransferManager" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">
+                  InvoiceClient.TransferManagement.XlsxInvoiceTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.TransferManagement.InvoiceTransferManagerV2ForGoogle, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                </Value>
     </Setting>
   </Settings>
 </SettingsFile>
