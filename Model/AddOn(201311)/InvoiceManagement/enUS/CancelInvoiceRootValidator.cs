@@ -23,32 +23,53 @@ namespace Model.InvoiceManagement.enUS
             invoice = null;
             cancelDate = default(DateTime);
 
-            if (String.IsNullOrEmpty(invItem.CancelInvoiceNumber) || !Regex.IsMatch(invItem.CancelInvoiceNumber, "^[a-zA-Z]{2}[0-9]{8}$"))
-            {
-                return new Exception(String.Format("Error void CancelInvoiceNumber, CancelInvoiceNumber length should be set aside for the 10 yards (including track code)，傳送資料：{0}，TAG：< CancelInvoiceNumber />", invItem.CancelInvoiceNumber));
-            }
-            String invNo, trackCode;
-            trackCode = invItem.CancelInvoiceNumber.Substring(0, 2);
-            invNo = invItem.CancelInvoiceNumber.Substring(2);
-
-            if (string.IsNullOrEmpty(invItem.InvoiceDate))
-            {
-                return new Exception("InvoiceDate error, Incorrect TAG:< InvoiceDate />");
-            }
-
-            if (!DateTime.TryParseExact(invItem.InvoiceDate, "yyyy/MM/dd", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime invoiceDate))
-            {
-                return new Exception(String.Format("Format of InvoiceDate error(YYYY/MM/DD), Incorrect TAG:< InvoiceDate />", invItem.InvoiceDate));
-            }
-
+            invItem.CancelInvoiceNumber = invItem.CancelInvoiceNumber.GetEfficientString();
+            invItem.CancelDataNumber = invItem.CancelDataNumber.GetEfficientString();
             invItem.SellerId = invItem.SellerId.GetEfficientString();
-            invoice = mgr.GetTable<InvoiceItem>().Where(i => i.No == invNo && i.TrackCode == trackCode).FirstOrDefault();
 
-            if (invoice == null)
+            if (invItem.CancelInvoiceNumber != null)
             {
-                return new MarkToRetryException(String.Format("Invoice No. does not exist:{0}", invItem.CancelInvoiceNumber));
+                if (!Regex.IsMatch(invItem.CancelInvoiceNumber, "^[a-zA-Z]{2}[0-9]{8}$"))
+                {
+                    return new Exception(String.Format("Error void CancelInvoiceNumber, CancelInvoiceNumber length should be set aside for the 10 characters (including track code)，your CancelInvoiceNumber：{0}，TAG：< CancelInvoiceNumber />", invItem.CancelInvoiceNumber));
+                }
+                String invNo, trackCode;
+                trackCode = invItem.CancelInvoiceNumber.Substring(0, 2);
+                invNo = invItem.CancelInvoiceNumber.Substring(2);
+
+                invoice = mgr.GetTable<InvoiceItem>()
+                                .Where(i => i.No == invNo && i.TrackCode == trackCode).FirstOrDefault();
+
+                if (invoice == null)
+                {
+                    return new MarkToRetryException(String.Format("Invoice No. does not exist:{0}", invItem.CancelInvoiceNumber));
+                }
             }
-            else if (invoice.Organization.ReceiptNo != invItem.SellerId)
+            else
+            {
+                invoice = mgr.GetTable<InvoicePurchaseOrder>().Where(p => p.OrderNo == invItem.CancelDataNumber)
+                            .Select(p => p.InvoiceItem)
+                            .Where(i => i.Organization.ReceiptNo == invItem.SellerId)
+                            .FirstOrDefault();
+
+                if (invoice == null)
+                {
+                    return new MarkToRetryException(String.Format("Invoice Data number does not exist:{0}", invItem.CancelDataNumber));
+                }
+
+            }
+
+            //if (string.IsNullOrEmpty(invItem.InvoiceDate))
+            //{
+            //    return new Exception("InvoiceDate error, Incorrect TAG:< InvoiceDate />");
+            //}
+
+            //if (!DateTime.TryParseExact(invItem.InvoiceDate, "yyyy/MM/dd", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime invoiceDate))
+            //{
+            //    return new Exception(String.Format("Format of InvoiceDate error(YYYY/MM/DD), Incorrect TAG:< InvoiceDate />", invItem.InvoiceDate));
+            //}
+
+            if (invoice.Organization.ReceiptNo != invItem.SellerId)
             {
                 return new Exception(String.Format("Invalid SellerId:{0}", invItem.SellerId));
             }
@@ -97,7 +118,7 @@ namespace Model.InvoiceManagement.enUS
             //備註
             if (invItem.Remark != null && invItem.Remark.Length > 200)
             {
-                return new Exception(String.Format("Note length can not be more than 200 data，Incorrect：{0}，TAG：< Remark />", invItem.Remark));
+                return new Exception(String.Format("Remark length can not be more than 200 characters，Incorrect：{0}，TAG：< Remark />", invItem.Remark));
             }
 
             return null;

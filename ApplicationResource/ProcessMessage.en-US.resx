@@ -129,7 +129,19 @@
   <data name="P104" xml:space="preserve">
     <value>Excel format for void allowance request</value>
   </data>
+  <data name="P202" xml:space="preserve">
+    <value>Json format for void invoice request</value>
+  </data>
+  <data name="P203" xml:space="preserve">
+    <value>Json format for allowance request</value>
+  </data>
+  <data name="P204" xml:space="preserve">
+    <value>Json format for void allowance request</value>
+  </data>
   <data name="P501" xml:space="preserve">
     <value>Xml format for cross border merchant invoice request</value>
+  </data>
+  <data name="P601" xml:space="preserve">
+    <value>Json format for cross border merchant invoice request</value>
   </data>
 </root>

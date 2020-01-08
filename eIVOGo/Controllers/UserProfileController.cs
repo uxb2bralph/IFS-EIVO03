@@ -119,6 +119,7 @@ namespace eIVOGo.Controllers
         {
             ViewBag.ViewModel = viewModel;
 
+            var profile = HttpContext.GetUser();
             UserProfile item = null;
             if (!String.IsNullOrEmpty(viewModel.KeyID))
             {
@@ -147,15 +148,22 @@ namespace eIVOGo.Controllers
                     //檢查密碼
                     ModelState.AddModelError("PassWord", "密碼不可少於６個字碼!!");
                 }
-                else if (!reg.IsMatch(viewModel.Password))
-                {
-                    //檢查密碼
-                    ModelState.AddModelError("PassWord", "密碼須由英文、數字組成!!");
-                }
+
                 else if (viewModel.Password != viewModel.Password1)
                 {
                     //檢查密碼
                     ModelState.AddModelError("PassWord1", "二組密碼輸入不同!!");
+                }
+                else
+                {
+                    if (profile.IsSystemAdmin())
+                    {
+                    }
+                    else if (!reg.IsMatch(viewModel.Password))
+                    {
+                        //檢查密碼
+                        ModelState.AddModelError("PassWord", "密碼須由英文、數字組成!!");
+                    }
                 }
             }
             else if (item == null)
@@ -168,7 +176,6 @@ namespace eIVOGo.Controllers
                 }
             }
 
-            var profile = HttpContext.GetUser();
             int? orgaCateID = null;
 
             if (viewModel.SellerID.HasValue)
@@ -204,7 +211,7 @@ namespace eIVOGo.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = this.ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
+                return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
             if (item == null)

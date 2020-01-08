@@ -93,7 +93,7 @@ namespace eIVOGo.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
+                return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
             IQueryable<Organization> orgItems;
@@ -301,7 +301,7 @@ namespace eIVOGo.Controllers
                     ViewBag.DataRole = "edit";
                 else
                     ViewBag.DataRole = "add";
-                return View("~/Views/Shared/ReportInputError.ascx");
+                return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
             if (model == null)
@@ -444,7 +444,7 @@ namespace eIVOGo.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
+                return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
             int interval = viewModel.Parts.Value * 50;
@@ -532,7 +532,7 @@ namespace eIVOGo.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
+                return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
             models.GetDataContext().ProcessInvoiceNo(viewModel.SellerID, viewModel.Year, viewModel.PeriodNo);

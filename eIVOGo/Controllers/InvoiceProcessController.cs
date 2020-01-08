@@ -725,7 +725,7 @@ namespace eIVOGo.Controllers
                     }
                 }
 
-                return View("~/Views/InvoiceProcess/Module/IssueAllowance.ascx", items);
+                return View("~/Views/InvoiceProcess/Module/IssueAllowance.cshtml", items);
             }
             else
             {

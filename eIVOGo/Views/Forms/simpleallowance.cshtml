@@ -9,8 +9,20 @@
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
+@using Business.Helper
+@{
 
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "開立折讓證明單");}
+    ModelSource<InvoiceItem> models;
+    ModelStateDictionary _modelState;
+    AllowanceViewModel _viewModel;
+    String _formID = $"form{DateTime.Now.Ticks}";
+
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    _viewModel = (AllowanceViewModel)ViewBag.ViewModel;
+}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "開立折讓證明單");}
 
 <form id="@(_formID)" role="form" method="post">
     <div class="border_gray">
@@ -18,29 +30,32 @@
         <h2>營業人</h2>
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
             <tr>
-                <th nowrap="nowrap" width="120">發票開立人
+                <th nowrap="nowrap" width="120">
+                    發票開立人
                 </th>
                 <td class="tdleft">
                     @{ var seller = models.GetTable<Organization>().Where(o => o.CompanyID == _viewModel.SellerID).First();}
-
                     @(seller.ReceiptNo) @(seller.CompanyName)
                 </td>
-                <th nowrap="nowrap" width="120">買受人
+                <th nowrap="nowrap" width="120">
+                    買受人
                 </th>
                 <td class="tdleft">
                     @if (_viewModel.BuyerReceiptNo != "0000000000")
-                        {
-                    @(_viewModel.BuyerReceiptNo) @(_viewModel.BuyerName)
+                    {
+                        <text>@(_viewModel.BuyerReceiptNo) @(_viewModel.BuyerName)</text>
                     }
                 </td>
             </tr>
             <tr>
-                <th nowrap="nowrap">營業稅額合計
+                <th nowrap="nowrap">
+                    營業稅額合計
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="TaxAmount" type="text" value="" />
                 </td>
-                <th nowrap="nowrap">未稅金額總計
+                <th nowrap="nowrap">
+                    未稅金額總計
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="TotalAmount" type="text" value="" />
@@ -70,32 +85,37 @@
             </thead>
             <tbody>
                 @for (int i = 0; i < _viewModel.OriginalSequenceNo.Length; i++)
-                    {
-                <tr>
-                    <td>
-                        <input class="form-control" name="InvoiceDate" type="text" value="@($"{_viewModel.InvoiceDate[i]:yyyy/MM/dd}")" readonly="readonly" /></td>
-                    <td>
-                        <input class="form-control" name="InvoiceNo" type="text" value="@(_viewModel.InvoiceNo[i])" readonly="readonly" />
-                        <input class="form-control" name="OriginalSequenceNo" type="hidden" value="@(_viewModel.OriginalSequenceNo[i])" />
-                    </td>
-                    @*<td>                    </td>*@
-                    <td>
-                        <input class="form-control" name="OriginalDescription" type="text" value="@(_viewModel.OriginalDescription[i])"/></td>
-                    <td>
-                        <input class="form-control" name="Piece" type="number" step="1" min="1" value="@($"{_viewModel.Piece[i]:0.}")" onblur="@(_formID).calcSingle(@(i));"/>
-                        <input class="form-control" name="PieceUnit" type="hidden" value="@(_viewModel.PieceUnit[i])" />
-                    </td>
-                    @*<td>                    </td>*@
-                    <td>
-                        <input class="form-control" name="UnitCost" type="number" value="@($"{_viewModel.UnitCost[i]:0.}")"  onblur="@(_formID).calcSingle(@(i));"/></td>
-                    <td>
-                        <input class="form-control" name="Amount" type="number" value="@*@($"{_viewModel.Amount[i]:0.}")*@"/></td>
-                    <td>
-                        <input class="form-control" name="Tax" type="number" value="@*@($"{_viewModel.Tax[i]:0.}")*@"/></td>
-                    <td>
-                        <input  name="TaxType" type="hidden" value="@((int)_viewModel.TaxType[i])"/>@(_viewModel.TaxType[i])
-                    </td>
-                </tr>
+                {
+                    <tr>
+                        <td>
+                            <input class="form-control" name="InvoiceDate" type="text" value="@($"{_viewModel.InvoiceDate[i]:yyyy/MM/dd}")" readonly="readonly" />
+                        </td>
+                        <td>
+                            <input class="form-control" name="InvoiceNo" type="text" value="@(_viewModel.InvoiceNo[i])" readonly="readonly" />
+                            <input class="form-control" name="OriginalSequenceNo" type="hidden" value="@(_viewModel.OriginalSequenceNo[i])" />
+                        </td>
+                        @*<td>                    </td>*@
+                        <td>
+                            <input class="form-control" name="OriginalDescription" type="text" value="@(_viewModel.OriginalDescription[i])" />
+                        </td>
+                        <td>
+                            <input class="form-control" name="Piece" type="number" step="1" min="1" value="@(_viewModel.Piece[i])" onblur="@(_formID).calcSingle(@(i));" />
+                            <input class="form-control" name="PieceUnit" type="hidden" value="@(_viewModel.PieceUnit[i])" />
+                        </td>
+                        @*<td>                    </td>*@
+                        <td>
+                            <input class="form-control" name="UnitCost" type="number" value="@(_viewModel.UnitCost[i])" onblur="@(_formID).calcSingle(@(i));" />
+                        </td>
+                        <td>
+                            <input class="form-control" name="Amount" type="number" value="@*@(_viewModel.Amount[i])*@" />
+                        </td>
+                        <td>
+                            <input class="form-control" name="Tax" type="number" value="@*@(_viewModel.Tax[i]:##,###,###,##0.##)*@" />
+                        </td>
+                        <td>
+                            <input name="TaxType" type="hidden" value="@((int)_viewModel.TaxType[i])" />@(_viewModel.TaxType[i])
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -162,7 +182,7 @@
                     $formData.buyerReceiptNo = '@(_viewModel.BuyerReceiptNo)';
                     $formData.buyerName = '@(_viewModel.BuyerName)';
                     showLoading();
-                    $.post('@(Url.Action("CommitAllowance","InvoiceBusiness",new { _viewModel.ProcessType,KeyID = seller.CompanyID.EncryptKey() }))', $formData, function (data) {
+                    $.post('@Html.Raw(Url.Action("CommitAllowance","InvoiceBusiness",new { _viewModel.ProcessType,KeyID = seller.CompanyID.EncryptKey() }))', $formData, function (data) {
                         hideLoading();
                         if ($.isPlainObject(data)) {
                             alert(data.message);
@@ -191,7 +211,7 @@
                     var tax = math.number($tax.eq(idx).val());
                     if (!isNaN(tax)) {
                         taxAmt += tax;
-                    } 
+                    }
                 });
 
                 $amt.each(function (idx) {
@@ -212,18 +232,4 @@
     });
 </script>
 
-<script runat="server">
 
-    ModelSource<InvoiceItem> models;
-    ModelStateDictionary _modelState;
-    AllowanceViewModel _viewModel;
-    String _formID = $"form{DateTime.Now.Ticks}";
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _viewModel = (AllowanceViewModel)ViewBag.ViewModel;
-    }
-</script>

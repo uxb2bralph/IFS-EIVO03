@@ -18,7 +18,7 @@ namespace Model.InvoiceManagement.Validator
         public InvoiceRootInvoiceValidatorForCBE(GenericManager<EIVOEntityDataContext> mgr, Organization owner)
             : base(mgr, owner)
         {
-
+            UseDefaultCrossBorderMerchantCarrier = true;
         }
 
         protected override Exception checkBusiness()

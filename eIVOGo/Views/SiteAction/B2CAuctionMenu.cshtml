@@ -37,7 +37,7 @@
                 <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceProcess/InquireToCancel"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>線上作廢發票</a>
             </li>
             <li>
-                <a href="@(Url.Action("InquireToIssueAllowance","InvoiceProcess"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>線上開立折讓證明</a>
+                <a href="@Html.Raw(Url.Action("InquireToIssueAllowance","InvoiceProcess"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>線上開立折讓證明</a>
             </li>
             <li>
                 <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceProcess/InquireToMIG"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>下載MIG檔案</a>

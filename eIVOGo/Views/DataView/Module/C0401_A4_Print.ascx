@@ -48,7 +48,7 @@
             <%  }
                 else
                 { %>
-                    <h3 style="width:4.8cm;"><%= _model.InvoiceSeller.CustomerName  %></h3>
+                    <h3 style="width:4.2cm;" class="title-small"><%= _model.InvoiceSeller.CustomerName  %></h3>
             <%  }
                 if (_isDuplicatedPrint)
                 { %>

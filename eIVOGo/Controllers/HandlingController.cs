@@ -126,7 +126,7 @@ namespace eIVOGo.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
+                return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
             String startNo = viewModel.StartNo.Substring(2, 8);
@@ -137,6 +137,17 @@ namespace eIVOGo.Controllers
             if(viewModel.ChannelID.HasValue)
             {
                 items = items.Join(models.GetTable<CDS_Document>().Where(d => d.ChannelID == (int?)viewModel.ChannelID), 
+                    i => i.InvoiceID, d => d.DocID, (i, d) => i);
+            }
+
+            if (viewModel.Attachment == 1)
+            {
+                items = items.Join(models.GetTable<CDS_Document>().Where(d => d.Attachment.Any()),
+                    i => i.InvoiceID, d => d.DocID, (i, d) => i);
+            }
+            else if (viewModel.Attachment == 0)
+            {
+                items = items.Join(models.GetTable<CDS_Document>().Where(d => !d.Attachment.Any()),
                     i => i.InvoiceID, d => d.DocID, (i, d) => i);
             }
 
@@ -152,12 +163,12 @@ namespace eIVOGo.Controllers
             //        .Where(i => i.InvoiceBuyer.Address != null && i.InvoiceBuyer.ReceiptNo != "0000000000")
             //        .OrderBy(i => i.TrackCode).ThenBy(i => i.No));
 
-            var resultItems = items
-                .Where(i => i.InvoiceBuyer.Address != null)
-                .OrderBy(i => i.InvoiceBuyer.ReceiptNo)
-                .ThenBy(i => i.InvoiceBuyer.Address)
-                .ThenBy(i => i.TrackCode)
-                .ThenBy(i => i.No);
+            var resultItems = items.Join(models.GetTable<InvoiceBuyer>().Where(i => i.Address != null),
+                    i => i.InvoiceID, b => b.InvoiceID, (i, b) => i);
+                //.OrderBy(i => i.InvoiceBuyer.ReceiptNo)
+                //.ThenBy(i => i.InvoiceBuyer.Address)
+                //.ThenBy(i => i.TrackCode)
+                //.ThenBy(i => i.No);
 
             return View("~/Views/Handling/MailTracking/QueryResult.cshtml", resultItems);
         }

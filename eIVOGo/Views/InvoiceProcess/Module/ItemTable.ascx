@@ -34,9 +34,9 @@
             <th data-sort="11">買受人統編</th>
             <th aria-sort="other">發票狀態</th>
             <th aria-sort="other">名稱</th>
-            <th aria-sort="other" style="display:none">連絡人名稱</th>
-            <th aria-sort="other" style="display:none">地址</th>
-            <th aria-sort="other" style="display:none">email</th>
+            <th aria-sort="other">連絡人名稱</th>
+            <th aria-sort="other">地址</th>
+            <th aria-sort="other">email</th>
             <th aria-sort="other">備註</th>
             <th aria-sort="other">開立通知</th>
             <th aria-sort="other">載具資訊</th>

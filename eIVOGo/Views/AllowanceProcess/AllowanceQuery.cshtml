@@ -150,7 +150,7 @@
                 }
 
                 showLoading();
-                $.post('@(Url.Action("Inquire","AllowanceProcess",new { resultAction = ViewBag.ResultAction }))', $formData, function (data) {
+                $.post('@Html.Raw(Url.Action("Inquire","AllowanceProcess",new { resultAction = ViewBag.ResultAction }))', $formData, function (data) {
 
                     hideLoading();
                     if ($.isPlainObject(data)) {
@@ -183,7 +183,7 @@
                 //$formData.processType = processType;
 
                 showLoading();
-                $.post('@(Url.Action("Print","AllowanceProcess",new { _viewModel.ProcessType }))', $formData, function (data) {
+                $.post('@Html.Raw(Url.Action("Print","AllowanceProcess",new { _viewModel.ProcessType }))', $formData, function (data) {
                     hideLoading();
                     if ($.isPlainObject(data)) {
                         alert(data.message);
@@ -209,7 +209,7 @@
                 $formData.cancellation = $('#queryArea select[name="Cancelled"]').val();
 
                 showLoading();
-                $.post('@(Url.Action("IssueAllowanceNotice", "AllowanceProcess"))', $formData, function (data) {
+                $.post('@Html.Raw(Url.Action("IssueAllowanceNotice", "AllowanceProcess"))', $formData, function (data) {
                     hideLoading();
                     if ($.isPlainObject(data)) {
                         alert(data.message);
@@ -225,7 +225,7 @@
                     $postForm.remove();
                 }
 
-                $postForm = $('<form method="post" />').prop('action', '@(Url.Action("CreateXlsx","AllowanceProcess"))')
+                $postForm = $('<form method="post" />').prop('action', '@Html.Raw(Url.Action("CreateXlsx","AllowanceProcess"))')
                     .css('display', 'none').appendTo($('body'));
 
                 $('#theForm').serializeArray().forEach(function (item, index) {

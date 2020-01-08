@@ -85,15 +85,25 @@
                 <input name="DeliveryDate" type="text" class="form_date" />
             </td>
             <th>
-                作業方式
+                附件檔
             </th>
             <td class="tdleft">
-                <select class="form-control" name="ChannelID">
+                <select name="Attachment">
                     <option value="">全部</option>
-                    <option value="@((int)Naming.ChannelIDType.ForGoogleOnLine)">On line</option>
-                    <option value="@((int)Naming.ChannelIDType.ForGoogleTerms)">Terms</option>
+                    <option value="1" selected="selected">有</option>
+                    <option value="0">無</option>
                 </select>
             </td>
+            @*<th>
+            作業方式
+        </th>
+        <td class="tdleft">
+            <select class="form-control" name="ChannelID">
+                <option value="">全部</option>
+                <option value="@((int)Naming.ChannelIDType.ForGoogleOnLine)">On line</option>
+                <option value="@((int)Naming.ChannelIDType.ForGoogleTerms)">Terms</option>
+            </select>
+        </td>*@
         </tr>
     </table>
     <!--表格 結束-->

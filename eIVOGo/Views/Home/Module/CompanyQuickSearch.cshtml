@@ -16,7 +16,7 @@
     ModelStateDictionary _modelState;
     ModelSource<InvoiceItem> models;
     IQueryable<Organization> _model;
-    SellerSelectorViewModel _viewModel = (SellerSelectorViewModel)ViewBag.ViewModel;
+    SellerSelectorViewModel _viewModel = ViewBag.ViewModel as SellerSelectorViewModel;
 
     if (_viewModel == null)
     {
@@ -49,7 +49,7 @@
                 }
             });
             $input.autocomplete({
-                source: '@(Url.Action("SearchCompany", "Home",new { _viewModel.Encrypt }))',
+                source: '@Html.Raw(Url.Action("SearchCompany", "Home",new { _viewModel.Encrypt }))',
                 select: function (event, ui) {
                     $input.val(ui.item.label);
                     $('#@(_valueID)').val(ui.item.value);

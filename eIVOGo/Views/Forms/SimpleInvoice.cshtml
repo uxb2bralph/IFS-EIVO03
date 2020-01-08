@@ -47,13 +47,13 @@
                     <input class="form-control" name="CustomerID" id="CustomerID" type="text" />
                     <div id="forCounterpart" style="display:none;">
                         @*相對營業人：
-                            <input type="radio" name="counterPart" value="@(true)" />是&nbsp;
+                            <input type="radio" name="counterPart" value="@($"{true}")" />是&nbsp;
                             <input type="radio" name="counterPart" value="@(false)" />否<br />*@
                     </div>
                     <script>
                         $global.onBusiness = function (buyerID) {
                             showLoading();
-                            $.post('@(Url.Action("Organization", "DataEntity"))', { 'id': buyerID }, function (data) {
+                            $.post('@Html.Raw(Url.Action("Organization", "DataEntity"))', { 'id': buyerID }, function (data) {
                                 hideLoading();
                                 if ($.isPlainObject(data) && data) {
                                     $('input[name="BuyerReceiptNo"]').val(data.ReceiptNo);
@@ -276,7 +276,7 @@
                 </tr>
             </thead>
             <tbody>
-                @{ Html.RenderPartial("~/Views/InvoiceBusiness/InvoiceProduct/AddItem.ascx");}
+                @{ Html.RenderPartial("~/Views/InvoiceBusiness/InvoiceProduct/AddItem.cshtml");}
 
             </tbody>
         </table>
@@ -293,6 +293,10 @@
             </tr>
         </tbody>
     </table>
+    @{ 
+        ViewBag.DialogID = "searchDialog";
+        Html.RenderPartial("~/Views/ProductCatalog/Module/ProductQuickSearch.cshtml");
+    }
 </form>
 <script>
     var uiInvoice;
@@ -307,7 +311,7 @@
                     var prnWin = window.open('', '_preview', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=auto,resizable=yes,alwaysRaised,dependent,titlebar=no,width=320,height=600');
                     prnWin.name = '_preview';
                     $form[0].target = '_preview';
-                    $form.prop('action', '@(Url.Action("PreviewInvoice","InvoiceBusiness"))').submit();
+                    $form.prop('action', '@Html.Raw(Url.Action("PreviewInvoice","InvoiceBusiness"))').submit();
                 }
             },
             commit: function (forPreview) {
@@ -317,7 +321,7 @@
                     var $formData = $form.serializeObject();
                     $formData.ForPreview = forPreview;
                     showLoading();
-                    $.post('@(Url.Action("CommitInvoice","InvoiceBusiness",new { _viewModel.InvoiceProcessType }))', $formData, function (data) {
+                    $.post('@Html.Raw(Url.Action("CommitInvoice","InvoiceBusiness",new { _viewModel.InvoiceProcessType }))', $formData, function (data) {
                         hideLoading();
                         if ($.isPlainObject(data)) {
                             alert(data.message);
@@ -398,6 +402,7 @@
                 var $row = $tr.clone(true);
                 $row.find('input').val('');
                 $tr.after($row);
+                //$row.find('.ui-autocomplete-input').removeClass('ui-autocomplete-input');
                 $tr.find('td').last().empty().append($('<a class="btn" onclick="uiInvoice.deleteRow();">刪除</a>'));
             },
             deleteRow: function () {
@@ -406,7 +411,24 @@
                     var $tr = $(event.target).parents('tr');
                     $tr.remove();
                 }
-            }
+            },
+            quickSearch: function (element) {
+                var event = event || window.event;
+                var $input = $(element);
+                $global.searchDone = function (item) {
+                    $input.val(item.ProductName);
+                    var $tr = $input.closest('tr');
+                    $tr.find('[name="UnitCost"]').val(item.SalePrice);
+                    $tr.find('[name="ItemRemark"]').val(item.Remark);
+                };
+                $('#searchDialog').dialog({
+                    width: 240,
+                    close: function (event, ui) {
+                        $input.focus();
+                    },
+                });
+            },
+
         };
     });
 </script>

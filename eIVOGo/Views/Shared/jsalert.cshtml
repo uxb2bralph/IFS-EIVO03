@@ -5,10 +5,11 @@
 
 @if (_message != null)
 {
-<script>
-    alert('@(HttpUtility.JavaScriptStringEncode(_message))');
-    @if (ViewBag.CloseWindow == true) {
-        <text>window.close();</text>
-    }
-</script>
+    <script>
+        alert('@(HttpUtility.JavaScriptStringEncode(_message))');
+        @if (ViewBag.CloseWindow == true)
+        {
+            <text>window.close();</text>
+        }
+    </script>
 }

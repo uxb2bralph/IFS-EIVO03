@@ -32,7 +32,7 @@
 
     function showInvoiceModal(docID) {
         var element = event.target;
-        $.post('@(Url.Action("ShowInvoiceContent", "DataView"))', 'docID=' + docID, function (html) {
+        $.post('@Html.Raw(Url.Action("ShowInvoiceContent", "DataView"))', 'docID=' + docID, function (html) {
                 //            $(element).after($(html).find("#mainContent"));
                 $(html).dialog({
                     width: 640,
@@ -53,7 +53,7 @@
 
     function showAllowanceModal(docID) {
         showLoading();
-        $.post('@(Url.Action("ShowAllowancePageView", "DataView"))', { 'id': docID }, function (data) {
+        $.post('@Html.Raw(Url.Action("ShowAllowancePageView", "DataView"))', { 'id': docID }, function (data) {
             hideLoading();
             if ($.isPlainObject(data)) {
                 alert(data.message);
@@ -133,7 +133,7 @@
     }
 
     function reportError(result) {
-        actionHandler('@(Url.Action("ReportError","Home"))', result, function () { }, 'auto', 'auto');
+        actionHandler('@Html.Raw(Url.Action("ReportError","Home"))', result, function () { }, 'auto', 'auto');
     }
 
     function invokeAction(url, data, done) {

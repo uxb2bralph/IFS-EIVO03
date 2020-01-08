@@ -97,11 +97,47 @@ namespace ApplicationResource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Json格式作廢發票請求檔.
+        /// </summary>
+        public static string P202 {
+            get {
+                return ResourceManager.GetString("P202", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Json格式開立折讓單請求檔.
+        /// </summary>
+        public static string P203 {
+            get {
+                return ResourceManager.GetString("P203", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Json格式作廢折讓單請求檔.
+        /// </summary>
+        public static string P204 {
+            get {
+                return ResourceManager.GetString("P204", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Xml格式發票開立請求檔(境外電商).
         /// </summary>
         public static string P501 {
             get {
                 return ResourceManager.GetString("P501", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Json格式發票開立請求檔(境外電商).
+        /// </summary>
+        public static string P601 {
+            get {
+                return ResourceManager.GetString("P601", resourceCulture);
             }
         }
     }

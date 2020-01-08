@@ -18,9 +18,16 @@
 <%@ Import Namespace="Uxnet.Web.WebUI" %>
 
 <% 
-    if(_viewModel.ForTest==true)
+    if (_viewModel.ForTest == true)
     {
-        Html.RenderPartial("~/Views/Notification/Module/IssuedC0401.cshtml", _model);
+        if (_model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.UseCBEStyle))
+        {
+            Html.RenderPartial("~/Views/Notification/Module/IssuedCBE.cshtml", _model);
+        }
+        else
+        {
+            Html.RenderPartial("~/Views/Notification/Module/IssuedC0401.cshtml", _model);
+        }
     }
     else if (_model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.Issuing))
     {
@@ -39,14 +46,16 @@
             if (_model.InvoiceBuyer.IsB2C()
                 || _model.Organization.OrganizationStatus.UseB2BStandalone == true)
             {
+                String body = _model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.UseCBEStyle)
+                    ? Html.Partial("~/Views/Notification/Module/IssuedCBE.cshtml", _model).ToString()
+                    : Html.Partial("~/Views/Notification/Module/IssuedC0401.cshtml", _model).ToString();
+
                 if (_viewModel.AppendAttachment == true)
                 {
-                    String body = Html.Partial("~/Views/Notification/Module/IssuedC0401.cshtml", _model).ToString();
                     body.SendMailMessage(mailTo, subject, _model.CDS_Document.Attachment.Select(a => a.StoredPath).ToArray());
                 }
                 else
                 {
-                    String body = Html.Partial("~/Views/Notification/Module/IssuedC0401.cshtml", _model).ToString();
                     body.SendMailMessage(mailTo, subject);
                 }
             }

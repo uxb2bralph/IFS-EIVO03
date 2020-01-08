@@ -62,11 +62,11 @@
     <div class="copyright" style="position: absolute; top: 290px; left: 50%;">
         &copy; 2011
         <script type="text/javascript" language="javascript">            show_date();</script>
-        UXB2B. All rights reserved. [ <a href="<%= Url.Action("CbsLogin","Account") %>">回登入頁</a> ]
+        UXB2B. All rights reserved. [ <a href="<%= Url.Action("Login","Account") %>">回登入頁</a> ]
     </div>
 </body>
 </html>
-<%  Html.RenderPartial("~/Views/Shared/ReportInputError.ascx"); %>
+<%  Html.RenderPartial("~/Views/Shared/ReportInputError.cshtml"); %>
 <%  Html.RenderPartial("~/Views/Shared/JsAlert.cshtml"); %>
 <script>
     $(function () {

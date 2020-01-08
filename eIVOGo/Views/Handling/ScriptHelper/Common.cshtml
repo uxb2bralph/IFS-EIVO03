@@ -1,13 +1,21 @@
+@using System.Linq
 @using System.IO
 @using System.Linq.Expressions
 
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
 @using eIVOGo.Helper
 @using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
 @using Utility
+@using Business.Helper
 @using Uxnet.Web.WebUI
+
 <script>
     var uiHandling;
     $(function () {
@@ -25,7 +33,7 @@
                 } else {
                     $('input[name="sort"]').remove();
                 }
-                var $formData = $('#queryArea').find('input,select,textarea').serializeObject();           
+                var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
 
                 clearErrors();
                 showLoading();
@@ -45,13 +53,13 @@
             showDetails: function () {
                 var items = Enumerable.From(uiHandling.items);
                 if (!uiHandling.$result) {
-                    $.post('@(Url.Action("InvoiceMailItems","Handling",new { showTable = true }))', { 'id': items.Select(function (i) { return i.InvoiceID; }).ToArray(), 'packageID': items.Select(function (i) { return i.PackageID; }).ToArray() }, function (data) {
+                    $.post('@Html.Raw(Url.Action("InvoiceMailItems","Handling",new { showTable = true }))', { 'id': items.Select(function (i) { return i.InvoiceID; }).ToArray(), 'packageID': items.Select(function (i) { return i.PackageID; }).ToArray() }, function (data) {
                         uiHandling.$result = $(data);
                         $('.queryAction').after(uiHandling.$result);
                         uiHandling.$result = uiHandling.$result.find('table.itemList > tbody');
                     });
                 } else {
-                    $.post('@(Url.Action("InvoiceMailItems","Handling",new { showTable = false }))', { 'id': Enumerable.From(uiHandling.items).Select(function (i) { return i.InvoiceID; }).ToArray(), 'packageID': items.Select(function (i) { return i.PackageID; }).ToArray() }, function (data) {
+                    $.post('@Html.Raw(Url.Action("InvoiceMailItems","Handling",new { showTable = false }))', { 'id': Enumerable.From(uiHandling.items).Select(function (i) { return i.InvoiceID; }).ToArray(), 'packageID': items.Select(function (i) { return i.PackageID; }).ToArray() }, function (data) {
                         $(data).appendTo(uiHandling.$result);
                     });
                 }
@@ -78,7 +86,7 @@
                         });
                 });
 
-                $.post('@(Url.Action("PackInvoice","Handling"))', { 'id': items }, function (data) {
+                $.post('@Html.Raw(Url.Action("PackInvoice","Handling"))', { 'id': items }, function (data) {
                     if (data) {
                         var $data = $(data);
                         if ($data.is('tr')) {
@@ -111,7 +119,7 @@
                     items.push(current.InvoiceID);
                 });
 
-                $.post('@(Url.Action("InvoiceMailItems","Handling",new { showTable = false }))', { 'id': items, 'packageID': items }, function (data) {
+                $.post('@Html.Raw(Url.Action("InvoiceMailItems","Handling",new { showTable = false }))', { 'id': items, 'packageID': items }, function (data) {
                     if (data) {
                         var $data = $(data);
                         if ($data.is('tr')) {
@@ -204,9 +212,9 @@
                         };
                     }).ToArray();
 
-                $('').launchDownload('@(Url.Action("DownloadXlsx","Handling"))', { 'jsonData': JSON.stringify(items) });
+                $('').launchDownload('@Html.Raw(Url.Action("DownloadXlsx","Handling"))', { 'jsonData': JSON.stringify(items) });
 
-                @*$postForm = $('<form method="post" />').prop('action', '@(Url.Action("DownloadXlsx","Handling"))')
+                @*$postForm = $('<form method="post" />').prop('action', '@Html.Raw(Url.Action("DownloadXlsx","Handling"))')
                     .css('display', 'none').appendTo($('body'));
 
                 $('<input type="hidden" name="data">')
@@ -214,6 +222,33 @@
                     .appendTo($postForm);
                 $postForm.submit();*@
                 //showLoading();
+            },
+
+            zipAll: function () {
+                if ($postForm) {
+                    $postForm.remove();
+                }
+
+                var dateItems = $('input[name="DeliveryDate"][data-package]').toEnumerable()
+                    .Select(function (c) {
+                        return { 'key': c.attr('data-package'), 'value': c.val() };
+                    });
+
+                var items = Enumerable.From(uiHandling.items).GroupBy(function (i) { return i.PackageID; })
+                    .Select(function (g) {
+                        return {
+                            'PackageID': g.Key(),
+                            'InvoiceID': g.Select(function (v) { return v.InvoiceID; }).ToArray()
+                        };
+                    }).ToArray();
+
+                $('').launchDownload('@Html.Raw(Url.Action("ZipInvoicePackagePDF","DataView",
+                                     new RenderStyleViewModel
+                                     {
+                                         PaperStyle = "A4",
+                                         PrintCuttingLine = true,
+                                         ProcessType = Naming.InvoiceProcessType.C0401,
+                                     }))', { 'jsonData': JSON.stringify(items) }, "report", true);
             },
         };
     });
