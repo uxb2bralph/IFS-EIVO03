@@ -224,21 +224,10 @@
       <Value Profile="(Default)">ZipInvoice</Value>
     </Setting>
     <Setting Name="PDFGeneratorOutput" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">E:\UXB2B_EIVO_GOOGLE\ZipInvoice</Value>
+      <Value Profile="(Default)">C:\UXB2B_EIVO_GOOGLE\ZipInvoice</Value>
     </Setting>
     <Setting Name="ClearTxnPath" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="ServerInspector" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">
-                  InvoiceClient.Agent.VacantInvoiceNoInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.Agent.InvoiceMappingInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.Agent.B2BInvoiceInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.Agent.InvoiceMailTrackingInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.Agent.InvoicePDFInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.Agent.AllowancePDFGenerator, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.Agent.InvoiceServerInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                </Value>
     </Setting>
     <Setting Name="PackerCycleDelayInSeconds" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">20</Value>
@@ -265,6 +254,20 @@
       <Value Profile="(Default)">
                 InvoiceClient.TransferManagement.XlsxInvoiceTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
               </Value>
+    </Setting>
+    <Setting Name="ServerInspector" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">
+                  InvoiceClient.Agent.VacantInvoiceNoInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoiceMappingInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.B2BInvoiceInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoiceMailTrackingInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoicePDFGeneratorForGooglePlay, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.AllowancePDFGenerator, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoiceServerInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                </Value>
+    </Setting>
+    <Setting Name="IsLocalMachine" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>
