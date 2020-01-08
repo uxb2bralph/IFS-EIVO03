@@ -53,7 +53,7 @@
             $form = $('#editItem');
             showLoading();
             clearErrors();
-            $.post('@(Url.Action("CommitCBESignUp","Account",new { _viewModel.KeyID }))', $form.serializeObject(), function (data) {
+            $.post('@Html.Raw(Url.Action("CommitCBESignUp","Account",new { _viewModel.KeyID }))', $form.serializeObject(), function (data) {
                 hideLoading();
                 if ($.isPlainObject(data)) {
                     if (data.result) {

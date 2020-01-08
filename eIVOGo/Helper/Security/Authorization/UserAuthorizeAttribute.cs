@@ -32,7 +32,7 @@ namespace eIVOGo.Helper.Security.Authorization
                         new RouteValueDictionary
                         {
                                 { "controller", "Account" },
-                                { "action", "CbsLogin" },
+                                { "action", "Login" },
                                 { "id", UrlParameter.Optional }
                         });
                 }
@@ -45,7 +45,7 @@ namespace eIVOGo.Helper.Security.Authorization
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary
                 {
                     { "controller", "Account" },
-                    { "action", "CbsLogin" },
+                    { "action", "Login" },
                     { "ReturnUrl", rtURL }
                 });
             }
@@ -57,7 +57,7 @@ namespace eIVOGo.Helper.Security.Authorization
                 new RouteValueDictionary
                 {
                                 { "controller", "Account" },
-                                { "action", "CbsLogin" },
+                                { "action", "Login" },
                                 { "id", UrlParameter.Optional }
                 });
         }

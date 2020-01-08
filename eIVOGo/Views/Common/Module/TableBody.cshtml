@@ -58,12 +58,12 @@ else
 }
 @foreach (var item in items)
 {
-    <tr>
-        @foreach (var c in columns)
-        {
-            <td>@{ Html.RenderPartial(c, (object)item); }</td>
-        }
-    </tr>
+    Html.RenderPartial("~/Views/Common/Module/TableRow.cshtml", (object)item);
+}
+@if (ViewBag.CreateNew != null)
+{
+    ViewBag.DisplayType = Naming.FieldDisplayType.Create;
+    Html.RenderPartial("~/Views/Common/Module/TableRow.cshtml", (object)ViewBag.CreateNew);
 }
 @*<script>
         $(function () {

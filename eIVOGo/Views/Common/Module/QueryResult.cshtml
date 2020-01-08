@@ -30,7 +30,7 @@
 <div class="border_gray">
     @{
         var recordCount = _viewModel.RecordCount;
-        if (recordCount > 0)
+        if (recordCount > 0 || ViewBag.CreateNew != null)
         {
             Html.RenderPartial("~/Views/Common/Module/QueryPaging.cshtml", _model);
         }

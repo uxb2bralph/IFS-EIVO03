@@ -37,7 +37,7 @@
                         $('input[name="BusinessBorder"]').on('click', function (event) {
                             var event = event || window.event;
                             var $target = $(event.target);
-                            $('').launchDownload('@(Url.Action("InvoiceMediaReport","InvoiceQuery"))', { 'BusinessBorder': $target.val() });
+                            $('').launchDownload('@Html.Raw(Url.Action("InvoiceMediaReport","InvoiceQuery"))', { 'BusinessBorder': $target.val() });
                         });
                     });
                 </script>
@@ -53,7 +53,7 @@
                 <script>
                     $(function () {
                         function getTaxNo(sellerID) {
-                            $.post('@(Url.Action("OrganizationExtension", "DataEntity"))', { 'id': sellerID }, function (data) {
+                            $.post('@Html.Raw(Url.Action("OrganizationExtension", "DataEntity"))', { 'id': sellerID }, function (data) {
                                 if (data) {
                                     $('input[name="TaxNo"]').val(data.TaxNo);
                                 }
@@ -139,7 +139,7 @@
             download: function () {
 
                 var $postForm = $('#theForm');
-                $postForm.prop('action', '@(Url.Action("InquireInvoiceMedia","InvoiceQuery"))').submit();
+                $postForm.prop('action', '@Html.Raw(Url.Action("InquireInvoiceMedia","InvoiceQuery"))').submit();
                 //showLoading();
             },
         };

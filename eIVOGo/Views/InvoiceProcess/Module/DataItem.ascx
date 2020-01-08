@@ -28,9 +28,9 @@
     <td><%= _model.InvoiceBuyer.IsB2C() ? "" : _model.InvoiceBuyer.ReceiptNo %></td>
     <td><%= _model.InvoiceCancellation==null ? "" : $"已作廢({_model.InvoiceCancellation.CancelDate:yyyy/MM/dd})" %></td>
     <td><%= _model.InvoiceBuyer.CustomerName %></td>
-    <td style="display:none"><%= _model.InvoiceBuyer.ContactName %></td>
-    <td style="display:none"><%= _model.InvoiceBuyer.Address %></td>
-    <td style="display:none"><%= _model.InvoiceBuyer.EMail %></td>
+    <td><%= _model.InvoiceBuyer.ContactName %></td>
+    <td><%= _model.InvoiceBuyer.Address %></td>
+    <td><%= _model.InvoiceBuyer.EMail %></td>
     <td><%= String.Join("", _model.InvoiceDetails.Select(t => t.InvoiceProduct.InvoiceProductItem.FirstOrDefault().Remark)) %></td>
     <td><%= _model.CDS_Document.IssuingNotice!=null ? String.Format("{0:yyyy/MM/dd HH:mm:ss}",_model.CDS_Document.IssuingNotice.IssueDate) : "未通知" %></td>
     <td><%= _model.InvoiceCarrier!=null ? _model.InvoiceCarrier.CarrierNo : null %></td>

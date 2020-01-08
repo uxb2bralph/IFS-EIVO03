@@ -26,19 +26,23 @@
 {
     <script>
         $(function () {
+            var $scope = $global.$scope;
+            if (!$scope) {
+                $scope = $('body');
+            }
             console.log('@(_modelState.ErrorMessage())');
                 @foreach (var key in _modelState.Keys.Where(k => _modelState[k].Errors.Count > 0))
                 {
                     if (String.IsNullOrEmpty(_dataRole))
                     {
                         <text>
-            $('[name="@(key)"]').addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
+            $scope.find('[name="@(key)"]').addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
                         </text>
                     }
                     else
                     {
                         <text>
-            $('[name="@(key)"][data-role="@(_dataRole)"]').addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
+            $scope.find('[name="@(key)"][data-role="@(_dataRole)"]').addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
                         </text>
                         }
                     }

@@ -43,12 +43,31 @@ namespace eIVOGo.Controllers
             return View("~/Views/Common/QueryIndex.cshtml");
         }
 
+        public ActionResult ShowData(ProcessRequestQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)InquireRequest(viewModel);
+            viewModel.ResultView = "~/Views/ProcessRequest/Module/ProcessRequestTable.cshtml";
+            viewModel.QueryForm = "~/Views/Common/Module/QueryResult.cshtml";
+            result.ViewName = "~/Views/Common/QueryIndex.cshtml";
+            return result;
+        }
+
+
         public ActionResult InquireRequest(ProcessRequestQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
             var profile = HttpContext.GetUser();
 
+            if (viewModel.KeyID != null)
+            {
+                viewModel.TaskID = viewModel.DecryptKeyValue();
+            }
+
             IQueryable<ProcessRequest> items = models.GetDataContext().FilterProcessRequestByRole(profile, models.GetTable<ProcessRequest>());
+            if(viewModel.TaskID.HasValue)
+            {
+                items = items.Where(p => p.TaskID == viewModel.TaskID);
+            }
 
             if(viewModel.SubmitDateFrom.HasValue)
             {

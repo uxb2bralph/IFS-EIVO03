@@ -23,7 +23,7 @@ namespace ProcessorUnit.Execution
 {
     public class InvoiceJsonRequestForCBEProcessor : ExecutorForever
     {
-        static JsonSerializerSettings _JSON_Settings = new JsonSerializerSettings
+        public static readonly JsonSerializerSettings _JSON_Settings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore
         };
@@ -47,6 +47,10 @@ namespace ProcessorUnit.Execution
                     {
                         manager.UploadInvoiceAutoTrackNo(result, token, invoice);
                         manager.BindProcessedItem(requestItem);
+                    }
+                    else
+                    {
+                        result.Result.message = "Issuer token doesn't exist.";
                     }
                 }
                 return JsonConvert.SerializeObject(result, _JSON_Settings);

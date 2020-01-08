@@ -47,18 +47,23 @@
                 var event = event || window.event;
                 var $form = $(event.target).closest('form');
                 $form.ajaxForm({
-                    url: "@(Url.Action("Commit","UserProfile",new { WaitForCheck = _viewModel.WaitForCheck }))",
+                    url: "@Html.Raw(Url.Action("Commit","UserProfile",new { WaitForCheck = _viewModel.WaitForCheck }))",
                     beforeSubmit: function () {
                         clearErrors();
                         showLoading();
                     },
                     success: function (data) {
-                        if (data) {
-                            $(data).appendTo($('body'));
-                        }
                         hideLoading();
-                        if ($global.actionDone) {
-                            $global.actionDone();
+                        if ($.isPlainObject(data)) {
+                            if (data.result) {
+                                if ($global.actionDone) {
+                                    $global.actionDone();
+                                }
+                            } else {
+                                alert(data.message);
+                            }
+                        } else {
+                            $(data).appendTo($('body'));
                         }
                     },
                     error: function () {

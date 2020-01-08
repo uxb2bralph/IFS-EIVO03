@@ -168,7 +168,7 @@
                     else
                     {
                         //taxFreeAmt = item.InvoiceAmountType.TotalAmount - item.InvoiceAmountType.TaxAmount * 20;                        
-                        taxFreeAmt = item.InvoiceAmountType.TotalAmount - item.InvoiceAmountType.TaxAmount - item.InvoiceAmountType.SalesAmount;
+                        taxFreeAmt = item.InvoiceAmountType.FreeTaxSalesAmount ?? 0;
                         if (taxFreeAmt < 0)
                         {
                             taxFreeAmt = 0;
@@ -189,7 +189,7 @@
                     else
                     {
                         //taxFreeAmt = item.InvoiceAmountType.SalesAmount - item.InvoiceAmountType.TaxAmount * 20;
-                        taxFreeAmt = item.InvoiceAmountType.TotalAmount - item.InvoiceAmountType.TaxAmount - item.InvoiceAmountType.SalesAmount;
+                        taxFreeAmt = item.InvoiceAmountType.FreeTaxSalesAmount ?? 0;
                         if (taxFreeAmt < 0)
                         {
                             taxFreeAmt = 0;

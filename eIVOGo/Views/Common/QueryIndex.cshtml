@@ -26,7 +26,10 @@
     QueryViewModel _viewModel = (QueryViewModel)ViewBag.ViewModel;
 }
 @{
-    Html.RenderPartial(_viewModel.QueryForm);
+    if (_viewModel.QueryForm != null)
+    {
+        Html.RenderPartial(_viewModel.QueryForm);
+    }
 }
 <script>
     debugger;

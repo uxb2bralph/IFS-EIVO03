@@ -125,6 +125,9 @@ namespace ProcessorUnit
             chainedProcessor.ChainedExecutor = new InvoiceJsonRequestForCBEProcessor { };
             chainedProcessor = chainedProcessor.ChainedExecutor;
 
+            chainedProcessor.ChainedExecutor = new VoidInvoiceJsonRequestProcessor { };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
             processorStart.ReadyToGo();
 
         }

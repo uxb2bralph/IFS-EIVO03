@@ -73,6 +73,31 @@ namespace eIVOGo.Controllers
             return View("~/Views/Account/CbsLogin.cshtml");
         }
 
+        // GET: Account
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> Login(LoginViewModel viewModel, string returnUrl)
+        {
+            var result = await CbsLogin(viewModel, returnUrl);
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Account/Login.aspx");
+            }
+            else
+            {
+                return result;
+            }
+        }
+
+        [AllowAnonymous]
+        public ActionResult Login()
+        {
+            ViewResult result = (ViewResult)CbsLogin();
+            if (Settings.Default.EIVO_Service != 0)
+                result.ViewName = "~/Views/Account/Login.aspx";
+            return result;
+        }
+
         public ActionResult ForgetPassword()
         {
             return View();

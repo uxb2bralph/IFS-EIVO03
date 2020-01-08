@@ -32,6 +32,7 @@ using Model.Security.MembershipManagement;
 using Utility;
 using Uxnet.Com.Security.UseCrypto;
 using Model.Schema.EIVO;
+using Newtonsoft.Json;
 
 namespace eIVOGo.Controllers
 {
@@ -601,6 +602,55 @@ namespace eIVOGo.Controllers
             AllowanceRoot allowance = uploadData.TrimAll().ConvertTo<AllowanceRoot>();
             return View(allowance);
         }
+
+        public ActionResult ZipInvoicePackagePDF(RenderStyleViewModel viewModel, String jsonData)
+        {
+            var items = JsonConvert.DeserializeObject<MailTrackingCsvViewModel[]>(jsonData);
+            if (items == null || items.Length == 0)
+            {
+                ViewBag.CloseWindow = true;
+                ViewBag.Message = "請選擇郵寄項目!!";
+                return View("~/Views/Shared/JsAlert.cshtml");
+            }
+
+            ViewBag.ViewModel = viewModel;
+            Response.AppendCookie(new HttpCookie("FileDownloadToken", viewModel.FileDownloadToken));
+
+            String outFile = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".zip");
+            using (var zipOut = System.IO.File.Create(outFile))
+            {
+                using (ZipArchive zip = new ZipArchive(zipOut, ZipArchiveMode.Create))
+                {
+                    int packageIdx = 1;
+                    foreach (var g in items)
+                    {
+                        int idx = 1;
+                        foreach (var v in g.InvoiceID)
+                        {
+                            InvoiceItem item = models.GetTable<InvoiceItem>().Where(i => i.InvoiceID == v).FirstOrDefault();
+                            if (item == null)
+                                continue;
+                            var pdfFile = GetInvoicePDF(item, viewModel);
+                            zip.CreateEntryFromFile(pdfFile, $"{packageIdx:000000}-{idx++:000}-{Path.GetFileName(pdfFile)}");
+
+                            foreach (var attach in item.CDS_Document.Attachment)
+                            {
+                                if (System.IO.File.Exists(attach.StoredPath))
+                                {
+                                    zip.CreateEntryFromFile(attach.StoredPath, $"{packageIdx:000000}-{idx++:000}-{Path.GetFileName(attach.StoredPath)}");
+                                }
+                            }
+                        }
+                        packageIdx++;
+                    }
+                }
+            }
+
+            var result = new FilePathResult(outFile, "application/octet-stream");
+            result.FileDownloadName = "發票列印下載.zip";
+            return result;
+        }
+
 
 
     }

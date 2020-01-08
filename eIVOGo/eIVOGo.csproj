@@ -417,7 +417,6 @@
     <Content Include="Views\DataView\Module\C0401_A4.ascx" />
     <Content Include="Views\DataView\C0401_POS.aspx" />
     <Content Include="Views\DataView\PrintC0401POS.aspx" />
-    <Content Include="Views\Forms\SimpleAllowance.ascx" />
     <Content Include="Views\InvoiceBusiness\Module\AllowanceCreated.ascx" />
     <Content Include="Views\InvoiceBusiness\Module\InvoiceProcessTypeDirection.ascx" />
     <Content Include="Views\InvoiceBusiness\Module\A0401Created.ascx" />
@@ -566,7 +565,6 @@
     <Content Include="Module\EIVO\Item\SogoInvoiceReceiptView.ascx" />
     <Content Include="Module\EIVO\Item\SogoInvoiceStubView.ascx" />
     <Content Include="Module\EIVO\Item\SOGOReceiptView.ascx" />
-    <Content Include="Views\InvoiceProcess\Module\IssueAllowance.ascx" />
     <Content Include="Views\InvoiceProcess\ResultAction\PrintAction.ascx" />
     <Content Include="Views\Notification\IssueAllowanceCancellation.aspx" />
     <Content Include="Views\Notification\IssueC0501.aspx" />
@@ -1053,11 +1051,6 @@
     <Content Include="Views\Account\CbsLogin.aspx" />
     <Content Include="logout.aspx" />
     <Content Include="Views\DataFlow\UserRoleSelector.ascx" />
-    <Content Include="Views\Handling\MailTracking\PackedItemList.ascx" />
-    <Content Include="Views\Handling\MailTracking\DataItem.ascx" />
-    <Content Include="Views\Handling\MailTracking\TableList.ascx" />
-    <Content Include="Views\Handling\MailTracking\ItemList.ascx" />
-    <Content Include="Views\Handling\MailTracking\MailTrackingMessage.ascx" />
     <Content Include="Views\Handling\MailTracking\ItemList.cshtml" />
     <Content Include="Views\Handling\MailTracking\PackedItemList.cshtml" />
     <Content Include="Views\Handling\MailTracking\DataItem.cshtml" />
@@ -1095,6 +1088,7 @@
     <Content Include="Views\DataView\Module\InvoiceContent.cshtml" />
     <Content Include="Views\Common\Module\TableRow.cshtml" />
     <Content Include="Views\Account\CbsLogin.cshtml" />
+    <Content Include="Views\Forms\SimpleAllowance.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="Views\Home\MainPage.aspx" />
     <Content Include="Module\Ajax\PagingControl.ascx" />
@@ -1479,7 +1473,6 @@
     <Content Include="Views\InquireInvoice\ByAgent.ascx" />
     <Content Include="Views\InquireInvoice\ByAttachment.ascx" />
     <Content Include="Views\InquireInvoice\ByDonation.ascx" />
-    <Content Include="Views\InvoiceBusiness\InvoiceProduct\AddItem.ascx" />
     <Content Include="Views\InvoiceBusiness\InvoiceProduct\DataItem.ascx" />
     <Content Include="Views\InvoiceBusiness\Module\InvoiceCreated.ascx" />
     <Content Include="Views\InvoiceBusiness\PrintInvoice.aspx" />
@@ -1900,7 +1893,6 @@
     <Content Include="template\MvcMainPage.Master" />
     <Content Include="template\MvcTabPage.Master" />
     <Content Include="vendor\Web.config" />
-    <Content Include="Views\Shared\JsAlert.ascx" />
     <Content Include="Views\Template\MvcMainPage.cshtml" />
     <Content Include="Views\Handling\ScriptHelper\Common.cshtml" />
     <Content Include="Views\Handling\MailTracking\TableList.cshtml" />
@@ -2023,7 +2015,6 @@
     <Content Include="Views\Organization\Module\GatewaySettings.cshtml" />
     <Content Include="Views\ProcessRequest\DataField\ExceptionContent.cshtml" />
     <Content Include="Views\Notification\Module\IssuedC0401.cshtml" />
-    <Content Include="Views\Shared\JsAlert.cshtml" />
     <Content Include="Views\ProductCatalog\DataField\Barcode.cshtml" />
     <Content Include="Views\ProductCatalog\DataField\PieceUnit.cshtml" />
     <Content Include="Views\ProductCatalog\DataField\ProcessAction.cshtml" />
@@ -2039,6 +2030,9 @@
     <Content Include="Views\Notification\Module\NotifyProcessException.cshtml" />
     <Content Include="Views\Notification\Module\IssuedCBE.cshtml" />
     <Content Include="Views\Shared\CommonScriptInclude.cshtml" />
+    <Content Include="Views\InvoiceBusiness\InvoiceProduct\AddItem.cshtml" />
+    <Content Include="Views\InvoiceProcess\Module\IssueAllowance.cshtml" />
+    <Content Include="Views\Shared\JsAlert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">
@@ -3365,6 +3359,7 @@
     <Compile Include="Module\SAM\Business\GroupMemberSelector.ascx.designer.cs">
       <DependentUpon>GroupMemberSelector.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs" />
     <Compile Include="Published\eInvoiceServiceGoogleCBM.asmx.cs">
       <DependentUpon>eInvoiceServiceGoogleCBM.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -4176,7 +4171,6 @@
     </Compile>
     <Compile Include="MvcHelper\ServerTransferResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs" />
     <Compile Include="Published\AlertAdmTurnKeyInfo.aspx.cs">
       <DependentUpon>AlertAdmTurnKeyInfo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

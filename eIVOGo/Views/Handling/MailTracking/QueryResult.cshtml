@@ -8,8 +8,7 @@
 
 @{
     IQueryable<InvoiceItem> _model;
-    _model = (IQueryable<InvoiceItem>
-        )this.Model;
+    _model = (IQueryable<InvoiceItem>)this.Model;
 }
 
 @functions {
@@ -32,28 +31,45 @@
 
         @if (_model.Count() > 0)
         {
-            var items = _model.ToList()
-                .Select(i =>
-                new _PackItem
-                {
-                    PackageID = i.InvoiceID,
-                    InvoiceID = i.InvoiceID,
-                    CustomerID = i.InvoiceBuyer.CustomerID,
-                    InvoiceNo = i.TrackCode + i.No,
-                    ContactName = i.InvoiceBuyer.ContactName,
-                    Address = i.InvoiceBuyer.Address,
-                    Remark = ""
-                }).ToList();
-            var preItem = items[0];
-            for (int i = 1; i < items.Count; i++)
+            List<_PackItem> items = new List<_PackItem>();
+            foreach(var g in _model.GroupBy(i => i.InvoiceBuyer.Address))
             {
-                var current = items[i];
-                if (current.ContactName == preItem.ContactName && current.Address == preItem.Address)
+                foreach(var i in g)
                 {
-                    current.PackageID = preItem.PackageID;
+                    items.Add(new _PackItem
+                    {
+                        PackageID = g.First().InvoiceID,
+                        InvoiceID = i.InvoiceID,
+                        CustomerID = i.InvoiceBuyer.CustomerID,
+                        InvoiceNo = i.TrackCode + i.No,
+                        ContactName = i.InvoiceBuyer.ContactName,
+                        Address = i.InvoiceBuyer.Address,
+                        Remark = ""
+                    });
                 }
-                preItem = current;
             }
+            //var items = _model.ToList()
+            //    .Select(i =>
+            //    new _PackItem
+            //    {
+            //        PackageID = i.InvoiceID,
+            //        InvoiceID = i.InvoiceID,
+            //        CustomerID = i.InvoiceBuyer.CustomerID,
+            //        InvoiceNo = i.TrackCode + i.No,
+            //        ContactName = i.InvoiceBuyer.ContactName,
+            //        Address = i.InvoiceBuyer.Address,
+            //        Remark = ""
+            //    }).ToList();
+            //var preItem = items[0];
+            //for (int i = 1; i < items.Count; i++)
+            //{
+            //    var current = items[i];
+            //    if (current.ContactName == preItem.ContactName && current.Address == preItem.Address)
+            //    {
+            //        current.PackageID = preItem.PackageID;
+            //    }
+            //    preItem = current;
+            //}
     <text>
         var newItems = @(Html.Raw(JsonConvert.SerializeObject(items)));
         uiHandling.items = uiHandling.items.concat(newItems);

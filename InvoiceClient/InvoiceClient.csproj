@@ -124,6 +124,8 @@
     <Compile Include="Agent\CsvAllowanceCancellationWatcher.cs" />
     <Compile Include="Agent\CsvAllowanceWatcher.cs" />
     <Compile Include="Agent\CsvInvoiceCancellationWatcherForCrossBorderMerchant.cs" />
+    <Compile Include="Agent\ProcessTaskResponseInspector.cs" />
+    <Compile Include="Agent\ExcelResponseInspector.cs" />
     <Compile Include="Agent\XmlProcessRequestWatcher.cs" />
     <Compile Include="Agent\ProcessResponseInspector.cs" />
     <Compile Include="Agent\ProcessRequestWatcher.cs" />

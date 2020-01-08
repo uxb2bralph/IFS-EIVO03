@@ -47,7 +47,7 @@
             }
             $input.on('click', function (event) {
                 var event = event || window.event;
-                $('').launchDownload('@(Url.Action(actionName,"InvoiceBusiness"))', { 'invoiceProcessType': $(this).val() });
+                $('').launchDownload('@Html.Raw(Url.Action(actionName,"InvoiceBusiness"))', { 'invoiceProcessType': $(this).val() });
             });
         });
         </script>

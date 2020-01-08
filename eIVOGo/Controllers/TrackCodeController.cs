@@ -152,7 +152,7 @@ namespace eIVOGo.Controllers
                     ViewBag.DataRole = "add";
 
                 ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
+                return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
             if (model == null)

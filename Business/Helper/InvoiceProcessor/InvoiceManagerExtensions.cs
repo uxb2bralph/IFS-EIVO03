@@ -1,6 +1,7 @@
 ﻿using Model.DataEntity;
 using Model.Helper;
 using Model.InvoiceManagement;
+using Model.InvoiceManagement.ErrorHandle;
 using Model.Schema.EIVO;
 using Model.Schema.TXN;
 using System;
@@ -163,17 +164,127 @@ namespace Business.Helper.InvoiceProcessor
             {
                 foreach (var newItem in manager.EventItems)
                 {
-                    if (newItem.CDS_Document.ProcessRequestDocument == null)
-                    {
-                        newItem.CDS_Document.ProcessRequestDocument = new ProcessRequestDocument
-                        {
-                            TaskID = requestItem.TaskID
-                        };
-                    }
+                    //if (newItem.CDS_Document.ProcessRequestDocument == null)
+                    //{
+                    //    newItem.CDS_Document.ProcessRequestDocument = new ProcessRequestDocument
+                    //    {
+                    //        TaskID = requestItem.TaskID
+                    //    };
+                    //}
+                    manager.ExecuteCommand(@"
+                        INSERT INTO [proc].ProcessRequestDocument
+                                (TaskID, DocID)
+                        SELECT  {0}, {1}
+                        WHERE          (NOT EXISTS
+                                            (SELECT          NULL
+                                                FROM               [proc].ProcessRequestDocument AS p
+                                                WHERE           (TaskID = {0}) AND (DocID = {1})))", 
+                        requestItem.TaskID, newItem.InvoiceID);
                 }
-                manager.SubmitChanges();
+                //manager.SubmitChanges();
             }
         }
 
+        public static void UploadInvoiceCancellation(this InvoiceManagerV2 models, XmlDocument uploadData, Root result)
+        {
+            try
+            {
+                CryptoUtility crypto = new CryptoUtility();
+                uploadData.PreserveWhitespace = true;
+                if (crypto.VerifyXmlSignature(uploadData))
+                {
+                    CancelInvoiceRoot item = uploadData.TrimAll().ConvertTo<CancelInvoiceRoot>();
+                    ///憑證資料檢查
+                    ///
+                    var token = models.GetTable<OrganizationToken>().Where(t => t.Thumbprint == crypto.SignerCertificate.Thumbprint).FirstOrDefault();
+                    if (token != null)
+                    {
+                        UploadInvoiceCancellation(models, result, item, token);
+                    }
+                    else
+                    {
+                        result.Result.message = "營業人憑證資料驗證不符!!";
+                    }
+                }
+                else
+                {
+                    result.Result.message = "發票資料簽章不符!!";
+                }
+                GovPlatformFactory.Notify();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                result.Result.message = ex.Message;
+            }
+        }
+
+        public static void UploadInvoiceCancellation(this InvoiceManagerV2 models, Root result, CancelInvoiceRoot item, OrganizationToken token)
+        {
+            List<AutomationItem> automation = new List<AutomationItem>();
+            var items = models.SaveUploadInvoiceCancellation(item, token);
+            if (items.Count > 0)
+            {
+                result.Response = new RootResponse
+                {
+                    InvoiceNo =
+                    items.Select(d => new RootResponseInvoiceNo
+                    {
+                        Value = item.CancelInvoice[d.Key].CancelInvoiceNumber,
+                        Description = d.Value.Message,
+                        ItemIndexSpecified = true,
+                        ItemIndex = d.Key,
+                        StatusCode = (d.Value is MarkToRetryException) ? "R01" : null,
+                    }).ToArray()
+                };
+
+                automation.AddRange(items.Select(d => new AutomationItem
+                {
+                    Description = d.Value.Message,
+                    Status = 0,
+                    CancelInvoice = new AutomationItemCancelInvoice
+                    {
+                        CancelInvoiceNumber = item.CancelInvoice[d.Key].CancelInvoiceNumber,
+                        SellerId = item.CancelInvoice[d.Key].SellerId
+                    }
+                }));
+
+                var notifyingItems = new Dictionary<int, Exception>();
+                foreach (var v in items.Where(d => !(d.Value is MarkToRetryException)))
+                {
+                    notifyingItems.Add(v.Key, v.Value);
+                }
+                if (notifyingItems.Count > 0)
+                {
+                    ThreadPool.QueueUserWorkItem(ExceptionNotification.SendNotification,
+                                                        new ExceptionInfo
+                                                        {
+                                                            Token = token,
+                                                            ExceptionItems = notifyingItems,
+                                                            CancelInvoiceData = item
+                                                        });
+                }
+            }
+            else
+            {
+                result.Result.value = 1;
+            }
+
+            if (models.EventItems != null && models.EventItems.Count > 0)
+            {
+                automation.AddRange(models.EventItems.Select(d => new AutomationItem
+                {
+                    Description = "",
+                    Status = 1,
+                    CancelInvoice = new AutomationItemCancelInvoice
+                    {
+                        CancelInvoiceNumber = d.TrackCode + d.No,
+                        SellerId = d.InvoiceSeller.ReceiptNo
+                    }
+                }));
+            }
+
+            result.Automation = automation.ToArray();
+        }
     }
 }

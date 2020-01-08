@@ -59,7 +59,7 @@ namespace eIVOGo.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
+                return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
             var items = models.GetTable<UniformInvoiceWinningNumber>().Where(w => w.Year == viewModel.Year && w.Period == viewModel.PeriodNo);
@@ -172,7 +172,7 @@ namespace eIVOGo.Controllers
                     ViewBag.DataRole = "add";
 
                 ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
+                return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
             if (model == null)

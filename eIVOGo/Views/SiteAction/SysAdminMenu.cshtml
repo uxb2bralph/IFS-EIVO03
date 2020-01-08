@@ -43,7 +43,7 @@
                     <a href="@(VirtualPathUtility.ToAbsolute("~/Inquiry/InquireInvoice.aspx"))">查詢發票/折讓</a>
                 </li>*@
                     <li>
-                        <a href="@(Url.Action("MailTracking", "Handling"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>登錄掛號郵件號碼</a>
+                        <a href="@Html.Raw(Url.Action("MailTracking", "Handling"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>登錄掛號郵件號碼</a>
                     </li>
                     @*<li>
                     <a href="@(VirtualPathUtility.ToAbsolute("~/EIVO/WebDownloadMIG.aspx"))">下載MIG檔案</a>
@@ -95,7 +95,7 @@
                     <li>
                         <a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>B2B系統功能維護 <span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level">
-                            @*<li><a href="@(Url.Action("B2BIndex","BusinessRelationship"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>相對營業人資料管理</a></li>*@
+                            @*<li><a href="@Html.Raw(Url.Action("B2BIndex","BusinessRelationship"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>相對營業人資料管理</a></li>*@
                             <li><a href="@(VirtualPathUtility.ToAbsolute("~/SYS/MaintainAnnouncement.aspx"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>跑馬燈訊息維護</a></li>
                             <li><a href="@(VirtualPathUtility.ToAbsolute("~/SYS/MaintainUserRoleDefinition.aspx"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>角色定義維護</a></li>
                             <li><a href="@(VirtualPathUtility.ToAbsolute("~/SYS/MaintainCategoryDefinition.aspx"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>組織單位類別維護</a></li>
@@ -115,13 +115,13 @@
                 <a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>會員管理維護<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="@(Url.Action("AccountIndex","Account"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>使用者帳號管理</a>
+                        <a href="@Html.Raw(Url.Action("AccountIndex","Account"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>使用者帳號管理</a>
                     </li>
                     <li>
                         <a href="@(VirtualPathUtility.ToAbsolute("~/OrganizationQuery/Index"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>開立人資料管理</a>
                     </li>
                     <li>
-                        <a href="@(Url.Action("InquireToProcess", "InvoiceProcess"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>買受人資料管理</a>
+                        <a href="@Html.Raw(Url.Action("InquireToProcess", "InvoiceProcess"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>買受人資料管理</a>
                     </li>
                     <li>
                         <a href="@(VirtualPathUtility.ToAbsolute("~/BusinessRelationship/MaintainRelationship"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>相對營業人資料管理</a>
@@ -151,7 +151,7 @@
                         <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceProcess/InquireToCancel"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>線上作廢發票</a>
                     </li>
                     <li>
-                        <a href="@(Url.Action("InquireToIssueAllowance", "InvoiceProcess"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>線上開立折讓證明</a>
+                        <a href="@Html.Raw(Url.Action("InquireToIssueAllowance", "InvoiceProcess"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>線上開立折讓證明</a>
                     </li>
                     <li>
                         <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceNo/VacantNoIndex"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>上期發票空白號碼查詢／匯出</a>
@@ -166,10 +166,10 @@
                         <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceProcess/InquireToAuthorize"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>核准重印發票</a>
                     </li>
                     <li>
-                        <a href="@(Url.Action("InquireToVoid", "InvoiceProcess"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>註銷發票</a>
+                        <a href="@Html.Raw(Url.Action("InquireToVoid", "InvoiceProcess"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>註銷發票</a>
                     </li>
                     <li>
-                        <a href="@(Url.Action("AllowToVoid", "InvoiceProcess"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>核准註銷發票</a>
+                        <a href="@Html.Raw(Url.Action("AllowToVoid", "InvoiceProcess"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>核准註銷發票</a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>資料管理 <span class="fa arrow"></span></a>

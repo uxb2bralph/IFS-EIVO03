@@ -205,6 +205,25 @@ namespace eIVOGo.Controllers
             return View("IssueCustomMessage");
         }
 
+        public ActionResult NotifyProcessException(ProcessRequestQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.TaskID = viewModel.DecryptKeyValue();
+            }
+
+            ProcessRequest item = models.GetTable<ProcessRequest>().Where(r => r.TaskID == viewModel.TaskID).FirstOrDefault();
+            if (item != null)
+            {
+                return View("~/Views/Notification/NotifyProcessException.cshtml", item);
+            }
+
+            return Content("Data not found!!");
+        }
+
 
     }
 }

@@ -38,7 +38,7 @@
             .Join(models.GetTable<InvoiceProductItem>(), d => d.ProductID, i => i.ProductID, (p, i) => i)
             .OrderBy(i => i.ItemID).ToArray();
         _pageCount = _products.Length > __FIRST_PAGE_ITEM_COUNT
-                ? (_products.Length + (__PAGE_ITEM_COUNT - __FIRST_PAGE_ITEM_COUNT) + __PAGE_ITEM_COUNT - 1) / __PAGE_ITEM_COUNT + 1
+                ? (_products.Length + (__PAGE_ITEM_COUNT - __FIRST_PAGE_ITEM_COUNT) + __PAGE_ITEM_COUNT - 1) / __PAGE_ITEM_COUNT
                 : 1;
 
         _totalAmtChar = ((int)_model.InvoiceAmountType.TotalAmount.Value).GetChineseNumberSeries(8);
