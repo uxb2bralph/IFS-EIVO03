@@ -138,6 +138,7 @@ namespace Model.InvoiceManagement
 
             item.TrackCode = _currentInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode;
             item.No = String.Format("{0:00000000}", _currentNo);
+            item.TrackID = _currentInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackID;
 
             _currentNo++;
             if (_currentNo > _currentInterval.EndNo)

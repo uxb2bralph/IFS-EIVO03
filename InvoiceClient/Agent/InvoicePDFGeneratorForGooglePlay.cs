@@ -63,6 +63,11 @@ namespace InvoiceClient.Agent
                             _prefix_name + paramValue[1] + "_" + invNo + ".pdf");
                         var url = $"{serviceUrl}?keyID={paramValue[2]}";
                         fetchPDF(pdfFile, url);
+                        
+                        //Generate pdf write to log
+                        var textContent = $"{DateTime.Now} {pdfFile} {paramValue[1]}";
+                        
+                        Logger.GeneratePdfInfo(textContent);
                     }
 
                     //Parallel.For(1, items.Length, (idx) =>

@@ -26,12 +26,13 @@ namespace Utility
         private Stream _stream;
         private int _waiting = 10;
 
-        public readonly string[] LoggingLevel = new string[] 
+        public readonly string[] LoggingLevel = new string[]
         {
             "err",
             "nfo",
             "dbg",
-            "wrn"
+            "wrn",
+            "gpdf_nfo"
         };
 
         private Logger()
@@ -48,7 +49,7 @@ namespace Utility
                 Directory.CreateDirectory(_path);
 
             _hashQ = new Dictionary<string, Queue>();
-            foreach(var qName in LoggingLevel)
+            foreach (var qName in LoggingLevel)
             {
                 _hashQ.Add(qName, new Queue());
             }
@@ -79,6 +80,10 @@ namespace Utility
             _instance._hashQ["nfo"].Enqueue(obj);
         }
 
+        public static void GeneratePdfInfo(object obj)
+        {
+            _instance._hashQ["gpdf_nfo"].Enqueue(obj);
+        }
 
         public static void Warn(object obj)
         {
@@ -97,7 +102,7 @@ namespace Utility
                 return _instance._path;
             }
         }
-        
+
         public static string LogDailyPath
         {
             get
@@ -138,7 +143,7 @@ namespace Utility
         private void writeLog()
         {
             bool hasContent = false;
-            foreach (var  qName in LoggingLevel)
+            foreach (var qName in LoggingLevel)
             {
                 Queue workingQ = _hashQ[qName];
 
@@ -173,7 +178,15 @@ namespace Utility
                     }
                     else
                     {
-                        filePath = String.Format("{0}\\SystemLog.{1}", filePath, qName);
+                        //pdf產製用
+                        if (qName.IndexOf("gpdf", 0, qName.Length) > -1)
+                        {
+                            filePath = $"{filePath}\\IncoiceClient.{qName}";
+                        }
+                        else
+                        {
+                            filePath = String.Format("{0}\\SystemLog.{1}", filePath, qName);
+                        }
                     }
 
                     if (OutputWritter != null)
@@ -216,7 +229,7 @@ namespace Utility
             }
         }
 
-        
+
         #region IDisposable 成員
 
         public void Dispose()
