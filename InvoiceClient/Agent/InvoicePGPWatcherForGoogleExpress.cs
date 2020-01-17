@@ -29,6 +29,8 @@ namespace InvoiceClient.Agent
         }
 
         String _invoiceRequest;
+        String _invoiceResponse;
+
         protected override void processFile(String invFile)
         {
             if (!File.Exists(invFile))
@@ -89,10 +91,7 @@ namespace InvoiceClient.Agent
                 if (result.Automation != null)
                 {
                     Automation auto = new Automation { Item = result.Automation };
-                    String responseName = fileName.Replace("request", "response")
-                            .Replace("_OUT_", "_IN_");
-                    responseName = Path.Combine(_ResponsedPath, responseName);
-                    auto.ConvertToXml().Save(responseName);
+                    auto.ConvertToXml().Save(_invoiceResponse);
                 }
             }
         }
@@ -126,6 +125,7 @@ namespace InvoiceClient.Agent
                         SubmitDate = DateTime.Now,
                         RequestPath = _invoiceRequest,
                         ProcessType = (int)Naming.InvoiceProcessType.C0401_Xml_CBE,
+                        ProcessStart = DateTime.Now,
                     };
                     models.GetTable<ProcessRequest>().InsertOnSubmit(requestItem);
                     models.SubmitChanges();
@@ -178,8 +178,27 @@ namespace InvoiceClient.Agent
                             }
                         }));
 
+
+
                         models.BindProcessedItem(requestItem);
+
+                        _invoiceResponse = _invoiceRequest.Replace("request", "response")
+                            .Replace("_OUT_", "_IN_");
+                        _invoiceResponse = Path.Combine(_ResponsedPath, _invoiceResponse);                        
+
+                        var processRequest = models.GetTable<ProcessRequest>().Where(t => t.TaskID == requestItem.TaskID).FirstOrDefault();
+                        if (processRequest != null)
+                        {
+                            processRequest.ResponsePath = _invoiceResponse;
+                            processRequest.ProcessComplete = DateTime.Now;
+                        }
+
+                        models.SubmitChanges();
+
+
                     }
+
+
 
                     result.Automation = automation.ToArray();
                 }

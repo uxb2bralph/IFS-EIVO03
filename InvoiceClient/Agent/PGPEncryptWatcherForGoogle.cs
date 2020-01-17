@@ -13,6 +13,9 @@ using Model.Schema.TXN;
 using System.Diagnostics;
 using System.Globalization;
 using Model.Locale;
+using System.Data.SqlClient;
+using Uxnet.Web.Helper;
+using System.Data.Linq;
 
 namespace InvoiceClient.Agent
 {
@@ -45,13 +48,29 @@ namespace InvoiceClient.Agent
 
             String gpgName = fullPath.EncryptFileTo(_ResponsedPath);
 
+            var status = 0;
+
             if (File.Exists(gpgName))
             {
                 storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
+
+                status = 1;
+                
             }
             else
             {
                 storeFile(fullPath, Path.Combine(_requestPath, fileName));
+
+                status = 0;
+            }
+
+            using (var db = new DataContext(DbConnection.LocalDb.InvoiceClient))
+            {
+                var sqlCommand = $@"INSERT INTO [dbo].PGPEncryptLog 
+                                         (SourceFilePath, PGPFileName, Status) 
+                                         VALUES('{fullPath}','{Path.GetFileName(gpgName)}',{status})";
+                
+                var value = db.ExecuteQuery<int>(sqlCommand);
             }
         }
 

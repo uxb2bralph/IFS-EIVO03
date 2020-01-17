@@ -467,6 +467,10 @@
       <Project>{72edd90c-e7fe-44f4-8b9b-c9512f02d547}</Project>
       <Name>Uxnet.Com</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Uxnet.Web\Uxnet.Web.csproj">
+      <Project>{44839C05-8A69-4331-89EB-761509CD68EB}</Project>
+      <Name>Uxnet.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

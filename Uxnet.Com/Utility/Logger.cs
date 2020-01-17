@@ -32,7 +32,8 @@ namespace Utility
             "nfo",
             "dbg",
             "wrn",
-            "gpdf_nfo"
+            "nfo_gpdf",
+            "nfo_pdftozip"
         };
 
         private Logger()
@@ -82,7 +83,12 @@ namespace Utility
 
         public static void GeneratePdfInfo(object obj)
         {
-            _instance._hashQ["gpdf_nfo"].Enqueue(obj);
+            _instance._hashQ["nfo_gpdf"].Enqueue(obj);
+        }
+
+        public static void PdfToZip(object obj)
+        {
+            _instance._hashQ["nfo_pdftozip"].Enqueue(obj);
         }
 
         public static void Warn(object obj)
@@ -178,9 +184,14 @@ namespace Utility
                     }
                     else
                     {
-                        //pdf產製用
+                        //pdf產製                                                
                         if (qName.IndexOf("gpdf", 0, qName.Length) > -1)
                         {
+                            filePath = $"{filePath}\\IncoiceClient.{qName}";
+                        }
+                        else if (qName.IndexOf("pdftozip", 0, qName.Length) > -1)
+                        {
+                            //pdf壓縮成.zip檔
                             filePath = $"{filePath}\\IncoiceClient.{qName}";
                         }
                         else

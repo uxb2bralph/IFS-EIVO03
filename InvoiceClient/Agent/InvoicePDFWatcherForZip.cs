@@ -52,22 +52,38 @@ namespace InvoiceClient.Agent
             _files.Clear();
 
             _outFile = Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}.zip");
+
+            var textContents = new List<string>();
+
             using (var zipOut = System.IO.File.Create(_outFile))
             {
                 using (ZipArchive zip = new ZipArchive(zipOut, ZipArchiveMode.Create))
                 {
+                    textContents.Add("Order No:");
+
                     for (int i = 0, count = 0; count < Settings.Default.MaxFileCountInPDFZip && i < files.Length; i++)
                     {
+                        var item = files[i];
+                        var fileName = Path.GetFileName(item);
+
+                        var pdfName = fileName.Split('.').ToArray()[0].Split('_');
+
+                        if (pdfName.Length > 1)
+                        {
+                            textContents.Add($"{pdfName[pdfName.Length - 2]}");
+                        }
+
                         try
                         {
-                            var item = files[i];
-                            zip.CreateEntryFromFile(item, Path.GetFileName(item));
+                            zip.CreateEntryFromFile(item, fileName);
                             _files.Add(item);
                             count++;
                         }
                         catch (Exception ex)
                         {
                             Logger.Error(ex);
+
+                            textContents.Add("Failed to add archive");
                         }
                     }
                 }
@@ -75,22 +91,32 @@ namespace InvoiceClient.Agent
 
             if (_files.Count > 0)
             {
-                String zipName = Path.Combine(_ResponsedPath, $"{Settings.Default.InvoicePDFZipPrefix}{DateTime.Now:yyyyMMddHHmmssffff}-{_files.Count}.zip");
-                File.Move(_outFile, zipName);
+                var zipName = $"{Settings.Default.InvoicePDFZipPrefix}{DateTime.Now:yyyyMMddHHmmssffff}-{_files.Count}.zip";
+
+                String moveFileName = Path.Combine(_ResponsedPath, zipName);
+
+                File.Move(_outFile, moveFileName);
 
                 foreach (var item in _files)
                 {
                     //File.Delete(item);
                     storeFile(item, Path.Combine(Logger.LogDailyPath, Path.GetFileName(item)));
                 }
-                
+
                 //if(Settings.Default.PackerCycleDelayInSeconds>0 && _files.Count< __MaxFileCount)
                 //{
                 //    Task.Delay(Settings.Default.PackerCycleDelayInSeconds * 1000)
                 //        .Wait();
                 //}
+                textContents.Add($"Zip File Name:{zipName}");
             }
 
+            if (textContents.Count > 0)
+            {
+                //The pdf file is packed into a compressed file and written to the log 
+                foreach (var item in textContents)
+                    Logger.PdfToZip(item);
+            }
         }
 
         protected override void processComplete()

@@ -269,6 +269,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\SampleController.cs" />
+    <Compile Include="Helper\DbConnection.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Module\Ajax\PagingControl.ascx.cs">
       <DependentUpon>PagingControl.ascx</DependentUpon>
