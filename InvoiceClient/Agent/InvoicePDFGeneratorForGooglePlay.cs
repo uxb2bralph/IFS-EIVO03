@@ -43,12 +43,12 @@ namespace InvoiceClient.Agent
 
                 XmlDocument signedReq = token.ConvertToXml().Sign();
                 string[] items = invSvc.ReceiveContentAsPDFForIssuer(signedReq, Settings.Default.ClientID);
-                
-                if (items.Length <2 && Settings.Default.IsLocalMachine)//yuki:加判斷是否為本機
+
+                if (items != null && items.Length < 2 && Settings.Default.IsLocalMachine)//yuki:加判斷是否為本機
                 {
                     items = invSvc.ReceiveContentAsPDFForSeller(signedReq, Settings.Default.ClientID);
                 }
-                
+
                 if (items != null && items.Length > 1)
                 {
                     String serviceUrl = items[0];
@@ -63,10 +63,10 @@ namespace InvoiceClient.Agent
                             _prefix_name + paramValue[1] + "_" + invNo + ".pdf");
                         var url = $"{serviceUrl}?keyID={paramValue[2]}";
                         fetchPDF(pdfFile, url);
-                        
+
                         //Generate pdf write to log
                         var textContent = $"{DateTime.Now} {pdfFile} {paramValue[1]}";
-                        
+
                         Logger.GeneratePdfInfo(textContent);
                     }
 
@@ -82,7 +82,7 @@ namespace InvoiceClient.Agent
                     Logger.Debug($"fetch count:{items.Length - 1}");
                     return storedPath;
                 }
-                return  null;
+                return null;
             }
             catch (Exception ex)
             {
