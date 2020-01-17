@@ -30,14 +30,8 @@ namespace InvoiceClient
             if (!String.IsNullOrEmpty(Settings.Default.AppCulture))
             {
                 Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(Settings.Default.AppCulture);
-            }
+            }                    
 
-            var _PreInvoiceWatcher = new InvoicePGPWatcherForGoogleExpress(Path.Combine(Settings.Default.InvoiceTxnPath, Settings.Default.UploadPreInvoiceFolder));
-            _PreInvoiceWatcher.StartUp();
-
-            //var _PDFInvoiceWatcher = new InvoicePDFGeneratorForGooglePlay();
-            //_PDFInvoiceWatcher.StartUp();
-            //_PDFInvoiceWatcher.GetSaleInvoices(1);
             if (Environment.UserInteractive /*|| Debugger.IsAttached*/)
             {
                 if (Settings.Default.ClearTxnPath
