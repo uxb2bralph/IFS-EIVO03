@@ -13,7 +13,7 @@ namespace Uxnet.Web.Helper
         public class LocalDb
         {
             private const string LocalDbConnectionString =
-@"Data Source=localhost\sqlexpress;Initial Catalog={0};Integrated Security=True;MultipleActiveResultSets=True";
+@"Data Source=localhost;Initial Catalog={0};Integrated Security=True;MultipleActiveResultSets=True";
 
             public static string InvoiceClient
             {
