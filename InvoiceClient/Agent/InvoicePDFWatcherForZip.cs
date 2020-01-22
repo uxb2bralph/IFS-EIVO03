@@ -59,39 +59,42 @@ namespace InvoiceClient.Agent
             {
                 using (ZipArchive zip = new ZipArchive(zipOut, ZipArchiveMode.Create))
                 {
-                    textContents.Add("Order No:");
-
                     for (int i = 0, count = 0; count < Settings.Default.MaxFileCountInPDFZip && i < files.Length; i++)
                     {
                         var item = files[i];
                         var fileName = Path.GetFileName(item);
 
-                        var pdfName = fileName.Split('.').ToArray()[0].Split('_');
-
-                        if (pdfName.Length > 1)
-                        {
-                            textContents.Add($"{pdfName[pdfName.Length - 2]}");
-                        }
+                        var pdfName = fileName.Split('.').ToArray()[0].Split('_');                        
 
                         try
                         {
                             zip.CreateEntryFromFile(item, fileName);
                             _files.Add(item);
                             count++;
+
+                            if (pdfName.Length > 1)
+                            {
+                                textContents.Add($"OrderNo:{pdfName[pdfName.Length - 2]} Status:1 ");
+                            }                            
                         }
                         catch (Exception ex)
                         {
                             Logger.Error(ex);
 
-                            textContents.Add("Failed to add archive");
+                            if (pdfName.Length > 1)
+                            {
+                                textContents.Add($"OrderNo:{pdfName[pdfName.Length - 2]} Status:0 ");
+                            }
                         }
                     }
                 }
             }
 
+            var zipName=string.Empty;
+
             if (_files.Count > 0)
             {
-                var zipName = $"{Settings.Default.InvoicePDFZipPrefix}{DateTime.Now:yyyyMMddHHmmssffff}-{_files.Count}.zip";
+                zipName = $"{Settings.Default.InvoicePDFZipPrefix}{DateTime.Now:yyyyMMddHHmmssffff}-{_files.Count}.zip";
 
                 String moveFileName = Path.Combine(_ResponsedPath, zipName);
 
@@ -108,14 +111,16 @@ namespace InvoiceClient.Agent
                 //    Task.Delay(Settings.Default.PackerCycleDelayInSeconds * 1000)
                 //        .Wait();
                 //}
-                textContents.Add($"Zip File Name:{zipName}");
-            }
-
-            if (textContents.Count > 0)
-            {
-                //The pdf file is packed into a compressed file and written to the log 
-                foreach (var item in textContents)
-                    Logger.PdfToZip(item);
+                if (textContents.Count > 0)
+                {
+                    //The pdf file is packed into a compressed file and written to the log                                 
+                    foreach (var item in textContents)
+                    {
+                        var log = string.Empty;
+                        log = item + $"ZipFileName:{zipName}";
+                        Logger.PdfToZip(log);
+                    }
+                }
             }
         }
 

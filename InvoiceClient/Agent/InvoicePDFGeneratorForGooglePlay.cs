@@ -65,7 +65,7 @@ namespace InvoiceClient.Agent
                         fetchPDF(pdfFile, url);
 
                         //Generate pdf write to log
-                        var textContent = $"{DateTime.Now} {pdfFile} {paramValue[1]}";
+                        var textContent = $"Path: {pdfFile} Order No: {paramValue[1]}";
 
                         Logger.GeneratePdfInfo(textContent);
                     }
