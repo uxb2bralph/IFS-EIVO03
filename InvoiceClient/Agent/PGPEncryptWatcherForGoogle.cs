@@ -63,7 +63,7 @@ namespace InvoiceClient.Agent
 
                 status = 0;                
 
-                Logger.Error($"Pdf file failed to encrypt to gpg file: {Path.Combine(_requestPath, fileName)}");                
+                Logger.Error($"Zip file failed to encrypt to gpg file: {Path.Combine(_requestPath, fileName)}");                
             }
 
             using (var db = new DataContext(DbConnection.LocalDb.InvoiceClient))
