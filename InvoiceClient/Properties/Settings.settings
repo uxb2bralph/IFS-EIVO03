@@ -148,9 +148,6 @@
     <Setting Name="UploadAttachment" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://eceivo.uxifs.com/eivo03/Published/UploadAttachmentForGoogle.ashx</Value>
     </Setting>
-    <Setting Name="ActivationKey" Type="System.String" Scope="Application">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="UploadCsvAllowanceFolder" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Allowance_csv</Value>
     </Setting>
@@ -241,9 +238,6 @@
     <Setting Name="WaitForInvoicePDFInSeconds" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">300</Value>
     </Setting>
-    <Setting Name="MaxWaitingTurns" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
     <Setting Name="AppCulture" Type="System.String" Scope="Application">
       <Value Profile="(Default)">en-US</Value>
     </Setting>
@@ -262,13 +256,28 @@
                 </Value>
     </Setting>
     <Setting Name="IsLocalMachine" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="TransferManager" Type="System.String" Scope="Application">
       <Value Profile="(Default)">
                   InvoiceClient.TransferManagement.XlsxInvoiceTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.TransferManagement.InvoiceTransferManagerV2ForGoogle, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.TransferManagement.InvoiceTransferManagerPGPForGoogle, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
                 </Value>
+    </Setting>
+    <Setting Name="EnableJobScheduler" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="JobSchedulerPeriod" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="MaxWaitingTurns" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="ScheduleToNextTurn" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="ActivationKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

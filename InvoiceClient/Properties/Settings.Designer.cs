@@ -458,15 +458,6 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ActivationKey {
-            get {
-                return ((string)(this["ActivationKey"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Allowance_csv")]
         public string UploadCsvAllowanceFolder {
             get {
@@ -737,15 +728,6 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int MaxWaitingTurns {
-            get {
-                return ((int)(this["MaxWaitingTurns"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("en-US")]
         public string AppCulture {
             get {
@@ -782,7 +764,7 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool IsLocalMachine {
             get {
                 return ((bool)(this["IsLocalMachine"]));
@@ -793,11 +775,56 @@ namespace InvoiceClient.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"
                   InvoiceClient.TransferManagement.XlsxInvoiceTransferManager, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.TransferManagement.InvoiceTransferManagerV2ForGoogle, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.TransferManagement.InvoiceTransferManagerPGPForGoogle, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
                 ")]
         public string TransferManager {
             get {
                 return ((string)(this["TransferManager"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableJobScheduler {
+            get {
+                return ((bool)(this["EnableJobScheduler"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public string JobSchedulerPeriod {
+            get {
+                return ((string)(this["JobSchedulerPeriod"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int MaxWaitingTurns {
+            get {
+                return ((int)(this["MaxWaitingTurns"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public string ScheduleToNextTurn {
+            get {
+                return ((string)(this["ScheduleToNextTurn"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ActivationKey {
+            get {
+                return ((string)(this["ActivationKey"]));
             }
         }
     }
