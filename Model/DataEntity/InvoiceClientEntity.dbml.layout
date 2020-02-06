@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="InvoiceClientEntity">
+  <DataContextMoniker Name="/InvoiceClientEntityDataContext" />
+  <nestedChildShapes>
+    <classShape Id="c020def8-388c-450d-a4f1-22fdf6dc46dc" absoluteBounds="1.375, 3.5, 2, 1.7220992024739581">
+      <DataClassMoniker Name="/InvoiceClientEntityDataContext/PGPEncryptLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="339d7a06-7476-486c-937c-b8cebd7cf87f" absoluteBounds="1.3899999999999997, 3.96, 1.9700000000000002, 1.1620992024739583" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="112953db-03b5-47ac-b862-a89df30972b2" absoluteBounds="5.5, 2.125, 2, 1.3525109863281251">
+      <DataClassMoniker Name="/InvoiceClientEntityDataContext/InvoicePDFGeneratorForGooglePlayLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b8ea7962-fa9c-47ff-abaf-19a5ee83a57f" absoluteBounds="5.515, 2.585, 1.9700000000000002, 0.792510986328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="479f5ba9-6ef9-472e-9241-108eed502c31" absoluteBounds="5.875, 4.125, 2, 1.5373050944010416">
+      <DataClassMoniker Name="/InvoiceClientEntityDataContext/InvoicePDFWatcherForZipLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8e9bf396-117b-4b32-a46c-0159e77fe7b3" absoluteBounds="5.89, 4.585, 1.9700000000000002, 0.97730509440104174" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

@@ -15,6 +15,7 @@ using System.Globalization;
 using Model.Locale;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using Model.Models;
 
 namespace InvoiceClient.Agent
 {
@@ -53,7 +54,18 @@ namespace InvoiceClient.Agent
 
             _outFile = Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}.zip");
 
-            var textContents = new List<string>();
+            //var textContents = new List<string>();
+            List<InvoicePDFWatcherForZipModel> logItems=new List<InvoicePDFWatcherForZipModel>();
+
+            string path = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "logs");
+            string filePath = ValueValidity.GetDateStylePath(path);
+
+            filePath = $"{filePath}\\InvoicePDFWatcherForZip.xml";
+
+            if (!File.Exists(filePath))
+            {
+                logItems.ConvertToXml().Save(filePath);
+            }
 
             using (var zipOut = System.IO.File.Create(_outFile))
             {
@@ -64,18 +76,28 @@ namespace InvoiceClient.Agent
                         var item = files[i];
                         var fileName = Path.GetFileName(item);
 
-                        var pdfName = fileName.Split('.').ToArray()[0].Split('_');                        
+                        var pdfName = fileName.Split('.').ToArray()[0].Split('_');
 
                         try
                         {
+
+
                             zip.CreateEntryFromFile(item, fileName);
                             _files.Add(item);
                             count++;
 
                             if (pdfName.Length > 1)
                             {
-                                textContents.Add($"OrderNo:{pdfName[pdfName.Length - 2]} Status:1 ");
-                            }                            
+                                InvoicePDFWatcherForZipModel log = new InvoicePDFWatcherForZipModel
+                                {
+                                    Date = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                                    OrderNo = pdfName[pdfName.Length - 2],
+                                    Status = 1
+                                };
+
+                                logItems.Add(log);
+                                //textContents.Add($"{pdfName[pdfName.Length - 2]} 1 ");
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -83,14 +105,22 @@ namespace InvoiceClient.Agent
 
                             if (pdfName.Length > 1)
                             {
-                                textContents.Add($"OrderNo:{pdfName[pdfName.Length - 2]} Status:0 ");
+                                InvoicePDFWatcherForZipModel log = new InvoicePDFWatcherForZipModel
+                                {
+                                    Date = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                                    OrderNo = pdfName[pdfName.Length - 2],
+                                    Status = 0
+                                };
+
+                                logItems.Add(log);
+                                //textContents.Add($"{pdfName[pdfName.Length - 2]} 0 ");
                             }
                         }
                     }
                 }
             }
 
-            var zipName=string.Empty;
+            var zipName = string.Empty;
 
             if (_files.Count > 0)
             {
@@ -111,16 +141,27 @@ namespace InvoiceClient.Agent
                 //    Task.Delay(Settings.Default.PackerCycleDelayInSeconds * 1000)
                 //        .Wait();
                 //}
-                if (textContents.Count > 0)
+
+                if (logItems.Count()>0)
                 {
-                    //The pdf file is packed into a compressed file and written to the log                                 
-                    foreach (var item in textContents)
-                    {
-                        var log = string.Empty;
-                        log = item + $"ZipFileName:{zipName}";
-                        Logger.PdfToZip(log);
-                    }
+                    foreach (var item in logItems)
+                    
+                        item.FileName = zipName;
+
+                    //log write to xml
+                    logItems.AppendChildToXml(filePath);
                 }
+
+                //if (textContents.Count > 0)
+                //{
+                //    //The pdf file is packed into a compressed file and written to the log                                 
+                //    foreach (var item in textContents)
+                //    {
+                //        var log = string.Empty;
+                //        log = item + $"{zipName}";
+                //        Logger.PdfToZip(log);
+                //    }
+                //}
             }
         }
 

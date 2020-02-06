@@ -31,9 +31,9 @@ namespace Utility
             "err",
             "nfo",
             "dbg",
-            "wrn",
-            "nfo_gpdf",
-            "nfo_pdftozip"
+            "wrn"
+            //,"nfo_gpdf",
+            //"nfo_pdftozip"
         };
 
         private Logger()
@@ -81,15 +81,15 @@ namespace Utility
             _instance._hashQ["nfo"].Enqueue(obj);
         }
 
-        public static void GeneratePdfInfo(object obj)
-        {
-            _instance._hashQ["nfo_gpdf"].Enqueue(obj);
-        }
+        //public static void GeneratePdfInfo(object obj)
+        //{
+        //    _instance._hashQ["nfo_gpdf"].Enqueue(obj);
+        //}
 
-        public static void PdfToZip(object obj)
-        {
-            _instance._hashQ["nfo_pdftozip"].Enqueue(obj);
-        }
+        //public static void PdfToZip(object obj)
+        //{
+        //    _instance._hashQ["nfo_pdftozip"].Enqueue(obj);
+        //}
 
         public static void Warn(object obj)
         {
@@ -184,20 +184,20 @@ namespace Utility
                     }
                     else
                     {
-                        //pdf產製                                                
-                        if (qName.IndexOf("gpdf", 0, qName.Length) > -1)
-                        {
-                            filePath = $"{filePath}\\IncoiceClient.{qName}";
-                        }
-                        else if (qName.IndexOf("pdftozip", 0, qName.Length) > -1)
-                        {
-                            //pdf壓縮成.zip檔
-                            filePath = $"{filePath}\\IncoiceClient.{qName}";
-                        }
-                        else
-                        {
+                        ////pdf產製                                                
+                        //if (qName.IndexOf("gpdf", 0, qName.Length) > -1)
+                        //{
+                        //    filePath = $"{filePath}\\IncoiceClient.{qName}";
+                        //}
+                        //else if (qName.IndexOf("pdftozip", 0, qName.Length) > -1)
+                        //{
+                        //    //pdf壓縮成.zip檔
+                        //    filePath = $"{filePath}\\IncoiceClient.{qName}";
+                        //}
+                        //else
+                        //{
                             filePath = String.Format("{0}\\SystemLog.{1}", filePath, qName);
-                        }
+                        //}
                     }
 
                     if (OutputWritter != null)

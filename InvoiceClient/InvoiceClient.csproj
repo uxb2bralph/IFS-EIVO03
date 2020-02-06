@@ -305,6 +305,7 @@
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="services\ServiceWorkItem.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TransferManagement\B2BInvoiceTransferManager.cs" />
     <Compile Include="TransferManagement\B2CInvoiceTransferManager.cs" />

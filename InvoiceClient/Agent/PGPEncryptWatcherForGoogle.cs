@@ -16,6 +16,7 @@ using Model.Locale;
 using System.Data.SqlClient;
 using Uxnet.Web.Helper;
 using System.Data.Linq;
+using Model.Models;
 
 namespace InvoiceClient.Agent
 {
@@ -66,7 +67,18 @@ namespace InvoiceClient.Agent
                 Logger.Error($"Zip file failed to encrypt to gpg file: {Path.Combine(_requestPath, fileName)}");                
             }
 
-            using (var db = new DataContext(DbConnection.LocalDb.InvoiceClient))
+            var connectString = string.Empty;
+
+            if (InvoiceClient.Properties.Settings.Default.IsLocalMachine)
+            {
+                connectString = DbConnection.LocalDb.InvoiceClient; 
+            }
+            else
+            {
+                connectString = DbConnection.ServerDb.InvoiceClient;
+            }
+
+            using (var db = new DataContext(connectString))
             {
                 var sqlCommand = $@"INSERT INTO [dbo].PGPEncryptLog 
                                          (SourceFilePath, PGPFileName, Status) 

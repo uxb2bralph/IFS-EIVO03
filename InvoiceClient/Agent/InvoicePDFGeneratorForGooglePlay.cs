@@ -11,9 +11,7 @@ using InvoiceClient.Properties;
 using Utility;
 using Model.Schema.TXN;
 using InvoiceClient.Helper;
-using InvoiceClient.TransferManagement;
-using System.Diagnostics;
-using System.Threading.Tasks;
+using Model.Models;
 
 namespace InvoiceClient.Agent
 {
@@ -53,6 +51,18 @@ namespace InvoiceClient.Agent
                 {
                     String serviceUrl = items[0];
 
+                    List<InvoicePDFGeneratorForGooglePlayModel> logItems = new List<InvoicePDFGeneratorForGooglePlayModel>();
+
+                    string path = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "logs");
+                    string filePath = ValueValidity.GetDateStylePath(path);
+
+                    filePath = $"{filePath}\\InvoicePDFGeneratorForGooglePlay.xml";
+
+                    if (!File.Exists(filePath))
+                    {
+                        logItems.ConvertToXml().Save(filePath);
+                    }
+
                     void proc(int i)
                     {
                         var item = items[i];
@@ -65,9 +75,18 @@ namespace InvoiceClient.Agent
                         fetchPDF(pdfFile, url);
 
                         //Generate pdf write to log
-                        var textContent = $"Path: {pdfFile} Order No: {paramValue[1]}";
+                        //var textContent = $"{pdfFile} {paramValue[1]}";
 
-                        Logger.GeneratePdfInfo(textContent);
+                        //Logger.GeneratePdfInfo(textContent);
+                        
+                        InvoicePDFGeneratorForGooglePlayModel logItem = new InvoicePDFGeneratorForGooglePlayModel
+                        {
+                            Date = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                            Path = pdfFile,
+                            OrderNo = paramValue[1]
+                        };
+
+                        logItems.Add(logItem);
                     }
 
                     //Parallel.For(1, items.Length, (idx) =>
@@ -78,6 +97,9 @@ namespace InvoiceClient.Agent
                     {
                         proc(idx);
                     }
+
+                    //log write to xml
+                    logItems.AppendChildToXml(filePath);
 
                     Logger.Debug($"fetch count:{items.Length - 1}");
                     return storedPath;
@@ -90,8 +112,7 @@ namespace InvoiceClient.Agent
             }
 
             return null;
-        }
-
+        }        
 
         protected override void fetchPDF(string pdfFile, string url)
         {

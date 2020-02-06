@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="InvoiceClient" Class="InvoiceClientEntityDataContext" Serialization="Unidirectional" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=NBT0116107a\SQLEXPRESS;Initial Catalog=InvoiceClient;Integrated Security=True" SettingsObjectName="Model.Properties.Settings" SettingsPropertyName="InvoiceClientConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.PGPEncryptLog" Member="PGPEncryptLog">
+    <Type Name="PGPEncryptLog">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SourceFilePath" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="PGPFileName" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoicePDFGeneratorForGooglePlayLog" Member="InvoicePDFGeneratorForGooglePlayLog">
+    <Type Name="InvoicePDFGeneratorForGooglePlayLog">
+      <Column Name="OrderNo" Type="System.String" DbType="NVarChar(64) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FileName" Type="System.String" DbType="NVarChar(512)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoicePDFWatcherForZipLog" Member="InvoicePDFWatcherForZipLog">
+    <Type Name="InvoicePDFWatcherForZipLog">
+      <Column Name="OrderNo" Type="System.String" DbType="NVarChar(64) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ZipFileName" Type="System.String" DbType="NVarChar(512)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>

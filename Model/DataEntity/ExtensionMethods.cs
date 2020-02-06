@@ -441,6 +441,28 @@ namespace Model.DataEntity
 
     }
 
+    public partial class InvoiceClientEntityManager<TEntity> : GenericManager<InvoiceClientEntityDataContext, TEntity>
+        where TEntity : class, new()
+    {
+        public InvoiceClientEntityManager() : base() { }
+        public InvoiceClientEntityManager(GenericManager<InvoiceClientEntityDataContext> manager) : base(manager) { }        
+
+        public InvoiceClientEntityDataContext Context
+        {
+            get
+            {
+                return (InvoiceClientEntityDataContext)this._db;
+            }
+        }
+
+        public List<TEntity> EventItems
+        {
+            get;
+            protected set;
+        }
+
+    }
+
     public partial class InvoiceDataSource : LinqToSqlDataSource<EIVOEntityDataContext, InvoiceItem> { }
     public partial class UserProfileDataSource : LinqToSqlDataSource<EIVOEntityDataContext, UserProfile> { }
     public partial class OrganizationDataSource : LinqToSqlDataSource<EIVOEntityDataContext, Organization> { }

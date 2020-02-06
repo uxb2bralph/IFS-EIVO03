@@ -70,6 +70,14 @@
     <Compile Include="AddOn%28201311%29\InvoiceManagement\enUS\CancelInvoiceRootValidator.cs" />
     <Compile Include="AddOn%28201311%29\InvoiceManagement\enUS\Check_CarrierType_PrintMark_DonateMark.cs" />
     <Compile Include="AddOn%28201311%29\InvoiceManagement\GoogleInvoiceManager.cs" />
+    <Compile Include="DataEntity\InvoiceClientEntity.cs">
+      <DependentUpon>InvoiceClientEntity.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="DataEntity\InvoiceClientEntity.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceClientEntity.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Helper\StorePathExtensions.cs" />
     <Compile Include="InvoiceManagement\GooglePlayInvoiceManager.cs" />
     <Compile Include="InvoiceManagement\GoogleInvoiceManagerV3.cs" />
@@ -155,6 +163,8 @@
     <Compile Include="InvoiceManagement\CsvInvoiceCancellationUploadManager.cs" />
     <Compile Include="InvoiceManagement\Validator\ExtensionMethods.cs" />
     <Compile Include="InvoiceManagement\Validator\TrackNoIntervalValidator.cs" />
+    <Compile Include="Models\InvoicePDFWatcherForZipModel.cs" />
+    <Compile Include="Models\InvoicePDFGeneratorForGooglePlayModel.cs" />
     <Compile Include="Models\ViewModel\A0101ViewModelValidator.cs" />
     <Compile Include="Models\ViewModel\A0401ViewModelValidator.cs" />
     <Compile Include="Models\ViewModel\AllowanceViewModelValidator.cs" />
@@ -403,6 +413,14 @@
   <ItemGroup>
     <None Include="DataEntity\EIVOEntity.dbml.layout">
       <DependentUpon>EIVOEntity.dbml</DependentUpon>
+    </None>
+    <None Include="DataEntity\InvoiceClientEntity.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>InvoiceClientEntity.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DataEntity\InvoiceClientEntity.dbml.layout">
+      <DependentUpon>InvoiceClientEntity.dbml</DependentUpon>
     </None>
     <None Include="DataEntity\TurnKey2.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>

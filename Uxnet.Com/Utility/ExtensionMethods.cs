@@ -283,7 +283,6 @@ namespace Utility
 
         }
 
-
         public static T ConvertTo<T>(this XmlDocument docMsg)
         {
             docMsg.RemoveCommentNodes();
@@ -304,12 +303,34 @@ namespace Utility
             return entData;
         }
 
-
         public static T ConvertTo<T>(this Stream dataStream)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(T));
             T entData = (T)serializer.Deserialize(dataStream);
             return entData;
+        }
+
+        public static void AppendChildToXml<T>(this List<T> list, string filePath)
+        {
+            var stringwriter = new StringWriter();
+            var serializer = new XmlSerializer(list.GetType());
+
+            serializer.Serialize(stringwriter, list);
+            var xmlStr = stringwriter.ToString();
+
+            var recordDoc = new XmlDocument();
+            recordDoc.LoadXml(xmlStr);
+
+            var element = recordDoc.DocumentElement;
+
+            var logFile = new XmlDocument();
+            logFile.Load(filePath);
+
+            var serialize = logFile.CreateElement("LogRecord");
+            serialize.InnerXml = element.InnerXml;
+            logFile.DocumentElement.AppendChild(serialize);
+
+            logFile.Save(filePath);
         }
 
         public static XmlDocument SerializeDataContractToXml<T>(this T target)
