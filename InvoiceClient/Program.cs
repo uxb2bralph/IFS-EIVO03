@@ -22,7 +22,10 @@ namespace InvoiceClient
         [STAThread]
         static void Main(string[] args)
         {
-            //System.Diagnostics.Debugger.Launch();
+            if (InvoiceClient.Properties.Settings.Default.IsLocalMachine)
+            {
+                System.Diagnostics.Debugger.Launch();
+            }
 
             /// SSL憑證信任設定
             System.Net.ServicePointManager.ServerCertificateValidationCallback = (s, certificate, chain, sslPolicyErrors) => true;

@@ -12,6 +12,7 @@ using Utility;
 using Model.Schema.TXN;
 using InvoiceClient.Helper;
 using Model.Models;
+using Model.Locale;
 
 namespace InvoiceClient.Agent
 {
@@ -42,9 +43,13 @@ namespace InvoiceClient.Agent
                 XmlDocument signedReq = token.ConvertToXml().Sign();
                 string[] items = invSvc.ReceiveContentAsPDFForIssuer(signedReq, Settings.Default.ClientID);
 
-                if (items != null && items.Length < 2 && Settings.Default.IsLocalMachine)//yuki:加判斷是否為本機
+                //為了有測試資料
+                int enviroment;
+                enviroment = int.TryParse(Settings.Default.Environment, out enviroment) == true ? enviroment : 3;
+                if (items != null && items.Length < 2 && (enviroment == (int)Naming.Environment.Dev || enviroment == (int)Naming.Environment.Test))//yuki:加判斷是否為本機
                 {
                     items = invSvc.ReceiveContentAsPDFForSeller(signedReq, Settings.Default.ClientID);
+                    Logger.Info("Test Generator items" + items.Length);
                 }
 
                 if (items != null && items.Length > 1)

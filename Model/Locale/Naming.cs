@@ -23,7 +23,7 @@ namespace Model.Locale
             COMP_E_INVOICE_B2C_SELLER = 15,	            //	2	賣方	     sketch_seller.gif
             COMP_E_INVOICE_B2C_BUYER = 16,	            //	3	買方	     sketch_buyer.gif
             COMP_E_INVOICE_GOOGLE_TW = 17,              //  4   Google台灣
-            COMP_ENTERPRISE_GROUP   =   18,
+            COMP_ENTERPRISE_GROUP = 18,
             COMP_VIRTUAL_CHANNEL = 19,
             COMP_INVOICE_AGENT = 20,                    //  5   發票開立代理
             COMP_E_INVOICE_B2B_SELLER = 21,	        //	B2B 賣　　　方
@@ -169,7 +169,7 @@ namespace Model.Locale
             下載大平台作廢折讓 = 9,
             UXGW上傳資料 = 10,
             授權資料下載 = 11,
-            接收發票=12,
+            接收發票 = 12,
             接收折讓單 = 13,
             接收作廢發票 = 14,
             接收作廢折讓單 = 15,
@@ -197,7 +197,7 @@ namespace Model.Locale
             註銷作廢折讓單 = 37,
             註銷收據 = 38,
             UXGW自動開立 = 39,
-            UXGW下載資料    = 40,
+            UXGW下載資料 = 40,
             UXGW上傳發票退回 = 41,
             UXGW上傳發票註銷 = 42,
             UXGW上傳折讓單退回 = 43,
@@ -354,16 +354,16 @@ namespace Model.Locale
         }
 
         public enum InvoiceCenterBusinessType
-        { 
-            銷項  =   1,
-            進項  =   2
+        {
+            銷項 = 1,
+            進項 = 2
         }
 
         public enum CounterpartBusinessQueryType
         {
             //銷項 = 1,
             進項 = 2
-        }        
+        }
 
         public enum InvoiceCenterBusinessQueryType
         {
@@ -562,5 +562,11 @@ namespace Model.Locale
             DESC = -1,
         }
 
+        public enum Environment
+        {
+            Dev = 1,
+            Test = 2,
+            formal = 3
+        }
     }
 }
