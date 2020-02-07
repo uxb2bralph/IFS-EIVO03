@@ -104,38 +104,49 @@ namespace InvoiceClient.services
             {
                 XDocument xmlDoc = XDocument.Load(filePath);
 
+                var connectString = string.Empty;
+
+                if (InvoiceClient.Properties.Settings.Default.IsLocalMachine)
+                {
+                    connectString = DbConnection.LocalDb.InvoiceClient;
+                }
+                else
+                {
+                    connectString = DbConnection.ServerDb.InvoiceClient;
+                }
+
                 using (InvoiceClientEntityManager<InvoicePDFGeneratorForGooglePlayLog> mgr = new InvoiceClientEntityManager<InvoicePDFGeneratorForGooglePlayLog>())
-                {                    
+                {
                     var records = from list in xmlDoc.Descendants("InvoicePDFGeneratorForGooglePlayModel")
                                   select list;
 
                     var isExist = false;
 
+                    Logger.Info("InvoicePDFGeneratorForGooglePlayLog ConnectionString:" + mgr.DataContext.Connection.ConnectionString);
+
                     foreach (var item in records)
                     {
                         if (!(item.Element("Date") == null || item.Element("Path") == null || item.Element("OrderNo") == null))
                         {
-                            mgr.GetTable<InvoicePDFGeneratorForGooglePlayLog>().InsertOnSubmit(new InvoicePDFGeneratorForGooglePlayLog
-                            {
-                                CreateDate = DateTime.Parse(item.Element("Date").Value),
-                                FileName = item.Element("Path").Value,
-                                OrderNo = item.Element("OrderNo").Value
-                            });
+                            var sqlCommand = $@"INSERT INTO [InvoiceClient].[dbo].[InvoicePDFGeneratorForGooglePlayLog] 
+                                         (OrderNo, FileName, CreateDate) 
+                                         VALUES('{item.Element("OrderNo").Value}','{item.Element("Path").Value}','{item.Element("Date").Value}')";
 
                             var message = string.Empty;
 
                             try
-                            {                                
-                                mgr.SubmitChanges();
+                            {
+                                mgr.ExecuteCommand(sqlCommand);
                             }
                             catch (Exception ex)
-                            {                                
-                                message = ex.ToString();
-                                Logger.Error(ex);
+                            {
+                                message = ex.ToString() + "error OrderNo:" + item.Element("OrderNo").Value;
+                                Logger.Error(message);
                             }
 
                             if (message.IndexOf("PRIMARY KEY") > -1 || message.Equals(string.Empty))
-                            {                                
+                            {
+
                                 isExist = true;
 
                                 item.RemoveAll();
@@ -146,7 +157,7 @@ namespace InvoiceClient.services
                     }
 
                     if (!isExist)
-                    {                        
+                    {
                         File.Delete(filePath);
                     }
                 }
@@ -173,32 +184,31 @@ namespace InvoiceClient.services
 
                     var isExist = false;
 
+                    Logger.Info("InvoicePDFWatcherForZipLog ConnectionString:" + mgr.DataContext.Connection.ConnectionString);
+
                     foreach (var item in records)
                     {
                         if (!(item.Element("Date") == null || item.Element("FileName") == null || item.Element("OrderNo") == null))
-                        {
-                            mgr.GetTable<InvoicePDFWatcherForZipLog>().InsertOnSubmit(new InvoicePDFWatcherForZipLog
-                            {
-                                CreateDate = DateTime.Parse(item.Element("Date").Value),
-                                ZipFileName = item.Element("FileName").Value,
-                                OrderNo = item.Element("OrderNo").Value,
-                                Status = item.Element("Status").Value == "1" ? true : false
-                            });
-
+                        {                            
+                            var sqlCommand = $@"INSERT INTO [InvoiceClient].[dbo].[InvoicePDFWatcherForZipLog] 
+                                         (OrderNo, ZipFileName, Status, CreateDate) 
+                                         VALUES('{item.Element("OrderNo").Value}','{item.Element("FileName").Value}','{item.Element("Status").Value}','{item.Element("Date").Value}')";
+                            
                             var message = string.Empty;
 
                             try
                             {
-                                mgr.SubmitChanges();
+                                mgr.ExecuteCommand(sqlCommand);
                             }
                             catch (Exception ex)
                             {
-                                message = ex.ToString();
-                                Logger.Error(ex);
+                                message = ex.ToString() + "error OrderNo:" + item.Element("OrderNo").Value;
+                                Logger.Error(message);
                             }
-
+                                                        
                             if (message.IndexOf("PRIMARY KEY") > -1 || message.Equals(string.Empty))
                             {
+
                                 isExist = true;
 
                                 item.RemoveAll();
