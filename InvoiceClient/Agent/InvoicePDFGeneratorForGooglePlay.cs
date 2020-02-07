@@ -49,7 +49,6 @@ namespace InvoiceClient.Agent
                 if (items != null && items.Length < 2 && (enviroment == (int)Naming.Environment.Dev || enviroment == (int)Naming.Environment.Test))//yuki:加判斷是否為本機
                 {
                     items = invSvc.ReceiveContentAsPDFForSeller(signedReq, Settings.Default.ClientID);
-                    Logger.Info("Test Generator items" + items.Length);
                 }
 
                 if (items != null && items.Length > 1)
