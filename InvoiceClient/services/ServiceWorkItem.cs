@@ -102,18 +102,7 @@ namespace InvoiceClient.services
 
             if (File.Exists(filePath))
             {
-                XDocument xmlDoc = XDocument.Load(filePath);
-
-                var connectString = string.Empty;
-
-                if (InvoiceClient.Properties.Settings.Default.IsLocalMachine)
-                {
-                    connectString = DbConnection.LocalDb.InvoiceClient;
-                }
-                else
-                {
-                    connectString = DbConnection.ServerDb.InvoiceClient;
-                }
+                XDocument xmlDoc = XDocument.Load(filePath);                
 
                 using (InvoiceClientEntityManager<InvoicePDFGeneratorForGooglePlayLog> mgr = new InvoiceClientEntityManager<InvoicePDFGeneratorForGooglePlayLog>())
                 {
