@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Utility;
+using Euthenia;
 
 namespace Model.InvoiceManagement
 {
@@ -27,6 +28,9 @@ namespace Model.InvoiceManagement
             Description,
             InvoiceNo,
         }
+
+        ISql sql;
+
         public DataTable InitializeAllowanceResponseTable()
         {
             DataTable table = new DataTable();
@@ -75,6 +79,16 @@ namespace Model.InvoiceManagement
                         dataID = allowanceItem.GetString(validator.AllowanceField.Allowance_No);
                         IEnumerable<DataRow> invoiceDetails = details.Where(d => d.GetString(validator.DetailsField.Allowance_No) == dataID);
 
+                        /*
+                        用GoogleID找InvoiceID
+                        */
+                        sql = new aMsSql("localhost", "EIVO03", "eivo", "eivoeivo");
+                        int? iInvoiceID = InquireInvoiceID(validator.AllowanceField.Customer_ID, validator.AllowanceField.Total_Amount);
+                        foreach (var d in invoiceDetails)
+                        {
+                            d[2] = iInvoiceID;
+                        }
+
                         Exception ex;
                         if ((ex = validator.Validate(allowanceItem,invoiceDetails)) != null)
                         {
@@ -117,6 +131,20 @@ namespace Model.InvoiceManagement
             return result;
         }
 
+        private int? InquireInvoiceID(int customer_ID, int total_Amount)
+        {
+            string strSql = "select * from viewInvoiceIDwithCustomerID where customerid=@customerid and TotalAmount >= @TotalAmount order by TotalAmount, InvoiceDate desc";
+            DataTable dt = sql.GetDataTable(strSql, "viewInvoiceIDwithCustomerID", "@customerid", customer_ID.ToString(), "@TotalAmount", total_Amount.ToString());
+
+            if (dt.Rows.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return int.Parse(dt.Rows[0]["InvoiceID"].ToString());
+            }
+        }
 
         protected void ReportError(DataTable result, DataRow source, Exception ex, AllowanceDataSetValidator validator)
         {
