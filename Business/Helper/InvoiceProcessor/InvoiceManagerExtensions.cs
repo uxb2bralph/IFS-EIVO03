@@ -178,7 +178,7 @@ namespace Business.Helper.InvoiceProcessor
                         WHERE          (NOT EXISTS
                                             (SELECT          NULL
                                                 FROM               [proc].ProcessRequestDocument AS p
-                                                WHERE           (TaskID = {0}) AND (DocID = {1})))", 
+                                                WHERE           (DocID = {1})))", 
                         requestItem.TaskID, newItem.InvoiceID);
                 }
                 //manager.SubmitChanges();
