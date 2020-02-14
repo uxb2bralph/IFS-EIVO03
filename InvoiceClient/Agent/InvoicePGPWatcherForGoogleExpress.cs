@@ -37,7 +37,14 @@ namespace InvoiceClient.Agent
                 return;
 
             String fileName = Path.GetFileName(invFile);
+
             _invoiceRequest = fileName;
+
+            _invoiceResponse = _invoiceRequest.Replace("request", "response")
+                           .Replace("_OUT_", "_IN_");
+
+            _invoiceResponse = Path.Combine(_ResponsedPath, _invoiceResponse);
+
             String fullPath = Path.Combine(_inProgressPath, fileName);
             try
             {
@@ -91,6 +98,7 @@ namespace InvoiceClient.Agent
                 if (result.Automation != null)
                 {
                     Automation auto = new Automation { Item = result.Automation };
+                   
                     auto.ConvertToXml().Save(_invoiceResponse);
                 }
             }
@@ -178,13 +186,7 @@ namespace InvoiceClient.Agent
                             }
                         }));
 
-
-
-                        models.BindProcessedItem(requestItem);
-
-                        _invoiceResponse = _invoiceRequest.Replace("request", "response")
-                            .Replace("_OUT_", "_IN_");
-                        _invoiceResponse = Path.Combine(_ResponsedPath, _invoiceResponse);                        
+                        models.BindProcessedItem(requestItem);                                            
 
                         var processRequest = models.GetTable<ProcessRequest>().Where(t => t.TaskID == requestItem.TaskID).FirstOrDefault();
                         if (processRequest != null)
