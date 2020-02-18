@@ -14,6 +14,8 @@ using Model.Schema.EIVO;
 using Model.Schema.EIVO.B2B;
 using Model.Schema.TXN;
 using Utility;
+using Model.InvoiceManagement;
+
 namespace InvoiceClient.Agent
 {
     class InvoiceAttachmentWatcherForGoogle : InvoiceWatcherForGoogle
@@ -95,9 +97,12 @@ namespace InvoiceClient.Agent
 
                 if (contentPath != fullPath)
                 {
+                    RecordHistoryData rec = new RecordHistoryData();
+                    rec.RecData(contentPath);
+                    
                     File.Delete(contentPath);
                 }
-
+                
                 if (result.Result.value != 1)
                 {
                     processError(result.Result.message, null, fileName);

@@ -167,8 +167,6 @@ namespace InvoiceClient.Agent
                     }
                     else
                     {
-                        models.BindProcessedItem(requestItem);
-
                         result.Result.value = 1;
                     }
 
@@ -186,7 +184,9 @@ namespace InvoiceClient.Agent
                                 InvoiceDate = String.Format("{0:yyyy/MM/dd}", i.InvoiceDate),
                                 InvoiceTime = String.Format("{0:HH:mm:ss}", i.InvoiceDate),
                             }
-                        }));       
+                        }));
+
+                        models.BindProcessedItem(requestItem); 
 
                         var processRequest = models.GetTable<ProcessRequest>().Where(t => t.TaskID == requestItem.TaskID).FirstOrDefault();
                         if (processRequest != null)

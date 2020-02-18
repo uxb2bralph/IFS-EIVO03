@@ -41,6 +41,10 @@
     <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.12.1.2\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="Euthenia, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Euthenia.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -87,6 +91,7 @@
     <Compile Include="InvoiceManagement\AllowanceDataSetManager.cs" />
     <Compile Include="InvoiceManagement\InvoiceManagerForCBE.cs" />
     <Compile Include="InvoiceManagement\InvoiceManagerV2.cs" />
+    <Compile Include="InvoiceManagement\RecordHistoryData.cs" />
     <Compile Include="InvoiceManagement\Validator\AllowanceDataSetValidator.cs" />
     <Compile Include="InvoiceManagement\Validator\InvoiceRootInvoiceValidatorForCBE.cs" />
     <Compile Include="InvoiceManagement\VoidInvoiceDataSetManager.cs" />

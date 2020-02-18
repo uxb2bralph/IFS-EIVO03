@@ -93,6 +93,8 @@ namespace InvoiceClient.services
 
         private static void PlayGeneratorPDFLogToDB()
         {
+            Logger.Info("into PlayGeneratorPDFLogToDB");
+
             _path = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "logs");
 
             //取得當前日期減一日的daily資料夾
@@ -155,6 +157,8 @@ namespace InvoiceClient.services
 
         private static void PDFForZipLogToDB()
         {
+            Logger.Info("into PDFForZipLogToDB");
+
             _path = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "logs");
 
             //取得當前日期減一日的daily資料夾
