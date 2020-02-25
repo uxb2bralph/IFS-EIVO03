@@ -335,7 +335,7 @@
     <value>課稅別格式錯誤，上傳資料：{0},TAG:&lt; TaxType /&gt;</value>
   </data>
   <data name="InvalidTotalAmount" xml:space="preserve">
-    <value>總金額不可為負數且為整數，上傳資料：{0},TAG:&lt; TaxAmount /&gt;</value>
+    <value>總金額不可為負數且為整數，上傳資料：{0},TAG:&lt; TotalAmount /&gt;</value>
   </data>
   <data name="InvalidTrackCode" xml:space="preserve">
     <value>發票號碼字軌錯誤，傳送資料:{0}，TAG：&lt; InvoicNumber /&gt;</value>

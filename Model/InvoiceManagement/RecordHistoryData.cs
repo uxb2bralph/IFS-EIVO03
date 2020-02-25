@@ -23,6 +23,7 @@ namespace Model.InvoiceManagement
             XDocument x = XDocument.Load(strFilePath);
             List<DataRecordInvoice> recInvoiceList = new List<DataRecordInvoice>();
             List<DataRecordAllowance> recAllowanceList = new List<DataRecordAllowance>();
+            abase.WriteLog("V2.21.11.05", aBase.LogType.Record, nameof(RecData));
             abase.WriteLog(string.Format("FilePath:{0}", strFilePath), aBase.LogType.Record, nameof(RecData));
 
             foreach (XElement Invoice in x.Elements("InvoiceRoot").Elements("Invoice"))
@@ -43,21 +44,21 @@ namespace Model.InvoiceManagement
                 {
                     rec.Description = InvoiceItem.Element("Description").Value ?? "";
                     rec.Quantity = int.Parse(InvoiceItem.Element("Quantity").Value ?? "0");
-                    rec.UnitPrice = int.Parse(InvoiceItem.Element("UnitPrice").Value ?? "0");
-                    rec.Amount = int.Parse(InvoiceItem.Element("Amount").Value ?? "0");
+                    rec.UnitPrice = Double.Parse(InvoiceItem.Element("UnitPrice").Value ?? "0");
+                    rec.Amount = Double.Parse(InvoiceItem.Element("Amount").Value ?? "0");
                     rec.SequenceNumber = int.Parse(InvoiceItem.Element("SequenceNumber").Value ?? "0");
                 }
-                rec.SalesAmount = int.Parse(Invoice.Element("SalesAmount").Value ?? "0");
-                rec.FreeTaxSalesAmount = int.Parse(Invoice.Element("FreeTaxSalesAmount").Value ?? "0");
-                rec.ZeroTaxSalesAmount = int.Parse(Invoice.Element("ZeroTaxSalesAmount").Value ?? "0");
+                rec.SalesAmount = Double.Parse(Invoice.Element("SalesAmount").Value ?? "0");
+                rec.FreeTaxSalesAmount = Double.Parse(Invoice.Element("FreeTaxSalesAmount").Value ?? "0");
+                rec.ZeroTaxSalesAmount = Double.Parse(Invoice.Element("ZeroTaxSalesAmount").Value ?? "0");
                 rec.TaxType = Invoice.Element("TaxType").Value ?? "";
                 rec.TaxRate = Double.Parse(Invoice.Element("TaxRate").Value ?? "0");
-                rec.TaxAmount = int.Parse(Invoice.Element("TaxAmount").Value ?? "0");
-                rec.TotalAmount = int.Parse(Invoice.Element("TotalAmount").Value ?? "0");
+                rec.TaxAmount = Double.Parse(Invoice.Element("TaxAmount").Value ?? "0");
+                rec.TotalAmount = Double.Parse(Invoice.Element("TotalAmount").Value ?? "0");
                 foreach (XElement Contact in Invoice.Elements("Contact"))
                 {
                     rec.Name = Contact.Element("Name").Value ?? "";
-                    rec.Address = Contact.Element("Address").Value ?? "";
+                    rec.Address = (Contact.Element("Address").Value ?? "").Replace("'", "''");
                     rec.Email = Contact.Element("Email").Value ?? "";
                 }
                 rec.Currency = Invoice.Element("Currency").Value ?? "";
@@ -85,16 +86,16 @@ namespace Model.InvoiceManagement
                 rec.AllowanceType = Allowance.Element("AllowanceType").Value;
                 foreach (XElement AllowanceItem in Allowance.Elements("AllowanceItem"))
                 {
-                    rec.OriginalDescription = Allowance.Element("OriginalDescription").Value;
-                    rec.Quantity = int.Parse(Allowance.Element("Quantity").Value);
-                    rec.UnitPrice = int.Parse(Allowance.Element("UnitPrice").Value);
-                    rec.Amount = int.Parse(Allowance.Element("Amount").Value);
-                    rec.Tax = int.Parse(Allowance.Element("Tax").Value);
-                    rec.AllowanceSequenceNumber = int.Parse(Allowance.Element("AllowanceSequenceNumber").Value);
-                    rec.TaxType = int.Parse(Allowance.Element("TaxType").Value);
+                    rec.OriginalDescription = AllowanceItem.Element("OriginalDescription").Value ?? "";
+                    rec.Quantity = int.Parse(AllowanceItem.Element("Quantity").Value);
+                    rec.UnitPrice = Double.Parse(AllowanceItem.Element("UnitPrice").Value);
+                    rec.Amount = Double.Parse(AllowanceItem.Element("Amount").Value);
+                    rec.Tax = Double.Parse(AllowanceItem.Element("Tax").Value);
+                    rec.AllowanceSequenceNumber = int.Parse(AllowanceItem.Element("AllowanceSequenceNumber").Value);
+                    rec.TaxType = int.Parse(AllowanceItem.Element("TaxType").Value);
                 }
-                rec.TaxAmount = int.Parse(Allowance.Element("TaxAmount").Value);
-                rec.TotalAmount = int.Parse(Allowance.Element("TotalAmount").Value);
+                rec.TaxAmount = Double.Parse(Allowance.Element("TaxAmount").Value);
+                rec.TotalAmount = Double.Parse(Allowance.Element("TotalAmount").Value);
                 rec.Currency = Allowance.Element("Currency").Value;
 
                 recAllowanceList.Add(rec);
@@ -102,18 +103,37 @@ namespace Model.InvoiceManagement
                 abase.WriteLog("recAllowanceList add 1 item", aBase.LogType.Record, nameof(RecData));
             }
 
-            abase.WriteLog(string.Format("recAllowanceList count {0}:", recAllowanceList.Count()), aBase.LogType.Record, nameof(RecData));
-            abase.WriteLog(string.Format("recInvoiceList count {0}:", recInvoiceList.Count()), aBase.LogType.Record, nameof(RecData));
+            if (recAllowanceList.Count() > 0)
+            {
+                abase.WriteLog(string.Format("recAllowanceList count {0}:", recAllowanceList.Count()), aBase.LogType.Record, nameof(RecData));
+            }
+            if (recInvoiceList.Count() > 0)
+            {
+                abase.WriteLog(string.Format("recInvoiceList count {0}:", recInvoiceList.Count()), aBase.LogType.Record, nameof(RecData));
+            }
 
             msSql.BeginTransaction();
             try
             {
-                msSql.InsData(ConvertToDataTable(recAllowanceList.ToList()), "RecordAllowance");
-                msSql.InsData(ConvertToDataTable(recInvoiceList.ToList()), "RecordInvoice");
+                if (recAllowanceList.Count() > 0)
+                {
+                    msSql.InsData(ConvertToDataTable(recAllowanceList.ToList()), "RecordAllowance");
+                }
+                if (recInvoiceList.Count() > 0)
+                {
+                    msSql.InsData(ConvertToDataTable(recInvoiceList.ToList()), "RecordInvoice");
+                }
+
                 msSql.Commit();
 
-                abase.WriteLog("recInvoiceList Insert Complete", aBase.LogType.Record, nameof(RecData));
-                abase.WriteLog("recAllowanceList Insert Complete", aBase.LogType.Record, nameof(RecData));
+                if (recInvoiceList.Count() > 0)
+                {
+                    abase.WriteLog("recInvoiceList Insert Complete", aBase.LogType.Record, nameof(RecData));
+                }
+                if (recAllowanceList.Count() > 0)
+                {
+                    abase.WriteLog("recAllowanceList Insert Complete", aBase.LogType.Record, nameof(RecData));
+                }
 
             }
             catch (Exception e)

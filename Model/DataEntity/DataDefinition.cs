@@ -94,16 +94,16 @@ namespace Model.DataEntity
         public string PrintMark { get; set; }
         public string Description { get; set; }
         public int Quantity { get; set; }
-        public int UnitPrice { get; set; }
-        public int Amount { get; set; }
+        public Double UnitPrice { get; set; }
+        public Double Amount { get; set; }
         public int SequenceNumber { get; set; }
-        public int SalesAmount { get; set; }
-        public int FreeTaxSalesAmount { get; set; }
-        public int ZeroTaxSalesAmount { get; set; }
+        public Double SalesAmount { get; set; }
+        public Double FreeTaxSalesAmount { get; set; }
+        public Double ZeroTaxSalesAmount { get; set; }
         public string TaxType { get; set; }
         public double TaxRate { get; set; }
-        public int TaxAmount { get; set; }
-        public int TotalAmount { get; set; }
+        public Double TaxAmount { get; set; }
+        public Double TotalAmount { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }
@@ -143,13 +143,13 @@ namespace Model.DataEntity
         public string AllowanceType{ get; set; }
         public string OriginalDescription { get; set; }
         public int Quantity { get; set; }
-        public int UnitPrice { get; set; }
-        public int Amount { get; set; }
-        public int Tax { get; set; }
+        public Double UnitPrice { get; set; }
+        public Double Amount { get; set; }
+        public Double Tax { get; set; }
         public int AllowanceSequenceNumber { get; set; }
         public int TaxType { get; set; }
-        public int TaxAmount { get; set; }
-        public int TotalAmount { get; set; }
+        public Double TaxAmount { get; set; }
+        public Double TotalAmount { get; set; }
         public string Currency { get; set; }
     }
 }
