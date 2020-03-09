@@ -31,5 +31,74 @@ namespace ProcessorRecord.Properties {
                 return ((string)(this["watcherPath"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("172.16.2.80")]
+        public string DB {
+            get {
+                return ((string)(this["DB"]));
+            }
+            set {
+                this["DB"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\RecUXB2B_EIVO\\PreInvoice")]
+        public string InvoiceRequestwatcherPath {
+            get {
+                return ((string)(this["InvoiceRequestwatcherPath"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\RecUXB2B_EIVO\\Allowance")]
+        public string AllowanceRequestwatcherPath {
+            get {
+                return ((string)(this["AllowanceRequestwatcherPath"]));
+            }
+            set {
+                this["AllowanceRequestwatcherPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\RecUXB2B_EIVO\\PreInvoice(ResponseToPGP)")]
+        public string AllowanceResponsewatcherPath {
+            get {
+                return ((string)(this["AllowanceResponsewatcherPath"]));
+            }
+            set {
+                this["AllowanceResponsewatcherPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\RecUXB2B_EIVO\\AllowancePdfTemp")]
+        public string AllowancePdfPath {
+            get {
+                return ((string)(this["AllowancePdfPath"]));
+            }
+            set {
+                this["AllowancePdfPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("EIVO03_202002")]
+        public string DB_Name {
+            get {
+                return ((string)(this["DB_Name"]));
+            }
+            set {
+                this["DB_Name"] = value;
+            }
+        }
     }
 }

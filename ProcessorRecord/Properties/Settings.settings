@@ -5,5 +5,23 @@
     <Setting Name="watcherPath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\UXB2B_EIVO\PreInvoice(ResponseToPGP)</Value>
     </Setting>
+    <Setting Name="DB" Type="System.String" Scope="User">
+      <Value Profile="(Default)">172.16.2.80</Value>
+    </Setting>
+    <Setting Name="InvoiceRequestwatcherPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\RecUXB2B_EIVO\PreInvoice</Value>
+    </Setting>
+    <Setting Name="AllowanceRequestwatcherPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\RecUXB2B_EIVO\Allowance</Value>
+    </Setting>
+    <Setting Name="AllowanceResponsewatcherPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\RecUXB2B_EIVO\PreInvoice(ResponseToPGP)</Value>
+    </Setting>
+    <Setting Name="AllowancePdfPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\RecUXB2B_EIVO\AllowancePdfTemp</Value>
+    </Setting>
+    <Setting Name="DB_Name" Type="System.String" Scope="User">
+      <Value Profile="(Default)">EIVO03_202002</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

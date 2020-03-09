@@ -43,76 +43,128 @@ namespace ProcessorRecord
             //} while (key.Key != ConsoleKey.Q);
             //Logger.Info("Process terminated..");
         }
-        private static FileSystemWatcher watcher = new FileSystemWatcher();
-        private static FileSystemWatcher movewatcher = new FileSystemWatcher();
-        private static Queue<string> Files = new Queue<string>();
+        private static FileSystemWatcher InvoiceRequestwatcher = new FileSystemWatcher();
+        private static Queue<string> InvoiceRequestFiles = new Queue<string>();
+
+        private static FileSystemWatcher AllowanceRequestwatcher = new FileSystemWatcher();
+        private static Queue<string> AllowanceRequestFiles = new Queue<string>();
+
+        private static FileSystemWatcher AllowanceResponsewatcher = new FileSystemWatcher();
+        private static Queue<string> AllowanceResponseFiles = new Queue<string>();
+
+        private static FileSystemWatcher AllowancePdfwatcher = new FileSystemWatcher();
+        private static Queue<string> AllowancePdfFiles = new Queue<string>();
+
         private static ISql sql;
         private static aBase A;
 
         private static void Run()
         {
-            string movewatcherPath = Properties.Settings.Default.watcherPath;
-            string watcherPath = movewatcherPath + "Record";
-            if (!Directory.Exists(movewatcherPath))
-            {
-                return;
-            }
-
-            if (!Directory.Exists(watcherPath))
-            {
-                Directory.CreateDirectory(watcherPath);
-            }
-
+            int InvoiceTimes = 0;
+            string InvoiceRequestwatcherPath = Properties.Settings.Default.InvoiceRequestwatcherPath;
+            string AllowanceRequestwatcherPath = Properties.Settings.Default.AllowanceRequestwatcherPath;
+            string AllowanceResponsewatcherPath = Properties.Settings.Default.AllowanceResponsewatcherPath;
+            string AllowancePdfwatcherPath = Properties.Settings.Default.AllowancePdfPath;
 
             //watcher.Path = @"C:\UXB2B_EIVO\PreInvoice(ResponseToPGP)Record";
-            watcher.Path = watcherPath;
-
+            InvoiceRequestwatcher.Path = InvoiceRequestwatcherPath;
             //設定是否監控子資料夾
-            watcher.IncludeSubdirectories = true;
-
+            InvoiceRequestwatcher.IncludeSubdirectories = true;
             //設定是否啟動元件，此部分必須要設定為 true，不然事件是不會被觸發的
-            watcher.EnableRaisingEvents = true;
+            InvoiceRequestwatcher.EnableRaisingEvents = true;
+            InvoiceRequestwatcher.Created += new FileSystemEventHandler(InvoiceRequestwatch_Created);
 
-            watcher.Created += new FileSystemEventHandler(watch_Created);
 
-            //movewatcher.Path = @"C:\UXB2B_EIVO\PreInvoice(ResponseToPGP)";
-            movewatcher.Path = movewatcherPath;
-
+            AllowanceRequestwatcher.Path = AllowanceRequestwatcherPath;
             //設定是否監控子資料夾
-            movewatcher.IncludeSubdirectories = true;
-
+            AllowanceRequestwatcher.IncludeSubdirectories = true;
             //設定是否啟動元件，此部分必須要設定為 true，不然事件是不會被觸發的
-            movewatcher.EnableRaisingEvents = true;
+            AllowanceRequestwatcher.EnableRaisingEvents = true;
+            AllowanceRequestwatcher.Created += new FileSystemEventHandler(AllowanceRequestwatch_Created);
 
-            movewatcher.Created += new FileSystemEventHandler(movewatch_Created);
 
-            sql = new aMsSql("localhost", "EIVO03", "eivo", "eivoeivo");
+            AllowanceResponsewatcher.Path = AllowanceResponsewatcherPath;
+            //設定是否監控子資料夾
+            AllowanceResponsewatcher.IncludeSubdirectories = true;
+            //設定是否啟動元件，此部分必須要設定為 true，不然事件是不會被觸發的
+            AllowanceResponsewatcher.EnableRaisingEvents = true;
+            AllowanceResponsewatcher.Created += new FileSystemEventHandler(AllowanceResponsewatcher_Created);
+
+
+            AllowancePdfwatcher.Path = AllowancePdfwatcherPath;
+            //設定是否監控子資料夾
+            AllowancePdfwatcher.IncludeSubdirectories = true;
+            //設定是否啟動元件，此部分必須要設定為 true，不然事件是不會被觸發的
+            AllowancePdfwatcher.EnableRaisingEvents = true;
+            AllowancePdfwatcher.Created += new FileSystemEventHandler(AllowancePdfwatcher_Created);
+
+
+
+
+
+
+
+            sql = new aMsSql(Properties.Settings.Default.DB, Properties.Settings.Default.DB_Name, "eivo", "eivoeivo");
             A = new aBase(nameof(ProcessorRecord));
 
-            string PgpFilePath = @"D:\一帆\測試區\PGP";
+            //string PgpFilePath = @"D:\一帆\測試區\PGP";
 
-            RecordHistoryData rec = new RecordHistoryData();
+            RecordHistoryData rec = new RecordHistoryData(Properties.Settings.Default.DB, Properties.Settings.Default.DB_Name);
 
             while (true)
             {
                 Thread.Sleep(50);
-                if (Files.Count > 0)
+                if (InvoiceRequestFiles.Count > 0)
                 {
                     Action<object> action = (object obj) =>
                     {
-                        if (Files.Count > 0)
+                        if (InvoiceRequestFiles.Count > 0)
                         {
-                            string FilePath = Files.Dequeue();
-
-                            List<string> RecordCompleteFilesByDB = GetCompleteFiles();
-
+                            if (InvoiceTimes <= 0)
+                            {
+                                InvoiceTimes = InvoiceRequestFiles.Count;
+                            }
+                            string FilePath = InvoiceRequestFiles.Dequeue();
+                            List<string> RecordCompleteFilesByDB = GetCompleteFiles("RecordInvoice");
 
                             if (RecordCompleteFilesByDB.IndexOf(Path.GetFileName(FilePath)) < 0)
                             {
-                                rec.RecData(FilePath);
-                                //RecordData(FilePath);
+                                rec.RecData(FilePath, RecordHistoryData.TableName.RecordInvoice);
+                            }
+                            InvoiceTimes--;
+                        }
+                        if (InvoiceTimes <= 0)
+                        {
+                            if (AllowanceRequestFiles.Count > 0)
+                            {
+                                string FilePath = AllowanceRequestFiles.Dequeue();
+                                List<string> RecordCompleteFilesByDB = GetCompleteFiles("RecordAllowance");
+                                if (RecordCompleteFilesByDB.IndexOf(Path.GetFileName(FilePath)) < 0)
+                                {
+                                    rec.RecData(FilePath, RecordHistoryData.TableName.RecordAllowance);
+                                }
                             }
 
+                            if (AllowanceResponseFiles.Count > 0)
+                            {
+                                string FilePath = AllowanceResponseFiles.Dequeue();
+                                List<string> RecordCompleteFilesByDB = GetCompleteFiles("RecordAllowanceResponse");
+                                if (RecordCompleteFilesByDB.IndexOf(Path.GetFileName(FilePath)) < 0)
+                                {
+                                    rec.RecData(FilePath, RecordHistoryData.TableName.RecordAllowanceResponse);
+                                }
+                            }
+
+                            if (AllowancePdfFiles.Count > 0)
+                            {
+                                string FilePath = AllowancePdfFiles.Dequeue();
+                                string ZipName = Directory.GetParent(FilePath).ToString().Replace(AllowancePdfwatcherPath + "\\", "") + ".Zip";
+                                //C:\UXB2B_EIVO\AllowancePdfTemp\%1
+                                string FileName = Path.GetFileNameWithoutExtension(FilePath);
+
+                                rec.RecAllowancePdf(ZipName, FileName);
+
+                            }
                         }
                     };
                     Task verifier = new Task(action, "Record");
@@ -120,6 +172,8 @@ namespace ProcessorRecord
                 }
             }
         }
+
+
 
         private static List<XDocument> DecryptFile(string p)
         {
@@ -178,141 +232,46 @@ namespace ProcessorRecord
             }
         }
 
-        private static void RecordData(string PgpFile)
+
+
+        private static void InvoiceRequestwatch_Created(object sender, FileSystemEventArgs e)
         {
-            List<DataRecordInvoice> recInvoiceList = new List<DataRecordInvoice>();
-            List<DataRecordAllowance> recAllowanceList = new List<DataRecordAllowance>();
-
-            List<XDocument> xList = DecryptFile(PgpFile);
-
-            foreach (var x in xList)
+            if (Path.GetExtension(e.FullPath) == ".xml" && e.FullPath.IndexOf("request") > 0)
             {
-                foreach (XElement Invoice in x.Elements("InvoiceRoot").Elements("Invoice"))
-                {
-                    DataRecordInvoice rec = new DataRecordInvoice();
-
-                    rec.FileName = PgpFile == "" ? "Empty" : Path.GetFileName(PgpFile);
-                    rec.DataNumber = Invoice.Element("DataNumber").Value;
-                    rec.DataDate = Invoice.Element("DataDate").Value;
-                    rec.GoogleId = Invoice.Element("GoogleId").Value ?? "";
-                    rec.SellerId = Invoice.Element("SellerId").Value ?? "";
-                    rec.BuyerName = Invoice.Element("BuyerName").Value ?? "";
-                    rec.BuyerId = Invoice.Element("BuyerId").Value ?? "";
-                    rec.InvoiceType = Invoice.Element("InvoiceType").Value ?? "";
-                    rec.DonateMark = Invoice.Element("DonateMark").Value ?? "";
-                    rec.PrintMark = Invoice.Element("PrintMark").Value ?? "";
-                    foreach (XElement InvoiceItem in Invoice.Elements("InvoiceItem"))
-                    {
-                        rec.Description = InvoiceItem.Element("Description").Value ?? "";
-                        rec.Quantity = A.GetInt(InvoiceItem.Element("Quantity").Value ?? "0");
-                        rec.UnitPrice = A.GetInt(InvoiceItem.Element("UnitPrice").Value ?? "0");
-                        rec.Amount = A.GetInt(InvoiceItem.Element("Amount").Value ?? "0");
-                        rec.SequenceNumber = A.GetInt(InvoiceItem.Element("SequenceNumber").Value ?? "0");
-                    }
-                    rec.SalesAmount = A.GetInt(Invoice.Element("SalesAmount").Value ?? "0");
-                    rec.FreeTaxSalesAmount = A.GetInt(Invoice.Element("FreeTaxSalesAmount").Value ?? "0");
-                    rec.ZeroTaxSalesAmount = A.GetInt(Invoice.Element("ZeroTaxSalesAmount").Value ?? "0");
-                    rec.TaxType = Invoice.Element("TaxType").Value ?? "";
-                    rec.TaxRate = A.GetDouble(Invoice.Element("TaxRate").Value ?? "0");
-                    rec.TaxAmount = A.GetInt(Invoice.Element("TaxAmount").Value ?? "0");
-                    rec.TotalAmount = A.GetInt(Invoice.Element("TotalAmount").Value ?? "0");
-                    foreach (XElement Contact in Invoice.Elements("Contact"))
-                    {
-                        rec.Name = Contact.Element("Name").Value ?? "";
-                        rec.Address = Contact.Element("Address").Value ?? "";
-                        rec.Email = Contact.Element("Email").Value ?? "";
-                    }
-                    rec.Currency = Invoice.Element("Currency").Value ?? "";
-
-                    rec.CarrierType = Invoice.Element("CarrierType") == null ? "" : Invoice.Element("CarrierType").Value;
-                    rec.CarrierId1 = Invoice.Element("CarrierId1") == null ? "" : Invoice.Element("CarrierId1").Value;
-                    rec.CarrierId2 = Invoice.Element("CarrierId2") == null ? "" : Invoice.Element("CarrierId2").Value;
-
-                    recInvoiceList.Add(rec);
-                }
-
-                foreach (XElement Allowance in x.Elements("AllowanceRoot").Elements("Allowance"))
-                {
-                    DataRecordAllowance rec = new DataRecordAllowance();
-
-                    rec.FileName = PgpFile == "" ? "Empty" : Path.GetFileName(PgpFile);
-                    rec.AllowanceNumber = Allowance.Element("AllowanceNumber").Value;
-                    rec.AllowanceDate = Allowance.Element("AllowanceDate").Value;
-                    rec.GoogleId = Allowance.Element("GoogleId").Value;
-                    rec.SellerId = Allowance.Element("SellerId").Value;
-                    rec.BuyerName = Allowance.Element("BuyerName").Value;
-                    rec.BuyerId = Allowance.Element("BuyerId").Value;
-                    rec.AllowanceType = Allowance.Element("AllowanceType").Value;
-                    foreach (XElement AllowanceItem in Allowance.Elements("AllowanceItem"))
-                    {
-                        rec.OriginalDescription = Allowance.Element("OriginalDescription").Value;
-                        rec.Quantity = A.GetInt(Allowance.Element("Quantity").Value);
-                        rec.UnitPrice = A.GetInt(Allowance.Element("UnitPrice").Value);
-                        rec.Amount = A.GetInt(Allowance.Element("Amount").Value);
-                        rec.Tax = A.GetInt(Allowance.Element("Tax").Value);
-                        rec.AllowanceSequenceNumber = A.GetInt(Allowance.Element("AllowanceSequenceNumber").Value);
-                        rec.TaxType = A.GetInt(Allowance.Element("TaxType").Value);
-                    }
-                    rec.TaxAmount = A.GetInt(Allowance.Element("TaxAmount").Value);
-                    rec.TotalAmount = A.GetInt(Allowance.Element("TotalAmount").Value);
-                    rec.Currency = Allowance.Element("Currency").Value;
-
-                    recAllowanceList.Add(rec);
-                }
-            }
-
-
-            sql.BeginTransaction();
-            try
-            {
-                sql.InsData(ConvertToDataTable(recAllowanceList.ToList()), "RecordAllowance");
-                sql.InsData(ConvertToDataTable(recInvoiceList.ToList()), "RecordInvoice");
-                sql.Commit();
-            }
-            catch (Exception e)
-            {
-                sql.Rollback();
+                InvoiceRequestFiles.Enqueue(e.FullPath);
             }
         }
 
-        public static DataTable ConvertToDataTable<T>(IList<T> data)
+        private static void AllowanceRequestwatch_Created(object sender, FileSystemEventArgs e)
         {
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
-            DataTable table = new DataTable();
-            foreach (PropertyDescriptor prop in properties)
+            if (Path.GetExtension(e.FullPath) == ".xml" && e.FullPath.IndexOf("request") > 0)
             {
-                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+                AllowanceRequestFiles.Enqueue(e.FullPath);
             }
+        }
 
-            foreach (T item in data)
+        private static void AllowanceResponsewatcher_Created(object sender, FileSystemEventArgs e)
+        {
+            if (Path.GetExtension(e.FullPath) == ".xml" && e.FullPath.IndexOf("response") > 0)
             {
-                DataRow row = table.NewRow();
-                foreach (PropertyDescriptor prop in properties)
-                {
-                    row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
-                }
-                table.Rows.Add(row);
+                AllowanceResponseFiles.Enqueue(e.FullPath);
             }
-            return table;
         }
 
-        private static void watch_Created(object sender, FileSystemEventArgs e)
+
+        private static void AllowancePdfwatcher_Created(object sender, FileSystemEventArgs e)
         {
-            Files.Enqueue(e.FullPath);
+            if (Path.GetExtension(e.FullPath) == ".pdf")
+            {
+                AllowancePdfFiles.Enqueue(e.FullPath);
+            }
         }
 
-        private static void movewatch_Created(object sender, FileSystemEventArgs e)
+        private static List<string> GetCompleteFiles(string strTableName)
         {
-            Thread.Sleep(50);
-            string strDestfilename = e.FullPath.Replace("PreInvoice(ResponseToPGP)", "PreInvoice(ResponseToPGP)Record");
-            File.Copy(e.FullPath, strDestfilename, true);
-        }
-
-        private static List<string> GetCompleteFiles()
-        {
-            string sqlstring = @"select distinct FileName from RecordInvoice";
+            string sqlstring = string.Format("select distinct FileName from {0}", strTableName);
             List<string> result = new List<string>();
-            DataTable dt = sql.GetDataTable(sqlstring, "RecordInvoice");
+            DataTable dt = sql.GetDataTable(sqlstring, strTableName);
 
             foreach (DataRow dtrw in dt.Rows)
             {
@@ -321,10 +280,7 @@ namespace ProcessorRecord
 
             return result;
         }
-
     }
-
-
 
     class InitializeApp
     {
