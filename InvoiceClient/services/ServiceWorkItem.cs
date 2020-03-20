@@ -144,6 +144,9 @@ namespace InvoiceClient.services
 
                                 xmlDoc.Save(filePath);
                             }
+                            else if (message != string.Empty)
+
+                                isExist = true;
                         }
                     }
 
@@ -198,7 +201,7 @@ namespace InvoiceClient.services
                                 message = ex.ToString() + "error OrderNo:" + item.Element("OrderNo").Value;
                                 Logger.Error(message);
                             }
-                                                        
+
                             if (message.IndexOf("PRIMARY KEY") > -1 || message.Equals(string.Empty))
                             {
 
@@ -208,6 +211,10 @@ namespace InvoiceClient.services
 
                                 xmlDoc.Save(filePath);
                             }
+                            else if (message != string.Empty)
+
+                                isExist = true;
+                            
                         }
                     }
 
