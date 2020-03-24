@@ -14,17 +14,190 @@ namespace Model.InvoiceManagement
 {
     public class RecordHistoryData
     {
-        ISql msSql;
-        public void RecData(string strFilePath)
+
+        public enum TableName
         {
-            msSql = new aMsSql("localhost", "EIVO03", "eivo", "eivoeivo");
-            aBase abase = new aBase(nameof(RecordHistoryData));
+            RecordInvoice,
+            RecordAllowance,
+            RecordAllowanceResponse
+        }
+        ISql msSql;
+        aBase abase;
+        string strDB, strDBName;
+
+        public RecordHistoryData(string DB, string DB_Name)
+        {
+            strDB = DB;
+            strDBName = DB_Name;
+        }
+
+        public void RecData(string strFilePath, TableName strTableName)
+        {
+            msSql = new aMsSql(strDB, strDBName, "eivo", "eivoeivo");
+            abase = new aBase(nameof(RecordHistoryData) + DateTime.Now.ToString("HHmmssfff"));
 
             XDocument x = XDocument.Load(strFilePath);
-            List<DataRecordInvoice> recInvoiceList = new List<DataRecordInvoice>();
-            List<DataRecordAllowance> recAllowanceList = new List<DataRecordAllowance>();
+
             abase.WriteLog("V2.21.11.05", aBase.LogType.Record, nameof(RecData));
             abase.WriteLog(string.Format("FilePath:{0}", strFilePath), aBase.LogType.Record, nameof(RecData));
+
+            switch (strTableName)
+            {
+                case TableName.RecordInvoice:
+                    List<DataRecordInvoice> recInvoiceList = ReadInvoiceRequest(x, strFilePath);
+                    if (recInvoiceList.Count() > 0)
+                    {
+                        abase.WriteLog(string.Format("recInvoiceList count:{0}    FilePath:{1}", strFilePath, recInvoiceList.Count()), aBase.LogType.Record, nameof(RecData));
+
+                        SaveData(recInvoiceList, TableName.RecordInvoice, strFilePath);
+                    }
+                    break;
+                case TableName.RecordAllowance:
+                    List<DataRecordAllowance> recAllowanceList = ReadAllowanceRequest(x, strFilePath);
+                    if (recAllowanceList.Count() > 0)
+                    {
+                        abase.WriteLog(string.Format("recAllowanceList count:{0}    FilePath:{1}", strFilePath, recAllowanceList.Count()), aBase.LogType.Record, nameof(RecData));
+                        SaveData(recAllowanceList, TableName.RecordAllowance, strFilePath);
+                    }
+
+                    break;
+                case TableName.RecordAllowanceResponse:
+                    List<DataRecordAllowanceResponse> recAllowanceResponseList = ReadAllowanceResponse(x, strFilePath);
+                    if (recAllowanceResponseList.Count() > 0)
+                    {
+                        abase.WriteLog(string.Format("recAllowanceResponseList count:{0}    FilePath:{1}", strFilePath, recAllowanceResponseList.Count()), aBase.LogType.Record, nameof(RecData));
+                        SaveData(recAllowanceResponseList, TableName.RecordAllowanceResponse, strFilePath);
+                    }
+                    break;
+                default:
+                    return;
+            }
+        }
+
+
+
+        private void SaveData(object recList, TableName strTableName, string strFilePath)
+        {
+            DataTable dt;
+            msSql.BeginTransaction();
+            try
+            {
+                switch (strTableName)
+                {
+                    case TableName.RecordInvoice:
+                        dt = ConvertToDataTable(((List<DataRecordInvoice>)recList).ToList());
+                        msSql.InsData(dt, "RecordInvoice");
+                        abase.WriteLog(string.Format("{0} recInvoiceList Insert Complete", strFilePath), aBase.LogType.Record, nameof(RecData));
+                        break;
+                    case TableName.RecordAllowance:
+                        dt = ConvertToDataTable(((List<DataRecordAllowance>)recList).ToList());
+                        msSql.InsData(dt, "RecordAllowance");
+                        abase.WriteLog(string.Format("{0} recAllowanceList Insert Complete", strFilePath), aBase.LogType.Record, nameof(RecData));
+                        break;
+                    case TableName.RecordAllowanceResponse:
+                        dt = ConvertToDataTable(((List<DataRecordAllowanceResponse>)recList).ToList());
+                        msSql.InsData(dt, "RecordAllowanceResponse");
+                        abase.WriteLog(string.Format("{0} recAllowanceResponseList Insert Complete", strFilePath), aBase.LogType.Record, nameof(RecData));
+                        break;
+                    default:
+                        return;
+                }
+                msSql.Commit();
+            }
+            catch (Exception e)
+            {
+                msSql.Rollback();
+                abase.WriteLog(e, aBase.LogType.Wrong, "msSql");
+            }
+        }
+        private List<DataRecordAllowanceResponse> ReadAllowanceResponse(XDocument x, string strFilePath)
+        {
+            List<DataRecordAllowanceResponse> recAllowanceList = new List<DataRecordAllowanceResponse>();
+            foreach (XElement AllowanceResponse in x.Elements("Item"))
+            {
+                DataRecordAllowanceResponse rec = new DataRecordAllowanceResponse();
+                rec.FileName = strFilePath == "" ? "Empty" : Path.GetFileName(strFilePath);
+                rec.ResponseStatus = AllowanceResponse.Element("Status").Value;
+                rec.ZipFileName = "";
+                rec.PdfFileName = "";
+                foreach (XElement AllowanceItem in AllowanceResponse.Elements("Allowance"))
+                {
+                    rec.AllowanceNumber = AllowanceItem.Element("AllowanceNumber").Value;
+                }
+                recAllowanceList.Add(rec);
+            }
+            return recAllowanceList;
+        }
+        private List<DataRecordAllowance> ReadAllowanceRequest(XDocument x, string strFilePath)
+        {
+            List<DataRecordAllowance> recAllowanceList = new List<DataRecordAllowance>();
+            foreach (XElement Allowance in x.Elements("AllowanceRoot").Elements("Allowance"))
+            {
+                DataRecordAllowance rec = new DataRecordAllowance();
+
+                rec.FileName = strFilePath == "" ? "Empty" : Path.GetFileName(strFilePath);
+                rec.AllowanceNumber = Allowance.Element("AllowanceNumber").Value;
+                rec.AllowanceDate = Allowance.Element("AllowanceDate").Value;
+                rec.GoogleId = Allowance.Element("GoogleId").Value;
+                rec.SellerId = Allowance.Element("SellerId").Value;
+                rec.BuyerName = Allowance.Element("BuyerName").Value;
+                rec.BuyerId = Allowance.Element("BuyerId").Value;
+                rec.AllowanceType = Allowance.Element("AllowanceType").Value;
+                foreach (XElement AllowanceItem in Allowance.Elements("AllowanceItem"))
+                {
+                    rec.OriginalDescription = AllowanceItem.Element("OriginalDescription").Value ?? "";
+                    rec.Quantity = int.Parse(AllowanceItem.Element("Quantity").Value);
+                    rec.UnitPrice = Double.Parse(AllowanceItem.Element("UnitPrice").Value);
+                    rec.Amount = Double.Parse(AllowanceItem.Element("Amount").Value);
+                    rec.Tax = Double.Parse(AllowanceItem.Element("Tax").Value);
+                    rec.AllowanceSequenceNumber = int.Parse(AllowanceItem.Element("AllowanceSequenceNumber").Value);
+                    rec.TaxType = int.Parse(AllowanceItem.Element("TaxType").Value);
+                }
+                rec.TaxAmount = Double.Parse(Allowance.Element("TaxAmount").Value);
+                rec.TotalAmount = Double.Parse(Allowance.Element("TotalAmount").Value);
+                rec.Currency = Allowance.Element("Currency").Value;
+
+                recAllowanceList.Add(rec);
+
+                //abase.WriteLog("recAllowanceList add 1 item", aBase.LogType.Record, nameof(RecData));
+            }
+            return recAllowanceList;
+        }
+
+        public void RecAllowancePdf(string zipName, string fileName)
+        {
+            string strSql = "SELECT * FROM RecordAllowanceResponse where AllowanceNumber=@AllowanceNumber";
+            DataTable dt = msSql.GetDataTable(strSql, "RecordAllowanceResponse", "@AllowanceNumber", zipName.Replace("taiwan_uxb2b_scanned_sac_pdf_", "").Replace(".pdf", ""));
+
+            if (dt.Rows.Count < 1) { return; }
+            else
+            {
+                foreach (DataRow dtrw in dt.Rows)
+                {
+                    dtrw["ZipFileName"] = zipName;
+                    dtrw["PdfFileName"] = fileName;
+                    dtrw["ResponseStatus"] = 3;
+                }
+            }
+
+            msSql.BeginTransaction();
+            try
+            {
+                msSql.UpdateData(dt, "RecordAllowanceResponse", " update RecordAllowanceResponse set ZipFileName=@ZipFileName ,  PdfFileName=@PdfFileName where FileName=@FileName and AllowanceNumber=@AllowanceNumber");
+                msSql.Commit();
+            }
+            catch (Exception e)
+            {
+                msSql.Rollback();
+                abase.WriteLog(e, aBase.LogType.Wrong, "msSql");
+            }
+
+
+        }
+
+        private List<DataRecordInvoice> ReadInvoiceRequest(XDocument x, string strFilePath)
+        {
+            List<DataRecordInvoice> recInvoiceList = new List<DataRecordInvoice>();
 
             foreach (XElement Invoice in x.Elements("InvoiceRoot").Elements("Invoice"))
             {
@@ -68,82 +241,11 @@ namespace Model.InvoiceManagement
                 rec.CarrierId2 = Invoice.Element("CarrierId2") == null ? "" : Invoice.Element("CarrierId2").Value;
 
                 recInvoiceList.Add(rec);
-
-                abase.WriteLog("recInvoiceList add 1 item", aBase.LogType.Record, nameof(RecData));
             }
 
-            foreach (XElement Allowance in x.Elements("AllowanceRoot").Elements("Allowance"))
-            {
-                DataRecordAllowance rec = new DataRecordAllowance();
-
-                rec.FileName = strFilePath == "" ? "Empty" : Path.GetFileName(strFilePath);
-                rec.AllowanceNumber = Allowance.Element("AllowanceNumber").Value;
-                rec.AllowanceDate = Allowance.Element("AllowanceDate").Value;
-                rec.GoogleId = Allowance.Element("GoogleId").Value;
-                rec.SellerId = Allowance.Element("SellerId").Value;
-                rec.BuyerName = Allowance.Element("BuyerName").Value;
-                rec.BuyerId = Allowance.Element("BuyerId").Value;
-                rec.AllowanceType = Allowance.Element("AllowanceType").Value;
-                foreach (XElement AllowanceItem in Allowance.Elements("AllowanceItem"))
-                {
-                    rec.OriginalDescription = AllowanceItem.Element("OriginalDescription").Value ?? "";
-                    rec.Quantity = int.Parse(AllowanceItem.Element("Quantity").Value);
-                    rec.UnitPrice = Double.Parse(AllowanceItem.Element("UnitPrice").Value);
-                    rec.Amount = Double.Parse(AllowanceItem.Element("Amount").Value);
-                    rec.Tax = Double.Parse(AllowanceItem.Element("Tax").Value);
-                    rec.AllowanceSequenceNumber = int.Parse(AllowanceItem.Element("AllowanceSequenceNumber").Value);
-                    rec.TaxType = int.Parse(AllowanceItem.Element("TaxType").Value);
-                }
-                rec.TaxAmount = Double.Parse(Allowance.Element("TaxAmount").Value);
-                rec.TotalAmount = Double.Parse(Allowance.Element("TotalAmount").Value);
-                rec.Currency = Allowance.Element("Currency").Value;
-
-                recAllowanceList.Add(rec);
-
-                abase.WriteLog("recAllowanceList add 1 item", aBase.LogType.Record, nameof(RecData));
-            }
-
-            if (recAllowanceList.Count() > 0)
-            {
-                abase.WriteLog(string.Format("recAllowanceList count {0}:", recAllowanceList.Count()), aBase.LogType.Record, nameof(RecData));
-            }
-            if (recInvoiceList.Count() > 0)
-            {
-                abase.WriteLog(string.Format("recInvoiceList count {0}:", recInvoiceList.Count()), aBase.LogType.Record, nameof(RecData));
-            }
-
-            msSql.BeginTransaction();
-            try
-            {
-                if (recAllowanceList.Count() > 0)
-                {
-                    msSql.InsData(ConvertToDataTable(recAllowanceList.ToList()), "RecordAllowance");
-                }
-                if (recInvoiceList.Count() > 0)
-                {
-                    msSql.InsData(ConvertToDataTable(recInvoiceList.ToList()), "RecordInvoice");
-                }
-
-                msSql.Commit();
-
-                if (recInvoiceList.Count() > 0)
-                {
-                    abase.WriteLog("recInvoiceList Insert Complete", aBase.LogType.Record, nameof(RecData));
-                }
-                if (recAllowanceList.Count() > 0)
-                {
-                    abase.WriteLog("recAllowanceList Insert Complete", aBase.LogType.Record, nameof(RecData));
-                }
-
-            }
-            catch (Exception e)
-            {
-                msSql.Rollback();
-                abase.WriteLog(e, aBase.LogType.Wrong, "msSql");
-            }
-
-
+            return recInvoiceList;
         }
+
         public DataTable ConvertToDataTable<T>(IList<T> data)
         {
             PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
@@ -164,5 +266,7 @@ namespace Model.InvoiceManagement
             }
             return table;
         }
+
+
     }
 }
