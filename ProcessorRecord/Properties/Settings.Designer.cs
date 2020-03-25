@@ -34,13 +34,49 @@ namespace ProcessorRecord.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("172.16.2.80")]
-        public string DB {
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\RecUXB2B_EIVO\\Allowance")]
+        public string AllowanceRequestwatcherPath {
             get {
-                return ((string)(this["DB"]));
+                return ((string)(this["AllowanceRequestwatcherPath"]));
             }
             set {
-                this["DB"] = value;
+                this["AllowanceRequestwatcherPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\RecUXB2B_EIVO\\Allowance(ResponseToPGP)")]
+        public string AllowanceResponsewatcherPath {
+            get {
+                return ((string)(this["AllowanceResponsewatcherPath"]));
+            }
+            set {
+                this["AllowanceResponsewatcherPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\RecUXB2B_EIVO\\AllowancePdfTemp")]
+        public string AllowancePdfPath {
+            get {
+                return ((string)(this["AllowancePdfPath"]));
+            }
+            set {
+                this["AllowancePdfPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DeleteFile {
+            get {
+                return ((bool)(this["DeleteFile"]));
+            }
+            set {
+                this["DeleteFile"] = value;
             }
         }
         
@@ -55,49 +91,25 @@ namespace ProcessorRecord.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\RecUXB2B_EIVO\\Allowance")]
-        public string AllowanceRequestwatcherPath {
-            get {
-                return ((string)(this["AllowanceRequestwatcherPath"]));
-            }
-            set {
-                this["AllowanceRequestwatcherPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\RecUXB2B_EIVO\\PreInvoice(ResponseToPGP)")]
-        public string AllowanceResponsewatcherPath {
-            get {
-                return ((string)(this["AllowanceResponsewatcherPath"]));
-            }
-            set {
-                this["AllowanceResponsewatcherPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\RecUXB2B_EIVO\\AllowancePdfTemp")]
-        public string AllowancePdfPath {
-            get {
-                return ((string)(this["AllowancePdfPath"]));
-            }
-            set {
-                this["AllowancePdfPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("EIVO03_202002")]
+        [global::System.Configuration.DefaultSettingValueAttribute("EIVO03")]
         public string DB_Name {
             get {
                 return ((string)(this["DB_Name"]));
             }
             set {
                 this["DB_Name"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
+        public string DB {
+            get {
+                return ((string)(this["DB"]));
+            }
+            set {
+                this["DB"] = value;
             }
         }
     }
