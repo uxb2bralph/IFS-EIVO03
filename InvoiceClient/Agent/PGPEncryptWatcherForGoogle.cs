@@ -46,8 +46,19 @@ namespace InvoiceClient.Agent
                 Logger.Error(ex);
                 return;
             }
-
+            
+            Logger.Info(string.Format("EncryptFile By {0}", nameof(PGPEncryptWatcherForGoogle)));
             String gpgName = fullPath.EncryptFileTo(_ResponsedPath);
+
+            Logger.Info(string.Format("fullPath:{0}  gpgName:{1}", fullPath, gpgName));
+
+            string CopyPath = Path.Combine(Settings.Default.RecAllowanceResponsePath, Path.GetFileName(fullPath));
+            if (!Directory.Exists(CopyPath))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(CopyPath));
+            }
+            Logger.Info(string.Format("fullPath:{0}  CopyPath:{1}", fullPath, CopyPath));
+            File.Copy(fullPath, CopyPath, true);
 
             var status = 0;
 

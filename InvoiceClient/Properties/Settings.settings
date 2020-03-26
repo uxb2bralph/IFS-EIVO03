@@ -35,9 +35,6 @@
     <Setting Name="IsAutoInvService" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="AutoInvServiceInterval" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">30</Value>
-    </Setting>
     <Setting Name="UploadAllowanceFolder" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Allowance</Value>
     </Setting>
@@ -106,9 +103,6 @@
     </Setting>
     <Setting Name="SellerReceiptNo" Type="System.String" Scope="Application">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="InvoiceTxnPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\UXB2B_EIVO</Value>
     </Setting>
     <Setting Name="MainTabs" Type="System.String" Scope="Application">
       <Value Profile="(Default)">
@@ -220,9 +214,6 @@
     <Setting Name="ZipInvoice" Type="System.String" Scope="Application">
       <Value Profile="(Default)">ZipInvoice</Value>
     </Setting>
-    <Setting Name="PDFGeneratorOutput" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\UXB2B_EIVO_GOOGLE\ZipInvoice</Value>
-    </Setting>
     <Setting Name="ClearTxnPath" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -240,9 +231,6 @@
     </Setting>
     <Setting Name="AppCulture" Type="System.String" Scope="Application">
       <Value Profile="(Default)">en-US</Value>
-    </Setting>
-    <Setting Name="InvoiceClient_WS_Invoice_eInvoiceService" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://localhost:2598/Published/eInvoiceService.asmx</Value>
     </Setting>
     <Setting Name="ServerInspector" Type="System.String" Scope="Application">
       <Value Profile="(Default)">
@@ -268,19 +256,37 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="JobSchedulerPeriod" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">5</Value>
-    </Setting>
-    <Setting Name="MaxWaitingTurns" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
-    <Setting Name="ScheduleToNextTurn" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">60</Value>
+      <Value Profile="(Default)">2</Value>
     </Setting>
     <Setting Name="Environment" Type="System.String" Scope="Application">
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="ActivationKey" Type="System.String" Scope="Application">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">1eee3729-9a07-4369-bb84-ef8903b9ed7e</Value>
+    </Setting>
+    <Setting Name="MaxWaitingTurns" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ScheduleToNextTurn" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="InvoiceClient_WS_Invoice_eInvoiceService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:2598/Published/eInvoiceService_Google.asmx</Value>
+    </Setting>
+    <Setting Name="AutoInvServiceInterval" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="InvoiceTxnPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\UXB2B_EIVO</Value>
+    </Setting>
+    <Setting Name="PDFGeneratorOutput" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\UXB2B_EIVO\ZipInvoice</Value>
+    </Setting>
+    <Setting Name="RecAllowanceRequestPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\RecUXB2B_EIVO\Allowance</Value>
+    </Setting>
+    <Setting Name="RecAllowanceResponsePath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\RecUXB2B_EIVO\Allowance(ResponseToPGP)</Value>
     </Setting>
   </Settings>
 </SettingsFile>

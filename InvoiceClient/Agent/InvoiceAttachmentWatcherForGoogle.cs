@@ -96,10 +96,7 @@ namespace InvoiceClient.Agent
                 //}
 
                 if (contentPath != fullPath)
-                {
-                    RecordHistoryData rec = new RecordHistoryData();
-                    rec.RecData(contentPath);
-                    
+                {                   
                     File.Delete(contentPath);
                 }
                 

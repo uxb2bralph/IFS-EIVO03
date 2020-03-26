@@ -82,7 +82,7 @@ namespace Model.InvoiceManagement
                         /*
                         用GoogleID找InvoiceID
                         */
-                        sql = new aMsSql("localhost", "EIVO03", "eivo", "eivoeivo");
+                        sql = new aMsSql(Properties.Settings.Default.DBConnectstring, Properties.Settings.Default.DBName, "eivo", "eivoeivo");
                         int? iInvoiceID = InquireInvoiceID(validator.AllowanceField.Customer_ID, validator.AllowanceField.Total_Amount);
                         foreach (var d in invoiceDetails)
                         {

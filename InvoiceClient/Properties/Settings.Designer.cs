@@ -124,15 +124,6 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("30")]
-        public int AutoInvServiceInterval {
-            get {
-                return ((int)(this["AutoInvServiceInterval"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Allowance")]
         public string UploadAllowanceFolder {
             get {
@@ -335,15 +326,6 @@ namespace InvoiceClient.Properties {
         public string SellerReceiptNo {
             get {
                 return ((string)(this["SellerReceiptNo"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\UXB2B_EIVO")]
-        public string InvoiceTxnPath {
-            get {
-                return ((string)(this["InvoiceTxnPath"]));
             }
         }
         
@@ -674,15 +656,6 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\UXB2B_EIVO_GOOGLE\\ZipInvoice")]
-        public string PDFGeneratorOutput {
-            get {
-                return ((string)(this["PDFGeneratorOutput"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ClearTxnPath {
             get {
@@ -737,16 +710,6 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:2598/Published/eInvoiceService.asmx")]
-        public string InvoiceClient_WS_Invoice_eInvoiceService {
-            get {
-                return ((string)(this["InvoiceClient_WS_Invoice_eInvoiceService"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"
                   InvoiceClient.Agent.VacantInvoiceNoInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
                   InvoiceClient.Agent.InvoiceMappingInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
@@ -794,28 +757,10 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
         public string JobSchedulerPeriod {
             get {
                 return ((string)(this["JobSchedulerPeriod"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int MaxWaitingTurns {
-            get {
-                return ((int)(this["MaxWaitingTurns"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
-        public string ScheduleToNextTurn {
-            get {
-                return ((string)(this["ScheduleToNextTurn"]));
             }
         }
         
@@ -830,10 +775,83 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1eee3729-9a07-4369-bb84-ef8903b9ed7e")]
         public string ActivationKey {
             get {
                 return ((string)(this["ActivationKey"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int MaxWaitingTurns {
+            get {
+                return ((int)(this["MaxWaitingTurns"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public string ScheduleToNextTurn {
+            get {
+                return ((string)(this["ScheduleToNextTurn"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:2598/Published/eInvoiceService_Google.asmx")]
+        public string InvoiceClient_WS_Invoice_eInvoiceService {
+            get {
+                return ((string)(this["InvoiceClient_WS_Invoice_eInvoiceService"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int AutoInvServiceInterval {
+            get {
+                return ((int)(this["AutoInvServiceInterval"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\UXB2B_EIVO")]
+        public string InvoiceTxnPath {
+            get {
+                return ((string)(this["InvoiceTxnPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\UXB2B_EIVO\\ZipInvoice")]
+        public string PDFGeneratorOutput {
+            get {
+                return ((string)(this["PDFGeneratorOutput"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\RecUXB2B_EIVO\\Allowance")]
+        public string RecAllowanceRequestPath {
+            get {
+                return ((string)(this["RecAllowanceRequestPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\RecUXB2B_EIVO\\Allowance(ResponseToPGP)")]
+        public string RecAllowanceResponsePath {
+            get {
+                return ((string)(this["RecAllowanceResponsePath"]));
             }
         }
     }

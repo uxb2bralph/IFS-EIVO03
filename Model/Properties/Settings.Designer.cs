@@ -215,17 +215,6 @@ namespace Model.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.200.23\\sqlexpress,1433;Initial Catalog=EIVO03;Integrated Secu" +
-            "rity=True")]
-        public string eInvoiceConnectionString {
-            get {
-                return ((string)(this["eInvoiceConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.200.23\\SQLEXPRESS;Initial Catalog=EINVTurnkey2;Persist Securi" +
             "ty Info=True;User ID=sa;Password=111111")]
         public string EINVTurnkey2ConnectionString {
@@ -255,7 +244,30 @@ namespace Model.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost\\sqlexpress;Initial Catalog=EIVO03;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost\\sqlexpress;Initial Catalog=InvoiceClient;Integrated Securit" +
+            "y=True")]
+        public string InvoiceClientConnectionString {
+            get {
+                return ((string)(this["InvoiceClientConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.16.2.23\\sqlexpress,1433;Initial Catalog=EIVO03_202002;Persist Sec" +
+            "urity Info=True;User ID=eivo;Password=eivoeivo")]
+        public string eInvoiceConnectionString {
+            get {
+                return ((string)(this["eInvoiceConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.16.2.23\\sqlexpress,1433;Initial Catalog=EIVO03_202002;Persist Sec" +
+            "urity Info=True;User ID=eivo;Password=eivoeivo")]
         public string EIVO03ConnectionString {
             get {
                 return ((string)(this["EIVO03ConnectionString"]));
@@ -264,11 +276,19 @@ namespace Model.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost;Initial Catalog=InvoiceClient;Integrated Security=True")]
-        public string InvoiceClientConnectionString {
+        [global::System.Configuration.DefaultSettingValueAttribute("17.16.2.23")]
+        public string DBConnectstring {
             get {
-                return ((string)(this["InvoiceClientConnectionString"]));
+                return ((string)(this["DBConnectstring"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("EIVO03_202002")]
+        public string DBName {
+            get {
+                return ((string)(this["DBName"]));
             }
         }
     }

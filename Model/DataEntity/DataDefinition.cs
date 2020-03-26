@@ -136,11 +136,11 @@ namespace Model.DataEntity
         public string FileName { get; set; }
         public string AllowanceNumber { get; set; }
         public string AllowanceDate { get; set; }
-        public string GoogleId{ get; set; }
+        public string GoogleId { get; set; }
         public string SellerId { get; set; }
         public string BuyerName { get; set; }
         public string BuyerId { get; set; }
-        public string AllowanceType{ get; set; }
+        public string AllowanceType { get; set; }
         public string OriginalDescription { get; set; }
         public int Quantity { get; set; }
         public Double UnitPrice { get; set; }
@@ -151,5 +151,15 @@ namespace Model.DataEntity
         public Double TaxAmount { get; set; }
         public Double TotalAmount { get; set; }
         public string Currency { get; set; }
+    }
+
+    public class DataRecordAllowanceResponse
+    {
+        public string FileName { get; set; }
+        public string AllowanceNumber { get; set; }
+        public string ZipFileName { get; set; }
+        public string PdfFileName { get; set; }
+        public string ResponseStatus { get; set; }
+
     }
 }

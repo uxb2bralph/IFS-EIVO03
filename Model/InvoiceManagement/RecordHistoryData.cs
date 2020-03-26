@@ -29,12 +29,13 @@ namespace Model.InvoiceManagement
         {
             strDB = DB;
             strDBName = DB_Name;
+
+            msSql = new aMsSql(strDB, strDBName, "eivo", "eivoeivo");
+            abase = new aBase(nameof(RecordHistoryData) + DateTime.Now.ToString("HHmmssfff"));
         }
 
         public void RecData(string strFilePath, TableName strTableName)
         {
-            msSql = new aMsSql(strDB, strDBName, "eivo", "eivoeivo");
-            abase = new aBase(nameof(RecordHistoryData) + DateTime.Now.ToString("HHmmssfff"));
 
             XDocument x = XDocument.Load(strFilePath);
 
@@ -113,7 +114,8 @@ namespace Model.InvoiceManagement
         private List<DataRecordAllowanceResponse> ReadAllowanceResponse(XDocument x, string strFilePath)
         {
             List<DataRecordAllowanceResponse> recAllowanceList = new List<DataRecordAllowanceResponse>();
-            foreach (XElement AllowanceResponse in x.Elements("Item"))
+            //foreach (XElement AllowanceResponse in x.Elements("Item"))
+            foreach (XElement AllowanceResponse in x.Elements().Elements("Item"))
             {
                 DataRecordAllowanceResponse rec = new DataRecordAllowanceResponse();
                 rec.FileName = strFilePath == "" ? "Empty" : Path.GetFileName(strFilePath);
@@ -164,32 +166,42 @@ namespace Model.InvoiceManagement
             return recAllowanceList;
         }
 
-        public void RecAllowancePdf(string zipName, string fileName)
+        public Boolean RecAllowancePdf(string zipName, string fileName)
         {
             string strSql = "SELECT * FROM RecordAllowanceResponse where AllowanceNumber=@AllowanceNumber";
-            DataTable dt = msSql.GetDataTable(strSql, "RecordAllowanceResponse", "@AllowanceNumber", zipName.Replace("taiwan_uxb2b_scanned_sac_pdf_", "").Replace(".pdf", ""));
+            DataTable dt = msSql.GetDataTable(strSql, "RecordAllowanceResponse", "@AllowanceNumber", fileName.Replace("taiwan_uxb2b_scanned_sac_pdf_", "").Replace(".pdf", ""));
 
-            if (dt.Rows.Count < 1) { return; }
+            abase.WriteLog(string.Format("zipName:{0}    fileName:{1}", zipName, fileName), aBase.LogType.Record, nameof(RecAllowancePdf));
+
+            abase.WriteLog(string.Format("AllowanceNumber:{0}", fileName.Replace("taiwan_uxb2b_scanned_sac_pdf_", "").Replace(".pdf", "")),aBase.LogType.Record, nameof(RecAllowancePdf));
+
+            if (dt.Rows.Count < 1)
+            {
+                abase.WriteLog("dt.Rows.Count<1", aBase.LogType.Record, nameof(RecAllowancePdf));
+                return false;
+            }
             else
             {
                 foreach (DataRow dtrw in dt.Rows)
                 {
                     dtrw["ZipFileName"] = zipName;
                     dtrw["PdfFileName"] = fileName;
-                    dtrw["ResponseStatus"] = 3;
+                    dtrw["ResponseStatus"] = "3";
                 }
             }
 
             msSql.BeginTransaction();
             try
             {
-                msSql.UpdateData(dt, "RecordAllowanceResponse", " update RecordAllowanceResponse set ZipFileName=@ZipFileName ,  PdfFileName=@PdfFileName where FileName=@FileName and AllowanceNumber=@AllowanceNumber");
+                msSql.UpdateData(dt, "RecordAllowanceResponse", " update RecordAllowanceResponse set ZipFileName=@ZipFileName ,PdfFileName=@PdfFileName, ResponseStatus=@ResponseStatus where FileName=@FileName and AllowanceNumber=@AllowanceNumber");
                 msSql.Commit();
+                return true;
             }
             catch (Exception e)
             {
                 msSql.Rollback();
                 abase.WriteLog(e, aBase.LogType.Wrong, "msSql");
+                return false;
             }
 
 
