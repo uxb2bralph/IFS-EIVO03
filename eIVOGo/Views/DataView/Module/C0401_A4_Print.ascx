@@ -177,19 +177,18 @@
         <div class="cutfield" style="float: right;">
             <h3 class="notop">領獎收據</h3>
             <p class="sign">
-                發票年期別：<br />
-                發票字軌號碼：<br />
-                金額：新台幣<br />
-                中獎人：<br />
-                身分證字號：<br />
-                地址：<br />
-                電話：
-            </p>
-            <h3 class="notop">紙本電子發票注意事項</h3>
-            <p class="rule1">中獎人請於領獎期間內攜帶國民身分證及本收執聯向下列郵局兌領，逾期不得領獎，影本不得進行領獎。</p>
-            <p class="rule">(一) 特別獎、特獎及頭獎為各直轄市及各縣、市之指定郵局。</p>
-            <p class="rule">(二) 二獎、三獎、四獎、五獎及六獎為各地郵局。</p>
-
+                一、金額(新臺幣)           元整<br />
+                二、中獎人簽名(正楷)或蓋章<br />
+                <br />
+                三、電話<br />
+                四、兌獎若有疑義，<img id="qrcode3" alt="" width="80" height="80" src="../images/invoiceqrcode.png" style="float: right; margin: 15px"/> <br />
+                    請洽客服專線：<br />
+                    4128282；或請至<br />
+                    下列網址查詢
+                    http://invoice.etax.nat.gov.tw/
+                    
+            </p>            
+               
         </div>
     </div>
     <% } %>
