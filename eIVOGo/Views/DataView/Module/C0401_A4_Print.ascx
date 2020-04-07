@@ -176,17 +176,16 @@
         <div style="width: 7.2cm; height: 8.8cm; display: block; overflow: hidden; float: right;"></div>
         <div class="cutfield" style="float: right;">
             <h3 class="notop">領獎收據</h3>
-            <p class="sign">
-                一、金額(新臺幣)           元整<br />
+            <p style="font-size: 9pt">
+                一、金額(新臺幣) &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 元整<br />
                 二、中獎人簽名(正楷)或蓋章<br />
                 <br />
-                三、電話<br />
-                四、兌獎若有疑義，<img id="qrcode3" alt="" width="80" height="80" src="../images/invoiceqrcode.png" style="float: right; margin: 15px"/> <br />
-                    請洽客服專線：<br />
-                    4128282；或請至<br />
-                    下列網址查詢
-                    http://invoice.etax.nat.gov.tw/
-                    
+                三、電話<br /><img id="qrcode3" alt="" width="80" height="80" src="../images/invoiceqrcode.png" style="float: right;"/>
+                四、兌獎若有疑義， <br />
+                &nbsp&nbsp&nbsp&nbsp&nbsp 請洽客服專線：<br />
+                &nbsp&nbsp&nbsp&nbsp&nbsp 4128282；或請<br />
+                &nbsp&nbsp&nbsp&nbsp&nbsp 至下列網址查詢<br />
+                &nbsp&nbsp&nbsp&nbsp&nbsp http://invoice.etax.nat.gov.tw/
             </p>            
                
         </div>
