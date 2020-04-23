@@ -173,12 +173,12 @@ namespace Model.InvoiceManagement
 
             abase.WriteLog(string.Format("zipName:{0}    fileName:{1}", zipName, fileName), aBase.LogType.Record, nameof(RecAllowancePdf));
 
-            abase.WriteLog(string.Format("AllowanceNumber:{0}", fileName.Replace("taiwan_uxb2b_scanned_sac_pdf_", "").Replace(".pdf", "")),aBase.LogType.Record, nameof(RecAllowancePdf));
+            abase.WriteLog(string.Format("AllowanceNumber:{0}", fileName.Replace("taiwan_uxb2b_scanned_sac_pdf_", "").Replace(".pdf", "")), aBase.LogType.Record, nameof(RecAllowancePdf));
 
             if (dt.Rows.Count < 1)
             {
-                abase.WriteLog("dt.Rows.Count<1", aBase.LogType.Record, nameof(RecAllowancePdf));
-                return false;
+                abase.WriteLog(string.Format("RecordAllowanceResponse查無對應的資料 zipName：{0}  fileName：{1}", zipName, fileName), aBase.LogType.Wrong, nameof(RecAllowancePdf));
+                return true;
             }
             else
             {
