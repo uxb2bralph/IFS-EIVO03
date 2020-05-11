@@ -43,13 +43,13 @@ namespace InvoiceClient.Agent
                 XmlDocument signedReq = token.ConvertToXml().Sign();
                 string[] items = invSvc.ReceiveContentAsPDFForIssuer(signedReq, Settings.Default.ClientID);
 
-                //為了有測試資料
-                int enviroment;
-                enviroment = int.TryParse(Settings.Default.Environment, out enviroment) == true ? enviroment : 3;
-                if (items != null && items.Length < 2 && (enviroment == (int)Naming.Environment.Dev || enviroment == (int)Naming.Environment.Test))//yuki:加判斷是否為本機
-                {
-                    items = invSvc.ReceiveContentAsPDFForSeller(signedReq, Settings.Default.ClientID);
-                }
+                ////為了有測試資料
+                //int enviroment;
+                //enviroment = int.TryParse(Settings.Default.Environment, out enviroment) == true ? enviroment : 3;
+                //if (items != null && items.Length < 2 && (enviroment == (int)Naming.Environment.Dev || enviroment == (int)Naming.Environment.Test))//yuki:加判斷是否為本機
+                //{
+                //    items = invSvc.ReceiveContentAsPDFForSeller(signedReq, Settings.Default.ClientID);
+                //}
 
                 if (items != null && items.Length > 1)
                 {
