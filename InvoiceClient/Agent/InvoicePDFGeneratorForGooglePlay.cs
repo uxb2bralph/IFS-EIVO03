@@ -14,6 +14,7 @@ using InvoiceClient.Helper;
 using InvoiceClient.TransferManagement;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using DataContructor.Models;
 
 namespace InvoiceClient.Agent
 {
@@ -47,6 +48,8 @@ namespace InvoiceClient.Agent
                 {
                     String serviceUrl = items[0];
 
+                    List<InvoicePDFGeneratorForGooglePlayModel> logItems = new List<InvoicePDFGeneratorForGooglePlayModel>();
+
                     void proc(int i)
                     {
                         var item = items[i];
@@ -57,6 +60,16 @@ namespace InvoiceClient.Agent
                             _prefix_name + paramValue[1] + "_" + invNo + ".pdf");
                         var url = $"{serviceUrl}?keyID={paramValue[2]}";
                         fetchPDF(pdfFile, url);
+
+                        InvoicePDFGeneratorForGooglePlayModel logItem = new InvoicePDFGeneratorForGooglePlayModel
+                        {
+                            Date = DateTime.Now,
+                            Path = pdfFile,
+                            OrderNo = paramValue[1],
+                            Url = url,
+                        };
+
+                        logItems.Add(logItem);
                     }
 
                     //Parallel.For(1, items.Length, (idx) =>
@@ -68,10 +81,20 @@ namespace InvoiceClient.Agent
                         proc(idx);
                     }
 
+                    String filePath = Path.Combine(Logger.LogDailyPath, "InvoicePDFGeneratorForGooglePlay.csv");
+                    using (StreamWriter writer = new StreamWriter(filePath, true))
+                    {
+                        using(CsvHelper.CsvWriter csv = new CsvHelper.CsvWriter(writer,true))
+                        {
+                            csv.WriteRecords<InvoicePDFGeneratorForGooglePlayModel>(logItems);
+                        }
+                        writer.WriteLine();
+                    }
+
                     Logger.Debug($"fetch count:{items.Length - 1}");
                     return storedPath;
                 }
-                return  null;
+                return null;
             }
             catch (Exception ex)
             {
@@ -79,13 +102,11 @@ namespace InvoiceClient.Agent
             }
 
             return null;
-        }
-
+        }        
 
         protected override void fetchPDF(string pdfFile, string url)
         {
             url = $"{url}&html={true}";
-            Logger.Debug(url);
             url.ConvertHtmlToPDF(pdfFile, 1);
         }
 

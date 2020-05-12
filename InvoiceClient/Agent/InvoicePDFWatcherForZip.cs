@@ -15,6 +15,7 @@ using System.Globalization;
 using Model.Locale;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using DataContructor.Models;
 
 namespace InvoiceClient.Agent
 {
@@ -52,6 +53,9 @@ namespace InvoiceClient.Agent
             _files.Clear();
 
             _outFile = Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}.zip");
+
+            List<InvoicePDFWatcherForZipModel> logItems = new List<InvoicePDFWatcherForZipModel>();
+
             using (var zipOut = System.IO.File.Create(_outFile))
             {
                 using (ZipArchive zip = new ZipArchive(zipOut, ZipArchiveMode.Create))
@@ -64,6 +68,15 @@ namespace InvoiceClient.Agent
                             zip.CreateEntryFromFile(item, Path.GetFileName(item));
                             _files.Add(item);
                             count++;
+
+                            InvoicePDFWatcherForZipModel log = new InvoicePDFWatcherForZipModel
+                            {
+                                Date = DateTime.Now,
+                                Path = Path.GetFileName(item),
+                                Status = 1
+                            };
+
+                            logItems.Add(log);
                         }
                         catch (Exception ex)
                         {
@@ -83,7 +96,21 @@ namespace InvoiceClient.Agent
                     //File.Delete(item);
                     storeFile(item, Path.Combine(Logger.LogDailyPath, Path.GetFileName(item)));
                 }
-                
+
+                String filePath = Path.Combine(Logger.LogDailyPath, "InvoicePDFWatcherForZip.csv");
+                using (StreamWriter writer = new StreamWriter(filePath, true))
+                {
+                    using (CsvHelper.CsvWriter csv = new CsvHelper.CsvWriter(writer, true))
+                    {
+                        foreach(var item in logItems)
+                        {
+                            item.FileName = zipName;
+                            csv.WriteRecord<InvoicePDFWatcherForZipModel>(item);
+                            writer.WriteLine();
+                        }
+                    }
+                }
+
                 //if(Settings.Default.PackerCycleDelayInSeconds>0 && _files.Count< __MaxFileCount)
                 //{
                 //    Task.Delay(Settings.Default.PackerCycleDelayInSeconds * 1000)

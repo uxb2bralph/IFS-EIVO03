@@ -8,8 +8,23 @@ namespace DataContructor.Models
 {
     public class InvoicePDFGeneratorForGooglePlayModel
     {
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         public string Path { get; set; }
         public string OrderNo { get; set; }
+        public String Url { get; set; }
+    }
+
+    public class InvoicePDFWatcherForZipModel 
+    {
+        public DateTime Date { get; set; }
+        public string Path { get; set; }
+        public string FileName { get; set; }
+        public int Status { get; set; }
+    }
+
+    public class PGPEncryptWatcherModel
+    {
+        public string FileName { get; set; }
+        public int Status { get; set; }
     }
 }
