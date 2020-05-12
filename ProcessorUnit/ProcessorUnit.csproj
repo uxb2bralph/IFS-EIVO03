@@ -73,6 +73,7 @@
     <Compile Include="Execution\InvoiceExcelRequestForIssuerProcessor.cs" />
     <Compile Include="Execution\InvoiceExcelRequestForVACProcessor.cs" />
     <Compile Include="Execution\InvoiceExcelRequestForCBEProcessor.cs" />
+    <Compile Include="Execution\AllowanceJsonRequestProcessor.cs" />
     <Compile Include="Execution\VoidInvoiceJsonRequestProcessor.cs" />
     <Compile Include="Execution\InvoiceJsonRequestForCBEProcessor.cs" />
     <Compile Include="Execution\InvoiceXmlRequestForCBEProcessor.cs" />

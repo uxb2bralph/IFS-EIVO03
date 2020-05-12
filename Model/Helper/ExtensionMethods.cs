@@ -536,14 +536,5 @@ namespace Model.Helper
                                 : ValueValidity.GenerateRandomCode(4);
         }
 
-        public static string BuildEncryptedData(this InvoiceItem item)
-        {
-            String key = File.ReadAllText(Path.Combine(Logger.LogPath, "ORCodeKey.txt"));
-            String EncryptContent = item.TrackCode + item.No + item.RandomNo;
-            com.tradevan.qrutil.QREncrypter qrencrypter = new com.tradevan.qrutil.QREncrypter();
-            String finalEncryData = qrencrypter.AESEncrypt(EncryptContent, key);
-            return finalEncryData;
-        }
-
     }
 }

@@ -159,7 +159,8 @@ namespace Model.InvoiceManagement.Validator
                 i.OriginalDescription = i.OriginalDescription.GetEfficientString();
                 InvoiceProduct item = null;
                 InvoiceProductItem prodItem = null;
-                foreach (var p in productItems.Where(p => p.Brief == i.OriginalDescription).OrderByDescending(d => d.ProductID))
+                //foreach (var p in productItems.Where(p => p.Brief == i.OriginalDescription).OrderByDescending(d => d.ProductID))
+                foreach (var p in productItems.OrderByDescending(d => d.ProductID))
                 {
                     prodItem = p.InvoiceProductItem.FirstOrDefault();
                     if (prodItem != null)

@@ -76,7 +76,6 @@ namespace Model.InvoiceManagement.Validator
 
         }
 
-        protected Naming.InvoiceProcessType processType;
         public InvoiceDataSetValidator(GenericManager<EIVOEntityDataContext> mgr, Organization owner, Naming.InvoiceProcessType processType) : base(mgr, owner)
         {
             this.processType = processType;
@@ -954,23 +953,23 @@ namespace Model.InvoiceManagement.Validator
                 }
 
 
-                if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
-                {
-                    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
-                }
+                //if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
+                //}
 
-                if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
-                {
-                    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
-                }
+                //if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
+                //}
 
-                if (product.CostAmount.HasValue && product.UnitCost.HasValue && product.Piece.HasValue)
-                {
-                    if (product.CostAmount != product.UnitCost * product.Piece)
-                    {
-                        return new Exception(MessageResources.InvalidProductAmount);
-                    }
-                }
+                //if (product.CostAmount.HasValue && product.UnitCost.HasValue && product.Piece.HasValue)
+                //{
+                //    if (product.CostAmount != product.UnitCost * product.Piece)
+                //    {
+                //        return new Exception(MessageResources.InvalidProductAmount);
+                //    }
+                //}
             }
             return null;
         }

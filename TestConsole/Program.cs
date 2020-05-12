@@ -23,6 +23,8 @@ using TestConsole.ServiceReference1;
 using ClosedXML.Excel;
 using System.Data;
 using Uxnet.Com.DataAccessLayer;
+using Model.InvoiceManagement;
+using Model.InvoiceManagement.InvoiceProcess;
 
 namespace TestConsole
 {
@@ -87,6 +89,19 @@ namespace TestConsole
 
             //test17();
 
+            //test18();
+            using (InvoiceManager models = new InvoiceManager())
+            {
+                C0501Handler c0501 = new C0501Handler(models);
+                //c0501.NotifyIssued();
+                c0501.WriteToTurnkey();
+            }
+
+            Console.ReadKey();
+        }
+
+        private static void test18()
+        {
             String jsonData = @"
 {
     ""result"":true,
@@ -96,7 +111,6 @@ namespace TestConsole
             dynamic json = JsonConvert.DeserializeObject(jsonData);
             _Test result = JsonConvert.DeserializeObject<_Test>(jsonData);
             Console.WriteLine(json.result);
-            Console.ReadKey();
         }
 
         class _Test

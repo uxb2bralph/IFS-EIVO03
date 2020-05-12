@@ -257,7 +257,11 @@ namespace Model.Models.ViewModel
                             {
                                 MasterID = _seller.CompanyID,
                                 Counterpart = buyer,
-                                BusinessID = (int)Naming.InvoiceCenterBusinessType.銷項
+                                BusinessID = (int)Naming.InvoiceCenterBusinessType.銷項,
+                                CompanyName = _buyer.Name,
+                                Addr = _buyer.Address,
+                                Phone = _buyer.Phone,
+                                ContactEmail = _buyer.EMail,
                             }
                         );
                 }

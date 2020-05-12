@@ -31,40 +31,40 @@ namespace eIVOGo.Controllers
         // GET: POSDevice
         public ActionResult AllocateInvoiceNo(POSDeviceViewModel viewModel)
         {
-            if (String.IsNullOrEmpty(Request.ContentType) && String.IsNullOrEmpty(Request.Params["Query_String"]))
-            {
-                using (StreamReader reader = new StreamReader(Request.InputStream, Request.ContentEncoding))
+            //if (String.IsNullOrEmpty(Request.ContentType) && String.IsNullOrEmpty(Request.Params["Query_String"]))
+            //{
+            //    using (StreamReader reader = new StreamReader(Request.InputStream, Request.ContentEncoding))
+            //    {
+            //        viewModel = JsonConvert.DeserializeObject<POSDeviceViewModel>(reader.ReadToEnd());
+            //    }
+            //}
+
+            /**
+                Http Header
+                Seed: RANDOM[16]
+                Authorization: Base64(SHA256([Vendor 統編] + [Activation Key] + [Seed]))
+
                 {
-                    viewModel = JsonConvert.DeserializeObject<POSDeviceViewModel>(reader.ReadToEnd());
+	                "SellerID": "[商家統編]",
+	                "Booklet": 1
                 }
+             */
+
+            Request.SaveAs(Path.Combine(Logger.LogDailyPath, String.Format("{0}.txt", DateTime.Now.Ticks)), true);
+
+            if (viewModel.Booklet.HasValue)
+            {
+                viewModel.quantity = viewModel.Booklet * 50;
             }
 
-            List<InvoiceNoAllocation> items = new List<InvoiceNoAllocation>();
+            viewModel.Seed = Request.Headers["Seed"].GetEfficientString();
+            viewModel.Authorization = Request.Headers["Authorization"].GetEfficientString();
 
-            //receiptNo = receiptNo.GetEfficientString();
-            var seller = models.GetTable<Organization>().Where(c => c.ReceiptNo == viewModel.company_id).FirstOrDefault();
-            if (seller != null)
-            {
-                InvoiceItemEncryption enc = new InvoiceItemEncryption();
-                using (TrackNoManager mgr = new TrackNoManager(models, seller.CompanyID))
-                {
-                    for (int i = 0; i < viewModel.quantity; i++)
-                    {
-                        var item = mgr.AllocateInvoiceNo();
-                        if (item == null)
-                            break;
-
-                        item.RandomNo = String.Format("{0:0000}", (DateTime.Now.Ticks % 10000));
-                        item.EncryptedContent = enc.EncryptContent(item.InvoiceNoInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode + String.Format("{0:00000000}", item.InvoiceNo), item.RandomNo);
-                        models.SubmitChanges();
-
-                        items.Add(item);
-                    }
-                }
-            }
+            List<InvoiceNoAllocation> items = models.AllocateInvoiceNo(viewModel);
 
             return Json(new
             {
+                viewModel.SellerID,
                 invoice_issue = items.Select(t => new
                 {
                     sn = t.InvoiceNoInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode + String.Format("{0:00000000}", t.InvoiceNo),

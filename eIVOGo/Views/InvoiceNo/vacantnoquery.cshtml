@@ -1,7 +1,3 @@
-
-@{ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" }
-
-
 @using System.IO
 @using System.Linq.Expressions
 
@@ -15,35 +11,57 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-<!--交易畫面標題-->
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "上期發票空白號碼查詢／匯出");}
+@{
+
+
+    Model.Security.MembershipManagement.UserProfileMember _profile;
+    ModelSource<InvoiceItem> models;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _profile = Business.Helper.WebPageUtility.UserProfile;
+}
+
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "上期發票空白號碼查詢／匯出");}
 
 <div class="border_gray">
     <!--表格 開始-->
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
         <tr>
-            <th colspan="2" class="Head_style_a">查詢條件
+            <th colspan="2" class="Head_style_a">
+                查詢條件
             </th>
         </tr>
         <tr>
-            <th>開立人統編
+            <th>
+                開立人統編
             </th>
             <td class="tdleft">
                 @{ ViewBag.SelectorIndication = "全部";
-                    Html.RenderPartial("~/Views/DataFlow/SellerSelector.ascx", _profile.InitializeOrganizationQuery(models));}
-                
+                    Html.RenderPartial("~/Views/DataFlow/SellerSelector.cshtml", _profile.InitializeOrganizationQuery(models));}
+
             </td>
-        </tr>        <tr>
-            <th>發票年度（民國年）
+        </tr>
+        <tr>
+            <th>
+                主機構、分支機構
+            </th>
+            <td class="tdleft">
+                <input type="radio" name="BranchRelation" value="@(true.ToString())" />是
+                <input type="radio" name="BranchRelation" value="@(false.ToString())" />否
+            </td>
+        </tr>
+        <tr>
+            <th>
+                發票年度（民國年）
             </th>
             <td class="tdleft">
                 <select name="Year">
                     @for (int y = DateTime.Today.Year; y >= 2011; y--)
-                        {
-                    <option value="@(y)">@(y-1911)</option>
+                    {
+                        <option value="@(y)">@(y - 1911)</option>
                     }
                 </select>
-@*<script>
+                @*<script>
                     $('select[name="Year"]').on('change', function (evt) {
                         $.post('@(Url.Action("TrackCodeSelector","InvoiceNo"))', { 'Year': $('select[name="Year"]').val(), 'PeriodNo': $('select[name="PeriodNo"]').val(), 'SelectIndication': '全部' }, function (data) {
                             $('#trackCodeSelector').html(data);
@@ -57,11 +75,11 @@
             <td class="tdleft">
                 <select name="PeriodNo">
                     @for (int y = 1; y < 7; y++)
-                        {
-                    <option value="@(y)">@(String.Format("{0:00}-{1:00}月",y*2-1,y*2))</option>
+                    {
+                        <option value="@(y)">@(String.Format("{0:00}-{1:00}月", y * 2 - 1, y * 2))</option>
                     }
                 </select>
-@*<script>
+                @*<script>
                         $('select[name="PeriodNo"]').val('@((DateTime.Today.Month + 1) / 2)');
                         $('select[name="PeriodNo"]').on('change', function (evt) {
                             $.post('@(Url.Action("TrackCodeSelector","InvoiceNo"))', { 'Year': $('select[name="Year"]').val(), 'PeriodNo': $('select[name="PeriodNo"]').val() }, function (data) {
@@ -71,7 +89,7 @@
                 </script>*@
             </td>
         </tr>
-@*<tr>
+        @*<tr>
             <th>字軌
             </th>
             <td class="tdleft" id="trackCodeSelector">
@@ -183,18 +201,6 @@
         };
     });
 </script>
-<script runat="server">
 
 
-    Model.Security.MembershipManagement.UserProfileMember _profile;
-    ModelSource<InvoiceItem> models;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _profile = Business.Helper.WebPageUtility.UserProfile;
-    }
-
-</script>
 

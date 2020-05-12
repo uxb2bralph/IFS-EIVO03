@@ -436,8 +436,8 @@ namespace InvoiceClient.Agent
                 IEnumerable<String> message = rootInvoiceNo.Select(i => String.Format("發票號碼:{0}=>{1}", i.Value, i.Description));
                 Logger.Warn(String.Format("在上傳發票檔({0})時,傳送失敗!!原因如下:\r\n{1}", fileName, String.Join("\r\n", message.ToArray())));
 
-                InvoiceRoot invoice = docInv.ConvertTo<InvoiceRoot>();
-                InvoiceRoot stored = docInv.ConvertTo<InvoiceRoot>();
+                InvoiceRoot invoice = docInv.TrimAll().ConvertTo<InvoiceRoot>();
+                InvoiceRoot stored = docInv.TrimAll().ConvertTo<InvoiceRoot>();
                 stored.Invoice = rootInvoiceNo.Where(i=>i.ItemIndexSpecified).Select(i=>invoice.Invoice[i.ItemIndex]).ToArray();
 
                 stored.ConvertToXml().Save(Path.Combine(_failedTxnPath, Path.GetFileName(fileName)));

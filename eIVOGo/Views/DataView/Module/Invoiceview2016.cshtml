@@ -33,6 +33,8 @@
 
     if (_model != null)
     {
+        __FIRST_PAGE_ITEM_COUNT = _model.Organization.LogoURL != null ? 12 : 15;
+
         _products = models.GetTable<InvoiceDetail>().Where(d => d.InvoiceID == _model.InvoiceID)
             .Join(models.GetTable<InvoiceProduct>(), d => d.ProductID, p => p.ProductID, (d, p) => p)
             .Join(models.GetTable<InvoiceProductItem>(), d => d.ProductID, i => i.ProductID, (p, i) => i)
@@ -43,7 +45,6 @@
 
         _totalAmtChar = ((int)_model.InvoiceAmountType.TotalAmount.Value).GetChineseNumberSeries(8);
 
-        __FIRST_PAGE_ITEM_COUNT = _model.Organization.LogoURL != null ? 12 : 15;
     }
 }
 @if (_model != null)

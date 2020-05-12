@@ -78,9 +78,13 @@ namespace Model.InvoiceManagement
 
             DataTable result = InitializeInvoiceResponseTable();
 
-            IEnumerable<DataRow> invoiceItems = item.Tables["Invoice"].Rows.Cast<DataRow>();
-            IEnumerable<DataRow> details = item.Tables["Details"].Rows.Cast<DataRow>();
-            //String dataID = "";
+            IEnumerable<DataRow> invoiceItems = (item.Tables["Invoice"] ?? item.Tables[0])?.Rows.Cast<DataRow>();
+            IEnumerable<DataRow> details = (item.Tables["Details"] ?? item.Tables[1])?.Rows.Cast<DataRow>();
+
+            if (invoiceItems == null || details == null)
+            {
+                throw new Exception("Bad Invoice Data Sheets");
+            }            //String dataID = "";
             //foreach (DataRow row in details)
             //{
             //    if (row.IsNull(validator.DetailsField.Data_ID) || String.IsNullOrEmpty((String)row[validator.DetailsField.Data_ID]))
@@ -186,8 +190,13 @@ namespace Model.InvoiceManagement
 
             DataTable result = InitializeInvoiceResponseTable();
 
-            IEnumerable<DataRow> invoiceItems = item.Tables["Invoice"].Rows.Cast<DataRow>();
-            IEnumerable<DataRow> details = item.Tables["Details"].Rows.Cast<DataRow>();
+            IEnumerable<DataRow> invoiceItems = (item.Tables["Invoice"] ?? item.Tables[0])?.Rows.Cast<DataRow>();
+            IEnumerable<DataRow> details = (item.Tables["Details"] ?? item.Tables[1])?.Rows.Cast<DataRow>();
+
+            if (invoiceItems == null || details == null)
+            {
+                throw new Exception("Bad Invoice Data Sheets");
+            }
             //String dataID = "";
             //foreach (DataRow row in details)
             //{
@@ -246,8 +255,14 @@ namespace Model.InvoiceManagement
 
             DataTable result = InitializeInvoiceResponseTable();
 
-            IEnumerable<DataRow> invoiceItems = item.Tables["Invoice"].Rows.Cast<DataRow>();
-            IEnumerable<DataRow> details = item.Tables["Details"].Rows.Cast<DataRow>();
+            IEnumerable<DataRow> invoiceItems = (item.Tables["Invoice"] ?? item.Tables[0])?.Rows.Cast<DataRow>();
+            IEnumerable<DataRow> details = (item.Tables["Details"] ?? item.Tables[1])?.Rows.Cast<DataRow>();
+
+            if (invoiceItems == null || details == null)
+            {
+                throw new Exception("Bad Invoice Data Sheets");
+            }
+
             String invoiceNo = "";
             foreach (DataRow row in details)
             {

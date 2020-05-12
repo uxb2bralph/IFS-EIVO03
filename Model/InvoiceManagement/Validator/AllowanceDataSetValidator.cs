@@ -34,17 +34,17 @@ namespace Model.InvoiceManagement.Validator
             public int Allowance_No { get; set; } = 0;
             public int Allowance_Date { get; set; } = 1;
             public int Seller_ID { get; set; } = 2;
-            public int Customer_ID { get; set; } = 3;
-            public int Buyer_Name { get; set; } = 4;
-            public int Buyer_ID { get; set; } = 5;
-            public int Allowance_Type { get; set; } = 6;
-            public int Contact_Name { get; set; } = 7;
-            public int EMail { get; set; } = 8;
-            public int Address { get; set; } = 9;
-            public int Phone { get; set; } = 10;
-            public int Tax_Amount { get; set; } = 11;
-            public int Total_Amount { get; set; } = 12;
-            public int Currency { get; set; } = 13;
+            //public int Customer_ID { get; set; } = 3;
+            //public int Buyer_Name { get; set; } = 4;
+            //public int Buyer_ID { get; set; } = 5;
+            //public int Allowance_Type { get; set; } = 6;
+            public int Contact_Name { get; set; } = 3;
+            public int EMail { get; set; } = 4;
+            public int Address { get; set; } = 5;
+            public int Phone { get; set; } = 6;
+            public int Tax_Amount { get; set; } = 7;
+            public int Total_Amount { get; set; } = 8;
+            public int Currency { get; set; } = 9;
         }
 
         internal DetailsFieldIndex DetailsField = new DetailsFieldIndex { };
@@ -183,12 +183,12 @@ namespace Model.InvoiceManagement.Validator
                 return new Exception("Allowance details not found.");
             }
 
-            byte? allowanceType = _allowanceItem.GetData<byte>(AllowanceField.Allowance_Type);
-            //課稅別
-            if (!allowanceType.HasValue || !Enum.IsDefined(typeof(Naming.AllowanceTypeDefinition), (int)allowanceType.Value))
-            {
-                allowanceType = (byte)Naming.AllowanceTypeDefinition.賣方開立;
-            }
+            //byte? allowanceType = _allowanceItem.GetData<byte>(AllowanceField.Allowance_Type);
+            //if (!allowanceType.HasValue || !Enum.IsDefined(typeof(Naming.AllowanceTypeDefinition), (int)allowanceType.Value))
+            //{
+            //    allowanceType = (byte)Naming.AllowanceTypeDefinition.賣方開立;
+            //}
+            byte allowanceType = (byte)Naming.AllowanceTypeDefinition.賣方開立;
 
             _productItems = new List<InvoiceAllowanceItem>();
             var invTable = models.GetTable<InvoiceItem>();

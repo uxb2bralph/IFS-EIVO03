@@ -115,12 +115,6 @@
                     InvoiceClient.MainContent.SystemConfigTab, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
                 </Value>
     </Setting>
-    <Setting Name="UploadC0501InvoiceCancellationFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">CancelInvoice_C0501</Value>
-    </Setting>
-    <Setting Name="UploadC0401SellerInvoiceFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">SellerInvoice_C0401</Value>
-    </Setting>
     <Setting Name="UploadInvoiceEnterprise" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Enterprise</Value>
     </Setting>

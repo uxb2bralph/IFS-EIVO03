@@ -28,7 +28,15 @@ namespace ModelExtension.Helper
                         Entrusting = viewModel.Entrusting,
                         EntrustToPrint = viewModel.EntrustToPrint,
                     },
-                    OrganizationExtension = new OrganizationExtension { }
+                    ReceiptNo = viewModel.ReceiptNo,
+                    OrganizationExtension = new OrganizationExtension
+                    {
+                        CustomerNo = viewModel.CustomerNo,
+                    },
+                    CompanyName = viewModel.CompanyName,
+                    Addr = viewModel.Addr,
+                    Phone = viewModel.Phone,
+                    ContactEmail = viewModel.ContactEmail,
                 };
 
                 model = new BusinessRelationship
@@ -42,7 +50,7 @@ namespace ModelExtension.Helper
                 var orgaCate = new OrganizationCategory
                 {
                     Organization = orgItem,
-                    CategoryID = (int)Naming.CategoryID.COMP_E_INVOICE_B2C_BUYER
+                    CategoryID = (int)Naming.MemberCategoryID.相對營業人,
                 };
 
                 if (!String.IsNullOrEmpty(viewModel.CustomerNo))
@@ -108,7 +116,10 @@ namespace ModelExtension.Helper
 
                 if(orgItem.OrganizationStatus==null)
                 {
-                    orgItem.OrganizationStatus = new OrganizationStatus { };
+                    orgItem.OrganizationStatus = new OrganizationStatus
+                    {
+                        CurrentLevel = (int)Naming.MemberStatusDefinition.Wait_For_Check
+                    };
                 }
 
                 //var currentUser = models.GetTable<UserProfile>().Where(u => u.PID == viewModel.ReceiptNo).FirstOrDefault();
@@ -120,12 +131,11 @@ namespace ModelExtension.Helper
                 //}
             }
 
-            orgItem.CompanyName = viewModel.CompanyName.Trim();
-            orgItem.ReceiptNo = viewModel.ReceiptNo;
-            orgItem.ContactEmail = viewModel.ContactEmail;
-            orgItem.Addr = viewModel.Addr;
-            orgItem.Phone = viewModel.Phone;
-            orgItem.OrganizationExtension.CustomerNo = viewModel.CustomerNo;
+            model.CompanyName = viewModel.CompanyName.Trim();
+            model.ContactEmail = viewModel.ContactEmail;
+            model.Addr = viewModel.Addr;
+            model.Phone = viewModel.Phone;
+            model.CustomerNo = viewModel.CustomerNo;
 
             models.SubmitChanges();
 

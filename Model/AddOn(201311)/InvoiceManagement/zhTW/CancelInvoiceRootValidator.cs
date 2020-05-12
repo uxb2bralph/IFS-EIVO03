@@ -92,15 +92,26 @@ namespace Model.InvoiceManagement.zhTW
                 return new Exception("作廢日期，TAG：< CancelDate />");
             }
 
+            //if (String.IsNullOrEmpty(invItem.CancelTime))
+            //{
+            //    return new Exception("作廢時間，TAG：< CancelTime />");
+            //}
+
             if (String.IsNullOrEmpty(invItem.CancelTime))
             {
-                return new Exception("作廢時間，TAG：< CancelTime />");
+                if (!DateTime.TryParseExact(String.Format("{0}", invItem.CancelDate, invItem.CancelTime), "yyyy/MM/dd", CultureInfo.CurrentCulture, DateTimeStyles.None, out cancelDate))
+                {
+                    return new Exception(String.Format("作廢發票日期格式錯誤(YYYY/MM/DD)；傳送資料:{0}", invItem.CancelDate));
+                }
+            }
+            else
+            {
+                if (!DateTime.TryParseExact(String.Format("{0} {1}", invItem.CancelDate, invItem.CancelTime), "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out cancelDate))
+                {
+                    return new Exception(String.Format("作廢發票日期、發票時間格式錯誤(YYYY/MM/DD HH:mm:ss)；傳送資料:{0} {1}", invItem.CancelDate, invItem.CancelTime));
+                }
             }
 
-            if (!DateTime.TryParseExact(String.Format("{0} {1}", invItem.CancelDate, invItem.CancelTime), "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out cancelDate))
-            {
-                return new Exception(String.Format("作廢發票日期、發票時間格式錯誤(YYYY/MM/DD HH:mm:ss)；傳送資料:{0} {1}", invItem.CancelDate, invItem.CancelTime));
-            }
 
             if (String.IsNullOrEmpty(invItem.CancelReason))
             {

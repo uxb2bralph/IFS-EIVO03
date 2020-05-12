@@ -138,13 +138,18 @@ namespace Model.InvoiceManagement.enUS
         {
             InvoiceItem invoice = null;
 
-            if (String.IsNullOrEmpty(item.GetString((int)VoidInvoiceField.Void_Invoice_No)) || !Regex.IsMatch(item.GetString((int)VoidInvoiceField.Void_Invoice_No), "^[a-zA-Z]{2}[0-9]{8}$"))
+            String expectedNo = item.GetString((int)VoidInvoiceField.Void_Invoice_No);
+            if (String.IsNullOrEmpty(expectedNo))
             {
                 return new Exception(String.Format("Invalid void invoice number：{0}", item.GetString((int)VoidInvoiceField.Void_Invoice_No)));
             }
-            String invNo, trackCode;
-            trackCode = item.GetString((int)VoidInvoiceField.Void_Invoice_No).Substring(0, 2);
-            invNo = item.GetString((int)VoidInvoiceField.Void_Invoice_No).Substring(2);
+            else if (Regex.IsMatch(expectedNo, "^[a-zA-Z]{2}[0-9]{8}$"))
+            {
+                String invNo, trackCode;
+                trackCode = item.GetString((int)VoidInvoiceField.Void_Invoice_No).Substring(0, 2);
+                invNo = item.GetString((int)VoidInvoiceField.Void_Invoice_No).Substring(2);
+                invoice = models.GetTable<InvoiceItem>().Where(i => i.No == invNo && i.TrackCode == trackCode).FirstOrDefault();
+            }
 
             DateTime? invoiceDate = item.GetData<DateTime>((int)VoidInvoiceField.Invoice_Date);
             if (!invoiceDate.HasValue)
@@ -153,8 +158,15 @@ namespace Model.InvoiceManagement.enUS
             }
 
             String sellerID = item.GetString((int)VoidInvoiceField.Seller_ID);
-            invoice = models.GetTable<InvoiceItem>().Where(i => i.No == invNo && i.TrackCode == trackCode).FirstOrDefault();
-            expectedSeller = models.GetTable<Organization>().Where(o => o.ReceiptNo == sellerID).FirstOrDefault();
+            var seller = expectedSeller = models.GetTable<Organization>().Where(o => o.ReceiptNo == sellerID).FirstOrDefault();
+
+            if (invoice == null && seller != null)
+            {
+                invoice = models.GetTable<InvoicePurchaseOrder>().Where(o => o.OrderNo == expectedNo)
+                            .Select(o => o.InvoiceItem)
+                            .Where(i => i.SellerID == seller.CompanyID)
+                            .FirstOrDefault();
+            }
 
             if (invoice == null)
             {
@@ -164,11 +176,6 @@ namespace Model.InvoiceManagement.enUS
             {
                 return new Exception(String.Format("Invalid Seller ID:{0}", sellerID));
             }
-
-            //if (invoice.SellerID != owner.CompanyID)
-            //{
-            //    return new Exception(String.Format("Non-original invoice voided invoice Liren,Cancel Invoice Number:{0}", item.GetString((int)VoidInvoiceField.Void_Invoice_No)));
-            //}
 
             if (invoice.InvoiceCancellation != null)
             {
@@ -194,7 +201,7 @@ namespace Model.InvoiceManagement.enUS
             //}
 
             voidItem = invoice.PrepareVoidItem(models, ref p);
-            voidItem.CancellationNo = item.GetString((int)VoidInvoiceField.Void_Invoice_No);
+            voidItem.CancellationNo = $"{invoice.TrackCode}{invoice.No}";
             voidItem.Remark = item.GetString((int)VoidInvoiceField.Remark);
             voidItem.ReturnTaxDocumentNo = item.GetString((int)VoidInvoiceField.Return_Tax_Document_No);
             voidItem.CancelDate = voidDate;

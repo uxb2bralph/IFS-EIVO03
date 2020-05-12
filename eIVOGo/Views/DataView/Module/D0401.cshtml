@@ -39,7 +39,7 @@
             }
             <p style="text-align:center">營業人銷貨退回、進貨退出<Br />或折讓證明單</p>
             <p style="text-align:center">@(String.Format("{0:yyyy-MM-dd}", _model.AllowanceDate))</p>
-            <p>
+            <p style="font-weight:bolder;">
                 賣方統編：@(_model.InvoiceAllowanceSeller.ReceiptNo)<br />
                 賣方名稱：@(_model.InvoiceAllowanceSeller.CustomerName)<br />
                 發票開立日期：@(String.Format("{0:yyyy-MM-dd}", details.InvoiceDate))<br />

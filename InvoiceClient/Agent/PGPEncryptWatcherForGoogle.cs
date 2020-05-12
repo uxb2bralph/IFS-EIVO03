@@ -24,6 +24,8 @@ namespace InvoiceClient.Agent
 
         }
 
+        public String AddedStore { get; set; }
+
         protected override void processFile(String invFile)
         {
             if (!File.Exists(invFile))
@@ -48,6 +50,19 @@ namespace InvoiceClient.Agent
             if (File.Exists(gpgName))
             {
                 storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
+                if (AddedStore != null)
+                {
+                    try
+                    {
+                        AddedStore.CheckStoredPath();
+                        String storeTo = Path.Combine(AddedStore, Path.GetFileName(gpgName));
+                        File.Copy(gpgName, storeTo);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex);
+                    }
+                }
             }
             else
             {

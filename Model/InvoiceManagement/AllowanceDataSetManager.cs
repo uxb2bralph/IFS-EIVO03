@@ -50,13 +50,13 @@ namespace Model.InvoiceManagement
             String dataID = "";
             foreach (DataRow row in details)
             {
-                if (row.IsNull(validator.DetailsField.Allowance_No) || String.IsNullOrEmpty((String)row[validator.DetailsField.Allowance_No]))
+                if (row.IsNull(validator.DetailsField.Allowance_No) || String.IsNullOrEmpty(row.GetString(validator.DetailsField.Allowance_No)))
                 {
                     row[validator.DetailsField.Allowance_No] = dataID;
                 }
                 else
                 {
-                    dataID = (String)row[validator.DetailsField.Allowance_No];
+                    dataID = row.GetString(validator.DetailsField.Allowance_No);
                 }
             }
 

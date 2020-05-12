@@ -120,7 +120,7 @@ namespace eIVOGo.Helper
 
             if (bResult)
             {
-
+                BusinessRelationship relationship = null;
                 var currentItem = this.EntityList.Where(o => o.ReceiptNo == item.Entity.ReceiptNo).FirstOrDefault();
 
                 if (currentItem == null)
@@ -133,18 +133,20 @@ namespace eIVOGo.Helper
                         if (item.Entity.OrganizationStatus == null)
                         {
                             item.Entity.OrganizationStatus = new OrganizationStatus
-                                {
-                                };
+                            {
+                                CurrentLevel = (int)Naming.MemberStatusDefinition.Checked
+                            };
                         }
 
                         item.Entity.OrganizationStatus.CurrentLevel = (int)Naming.MemberStatusDefinition.Checked;
 
-                        new BusinessRelationship
+                        relationship = new BusinessRelationship
                         {
                             Counterpart = item.Entity,
                             BusinessID = (int)BusinessType,
                             MasterID = _masterID.Value,
-                            CurrentLevel = (int)Naming.MemberStatusDefinition.Checked
+                            CurrentLevel = (int)Naming.MemberStatusDefinition.Checked,
+
                         };
 
                         if (MasterGroup != null && MasterGroup.Length > 0)
@@ -154,7 +156,7 @@ namespace eIVOGo.Helper
                                 if (masterID == _masterID)
                                     continue;
 
-                                new BusinessRelationship
+                                relationship = new BusinessRelationship
                                 {
                                     Counterpart = item.Entity,
                                     BusinessID = (int)BusinessType,
@@ -167,7 +169,7 @@ namespace eIVOGo.Helper
                         var orgaCate = new OrganizationCategory
                         {
                             Organization = item.Entity,
-                            CategoryID = (int)Naming.CategoryID.COMP_ENTERPRISE_GROUP
+                            CategoryID = (int)Naming.MemberCategoryID.相對營業人,
                         };
 
                         this.EntityList.InsertOnSubmit(item.Entity);
@@ -192,34 +194,34 @@ namespace eIVOGo.Helper
 
                         this.GetTable<UserRole>().InsertOnSubmit(new UserRole
                         {
-                            RoleID = (int)Naming.RoleID.相對營業人,
+                            RoleID = (int)Naming.EIVOUserRoleID.會員,
                             UserProfile = userProfile,
                             OrganizationCategory = orgaCate
                         });
 
                     }
-                    else
-                    {
-                        newItem.CompanyName = item.Entity.CompanyName;
-                        newItem.ReceiptNo = item.Entity.ReceiptNo;
-                        newItem.ContactEmail = item.Entity.ContactEmail;
-                        newItem.Addr = item.Entity.Addr;
-                        newItem.Phone = item.Entity.Phone;
-                        newItem.OrganizationStatus.Entrusting = item.Entity.OrganizationStatus.Entrusting == true;
-                        newItem.OrganizationStatus.EntrustToPrint = item.Entity.OrganizationStatus.EntrustToPrint == true;
-                    }
+                    //else
+                    //{
+                    //    newItem.CompanyName = item.Entity.CompanyName;
+                    //    newItem.ReceiptNo = item.Entity.ReceiptNo;
+                    //    newItem.ContactEmail = item.Entity.ContactEmail;
+                    //    newItem.Addr = item.Entity.Addr;
+                    //    newItem.Phone = item.Entity.Phone;
+                    //    newItem.OrganizationStatus.Entrusting = item.Entity.OrganizationStatus.Entrusting == true;
+                    //    newItem.OrganizationStatus.EntrustToPrint = item.Entity.OrganizationStatus.EntrustToPrint == true;
+                    //}
                 }
                 else
                 {
                     if (!currentItem.RelativeRelation.Any(b => b.MasterID == _masterID && b.BusinessID == (int)BusinessType))
                     {
-                        currentItem.RelativeRelation.Add(
-                            new BusinessRelationship
-                            {
-                                Counterpart = currentItem,
-                                BusinessID = (int)BusinessType,
-                                MasterID = _masterID.Value
-                            });
+                        relationship = new BusinessRelationship
+                        {
+                            Counterpart = currentItem,
+                            BusinessID = (int)BusinessType,
+                            MasterID = _masterID.Value
+                        };
+                        currentItem.RelativeRelation.Add(relationship);
                     }
 
                     if (MasterGroup != null && MasterGroup.Length > 0)
@@ -231,32 +233,36 @@ namespace eIVOGo.Helper
 
                             if (!currentItem.RelativeRelation.Any(b => b.MasterID == masterID && b.BusinessID == (int)BusinessType))
                             {
-                                currentItem.RelativeRelation.Add(
-                                    new BusinessRelationship
-                                    {
-                                        Counterpart = currentItem,
-                                        BusinessID = (int)BusinessType,
-                                        MasterID = masterID
-                                    });
+                                relationship = new BusinessRelationship
+                                {
+                                    Counterpart = currentItem,
+                                    BusinessID = (int)BusinessType,
+                                    MasterID = masterID
+                                };
+                                currentItem.RelativeRelation.Add(relationship);
                             }
                         }
                     }
 
-                    currentItem.CompanyName = item.Entity.CompanyName;
-                    currentItem.ReceiptNo = item.Entity.ReceiptNo;
-                    currentItem.ContactEmail = item.Entity.ContactEmail;
-                    currentItem.Addr = item.Entity.Addr;
-                    currentItem.Phone = item.Entity.Phone;
-                    currentItem.OrganizationStatus.Entrusting = item.Entity.OrganizationStatus.Entrusting == true;
-                    currentItem.OrganizationStatus.EntrustToPrint = item.Entity.OrganizationStatus.EntrustToPrint == true;
+                    //currentItem.OrganizationStatus.Entrusting = item.Entity.OrganizationStatus.Entrusting == true;
+                    //currentItem.OrganizationStatus.EntrustToPrint = item.Entity.OrganizationStatus.EntrustToPrint == true;
 
-                    var currentUser = this.GetTable<UserProfile>().Where(u => u.PID == item.Entity.ReceiptNo).FirstOrDefault();
-                    if (currentUser != null)
-                    {
-                        currentUser.Phone = item.Entity.Phone;
-                        currentUser.EMail = item.Entity.ContactEmail;
-                        currentUser.Address = item.Entity.Addr;
-                    }
+                    //var currentUser = this.GetTable<UserProfile>().Where(u => u.PID == item.Entity.ReceiptNo).FirstOrDefault();
+                    //if (currentUser != null)
+                    //{
+                    //    currentUser.Phone = item.Entity.Phone;
+                    //    currentUser.EMail = item.Entity.ContactEmail;
+                    //    currentUser.Address = item.Entity.Addr;
+                    //}
+                }
+
+                if (relationship != null)
+                {
+                    relationship.CompanyName = item.Entity.CompanyName;
+                    relationship.ContactEmail = item.Entity.ContactEmail;
+                    relationship.Addr = item.Entity.Addr;
+                    relationship.Phone = item.Entity.Phone;
+
                 }
             }
 

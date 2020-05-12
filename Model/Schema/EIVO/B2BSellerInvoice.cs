@@ -9,14 +9,14 @@
 //------------------------------------------------------------------------------
 
 // 
-// 此原始程式碼由 xsd 版本=4.6.1055.0 自動產生。
+// 此原始程式碼由 xsd 版本=4.8.3928.0 自動產生。
 // 
 namespace Model.Schema.EIVO.B2B {
     using System.Xml.Serialization;
     
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -30,7 +30,7 @@ namespace Model.Schema.EIVO.B2B {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -70,7 +70,28 @@ namespace Model.Schema.EIVO.B2B {
         public decimal SalesAmount;
         
         /// <remarks/>
+        public decimal FreeTaxSalesAmount;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool FreeTaxSalesAmountSpecified;
+        
+        /// <remarks/>
+        public decimal ZeroTaxSalesAmount;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ZeroTaxSalesAmountSpecified;
+        
+        /// <remarks/>
         public byte TaxType;
+        
+        /// <remarks/>
+        public decimal TaxRate;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TaxRateSpecified;
         
         /// <remarks/>
         public decimal TaxAmount;
@@ -87,11 +108,14 @@ namespace Model.Schema.EIVO.B2B {
         public bool DiscountAmountSpecified;
         
         /// <remarks/>
+        public string MainRemark;
+        
+        /// <remarks/>
         public SellerInvoiceRootInvoiceCustomerDefined CustomerDefined;
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -145,7 +169,7 @@ namespace Model.Schema.EIVO.B2B {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]

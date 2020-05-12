@@ -136,6 +136,7 @@ namespace eIVOGo.Helper
                 _bResult = false;
             }
 
+            BusinessRelationship relationship = null;
             item.Entity = this.EntityList.Where(o => o.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault();
 
             if (item.Entity == null)
@@ -150,9 +151,18 @@ namespace eIVOGo.Helper
                         {
                             CurrentLevel = (int)Naming.MemberStatusDefinition.Checked
                         },
+                        ReceiptNo = viewModel.ReceiptNo,
+                        OrganizationExtension = new OrganizationExtension
+                        {
+                            CustomerNo = viewModel.CustomerNo,
+                        },
+                        CompanyName = viewModel.CompanyName,
+                        Addr = viewModel.Addr,
+                        Phone = viewModel.Phone,
+                        ContactEmail = viewModel.ContactEmail,
                     };
 
-                    new BusinessRelationship
+                    relationship = new BusinessRelationship
                     {
                         Counterpart = item.Entity,
                         BusinessID = (int)BusinessType,
@@ -163,7 +173,7 @@ namespace eIVOGo.Helper
                     var orgaCate = new OrganizationCategory
                     {
                         Organization = item.Entity,
-                        CategoryID = (int)Naming.CategoryID.COMP_ENTERPRISE_GROUP
+                        CategoryID = (int)Naming.MemberCategoryID.相對營業人
                     };
 
                     this.EntityList.InsertOnSubmit(item.Entity);
@@ -198,7 +208,7 @@ namespace eIVOGo.Helper
             {
                 if (!this.GetTable<BusinessRelationship>().Any(r => r.MasterID == _masterID && r.BusinessID == (int)BusinessType && r.RelativeID == item.Entity.CompanyID))
                 {
-                    new BusinessRelationship
+                    relationship = new BusinessRelationship
                     {
                         Counterpart = item.Entity,
                         BusinessID = (int)BusinessType,
@@ -206,20 +216,22 @@ namespace eIVOGo.Helper
                     };
                 }
 
-                var currentUser = this.GetTable<UserProfile>().Where(u => u.PID == viewModel.ReceiptNo).FirstOrDefault();
-                if (currentUser != null)
-                {
-                    currentUser.Phone = viewModel.Phone;
-                    currentUser.EMail = viewModel.ContactEmail;
-                    currentUser.Address = viewModel.Addr;
-                }
+                //var currentUser = this.GetTable<UserProfile>().Where(u => u.PID == viewModel.ReceiptNo).FirstOrDefault();
+                //if (currentUser != null)
+                //{
+                //    currentUser.Phone = viewModel.Phone;
+                //    currentUser.EMail = viewModel.ContactEmail;
+                //    currentUser.Address = viewModel.Addr;
+                //}
             }
 
-            item.Entity.CompanyName = viewModel.CompanyName;
-            item.Entity.ReceiptNo = viewModel.ReceiptNo;
-            item.Entity.ContactEmail = viewModel.ContactEmail;
-            item.Entity.Addr = viewModel.Addr;
-            item.Entity.Phone = viewModel.Phone;
+            if (relationship != null)
+            {
+                relationship.CompanyName = viewModel.CompanyName;
+                relationship.ContactEmail = viewModel.ContactEmail;
+                relationship.Addr = viewModel.Addr;
+                relationship.Phone = viewModel.Phone;
+            }
 
             return _bResult;
         }

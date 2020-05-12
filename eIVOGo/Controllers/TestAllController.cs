@@ -57,7 +57,7 @@ namespace eIVOGo.Controllers
                 EIVOPlatformFactory.ResetBusyCount();
             }
             EIVOPlatformFactory.Notify();
-            return Content(DateTime.Now.ToString());
+            return Json(EIVOPlatformFactory.CurrentStatus, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult MatchAttachment()

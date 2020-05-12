@@ -127,9 +127,6 @@ namespace Model.DataEntity
     partial void InsertInvoiceTrackCode(InvoiceTrackCode instance);
     partial void UpdateInvoiceTrackCode(InvoiceTrackCode instance);
     partial void DeleteInvoiceTrackCode(InvoiceTrackCode instance);
-    partial void InsertInvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment instance);
-    partial void UpdateInvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment instance);
-    partial void DeleteInvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment instance);
     partial void InsertDocumentOwner(DocumentOwner instance);
     partial void UpdateDocumentOwner(DocumentOwner instance);
     partial void DeleteDocumentOwner(DocumentOwner instance);
@@ -463,6 +460,12 @@ namespace Model.DataEntity
     partial void InsertProcessRequestDocument(ProcessRequestDocument instance);
     partial void UpdateProcessRequestDocument(ProcessRequestDocument instance);
     partial void DeleteProcessRequestDocument(ProcessRequestDocument instance);
+    partial void InsertInvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment instance);
+    partial void UpdateInvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment instance);
+    partial void DeleteInvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment instance);
+    partial void InsertInvoiceNoMainAssignment(InvoiceNoMainAssignment instance);
+    partial void UpdateInvoiceNoMainAssignment(InvoiceNoMainAssignment instance);
+    partial void DeleteInvoiceNoMainAssignment(InvoiceNoMainAssignment instance);
     #endregion
 		
 		public EIVOEntityDataContext() : 
@@ -756,14 +759,6 @@ namespace Model.DataEntity
 			get
 			{
 				return this.GetTable<InvoiceTrackCode>();
-			}
-		}
-		
-		public System.Data.Linq.Table<InvoiceTrackCodeAssignment> InvoiceTrackCodeAssignments
-		{
-			get
-			{
-				return this.GetTable<InvoiceTrackCodeAssignment>();
 			}
 		}
 		
@@ -1655,6 +1650,22 @@ namespace Model.DataEntity
 			}
 		}
 		
+		public System.Data.Linq.Table<InvoiceTrackCodeAssignment> InvoiceTrackCodeAssignment
+		{
+			get
+			{
+				return this.GetTable<InvoiceTrackCodeAssignment>();
+			}
+		}
+		
+		public System.Data.Linq.Table<InvoiceNoMainAssignment> InvoiceNoMainAssignment
+		{
+			get
+			{
+				return this.GetTable<InvoiceNoMainAssignment>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.MatchDocumentAttachment")]
 		public int MatchDocumentAttachment()
 		{
@@ -1778,8 +1789,6 @@ namespace Model.DataEntity
 		
 		private EntitySet<MemberCode> _MemberCodes;
 		
-		private EntitySet<InvoiceTrackCodeAssignment> _InvoiceTrackCodeAssignments;
-		
 		private EntitySet<DocumentOwner> _DocumentOwners;
 		
 		private EntitySet<InvoiceAllowanceBuyer> _InvoiceAllowanceBuyer;
@@ -1827,6 +1836,10 @@ namespace Model.DataEntity
 		private EntitySet<ProcessExceptionNotification> _ProcessExceptionNotification;
 		
 		private EntitySet<ProductSupplier> _ProductSupplier;
+		
+		private EntitySet<InvoiceTrackCodeAssignment> _InvoiceTrackCodeAssignment;
+		
+		private EntitySet<InvoiceNoMainAssignment> _InvoiceNoMainAssignment;
 		
 		private bool serializing;
 		
@@ -2500,27 +2513,8 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceTrackCodeAssignment", Storage="_InvoiceTrackCodeAssignments", ThisKey="CompanyID", OtherKey="SellerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=30, EmitDefaultValue=false)]
-		public EntitySet<InvoiceTrackCodeAssignment> InvoiceTrackCodeAssignments
-		{
-			get
-			{
-				if ((this.serializing 
-							&& (this._InvoiceTrackCodeAssignments.HasLoadedOrAssignedValues == false)))
-				{
-					return null;
-				}
-				return this._InvoiceTrackCodeAssignments;
-			}
-			set
-			{
-				this._InvoiceTrackCodeAssignments.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_DocumentOwner", Storage="_DocumentOwners", ThisKey="CompanyID", OtherKey="OwnerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=31, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=30, EmitDefaultValue=false)]
 		public EntitySet<DocumentOwner> DocumentOwners
 		{
 			get
@@ -2539,7 +2533,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceAllowanceBuyer", Storage="_InvoiceAllowanceBuyer", ThisKey="CompanyID", OtherKey="BuyerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=32, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=31, EmitDefaultValue=false)]
 		public EntitySet<InvoiceAllowanceBuyer> InvoiceAllowanceBuyer
 		{
 			get
@@ -2558,7 +2552,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceAllowanceSeller", Storage="_InvoiceAllowanceSeller", ThisKey="CompanyID", OtherKey="SellerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=33, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=32, EmitDefaultValue=false)]
 		public EntitySet<InvoiceAllowanceSeller> InvoiceAllowanceSeller
 		{
 			get
@@ -2577,7 +2571,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceSeller", Storage="_InvoiceSeller", ThisKey="CompanyID", OtherKey="SellerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=34, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=33, EmitDefaultValue=false)]
 		public EntitySet<InvoiceSeller> InvoiceSeller
 		{
 			get
@@ -2596,7 +2590,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_EnterpriseGroupMember", Storage="_EnterpriseGroupMember", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=35, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=34, EmitDefaultValue=false)]
 		public EntitySet<EnterpriseGroupMember> EnterpriseGroupMember
 		{
 			get
@@ -2615,7 +2609,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_DocumentTypeFlow", Storage="_DocumentTypeFlow", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=36, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=35, EmitDefaultValue=false)]
 		public EntitySet<DocumentTypeFlow> DocumentTypeFlow
 		{
 			get
@@ -2634,7 +2628,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_BusinessRelationship", Storage="_BusinessRelationship", ThisKey="CompanyID", OtherKey="MasterID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=37, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=36, EmitDefaultValue=false)]
 		public EntitySet<BusinessRelationship> MasterRelation
 		{
 			get
@@ -2653,7 +2647,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_BusinessRelationship1", Storage="_BusinessRelationship1", ThisKey="CompanyID", OtherKey="RelativeID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=38, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=37, EmitDefaultValue=false)]
 		public EntitySet<BusinessRelationship> RelativeRelation
 		{
 			get
@@ -2672,7 +2666,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ReceiptItem", Storage="_ReceiptItemForSeller", ThisKey="CompanyID", OtherKey="SellerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=39, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=38, EmitDefaultValue=false)]
 		public EntitySet<ReceiptItem> ReceiptItemForSeller
 		{
 			get
@@ -2691,7 +2685,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ReceiptItem1", Storage="_ReceiptItemForBuyer", ThisKey="CompanyID", OtherKey="BuyerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=40, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=39, EmitDefaultValue=false)]
 		public EntitySet<ReceiptItem> ReceiptItemForBuyer
 		{
 			get
@@ -2710,7 +2704,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ExceptionLog", Storage="_ExceptionLog", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=41, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=40, EmitDefaultValue=false)]
 		public EntitySet<ExceptionLog> ExceptionLog
 		{
 			get
@@ -2729,7 +2723,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationToken", Storage="_OrganizationToken", ThisKey="CompanyID", OtherKey="CompanyID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=42, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=41, EmitDefaultValue=false)]
 		public OrganizationToken OrganizationToken
 		{
 			get
@@ -2764,7 +2758,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_CALog", Storage="_CALog", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=43, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=42, EmitDefaultValue=false)]
 		public EntitySet<CALog> CALog
 		{
 			get
@@ -2783,7 +2777,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_SMSNotificationLog", Storage="_SMSNotificationLogs", ThisKey="CompanyID", OtherKey="OwnerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=44, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=43, EmitDefaultValue=false)]
 		public EntitySet<SMSNotificationLog> SMSNotificationLogs
 		{
 			get
@@ -2802,7 +2796,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationStatus", Storage="_OrganizationStatus", ThisKey="CompanyID", OtherKey="CompanyID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=45, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=44, EmitDefaultValue=false)]
 		public OrganizationStatus OrganizationStatus
 		{
 			get
@@ -2837,7 +2831,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceBuyer", Storage="_InvoiceBuyer", ThisKey="CompanyID", OtherKey="BuyerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=46, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=45, EmitDefaultValue=false)]
 		public EntitySet<InvoiceBuyer> InvoiceBuyer
 		{
 			get
@@ -2856,7 +2850,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceIssuerAgent", Storage="_InvoiceInsurerAgent", ThisKey="CompanyID", OtherKey="AgentID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=47, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=46, EmitDefaultValue=false)]
 		public EntitySet<InvoiceIssuerAgent> InvoiceInsurerAgent
 		{
 			get
@@ -2875,7 +2869,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceIssuerAgent1", Storage="_AsInvoiceInsurer", ThisKey="CompanyID", OtherKey="IssuerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=48, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=47, EmitDefaultValue=false)]
 		public EntitySet<InvoiceIssuerAgent> AsInvoiceInsurer
 		{
 			get
@@ -2894,7 +2888,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_POSDevice", Storage="_POSDevice", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=49, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=48, EmitDefaultValue=false)]
 		public EntitySet<POSDevice> POSDevice
 		{
 			get
@@ -2913,7 +2907,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationExtension", Storage="_OrganizationExtension", ThisKey="CompanyID", OtherKey="CompanyID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=50, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=49, EmitDefaultValue=false)]
 		public OrganizationExtension OrganizationExtension
 		{
 			get
@@ -2948,7 +2942,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationBranch", Storage="_OrganizationBranch", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=51, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=50, EmitDefaultValue=false)]
 		public EntitySet<OrganizationBranch> OrganizationBranch
 		{
 			get
@@ -2967,7 +2961,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ProcessRequest", Storage="_ProcessRequest", ThisKey="CompanyID", OtherKey="AgentID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=52, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=51, EmitDefaultValue=false)]
 		public EntitySet<ProcessRequest> ProcessRequest
 		{
 			get
@@ -2986,7 +2980,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ProcessExceptionNotification", Storage="_ProcessExceptionNotification", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=53, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=52, EmitDefaultValue=false)]
 		public EntitySet<ProcessExceptionNotification> ProcessExceptionNotification
 		{
 			get
@@ -3005,7 +2999,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ProductSupplier", Storage="_ProductSupplier", ThisKey="CompanyID", OtherKey="SupplierID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=54, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=53, EmitDefaultValue=false)]
 		public EntitySet<ProductSupplier> ProductSupplier
 		{
 			get
@@ -3020,6 +3014,44 @@ namespace Model.DataEntity
 			set
 			{
 				this._ProductSupplier.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceTrackCodeAssignment", Storage="_InvoiceTrackCodeAssignment", ThisKey="CompanyID", OtherKey="SellerID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=54, EmitDefaultValue=false)]
+		public EntitySet<InvoiceTrackCodeAssignment> InvoiceTrackCodeAssignment
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._InvoiceTrackCodeAssignment.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._InvoiceTrackCodeAssignment;
+			}
+			set
+			{
+				this._InvoiceTrackCodeAssignment.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceNoMainAssignment", Storage="_InvoiceNoMainAssignment", ThisKey="CompanyID", OtherKey="MasterID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=55, EmitDefaultValue=false)]
+		public EntitySet<InvoiceNoMainAssignment> InvoiceNoMainAssignment
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._InvoiceNoMainAssignment.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._InvoiceNoMainAssignment;
+			}
+			set
+			{
+				this._InvoiceNoMainAssignment.Assign(value);
 			}
 		}
 		
@@ -3098,18 +3130,6 @@ namespace Model.DataEntity
 		}
 		
 		private void detach_MemberCodes(MemberCode entity)
-		{
-			this.SendPropertyChanging();
-			entity.Organization = null;
-		}
-		
-		private void attach_InvoiceTrackCodeAssignments(InvoiceTrackCodeAssignment entity)
-		{
-			this.SendPropertyChanging();
-			entity.Organization = this;
-		}
-		
-		private void detach_InvoiceTrackCodeAssignments(InvoiceTrackCodeAssignment entity)
 		{
 			this.SendPropertyChanging();
 			entity.Organization = null;
@@ -3367,6 +3387,30 @@ namespace Model.DataEntity
 			entity.Organization = null;
 		}
 		
+		private void attach_InvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_InvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
+		private void attach_InvoiceNoMainAssignment(InvoiceNoMainAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_InvoiceNoMainAssignment(InvoiceNoMainAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
 		private void Initialize()
 		{
 			this._OrganizationCategory = new EntitySet<OrganizationCategory>(new Action<OrganizationCategory>(this.attach_OrganizationCategory), new Action<OrganizationCategory>(this.detach_OrganizationCategory));
@@ -3375,7 +3419,6 @@ namespace Model.DataEntity
 			this._InvoiceItems = new EntitySet<InvoiceItem>(new Action<InvoiceItem>(this.attach_InvoiceItems), new Action<InvoiceItem>(this.detach_InvoiceItems));
 			this._InvoiceItems1 = new EntitySet<InvoiceItem>(new Action<InvoiceItem>(this.attach_InvoiceItems1), new Action<InvoiceItem>(this.detach_InvoiceItems1));
 			this._MemberCodes = new EntitySet<MemberCode>(new Action<MemberCode>(this.attach_MemberCodes), new Action<MemberCode>(this.detach_MemberCodes));
-			this._InvoiceTrackCodeAssignments = new EntitySet<InvoiceTrackCodeAssignment>(new Action<InvoiceTrackCodeAssignment>(this.attach_InvoiceTrackCodeAssignments), new Action<InvoiceTrackCodeAssignment>(this.detach_InvoiceTrackCodeAssignments));
 			this._DocumentOwners = new EntitySet<DocumentOwner>(new Action<DocumentOwner>(this.attach_DocumentOwners), new Action<DocumentOwner>(this.detach_DocumentOwners));
 			this._InvoiceAllowanceBuyer = new EntitySet<InvoiceAllowanceBuyer>(new Action<InvoiceAllowanceBuyer>(this.attach_InvoiceAllowanceBuyer), new Action<InvoiceAllowanceBuyer>(this.detach_InvoiceAllowanceBuyer));
 			this._InvoiceAllowanceSeller = new EntitySet<InvoiceAllowanceSeller>(new Action<InvoiceAllowanceSeller>(this.attach_InvoiceAllowanceSeller), new Action<InvoiceAllowanceSeller>(this.detach_InvoiceAllowanceSeller));
@@ -3400,6 +3443,8 @@ namespace Model.DataEntity
 			this._ProcessRequest = new EntitySet<ProcessRequest>(new Action<ProcessRequest>(this.attach_ProcessRequest), new Action<ProcessRequest>(this.detach_ProcessRequest));
 			this._ProcessExceptionNotification = new EntitySet<ProcessExceptionNotification>(new Action<ProcessExceptionNotification>(this.attach_ProcessExceptionNotification), new Action<ProcessExceptionNotification>(this.detach_ProcessExceptionNotification));
 			this._ProductSupplier = new EntitySet<ProductSupplier>(new Action<ProductSupplier>(this.attach_ProductSupplier), new Action<ProductSupplier>(this.detach_ProductSupplier));
+			this._InvoiceTrackCodeAssignment = new EntitySet<InvoiceTrackCodeAssignment>(new Action<InvoiceTrackCodeAssignment>(this.attach_InvoiceTrackCodeAssignment), new Action<InvoiceTrackCodeAssignment>(this.detach_InvoiceTrackCodeAssignment));
+			this._InvoiceNoMainAssignment = new EntitySet<InvoiceNoMainAssignment>(new Action<InvoiceNoMainAssignment>(this.attach_InvoiceNoMainAssignment), new Action<InvoiceNoMainAssignment>(this.detach_InvoiceNoMainAssignment));
 			OnCreated();
 		}
 		
@@ -13749,7 +13794,7 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCodeAssignment_InvoiceNoInterval", Storage="_InvoiceTrackCodeAssignment", ThisKey="TrackID,SellerID", OtherKey="TrackID,SellerID", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCodeAssignment_InvoiceNoInterval", Storage="_InvoiceTrackCodeAssignment", ThisKey="TrackID,SellerID", OtherKey="TrackID,SellerID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public InvoiceTrackCodeAssignment InvoiceTrackCodeAssignment
 		{
 			get
@@ -13766,12 +13811,12 @@ namespace Model.DataEntity
 					if ((previousValue != null))
 					{
 						this._InvoiceTrackCodeAssignment.Entity = null;
-						previousValue.InvoiceNoIntervals.Remove(this);
+						previousValue.InvoiceNoInterval.Remove(this);
 					}
 					this._InvoiceTrackCodeAssignment.Entity = value;
 					if ((value != null))
 					{
-						value.InvoiceNoIntervals.Add(this);
+						value.InvoiceNoInterval.Add(this);
 						this._TrackID = value.TrackID;
 						this._SellerID = value.SellerID;
 					}
@@ -13890,7 +13935,9 @@ namespace Model.DataEntity
 		
 		private System.Nullable<byte> _InvoiceType;
 		
-		private EntitySet<InvoiceTrackCodeAssignment> _InvoiceTrackCodeAssignments;
+		private EntitySet<InvoiceTrackCodeAssignment> _InvoiceTrackCodeAssignment;
+		
+		private EntitySet<InvoiceNoMainAssignment> _InvoiceNoMainAssignment;
 		
 		private bool serializing;
 		
@@ -14020,22 +14067,41 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCode_InvoiceTrackCodeAssignment", Storage="_InvoiceTrackCodeAssignments", ThisKey="TrackID", OtherKey="TrackID")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCode_InvoiceTrackCodeAssignment", Storage="_InvoiceTrackCodeAssignment", ThisKey="TrackID", OtherKey="TrackID")]
 		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6, EmitDefaultValue=false)]
-		public EntitySet<InvoiceTrackCodeAssignment> InvoiceTrackCodeAssignments
+		public EntitySet<InvoiceTrackCodeAssignment> InvoiceTrackCodeAssignment
 		{
 			get
 			{
 				if ((this.serializing 
-							&& (this._InvoiceTrackCodeAssignments.HasLoadedOrAssignedValues == false)))
+							&& (this._InvoiceTrackCodeAssignment.HasLoadedOrAssignedValues == false)))
 				{
 					return null;
 				}
-				return this._InvoiceTrackCodeAssignments;
+				return this._InvoiceTrackCodeAssignment;
 			}
 			set
 			{
-				this._InvoiceTrackCodeAssignments.Assign(value);
+				this._InvoiceTrackCodeAssignment.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCode_InvoiceNoMainAssignment", Storage="_InvoiceNoMainAssignment", ThisKey="TrackID", OtherKey="TrackID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=7, EmitDefaultValue=false)]
+		public EntitySet<InvoiceNoMainAssignment> InvoiceNoMainAssignment
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._InvoiceNoMainAssignment.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._InvoiceNoMainAssignment;
+			}
+			set
+			{
+				this._InvoiceNoMainAssignment.Assign(value);
 			}
 		}
 		
@@ -14059,13 +14125,25 @@ namespace Model.DataEntity
 			}
 		}
 		
-		private void attach_InvoiceTrackCodeAssignments(InvoiceTrackCodeAssignment entity)
+		private void attach_InvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment entity)
 		{
 			this.SendPropertyChanging();
 			entity.InvoiceTrackCode = this;
 		}
 		
-		private void detach_InvoiceTrackCodeAssignments(InvoiceTrackCodeAssignment entity)
+		private void detach_InvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceTrackCode = null;
+		}
+		
+		private void attach_InvoiceNoMainAssignment(InvoiceNoMainAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceTrackCode = this;
+		}
+		
+		private void detach_InvoiceNoMainAssignment(InvoiceNoMainAssignment entity)
 		{
 			this.SendPropertyChanging();
 			entity.InvoiceTrackCode = null;
@@ -14073,274 +14151,8 @@ namespace Model.DataEntity
 		
 		private void Initialize()
 		{
-			this._InvoiceTrackCodeAssignments = new EntitySet<InvoiceTrackCodeAssignment>(new Action<InvoiceTrackCodeAssignment>(this.attach_InvoiceTrackCodeAssignments), new Action<InvoiceTrackCodeAssignment>(this.detach_InvoiceTrackCodeAssignments));
-			OnCreated();
-		}
-		
-		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
-		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public void OnDeserializing(StreamingContext context)
-		{
-			this.Initialize();
-		}
-		
-		[global::System.Runtime.Serialization.OnSerializingAttribute()]
-		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public void OnSerializing(StreamingContext context)
-		{
-			this.serializing = true;
-		}
-		
-		[global::System.Runtime.Serialization.OnSerializedAttribute()]
-		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public void OnSerialized(StreamingContext context)
-		{
-			this.serializing = false;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.InvoiceTrackCodeAssignment")]
-	[global::System.Runtime.Serialization.DataContractAttribute()]
-	public partial class InvoiceTrackCodeAssignment : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _TrackID;
-		
-		private int _SellerID;
-		
-		private EntitySet<InvoiceNoInterval> _InvoiceNoIntervals;
-		
-		private EntitySet<UnassignedInvoiceNo> _UnassignedInvoiceNo;
-		
-		private EntityRef<InvoiceTrackCode> _InvoiceTrackCode;
-		
-		private EntityRef<Organization> _Organization;
-		
-		private bool serializing;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnTrackIDChanging(int value);
-    partial void OnTrackIDChanged();
-    partial void OnSellerIDChanging(int value);
-    partial void OnSellerIDChanged();
-    #endregion
-		
-		public InvoiceTrackCodeAssignment()
-		{
-			this.Initialize();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TrackID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
-		public int TrackID
-		{
-			get
-			{
-				return this._TrackID;
-			}
-			set
-			{
-				if ((this._TrackID != value))
-				{
-					if (this._InvoiceTrackCode.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnTrackIDChanging(value);
-					this.SendPropertyChanging();
-					this._TrackID = value;
-					this.SendPropertyChanged("TrackID");
-					this.OnTrackIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellerID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
-		public int SellerID
-		{
-			get
-			{
-				return this._SellerID;
-			}
-			set
-			{
-				if ((this._SellerID != value))
-				{
-					if (this._Organization.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnSellerIDChanging(value);
-					this.SendPropertyChanging();
-					this._SellerID = value;
-					this.SendPropertyChanged("SellerID");
-					this.OnSellerIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCodeAssignment_InvoiceNoInterval", Storage="_InvoiceNoIntervals", ThisKey="TrackID,SellerID", OtherKey="TrackID,SellerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3, EmitDefaultValue=false)]
-		public EntitySet<InvoiceNoInterval> InvoiceNoIntervals
-		{
-			get
-			{
-				if ((this.serializing 
-							&& (this._InvoiceNoIntervals.HasLoadedOrAssignedValues == false)))
-				{
-					return null;
-				}
-				return this._InvoiceNoIntervals;
-			}
-			set
-			{
-				this._InvoiceNoIntervals.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCodeAssignment_UnassignedInvoiceNo", Storage="_UnassignedInvoiceNo", ThisKey="TrackID,SellerID", OtherKey="TrackID,SellerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4, EmitDefaultValue=false)]
-		public EntitySet<UnassignedInvoiceNo> UnassignedInvoiceNo
-		{
-			get
-			{
-				if ((this.serializing 
-							&& (this._UnassignedInvoiceNo.HasLoadedOrAssignedValues == false)))
-				{
-					return null;
-				}
-				return this._UnassignedInvoiceNo;
-			}
-			set
-			{
-				this._UnassignedInvoiceNo.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCode_InvoiceTrackCodeAssignment", Storage="_InvoiceTrackCode", ThisKey="TrackID", OtherKey="TrackID", IsForeignKey=true)]
-		public InvoiceTrackCode InvoiceTrackCode
-		{
-			get
-			{
-				return this._InvoiceTrackCode.Entity;
-			}
-			set
-			{
-				InvoiceTrackCode previousValue = this._InvoiceTrackCode.Entity;
-				if (((previousValue != value) 
-							|| (this._InvoiceTrackCode.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._InvoiceTrackCode.Entity = null;
-						previousValue.InvoiceTrackCodeAssignments.Remove(this);
-					}
-					this._InvoiceTrackCode.Entity = value;
-					if ((value != null))
-					{
-						value.InvoiceTrackCodeAssignments.Add(this);
-						this._TrackID = value.TrackID;
-					}
-					else
-					{
-						this._TrackID = default(int);
-					}
-					this.SendPropertyChanged("InvoiceTrackCode");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceTrackCodeAssignment", Storage="_Organization", ThisKey="SellerID", OtherKey="CompanyID", IsForeignKey=true)]
-		public Organization Organization
-		{
-			get
-			{
-				return this._Organization.Entity;
-			}
-			set
-			{
-				Organization previousValue = this._Organization.Entity;
-				if (((previousValue != value) 
-							|| (this._Organization.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Organization.Entity = null;
-						previousValue.InvoiceTrackCodeAssignments.Remove(this);
-					}
-					this._Organization.Entity = value;
-					if ((value != null))
-					{
-						value.InvoiceTrackCodeAssignments.Add(this);
-						this._SellerID = value.CompanyID;
-					}
-					else
-					{
-						this._SellerID = default(int);
-					}
-					this.SendPropertyChanged("Organization");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_InvoiceNoIntervals(InvoiceNoInterval entity)
-		{
-			this.SendPropertyChanging();
-			entity.InvoiceTrackCodeAssignment = this;
-		}
-		
-		private void detach_InvoiceNoIntervals(InvoiceNoInterval entity)
-		{
-			this.SendPropertyChanging();
-			entity.InvoiceTrackCodeAssignment = null;
-		}
-		
-		private void attach_UnassignedInvoiceNo(UnassignedInvoiceNo entity)
-		{
-			this.SendPropertyChanging();
-			entity.InvoiceTrackCodeAssignment = this;
-		}
-		
-		private void detach_UnassignedInvoiceNo(UnassignedInvoiceNo entity)
-		{
-			this.SendPropertyChanging();
-			entity.InvoiceTrackCodeAssignment = null;
-		}
-		
-		private void Initialize()
-		{
-			this._InvoiceNoIntervals = new EntitySet<InvoiceNoInterval>(new Action<InvoiceNoInterval>(this.attach_InvoiceNoIntervals), new Action<InvoiceNoInterval>(this.detach_InvoiceNoIntervals));
-			this._UnassignedInvoiceNo = new EntitySet<UnassignedInvoiceNo>(new Action<UnassignedInvoiceNo>(this.attach_UnassignedInvoiceNo), new Action<UnassignedInvoiceNo>(this.detach_UnassignedInvoiceNo));
-			this._InvoiceTrackCode = default(EntityRef<InvoiceTrackCode>);
-			this._Organization = default(EntityRef<Organization>);
+			this._InvoiceTrackCodeAssignment = new EntitySet<InvoiceTrackCodeAssignment>(new Action<InvoiceTrackCodeAssignment>(this.attach_InvoiceTrackCodeAssignment), new Action<InvoiceTrackCodeAssignment>(this.detach_InvoiceTrackCodeAssignment));
+			this._InvoiceNoMainAssignment = new EntitySet<InvoiceNoMainAssignment>(new Action<InvoiceNoMainAssignment>(this.attach_InvoiceNoMainAssignment), new Action<InvoiceNoMainAssignment>(this.detach_InvoiceNoMainAssignment));
 			OnCreated();
 		}
 		
@@ -22424,6 +22236,16 @@ namespace Model.DataEntity
 		
 		private System.Nullable<int> _CurrentLevel;
 		
+		private string _CompanyName;
+		
+		private string _Phone;
+		
+		private string _Addr;
+		
+		private string _ContactEmail;
+		
+		private string _CustomerNo;
+		
 		private EntityRef<BusinessType> _BusinessType;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -22444,6 +22266,16 @@ namespace Model.DataEntity
     partial void OnBusinessIDChanged();
     partial void OnCurrentLevelChanging(System.Nullable<int> value);
     partial void OnCurrentLevelChanged();
+    partial void OnCompanyNameChanging(string value);
+    partial void OnCompanyNameChanged();
+    partial void OnPhoneChanging(string value);
+    partial void OnPhoneChanged();
+    partial void OnAddrChanging(string value);
+    partial void OnAddrChanged();
+    partial void OnContactEmailChanging(string value);
+    partial void OnContactEmailChanged();
+    partial void OnCustomerNoChanging(string value);
+    partial void OnCustomerNoChanged();
     #endregion
 		
 		public BusinessRelationship()
@@ -22547,6 +22379,111 @@ namespace Model.DataEntity
 					this._CurrentLevel = value;
 					this.SendPropertyChanged("CurrentLevel");
 					this.OnCurrentLevelChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyName", DbType="NVarChar(128)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public string CompanyName
+		{
+			get
+			{
+				return this._CompanyName;
+			}
+			set
+			{
+				if ((this._CompanyName != value))
+				{
+					this.OnCompanyNameChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyName = value;
+					this.SendPropertyChanged("CompanyName");
+					this.OnCompanyNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Phone", DbType="NVarChar(20)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6)]
+		public string Phone
+		{
+			get
+			{
+				return this._Phone;
+			}
+			set
+			{
+				if ((this._Phone != value))
+				{
+					this.OnPhoneChanging(value);
+					this.SendPropertyChanging();
+					this._Phone = value;
+					this.SendPropertyChanged("Phone");
+					this.OnPhoneChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Addr", DbType="NVarChar(256)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=7)]
+		public string Addr
+		{
+			get
+			{
+				return this._Addr;
+			}
+			set
+			{
+				if ((this._Addr != value))
+				{
+					this.OnAddrChanging(value);
+					this.SendPropertyChanging();
+					this._Addr = value;
+					this.SendPropertyChanged("Addr");
+					this.OnAddrChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContactEmail", DbType="NVarChar(512)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=8)]
+		public string ContactEmail
+		{
+			get
+			{
+				return this._ContactEmail;
+			}
+			set
+			{
+				if ((this._ContactEmail != value))
+				{
+					this.OnContactEmailChanging(value);
+					this.SendPropertyChanging();
+					this._ContactEmail = value;
+					this.SendPropertyChanged("ContactEmail");
+					this.OnContactEmailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerNo", DbType="NVarChar(16)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=9)]
+		public string CustomerNo
+		{
+			get
+			{
+				return this._CustomerNo;
+			}
+			set
+			{
+				if ((this._CustomerNo != value))
+				{
+					this.OnCustomerNoChanging(value);
+					this.SendPropertyChanging();
+					this._CustomerNo = value;
+					this.SendPropertyChanged("CustomerNo");
+					this.OnCustomerNoChanged();
 				}
 			}
 		}
@@ -29766,7 +29703,7 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCodeAssignment_UnassignedInvoiceNo", Storage="_InvoiceTrackCodeAssignment", ThisKey="TrackID,SellerID", OtherKey="TrackID,SellerID", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCodeAssignment_UnassignedInvoiceNo", Storage="_InvoiceTrackCodeAssignment", ThisKey="TrackID,SellerID", OtherKey="TrackID,SellerID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public InvoiceTrackCodeAssignment InvoiceTrackCodeAssignment
 		{
 			get
@@ -42744,6 +42681,647 @@ namespace Model.DataEntity
 		public void OnDeserializing(StreamingContext context)
 		{
 			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.InvoiceTrackCodeAssignment")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class InvoiceTrackCodeAssignment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _TrackID;
+		
+		private int _SellerID;
+		
+		private System.Nullable<int> _AssignmentID;
+		
+		private EntitySet<InvoiceNoInterval> _InvoiceNoInterval;
+		
+		private EntitySet<UnassignedInvoiceNo> _UnassignedInvoiceNo;
+		
+		private EntityRef<InvoiceTrackCode> _InvoiceTrackCode;
+		
+		private EntityRef<Organization> _Organization;
+		
+		private EntityRef<InvoiceNoMainAssignment> _InvoiceNoMainAssignment;
+		
+		private bool serializing;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnTrackIDChanging(int value);
+    partial void OnTrackIDChanged();
+    partial void OnSellerIDChanging(int value);
+    partial void OnSellerIDChanged();
+    partial void OnAssignmentIDChanging(System.Nullable<int> value);
+    partial void OnAssignmentIDChanged();
+    #endregion
+		
+		public InvoiceTrackCodeAssignment()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TrackID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int TrackID
+		{
+			get
+			{
+				return this._TrackID;
+			}
+			set
+			{
+				if ((this._TrackID != value))
+				{
+					if (this._InvoiceTrackCode.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTrackIDChanging(value);
+					this.SendPropertyChanging();
+					this._TrackID = value;
+					this.SendPropertyChanged("TrackID");
+					this.OnTrackIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellerID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int SellerID
+		{
+			get
+			{
+				return this._SellerID;
+			}
+			set
+			{
+				if ((this._SellerID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSellerIDChanging(value);
+					this.SendPropertyChanging();
+					this._SellerID = value;
+					this.SendPropertyChanged("SellerID");
+					this.OnSellerIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AssignmentID", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public System.Nullable<int> AssignmentID
+		{
+			get
+			{
+				return this._AssignmentID;
+			}
+			set
+			{
+				if ((this._AssignmentID != value))
+				{
+					if (this._InvoiceNoMainAssignment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAssignmentIDChanging(value);
+					this.SendPropertyChanging();
+					this._AssignmentID = value;
+					this.SendPropertyChanged("AssignmentID");
+					this.OnAssignmentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCodeAssignment_InvoiceNoInterval", Storage="_InvoiceNoInterval", ThisKey="TrackID,SellerID", OtherKey="TrackID,SellerID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4, EmitDefaultValue=false)]
+		public EntitySet<InvoiceNoInterval> InvoiceNoInterval
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._InvoiceNoInterval.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._InvoiceNoInterval;
+			}
+			set
+			{
+				this._InvoiceNoInterval.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCodeAssignment_UnassignedInvoiceNo", Storage="_UnassignedInvoiceNo", ThisKey="TrackID,SellerID", OtherKey="TrackID,SellerID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5, EmitDefaultValue=false)]
+		public EntitySet<UnassignedInvoiceNo> UnassignedInvoiceNo
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._UnassignedInvoiceNo.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._UnassignedInvoiceNo;
+			}
+			set
+			{
+				this._UnassignedInvoiceNo.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCode_InvoiceTrackCodeAssignment", Storage="_InvoiceTrackCode", ThisKey="TrackID", OtherKey="TrackID", IsForeignKey=true)]
+		public InvoiceTrackCode InvoiceTrackCode
+		{
+			get
+			{
+				return this._InvoiceTrackCode.Entity;
+			}
+			set
+			{
+				InvoiceTrackCode previousValue = this._InvoiceTrackCode.Entity;
+				if (((previousValue != value) 
+							|| (this._InvoiceTrackCode.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._InvoiceTrackCode.Entity = null;
+						previousValue.InvoiceTrackCodeAssignment.Remove(this);
+					}
+					this._InvoiceTrackCode.Entity = value;
+					if ((value != null))
+					{
+						value.InvoiceTrackCodeAssignment.Add(this);
+						this._TrackID = value.TrackID;
+					}
+					else
+					{
+						this._TrackID = default(int);
+					}
+					this.SendPropertyChanged("InvoiceTrackCode");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceTrackCodeAssignment", Storage="_Organization", ThisKey="SellerID", OtherKey="CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.InvoiceTrackCodeAssignment.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.InvoiceTrackCodeAssignment.Add(this);
+						this._SellerID = value.CompanyID;
+					}
+					else
+					{
+						this._SellerID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceNoMainAssignment_InvoiceTrackCodeAssignment", Storage="_InvoiceNoMainAssignment", ThisKey="AssignmentID", OtherKey="AssignmentID", IsForeignKey=true)]
+		public InvoiceNoMainAssignment InvoiceNoMainAssignment
+		{
+			get
+			{
+				return this._InvoiceNoMainAssignment.Entity;
+			}
+			set
+			{
+				InvoiceNoMainAssignment previousValue = this._InvoiceNoMainAssignment.Entity;
+				if (((previousValue != value) 
+							|| (this._InvoiceNoMainAssignment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._InvoiceNoMainAssignment.Entity = null;
+						previousValue.InvoiceTrackCodeAssignment.Remove(this);
+					}
+					this._InvoiceNoMainAssignment.Entity = value;
+					if ((value != null))
+					{
+						value.InvoiceTrackCodeAssignment.Add(this);
+						this._AssignmentID = value.AssignmentID;
+					}
+					else
+					{
+						this._AssignmentID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("InvoiceNoMainAssignment");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_InvoiceNoInterval(InvoiceNoInterval entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceTrackCodeAssignment = this;
+		}
+		
+		private void detach_InvoiceNoInterval(InvoiceNoInterval entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceTrackCodeAssignment = null;
+		}
+		
+		private void attach_UnassignedInvoiceNo(UnassignedInvoiceNo entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceTrackCodeAssignment = this;
+		}
+		
+		private void detach_UnassignedInvoiceNo(UnassignedInvoiceNo entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceTrackCodeAssignment = null;
+		}
+		
+		private void Initialize()
+		{
+			this._InvoiceNoInterval = new EntitySet<InvoiceNoInterval>(new Action<InvoiceNoInterval>(this.attach_InvoiceNoInterval), new Action<InvoiceNoInterval>(this.detach_InvoiceNoInterval));
+			this._UnassignedInvoiceNo = new EntitySet<UnassignedInvoiceNo>(new Action<UnassignedInvoiceNo>(this.attach_UnassignedInvoiceNo), new Action<UnassignedInvoiceNo>(this.detach_UnassignedInvoiceNo));
+			this._InvoiceTrackCode = default(EntityRef<InvoiceTrackCode>);
+			this._Organization = default(EntityRef<Organization>);
+			this._InvoiceNoMainAssignment = default(EntityRef<InvoiceNoMainAssignment>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Runtime.Serialization.OnSerializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnSerializing(StreamingContext context)
+		{
+			this.serializing = true;
+		}
+		
+		[global::System.Runtime.Serialization.OnSerializedAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnSerialized(StreamingContext context)
+		{
+			this.serializing = false;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.InvoiceNoMainAssignment")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class InvoiceNoMainAssignment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _AssignmentID;
+		
+		private int _TrackID;
+		
+		private int _MasterID;
+		
+		private int _StartNo;
+		
+		private int _EndNo;
+		
+		private EntitySet<InvoiceTrackCodeAssignment> _InvoiceTrackCodeAssignment;
+		
+		private EntityRef<InvoiceTrackCode> _InvoiceTrackCode;
+		
+		private EntityRef<Organization> _Organization;
+		
+		private bool serializing;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnAssignmentIDChanging(int value);
+    partial void OnAssignmentIDChanged();
+    partial void OnTrackIDChanging(int value);
+    partial void OnTrackIDChanged();
+    partial void OnMasterIDChanging(int value);
+    partial void OnMasterIDChanged();
+    partial void OnStartNoChanging(int value);
+    partial void OnStartNoChanged();
+    partial void OnEndNoChanging(int value);
+    partial void OnEndNoChanged();
+    #endregion
+		
+		public InvoiceNoMainAssignment()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AssignmentID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int AssignmentID
+		{
+			get
+			{
+				return this._AssignmentID;
+			}
+			set
+			{
+				if ((this._AssignmentID != value))
+				{
+					this.OnAssignmentIDChanging(value);
+					this.SendPropertyChanging();
+					this._AssignmentID = value;
+					this.SendPropertyChanged("AssignmentID");
+					this.OnAssignmentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TrackID", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int TrackID
+		{
+			get
+			{
+				return this._TrackID;
+			}
+			set
+			{
+				if ((this._TrackID != value))
+				{
+					if (this._InvoiceTrackCode.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTrackIDChanging(value);
+					this.SendPropertyChanging();
+					this._TrackID = value;
+					this.SendPropertyChanged("TrackID");
+					this.OnTrackIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MasterID", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public int MasterID
+		{
+			get
+			{
+				return this._MasterID;
+			}
+			set
+			{
+				if ((this._MasterID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnMasterIDChanging(value);
+					this.SendPropertyChanging();
+					this._MasterID = value;
+					this.SendPropertyChanged("MasterID");
+					this.OnMasterIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartNo", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public int StartNo
+		{
+			get
+			{
+				return this._StartNo;
+			}
+			set
+			{
+				if ((this._StartNo != value))
+				{
+					this.OnStartNoChanging(value);
+					this.SendPropertyChanging();
+					this._StartNo = value;
+					this.SendPropertyChanged("StartNo");
+					this.OnStartNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndNo", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public int EndNo
+		{
+			get
+			{
+				return this._EndNo;
+			}
+			set
+			{
+				if ((this._EndNo != value))
+				{
+					this.OnEndNoChanging(value);
+					this.SendPropertyChanging();
+					this._EndNo = value;
+					this.SendPropertyChanged("EndNo");
+					this.OnEndNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceNoMainAssignment_InvoiceTrackCodeAssignment", Storage="_InvoiceTrackCodeAssignment", ThisKey="AssignmentID", OtherKey="AssignmentID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6, EmitDefaultValue=false)]
+		public EntitySet<InvoiceTrackCodeAssignment> InvoiceTrackCodeAssignment
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._InvoiceTrackCodeAssignment.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._InvoiceTrackCodeAssignment;
+			}
+			set
+			{
+				this._InvoiceTrackCodeAssignment.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCode_InvoiceNoMainAssignment", Storage="_InvoiceTrackCode", ThisKey="TrackID", OtherKey="TrackID", IsForeignKey=true)]
+		public InvoiceTrackCode InvoiceTrackCode
+		{
+			get
+			{
+				return this._InvoiceTrackCode.Entity;
+			}
+			set
+			{
+				InvoiceTrackCode previousValue = this._InvoiceTrackCode.Entity;
+				if (((previousValue != value) 
+							|| (this._InvoiceTrackCode.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._InvoiceTrackCode.Entity = null;
+						previousValue.InvoiceNoMainAssignment.Remove(this);
+					}
+					this._InvoiceTrackCode.Entity = value;
+					if ((value != null))
+					{
+						value.InvoiceNoMainAssignment.Add(this);
+						this._TrackID = value.TrackID;
+					}
+					else
+					{
+						this._TrackID = default(int);
+					}
+					this.SendPropertyChanged("InvoiceTrackCode");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceNoMainAssignment", Storage="_Organization", ThisKey="MasterID", OtherKey="CompanyID", IsForeignKey=true)]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.InvoiceNoMainAssignment.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.InvoiceNoMainAssignment.Add(this);
+						this._MasterID = value.CompanyID;
+					}
+					else
+					{
+						this._MasterID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_InvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceNoMainAssignment = this;
+		}
+		
+		private void detach_InvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceNoMainAssignment = null;
+		}
+		
+		private void Initialize()
+		{
+			this._InvoiceTrackCodeAssignment = new EntitySet<InvoiceTrackCodeAssignment>(new Action<InvoiceTrackCodeAssignment>(this.attach_InvoiceTrackCodeAssignment), new Action<InvoiceTrackCodeAssignment>(this.detach_InvoiceTrackCodeAssignment));
+			this._InvoiceTrackCode = default(EntityRef<InvoiceTrackCode>);
+			this._Organization = default(EntityRef<Organization>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Runtime.Serialization.OnSerializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnSerializing(StreamingContext context)
+		{
+			this.serializing = true;
+		}
+		
+		[global::System.Runtime.Serialization.OnSerializedAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnSerialized(StreamingContext context)
+		{
+			this.serializing = false;
 		}
 	}
 	

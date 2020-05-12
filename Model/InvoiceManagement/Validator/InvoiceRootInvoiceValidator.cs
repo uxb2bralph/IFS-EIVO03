@@ -41,7 +41,8 @@ namespace Model.InvoiceManagement.Validator
         protected bool _isAutoTrackNo;
         protected Dictionary<int, TrackNoManager> _trackNoManagerList;
         protected Func<Exception>[, , ,] _deliveryCheck;
-      
+        protected Naming.InvoiceProcessType processType;
+
 
         public InvoiceRootInvoiceValidator(GenericManager<EIVOEntityDataContext> mgr, Organization owner)
         {
@@ -381,10 +382,15 @@ namespace Model.InvoiceManagement.Validator
                     return new Exception(MessageResources.AlertInvoiceDate);
                 }
 
-                if (String.IsNullOrEmpty(_invItem.InvoiceTime))
+                _invItem.InvoiceTime = _invItem.InvoiceTime.GetEfficientString();
+                if (_invItem.InvoiceTime == null)
                 {
-                    return new Exception(MessageResources.AlertInvoiceTime);
+                    _invItem.InvoiceTime = "12:00:00";
                 }
+                //if (String.IsNullOrEmpty(_invItem.InvoiceTime))
+                //{
+                //    return new Exception(MessageResources.AlertInvoiceTime);
+                //}
 
                 if (!DateTime.TryParseExact(String.Format("{0} {1}", _invItem.InvoiceDate, _invItem.InvoiceTime), "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate))
                 {
@@ -722,6 +728,7 @@ namespace Model.InvoiceManagement.Validator
             {
                 _buyer.CustomerNumber = _buyer.ReceiptNo;
                 _buyer.ReceiptNo = "0000000000";
+                _buyer.EMail = _invItem.CarrierId1 ?? _invItem.CarrierId2;
             }
 
             if (_invItem.Contact != null)
@@ -883,15 +890,15 @@ namespace Model.InvoiceManagement.Validator
                 }
 
 
-                if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
-                {
-                    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
-                }
+                //if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
+                //}
 
-                if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
-                {
-                    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
-                }
+                //if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
+                //}
 
             }
             return null;

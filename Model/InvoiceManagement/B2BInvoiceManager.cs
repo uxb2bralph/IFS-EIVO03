@@ -136,12 +136,14 @@ namespace Model.InvoiceManagement
                 return null;
             }
             //發票買受人名稱
-            if (string.IsNullOrEmpty(invItem.BuyerName))
-            {
-                ex = new Exception(String.Format("發票買受人名稱不得為空白"));
-                return null;
-            }
-            if (this.EntityList.Any(i => i.No == invNo && i.TrackCode == trackCode))
+            invItem.BuyerName = invItem.BuyerName.GetEfficientString();
+            //if (string.IsNullOrEmpty(invItem.BuyerName))
+            //{
+            //    ex = new Exception(String.Format("發票買受人名稱不得為空白"));
+            //    return null;
+            //}
+
+            if (this.EntityList.Any(i => i.No == invNo && i.TrackCode == trackCode && i.SellerID==seller.CompanyID))
             {
                 ex = new Exception(String.Format("發票號碼已存在:{0}", invItem.InvoiceNumber));
                 return null;
@@ -176,14 +178,14 @@ namespace Model.InvoiceManagement
                 InvoiceBuyer = new InvoiceBuyer
                 {
                     BuyerMark = invItem.BuyerMark,
-                    Name = invItem.BuyerName,
+                    Name = invItem.BuyerName ?? relation.CompanyName ?? buyer.CompanyName,
                     ReceiptNo = invItem.BuyerId,
-                    Address = buyer.Addr,
+                    Address = relation.Addr ?? buyer.Addr,
                     ContactName = buyer.ContactName,
-                    CustomerName = buyer.CompanyName,
-                    EMail = buyer.ContactEmail,
+                    CustomerName = relation.CompanyName ?? buyer.CompanyName,
+                    EMail = relation.ContactEmail ?? buyer.ContactEmail,
                     Fax = buyer.Fax,
-                    Phone = buyer.Phone,
+                    Phone = relation.Phone ?? buyer.Phone,
                     PersonInCharge = buyer.UndertakerName,
                     BuyerID = buyer.CompanyID
                 },
@@ -281,7 +283,7 @@ namespace Model.InvoiceManagement
             return newItem;
         }
 
-        public Dictionary<int, Exception> SaveUploadInvoiceCancellation(CancelInvoiceRoot item, OrganizationToken owner)
+        public override Dictionary<int, Exception> SaveUploadInvoiceCancellation(CancelInvoiceRoot item, OrganizationToken owner)
         {
             Dictionary<int, Exception> result = new Dictionary<int, Exception>();
             if (item != null && item.CancelInvoice != null && item.CancelInvoice.Length > 0)
@@ -1278,7 +1280,7 @@ namespace Model.InvoiceManagement
         }
 
 
-        public Dictionary<int, Exception> SaveUploadAllowance(AllowanceRoot root, OrganizationToken owner)
+        public override Dictionary<int, Exception> SaveUploadAllowance(AllowanceRoot root, OrganizationToken owner)
         {
 
             Dictionary<int, Exception> result = new Dictionary<int, Exception>();
@@ -1319,7 +1321,7 @@ namespace Model.InvoiceManagement
         }
 
 
-        public Dictionary<int, Exception> SaveUploadAllowanceCancellation(CancelAllowanceRoot root, OrganizationToken owner)
+        public override Dictionary<int, Exception> SaveUploadAllowanceCancellation(CancelAllowanceRoot root, OrganizationToken owner)
         {
             Dictionary<int, Exception> result = new Dictionary<int, Exception>();
             if (root != null && root.CancelAllowance != null && root.CancelAllowance.Length > 0)

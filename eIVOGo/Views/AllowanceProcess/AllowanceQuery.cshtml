@@ -178,12 +178,12 @@
                     return false;
                 }
 
-                var $formData = $('#theForm').serializeObject();
+                var $formData = $('input[name="chkItem"]:checked').serializeObject();
                 $formData.paperStyle = style;
-                //$formData.processType = processType;
+                $formData.processType = $('select[name="ProcessType"]').val();
 
                 showLoading();
-                $.post('@Html.Raw(Url.Action("Print","AllowanceProcess",new { _viewModel.ProcessType }))', $formData, function (data) {
+                $.post('@Html.Raw(Url.Action("Print","AllowanceProcess"))', $formData, function (data) {
                     hideLoading();
                     if ($.isPlainObject(data)) {
                         alert(data.message);
@@ -219,21 +219,17 @@
                 });
 
             },
-
             download: function () {
+                var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
+                $('').launchDownload('@Html.Raw(Url.Action("CreateXlsx","AllowanceProcess"))', $formData, '_blank');
+            },
+            downloadItems: function () {
                 if ($postForm) {
                     $postForm.remove();
                 }
 
-                $postForm = $('<form method="post" />').prop('action', '@Html.Raw(Url.Action("CreateXlsx","AllowanceProcess"))')
-                    .css('display', 'none').appendTo($('body'));
-
-                $('#theForm').serializeArray().forEach(function (item, index) {
-                    $('<input type="hidden">')
-                        .prop('name', item.name).prop('value', item.value)
-                        .appendTo($postForm);
-                });
-                $postForm.submit();
+                var $formData = $('input[name="chkItem"]:checked').serializeObject();
+                $('').launchDownload('@Html.Raw(Url.Action("CreateXlsx","AllowanceProcess"))', $formData);
                 //showLoading();
             },
         };

@@ -226,6 +226,10 @@ namespace Model.InvoiceManagement.Validator
             {
                 return new Exception(String.Format("買方識別碼錯誤，傳送資料：{0}，TAG:< Identifier />", _c0401Item.Main.Buyer.Identifier));
             }
+            else if (_c0401Item.Main.Buyer.Name == null)
+            {
+                return new Exception(String.Format("買方名稱格式錯誤，傳送資料：{0}，TAG:< Name />", _c0401Item.Main.Buyer.Name));
+            }
             else if (_c0401Item.Main.Buyer.Name.Length > 60)
             {
                 return new Exception(String.Format("買方名稱格式錯誤，長度最多60碼，傳送資料：{0}，TAG:< Name />", _c0401Item.Main.Buyer.Name));
@@ -670,15 +674,15 @@ namespace Model.InvoiceManagement.Validator
                 }
 
 
-                if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
-                {
-                    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
-                }
+                //if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
+                //}
 
-                if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
-                {
-                    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
-                }
+                //if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
+                //}
 
             }
             return null;

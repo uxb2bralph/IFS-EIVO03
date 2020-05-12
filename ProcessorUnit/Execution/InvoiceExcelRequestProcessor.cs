@@ -31,6 +31,14 @@ namespace ProcessorUnit.Execution
 
         protected Func<DataSet, ProcessRequest, DataTable> processDataSet;
 
+        static String[] __AcceptedTableName =
+            {
+                "Invoice",
+                "Details",
+                "Void_Invoice",
+                "Allowance",
+                "Void_Allowance",
+            };
         protected override void ProcessRequestItem()
         {
             ProcessRequest requestItem = queueItem.ProcessRequest;
@@ -44,31 +52,30 @@ namespace ProcessorUnit.Execution
                 using (DataSet ds = requestFile.ImportExcelXLS())
                 {
                     int idx = 1;
-                    foreach(var t in ds.Tables.Cast<DataTable>().ToArray())
+                    var tables = ds.Tables.Cast<DataTable>().ToList();
+                    var expectedNames = __AcceptedTableName.ToList();
+                    foreach(var t in tables.ToList())
                     {
-                        if (t.TableName.Contains("Details"))
+                        t.TableName = t.TableName.Replace("$", "");
+                        var item = expectedNames.Where(n => n == t.TableName).FirstOrDefault();
+                        if (item != null)
                         {
-                            t.TableName = "Details";
+                            tables.Remove(t);
+                            expectedNames.Remove(item);
                         }
-                        else if (t.TableName.Contains("Void_Invoice"))
+                    }
+
+                    foreach(var t in tables)
+                    {
+                        var item = expectedNames.Where(n => t.TableName.Contains(n)).FirstOrDefault();
+                        if (item != null)
                         {
-                            t.TableName = "Void_Invoice";
+                            t.TableName = item;
+                            expectedNames.Remove(item);
                         }
-                        else if (t.TableName.Contains("Invoice"))
+                        else
                         {
-                            t.TableName = "Invoice";
-                        }
-                        else if (t.TableName.Contains("Void_Allowance"))
-                        {
-                            t.TableName = "Void_Allowance";
-                        }
-                        else if (t.TableName.Contains("Allowance"))
-                        {
-                            t.TableName = "Allowance";
-                        }
-                        else 
-                        {
-                            t.TableName = $"unused_{idx++}";
+                            t.TableName = $"undetermined_{idx++}";
                         }
                     }
                     var result = processDataSet(ds, requestItem);

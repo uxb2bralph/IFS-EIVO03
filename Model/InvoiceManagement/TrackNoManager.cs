@@ -138,6 +138,7 @@ namespace Model.InvoiceManagement
 
             item.TrackCode = _currentInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode;
             item.No = String.Format("{0:00000000}", _currentNo);
+            item.TrackID = _currentInterval.TrackID;
 
             _currentNo++;
             if (_currentNo > _currentInterval.EndNo)
@@ -204,8 +205,11 @@ namespace Model.InvoiceManagement
                 //    && n.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo == currentPeriodNo
                 //    && !n.LockID.HasValue);
 
-                intervalItems = intervalItems.Where(n => n.InvoiceNoAssignments.Count == 0
-                                || n.InvoiceNoAssignments.Max(a => a.InvoiceNo) < n.EndNo);
+                intervalItems = intervalItems
+                                .Where(n => n.InvoiceNoAssignments.Count == 0
+                                    || n.InvoiceNoAssignments.Max(a => a.InvoiceNo) < n.EndNo)
+                                .Where(n => n.InvoiceNoAllocation.Count == 0
+                                    || n.InvoiceNoAllocation.Max(a => a.InvoiceNo) < n.EndNo);
 
                 if (intervalID.HasValue)
                     intervalItems = intervalItems.Where(n => n.IntervalID > intervalID);
@@ -228,9 +232,7 @@ namespace Model.InvoiceManagement
 
                 if (item != null)
                 {
-                    _currentNo = item.InvoiceNoAssignments.Count == 0
-                        ? item.StartNo
-                        : item.InvoiceNoAssignments.Max(a => a.InvoiceNo) + 1;
+                    _currentNo = item.CurrentAllocatingNo();
                 }
 
                 return item;

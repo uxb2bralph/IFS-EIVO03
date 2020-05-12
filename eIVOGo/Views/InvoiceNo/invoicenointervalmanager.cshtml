@@ -13,8 +13,20 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@{
+
+    Model.Security.MembershipManagement.UserProfileMember _profile;
+    ModelSource<InvoiceItem> models;
+
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _profile = Business.Helper.WebPageUtility.UserProfile;
+}
+
 <!--交易畫面標題-->
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "新增/修改發票號碼區間");}
+@{
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "新增/修改發票號碼區間");
+}
 
 
 <div class="border_gray" id="queryArea">
@@ -32,10 +44,10 @@
                 </th>
                 <td class="tdleft">
                     <select name="year">
-                    @for (int yy = 2012; yy <= DateTime.Now.Year + 1; yy++)
+                        @for (int yy = 2012; yy <= DateTime.Now.Year + 1; yy++)
                         {
                             <option value="@(yy)">@(yy-1911)</option>
-                    }
+                        }
                     </select>
                     <script>
                         $(function () {
@@ -70,8 +82,8 @@
                     開立人統編
                 </th>
                 <td class="tdleft">
-                    @{ Html.RenderPartial("~/Views/DataFlow/SellerSelector.ascx", _profile.InitializeOrganizationQuery(models));}
-                
+                    @{ Html.RenderPartial("~/Views/DataFlow/SellerSelector.cshtml", _profile.InitializeOrganizationQuery(models));}
+
                 </td>
             </tr>
         </tbody>
@@ -84,7 +96,7 @@
     <tbody>
         <tr>
             <td class="Bargain_btn">
-                <button type="button" onclick="uiTrackCodeNo.inquire();" >查詢</button>
+                <button type="button" onclick="uiTrackCodeNo.inquire();">查詢</button>
             </td>
         </tr>
     </tbody>
@@ -187,6 +199,22 @@
                     }
                 });
             },
+            splitItem: function (keyID) {
+                if (confirm('確定分割此配號區間?')) {
+                    var event = event || window.event;
+                    var $tr = $(event.target).closest('tr');
+                    $.post('@(Url.Action("SplitNoInterval","InvoiceNo"))', { 'keyID': keyID }, function (data) {
+                        if (data.result) {
+                            alert('配號區間已分割!!')
+                            uiTrackCodeNo.inquire();
+                        } else {
+                            if (data.message) {
+                                alert(data.message);
+                            }
+                        }
+                    });
+                }
+            },
             assignPOSBooklets: function (value) {
                 $.post('@(Url.Action("EditPOSBooklets","InvoiceNo"))', { 'intervalID': value }, function (data) {
                     $global.createTab('editPOSInterval', 'POS本組數配置', data, true);
@@ -206,16 +234,4 @@
 
         };
     });
-</script>
-<script runat="server">
-
-    Model.Security.MembershipManagement.UserProfileMember _profile;
-    ModelSource<InvoiceItem> models;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _profile = Business.Helper.WebPageUtility.UserProfile;
-    }
 </script>

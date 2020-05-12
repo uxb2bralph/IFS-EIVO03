@@ -140,6 +140,11 @@ namespace Model.InvoiceManagement
                 validator.EndAutoTrackNo();
                 workingMgr.Dispose();
 
+                if (eventItems.Count > 0)
+                {
+                    HasItem = true;
+                }
+
                 EventItems = eventItems;
             }
 

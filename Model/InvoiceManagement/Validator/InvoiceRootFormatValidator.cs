@@ -575,15 +575,15 @@ namespace Model.InvoiceManagement.Validator
                 }
 
 
-                if (!Regex.IsMatch(product.UnitCost.ToString(), InvoiceRootInvoiceValidator.__DECIMAL_AMOUNT_PATTERN))
-                {
-                    items.Add( new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost)));
-                }
+                //if (!Regex.IsMatch(product.UnitCost.ToString(), InvoiceRootInvoiceValidator.__DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    items.Add( new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost)));
+                //}
 
-                if (!Regex.IsMatch(product.CostAmount.ToString(), InvoiceRootInvoiceValidator.__DECIMAL_AMOUNT_PATTERN))
-                {
-                    items.Add( new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount)));
-                }
+                //if (!Regex.IsMatch(product.CostAmount.ToString(), InvoiceRootInvoiceValidator.__DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    items.Add( new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount)));
+                //}
 
             }
         }

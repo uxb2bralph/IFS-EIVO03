@@ -116,6 +116,11 @@ namespace ProcessorUnit
             };
             chainedProcessor = chainedProcessor.ChainedExecutor;
 
+            chainedProcessor.ChainedExecutor = new AllowanceJsonRequestProcessor
+            {
+            };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
             chainedProcessor.ChainedExecutor = new VoidAllowanceExcelRequestProcessor { };
             chainedProcessor = chainedProcessor.ChainedExecutor;
 

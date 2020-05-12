@@ -59,7 +59,7 @@ namespace eIVOGo.Module.SAM.Invoice
                 }
 
                 _entity = new InvoiceNoInterval { };
-                codeAssignment.InvoiceNoIntervals.Add(_entity);
+                codeAssignment.InvoiceNoInterval.Add(_entity);
             }
             else if (_entity.InvoiceNoAssignments.Count > 0)
             {

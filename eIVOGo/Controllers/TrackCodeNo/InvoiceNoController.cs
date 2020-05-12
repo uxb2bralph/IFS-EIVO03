@@ -27,7 +27,7 @@ using Model.Schema.TurnKey.E0402;
 using Model.Security.MembershipManagement;
 using Utility;
 
-namespace eIVOGo.Controllers
+namespace eIVOGo.Controllers.TrackCodeNo
 {
     [Authorize]
     public class InvoiceNoController : SampleController<InvoiceItem>
@@ -35,7 +35,7 @@ namespace eIVOGo.Controllers
         // GET: InvoiceNo
         public ActionResult MaintainInvoiceNoInterval()
         {
-            return View();
+            return View("~/Views/InvoiceNo/MaintainInvoiceNoInterval.cshtml");
         }
 
         public ActionResult InquireInterval(InquireNoIntervalViewModel viewModel)
@@ -66,7 +66,7 @@ namespace eIVOGo.Controllers
             if (viewModel.PeriodNo.HasValue)
                 items = items.Where(i => i.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo == viewModel.PeriodNo);
 
-            return View("~/Views/InvoiceNo/Module/QueryResult.ascx", items);
+            return View("~/Views/InvoiceNo/Module/QueryResult.cshtml", items);
         }
 
         public ActionResult InquireVacantNo(InquireNoIntervalViewModel viewModel)
@@ -131,11 +131,11 @@ namespace eIVOGo.Controllers
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
-            return zipVacantNo(items);
+            return zipVacantNo(viewModel, items);
 
         }
 
-        private ActionResult zipVacantNo(List<InquireVacantNoResult> vacantNoItems)
+        private ActionResult zipVacantNo(InquireNoIntervalViewModel viewModel,List<InquireVacantNoResult> vacantNoItems)
         {
             String temp = Server.MapPath("~/temp");
             if (!Directory.Exists(temp))
@@ -159,7 +159,7 @@ namespace eIVOGo.Controllers
                             Main = new Main
                             {
                                 BranchBan = orgItem.ReceiptNo,
-                                HeadBan = orgItem.ReceiptNo,
+                                HeadBan = viewModel.BranchRelation == true && orgItem.AsInvoiceInsurer.Count > 0 ? orgItem.AsInvoiceInsurer.First().InvoiceAgent.ReceiptNo : orgItem.ReceiptNo,
                                 YearMonth = String.Format("{0}{1:00}", item.Key.Year - 1911, item.Key.PeriodNo * 2),
                                 InvoiceType = item.Key.InvoiceType == (byte)InvoiceTypeEnum.Item08 ? InvoiceTypeEnum.Item08 : InvoiceTypeEnum.Item07,
                                 InvoiceTrack = item.Key.TrackCode
@@ -319,7 +319,7 @@ namespace eIVOGo.Controllers
                 }
 
                 model = new InvoiceNoInterval { };
-                codeAssignment.InvoiceNoIntervals.Add(model);
+                codeAssignment.InvoiceNoInterval.Add(model);
             }
 
             model.StartNo = viewModel.StartNo.Value;
@@ -327,7 +327,7 @@ namespace eIVOGo.Controllers
 
             models.SubmitChanges();
 
-            return View("~/Views/InvoiceNo/Module/DataItem.ascx", model);
+            return View("~/Views/InvoiceNo/Module/DataItem.cshtml", model);
 
         }
 
@@ -355,7 +355,7 @@ namespace eIVOGo.Controllers
                     return View("~/Views/Shared/JsAlert.cshtml", model: "配號區間資料錯誤!!");
             }
 
-            return View("~/Views/InvoiceNo/Module/EditItem.ascx", item);
+            return View("~/Views/InvoiceNo/Module/EditItem.cshtml", item);
 
         }
 
@@ -391,32 +391,29 @@ namespace eIVOGo.Controllers
 
             try
             {
-                var current = item.InvoiceNoAssignments.OrderByDescending(a => a.InvoiceID).FirstOrDefault();
-                if (current != null)
+                var currentNo = item.CurrentAllocatingNo();
+                var remained = item.EndNo - currentNo + 1;
+                if (remained > 100)
                 {
-                    var remained = item.EndNo - current.InvoiceNo.Value;
-                    if (remained > 100)
+                    var cutpoint = item.EndNo - ((remained - 100) / 50 * 50);
+                    if (cutpoint == item.EndNo)
                     {
-                        var cutpoint = item.EndNo - ((remained - 100) / 50 * 50);
-                        if (cutpoint == item.EndNo)
-                        {
-                            return Json(new { result = false, message = "剩餘號碼不足單一本組數，無法分割！" }, JsonRequestBehavior.AllowGet);
-                        }
-
-                        InvoiceNoInterval newItem = new InvoiceNoInterval
-                        {
-                            EndNo = item.EndNo,
-                            SellerID = item.SellerID,
-                            TrackID = item.TrackID,
-                            StartNo = cutpoint + 1,
-                        };
-                        models.GetTable<InvoiceNoInterval>().InsertOnSubmit(newItem);
-                        item.EndNo = cutpoint;
-                        models.SubmitChanges();
-
-                        return Json(new { result = true }, JsonRequestBehavior.AllowGet);
-
+                        return Json(new { result = false, message = "剩餘號碼不足單一本組數，無法分割！" }, JsonRequestBehavior.AllowGet);
                     }
+
+                    InvoiceNoInterval newItem = new InvoiceNoInterval
+                    {
+                        EndNo = item.EndNo,
+                        SellerID = item.SellerID,
+                        TrackID = item.TrackID,
+                        StartNo = cutpoint + 1,
+                    };
+                    models.GetTable<InvoiceNoInterval>().InsertOnSubmit(newItem);
+                    item.EndNo = cutpoint;
+                    models.SubmitChanges();
+
+                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+
                 }
                 return Json(new { result = false }, JsonRequestBehavior.AllowGet);
             }
@@ -480,7 +477,7 @@ namespace eIVOGo.Controllers
 
             if (item != null)
             {
-                result.ViewName = "~/Views/InvoiceNo/Module/AllotInterval.ascx";
+                result.ViewName = "~/Views/InvoiceNo/Module/AllotInterval.cshtml";
             }
             return result;
         }
@@ -494,18 +491,18 @@ namespace eIVOGo.Controllers
             if (item == null)
                 return result;
 
-            return View("~/Views/InvoiceNo/Module/DataItem.ascx", item);
+            return View("~/Views/InvoiceNo/Module/DataItem.cshtml", item);
         }
 
         public ActionResult TrackCodeSelector(InquireNoIntervalViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            return View("~/Views/InvoiceNo/Module/TrackCodeSelector.ascx");
+            return View("~/Views/InvoiceNo/Module/TrackCodeSelector.cshtml");
         }
 
         public ActionResult VacantNoIndex()
         {
-            return View();
+            return View("~/Views/InvoiceNo/VacantNoIndex.cshtml");
         }
 
         public ActionResult ProcessVacantNo(InquireNoIntervalViewModel viewModel)
@@ -553,7 +550,7 @@ namespace eIVOGo.Controllers
                 return View("~/Views/Shared/JsAlertMessage.ascx",model:"配號區間資料錯誤!!");
             }
 
-            return View("~/Views/InvoiceNo/Module/EditPOSBooklets.ascx", item);
+            return View("~/Views/InvoiceNo/Module/EditPOSBooklets.cshtml", item);
         }
 
     }

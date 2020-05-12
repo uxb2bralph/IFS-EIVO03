@@ -45,6 +45,7 @@ namespace Model.Models.ViewModel
         public int? PeriodNo { get; set; }
         public int? SellerID { get; set; }
         public String SelectIndication { get; set; }
+        public bool? BranchRelation { get; set; }
     }
 
     public partial class BusinessRelationshipViewModel

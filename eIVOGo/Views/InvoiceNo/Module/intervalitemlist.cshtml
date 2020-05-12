@@ -1,13 +1,14 @@
 
-@{ Register Src="~/Module/Common/ActionHandler.ascx" TagName="ActionHandler" TagPrefix="uc1" }
-@{ Register Src="~/Module/Common/PagingControl.ascx" TagName="PagingControl" TagPrefix="uc2" }
 @using System.IO
 @using System.Linq.Expressions
 
 
 @using Model.DataEntity
 @using Model.Locale
-
+@{
+    IEnumerable<InvoiceNoInterval> _items;
+    _items = (IEnumerable<InvoiceNoInterval>)this.Model;
+}
 <table class="table01 itemList">
     <thead>
         <tr>
@@ -16,16 +17,19 @@
             <th style="min-width: 80px">字軌</th>
             <th style="min-width: 160px">發票號碼起</th>
             <th style="min-width: 160px">發票號碼迄</th>
+            <th style="min-width: 160px">配號總數／剩餘</th>
+            <th>給號</th>
             <th style="min-width: 150px">管理</th>
         </tr>
     </thead>
     <tbody>
         @{ int idx = 0;}
- @foreach (var item in _items)
-                {
-                    idx++;
-                    Html.RenderPartial("~/Views/InvoiceNo/Module/DataItem.ascx", item);
-                }@{ Html.RenderPartial("~/Views/InvoiceNo/Module/AddItem.ascx");}
+        @foreach (var item in _items)
+        {
+            idx++;
+            Html.RenderPartial("~/Views/InvoiceNo/Module/DataItem.cshtml", item);
+        }
+        @{ Html.RenderPartial("~/Views/InvoiceNo/Module/AddItem.cshtml");}
 
     </tbody>
     <tfoot>
@@ -35,14 +39,4 @@
     </tfoot>
 </table>
 
-<script runat="server">
 
-    IEnumerable<InvoiceNoInterval> _items;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _items = (IEnumerable<InvoiceNoInterval>)this.Model;
-    }
-
-</script>

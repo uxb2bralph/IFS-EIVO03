@@ -44,7 +44,7 @@ namespace Model.InvoiceManagement
         }
 
 
-        public static Action<int,bool> NotifyIssuedInvoice
+        public static Action<int, bool> NotifyIssuedInvoice
         {
             get;
             set;
@@ -214,7 +214,7 @@ namespace Model.InvoiceManagement
 
                             var t = Task.Factory.ContinueWhenAll(__Tasks.ToArray(), ts =>
                             {
-                                Console.WriteLine($"EIVOPlatformFatory finished:{DateTime.Now}");
+                                Logger.Info($"EIVOPlatformFatory finished:{DateTime.Now}");
                             });
                             t.Wait();
 
@@ -287,6 +287,15 @@ namespace Model.InvoiceManagement
             if (Settings.Default.EnableEIVOPlatform)
                 __Handler.Notify();
         }
+
+        public static dynamic CurrentStatus =>
+            new
+            {
+                Enabled = Settings.Default.EnableEIVOPlatform,
+                HasInstance = __Handler != null,
+                MaxWaitingCount = __Handler?.MaxWaitingCount ?? -1,
+                ReportDate = DateTime.Now,
+            };
 
         //private static void notifyToProcess(object stateInfo)
         //{

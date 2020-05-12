@@ -178,7 +178,7 @@ namespace Business.Helper.InvoiceProcessor
                         WHERE          (NOT EXISTS
                                             (SELECT          NULL
                                                 FROM               [proc].ProcessRequestDocument AS p
-                                                WHERE           (TaskID = {0}) AND (DocID = {1})))", 
+                                                WHERE           (DocID = {1})))", 
                         requestItem.TaskID, newItem.InvoiceID);
                 }
                 //manager.SubmitChanges();
@@ -281,6 +281,103 @@ namespace Business.Helper.InvoiceProcessor
                         CancelInvoiceNumber = d.TrackCode + d.No,
                         SellerId = d.InvoiceSeller.ReceiptNo
                     }
+                }));
+            }
+
+            result.Automation = automation.ToArray();
+        }
+
+        public static void UploadAllowance(this InvoiceManagerV2 models, XmlDocument uploadData, Root result)
+        {
+            try
+            {
+                CryptoUtility crypto = new CryptoUtility();
+
+                uploadData.PreserveWhitespace = true;
+                if (crypto.VerifyXmlSignature(uploadData))
+                {
+                    AllowanceRoot allowance = uploadData.TrimAll().ConvertTo<AllowanceRoot>();
+
+                    ///憑證資料檢查
+                    ///
+                    var token = models.GetTable<OrganizationToken>().Where(t => t.Thumbprint == crypto.SignerCertificate.Thumbprint).FirstOrDefault();
+                    if (token != null)
+                    {
+                        models.UploadAllowance(result, allowance, token);
+                    }
+                    else
+                    {
+                        result.Result.message = "營業人憑證資料驗證不符!!";
+                    }
+                }
+                else
+                {
+                    result.Result.message = "發票資料簽章不符!!";
+                }
+                GovPlatformFactory.Notify();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                result.Result.message = ex.Message;
+            }
+
+        }
+
+        public static void UploadAllowance(this InvoiceManagerV2 models, Root result, AllowanceRoot allowance, OrganizationToken token)
+        {
+            List<AutomationItem> automation = new List<AutomationItem>();
+            var items = models.SaveUploadAllowance(allowance, token);
+            if (items.Count > 0)
+            {
+                result.Response = new RootResponse
+                {
+                    InvoiceNo =
+                    items.Select(d => new RootResponseInvoiceNo
+                    {
+                        Value = allowance.Allowance[d.Key].AllowanceNumber,
+                        Description = d.Value.Message,
+                        ItemIndexSpecified = true,
+                        ItemIndex = d.Key
+                    }).ToArray()
+                };
+
+                automation.AddRange(items.Select(d => new AutomationItem
+                {
+                    Description = d.Value.Message,
+                    Status = 0,
+                    Allowance = new AutomationItemAllowance
+                    {
+                        AllowanceNumber = allowance.Allowance[d.Key].AllowanceNumber,
+                        SellerId = allowance.Allowance[d.Key].SellerId,
+                    },
+                }));
+
+                ThreadPool.QueueUserWorkItem(ExceptionNotification.SendNotification,
+                    new ExceptionInfo
+                    {
+                        Token = token,
+                        ExceptionItems = items,
+                        AllowanceData = allowance
+                    });
+            }
+            else
+            {
+                result.Result.value = 1;
+            }
+
+            if (models.EventItems_Allowance != null && models.EventItems_Allowance.Count() > 0)
+            {
+                //上傳後折讓
+                automation.AddRange(models.EventItems_Allowance.Select(d => new AutomationItem
+                {
+                    Description = "",
+                    Status = 1,
+                    Allowance = new AutomationItemAllowance
+                    {
+                        AllowanceNumber = d.AllowanceNumber,
+                        SellerId = d.InvoiceAllowanceSeller.ReceiptNo
+                    },
                 }));
             }
 

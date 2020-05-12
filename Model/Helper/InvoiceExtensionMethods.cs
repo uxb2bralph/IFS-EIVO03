@@ -8,6 +8,7 @@ using DataAccessLayer.basis;
 using Model.DataEntity;
 using Model.InvoiceManagement.InvoiceProcess;
 using Model.Locale;
+using Model.Models.ViewModel;
 using Uxnet.Com.DataAccessLayer;
 
 namespace Model.Helper

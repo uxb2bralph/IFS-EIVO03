@@ -70,6 +70,7 @@
     <Compile Include="AddOn%28201311%29\InvoiceManagement\enUS\CancelInvoiceRootValidator.cs" />
     <Compile Include="AddOn%28201311%29\InvoiceManagement\enUS\Check_CarrierType_PrintMark_DonateMark.cs" />
     <Compile Include="AddOn%28201311%29\InvoiceManagement\GoogleInvoiceManager.cs" />
+    <Compile Include="Helper\InvoiceItemEncryption.cs" />
     <Compile Include="Helper\StorePathExtensions.cs" />
     <Compile Include="InvoiceManagement\GooglePlayInvoiceManager.cs" />
     <Compile Include="InvoiceManagement\GoogleInvoiceManagerV3.cs" />

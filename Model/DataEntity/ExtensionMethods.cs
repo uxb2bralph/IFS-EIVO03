@@ -384,6 +384,13 @@ namespace Model.DataEntity
                                                 FROM               DocumentSubscriptionQueue
                                                 WHERE           (DocID = {0})))", docID);
         }
+
+        public static int CurrentAllocatingNo(this InvoiceNoInterval item)
+        {
+            var currentAllocated = (item.InvoiceNoAllocation.Max(a => (int?)a.InvoiceNo) + 1) ?? item.StartNo;
+            var currentNo = (item.InvoiceNoAssignments.Max(a => a.InvoiceNo) + 1) ?? item.StartNo;
+            return Math.Max(currentAllocated, currentNo);
+        }
     }
 
     public partial class EIVOEntityManager<TEntity> : GenericManager<EIVOEntityDataContext, TEntity>

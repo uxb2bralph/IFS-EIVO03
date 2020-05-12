@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using DataAccessLayer.basis;
 using Model.DataEntity;
+using Model.Helper;
+using Model.InvoiceManagement;
 using Model.Locale;
+using Model.Models.ViewModel;
 using Model.Security.MembershipManagement;
 
 namespace eIVOGo.Helper
@@ -115,7 +120,10 @@ namespace eIVOGo.Helper
 
                 default:
                     var agentID = profile.CurrentUserRole.OrganizationCategory.CompanyID;
-                    return items.Where(i => i.AgentID == agentID);
+                    var issuers = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == agentID)
+                        .Select(a => a.IssuerID);
+                    return items.Where(i => i.AgentID == agentID
+                                    || issuers.Any(a => i.AgentID == a));
 
             }
 
@@ -135,6 +143,67 @@ namespace eIVOGo.Helper
             }
 
         }
+
+        public static List<InvoiceNoAllocation> AllocateInvoiceNo(this GenericManager<EIVOEntityDataContext> models, POSDeviceViewModel viewModel)
+        {
+            List<InvoiceNoAllocation> items = new List<InvoiceNoAllocation>();
+
+            //receiptNo = receiptNo.GetEfficientString();
+            var seller = models.GetTable<Organization>().Where(c => c.ReceiptNo == viewModel.company_id).FirstOrDefault();
+            bool auth = true;
+            if (seller != null)
+            {
+                if (viewModel.Seed != null && viewModel.Authorization != null)
+                {
+                    OrganizationToken token = seller.OrganizationToken;
+                    if (token == null)
+                    {
+                        token = models.GetTable<InvoiceIssuerAgent>().Where(i => i.IssuerID == seller.CompanyID)
+                                    .Join(models.GetTable<Organization>(), i => i.AgentID, o => o.CompanyID, (i, o) => o)
+                                    .Join(models.GetTable<OrganizationToken>(), o => o.CompanyID, t => t.CompanyID, (o, t) => t)
+                                    .FirstOrDefault();
+                                
+                    }
+                    if (token == null)
+                    {
+                        auth = false;
+                    }
+                    else
+                    {
+                        SHA256 hash = SHA256.Create();
+                        String computedAuth = Convert.ToBase64String(
+                                hash.ComputeHash(
+                                    Encoding.Default.GetBytes($"{token.Organization.ReceiptNo}{token.KeyID}{viewModel.Seed}")
+                                )
+                            );
+
+                        auth = viewModel.Authorization == computedAuth;
+                    }
+                }
+
+                if (auth)
+                {
+                    using (TrackNoManager mgr = new TrackNoManager(models, seller.CompanyID))
+                    {
+                        for (int i = 0; i < viewModel.quantity; i++)
+                        {
+                            var item = mgr.AllocateInvoiceNo();
+                            if (item == null)
+                                break;
+
+                            item.RandomNo = String.Format("{0:0000}", (DateTime.Now.Ticks % 10000));
+                            item.EncryptedContent = (item.InvoiceNoInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode + String.Format("{0:00000000}", item.InvoiceNo).EncryptContent(item.RandomNo));
+                            models.SubmitChanges();
+
+                            items.Add(item);
+                        }
+                    }
+                }
+            }
+
+            return items;
+        }
+
 
     }
 }

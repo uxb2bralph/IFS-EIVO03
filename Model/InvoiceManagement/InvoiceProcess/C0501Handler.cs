@@ -51,7 +51,15 @@ namespace Model.InvoiceManagement.InvoiceProcess
                 foreach (var item in buffer)
                 {
                     docID = item.DocID;
-                    var invoiceItem = item.CDS_Document.DerivedDocument.ParentDocument.InvoiceItem;
+                    var invoiceItem = item.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem;
+                    if (invoiceItem == null)
+                    {
+                        invoiceItem = item.CDS_Document.InvoiceItem;
+                    }
+
+                    if (invoiceItem == null)
+                        continue;
+
                     try
                     {
                         var fileName = Path.Combine(Settings.Default.C0501Outbound, $"C0501-{DateTime.Now:yyyyMMddHHmmssf}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
@@ -88,7 +96,11 @@ namespace Model.InvoiceManagement.InvoiceProcess
             while ((item = queryItems.FirstOrDefault()) != null)
             {
                 docID = item.DocID;
-                var invoiceItem = item.CDS_Document.DerivedDocument.ParentDocument.InvoiceItem;
+                var invoiceItem = item.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem;
+                if (invoiceItem == null)
+                {
+                    invoiceItem = item.CDS_Document.InvoiceItem;
+                }
 
                 try
                 {

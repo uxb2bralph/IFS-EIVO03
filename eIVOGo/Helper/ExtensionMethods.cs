@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
@@ -358,22 +359,29 @@ namespace eIVOGo.Helper
             {
                 File.Delete(saveTo);
 
-                bool checking = true;
-                while (checking)
+                var t = Task.Run(() =>
                 {
-                    try
+                    bool checking = true;
+                    while (checking)
                     {
-                        using (var fs = File.OpenRead(pdfFile))
+                        try
                         {
-                            fs.Close();
-                            checking = false;
+                            using (var fs = File.OpenRead(pdfFile))
+                            {
+                                fs.Close();
+                                checking = false;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error(ex);
+                            Thread.Sleep(100);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Logger.Error(ex);
-                    }
-                }
+                });
+
+                t.Wait();
+
                 return pdfFile;
             }
 

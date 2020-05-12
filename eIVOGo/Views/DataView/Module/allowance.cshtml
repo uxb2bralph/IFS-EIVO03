@@ -17,7 +17,7 @@
 @using Uxnet.Web.WebUI
 
 <div>
-    @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "發票折讓證明");}
+    @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "發票折讓證明");}
 
     <div class="border_gray">
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
@@ -79,13 +79,13 @@
                         <td>@(item.InvoiceDate.Value.Year)</td>
                         <td>@(item.InvoiceDate.Value.Month)</td>
                         <td>@(item.InvoiceDate.Value.Day)</td>
-                        <td>@(item.InvoiceNo.Substring(0,2))</td>
-                        <td>@(item.InvoiceNo.Substring(2))</td>
+                        <td>@(item.InvoiceNo?.Substring(0,2))</td>
+                        <td>@(item.InvoiceNo?.Substring(2))</td>
                         <td>@(item.OriginalDescription)</td>
                         <td style="text-align:right;">@($"{item.Piece:.}")</td>
-                        <td style="text-align:right;">@(String.Format("{0:0,0}", item.UnitCost))</td>
-                        <td style="text-align:right;">@(String.Format("{0:0,0}", item.Amount))</td>
-                        <td style="text-align:right;">@(String.Format("{0:0,0}", item.Tax))</td>
+                        <td style="text-align:right;">@(String.Format("{0:##,###,###,##0.##}", item.UnitCost))</td>
+                        <td style="text-align:right;">@(String.Format("{0:##,###,###,##0.##}", item.Amount))</td>
+                        <td style="text-align:right;">@(String.Format("{0:##,###,###,##0.##}", item.Tax))</td>
                     </tr>
                     }
                 </tbody>
