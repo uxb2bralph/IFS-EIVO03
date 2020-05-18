@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
 using Model.DataEntity;
 using eIVOGo.Helper;
 using Utility;
@@ -13,6 +12,7 @@ using Business.Helper;
 using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
 using Newtonsoft.Json;
+using eIVOGo.Resource.Helpers;
 
 namespace eIVOGo.Controllers
 {
@@ -21,7 +21,8 @@ namespace eIVOGo.Controllers
         // GET: Home
         public ActionResult MainPage()
         {
-            return View();
+            //return View();
+            return View("~/Views/Home/MainPage.cshtml");
         }
 
         public ActionResult SearchCompany(String term,bool? encrypt)
@@ -135,5 +136,35 @@ namespace eIVOGo.Controllers
             return View("~/Views/Home/Module/ReportError.cshtml");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="culture"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
+        public ActionResult SetCulture(string culture,string returnUrl)
+        {
+            // Validate input 
+            culture = CultureHelper.GetImplementedCulture(culture);
+
+            // Save culture in a cookie 
+            HttpCookie cookie = Request.Cookies["_culture"];
+
+            if (cookie != null)
+            {
+                // update cookie value 
+                cookie.Value = culture;
+            }
+            else
+            {
+                // create cookie value 
+                cookie = new HttpCookie("_culture");
+                cookie.Value = culture;
+                cookie.Expires = DateTime.Now.AddYears(1);
+            }
+
+            Response.Cookies.Add(cookie);
+            return Redirect(returnUrl);
+        }
     }
 }

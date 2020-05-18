@@ -28,6 +28,9 @@ using Model.Schema.TXN;
 using Model.Security.MembershipManagement;
 using Utility;
 using Uxnet.Com.Security.UseCrypto;
+using AutoMapper;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 namespace eIVOGo.Controllers
 {
@@ -36,17 +39,21 @@ namespace eIVOGo.Controllers
         // GET: TrackCode
         public ActionResult Index()
         {
-            return View();
+            return View("~/Views/TrackCode/Index.cshtml");
+            //return View();
         }
 
         public ActionResult Inquire(TrackCodeQueryViewModel viewModel)
         {
-
             ViewBag.ViewModel = viewModel;
+
+            var pageIndex = viewModel.PageIndex;
+            var pageSize = viewModel.PageSize;
+
             IQueryable<InvoiceTrackCode> items = models.GetTable<InvoiceTrackCode>()
                 .Where(t => t.Year == viewModel.Year);
 
-            if(viewModel.PeriodNo.HasValue)
+            if (viewModel.PeriodNo.HasValue && viewModel.PeriodNo.Value != 0)
             {
                 items = items.Where(t => t.PeriodNo == viewModel.PeriodNo);
             }
@@ -54,18 +61,103 @@ namespace eIVOGo.Controllers
 
             ViewBag.PageSize = viewModel.PageSize.HasValue && viewModel.PageSize > 0 ? viewModel.PageSize.Value : Uxnet.Web.Properties.Settings.Default.PageSize;
 
+            List<InvoiceTrackCodeItem> datas = new List<InvoiceTrackCodeItem>();
+
+            if (items.Count() > 0)
+            {
+                foreach (var item in items)
+                {
+                    var aa = new InvoiceTrackCodeItem
+                    {
+                        TrackID = item.TrackID,
+                        TrackCode = item.TrackCode,
+                        Year = item.Year,
+                        PeriodNo = item.PeriodNo,
+                        InvoiceType = item.InvoiceType
+                    };
+
+                    datas.Add(aa);
+                }
+                viewModel.Results = datas;
+            }
+
             if (viewModel.PageIndex.HasValue)
             {
                 if (viewModel.Sort != null && viewModel.Sort.Length > 0)
                     ViewBag.Sort = viewModel.Sort.Where(s => s.HasValue).Select(s => s.Value).ToArray();
                 ViewBag.PageIndex = viewModel.PageIndex - 1;
-                return View("~/Views/TrackCode/Module/ItemList.ascx", items);
+                return View("~/Views/TrackCode/Module/ItemList.cshtml", viewModel);
+                //return View("~/Views/TrackCode/Module/ItemList.cshtml", JsonConvert.SerializeObject(viewModel));
             }
             else
             {
                 ViewBag.PageIndex = 0;
-                return View("~/Views/TrackCode/Module/QueryResult.ascx", items);
+
+                return View("~/Views/TrackCode/Index.cshtml", viewModel);
+                //return View("~/Views/TrackCode/Module/QueryResult.ascx", items);
             }
+        }
+
+        [HttpPost]
+        public ActionResult Index(TrackCodeQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            var pageIndex = viewModel.PageIndex;
+            var pageSize = viewModel.PageSize;
+
+            IQueryable<InvoiceTrackCode> items = models.GetTable<InvoiceTrackCode>()
+                .Where(t => t.Year == viewModel.Year);
+
+            if (viewModel.PeriodNo.HasValue)
+            {
+                items = items.Where(t => t.PeriodNo == viewModel.PeriodNo);
+            }
+            items = items.OrderBy(t => t.PeriodNo).ThenBy(t => t.TrackCode);
+
+            ViewBag.PageSize = viewModel.PageSize.HasValue && viewModel.PageSize > 0 ? viewModel.PageSize.Value : Uxnet.Web.Properties.Settings.Default.PageSize;
+
+            List<InvoiceTrackCodeItem> datas = new List<InvoiceTrackCodeItem>();
+
+            if (items.Count() > 0)
+            {
+                foreach (var item in items)
+                {
+                    var aa = new InvoiceTrackCodeItem
+                    {
+                        TrackID = item.TrackID,
+                        TrackCode = item.TrackCode,
+                        Year = item.Year,
+                        PeriodNo = item.PeriodNo,
+                        InvoiceType = item.InvoiceType
+                    };
+
+                    datas.Add(aa);
+                }
+                viewModel.Results = datas;
+            }
+
+            if (viewModel.PageIndex.HasValue)
+            {
+                if (viewModel.Sort != null && viewModel.Sort.Length > 0)
+                    ViewBag.Sort = viewModel.Sort.Where(s => s.HasValue).Select(s => s.Value).ToArray();
+                ViewBag.PageIndex = viewModel.PageIndex - 1;
+
+                //RedirectToAction("~/Views/TrackCode/ItemList.cshtml","TrackCode", viewModel);
+                //return View("~/Views/TrackCode/ItemList.cshtml", viewModel);
+                return View("~/Views/TrackCode/Module/ItemList.cshtml", viewModel);
+
+
+                //return View("~/Views/TrackCode/Module/ItemList.cshtml", JsonConvert.SerializeObject(viewModel));
+            }
+            else
+            {
+                ViewBag.PageIndex = 0;
+
+                return View("~/Views/TrackCode/Index.cshtml", viewModel);
+                //return View("~/Views/TrackCode/Module/QueryResult.ascx", items);
+            }
+
         }
 
         public ActionResult EditItem(int? id)
@@ -106,7 +198,7 @@ namespace eIVOGo.Controllers
             {
                 return View("~/Views/Shared/JsAlert.cshtml", model: "發票字軌資料錯誤!!");
             }
-            
+
             return View("~/Views/TrackCode/Module/DataItem.ascx", item);
 
         }
@@ -116,7 +208,7 @@ namespace eIVOGo.Controllers
             ViewBag.ViewModel = viewModel;
 
             viewModel.TrackCode = viewModel.TrackCode.GetEfficientString();
-            if (viewModel.TrackCode==null || !Regex.IsMatch(viewModel.TrackCode,"^[A-Za-z]{2}$"))
+            if (viewModel.TrackCode == null || !Regex.IsMatch(viewModel.TrackCode, "^[A-Za-z]{2}$"))
             {
                 ModelState.AddModelError("TrackCode", "字軌應為二位英文字母!!");
             }

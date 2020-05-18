@@ -1,5 +1,4 @@
-
-@using System.IO
+﻿@using System.IO
 @using System.Linq.Expressions
 
 
@@ -10,25 +9,27 @@
 @using Model.DataEntity
 @using eIVOGo.Controllers
 @using Business.Helper
+@using Model.Security.MembershipManagement
+@using DataAccessLayer.basis
+@using eIVOGo.Resource.Views.Home
 
-@section headContent { 
- 
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
+
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ViewContext.Controller.DataSource();
+    IQueryable<ProductCatalog> _model = (IQueryable<ProductCatalog>)this.Model;
+    ProductCatalogQueryViewModel _viewModel = (ProductCatalogQueryViewModel)ViewBag.ViewModel;
+
+    ViewBag.ActionName = MainPage.首頁;   
 }
-@section mainContent { 
+
 @if (_profile.IsSystemAdmin())
-        {
-            Html.RenderPartial("~/Views/Home/Module/TodoList.ascx");
-        } 
+{
+    Html.RenderPartial("~/Views/Home/Module/TodoList.cshtml");
 }
-<script runat="server">
 
-    Model.Security.MembershipManagement.UserProfileMember _profile;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        ViewBag.ActionName = "首頁";
-        _profile = Context.GetUser();
-    }
-
-</script>

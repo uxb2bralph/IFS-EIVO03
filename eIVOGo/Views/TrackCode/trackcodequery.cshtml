@@ -1,8 +1,4 @@
-
-
-@using System.IO
-@using System.Linq.Expressions
-
+﻿@using System.Linq.Expressions
 @using eIVOGo.Controllers
 @using eIVOGo.Helper
 @using eIVOGo.Models
@@ -11,56 +7,126 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@{ Register Src="~/Module/jQuery/EnumSelector.ascx" TagPrefix="uc1" TagName="EnumSelector" }
+@using eIVOGo.Resource.Views.TrackCode
+@using Model.Models.ViewModel
+@model Model.Models.ViewModel.TrackCodeQueryViewModel
+
+@{
+    TrackCodeQueryViewModel _model = this.Model;
+
+    var yearList = new List<SelectListItem>();
+
+    for (int yy = 2012; yy <= DateTime.Now.Year + 1; yy++)
+    {
+        var selectListItem = new SelectListItem
+        {
+            Text = (yy - 1911).ToString(),
+            Value = yy.ToString()
+        };
+
+        if (_model != null && _model.Year !=null)
+        {
+            if (yy.Equals(_model.Year))
+            {
+                selectListItem.Selected = true;
+            }
+        }
+        else
+        {
+            if (yy.Equals(DateTime.Now.Year))
+            {
+                selectListItem.Selected = true;
+            }
+        }
+
+        yearList.Add(selectListItem);
+    }
+
+    var periodNoList = new List<SelectListItem>();
+
+    var value = 0;
+
+    var item = new SelectListItem
+    {
+        Text = (TrackCodeQuery.全部),
+        Value = value.ToString()
+    };
+
+    periodNoList.Add(item);
+
+    for (int i = 1; i < 12; i += 2)
+    {
+        value++;
+
+        var subItem = new SelectListItem();
+
+        if (i == 9)
+        {
+            subItem.Text = "0" + i.ToString() + "-" + (i + 1).ToString() + (TrackCodeQuery.月);
+        }
+        else if (i > 9)
+        {
+            subItem.Text = i.ToString() + "-" + (i + 1).ToString() + (TrackCodeQuery.月);
+        }
+        else
+        {
+            subItem.Text = "0" + i.ToString() + "-" + "0" + (i + 1).ToString() + (TrackCodeQuery.月);
+        }
+
+        subItem.Value = value.ToString();
+
+        if (_model != null && _model.PeriodNo !=null)
+        {
+            if (((i + 1) / 2).Equals(_model.PeriodNo))
+            {
+                subItem.Selected = true;
+            }
+        }
+        else
+        {
+            if (i.Equals(DateTime.Now.Month) || (i + 1).Equals(DateTime.Now.Month))
+            {
+                subItem.Selected = true;
+            }
+        }
+
+        periodNoList.Add(subItem);
+    }
+}
 
 <!--交易畫面標題-->
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "電子發票字軌維護");}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", TrackCodeQuery.電子發票字軌維護);}
 
 <div class="border_gray">
     <!--表格 開始-->
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
         <tr>
-            <th colspan="2" class="Head_style_a">查詢條件
+            <th colspan="2" class="Head_style_a">
+                @TrackCodeQuery.查詢條件
             </th>
         </tr>
         <tr>
             <th nowrap="nowrap" width="120">
-                <span class="red">*</span> 發票年度（民國年）
+                <span class="red">*</span> @TrackCodeQuery.發票年度
             </th>
             <td class="tdleft">
-                <select name="year">
-                    @for (int yy = 2012; yy <= DateTime.Now.Year + 1; yy++)
-                        {
-                            <option value="@(yy)">@(yy-1911)</option>
-                    }
-                    </select>
-                    <script>
-                        $(function () {
-                            $('select[name="year"]').val(@(DateTime.Now.Year));
-                        });
-                    </script>
-            </td>
-        </tr>
-        <tr><td>期別</td>
-            <td class="tdleft">
-                <select name="PeriodNo">
-                    <option value="">全部</option>
-                    <option value="1">01-02月</option>
-                    <option value="2">03-04月</option>
-                    <option value="3">05-06月</option>
-                    <option value="4">07-08月</option>
-                    <option value="5">09-10月</option>
-                    <option value="6">11-12月</option>
-                </select>
+                @Html.DropDownListFor(m => m.Year, yearList)
             </td>
         </tr>
         <tr>
-            <th>每頁資料筆數
+            <td>@TrackCodeQuery.期別</td>
+            <td class="tdleft">
+                @Html.DropDownListFor(m => m.PeriodNo, periodNoList,new { onchange = "SelectedIndexChanged()" })
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @TrackCodeQuery.每頁資料筆數
             </th>
             <td class="tdleft" colspan="3">
                 <input name="pageSize" type="text" value="@(Request["pageSize"] ?? Uxnet.Web.Properties.Settings.Default.PageSize.ToString())" />
             </td>
-        </tr>    
+        </tr>
     </table>
     <!--表格 結束-->
 </div>
@@ -69,22 +135,16 @@
     <tbody>
         <tr>
             <td class="Bargain_btn">
-                <button type="button" onclick="uiTrackCodeQuery.inquire();" >查詢</button>
+                <button type="submit"> @TrackCodeQuery.查詢</button>
             </td>
         </tr>
     </tbody>
 </table>
 <!--表格 開始-->
-@{ Html.RenderPartial("~/Views/TrackCode/ScriptHelper/Common.ascx");}
-
-<script runat="server">
-
-    ModelSource<InvoiceItem> models;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+@{ Html.RenderPartial("~/Views/TrackCode/ScriptHelper/Common.cshtml");}
+<script type="text/javascript">
+    function SelectedIndexChanged() {
+        //Form post
+        $('input[name="pageIndex"]').remove();
     }
-</script>
-
+</script>  

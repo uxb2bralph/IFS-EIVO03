@@ -71,6 +71,9 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="AutoMapper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.9.0.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="ClosedXML, Version=0.76.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
       <HintPath>..\packages\ClosedXML.0.76.0\lib\net40-client\ClosedXML.dll</HintPath>
       <Private>True</Private>
@@ -2034,6 +2037,15 @@
     <Content Include="Views\InvoiceBusiness\InvoiceProduct\AddItem.cshtml" />
     <Content Include="Views\InvoiceProcess\Module\IssueAllowance.cshtml" />
     <Content Include="Views\Shared\JsAlert.cshtml" />
+    <Content Include="Views\Home\MainPage.cshtml" />
+    <Content Include="Views\Home\Module\TodoList.cshtml" />
+    <Content Include="Views\TrackCode\Index.cshtml" />
+    <Content Include="Views\TrackCode\TrackCodeQuery.cshtml" />
+    <Content Include="Views\TrackCode\Module\ItemList.cshtml" />
+    <Content Include="Views\TrackCode\Module\QueryResult.cshtml" />
+    <Content Include="Views\TrackCode\Module\DataItem.cshtml" />
+    <Content Include="Views\TrackCode\Module\AddItem.cshtml" />
+    <Content Include="Views\TrackCode\ScriptHelper\Common.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">
@@ -4497,6 +4509,10 @@
       <Project>{8cf5d523-2ab2-4a61-9660-5ab9e36f48d6}</Project>
       <Name>Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\eIVOGo.Resource\eIVOGo.Resource.csproj">
+      <Project>{74474526-6d59-455b-8e3c-c156aa4a8945}</Project>
+      <Name>eIVOGo.Resource</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Uxnet.Com\Uxnet.Com.csproj">
       <Project>{72edd90c-e7fe-44f4-8b9b-c9512f02d547}</Project>
       <Name>Uxnet.Com</Name>
@@ -4523,11 +4539,6 @@
     <Content Include="Published\Web.config" />
     <Content Include="Published\DumpExceptionLog.ashx" />
     <Content Include="Published\GenerateMemberCode.ashx" />
-    <None Include="Properties\Settings.settings">
-      <Generator>PublicSettingsSingleFileGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Settings2.Designer.cs</LastGenOutput>
-    </None>
     <Content Include="Published\UploadAttachment.ashx" />
   </ItemGroup>
   <PropertyGroup>

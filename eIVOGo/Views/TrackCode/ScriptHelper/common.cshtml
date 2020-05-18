@@ -1,49 +1,42 @@
-
-@using System.IO
-@using System.Linq.Expressions
-
-@using eIVOGo.Helper
-@using eIVOGo.Models
-@using Model.DataEntity
-@using Model.Helper
-@using Model.Locale
-@using Utility
-@using Uxnet.Web.WebUI
-<script>
+﻿<script>
     $(function () {
         var $postForm;
         if (!window.uiTrackCodeQuery) {
             window.uiTrackCodeQuery = {};
         }
 
-        window.uiTrackCodeQuery.inquire = function (pageNum, onPaging) {
+         window.uiTrackCodeQuery.inquire = function (pageNum, onPaging) {
+            var year = $('input[name="Year"]').val()
+            var periodno = $('input[name="PeriodNo"]').val()
+            
+            var _Object = { Year: year, PeriodNo: periodno, PageIndex: pageNum}
+           
             if (pageNum) {
                 $('input[name="pageIndex"]').val(pageNum);
             } else {
                 $('input[name="sort"]').remove();
             }
-            $('#theForm').ajaxForm({
-                url: "@(Url.Action("Inquire","TrackCode",new { resultAction = ViewBag.ResultAction }))",
-                beforeSubmit: function () {
-                    showLoading();
-                },
-                success: function (data) {
-                    if (data) {
+            $.ajax({
+                type: "POST",
+                url: 'Inquire',
+                data: _Object,                
+                dataType: "text",
+                success: function (_result) {                   
+                    if (_result) {
                         if (onPaging) {
-                            onPaging(data);
+                            onPaging(_result);
                         } else {
                             if (uiTrackCodeQuery.$result)
                                 uiTrackCodeQuery.$result.remove();
-                            uiTrackCodeQuery.$result = $(data);
+                            uiTrackCodeQuery.$result = $(_result);
                             $('.queryAction').after(uiTrackCodeQuery.$result);
                         }
                     }
-                    hideLoading();
                 },
-                error: function () {
+                error: function (error) {
                     hideLoading();
                 }
-            }).submit();
+            });
         };
 
         window.uiTrackCodeQuery.edit = function (value) {
@@ -134,4 +127,3 @@
 
     }
 </script>
-

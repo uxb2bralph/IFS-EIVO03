@@ -118,6 +118,21 @@ namespace Model.Models.ViewModel
     {
         public int? Year { get; set; }
         public int? PeriodNo { get; set; }
+
+        public List<InvoiceTrackCodeItem> Results { get; set; }
+    }
+
+    public class InvoiceTrackCodeItem
+    {
+        public int TrackID;
+
+        public string TrackCode;
+
+        public short Year;
+
+        public short PeriodNo;
+
+        public System.Nullable<byte> InvoiceType;
     }
 
     public partial class TrackCodeViewModel

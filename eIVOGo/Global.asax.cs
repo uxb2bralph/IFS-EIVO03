@@ -10,6 +10,7 @@ using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
 using eIVOGo.Properties;
+using eIVOGo.Resource.Helpers;
 using Utility;
 
 namespace eIVOGo
@@ -60,6 +61,23 @@ namespace eIVOGo
             Model.InvoiceManagement.EIVOPlatformFactory.Sign = eIVOGo.Helper.AppSigner.Sign;
             Model.InvoiceManagement.EIVOPlatformFactory.SignCms = eIVOGo.Helper.AppSigner.SignCms;
             Model.InvoiceManagement.EIVOPlatformFactory.Notify();
+        }
+
+        protected void Application_BeginRequest(Object sender, EventArgs e)
+        {
+            HttpCookie cultureCookie = Request.Cookies["_culture"];
+            if (cultureCookie != null)
+            {
+                // get culture name
+                var cultureInfoName = CultureHelper.GetImplementedCulture(cultureCookie.Value);
+
+                // set culture
+                System.Threading.Thread.CurrentThread.CurrentCulture =
+                new System.Globalization.CultureInfo(cultureInfoName);
+                System.Threading.Thread.CurrentThread.CurrentUICulture =
+                new System.Globalization.CultureInfo(cultureInfoName);
+
+            }
         }
 
         void Application_End(object sender, EventArgs e)

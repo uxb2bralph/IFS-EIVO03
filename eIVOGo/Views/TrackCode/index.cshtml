@@ -10,27 +10,92 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using eIVOGo.Helper
+@using eIVOGo.Resource.Views.Common
+@model Model.Models.ViewModel.TrackCodeQueryViewModel
 
-@section headContent { 
- 
-}
-@{ Html.RenderPartial("~/Views/TrackCode/TrackCodeQuery.ascx");}
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
 
-<script runat="server">
+    ViewBag.ActionName = TreeView.首頁___系統管理維護;
 
-    protected override void OnInit(EventArgs e)
+    //IEnumerable<InvoiceTrackCode> _model = (IEnumerable<InvoiceTrackCode>)this.Model;
+    var _model = this.Model;
+
+    int _pageSize = 0;
+
+    if (ViewBag.PageSize != null)
     {
-        base.OnInit(e);
-        ViewBag.ActionName = "首頁 > 系統管理維護";
+        _pageSize = (int)ViewBag.PageSize;
     }
 
-    //public override void Dispose()
-    //{
-    //    var models = TempData.GetGenericModelSource();
-    //    if (models != null)
-    //        models.Dispose();
+    var recordCount = 0;
+    int? Year;
+    int? PeriodNo=0;
 
-    //    base.Dispose();
-    //}
+    if (_model != null && _model.Results != null)
+    {
+        recordCount = _model.Results.Count();
+        Year = _model.Year;
+        PeriodNo = _model.PeriodNo;
+    }
+}
 
-</script>
+@{Html.RenderPartial("~/Views/TrackCode/TrackCodeQuery.cshtml");}
+
+    <input type="hidden" name="PeriodNo" value=@(PeriodNo) />
+
+@{Html.HiddenFor(model => model.PeriodNo);}
+@{Html.HiddenFor(model => model.Year);}
+
+@if (_model != null)
+{
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "查詢結果");
+
+    <div class="border_gray" style="overflow-x: auto; max-width: 1024px;">
+
+        @if (_model != null && recordCount > 0 && ViewBag.PageSize != null)
+        {
+            { Html.RenderPartial("~/Views/TrackCode/Module/ItemList.cshtml", _model); }
+
+            <input type="hidden" name="pageIndex" />
+
+            <nav aria-label="Page navigation">
+                <ul class="pagination" id="itemPagination"></ul>
+            </nav>
+            <script>
+        $(function () {
+            var obj = $('#itemPagination').twbsPagination({
+        totalPages: @((recordCount+_pageSize-1) / _pageSize),
+                        totalRecordCount: @(recordCount),
+                        visiblePages: 10,
+                        first: '最前',
+                        prev: '上頁',
+                        next: '下頁',
+                        last: '最後',
+                        initiateStartPageClick: false,
+                        onPageClick: function (event, page) {
+            uiTrackCodeQuery.inquire(page,function(data){
+                var $node = $('.itemList').next();
+                                $('.itemList').remove();
+                                $node.before(data);
+            });
+        }
+        });
+                });
+            </script>
+
+            if (ViewBag.ResultAction != null)
+            {
+                Html.RenderPartial((String)ViewBag.ResultAction);
+            }
+        }
+        else
+        {
+            <font color="red">查無資料!!</font>
+            { Html.RenderPartial("~/Views/TrackCode/Module/ItemList.cshtml", _model.Results); }
+
+        }
+    </div>
+}
+@*@if (this.Model != null)
+    { Html.RenderPartial("~/Views/TrackCode/QueryResult.cshtml"); }*@

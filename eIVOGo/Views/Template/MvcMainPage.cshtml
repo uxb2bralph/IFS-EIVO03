@@ -6,6 +6,8 @@
 
 @using Model.DataEntity
 @using eIVOGo.Controllers
+@using eIVOGo.Resource.Views.Template
+
 @{
     ViewBag.Title = "電子發票系統";
     ModelSource<InvoiceItem> models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
@@ -18,7 +20,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>電子發票系統</title>
+    <title>@MvcMainPage.ElectronicInvoiceSystemTitle</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -67,7 +69,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="@(VirtualPathUtility.ToAbsolute("~/Home/MainPage"))">電子發票系統</a>
+                <a class="navbar-brand" href="@(VirtualPathUtility.ToAbsolute("~/Home/MainPage"))">@MvcMainPage.ElectronicInvoiceSystemTitle</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -75,7 +77,7 @@
                 @if (_items.Count() > 0)
                 {
                     <li>
-                        ‧系統公告：
+                        ‧@MvcMainPage.SystemNotificationTitle：
                         <marquee class="notice" scrollamount="2">
                             @foreach (var item in _items)
                             {
@@ -84,6 +86,22 @@
                         </marquee>
                     </li>
                 }
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-language" aria-hidden="true"></i><i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            @Html.ActionLink("English", "SetCulture", "Home", new { culture = "en-US", returnUrl = this.Request.RawUrl }, null)
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            @Html.ActionLink("繁體", "SetCulture", "Home", new { culture = "zh-TW", returnUrl = this.Request.RawUrl }, null)
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-envelope fa-fw"></i><i class="fa fa-caret-down"></i>
@@ -222,66 +240,66 @@
                         <li>
                             <a href="@(Url.Action("QueryIndex","ProcessRequest"))">
                                 <div>
-                                    <i class="fa fa-tasks fa-fw"></i>工作清單
+                                    <i class="fa fa-tasks fa-fw"></i>@MvcMainPage.WorkListTitle
                                     <span class="pull-right text-muted small"></span>
                                 </div>
                             </a>
                         </li>
                         <li class="divider"></li>
                         @*<li>
-            <a href="#">
-                <div>
-                    <i class="fa fa-comment fa-fw"></i>New Comment
-                    <span class="pull-right text-muted small">4 minutes ago</span>
-                </div>
-            </a>
-        </li>
-        <li class="divider"></li>
-        <li>
-            <a href="#">
-                <div>
-                    <i class="fa fa-twitter fa-fw"></i>3 New Followers
-                    <span class="pull-right text-muted small">12 minutes ago</span>
-                </div>
-            </a>
-        </li>
-        <li class="divider"></li>
-        <li>
-            <a href="#">
-                <div>
-                    <i class="fa fa-envelope fa-fw"></i>Message Sent
+                                <a href="#">
+                                    <div>
+                                        <i class="fa fa-comment fa-fw"></i>New Comment
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i>3 New Followers
+                                        <span class="pull-right text-muted small">12 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i>Message Sent
 
-                    <span class="pull-right text-muted small">4 minutes ago</span>
-                </div>
-            </a>
-        </li>
-        <li class="divider"></li>
-        <li>
-            <a href="#">
-                <div>
-                    <i class="fa fa-tasks fa-fw"></i>New Task
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <i class="fa fa-tasks fa-fw"></i>New Task
 
-                    <span class="pull-right text-muted small">4 minutes ago</span>
-                </div>
-            </a>
-        </li>
-        <li class="divider"></li>
-        <li>
-            <a href="#">
-                <div>
-                    <i class="fa fa-upload fa-fw"></i>Server Rebooted
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <i class="fa fa-upload fa-fw"></i>Server Rebooted
 
-                    <span class="pull-right text-muted small">4 minutes ago</span>
-                </div>
-            </a>
-        </li>
-        <li class="divider"></li>
-        <li>
-            <a class="text-center" href="#">
-                <strong>See All Alerts</strong>
-                <i class="fa fa-angle-right"></i>
-            </a>
-        </li>*@
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a class="text-center" href="#">
+                                    <strong>See All Alerts</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </li>*@
                     </ul>
                     <!-- /.dropdown-alerts -->
                 </li>
@@ -292,14 +310,14 @@
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                         <li>
-                            <a href="@(VirtualPathUtility.ToAbsolute(" ~/UserProfile/EditMySelf"))"><i class="fa fa-user fa-fw"></i>帳號管理</a>
+                            <a href="@(VirtualPathUtility.ToAbsolute(" ~/UserProfile/EditMySelf"))"><i class="fa fa-user fa-fw"></i>@MvcMainPage.AccountManagementTitle</a>
                         </li>
                         @*<li>
                                 <a href="#"><i class="fa fa-gear fa-fw"></i>Settings</a>
                             </li>*@
                         <li class="divider"></li>
                         <li>
-                            <a href="@(VirtualPathUtility.ToAbsolute(" ~/Logout.aspx"))"><i class="fa fa-sign-out fa-fw"></i>登出</a>
+                            <a href="@(VirtualPathUtility.ToAbsolute(" ~/Logout.aspx"))"><i class="fa fa-sign-out fa-fw"></i>@MvcMainPage.LogoutTitle</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -316,7 +334,7 @@
 
             <ul class="nav nav-tabs" role="tablist" id="masterTab">
                 <li role="presentation" class="active">
-                    <a href="#masterHome" class="tab-link" aria-controls="masterHome" role="tab" data-toggle="tab">@(ViewBag.ActionName ?? "首頁") <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                    <a href="#masterHome" class="tab-link" aria-controls="masterHome" role="tab" data-toggle="tab">@(ViewBag.ActionName ?? MvcMainPage.HomeTitle) <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
                 </li>
             </ul>
 
@@ -327,18 +345,21 @@
                         @if (ViewBag.ActionName != null)
                         {
                             @*<div class="row">
-                                    <div class="col-lg-12">
-                                        <h2 class="page-header">@ViewBag.ActionName</h2>
-                                    </div>
-                                </div>*@
+                <div class="col-lg-12">
+                    <h2 class="page-header">@ViewBag.ActionName</h2>
+                </div>
+            </div>*@
                         }
                         <h2><br /></h2>
                         <form id="theForm" method="post" role="form" enctype="multipart/form-data">
                             @RenderSection("formContent", false)
                         </form>
-                        <div class="row">
-                            @RenderBody()
-                        </div>
+                        @using (Html.BeginForm("Inquire", "TrackCode", FormMethod.Post))
+                        { 
+                            <div class="row">
+                                @RenderBody()
+                            </div>
+                        }
                         <!-- /.row -->
                     </div>
                 </div>
