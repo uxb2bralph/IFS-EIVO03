@@ -276,19 +276,20 @@ namespace Model.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("17.16.2.23")]
-        public string DBConnectstring {
+        [global::System.Configuration.DefaultSettingValueAttribute("EIVO03_202002")]
+        public string DBName {
             get {
-                return ((string)(this["DBConnectstring"]));
+                return ((string)(this["DBName"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("EIVO03_202002")]
-        public string DBName {
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=Localhost;Initial Catalog=EIVO03;Persist Security Info=True;User ID=e" +
+            "ivo;Password=eivoeivo")]
+        public string DBConnectstring {
             get {
-                return ((string)(this["DBName"]));
+                return ((string)(this["DBConnectstring"]));
             }
         }
     }

@@ -103,11 +103,11 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=172.16.2.23\sqlexpress,1433;Initial Catalog=EIVO03_202002;Persist Security Info=True;User ID=eivo;Password=eivoeivo</Value>
     </Setting>
-    <Setting Name="DBConnectstring" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">17.16.2.23</Value>
-    </Setting>
     <Setting Name="DBName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">EIVO03_202002</Value>
+    </Setting>
+    <Setting Name="DBConnectstring" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Data Source=Localhost;Initial Catalog=EIVO03;Persist Security Info=True;User ID=eivo;Password=eivoeivo</Value>
     </Setting>
   </Settings>
 </SettingsFile>

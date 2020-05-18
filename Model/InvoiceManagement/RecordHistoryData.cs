@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Euthenia;
 using Model.DataEntity;
+using System.Data.SqlClient;
 
 namespace Model.InvoiceManagement
 {
@@ -21,26 +21,16 @@ namespace Model.InvoiceManagement
             RecordAllowance,
             RecordAllowanceResponse
         }
-        ISql msSql;
-        aBase abase;
-        string strDB, strDBName;
+        public FunMsSql msSql;
 
-        public RecordHistoryData(string DB, string DB_Name)
+        public RecordHistoryData()
         {
-            strDB = DB;
-            strDBName = DB_Name;
-
-            msSql = new aMsSql(strDB, strDBName, "eivo", "eivoeivo");
-            abase = new aBase(nameof(RecordHistoryData) + DateTime.Now.ToString("HHmmssfff"));
+            msSql = new FunMsSql();
         }
 
         public void RecData(string strFilePath, TableName strTableName)
         {
-
             XDocument x = XDocument.Load(strFilePath);
-
-            abase.WriteLog("V2.21.11.05", aBase.LogType.Record, nameof(RecData));
-            abase.WriteLog(string.Format("FilePath:{0}", strFilePath), aBase.LogType.Record, nameof(RecData));
 
             switch (strTableName)
             {
@@ -48,8 +38,6 @@ namespace Model.InvoiceManagement
                     List<DataRecordInvoice> recInvoiceList = ReadInvoiceRequest(x, strFilePath);
                     if (recInvoiceList.Count() > 0)
                     {
-                        abase.WriteLog(string.Format("recInvoiceList count:{0}    FilePath:{1}", strFilePath, recInvoiceList.Count()), aBase.LogType.Record, nameof(RecData));
-
                         SaveData(recInvoiceList, TableName.RecordInvoice, strFilePath);
                     }
                     break;
@@ -57,7 +45,6 @@ namespace Model.InvoiceManagement
                     List<DataRecordAllowance> recAllowanceList = ReadAllowanceRequest(x, strFilePath);
                     if (recAllowanceList.Count() > 0)
                     {
-                        abase.WriteLog(string.Format("recAllowanceList count:{0}    FilePath:{1}", strFilePath, recAllowanceList.Count()), aBase.LogType.Record, nameof(RecData));
                         SaveData(recAllowanceList, TableName.RecordAllowance, strFilePath);
                     }
 
@@ -66,7 +53,6 @@ namespace Model.InvoiceManagement
                     List<DataRecordAllowanceResponse> recAllowanceResponseList = ReadAllowanceResponse(x, strFilePath);
                     if (recAllowanceResponseList.Count() > 0)
                     {
-                        abase.WriteLog(string.Format("recAllowanceResponseList count:{0}    FilePath:{1}", strFilePath, recAllowanceResponseList.Count()), aBase.LogType.Record, nameof(RecData));
                         SaveData(recAllowanceResponseList, TableName.RecordAllowanceResponse, strFilePath);
                     }
                     break;
@@ -74,8 +60,6 @@ namespace Model.InvoiceManagement
                     return;
             }
         }
-
-
 
         private void SaveData(object recList, TableName strTableName, string strFilePath)
         {
@@ -88,17 +72,14 @@ namespace Model.InvoiceManagement
                     case TableName.RecordInvoice:
                         dt = ConvertToDataTable(((List<DataRecordInvoice>)recList).ToList());
                         msSql.InsData(dt, "RecordInvoice");
-                        abase.WriteLog(string.Format("{0} recInvoiceList Insert Complete", strFilePath), aBase.LogType.Record, nameof(RecData));
                         break;
                     case TableName.RecordAllowance:
                         dt = ConvertToDataTable(((List<DataRecordAllowance>)recList).ToList());
                         msSql.InsData(dt, "RecordAllowance");
-                        abase.WriteLog(string.Format("{0} recAllowanceList Insert Complete", strFilePath), aBase.LogType.Record, nameof(RecData));
                         break;
                     case TableName.RecordAllowanceResponse:
                         dt = ConvertToDataTable(((List<DataRecordAllowanceResponse>)recList).ToList());
                         msSql.InsData(dt, "RecordAllowanceResponse");
-                        abase.WriteLog(string.Format("{0} recAllowanceResponseList Insert Complete", strFilePath), aBase.LogType.Record, nameof(RecData));
                         break;
                     default:
                         return;
@@ -108,7 +89,6 @@ namespace Model.InvoiceManagement
             catch (Exception e)
             {
                 msSql.Rollback();
-                abase.WriteLog(e, aBase.LogType.Wrong, "msSql");
             }
         }
         private List<DataRecordAllowanceResponse> ReadAllowanceResponse(XDocument x, string strFilePath)
@@ -160,8 +140,6 @@ namespace Model.InvoiceManagement
                 rec.Currency = Allowance.Element("Currency").Value;
 
                 recAllowanceList.Add(rec);
-
-                //abase.WriteLog("recAllowanceList add 1 item", aBase.LogType.Record, nameof(RecData));
             }
             return recAllowanceList;
         }
@@ -171,13 +149,8 @@ namespace Model.InvoiceManagement
             string strSql = "SELECT * FROM RecordAllowanceResponse where AllowanceNumber=@AllowanceNumber";
             DataTable dt = msSql.GetDataTable(strSql, "RecordAllowanceResponse", "@AllowanceNumber", fileName.Replace("taiwan_uxb2b_scanned_sac_pdf_", "").Replace(".pdf", ""));
 
-            abase.WriteLog(string.Format("zipName:{0}    fileName:{1}", zipName, fileName), aBase.LogType.Record, nameof(RecAllowancePdf));
-
-            abase.WriteLog(string.Format("AllowanceNumber:{0}", fileName.Replace("taiwan_uxb2b_scanned_sac_pdf_", "").Replace(".pdf", "")), aBase.LogType.Record, nameof(RecAllowancePdf));
-
             if (dt.Rows.Count < 1)
             {
-                abase.WriteLog(string.Format("RecordAllowanceResponse查無對應的資料 zipName：{0}  fileName：{1}", zipName, fileName), aBase.LogType.Wrong, nameof(RecAllowancePdf));
                 return true;
             }
             else
@@ -200,11 +173,8 @@ namespace Model.InvoiceManagement
             catch (Exception e)
             {
                 msSql.Rollback();
-                abase.WriteLog(e, aBase.LogType.Wrong, "msSql");
                 return false;
             }
-
-
         }
 
         private List<DataRecordInvoice> ReadInvoiceRequest(XDocument x, string strFilePath)
@@ -279,6 +249,226 @@ namespace Model.InvoiceManagement
             return table;
         }
 
+        public int? InquireInvoiceID(int customer_ID, int total_Amount)
+        {
+            string strSql = "select * from viewInvoiceIDwithCustomerID where customerid=@customerid and TotalAmount >= @TotalAmount order by TotalAmount, InvoiceDate desc";
+            DataTable dt = msSql.GetDataTable(strSql, "viewInvoiceIDwithCustomerID", "@customerid", customer_ID.ToString(), "@TotalAmount", total_Amount.ToString());
+
+            if (dt.Rows.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return int.Parse(dt.Rows[0]["InvoiceID"].ToString());
+            }
+        }
+
 
     }
+
+
+    public class FunMsSql
+    {
+        private string strConnString;
+        private SqlConnection m_conn;
+        private SqlTransaction m_transaction;
+
+        public FunMsSql()
+        {
+            strConnString = Properties.Settings.Default.DBConnectstring;
+        }
+        private SqlCommand GetSqlCommand()
+        {
+            SqlCommand cmd = m_conn.CreateCommand();
+            cmd.Connection = m_conn;
+            cmd.Transaction = m_transaction;
+            cmd.CommandTimeout = 300;
+            return cmd;
+        }
+
+        public void BeginTransaction()
+        {
+            m_conn = new SqlConnection(strConnString);
+            m_conn.Open();
+            m_transaction = m_conn.BeginTransaction();
+        }
+
+        public void Commit()
+        {
+            m_transaction.Commit();
+            m_conn.Close();
+        }
+
+        public void Rollback()
+        {
+            m_transaction.Rollback();
+            m_conn.Close();
+        }
+
+        public DataTable GetDataTable(string strSql, string strDatatableName, params string[] strParameters)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                using (var conn = new SqlConnection(strConnString))
+                {
+                    using (var cmd = new SqlCommand(strSql, conn))
+                    {
+                        cmd.CommandType = CommandType.Text;
+
+                        for (int i = 0; i <= strParameters.Length - 1; i += 2)
+                        {
+                            cmd.Parameters.AddWithValue(strParameters[i].ToString(), strParameters[i + 1]);
+                        }
+                        conn.Open();
+
+                        using (var adapter = new SqlDataAdapter(cmd))
+                        {
+                            adapter.Fill(ds, strDatatableName);
+                        }
+                    }
+                }
+                if (ds.Tables.Count != 1)
+                {
+                    return new DataTable();
+                }
+                return ds.Tables[strDatatableName];
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public void InsData(DataTable dt, String strDatatableName)
+        {
+            int i = 0;
+
+            InsData(dt, strDatatableName, ref i);
+        }
+
+        public void InsData(DataTable dt, string strDatatableName, ref int iResult)
+        {
+            SqlCommand cmd = GetSqlCommand();
+
+            try
+            {
+                foreach (DataRow dtrw in dt.Rows)
+                {
+                    if (dtrw.RowState == DataRowState.Added)
+                    {
+                        String strInsSqlString = GetInsSqlString(dtrw, strDatatableName);
+                        cmd.CommandText = strInsSqlString;
+                        iResult += cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private string GetInsSqlString(DataRow dtrw, string strDatatableName)
+        {
+            String strColName = "";
+            String strColValue = "";
+
+            DataTable dt = GetDataTable("select * from " + strDatatableName + " where 1=2", strDatatableName);
+
+            for (int i = 0; i <= dtrw.Table.Columns.Count - 1; i++)
+            {
+                if (InInsertTable(dtrw.Table.Columns[i].ColumnName, dt) && dtrw[i].ToString() != "")
+                {
+                    if (strColName != "")
+                        strColName += ", ";
+                    if (strColValue != "")
+                        strColValue += ", ";
+
+                    strColName += dtrw.Table.Columns[i].ColumnName;
+
+                    if (dtrw[i].GetType().Name == typeof(DateTime).Name)
+                    {
+                        strColValue += String.Format("'{0}'", ((DateTime)dtrw[i]).ToString("yyyy-MM-dd HH:mm:ss"));
+                    }
+                    else if (dtrw[i].GetType().Name == typeof(Int32).Name)
+                    {
+                        strColValue += ((Int32)dtrw[i]).ToString().ToUpper();
+                    }
+                    else if (dtrw[i].GetType().Name == typeof(Double).Name)
+                    {
+                        strColValue += ((Double)dtrw[i]).ToString().ToUpper();
+                    }
+                    else if (dtrw[i].GetType().Name == typeof(Boolean).Name)
+                    {
+                        strColValue += ((Boolean)dtrw[i]).ToString().ToUpper();
+                    }
+                    else
+                    {
+                        strColValue += String.Format("'{0}'", dtrw[i].ToString());
+                    }
+                }
+            }
+
+            return "Insert " + strDatatableName + " (" + strColName + ") Values (" + strColValue + ")";
+        }
+
+        private bool InInsertTable(string columnName, DataTable dt)
+        {
+            bool bolExist = false;
+
+            for (int i = 0; i <= dt.Columns.Count - 1; i++)
+            {
+                if (dt.Columns[i].ColumnName.ToLower() == columnName.ToLower())
+                {
+                    return true;
+                }
+            }
+            return bolExist;
+        }
+
+        public void UpdateData(string strUpdateString)
+        {
+            SqlCommand cmd = GetSqlCommand();
+            int iResult = 0;
+            cmd.CommandText = strUpdateString;
+            iResult += cmd.ExecuteNonQuery();
+        }
+
+        public void UpdateData(DataTable dt, string strDatatableName, string strUpdateString)
+        {
+            int i = 0;
+            UpdateData(dt, strDatatableName, strUpdateString, ref i);
+        }
+
+        public void UpdateData(DataTable dt, string strDatatableName, string strUpdateSqlString, ref int iResult)
+        {
+            SqlCommand cmd = GetSqlCommand();
+            try
+            {
+                foreach (DataRow dtrw in dt.Rows)
+                {
+                    if (dtrw.RowState == DataRowState.Modified)
+                    {
+                        cmd.CommandText = strUpdateSqlString;
+                        cmd.Parameters.Clear();
+                        for (int ii = 0; ii <= dt.Columns.Count - 1; ii++)
+                        {
+                            string strColName = dt.Columns[ii].ColumnName;
+                            cmd.Parameters.AddWithValue("@" + strColName, dtrw[strColName]);
+                        }
+                        iResult += cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
+    }
+
 }

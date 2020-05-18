@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Model.DataEntity;
 using System.IO;
 using System.Xml.Linq;
-using Euthenia;
 using System.Data;
 using System.ComponentModel;
 using System.Threading;
@@ -17,12 +16,11 @@ namespace ProcessorRecord
 {
     class Program
     {
-        private static ISql sql;
-        private static aBase A;
-
+        static RecordHistoryData rec;
 
         static void Main(string[] arg)
         {
+            rec = new RecordHistoryData();
             RunSingle(100, 2000);
         }
 
@@ -39,11 +37,6 @@ namespace ProcessorRecord
                 Directory.CreateDirectory(AllowanceResponsewatcherPath);
             if (!Directory.Exists(AllowancePdfwatcherPath))
                 Directory.CreateDirectory(AllowancePdfwatcherPath);
-
-            sql = new aMsSql(Properties.Settings.Default.DB, Properties.Settings.Default.DB_Name, "eivo", "eivoeivo");
-            A = new aBase(nameof(ProcessorRecord));
-
-            RecordHistoryData rec = new RecordHistoryData(Properties.Settings.Default.DB, Properties.Settings.Default.DB_Name);
 
             while (true)
             {
@@ -132,11 +125,11 @@ namespace ProcessorRecord
                     Console.WriteLine("Do PdfList:{0}", i++);
 
                     string ZipName = Directory.GetParent(v).ToString().Replace(AllowancePdfwatcherPath + "\\", "") + ".Zip";
-                    A.WriteLog(string.Format("ZipName:{0}", ZipName), aBase.LogType.Record, "AllowancePdfFiles");
+                    //A.WriteLog(string.Format("ZipName:{0}", ZipName), aBase.LogType.Record, "AllowancePdfFiles");
                     Console.WriteLine(string.Format("ZipName:{0}", ZipName));
 
                     string FileName = Path.GetFileName(v);
-                    A.WriteLog(string.Format("FileName:{0}", FileName), aBase.LogType.Record, "AllowancePdfFiles");
+                    //A.WriteLog(string.Format("FileName:{0}", FileName), aBase.LogType.Record, "AllowancePdfFiles");
                     Console.WriteLine(string.Format("FileName:{0}", FileName));
 
                     if (rec.RecAllowancePdf(ZipName, FileName))
@@ -164,11 +157,11 @@ namespace ProcessorRecord
         {
             string sqlstring = string.Format("select distinct FileName from {0}", strTableName);
             List<string> result = new List<string>();
-            DataTable dt = sql.GetDataTable(sqlstring, strTableName);
+            DataTable dt =rec.msSql.GetDataTable(sqlstring, strTableName);
 
             foreach (DataRow dtrw in dt.Rows)
             {
-                result.Add(A.GetString(dtrw["FileName"]));
+                result.Add(dtrw["FileName"].ToString());
             }
 
             return result;
