@@ -49,6 +49,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\TrackCode.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrackCode.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\TrackCode.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrackCode.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Enums\LanguageEnum.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Form1.cs">
@@ -101,6 +111,46 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MvcMainPage.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\TrackCode\Index.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrackCode\Index.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrackCode\Module\AddItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrackCode\Module\AddItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrackCode\Module\DataItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrackCode\Module\DataItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrackCode\Module\ItemList.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemList.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrackCode\Module\ItemList.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemList.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\TrackCode\TrackCodeQuery.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -111,6 +161,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TrackCodeQuery.en-US.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controllers\TrackCode.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TrackCode.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\TrackCode.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TrackCode.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -151,6 +209,38 @@
     <EmbeddedResource Include="Views\Template\MvcMainPage.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MvcMainPage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TrackCode\Index.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Index.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TrackCode\Index.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Index.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TrackCode\Module\AddItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TrackCode\Module\AddItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TrackCode\Module\DataItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TrackCode\Module\DataItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TrackCode\Module\ItemList.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemList.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TrackCode\Module\ItemList.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemList.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TrackCode\TrackCodeQuery.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -6,22 +6,30 @@
         }
 
          window.uiTrackCodeQuery.inquire = function (pageNum, onPaging) {
-            var year = $('input[name="Year"]').val()
-            var periodno = $('input[name="PeriodNo"]').val()
+             var year = $('input[name="Year"]').val();
+             var periodno = $('input[name="PeriodNo"]').val();
+               
+             
             
-            var _Object = { Year: year, PeriodNo: periodno, PageIndex: pageNum}
-           
+             var sort = $('input[name="sort"]').serializeObject().sort;
+             var _Object = { Year: year, PeriodNo: periodno, PageIndex: pageNum,Sort:sort };
+
             if (pageNum) {
                 $('input[name="pageIndex"]').val(pageNum);
+                if (sort != null) {
+                    _Object.Sort = sort;
+                }
             } else {
                 $('input[name="sort"]').remove();
-            }
+             }
+
             $.ajax({
                 type: "POST",
                 url: 'Inquire',
-                data: _Object,                
+                data: _Object,
                 dataType: "text",
-                success: function (_result) {                   
+                success: function (_result) {
+
                     if (_result) {
                         if (onPaging) {
                             onPaging(_result);
@@ -32,6 +40,8 @@
                             $('.queryAction').after(uiTrackCodeQuery.$result);
                         }
                     }
+
+
                 },
                 error: function (error) {
                     hideLoading();

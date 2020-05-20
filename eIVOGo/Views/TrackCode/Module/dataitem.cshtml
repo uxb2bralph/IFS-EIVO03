@@ -1,6 +1,7 @@
 ﻿@using Model.DataEntity
 @using Model.Models.ViewModel
 @using Model.Locale
+@using eIVOGo.Resource.Views.TrackCode.Module
 
 @{
     InvoiceTrackCodeItem _model=(InvoiceTrackCodeItem)this.Model;
@@ -8,16 +9,16 @@
 
     <tr>
         <td>@(_model.Year - 1911)</td>
-        <td>@(String.Format("{0:00}", _model.PeriodNo * 2 - 1))~@(String.Format("{0:00}", _model.PeriodNo * 2))月</td>
+        <td>@(String.Format("{0:00}", _model.PeriodNo * 2 - 1))~@(String.Format("{0:00}", _model.PeriodNo * 2))@(DataItem.月)</td>
         <td>@(_model.TrackCode)</td>
         <td>@($"{(Naming.InvoiceTypeDefinition?)_model.InvoiceType}")</td>
         <td>
             <div class="btn-group dropdown" data-toggle="dropdown">
-                <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">請選擇功能</button>
+                <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">@(DataItem.請選擇功能)</button>
                 <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                    <li><a class="btn" onclick="uiTrackCodeQuery.edit(@(_model.TrackID));">修改</a></li>
-                    <li><a class="btn" onclick="uiTrackCodeQuery.delete(@(_model.TrackID));">刪除</a></li>
+                    <li><a class="btn" onclick="uiTrackCodeQuery.edit(@(_model.TrackID));">@(DataItem.修改)</a></li>
+                    <li><a class="btn" onclick="uiTrackCodeQuery.delete(@(_model.TrackID));">@(DataItem.刪除)</a></li>
                 </ul>
             </div>
         </td>
