@@ -117,17 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="修改" xml:space="preserve">
-    <value>Modify</value>
-    <comment>修改</comment>
+  <data name="一般稅額計算之電子發票" xml:space="preserve">
+    <value>Electronic invoice for general tax calculation</value>
+    <comment>一般稅額計算之電子發票</comment>
   </data>
-  <data name="刪除" xml:space="preserve">
-    <value>Delete</value>
-    <comment>刪除</comment>
+  <data name="取消" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>取消</comment>
   </data>
   <data name="月" xml:space="preserve">
     <value>month</value>
     <comment>月</comment>
+  </data>
+  <data name="特種稅額計算之電子發票" xml:space="preserve">
+    <value>Electronic invoice for special tax calculation</value>
+    <comment>特種稅額計算之電子發票</comment>
+  </data>
+  <data name="確定" xml:space="preserve">
+    <value>Confirm</value>
+    <comment>確定</comment>
+  </data>
+  <data name="請輸入字軌" xml:space="preserve">
+    <value>Please enter the track code</value>
+    <comment>請輸入字軌</comment>
   </data>
   <data name="請選擇功能" xml:space="preserve">
     <value>Please select a function</value>

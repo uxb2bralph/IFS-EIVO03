@@ -141,6 +141,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataItem.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\TrackCode\Module\EditItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrackCode\Module\EditItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditItem.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\TrackCode\Module\ItemList.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -150,6 +160,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ItemList.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrackCode\ScriptHelper\Common.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrackCode\ScriptHelper\Common.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\TrackCode\TrackCodeQuery.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -234,6 +254,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DataItem.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\TrackCode\Module\EditItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TrackCode\Module\EditItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\TrackCode\Module\ItemList.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ItemList.en-US.Designer.cs</LastGenOutput>
@@ -241,6 +269,14 @@
     <EmbeddedResource Include="Views\TrackCode\Module\ItemList.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ItemList.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TrackCode\ScriptHelper\Common.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TrackCode\ScriptHelper\Common.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TrackCode\TrackCodeQuery.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
