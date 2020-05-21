@@ -4,7 +4,9 @@
 @using eIVOGo.Resource.Views.TrackCode.Module
 
 @{
-    InvoiceTrackCode _model=(InvoiceTrackCode)this.Model;
+    InvoiceTrackCodeItem _model = new InvoiceTrackCodeItem();
+    _model = this.Model;
+
 }
 
     <tr>

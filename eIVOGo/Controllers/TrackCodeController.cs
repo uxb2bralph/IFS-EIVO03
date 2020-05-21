@@ -240,7 +240,17 @@ namespace eIVOGo.Controllers
 
             models.SubmitChanges();
 
-            return View("~/Views/TrackCode/Module/DataItem.cshtml", model);
+            InvoiceTrackCodeItem result = new InvoiceTrackCodeItem
+            {
+                InvoiceType = model.InvoiceType,
+                TrackCode = model.TrackCode,
+                PeriodNo = model.PeriodNo,
+                TrackID = model.TrackID,
+                Year = model.Year
+            };
+
+
+            return View("~/Views/TrackCode/Module/DataItem.cshtml", result);
 
         }
 
