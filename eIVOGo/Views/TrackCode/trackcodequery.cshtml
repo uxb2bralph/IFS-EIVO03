@@ -24,7 +24,7 @@
             Value = yy.ToString()
         };
 
-        if (_model != null && _model.Year !=null)
+        if (_model != null && _model.Year != null)
         {
             if (yy.Equals(_model.Year))
             {
@@ -75,7 +75,7 @@
 
         subItem.Value = value.ToString();
 
-        if (_model != null && _model.PeriodNo !=null)
+        if (_model != null && _model.PeriodNo != null)
         {
             if (((i + 1) / 2).Equals(_model.PeriodNo))
             {
@@ -94,57 +94,60 @@
     }
 }
 
-<!--交易畫面標題-->
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", TrackCodeQuery.電子發票字軌維護);}
+@using (Html.BeginForm("Inquire", "TrackCode", FormMethod.Post))
+{
+    <!--交易畫面標題-->
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", TrackCodeQuery.電子發票字軌維護);
 
-<div class="border_gray">
-    <!--表格 開始-->
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
-        <tr>
-            <th colspan="2" class="Head_style_a">
-                @TrackCodeQuery.查詢條件
-            </th>
-        </tr>
-        <tr>
-            <th nowrap="nowrap" width="120">
-                <span class="red">*</span> @TrackCodeQuery.發票年度
-            </th>
-            <td class="tdleft">
-                @Html.DropDownListFor(m => m.Year, yearList)
-            </td>
-        </tr>
-        <tr>
-            <td>@TrackCodeQuery.期別</td>
-            <td class="tdleft">
-                @Html.DropDownListFor(m => m.PeriodNo, periodNoList,new { onchange = "SelectedIndexChanged()" })
-            </td>
-        </tr>
-        <tr>
-            <th>
-                @TrackCodeQuery.每頁資料筆數
-            </th>
-            <td class="tdleft" colspan="3">
-                <input name="pageSize" type="text" value="@(Request["pageSize"] ?? Uxnet.Web.Properties.Settings.Default.PageSize.ToString())" />
-            </td>
-        </tr>
+    <div class="border_gray">
+        <!--表格 開始-->
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
+            <tr>
+                <th colspan="2" class="Head_style_a">
+                    @TrackCodeQuery.查詢條件
+                </th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap" width="120">
+                    <span class="red">*</span> @TrackCodeQuery.發票年度
+                </th>
+                <td class="tdleft">
+                    @Html.DropDownListFor(m => m.Year, yearList)
+                </td>
+            </tr>
+            <tr>
+                <td>@TrackCodeQuery.期別</td>
+                <td class="tdleft">
+                    @Html.DropDownListFor(m => m.PeriodNo, periodNoList, new { onchange = "SelectedIndexChanged()" })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @TrackCodeQuery.每頁資料筆數
+                </th>
+                <td class="tdleft" colspan="3">
+                    <input name="pageSize" type="text" value="@(Request["pageSize"] ?? Uxnet.Web.Properties.Settings.Default.PageSize.ToString())" />
+                </td>
+            </tr>
+        </table>
+        <!--表格 結束-->
+    </div>
+    <!--按鈕-->
+    <table border="0" cellspacing="0" cellpadding="0" width="100%" class="queryAction">
+        <tbody>
+            <tr>
+                <td class="Bargain_btn">
+                    <button type="submit"> @TrackCodeQuery.查詢</button>
+                </td>
+            </tr>
+        </tbody>
     </table>
-    <!--表格 結束-->
-</div>
-<!--按鈕-->
-<table border="0" cellspacing="0" cellpadding="0" width="100%" class="queryAction">
-    <tbody>
-        <tr>
-            <td class="Bargain_btn">
-                <button type="submit"> @TrackCodeQuery.查詢</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<!--表格 開始-->
+}
+
 @{ Html.RenderPartial("~/Views/TrackCode/ScriptHelper/Common.cshtml");}
 <script type="text/javascript">
     function SelectedIndexChanged() {
         //Form post
         $('input[name="pageIndex"]').remove();
     }
-</script>  
+</script>

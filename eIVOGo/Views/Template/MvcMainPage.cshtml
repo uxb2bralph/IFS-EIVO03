@@ -345,21 +345,18 @@
                         @if (ViewBag.ActionName != null)
                         {
                             @*<div class="row">
-                <div class="col-lg-12">
-                    <h2 class="page-header">@ViewBag.ActionName</h2>
-                </div>
-            </div>*@
+                                    <div class="col-lg-12">
+                                        <h2 class="page-header">@ViewBag.ActionName</h2>
+                                    </div>
+                                </div>*@
                         }
                         <h2><br /></h2>
                         <form id="theForm" method="post" role="form" enctype="multipart/form-data">
                             @RenderSection("formContent", false)
                         </form>
-                        @using (Html.BeginForm("Inquire", "TrackCode", FormMethod.Post))
-                        { 
-                            <div class="row">
-                                @RenderBody()
-                            </div>
-                        }
+                        <div class="row">
+                            @RenderBody()
+                        </div>
                         <!-- /.row -->
                     </div>
                 </div>
