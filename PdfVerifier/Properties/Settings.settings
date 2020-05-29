@@ -3,7 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="watcherPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\EIVO\PdfVerifierTest\PDF\Input</Value>
+      <Value Profile="(Default)">D:\RecUXB2B_EIVO\PDF\PdfWatch</Value>
+    </Setting>
+    <Setting Name="resultPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">D:\RecUXB2B_EIVO\PDF\PdfResult</Value>
     </Setting>
   </Settings>
 </SettingsFile>

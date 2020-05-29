@@ -12,7 +12,7 @@ namespace PdfVerifier.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,13 +25,25 @@ namespace PdfVerifier.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\EIVO\\PdfVerifierTest\\PDF\\Input")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\RecUXB2B_EIVO\\PDF\\PdfWatch")]
         public string watcherPath {
             get {
                 return ((string)(this["watcherPath"]));
             }
             set {
                 this["watcherPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\RecUXB2B_EIVO\\PDF\\PdfResult")]
+        public string resultPath {
+            get {
+                return ((string)(this["resultPath"]));
+            }
+            set {
+                this["resultPath"] = value;
             }
         }
     }
