@@ -283,5 +283,12 @@ namespace Model.Models.ViewModel
         public int? SupplierID { get; set; }
     }
 
-
+    public class EnumSelectorViewModel
+    {
+        public string FieldName { get; set; }
+        public string SelectorIndication { get; set; }
+        public string SelectorIndicationValue { get; set; }
+        public Dictionary<string,string> OptionItems { get; set; }
+        public string DefaultValue { get; set; }
+    }
 }

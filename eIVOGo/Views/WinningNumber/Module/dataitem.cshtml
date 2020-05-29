@@ -1,43 +1,14 @@
-
-@using System.IO
-@using System.Linq.Expressions
-
-@using Model.DataEntity
+﻿@using Model.DataEntity
 @using Model.Locale
-@using Model.DataEntity
 
-<tr>
-    <td>@(_model.Year)</td>
-    <td>@(String.Format("{0:00}-{1:00}月",_model.Period*2-1,_model.Period*2))</td>
-    <td>@(((Naming.WinningPrizeType)_model.Rank).ToString())</td>
-    <td>@(String.Format("{0:##,###,###,##0}",_model.Bonus))</td>
-    <td>@(_model.WinningNO)</td>
-    <td>
-    @if (isEditable( _model))
-        {
-        <div class="btn-group dropdown" data-toggle="dropdown">
-            <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">請選擇功能</button>
-            <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
-            <ul class="dropdown-menu">
-                <li><a class="btn" onclick="uiWinningNo.editItem(@(_model.WinningID));">修改</a></li>
-                <li><a class="btn" onclick="uiWinningNo.deleteItem(@(_model.WinningID));">刪除</a></li>
-            </ul>
-        </div>
-    }
-</td>
-</tr>
+@{
+    Layout = null;
 
+    UniformInvoiceWinningNumber _model = (UniformInvoiceWinningNumber)this.Model;
+}
 
-<script runat="server">
-
-    UniformInvoiceWinningNumber _model;
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _model = (UniformInvoiceWinningNumber)this.Model;
-    }
-
-    bool isEditable(UniformInvoiceWinningNumber item)
+@functions  {
+    public bool isEditable(UniformInvoiceWinningNumber item)
     {
         switch((Naming.WinningPrizeType)item.Rank)
         {
@@ -50,5 +21,25 @@
                 return false;
         }
     }
+}
 
-</script>
+    <tr>
+        <td>@(_model.Year)</td>
+        <td>@(String.Format("{0:00}-{1:00}月", _model.Period * 2 - 1, _model.Period * 2))</td>
+        <td>@(((Naming.WinningPrizeType)_model.Rank).ToString())</td>
+        <td>@(String.Format("{0:##,###,###,##0}", _model.Bonus))</td>
+        <td>@(_model.WinningNO)</td>
+        <td>
+            @if (isEditable(_model))
+            {
+                <div class="btn-group dropdown" data-toggle="dropdown">
+                    <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">請選擇功能</button>
+                    <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a class="btn" onclick="uiWinningNo.editItem(@(_model.WinningID));">修改</a></li>
+                        <li><a class="btn" onclick="uiWinningNo.deleteItem(@(_model.WinningID));">刪除</a></li>
+                    </ul>
+                </div>
+            }
+        </td>
+    </tr>

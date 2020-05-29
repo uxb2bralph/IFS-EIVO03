@@ -12,36 +12,50 @@
 <script>
     var uiWinningNo;
     $(function () {
-        var $postForm;
         uiWinningNo = {
             inquire: function (pageNum, onPaging) {
+                alert('cccc');
+                var year = $('input[name="Year"]').val();
+                var periodno = $('input[name="PeriodNo"]').val();
+                var sort = $('input[name="sort"]').serializeObject().sort;
+                var _Object = { Year: year, PeriodNo: periodno, PageIndex: pageNum, Sort: sort };
+
                 if (pageNum) {
                     $('input[name="pageIndex"]').val(pageNum);
+                    if (sort != null) {
+                        _Object.Sort = sort;
+                    }
                 } else {
                     $('input[name="sort"]').remove();
                 }
-                $('#theForm').ajaxForm({
-                    url: "@(Url.Action("Inquire","WinningNumber",new { resultAction = ViewBag.ResultAction }))",
-                    beforeSubmit: function () {
+
+                $.ajax({
+                type: "POST",
+                    url: '@Url.Action("Inquire","WinningNumber", new { resultAction = ViewBag.ResultAction, obj="_Object"})',
+                beforeSubmit: function () {
                         showLoading();
                     },
-                    success: function (data) {
-                        if (data) {
-                            if (onPaging) {
-                                onPaging(data);
-                            } else {
-                                if (uiWinningNo.$result)
-                                    uiWinningNo.$result.remove();
-                                uiWinningNo.$result = $(data);
-                                $('.queryAction').after(uiWinningNo.$result);
-                            }
+                data: _Object,
+                dataType: "text",
+                success: function (data) {
+                    if (data) {
+                        if (onPaging) {
+                            onPaging(data);
+                        } else {
+                            if (uiWinningNo.$result)
+                                uiWinningNo.$result.remove();
+                            uiWinningNo.$result = $(data);
+                            $('.queryAction').after(uiWinningNo.$result);
                         }
-                        hideLoading();
-                    },
-                    error: function () {
-                        hideLoading();
                     }
-                }).submit();
+                    hideLoading();
+                },
+                error: function (error) {
+                    hideLoading();
+                }
+                });
+
+
             },
             editItem: function (value) {
                 var event = event || window.event;
@@ -93,6 +107,8 @@
                         }
                     }
                 });
+
+                
             },
             showItem: function (value) {
                 var event = event || window.event;

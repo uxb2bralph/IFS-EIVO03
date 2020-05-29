@@ -1,19 +1,32 @@
-
-@using System.IO
-@using System.Linq.Expressions
-
-@using Model.DataEntity
+﻿@using Model.Models.ViewModel
 @using Model.Locale
-@using Model.DataEntity
-@using eIVOGo.Models.ViewModel
-@using Model.Models.ViewModel
-@{ Register Src="~/Module/jQuery/EnumSelector.ascx" TagPrefix="uc1" TagName="EnumSelector" }
+@using eIVOGo.Helper
+
+@{
+    Layout = null;
+
+    InquireNoIntervalViewModel _viewModel = (InquireNoIntervalViewModel)ViewBag.ViewModel;
+
+    string[] enumList = Enum.GetNames(typeof(Naming.EditableWinningPrizeType));
+    var _items = new Dictionary<string, string>();
+
+    foreach (string item in enumList)
+    {
+        _items.Add(((int)Enum.Parse(typeof(Naming.EditableWinningPrizeType), item)).ToString(),item);
+    }
+
+    EnumSelectorViewModel enumSelectorViewModel = new EnumSelectorViewModel
+    {
+        FieldName = "Rank",
+        OptionItems = _items
+    };
+}
 
 <tr>
     <td>@(_viewModel.Year)</td>
-    <td>@(String.Format("{0:00}-{1:00}月",_viewModel.PeriodNo*2-1,_viewModel.PeriodNo*2))</td>
+    <td>@(String.Format("{0:00}-{1:00}月", _viewModel.PeriodNo * 2 - 1, _viewModel.PeriodNo * 2))</td>
     <td>
-        <uc1:EnumSelector runat="server" ID="Rank" FieldName="Rank" TypeName="Model.Locale.Naming+EditableWinningPrizeType, Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+        @{Html.RenderPartial("~/Views/Common/Module/EnumSelect.cshtml", enumSelectorViewModel);}
     </td>
     <td></td>
     <td>
@@ -23,16 +36,3 @@
         <a class="btn" onclick="uiWinningNo.commitItem(null,@(_viewModel.Year),@(_viewModel.PeriodNo));">新增中獎號碼</a>
     </td>
 </tr>
-
-
-<script runat="server">
-
-    InquireNoIntervalViewModel _viewModel;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _viewModel = (InquireNoIntervalViewModel)ViewBag.ViewModel;
-    }
-
-</script>

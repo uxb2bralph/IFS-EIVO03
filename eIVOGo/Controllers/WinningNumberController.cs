@@ -38,8 +38,10 @@ namespace eIVOGo.Controllers
         // GET: WinningNumber
         public ActionResult Index()
         {
-            ViewBag.InquiryView = "~/Views/WinningNumber/WinningNoQuery.ascx";
-            return View("~/Views/InvoiceProcess/Index.aspx");
+            //ViewBag.InquiryView = "~/Views/WinningNumber/WinningNoQuery.ascx";
+            ViewBag.InquiryView = "~/Views/WinningNumber/WinningNoQuery.cshtml";
+            //return View("~/Views/InvoiceProcess/Index.aspx");
+            return View("~/Views/InvoiceProcess/Index.cshtml");
         }
 
         public ActionResult Inquire(InquireNoIntervalViewModel viewModel)
@@ -64,7 +66,7 @@ namespace eIVOGo.Controllers
 
             var items = models.GetTable<UniformInvoiceWinningNumber>().Where(w => w.Year == viewModel.Year && w.Period == viewModel.PeriodNo);
 
-            return View("~/Views/WinningNumber/Module/QueryResult.ascx", items);
+            return View("~/Views/WinningNumber/Module/QueryResult.cshtml", items);
         }
 
         public ActionResult EditItem(int? id)
@@ -73,7 +75,7 @@ namespace eIVOGo.Controllers
             UniformInvoiceWinningNumber model = result.Model as UniformInvoiceWinningNumber;
             if (model != null)
             {
-                result.ViewName = "~/Views/WinningNumber/Module/EditItem.ascx";
+                result.ViewName = "~/Views/WinningNumber/Module/EditItem.cshtml";
             }
             return result;
         }
@@ -111,7 +113,7 @@ namespace eIVOGo.Controllers
                 return View("~/Views/Shared/JsAlert.cshtml", model: "中獎號碼資料錯誤!!");
             }
 
-            return View("~/Views/WinningNumber/Module/DataItem.ascx", item);
+            return View("~/Views/WinningNumber/Module/DataItem.cshtml", item);
 
         }
 
@@ -211,12 +213,12 @@ namespace eIVOGo.Controllers
                 createWinningNo(table, model.Year, model.Period, viewModel.WinningNo.Substring(4), Naming.WinningPrizeType.五獎);
                 createWinningNo(table, model.Year, model.Period, viewModel.WinningNo.Substring(5), Naming.WinningPrizeType.六獎);
                 models.SubmitChanges();
-                return View("~/Views/WinningNumber/Module/QueryRequired.ascx", model);
+                return View("~/Views/WinningNumber/Module/QueryRequired.cshtml", model);
             }
             else
             {
                 models.SubmitChanges();
-                return View("~/Views/WinningNumber/Module/DataItem.ascx", model);
+                return View("~/Views/WinningNumber/Module/DataItem.cshtml", model);
             }
 
         }

@@ -1,45 +1,48 @@
-
-@using System.IO
-@using System.Linq.Expressions
-
-@using Model.DataEntity
+﻿@using Model.DataEntity
 @using Model.Locale
-@using Model.DataEntity
-@using eIVOGo.Models.ViewModel
 @using Model.Models.ViewModel
-@{ Register Src="~/Module/jQuery/EnumSelector.ascx" TagPrefix="uc1" TagName="EnumSelector" }
+@{
+    Layout = null;
 
-<tr>
-    <td>@(_model.Year)</td>
-    <td>@(String.Format("{0:00}-{1:00}月",_model.Period*2-1,_model.Period*2))</td>
-    <td><uc1:EnumSelector runat="server" ID="Rank" FieldName="Rank" TypeName="Model.Locale.Naming+EditableWinningPrizeType, Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" /></td>
-    <td>
-    </td>
-    <td>
-        <input type="text" name="WinningNo" placeholder="請輸入中獎號碼" value="@(_model.WinningNO)" data-role="edit" />
-    </td>
-    <td>
-        <div class="btn-group dropdown" data-toggle="dropdown">
-            <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">請選擇功能</button>
-            <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
-            <ul class="dropdown-menu">
-                <li><a class="btn" onclick="uiWinningNo.commitItem(@(_model.WinningID),@(_model.Year),@(_model.Period));">確定</a></li>
-                <li><a class="btn" onclick="uiWinningNo.showItem(@(_model.WinningID));">取消</a></li>
-            </ul>
-        </div>
-    </td>
-</tr>
+    UniformInvoiceWinningNumber _model = (UniformInvoiceWinningNumber)this.Model;
 
+    //Rank.DefaultValue = _model.Rank.ToString();
+    string[] enumList = Enum.GetNames(typeof(Naming.EditableWinningPrizeType));
+    var _items = new Dictionary<string, string>();
 
-<script runat="server">
-
-    UniformInvoiceWinningNumber _model;
-
-    protected override void OnInit(EventArgs e)
+    foreach (string item in enumList)
     {
-        base.OnInit(e);
-        _model = (UniformInvoiceWinningNumber)this.Model;
-        Rank.DefaultValue = _model.Rank.ToString();
+        _items.Add(((int)Enum.Parse(typeof(Naming.EditableWinningPrizeType), item)).ToString(), item);
     }
 
-</script>
+    EnumSelectorViewModel enumSelectorViewModel = new EnumSelectorViewModel
+    {
+        FieldName = "Rank",
+        OptionItems = _items,        
+        DefaultValue = _model.Rank.ToString()
+    };
+
+}
+
+    <tr>
+        <td>@_model.Year</td>
+        <td>@String.Format("{0:00}-{1:00}月",_model.Period*2-1,_model.Period*2)</td>
+        <td>
+            @{Html.RenderPartial("~/Views/Common/Module/EnumSelect.cshtml", enumSelectorViewModel);}
+        </td>
+        <td>
+        </td>
+        <td>
+            <input type="text" name="WinningNo" placeholder="請輸入中獎號碼" value="@_model.WinningNO" data-role="edit" />
+        </td>
+        <td>
+            <div class="btn-group dropdown" data-toggle="dropdown">
+                <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">請選擇功能</button>
+                <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a class="btn" onclick="uiWinningNo.commitItem(@_model.WinningID,@_model.Year,@_model.Period);">確定</a></li>
+                    <li><a class="btn" onclick="uiWinningNo.showItem(@_model.WinningID);">取消</a></li>
+                </ul>
+            </div>
+        </td>
+    </tr>

@@ -117,8 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="首頁 &gt; 發票作業" xml:space="preserve">
+    <value>Home &gt; Invoice assignment</value>
+    <comment>首頁 &gt; 發票作業</comment>
+  </data>
   <data name="首頁 &gt; 系統管理維護" xml:space="preserve">
     <value>Home &gt; System Management and Maintenance</value>
-    <comment>treeview</comment>
+    <comment>首頁 &gt; 系統管理維護</comment>
   </data>
 </root>

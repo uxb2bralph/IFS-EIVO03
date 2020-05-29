@@ -61,6 +61,15 @@ namespace eIVOGo.Resource.Views.Common {
         }
         
         /// <summary>
+        ///   查詢類似 首頁 &gt; 發票作業 的當地語系化字串。
+        /// </summary>
+        public static string 首頁___發票作業 {
+            get {
+                return ResourceManager.GetString("首頁 > 發票作業", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 首頁 &gt; 系統管理維護 的當地語系化字串。
         /// </summary>
         public static string 首頁___系統管理維護 {

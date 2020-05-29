@@ -1093,6 +1093,7 @@
     <Content Include="Views\Common\Module\TableRow.cshtml" />
     <Content Include="Views\Account\CbsLogin.cshtml" />
     <Content Include="Views\Forms\SimpleAllowance.cshtml" />
+    <Content Include="Views\Common\Module\EnumSelect.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="Views\Home\MainPage.aspx" />
     <Content Include="Module\Ajax\PagingControl.ascx" />
@@ -2046,6 +2047,18 @@
     <Content Include="Views\TrackCode\Module\DataItem.cshtml" />
     <Content Include="Views\TrackCode\Module\AddItem.cshtml" />
     <Content Include="Views\TrackCode\ScriptHelper\Common.cshtml" />
+    <Content Include="Views\TrackCode\Module\EditItem.cshtml" />
+    <Content Include="Views\InvoiceProcess\Index.cshtml" />
+    <Content Include="Views\WinningNumber\WinningNoQuery.cshtml" />
+    <Content Include="Views\WinningNumber\ScriptHelper\common.cshtml" />
+    <Content Include="Views\WinningNumber\ScriptHelper\matchwinning.cshtml" />
+    <Content Include="Views\WinningNumber\Module\QueryResult.cshtml" />
+    <Content Include="Views\WinningNumber\Module\ItemList.cshtml" />
+    <Content Include="Views\WinningNumber\Module\DataItem.cshtml" />
+    <Content Include="Views\WinningNumber\Module\AddItem.cshtml" />
+    <Content Include="Views\WinningNumber\Module\EditItem.cshtml" />
+    <Content Include="Views\WinningNumber\ResultAction\DoMatch.cshtml" />
+    <Content Include="Views\WinningNumber\Module\QueryRequired.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

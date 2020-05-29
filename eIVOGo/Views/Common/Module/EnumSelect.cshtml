@@ -1,0 +1,32 @@
+﻿@using Model.Models.ViewModel
+
+@{
+    EnumSelectorViewModel _model = this.Model;
+}
+
+<select name="@(_model.FieldName)">
+    @if (!String.IsNullOrEmpty(_model.SelectorIndication))
+    {
+        <option value="@(_model.SelectorIndicationValue) ">@(_model.SelectorIndication)</option>
+    }
+    @{ foreach (var item in _model.OptionItems)
+        {
+            <option value="@item.Key">@(item.Value)</option>
+        }}
+</select>
+@if (_model.FieldName != null && Request[_model.FieldName] != null)
+{
+    <script>
+        $(function () {
+            $('select[name="<%= FieldName %>"]').val('<%= Request[FieldName] %>');
+        });
+    </script>
+}
+else if (!String.IsNullOrEmpty(_model.DefaultValue))
+{
+    <script>
+    $(function () {
+        $('select[name="@(_model.FieldName)"]').val('@(_model.DefaultValue)');
+    });
+    </script>
+} 

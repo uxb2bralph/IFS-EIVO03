@@ -147,9 +147,9 @@
                 listItems.push(this.buildItem('last', this.options.totalPages));
             }
 
-            listItems.push($('<li><a>總頁數:' + this.options.totalPages + '</a></li>').addClass(this.options['pageClass']).addClass('disabled'));
+            listItems.push($('<li><a>' + this.options.displayTotalPages+':'+ this.options.totalPages + '</a></li>').addClass(this.options['pageClass']).addClass('disabled'));
             if (!(this.options.totalRecordCount === undefined)) {
-                listItems.push($('<li><a>總筆數:' + this.options.totalRecordCount + '</a></li>').addClass(this.options['pageClass']).addClass('disabled'));
+                listItems.push($('<li><a>' + this.options.displayTotalRecordCount +':'+ this.options.totalRecordCount + '</a></li>').addClass(this.options['pageClass']).addClass('disabled'));
             }
 
             return listItems;
@@ -327,7 +327,9 @@
         pageClass: 'page-item',
         activeClass: 'active',
         disabledClass: 'disabled',
-        anchorClass: 'page-link'
+        anchorClass: 'page-link',
+        displayTotalPages: '總頁數',
+        displayTotalRecordCount: '總筆數'
     };
 
     $.fn.twbsPagination.Constructor = TwbsPagination;

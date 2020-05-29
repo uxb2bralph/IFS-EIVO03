@@ -1,39 +1,16 @@
-
-@using System.IO
+﻿@using System.IO
 @using System.Linq.Expressions
-
+@using System.Web.Mvc.Html
 @using eIVOGo.Helper
 @using eIVOGo.Models
-@using Model.DataEntity
-@using Model.Helper
-@using Model.Locale
-@using Utility
-@using Uxnet.Web.WebUI
-@using eIVOGo.Helper
+@using eIVOGo.Resource.Views.Common
 
-@section headContent { 
- 
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
+    ViewBag.ActionName = TreeView.首頁___發票作業;
+    string _inquiryView = (String)ViewBag.InquiryView ?? "~/Views/InvoiceProcess/InvoiceQuery.ascx";
 }
+
 @{ Html.RenderPartial(_inquiryView);}
 
-<script runat="server">
 
-    String _inquiryView;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        ViewBag.ActionName = "首頁 > 發票作業";
-        _inquiryView = (String)ViewBag.InquiryView ?? "~/Views/InvoiceProcess/InvoiceQuery.ascx";
-    }
-
-    //public override void Dispose()
-    //{
-    //    var models = TempData.GetGenericModelSource();
-    //    if (models != null)
-    //        models.Dispose();
-
-    //    base.Dispose();
-    //}
-
-</script>

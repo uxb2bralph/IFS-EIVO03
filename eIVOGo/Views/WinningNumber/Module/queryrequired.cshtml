@@ -1,22 +1,11 @@
+﻿@using Model.DataEntity
 
-@using System.IO
-@using System.Linq.Expressions
+@{
+    UniformInvoiceWinningNumber _model = (UniformInvoiceWinningNumber)this.Model;
+}
 
-@using Model.DataEntity
-@using Model.Locale
-@using Model.DataEntity
+<!DOCTYPE html>
 
 <script>
     uiWinningNo.inquire();
-</script>
-
-<script runat="server">
-
-    UniformInvoiceWinningNumber _model;
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _model = (UniformInvoiceWinningNumber)this.Model;
-    }
-
 </script>
