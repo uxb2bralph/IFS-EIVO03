@@ -1,34 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.Linq;
-using System.Data.SqlClient;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
-using System.Xml;
-
-using Business.Helper;
-using ClosedXML.Excel;
-using eIVOGo.Helper;
-using eIVOGo.Models;
-using eIVOGo.Models.ViewModel;
-using Model.Models.ViewModel;
 using eIVOGo.Module.Common;
-using eIVOGo.Properties;
 using Model.DataEntity;
-using Model.Helper;
-using Model.InvoiceManagement;
 using Model.Locale;
-using Model.Security.MembershipManagement;
+using Model.Models.ViewModel;
 using Utility;
+using eIVOGo.Resource.Controllers;
 
 namespace eIVOGo.Controllers
 {
@@ -50,12 +30,12 @@ namespace eIVOGo.Controllers
 
             if (!viewModel.Year.HasValue)
             {
-                ModelState.AddModelError("Year", "請選擇年份!!");
+                ModelState.AddModelError("Year", WinningNumber.請選擇年份);
             }
 
             if (!viewModel.PeriodNo.HasValue)
             {
-                ModelState.AddModelError("PeriodNo", "請選擇期別!!");
+                ModelState.AddModelError("PeriodNo", WinningNumber.請選擇期別);
             }
 
             if (!ModelState.IsValid)
@@ -86,7 +66,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return Json(new { result = false, message = "中獎號碼資料錯誤!!" }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = false, message = WinningNumber.中獎號碼資料錯誤 }, JsonRequestBehavior.AllowGet);
             }
 
             if (item.Rank == (int)Naming.WinningPrizeType.頭獎)
@@ -110,7 +90,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "中獎號碼資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: WinningNumber.中獎號碼資料錯誤);
             }
 
             return View("~/Views/WinningNumber/Module/DataItem.cshtml", item);
@@ -128,19 +108,19 @@ namespace eIVOGo.Controllers
             {
                 if (viewModel.WinningNo == null || !Regex.IsMatch(viewModel.WinningNo, "^[0-9]{8}$"))
                 {
-                    ModelState.AddModelError("WinningNo", "中獎號碼為8碼數字!!");
+                    ModelState.AddModelError("WinningNo", WinningNumber.中獎號碼為8碼數字);
                 }
             }
             else if (viewModel.Rank == (int)Naming.EditableWinningPrizeType.增開六獎)
             {
                 if (viewModel.WinningNo == null || !Regex.IsMatch(viewModel.WinningNo, "^[0-9]{3}$"))
                 {
-                    ModelState.AddModelError("WinningNo", "中獎號碼為3碼數字!!");
+                    ModelState.AddModelError("WinningNo", WinningNumber.中獎號碼為3碼數字);
                 }
             }
             else
             {
-                ModelState.AddModelError("Rank", "獎別錯誤!!");
+                ModelState.AddModelError("Rank", WinningNumber.獎別錯誤);
             }
 
             var table = models.GetTable<UniformInvoiceWinningNumber>();
@@ -149,19 +129,19 @@ namespace eIVOGo.Controllers
             {
                 if (!viewModel.Period.HasValue || viewModel.Period > 6 || viewModel.Period < 1)
                 {
-                    ViewBag.Message = "請選擇期別!!";
+                    ViewBag.Message = WinningNumber.請選擇期別;
                     return View("~/Views/Shared/AlertMessage.cshtml");
                 }
                 else if (!viewModel.Year.HasValue)
                 {
-                    ViewBag.Message = "請選擇年份!!";
+                    ViewBag.Message = WinningNumber.請選擇年份;
                     return View("~/Views/Shared/AlertMessage.cshtml");
                 }
                 else
                 {
                     if (table.Any(t => t.Year == viewModel.Year && t.WinningNO == viewModel.WinningNo && t.Period == viewModel.Period))
                     {
-                        ModelState.AddModelError("WinningNo", "中獎號碼重複!!");
+                        ModelState.AddModelError("WinningNo", WinningNumber.中獎號碼重複);
                     }
                 }
             }
@@ -247,7 +227,7 @@ namespace eIVOGo.Controllers
                 SharedFunction.doSendMaild(new SharedFunction._MailQueryState { setYear = viewModel.Year.Value, setPeriod = viewModel.PeriodNo.Value });
                 SharedFunction.doSendSMSMessage(new SharedFunction._MailQueryState { setYear = viewModel.Year.Value, setPeriod = viewModel.PeriodNo.Value });
 
-                ViewBag.Message = "對獎作業完成!!";
+                ViewBag.Message = WinningNumber.對獎作業完成;
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
             else
@@ -267,7 +247,7 @@ namespace eIVOGo.Controllers
 	                FROM     UniformInvoiceWinningNumber INNER JOIN
 					                InvoiceWinningNumber ON UniformInvoiceWinningNumber.WinningID = InvoiceWinningNumber.WinningID
 	                WHERE   (UniformInvoiceWinningNumber.Period = {0}) AND (UniformInvoiceWinningNumber.Year = {1})", viewModel.PeriodNo, viewModel.Year);
-                ViewBag.Message = "中獎發票已清除完成!!";
+                ViewBag.Message = WinningNumber.中獎發票已清除完成;
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
             else

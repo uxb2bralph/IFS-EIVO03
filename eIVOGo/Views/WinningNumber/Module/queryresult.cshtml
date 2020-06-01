@@ -1,11 +1,12 @@
 ﻿@using Model.DataEntity
+@using eIVOGo.Resource.Views.WinningNumber.Module
 
 @{
     Layout = null;
 
     IEnumerable<UniformInvoiceWinningNumber> _model = (IEnumerable<UniformInvoiceWinningNumber>)this.Model;    
 
-    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", @QueryResult.查詢結果);
 }
 
 <div class="border_gray" style="overflow-x: auto; max-width: 1024px;">
@@ -18,7 +19,7 @@
     }
     else
     {
-        <font color="red">查無資料!!</font>
+    <font color="red">@QueryResult.查無資料!!</font>
         Html.RenderPartial("~/Views/WinningNumber/Module/ItemList.cshtml", _model);
 
     }

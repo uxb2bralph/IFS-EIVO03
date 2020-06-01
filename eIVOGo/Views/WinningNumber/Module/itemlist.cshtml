@@ -1,4 +1,5 @@
 ﻿@using Model.DataEntity
+@using eIVOGo.Resource.Views.WinningNumber.Module
 
 @{
     Layout = null;
@@ -9,11 +10,11 @@
     <table class="table01 itemList">
         <thead>
             <tr>
-                <th style="min-width: 100px" aria-sort="other">發票年度</th>
-                <th style="min-width: 100px" aria-sort="other">發票期別</th>
-                <th style="min-width: 120px">獎別</th>
-                <th style="min-width: 160px">中獎金額</th>
-                <th style="min-width: 160px">中獎號碼</th>
+                <th style="min-width: 100px" aria-sort="other">@ItemList.發票年度</th>
+                <th style="min-width: 100px" aria-sort="other">@ItemList.發票期別</th>
+                <th style="min-width: 120px">@ItemList.獎別</th>
+                <th style="min-width: 160px">@ItemList.中獎金額</th>
+                <th style="min-width: 160px">@ItemList.中獎號碼</th>
                 <th style="min-width: 150px" aria-sort="other">管理</th>
             </tr>
         </thead>

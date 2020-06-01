@@ -59,6 +59,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TrackCode.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\WinningNumber.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WinningNumber.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\WinningNumber.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WinningNumber.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Enums\LanguageEnum.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Form1.cs">
@@ -181,6 +191,86 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TrackCodeQuery.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\WinningNumber\Module\AddItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\Module\AddItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\Module\DataItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\Module\DataItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\Module\EditItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\Module\EditItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\Module\ItemList.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemList.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\Module\ItemList.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemList.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\Module\QueryResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\Module\QueryResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryResult.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\ResultAction\DoMatch.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DoMatch.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\ResultAction\DoMatch.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DoMatch.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\ScriptHelper\Common.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\ScriptHelper\Common.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\WinningNoQuery.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WinningNoQuery.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningNumber\WinningNoQuery.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WinningNoQuery.en-US.resx</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Controllers\TrackCode.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TrackCode.en-US.Designer.cs</LastGenOutput>
@@ -188,6 +278,14 @@
     <EmbeddedResource Include="Controllers\TrackCode.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TrackCode.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\WinningNumber.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WinningNumber.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\WinningNumber.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WinningNumber.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -285,6 +383,70 @@
     <EmbeddedResource Include="Views\TrackCode\TrackCodeQuery.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TrackCodeQuery.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\Module\AddItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\Module\AddItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\Module\DataItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\Module\DataItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\Module\EditItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\Module\EditItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\Module\ItemList.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemList.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\Module\ItemList.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemList.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\Module\QueryResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\Module\QueryResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryResult.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\ResultAction\DoMatch.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DoMatch.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\ResultAction\DoMatch.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DoMatch.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\ScriptHelper\Common.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\ScriptHelper\Common.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\WinningNoQuery.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WinningNoQuery.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningNumber\WinningNoQuery.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WinningNoQuery.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

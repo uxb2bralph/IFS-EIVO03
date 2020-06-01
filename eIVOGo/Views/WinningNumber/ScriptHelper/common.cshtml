@@ -1,20 +1,11 @@
+@using eIVOGo.Resource.Views.WinningNumber.ScriptHelper
 
-@using System.IO
-@using System.Linq.Expressions
-
-@using eIVOGo.Helper
-@using eIVOGo.Models
-@using Model.DataEntity
-@using Model.Helper
-@using Model.Locale
-@using Utility
-@using Uxnet.Web.WebUI
 <script>
     var uiWinningNo;
     $(function () {
         uiWinningNo = {
             inquire: function (pageNum, onPaging) {
-                alert('cccc');
+                //alert('test');
                 var year = $('input[name="Year"]').val();
                 var periodno = $('input[name="PeriodNo"]').val();
                 var sort = $('input[name="sort"]').serializeObject().sort;
@@ -74,12 +65,12 @@
                 });
             },
             deleteItem: function (value) {
-                if (confirm('確定刪除此筆資料?')) {
+                if (confirm('@Common.確定刪除此筆資料')) {
                     var event = event || window.event;
                     var $tr = $(event.target).closest('tr');
                     $.post('@(Url.Action("DeleteItem","WinningNumber"))', { 'id': value }, function (data) {
                         if (data.result) {
-                            alert('資料已刪除!!')
+                            alert('@Common.資料已刪除')
                             $tr.remove();
                             uiWinningNo.inquire();
                         } else {
@@ -98,7 +89,7 @@
                         if ($data.is('tr')) {
                             $tr.before($data);
                             if (value) {
-                                alert('資料已更新!!');
+                                alert('@Common.資料已更新');
                                 $tr.remove();
                             }
                         } else {
