@@ -331,16 +331,6 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\r\n                    InvoiceClient.MainContent.SystemConfigTab, InvoiceClient, V" +
-            "ersion=1.0.0.0, Culture=neutral, PublicKeyToken=null;\r\n                ")]
-        public string MainTabs {
-            get {
-                return ((string)(this["MainTabs"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("CancelInvoice_C0501")]
         public string UploadC0501InvoiceCancellationFolder {
             get {
@@ -692,36 +682,10 @@ namespace InvoiceClient.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("300")]
-        public int WaitForInvoicePDFInSeconds {
-            get {
-                return ((int)(this["WaitForInvoicePDFInSeconds"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("en-US")]
         public string AppCulture {
             get {
                 return ((string)(this["AppCulture"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"
-                  InvoiceClient.Agent.VacantInvoiceNoInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.Agent.InvoiceMappingInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.Agent.B2BInvoiceInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.Agent.InvoiceMailTrackingInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.Agent.InvoicePDFGeneratorForGooglePlay, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.Agent.AllowancePDFGenerator, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                  InvoiceClient.Agent.InvoiceServerInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
-                ")]
-        public string ServerInspector {
-            get {
-                return ((string)(this["ServerInspector"]));
             }
         }
         
@@ -852,6 +816,79 @@ namespace InvoiceClient.Properties {
         public string RecAllowanceResponsePath {
             get {
                 return ((string)(this["RecAllowanceResponsePath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"
+                  InvoiceClient.Agent.VacantInvoiceNoInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoiceMappingInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.B2BInvoiceInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoiceMailTrackingInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoicePDFGeneratorForGooglePlay, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.AllowancePDFGenerator, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoiceServerInspector, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                  InvoiceClient.Agent.InvoicePDFInspectorForGoogleAdWords, InvoiceClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;
+                ")]
+        public string ServerInspector {
+            get {
+                return ((string)(this["ServerInspector"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int WaitForInvoicePDFInSeconds {
+            get {
+                return ((int)(this["WaitForInvoicePDFInSeconds"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\r\n          InvoiceClient.MainContent.SystemConfigTab, InvoiceClient, Version=1.0" +
+            ".0.0, Culture=neutral, PublicKeyToken=null;\r\n        ")]
+        public string MainTabs {
+            get {
+                return ((string)(this["MainTabs"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\UXB2B_EIVO\\AllowanceZipInvoice")]
+        public string AllowancePDFGeneratorOutput {
+            get {
+                return ((string)(this["AllowancePDFGeneratorOutput"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("taiwan_uxb2b_scanned_sac_pdf_")]
+        public string AllowancePDFZipPrefix {
+            get {
+                return ((string)(this["AllowancePDFZipPrefix"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("AllowanceZipInvoice")]
+        public string AllowanceZipInvoice {
+            get {
+                return ((string)(this["AllowanceZipInvoice"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("AllowanceInvoicePDF")]
+        public string AllowanceDownloadSaleInvoiceFolder {
+            get {
+                return ((string)(this["AllowanceDownloadSaleInvoiceFolder"]));
             }
         }
     }

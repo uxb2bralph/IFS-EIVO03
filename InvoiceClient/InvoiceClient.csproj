@@ -108,6 +108,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Agent\AllowancePDFWatcherForZip.cs" />
     <Compile Include="Agent\AllowanceWatcher.cs" />
     <Compile Include="Agent\AllowanceCancellationWatcher.cs" />
     <Compile Include="Agent\AllowanceCancellationWatcherV2.cs" />

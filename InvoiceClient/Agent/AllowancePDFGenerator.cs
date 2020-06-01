@@ -44,8 +44,8 @@ namespace InvoiceClient.Agent
                 String storedPath = Settings.Default.DownloadDataInAbsolutePath ? Settings.Default.DownloadSaleInvoiceFolder : Path.Combine(Settings.Default.InvoiceTxnPath, Settings.Default.DownloadSaleInvoiceFolder);
                 ValueValidity.CheckAndCreatePath(storedPath);
 
-                String tmpPath = Path.Combine(Logger.LogDailyPath, $"A_{(index ?? DateTime.Now.Ticks):0000}");
-                ValueValidity.CheckAndCreatePath(tmpPath);
+                //String tmpPath = Path.Combine(Logger.LogDailyPath, $"A_{(index ?? DateTime.Now.Ticks):0000}");
+                //ValueValidity.CheckAndCreatePath(tmpPath);
 
                 bool hasNew = false;
 
@@ -54,7 +54,7 @@ namespace InvoiceClient.Agent
                 if (items != null && items.Length > 1)
                 {
                     hasNew = true;
-                    Directory.CreateDirectory(tmpPath);
+                    //Directory.CreateDirectory(tmpPath);
                     String serviceUrl = items[0];
 
                     void proc(int i)
@@ -63,7 +63,7 @@ namespace InvoiceClient.Agent
                         String[] paramValue = item.Split('\t');
                         String allowanceNo = paramValue[0];
 
-                        String pdfFile = Path.Combine(tmpPath,
+                        String pdfFile = Path.Combine(Settings.Default.AllowancePDFGeneratorOutput,
                             _prefix_name + allowanceNo + ".pdf");
 
                         var url = $"{serviceUrl}?keyID={paramValue[1]}";
@@ -78,13 +78,14 @@ namespace InvoiceClient.Agent
 
                 }
 
-                if (hasNew)
-                {
-                    String args = $"{_prefix_name}{DateTime.Now:yyyyMMddHHmmssffff}_{items.Length - 1:0000} \"{tmpPath}\" \"{storedPath}\"";
+                //if (hasNew)
+                //{
+                //    String args = $"{_prefix_name}{DateTime.Now:yyyyMMddHHmmssffff}_{items.Length - 1:0000} \"{tmpPath}\" \"{storedPath}\"";
 
-                    Logger.Info($"zip PDF:{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ZipAllowancePDF.bat")} {args}");
-                    "ZipAllowancePDF.bat".RunBatch(args);
-                }
+                //    Logger.Info($"zip PDF:{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ZipAllowancePDF.bat")} {args}");
+                //    "ZipAllowancePDF.bat".RunBatch(args);
+                //}
+
                 return hasNew ? storedPath : null;
             }
             catch (Exception ex)
