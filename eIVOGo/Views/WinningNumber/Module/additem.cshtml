@@ -1,6 +1,6 @@
 ﻿@using Model.Models.ViewModel
 @using Model.Locale
-@using eIVOGo.Helper
+@using eIVOGo.Resource.Views.WinningNumber.Module
 
 @{
     Layout = null;
@@ -24,15 +24,15 @@
 
 <tr>
     <td>@(_viewModel.Year)</td>
-    <td>@(String.Format("{0:00}-{1:00}月", _viewModel.PeriodNo * 2 - 1, _viewModel.PeriodNo * 2))</td>
+    <td>@(String.Format("{0:00}-{1:00}{2}", _viewModel.PeriodNo * 2 - 1, _viewModel.PeriodNo * 2,AddItem.月))</td>
     <td>
         @{Html.RenderPartial("~/Views/Common/Module/EnumSelect.cshtml", enumSelectorViewModel);}
     </td>
     <td></td>
     <td>
-        <input type="text" name="WinningNo" placeholder="請輸入中獎號碼" value="" data-role="add" />
+        <input type="text" name="WinningNo" placeholder="@AddItem.請輸入中獎號碼" value="" data-role="add" />
     </td>
     <td>
-        <a class="btn" onclick="uiWinningNo.commitItem(null,@(_viewModel.Year),@(_viewModel.PeriodNo));">新增中獎號碼</a>
+        <a class="btn" onclick="uiWinningNo.commitItem(null,@(_viewModel.Year),@(_viewModel.PeriodNo));">@AddItem.新增中獎號碼</a>
     </td>
 </tr>
