@@ -1,18 +1,38 @@
 ﻿@using Model.Models.ViewModel
 @using Model.Locale
 @using eIVOGo.Resource.Views.WinningNumber.Module
+@using eIVOGo.Resource.Views.Common.Enum
 
 @{
     Layout = null;
 
     InquireNoIntervalViewModel _viewModel = (InquireNoIntervalViewModel)ViewBag.ViewModel;
 
+    //下拉選單
     string[] enumList = Enum.GetNames(typeof(Naming.EditableWinningPrizeType));
     var _items = new Dictionary<string, string>();
 
     foreach (string item in enumList)
     {
-        _items.Add(((int)Enum.Parse(typeof(Naming.EditableWinningPrizeType), item)).ToString(),item);
+        var name = item;
+
+        switch (item)
+        {
+            case "特別獎":
+                name = EditableWinningPrizeType.特別獎;
+                break;
+            case "特獎":
+                name = EditableWinningPrizeType.特獎;
+                break;
+            case "頭獎":
+                name = EditableWinningPrizeType.頭獎;
+                break;
+            case "增開六獎":
+                name = EditableWinningPrizeType.增開六獎;
+                break;
+        }
+
+        _items.Add(((int)Enum.Parse(typeof(Naming.EditableWinningPrizeType), item)).ToString(), name);
     }
 
     EnumSelectorViewModel enumSelectorViewModel = new EnumSelectorViewModel
@@ -24,7 +44,7 @@
 
 <tr>
     <td>@(_viewModel.Year)</td>
-    <td>@(String.Format("{0:00}-{1:00}{2}", _viewModel.PeriodNo * 2 - 1, _viewModel.PeriodNo * 2,AddItem.月))</td>
+    <td>@(String.Format("{0:00}-{1:00}{2}", _viewModel.PeriodNo * 2 - 1, _viewModel.PeriodNo * 2, AddItem.月))</td>
     <td>
         @{Html.RenderPartial("~/Views/Common/Module/EnumSelect.cshtml", enumSelectorViewModel);}
     </td>

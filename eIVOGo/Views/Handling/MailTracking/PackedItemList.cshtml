@@ -2,6 +2,7 @@
 @using System.IO
 @using System.Linq.Expressions
 
+@using eIVOGo.Resource.Views.Handling.MailTracking
 @using Model.DataEntity
 @using Model.Locale
 @using eIVOGo.Controllers
@@ -44,11 +45,11 @@
     </td>
     <td>
         <div class="btn-group dropdown" data-toggle="dropdown">
-            <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">請選擇功能</button>
+            <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">@PackedItemList.請選擇功能</button>
             <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
             <ul class="dropdown-menu">
-                <li><a class="btn" onclick="uiHandling.pack();">合併</a></li>
-                <li><a class="btn" onclick="uiHandling.unpack();">分開</a></li>
+                <li><a class="btn" onclick="uiHandling.pack();">@PackedItemList.合併</a></li>
+                <li><a class="btn" onclick="uiHandling.unpack();">@PackedItemList.分開</a></li>
             </ul>
         </div>
     </td>

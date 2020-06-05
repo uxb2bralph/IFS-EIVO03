@@ -290,5 +290,7 @@ namespace Model.Models.ViewModel
         public string SelectorIndicationValue { get; set; }
         public Dictionary<string,string> OptionItems { get; set; }
         public string DefaultValue { get; set; }
+
+        public string FieldClass { get; set; }
     }
 }

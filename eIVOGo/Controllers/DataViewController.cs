@@ -1,42 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.Linq;
-using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 using System.Xml;
-
 using Business.Helper;
-using ClosedXML.Excel;
 using eIVOGo.Helper;
-using eIVOGo.Models;
-using eIVOGo.Models.ViewModel;
 using eIVOGo.Properties;
-using Model.Models.ViewModel;
+
 using Model.DataEntity;
-using Model.Helper;
-using Model.InvoiceManagement;
 using Model.Locale;
-using Model.Schema.TXN;
-using Model.Security.MembershipManagement;
-using Utility;
-using Uxnet.Com.Security.UseCrypto;
+using Model.Models.ViewModel;
 using Model.Schema.EIVO;
 using Newtonsoft.Json;
+using Utility;
+using DataView = eIVOGo.Resource.Controllers.DataView;
 
 namespace eIVOGo.Controllers
 {
-    
+
     public class DataViewController : SampleController<InvoiceItem>
     {
         // GET: DataView
@@ -609,7 +595,7 @@ namespace eIVOGo.Controllers
             if (items == null || items.Length == 0)
             {
                 ViewBag.CloseWindow = true;
-                ViewBag.Message = "請選擇郵寄項目!!";
+                ViewBag.Message = DataView.請選擇郵寄項目;
                 return View("~/Views/Shared/JsAlert.cshtml");
             }
 
@@ -647,7 +633,7 @@ namespace eIVOGo.Controllers
             }
 
             var result = new FilePathResult(outFile, "application/octet-stream");
-            result.FileDownloadName = "發票列印下載.zip";
+            result.FileDownloadName = DataView.發票列印下載+".zip";
             return result;
         }
 

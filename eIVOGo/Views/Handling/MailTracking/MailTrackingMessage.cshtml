@@ -1,6 +1,6 @@
 @using System.IO
 @using System.Linq.Expressions
-
+@using eIVOGo.Resource.Views.Handling.MailTracking
 @using eIVOGo.Helper
 @using eIVOGo.Models
 @using eIVOGo.Controllers
@@ -9,6 +9,7 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+
 @{
     ModelSource<InvoiceItem> models;
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
@@ -29,20 +30,20 @@
 
 }
 <!--交易畫面標題-->
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "登錄掛號郵件");}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", @MailTrackingMessage.登錄掛號郵件);}
 
 <div class="border_gray">
     <!--表格 開始-->
     <table id="queryArea" width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
         <tr>
             <th>
-                發票號碼(起號)
+                @MailTrackingMessage.發票號碼_起號_
             </th>
             <td class="tdleft">
                 <input name="StartNo" type="text" />
             </td>
             <th>
-                發票號碼(迄號)
+                @MailTrackingMessage.發票號碼_迄號_
             </th>
             <td class="tdleft">
                 <input name="EndNo" type="text" />
@@ -50,14 +51,14 @@
         </tr>
         <tr>
             <th>
-                寄件過程
+                @MailTrackingMessage.寄件過程
             </th>
             <td class="tdleft">
-                <input name="DeliveryStatus" value="1303" type="radio" />初次寄送
-                <input name="DeliveryStatus" value="1309" type="radio" />退回重寄
+                <input name="DeliveryStatus" value="1303" type="radio" />@MailTrackingMessage.初次寄送
+                <input name="DeliveryStatus" value="1309" type="radio" />@MailTrackingMessage.退回重寄
             </td>
             <th>
-                郵件張數
+                @MailTrackingMessage.郵件張數
             </th>
             <td class="tdleft">
                 <input name="MailingCount" type="text" />
@@ -65,13 +66,13 @@
         </tr>
         <tr>
             <th>
-                郵件號碼1(流水號碼段)
+                @MailTrackingMessage.郵件號碼1_流水號碼段_
             </th>
             <td class="tdleft">
                 <input name="MailNo1" type="text" />
             </td>
             <th>
-                郵件號碼2(固定號碼段)
+                @MailTrackingMessage.郵件號碼2_固定號碼段_
             </th>
             <td class="tdleft">
                 <input name="MailNo2" type="text" />
@@ -79,19 +80,19 @@
         </tr>
         <tr>
             <th>
-                寄件日期
+                @MailTrackingMessage.寄件日期
             </th>
             <td class="tdleft">
                 <input name="DeliveryDate" type="text" class="form_date" />
             </td>
             <th>
-                附件檔
+                @MailTrackingMessage.附件檔
             </th>
             <td class="tdleft">
                 <select name="Attachment">
-                    <option value="">全部</option>
-                    <option value="1" selected="selected">有</option>
-                    <option value="0">無</option>
+                    <option value="">@MailTrackingMessage.全部</option>
+                    <option value="1" selected="selected">@MailTrackingMessage.有</option>
+                    <option value="0">@MailTrackingMessage.無</option>
                 </select>
             </td>
             @*<th>
@@ -114,8 +115,8 @@
     <tbody>
         <tr>
             <td class="Bargain_btn">
-                <button type="button" onclick="uiHandling.inquireTracking();">查詢</button>&nbsp;&nbsp;
-                <button type="button" onclick="uiHandling.reset();">清除</button>
+                <button type="button" onclick="uiHandling.inquireTracking();">@MailTrackingMessage.查詢</button>&nbsp;&nbsp;
+                <button type="button" onclick="uiHandling.reset();">@MailTrackingMessage.清除</button>
             </td>
         </tr>
     </tbody>

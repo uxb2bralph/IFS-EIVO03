@@ -5,12 +5,15 @@
 @using eIVOGo.Helper
 @using eIVOGo.Models
 @using eIVOGo.Models.ViewModel
+@using eIVOGo.Resource.Views.Account.ScriptHelper
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+
+
 @{
 
     ModelSource<InvoiceItem> models;
@@ -32,7 +35,7 @@
             var $queryAction = uiAccountQuery.$queryAction;
 
             if (!$form) {
-                alert('查詢表單資料錯誤!!');
+                alert('@Common.查詢表單資料錯誤');
                 return;
             }
 
@@ -138,7 +141,7 @@
         };
 
         window.uiAccountQuery.activate = function (value) {
-            if (confirm('確認啟用此帳號?')) {
+            if (confirm('@Common.確認啟用此帳號')) {
                 var event = event || window.event;
                 var $tr = $(event.target).closest('tr');
                 $.post('@Html.Raw(Url.Action("Activate","Account"))', { id: value }, function (data) {
@@ -146,7 +149,7 @@
                         var $data = $(data);
                         if ($data.is('tr')) {
                             $tr.before($data);
-                            alert('資料已更新!!');
+                            alert('@Common.資料已更新');
                             $tr.remove();
                         } else {
                             $('body').append($data);
@@ -158,7 +161,7 @@
         };
 
         window.uiAccountQuery.deactivate = function (value) {
-            if (confirm('確認停用此帳號?')) {
+            if (confirm('@Common.確認停用此帳號')) {
                 var event = event || window.event;
                 var $tr = $(event.target).closest('tr');
                 $.post('@Html.Raw(Url.Action("Deactivate","Account"))', { id: value }, function (data) {
@@ -166,7 +169,7 @@
                         var $data = $(data);
                         if ($data.is('tr')) {
                             $tr.before($data);
-                            alert('資料已更新!!');
+                            alert('@Common.資料已更新');
                             $tr.remove();
                         } else {
                             $('body').append($data);
@@ -178,12 +181,12 @@
         };
 
         window.uiAccountQuery.delete = function (value) {
-            if (confirm('確認刪除此帳號?')) {
+            if (confirm('@Common.確認刪除此帳號')) {
                 var event = event || window.event;
                 var $tr = $(event.target).closest('tr');
                 $.post('@Html.Raw(Url.Action("DeleteItem","Account"))', { id: value }, function (data) {
                     if (data.result) {
-                        alert('資料已刪除!!')
+                        alert('@Common.資料已刪除')
                         $tr.remove();
                     } else {
                         alert(data.message);

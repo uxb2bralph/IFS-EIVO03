@@ -15,6 +15,7 @@
 @using Utility
 @using Business.Helper
 @using Uxnet.Web.WebUI
+@using eIVOGo.Resource.Views.Handling.ScriptHelper
 
 <script>
     var uiHandling;
@@ -74,7 +75,7 @@
                 var allItems = Enumerable.From(uiHandling.items);
                 var checkedItems = $('input[name="PackageID"]:checked').toEnumerable();
                 if (checkedItems.Count() < 1) {
-                    alert('請選擇合併寄件項目!!');
+                    alert('@Common.請選擇合併寄件項目');
                     return;
                 }
                 var first = checkedItems.First();
@@ -112,7 +113,7 @@
                 var packedItems = Enumerable.From(uiHandling.items)
                     .Where(function (i) { return i.PackageID == packageID; });
                 if (packedItems.Count() < 1) {
-                    alert('請選擇分開寄件項目!!');
+                    alert('@Common.請選擇分開寄件項目');
                     return;
                 }
 
@@ -143,7 +144,7 @@
                 var packedItems = Enumerable.From(uiHandling.items)
                     .Where(function (i) { return i.PackageID == packageID; });
                 if (packedItems.Count() < 1) {
-                    alert('請選擇欲刪除寄件項目!!');
+                    alert('@Common.請選擇欲刪除寄件項目');
                     return;
                 }
 

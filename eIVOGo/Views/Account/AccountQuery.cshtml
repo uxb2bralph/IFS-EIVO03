@@ -13,6 +13,9 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using eIVOGo.Resource.Views.Account
+@using eIVOGo.Resource.Views.Common.Enum
+
 @{
 
 
@@ -24,21 +27,53 @@
     _viewModel = (UserAccountQueryViewModel)ViewBag.ViewModel;
     _profile = Business.Helper.WebPageUtility.UserProfile;
 
+    //下拉選單
+    string[] enumList = Enum.GetNames(typeof(Naming.BusinessRelationshipStatus));
+    var _items = new Dictionary<string, string>();
+
+    foreach (string item in enumList)
+    {
+        var name = item;
+
+        switch (item)
+        {
+            case "註記停用":
+                name = BusinessRelationshipStatus.註記停用;
+                break;
+            case "等待回覆確認":
+                name = BusinessRelationshipStatus.等待回覆確認;
+                break;
+            case "人員已確認":
+                name = BusinessRelationshipStatus.人員已確認;
+                break;
+        }
+
+        _items.Add(((int)Enum.Parse(typeof(Naming.BusinessRelationshipStatus), item)).ToString(),name);
+
+    }
+
+    EnumSelectorViewModel enumSelectorViewModel = new EnumSelectorViewModel
+    {
+        FieldName = "LevelID",
+        OptionItems = _items,
+        SelectorIndication=@AccountQuery.全部,
+        FieldClass="form-control"
+    };
 }
 <!--交易畫面標題-->
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "使用者管理");}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", AccountQuery.使用者管理);}
 
 <div class="border_gray">
     <!--表格 開始-->
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title" id="queryArea">
         <tr>
             <th colspan="4" class="Head_style_a">
-                查詢條件
+                @AccountQuery.查詢條件
             </th>
         </tr>
         <tr>
             <th nowrap="nowrap" width="120">
-                營業人名稱
+                @AccountQuery.營業人名稱
             </th>
             <td colspan="3" class="tdleft">
                 @{
@@ -56,14 +91,14 @@
             </tr>*@
         <tr>
             <th nowrap="nowrap" width="120">
-                帳號
+                @AccountQuery.帳號
             </th>
             <td class="tdleft">
                 <input name="PID" type="text" value="@(Request["PID"])" class="form-control" />
                 <input name="RoleID" type="hidden" value="@(_viewModel.RoleID)" />
             </td>
             <th nowrap="nowrap" width="120">
-                姓名
+                @AccountQuery.姓名
             </th>
             <td class="tdleft">
                 <input name="UserName" type="text" value="@(Request["UserName"])" class="form-control" />
@@ -72,18 +107,13 @@
         </tr>
         <tr>
             <th nowrap="nowrap" width="120">
-                會員狀態
+                @AccountQuery.會員狀態
             </th>
             <td class="tdleft">
-                <select name="LevelID" class="form-control">
-                    <option value="">全部</option>
-                    @{
-                        Html.RenderPartial("~/Views/Common/Module/EnumSelectOptions.cshtml", typeof(Naming.BusinessRelationshipStatus));
-                    }
-                </select>
+                @{Html.RenderPartial("~/Views/Common/Module/EnumSelect.cshtml", enumSelectorViewModel);}
             </td>
             <th>
-                每頁資料筆數
+                @AccountQuery.每頁資料筆數
             </th>
             <td class="tdleft">
                 <input name="pageSize" type="text" value="@(_viewModel.PageSize ?? Uxnet.Web.Properties.Settings.Default.PageSize)" />
@@ -97,7 +127,7 @@
     <tbody>
         <tr>
             <td class="Bargain_btn">
-                <button type="button" onclick="uiAccountQuery.inquire();">查詢</button>
+                <button type="button" onclick="uiAccountQuery.inquire();">@AccountQuery.查詢</button>
             </td>
         </tr>
     </tbody>

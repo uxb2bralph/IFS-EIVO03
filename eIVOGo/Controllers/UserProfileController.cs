@@ -26,6 +26,8 @@ using Model.Locale;
 using Model.Security.MembershipManagement;
 using Utility;
 using eIVOGo.Helper.Security.Authorization;
+using Resx = eIVOGo.Resource.Controllers;
+
 
 namespace eIVOGo.Controllers
 {
@@ -100,7 +102,7 @@ namespace eIVOGo.Controllers
             UserProfile item = result.Model as UserProfile;
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: Resx.UserProfile.資料錯誤);
             }
                
             if((new LoginHandler()).ProcessLogin(item.PID))
@@ -110,7 +112,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: Resx.UserProfile.資料錯誤);
             }
         }
 
@@ -131,12 +133,12 @@ namespace eIVOGo.Controllers
             viewModel.PID = viewModel.PID.GetEfficientString();
             if (String.IsNullOrEmpty(viewModel.PID))
             {
-                ModelState.AddModelError("PID", "帳號不可為空白!!");
+                ModelState.AddModelError("PID", Resx.UserProfile.帳號不可為空白);
             }
             else if ((item != null && models.GetTable<UserProfile>().Any(u => u.UID != item.UID && u.PID == viewModel.PID))
                     || (item == null && models.GetTable<UserProfile>().Any(u => u.PID == viewModel.PID)))
             {
-                ModelState.AddModelError("PID", "這個帳號已被使用，請更換申請帳號!!");
+                ModelState.AddModelError("PID", Resx.UserProfile.這個帳號已被使用_更換申請帳號);
             }
 
             Regex reg = new Regex("^(?=.*\\d)(?=.*[a-zA-Z])");
@@ -146,13 +148,13 @@ namespace eIVOGo.Controllers
                 if (viewModel.Password.Length < 6)
                 {
                     //檢查密碼
-                    ModelState.AddModelError("PassWord", "密碼不可少於６個字碼!!");
+                    ModelState.AddModelError("PassWord", Resx.UserProfile.密碼不可少於６個字碼);
                 }
 
                 else if (viewModel.Password != viewModel.Password1)
                 {
                     //檢查密碼
-                    ModelState.AddModelError("PassWord1", "二組密碼輸入不同!!");
+                    ModelState.AddModelError("PassWord1", Resx.UserProfile.二組密碼輸入不同);
                 }
                 else
                 {
@@ -162,7 +164,7 @@ namespace eIVOGo.Controllers
                     else if (!reg.IsMatch(viewModel.Password))
                     {
                         //檢查密碼
-                        ModelState.AddModelError("PassWord", "密碼須由英文、數字組成!!");
+                        ModelState.AddModelError("PassWord", Resx.UserProfile.密碼須由英文_數字組成);
                     }
                 }
             }
@@ -172,7 +174,7 @@ namespace eIVOGo.Controllers
                 ///
                 if (String.IsNullOrEmpty(viewModel.Password))
                 {
-                    ModelState.AddModelError("PassWord", "密碼不可為空白!!");
+                    ModelState.AddModelError("PassWord", Resx.UserProfile.密碼不可為空白);
                 }
             }
 
@@ -188,7 +190,7 @@ namespace eIVOGo.Controllers
             {
                 if (profile.IsSystemAdmin())
                 {
-                    ModelState.AddModelError("SellerID", "請選擇所屬會員!!");
+                    ModelState.AddModelError("SellerID", Resx.UserProfile.請選擇所屬會員);
                 }
                 else
                 {
@@ -198,13 +200,13 @@ namespace eIVOGo.Controllers
 
             if (!viewModel.DefaultRoleID.HasValue)
             {
-                ModelState.AddModelError("DefaultRoleID", "請選擇身份設定!!");
+                ModelState.AddModelError("DefaultRoleID", Resx.UserProfile.請選擇身份設定);
             }
             else if(!profile.IsSystemAdmin())
             {
                 if (!Enum.IsDefined(typeof(Naming.EIVOMemberRoleID), (int)viewModel.DefaultRoleID))
                 {
-                    ModelState.AddModelError("DefaultRoleID", "請選擇身份設定!!");
+                    ModelState.AddModelError("DefaultRoleID", Resx.UserProfile.請選擇身份設定);
                 }
             }
 
@@ -264,7 +266,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料已修改!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: Resx.UserProfile.資料已修改);
             }
         }
 

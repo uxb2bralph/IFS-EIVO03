@@ -49,6 +49,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\DataView.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataView.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\DataView.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataView.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\Handling.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Handling.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\Handling.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Handling.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\TrackCode.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -58,6 +78,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TrackCode.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\UserProfile.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UserProfile.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\UserProfile.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UserProfile.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\WinningNumber.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -81,6 +111,96 @@
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Account\AccountQuery.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AccountQuery.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\AccountQuery.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AccountQuery.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\Module\DataItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\Module\DataItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\Module\ItemList.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemList.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\Module\ItemList.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemList.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\Module\QueryResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\Module\QueryResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryResult.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\ScriptHelper\Common.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\ScriptHelper\Common.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Enum\BusinessRelationshipStatus.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BusinessRelationshipStatus.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Enum\BusinessRelationshipStatus.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BusinessRelationshipStatus.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Enum\EditableWinningPrizeType.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditableWinningPrizeType.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Enum\EditableWinningPrizeType.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditableWinningPrizeType.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Home\Module\CompanyQuickSearch.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CompanyQuickSearch.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Home\Module\CompanyQuickSearch.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CompanyQuickSearch.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Module\EnumSelectOptions.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EnumSelectOptions.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Module\EnumSelectOptions.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EnumSelectOptions.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Common\TreeView1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -90,6 +210,56 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TreeView.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Handling\MailTracking\MailTrackingMessage.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MailTrackingMessage.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Handling\MailTracking\MailTrackingMessage.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MailTrackingMessage.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Handling\MailTracking\PackedItemList.Designer.cs">
+      <DependentUpon>PackedItemList.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Views\Handling\MailTracking\DataItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Handling\MailTracking\PackedItemList.en-US.Designer.cs">
+      <DependentUpon>PackedItemList.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Views\Handling\MailTracking\DataItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Handling\MailTracking\TableList.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TableList.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Handling\MailTracking\TableList.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TableList.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Handling\ScriptHelper\Common.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Handling\ScriptHelper\Common.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\Home\MainPage.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -191,6 +361,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TrackCodeQuery.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserProfile\EditUserProfile.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditUserProfile.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserProfile\EditUserProfile.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditUserProfile.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserProfile\Module\ItemForm.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemForm.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserProfile\Module\ItemForm.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemForm.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\WinningNumber\Module\AddItem.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -271,6 +461,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WinningNoQuery.en-US.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controllers\DataView.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataView.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\DataView.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\Handling.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Handling.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\Handling.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Handling.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controllers\TrackCode.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TrackCode.en-US.Designer.cs</LastGenOutput>
@@ -278,6 +484,14 @@
     <EmbeddedResource Include="Controllers\TrackCode.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TrackCode.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\UserProfile.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserProfile.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\UserProfile.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserProfile.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Controllers\WinningNumber.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -296,6 +510,78 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Views\Account\AccountQuery.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AccountQuery.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Account\AccountQuery.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AccountQuery.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Account\Module\DataItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Account\Module\DataItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Account\Module\ItemList.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemList.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Account\Module\ItemList.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemList.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Account\Module\QueryResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Account\Module\QueryResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryResult.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Account\ScriptHelper\Common.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Account\ScriptHelper\Common.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Enum\BusinessRelationshipStatus.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BusinessRelationshipStatus.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Enum\BusinessRelationshipStatus.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BusinessRelationshipStatus.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Enum\EditableWinningPrizeType.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditableWinningPrizeType.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Enum\EditableWinningPrizeType.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditableWinningPrizeType.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Home\Module\CompanyQuickSearch.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CompanyQuickSearch.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Home\Module\CompanyQuickSearch.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CompanyQuickSearch.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Module\EnumSelectOptions.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EnumSelectOptions.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Module\EnumSelectOptions.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EnumSelectOptions.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Common\TreeView.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TreeView.en-US.Designer.cs</LastGenOutput>
@@ -303,6 +589,47 @@
     <EmbeddedResource Include="Views\Common\TreeView.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TreeView1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Handling\MailTracking\MailTrackingMessage.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MailTrackingMessage.en-US.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Handling\MailTracking\MailTrackingMessage.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MailTrackingMessage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Handling\MailTracking\PackedItemList.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PackedItemList.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Handling\MailTracking\PackedItemList.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PackedItemList.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Handling\MailTracking\DataItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Handling\MailTracking\DataItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Handling\MailTracking\TableList.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TableList.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Handling\MailTracking\TableList.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TableList.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Handling\ScriptHelper\Common.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Handling\ScriptHelper\Common.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Home\MainPage.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -335,6 +662,7 @@
     <EmbeddedResource Include="Views\TrackCode\Index.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Index.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TrackCode\Module\AddItem.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -379,10 +707,27 @@
     <EmbeddedResource Include="Views\TrackCode\TrackCodeQuery.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TrackCodeQuery.en-US.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TrackCode\TrackCodeQuery.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TrackCodeQuery.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserProfile\EditUserProfile.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditUserProfile.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserProfile\EditUserProfile.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditUserProfile.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserProfile\Module\ItemForm.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemForm.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserProfile\Module\ItemForm.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemForm.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\WinningNumber\Module\AddItem.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -462,7 +807,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Account\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,6 +6,7 @@
 @using eIVOGo.Helper
 @using Model.Locale
 @using eIVOGo.Models.ViewModel
+@using eIVOGo.Resource.Views.Home.Module
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using Model.Security.MembershipManagement
@@ -37,7 +38,7 @@
     _item = _model.Where(c => c.CompanyID == _viewModel.SellerID).FirstOrDefault();
 }
 
-<input type="text" class="form-control" size="40" id="@(_contentID)" value="@(_item!=null ? $"{_item.ReceiptNo} {_item.CompanyName}" : null)" placeholder="請輸入檢索關鍵字" />
+<input type="text" class="form-control" size="40" id="@(_contentID)" value="@(_item!=null ? $"{_item.ReceiptNo} {_item.CompanyName}" : null)" placeholder="@CompanyQuickSearch.請輸入檢索關鍵字" />
 <input type="hidden" id="@(_valueID)" name="@(_fieldName)" value="@(_viewModel.SellerID)" />
 <script>
         $(function () {

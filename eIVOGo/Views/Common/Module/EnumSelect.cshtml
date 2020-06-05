@@ -4,10 +4,10 @@
     EnumSelectorViewModel _model = this.Model;
 }
 
-<select name="@(_model.FieldName)">
+<select name="@(_model.FieldName)" class="@(_model.FieldClass)">
     @if (!String.IsNullOrEmpty(_model.SelectorIndication))
     {
-        <option value="@(_model.SelectorIndicationValue) ">@(_model.SelectorIndication)</option>
+        <option value="@(_model.SelectorIndicationValue) " >@(_model.SelectorIndication)</option>
     }
     @{ foreach (var item in _model.OptionItems)
         {

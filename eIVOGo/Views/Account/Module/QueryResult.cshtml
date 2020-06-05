@@ -7,6 +7,7 @@
 @using eIVOGo.Helper
 @using eIVOGo.Models
 @using eIVOGo.Controllers
+@using eIVOGo.Resource.Views.Account.Module
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
@@ -28,7 +29,7 @@
     _pageSize = _viewModel.PageSize.Value;
 }
 
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", QueryResult.查詢結果);}
 
 
 <div class="border_gray" style="overflow-x: auto;">
@@ -45,12 +46,14 @@
         $(function () {
             var obj = $('#itemPagination').twbsPagination({
                 totalPages: @((recordCount+_pageSize-1) / _pageSize),
-                        totalRecordCount: @(recordCount),
+                totalRecordCount: @(recordCount),
+                displayTotalPages: '@QueryResult.總頁數',
+                        displayTotalRecordCount:'@QueryResult.總筆數',
                         visiblePages: 10,
-                        first: '最前',
-                        prev: '上頁',
-                        next: '下頁',
-                        last: '最後',
+                        first: '@QueryResult.最前',
+                        prev: '@QueryResult.上頁',
+                        next: '@QueryResult.下頁',
+                        last: '@QueryResult.最後',
                         initiateStartPageClick: false,
                         onPageClick: function (event, page) {
                             uiAccountQuery.inquire(page,function(data){
@@ -69,9 +72,9 @@
     }
     else
     {
-        <font color="red">查無資料!!</font>
+        <font color="red">@QueryResult.查無資料!!</font>
         <br />
-        <a class="btn" onclick="uiAccountQuery.edit();">新增</a>
+        <a class="btn" onclick="uiAccountQuery.edit();">@QueryResult.新增</a>
     }
 </div>
 
