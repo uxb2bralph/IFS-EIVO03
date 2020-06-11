@@ -1,0 +1,332 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="B2B發票買受人可重複列印" xml:space="preserve">
+    <value>B2B發票買受人可重複列印</value>
+    <comment>B2B發票買受人可重複列印</comment>
+  </data>
+  <data name="B2B發票開立通知以鏈結取代附件" xml:space="preserve">
+    <value>B2B發票開立通知以鏈結取代附件</value>
+    <comment>B2B發票開立通知以鏈結取代附件</comment>
+  </data>
+  <data name="一般稅額計算之電子發票" xml:space="preserve">
+    <value>一般稅額計算之電子發票</value>
+    <comment>一般稅額計算之電子發票</comment>
+  </data>
+  <data name="上期發票空白號碼" xml:space="preserve">
+    <value>上期發票空白號碼</value>
+    <comment>上期發票空白號碼</comment>
+  </data>
+  <data name="作廢折讓" xml:space="preserve">
+    <value>作廢折讓</value>
+    <comment>作廢折讓</comment>
+  </data>
+  <data name="作廢發票" xml:space="preserve">
+    <value>作廢發票</value>
+    <comment>作廢發票</comment>
+  </data>
+  <data name="使用傳送企業發票對應資料" xml:space="preserve">
+    <value>使用傳送企業發票對應資料</value>
+    <comment>使用傳送企業發票對應資料</comment>
+  </data>
+  <data name="使用境外電商郵件樣式" xml:space="preserve">
+    <value>使用境外電商郵件樣式</value>
+    <comment>使用境外電商郵件樣式</comment>
+  </data>
+  <data name="使用委外客服" xml:space="preserve">
+    <value>使用委外客服</value>
+    <comment>使用委外客服</comment>
+  </data>
+  <data name="使用客訂郵件樣式" xml:space="preserve">
+    <value>使用客訂郵件樣式</value>
+    <comment>使用客訂郵件樣式</comment>
+  </data>
+  <data name="使用簡訊通知買受人" xml:space="preserve">
+    <value>使用簡訊通知買受人</value>
+    <comment>使用簡訊通知買受人</comment>
+  </data>
+  <data name="傳真" xml:space="preserve">
+    <value>傳真</value>
+    <comment>傳真</comment>
+  </data>
+  <data name="公司統一編號" xml:space="preserve">
+    <value>公司統一編號</value>
+    <comment>公司統一編號</comment>
+  </data>
+  <data name="公司識別標章" xml:space="preserve">
+    <value>公司識別標章</value>
+    <comment>公司識別標章</comment>
+  </data>
+  <data name="公司負責人" xml:space="preserve">
+    <value>公司負責人</value>
+    <comment>公司負責人</comment>
+  </data>
+  <data name="名稱" xml:space="preserve">
+    <value>名稱</value>
+    <comment>名稱</comment>
+  </data>
+  <data name="地址" xml:space="preserve">
+    <value>地址</value>
+    <comment>地址</comment>
+  </data>
+  <data name="基本資料" xml:space="preserve">
+    <value>基本資料</value>
+    <comment>基本資料</comment>
+  </data>
+  <data name="客訂樣式" xml:space="preserve">
+    <value>客訂樣式</value>
+    <comment>客訂樣式</comment>
+  </data>
+  <data name="寄送中獎通知" xml:space="preserve">
+    <value>寄送中獎通知</value>
+    <comment>寄送中獎通知</comment>
+  </data>
+  <data name="寄送作廢折讓通知" xml:space="preserve">
+    <value>寄送作廢折讓通知</value>
+    <comment>寄送作廢折讓通知</comment>
+  </data>
+  <data name="寄送作廢通知" xml:space="preserve">
+    <value>寄送作廢通知</value>
+    <comment>寄送作廢通知</comment>
+  </data>
+  <data name="寄送折讓通知" xml:space="preserve">
+    <value>寄送折讓通知</value>
+    <comment>寄送折讓通知</comment>
+  </data>
+  <data name="寄送開立通知" xml:space="preserve">
+    <value>寄送開立通知</value>
+    <comment>寄送開立通知</comment>
+  </data>
+  <data name="折讓單列印樣式" xml:space="preserve">
+    <value>折讓單列印樣式</value>
+    <comment>折讓單列印樣式</comment>
+  </data>
+  <data name="是" xml:space="preserve">
+    <value>是</value>
+    <comment>是</comment>
+  </data>
+  <data name="營業人" xml:space="preserve">
+    <value>營業人</value>
+    <comment>營業人</comment>
+  </data>
+  <data name="特種稅額計算之電子發票" xml:space="preserve">
+    <value>特種稅額計算之電子發票</value>
+    <comment>特種稅額計算之電子發票</comment>
+  </data>
+  <data name="用戶端自動下載" xml:space="preserve">
+    <value>用戶端自動下載</value>
+    <comment>用戶端自動下載</comment>
+  </data>
+  <data name="發票列印樣式" xml:space="preserve">
+    <value>發票列印樣式</value>
+    <comment>發票列印樣式</comment>
+  </data>
+  <data name="發票折讓" xml:space="preserve">
+    <value>發票折讓</value>
+    <comment>發票折讓</comment>
+  </data>
+  <data name="發票開立" xml:space="preserve">
+    <value>發票開立</value>
+    <comment>發票開立</comment>
+  </data>
+  <data name="簡訊通知" xml:space="preserve">
+    <value>簡訊通知</value>
+    <comment>簡訊通知</comment>
+  </data>
+  <data name="聯絡人姓名" xml:space="preserve">
+    <value>聯絡人姓名</value>
+    <comment>聯絡人姓名</comment>
+  </data>
+  <data name="聯絡人職稱" xml:space="preserve">
+    <value>聯絡人職稱</value>
+    <comment>聯絡人職稱</comment>
+  </data>
+  <data name="聯絡人行動電話" xml:space="preserve">
+    <value>聯絡人行動電話</value>
+    <comment>聯絡人行動電話</comment>
+  </data>
+  <data name="聯絡人電子郵件" xml:space="preserve">
+    <value>聯絡人電子郵件</value>
+    <comment>聯絡人電子郵件</comment>
+  </data>
+  <data name="聯絡人電話" xml:space="preserve">
+    <value>聯絡人電話</value>
+    <comment>聯絡人電話</comment>
+  </data>
+  <data name="聯絡方式" xml:space="preserve">
+    <value>聯絡方式</value>
+    <comment>聯絡方式</comment>
+  </data>
+  <data name="自動核准列印" xml:space="preserve">
+    <value>自動核准列印</value>
+    <comment>自動核准列印</comment>
+  </data>
+  <data name="訊息通知" xml:space="preserve">
+    <value>訊息通知</value>
+    <comment>訊息通知</comment>
+  </data>
+  <data name="設定使用委外客服" xml:space="preserve">
+    <value>設定使用委外客服</value>
+    <comment>設定使用委外客服</comment>
+  </data>
+  <data name="設定使用發票列印" xml:space="preserve">
+    <value>設定使用發票列印</value>
+    <comment>設定使用發票列印</comment>
+  </data>
+  <data name="設定傳送發票對應資料" xml:space="preserve">
+    <value>設定傳送發票對應資料</value>
+    <comment>設定傳送發票對應資料</comment>
+  </data>
+  <data name="設定接收B2B發票(PDF檔)" xml:space="preserve">
+    <value>設定接收B2B發票(PDF檔)</value>
+    <comment>設定接收B2B發票(PDF檔)</comment>
+  </data>
+  <data name="設定發票資料全列印" xml:space="preserve">
+    <value>設定發票資料全列印</value>
+    <comment>設定發票資料全列印</comment>
+  </data>
+  <data name="設定發票類別" xml:space="preserve">
+    <value>設定發票類別</value>
+    <comment>設定發票類別</comment>
+  </data>
+  <data name="設定項目" xml:space="preserve">
+    <value>設定項目</value>
+    <comment>設定項目</comment>
+  </data>
+  <data name="請選擇" xml:space="preserve">
+    <value>請選擇</value>
+    <comment>請選擇</comment>
+  </data>
+  <data name="開立發票字軌號碼檢核" xml:space="preserve">
+    <value>開立發票字軌號碼檢核</value>
+    <comment>開立發票字軌號碼檢核</comment>
+  </data>
+  <data name="電子發票核准函號" xml:space="preserve">
+    <value>電子發票核准函號</value>
+    <comment>電子發票核准函號</comment>
+  </data>
+  <data name="電話" xml:space="preserve">
+    <value>電話</value>
+    <comment>電話</comment>
+  </data>
+  <data name="類別" xml:space="preserve">
+    <value>類別</value>
+    <comment>類別</comment>
+  </data>
+</root>
