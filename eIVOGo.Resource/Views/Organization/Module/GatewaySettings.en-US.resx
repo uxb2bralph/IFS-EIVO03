@@ -117,12 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="查無資料" xml:space="preserve">
-    <value>No information found!!</value>
-    <comment>查無資料</comment>
+  <data name="Excel格式加值中心配號" xml:space="preserve">
+    <value>Excel format value-added center allocation number</value>
+    <comment>Excel格式加值中心配號</comment>
   </data>
-  <data name="查詢結果" xml:space="preserve">
-    <value>Search result</value>
-    <comment>查詢結果</comment>
+  <data name="Excel格式境外電商專用" xml:space="preserve">
+    <value>Excel format for overseas e-commerce</value>
+    <comment>Excel格式境外電商專用</comment>
+  </data>
+  <data name="Excel格式開立人配號" xml:space="preserve">
+    <value>Number issuance in Excel format</value>
+    <comment>Excel格式開立人配號</comment>
+  </data>
+  <data name="Excel通用格式" xml:space="preserve">
+    <value>Excel Common Format</value>
+    <comment>Excel通用格式</comment>
+  </data>
+  <data name="建立憑證資訊" xml:space="preserve">
+    <value>Create certificate information</value>
+    <comment>建立憑證資訊</comment>
+  </data>
+  <data name="用戶端G/W設定" xml:space="preserve">
+    <value>Client G/W settings</value>
+    <comment>用戶端G/W設定</comment>
+  </data>
+  <data name="選擇傳送Excel發票開立方式" xml:space="preserve">
+    <value>Choose the way to send Excel invoices</value>
+    <comment>選擇傳送Excel發票開立方式</comment>
   </data>
 </root>

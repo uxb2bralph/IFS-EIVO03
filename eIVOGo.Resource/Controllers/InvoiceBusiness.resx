@@ -117,12 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="查無資料" xml:space="preserve">
-    <value>No information found!!</value>
-    <comment>查無資料</comment>
+  <data name="POS機編號錯誤" xml:space="preserve">
+    <value>POS機編號錯誤!!</value>
+    <comment>POS機編號錯誤</comment>
   </data>
-  <data name="查詢結果" xml:space="preserve">
-    <value>Search result</value>
-    <comment>查詢結果</comment>
+  <data name="已存在相同的POS機編號" xml:space="preserve">
+    <value>已存在相同的POS機編號!!</value>
+    <comment>已存在相同的POS機編號</comment>
+  </data>
+  <data name="營業人資料錯誤" xml:space="preserve">
+    <value>營業人資料錯誤!!</value>
+    <comment>營業人資料錯誤</comment>
+  </data>
+  <data name="發票開立人錯誤" xml:space="preserve">
+    <value>發票開立人錯誤!!</value>
+    <comment>發票開立人錯誤</comment>
   </data>
 </root>

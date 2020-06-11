@@ -117,12 +117,36 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="查無資料" xml:space="preserve">
-    <value>No information found!!</value>
-    <comment>查無資料</comment>
+  <data name="GOOGLE_Taiwa" xml:space="preserve">
+    <value>GOOGLE_Taiwa</value>
+    <comment>GOOGLE_Taiwa</comment>
   </data>
-  <data name="查詢結果" xml:space="preserve">
-    <value>Search result</value>
-    <comment>查詢結果</comment>
+  <data name="境外電商" xml:space="preserve">
+    <value>境外電商</value>
+    <comment>境外電商</comment>
+  </data>
+  <data name="店家發票自動配號" xml:space="preserve">
+    <value>店家發票自動配號</value>
+    <comment>店家發票自動配號</comment>
+  </data>
+  <data name="發票開立人" xml:space="preserve">
+    <value>發票開立人</value>
+    <comment>發票開立人</comment>
+  </data>
+  <data name="相對營業人" xml:space="preserve">
+    <value>相對營業人</value>
+    <comment>相對營業人</comment>
+  </data>
+  <data name="請選擇" xml:space="preserve">
+    <value>請選擇</value>
+    <comment>請選擇</comment>
+  </data>
+  <data name="開立發票店家代理" xml:space="preserve">
+    <value>開立發票店家代理</value>
+    <comment>開立發票店家代理</comment>
+  </data>
+  <data name="集團成員" xml:space="preserve">
+    <value>集團成員</value>
+    <comment>集團成員</comment>
   </data>
 </root>

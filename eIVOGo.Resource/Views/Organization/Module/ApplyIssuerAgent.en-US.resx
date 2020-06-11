@@ -117,12 +117,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="查無資料" xml:space="preserve">
-    <value>No information found!!</value>
-    <comment>查無資料</comment>
+  <data name="發票代傳營業人" xml:space="preserve">
+    <value>Invoice agent</value>
+    <comment>發票代傳營業人</comment>
   </data>
-  <data name="查詢結果" xml:space="preserve">
-    <value>Search result</value>
-    <comment>查詢結果</comment>
+  <data name="確定" xml:space="preserve">
+    <value>Submit</value>
+    <comment>確定</comment>
+  </data>
+  <data name="設定發票代傳營業人" xml:space="preserve">
+    <value>Set up invoice agent</value>
+    <comment>設定發票代傳營業人</comment>
+  </data>
+  <data name="資料已儲存_是否關閉" xml:space="preserve">
+    <value>The data has been saved, is it closed?</value>
+    <comment>資料已儲存，是否關閉？</comment>
+  </data>
+  <data name="重填" xml:space="preserve">
+    <value>Refill</value>
+    <comment>重填</comment>
   </data>
 </root>

@@ -117,12 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="查無資料" xml:space="preserve">
-    <value>No information found!!</value>
-    <comment>查無資料</comment>
+  <data name="使用者管理" xml:space="preserve">
+    <value>User management</value>
+    <comment>使用者管理</comment>
   </data>
-  <data name="查詢結果" xml:space="preserve">
-    <value>Search result</value>
-    <comment>查詢結果</comment>
+  <data name="全部" xml:space="preserve">
+    <value>All</value>
+    <comment>全部</comment>
+  </data>
+  <data name="已停用" xml:space="preserve">
+    <value>Terminated</value>
+    <comment>已停用</comment>
+  </data>
+  <data name="已啟用" xml:space="preserve">
+    <value>Activated</value>
+    <comment>已啟用</comment>
+  </data>
+  <data name="店家名稱" xml:space="preserve">
+    <value>Store name</value>
+    <comment>店家名稱</comment>
+  </data>
+  <data name="店家狀態" xml:space="preserve">
+    <value>Store status</value>
+    <comment>店家狀態</comment>
+  </data>
+  <data name="店家資料維護" xml:space="preserve">
+    <value>Store data maintenance</value>
+    <comment>店家資料維護</comment>
+  </data>
+  <data name="查詢" xml:space="preserve">
+    <value>Inquire</value>
+    <comment>查詢</comment>
+  </data>
+  <data name="查詢條件" xml:space="preserve">
+    <value>Query conditions</value>
+    <comment>查詢條件</comment>
+  </data>
+  <data name="營業人管理" xml:space="preserve">
+    <value>Business management</value>
+    <comment>營業人管理</comment>
+  </data>
+  <data name="發票代傳管理" xml:space="preserve">
+    <value>Invoice generation management</value>
+    <comment>發票代傳管理</comment>
+  </data>
+  <data name="確認停用此筆資料" xml:space="preserve">
+    <value>Confirm to disable this data?</value>
+    <comment>確認停用此筆資料</comment>
+  </data>
+  <data name="確認啟用此筆資料" xml:space="preserve">
+    <value>Confirm to activate this data?</value>
+    <comment>確認啟用此筆資料</comment>
+  </data>
+  <data name="確認設定此開立人為B2B營業人" xml:space="preserve">
+    <value>Confirm to set up this issuer as a B2B business</value>
+    <comment>確認設定此開立人為B2B營業人</comment>
+  </data>
+  <data name="統編" xml:space="preserve">
+    <value>Uniform numbers</value>
+    <comment>統編</comment>
   </data>
 </root>

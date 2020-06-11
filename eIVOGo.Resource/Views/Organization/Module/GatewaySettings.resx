@@ -117,12 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="查無資料" xml:space="preserve">
-    <value>No information found!!</value>
-    <comment>查無資料</comment>
+  <data name="Excel格式加值中心配號" xml:space="preserve">
+    <value>Excel格式加值中心配號</value>
+    <comment>Excel格式加值中心配號</comment>
   </data>
-  <data name="查詢結果" xml:space="preserve">
-    <value>Search result</value>
-    <comment>查詢結果</comment>
+  <data name="Excel格式境外電商專用" xml:space="preserve">
+    <value>Excel格式境外電商專用</value>
+    <comment>Excel格式境外電商專用</comment>
+  </data>
+  <data name="Excel格式開立人配號" xml:space="preserve">
+    <value>Excel格式開立人配號</value>
+    <comment>Excel格式開立人配號</comment>
+  </data>
+  <data name="Excel通用格式" xml:space="preserve">
+    <value>Excel通用格式</value>
+    <comment>Excel通用格式</comment>
+  </data>
+  <data name="建立憑證資訊" xml:space="preserve">
+    <value>建立憑證資訊</value>
+    <comment>建立憑證資訊</comment>
+  </data>
+  <data name="用戶端G/W設定" xml:space="preserve">
+    <value>用戶端G/W設定</value>
+    <comment>用戶端G/W設定</comment>
+  </data>
+  <data name="選擇傳送Excel發票開立方式" xml:space="preserve">
+    <value>選擇傳送Excel發票開立方式</value>
+    <comment>選擇傳送Excel發票開立方式</comment>
   </data>
 </root>

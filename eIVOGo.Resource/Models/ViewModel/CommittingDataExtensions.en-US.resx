@@ -117,12 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="查無資料" xml:space="preserve">
-    <value>No information found!!</value>
-    <comment>查無資料</comment>
+  <data name="相同的企業統編已存在!!" xml:space="preserve">
+    <value>The same corporate editor already exists!!</value>
+    <comment>相同的企業統編已存在!!</comment>
   </data>
-  <data name="查詢結果" xml:space="preserve">
-    <value>Search result</value>
-    <comment>查詢結果</comment>
+  <data name="請設定公司類別!!" xml:space="preserve">
+    <value>Please set the company category!!</value>
+    <comment>請設定公司類別!!</comment>
+  </data>
+  <data name="請設定發票類別!!" xml:space="preserve">
+    <value>Please set the invoice type!!</value>
+    <comment>請設定發票類別!!</comment>
   </data>
 </root>
