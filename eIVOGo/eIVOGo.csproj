@@ -1094,6 +1094,7 @@
     <Content Include="Views\Account\CbsLogin.cshtml" />
     <Content Include="Views\Forms\SimpleAllowance.cshtml" />
     <Content Include="Views\Common\Module\EnumSelect.cshtml" />
+    <Content Include="Views\Handling\index.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="Views\Home\MainPage.aspx" />
     <Content Include="Module\Ajax\PagingControl.ascx" />
@@ -1471,7 +1472,6 @@
     <Content Include="Views\DonatedInvoice\ReportGridPage.aspx" />
     <Content Include="Views\DonatedInvoice\ReportIndex.aspx" />
     <Content Include="Views\DonatedInvoice\ReportResult.aspx" />
-    <Content Include="Views\Handling\Index.aspx" />
     <Content Include="Views\Home\Module\TodoList.ascx" />
     <Content Include="Views\DataView\ShowInvoicePageView.aspx" />
     <Content Include="Views\InquireInvoice\ByCategory.ascx" />
@@ -2015,8 +2015,6 @@
     <Content Include="Views\OrganizationQuery\Module\CompanyResult.cshtml" />
     <Content Include="Views\OrganizationQuery\Index.cshtml" />
     <Content Include="Views\OrganizationQuery\Module\InquireOrganization.cshtml" />
-    <Content Include="Views\OrganizationQuery\InquiryResult.cshtml" />
-    <Content Include="Views\OrganizationQuery\Module\InquiryResult.cshtml" />
     <Content Include="Views\Organization\Module\GatewaySettings.cshtml" />
     <Content Include="Views\ProcessRequest\DataField\ExceptionContent.cshtml" />
     <Content Include="Views\Notification\Module\IssuedC0401.cshtml" />
@@ -2059,6 +2057,7 @@
     <Content Include="Views\WinningNumber\Module\EditItem.cshtml" />
     <Content Include="Views\WinningNumber\ResultAction\DoMatch.cshtml" />
     <Content Include="Views\WinningNumber\Module\QueryRequired.cshtml" />
+    <Content Include="Views\Organization\Module\ApplyIssuerAgent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

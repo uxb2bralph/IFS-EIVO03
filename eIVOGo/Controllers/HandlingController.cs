@@ -15,6 +15,7 @@ using Model.Security.MembershipManagement;
 using ModelExtension.Helper;
 using Newtonsoft.Json;
 using Utility;
+using Organization = Model.DataEntity.Organization;
 
 namespace eIVOGo.Controllers
 {
@@ -38,7 +39,7 @@ namespace eIVOGo.Controllers
         public ActionResult DisableCompany(int companyID)
         {
             updateCompanyStatus(companyID, Naming.MemberStatusDefinition.Mark_To_Delete);
-            return View("Index");
+            return View("~/Views/Handling/Index.cshtml");
         }
 
         private void updateCompanyStatus(int companyID, Naming.MemberStatusDefinition status)
@@ -67,7 +68,7 @@ namespace eIVOGo.Controllers
         public ActionResult EnableCompany(int companyID)
         {
             updateCompanyStatus(companyID, Naming.MemberStatusDefinition.Checked);
-            return View("Index");
+            return View("~/Views/Handling/Index.cshtml");
         }
 
         public ActionResult ApplyRelationship(int companyID)
@@ -96,7 +97,7 @@ namespace eIVOGo.Controllers
                 }
             }
 
-            return View("Index");
+            return View("~/Views/Handling/Index.cshtml");
         }
 
         public ActionResult MailTracking()
@@ -369,7 +370,7 @@ namespace eIVOGo.Controllers
             {
                 // TODO: Add update logic here
 
-                return RedirectToAction("Index");
+                return RedirectToAction("~/Views/Handling/Index.cshtml");
             }
             catch
             {
@@ -391,7 +392,7 @@ namespace eIVOGo.Controllers
             {
                 // TODO: Add delete logic here
 
-                return RedirectToAction("Index");
+                return RedirectToAction("~/Views/Handling/Index.cshtml");
             }
             catch
             {
