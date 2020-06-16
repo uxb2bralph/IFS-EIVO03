@@ -49,6 +49,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\BusinessRelationship.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BusinessRelationship.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\BusinessRelationship.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BusinessRelationship.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\DataView.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -201,6 +211,111 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="Views\BusinessRelationship\ImportCounterpartBusiness.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImportCounterpartBusiness.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\AddItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\AddItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\CounterpartBusinessXmlResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CounterpartBusinessXmlResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\CounterpartBusinessXmlResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CounterpartBusinessXmlResult.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\DataItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\DataItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\EditImportCounterpartBusinessXml.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditImportCounterpartBusinessXml.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\EditImportCounterpartBusinessXml.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditImportCounterpartBusinessXml.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\GroupMemberSelector.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GroupMemberSelector.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\GroupMemberSelector.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GroupMemberSelector.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\ImportCounterpartBusinessBranch.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImportCounterpartBusinessBranch.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\ImportCounterpartBusinessBranch.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImportCounterpartBusinessBranch.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\ImportCounterpartBusinessList.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImportCounterpartBusinessList.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\ImportCounterpartBusinessList.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImportCounterpartBusinessList.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\ItemList.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemList.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\ItemList.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemList.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\MaintainBusinessRelationship.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MaintainBusinessRelationship.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\MaintainBusinessRelationship.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MaintainBusinessRelationship.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\QueryResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessRelationship\Module\QueryResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryResult.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Common\Enum\BusinessRelationshipStatus.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -221,6 +336,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EditableWinningPrizeType.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\Common\Enum\InvoiceCenterBusinessQueryType.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceCenterBusinessQueryType.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Enum\InvoiceCenterBusinessQueryType.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceCenterBusinessQueryType.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Common\Enum\MemberCategoryID.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -230,6 +355,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MemberCategoryID.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Page.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Page.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\Home\Module\CompanyQuickSearch.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -581,6 +711,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WinningNoQuery.en-US.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controllers\BusinessRelationship.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BusinessRelationship.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\BusinessRelationship.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BusinessRelationship.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controllers\DataView.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DataView.en-US.Designer.cs</LastGenOutput>
@@ -704,6 +842,91 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommittingDataExtensions.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\ImportCounterpartBusiness.en-US.resx" />
+    <EmbeddedResource Include="Views\BusinessRelationship\ImportCounterpartBusiness.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ImportCounterpartBusiness.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\AddItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\AddItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\CounterpartBusinessXmlResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CounterpartBusinessXmlResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\CounterpartBusinessXmlResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CounterpartBusinessXmlResult.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\DataItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\DataItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\EditImportCounterpartBusinessXml.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditImportCounterpartBusinessXml.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\EditImportCounterpartBusinessXml.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditImportCounterpartBusinessXml.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\GroupMemberSelector.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GroupMemberSelector.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\GroupMemberSelector.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GroupMemberSelector.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\ImportCounterpartBusinessBranch.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ImportCounterpartBusinessBranch.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\ImportCounterpartBusinessBranch.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ImportCounterpartBusinessBranch.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\ImportCounterpartBusinessList.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ImportCounterpartBusinessList.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\ImportCounterpartBusinessList.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ImportCounterpartBusinessList.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\ItemList.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemList.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\ItemList.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemList.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\MaintainBusinessRelationship.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MaintainBusinessRelationship.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\MaintainBusinessRelationship.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MaintainBusinessRelationship.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\QueryResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\BusinessRelationship\Module\QueryResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryResult.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Common\Enum\BusinessRelationshipStatus.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>BusinessRelationshipStatus.en-US.Designer.cs</LastGenOutput>
@@ -720,6 +943,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EditableWinningPrizeType.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Enum\InvoiceCenterBusinessQueryType.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceCenterBusinessQueryType.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Enum\InvoiceCenterBusinessQueryType.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceCenterBusinessQueryType.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Common\Enum\MemberCategoryID.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MemberCategoryID.en-US.Designer.cs</LastGenOutput>
@@ -727,6 +958,11 @@
     <EmbeddedResource Include="Views\Common\Enum\MemberCategoryID.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MemberCategoryID.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Page.en-US.resx" />
+    <EmbeddedResource Include="Views\Common\Page.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Page.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Home\Module\CompanyQuickSearch.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -828,6 +1064,7 @@
     <EmbeddedResource Include="Views\OrganizationQuery\Module\InquireOrganization.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InquireOrganization.en-US.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\OrganizationQuery\Module\InquireOrganization.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

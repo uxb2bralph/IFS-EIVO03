@@ -1,34 +1,16 @@
-
-@using System.IO
-@using System.Linq.Expressions
-
-
-@using eIVOGo.Helper
-@using Model.Locale
-@using eIVOGo.Models.ViewModel
-@using Model.Models.ViewModel
-@using Model.DataEntity
+﻿@using Model.DataEntity
 @using eIVOGo.Controllers
+@using eIVOGo.Resource.Views.Common
 
-@section headContent { 
- 
+
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
+
+    ViewBag.ActionName = TreeView.首頁___相對營業人管理;
+
+    ModelSource<InvoiceItem> models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    ModelStateDictionary _modelState = (ModelStateDictionary)ViewBag.ModelState;
 }
-@{ Html.RenderPartial("~/Views/BusinessRelationship/Module/MaintainBusinessRelationship.ascx");}
 
-<script runat="server">
+@{ Html.RenderPartial("~/Views/BusinessRelationship/Module/MaintainBusinessRelationship.cshtml");}
 
-    ModelSource<InvoiceItem> models;
-    ModelStateDictionary _modelState;
-
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        ViewBag.ActionName = "首頁 > 相對營業人管理";
-    }
-
-
-
-</script>

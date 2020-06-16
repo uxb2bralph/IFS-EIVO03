@@ -70,11 +70,47 @@ namespace eIVOGo.Resource.Views.Common {
         }
         
         /// <summary>
+        ///   查詢類似 匯入商務關係相對營業人 的當地語系化字串。
+        /// </summary>
+        public static string 匯入商務關係相對營業人 {
+            get {
+                return ResourceManager.GetString("匯入商務關係相對營業人", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 相對營業人管理-匯入相對營業人資料 的當地語系化字串。
+        /// </summary>
+        public static string 相對營業人管理_匯入相對營業人資料 {
+            get {
+                return ResourceManager.GetString("相對營業人管理_匯入相對營業人資料", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 首頁 的當地語系化字串。
+        /// </summary>
+        public static string 首頁 {
+            get {
+                return ResourceManager.GetString("首頁", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 首頁 &gt; 發票作業 的當地語系化字串。
         /// </summary>
         public static string 首頁___發票作業 {
             get {
                 return ResourceManager.GetString("首頁 > 發票作業", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 首頁 &gt; 相對營業人管理 的當地語系化字串。
+        /// </summary>
+        public static string 首頁___相對營業人管理 {
+            get {
+                return ResourceManager.GetString("首頁 > 相對營業人管理", resourceCulture);
             }
         }
         

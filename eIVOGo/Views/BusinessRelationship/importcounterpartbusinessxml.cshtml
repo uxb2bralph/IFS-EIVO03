@@ -1,34 +1,21 @@
-
-@using System.IO
-@using System.Linq.Expressions
-
-
-@using eIVOGo.Helper
+﻿@using eIVOGo.Helper
 @using Model.Locale
 @using eIVOGo.Models.ViewModel
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
+@using eIVOGo.Resource.Views.Common
 
-@section headContent { 
- 
-}
-@section mainContent { 
-@{ Html.RenderPartial("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessXml.ascx");}
- 
-}
-<script runat="server">
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
 
     ModelSource<InvoiceItem> models;
     ModelStateDictionary _modelState;
 
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    ViewBag.ActionName = TreeView.首頁 + " > " + TreeView.匯入商務關係相對營業人;
+}
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        ViewBag.ActionName = "首頁 > 匯入商務關係相對營業人";
-    }
-
-</script>
+@{ Html.RenderPartial("~/Views/BusinessRelationship/Module/EditImportCounterpartBusinessXml.cshtml");}
+d
