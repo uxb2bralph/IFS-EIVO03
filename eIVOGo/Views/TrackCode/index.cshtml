@@ -13,6 +13,7 @@
 @using eIVOGo.Resource.Views.Common
 @using eIVOGo.Resource.Views.TrackCode
 @model Model.Models.ViewModel.TrackCodeQueryViewModel
+@using page = eIVOGo.Resource.Views.Common.Page
 
 @{
     Layout = "~/Views/Template/MvcMainPage.cshtml";
@@ -68,13 +69,13 @@
                     var obj = $('#itemPagination').twbsPagination({
                 totalPages: @((recordCount+_pageSize-1) / _pageSize),
                         totalRecordCount: +@(recordCount),
-                        displayTotalPages: '@Index.總頁數',
-                        displayTotalRecordCount:'@Index.總筆數',
+                        displayTotalPages: '@page.總頁數',
+                        displayTotalRecordCount:'@page.總筆數',
                                 visiblePages: 10,
-                                first: '@Index.最前',
-                                prev: '@Index.上頁',
-                                next: '@Index.下頁',
-                                last: '@Index.最後',
+                                first: '@page.最前',
+                                prev: '@page.上頁',
+                                next: '@page.下頁',
+                                last: '@page.最後',
                                 initiateStartPageClick: false,
                                 onPageClick: function (event, page) {
                     uiTrackCodeQuery.inquire(page,function(data){
@@ -100,7 +101,7 @@
         }
         else
         {
-            <font color="red">@Index.查無資料!!</font>
+            <font color="red">@page.查無資料!!</font>
             { Html.RenderPartial("~/Views/TrackCode/Module/ItemList.cshtml", _model.Results); }
 
         }

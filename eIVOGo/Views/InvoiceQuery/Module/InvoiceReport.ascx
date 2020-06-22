@@ -8,6 +8,7 @@
 
 
 <%@ Import Namespace="System.IO" %>
+<a href="attachmentresult.cshtml">attachmentresult.cshtml</a>
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="eIVOGo.Helper" %>

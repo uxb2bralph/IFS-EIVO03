@@ -49,6 +49,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AllowanceProcess.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AllowanceProcess.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\AllowanceProcess.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AllowanceProcess.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\BusinessRelationship.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -88,6 +98,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceBusiness.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\InvoiceProcess.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceProcess.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\InvoiceProcess.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceProcess.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\Organization.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -210,6 +230,66 @@
       <DependentUpon>CommittingDataExtensions.en-US.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Views\AllowanceProcess\AllowanceQuery.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AllowanceQuery.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AllowanceProcess\AllowanceQuery.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AllowanceQuery.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AllowanceProcess\Module\AllowanceItemTable.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AllowanceItemTable.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AllowanceProcess\Module\AllowanceItemTable.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AllowanceItemTable.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AllowanceProcess\Module\DoVoidAllowance.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DoVoidAllowance.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AllowanceProcess\Module\DoVoidAllowance.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DoVoidAllowance.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AllowanceProcess\Module\InvokeCommitAction.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvokeCommitAction.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AllowanceProcess\Module\InvokeCommitAction.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvokeCommitAction.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AllowanceProcess\Module\PrintResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AllowanceProcess\Module\PrintResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintResult.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AllowanceProcess\Module\ResultAction.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResultAction.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AllowanceProcess\Module\ResultAction.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResultAction.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\BusinessRelationship\ImportCounterpartBusiness.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -361,6 +441,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Page.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\Common\Page.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Page.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Home\Module\CompanyQuickSearch.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -460,6 +545,286 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TodoList.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByAgent.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByAgent.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByAgent.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByAgent.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByAllowanceConsumption.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByAllowanceConsumption.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByAllowanceConsumption.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByAllowanceConsumption.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByAttachment.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByAttachment.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByAttachment.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByAttachment.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByBuyer.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByBuyer.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByBuyer.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByBuyer.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByBuyerName.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByBuyerName.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByBuyerName.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByBuyerName.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByCancellation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByCancellation.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByCancellation.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByCancellation.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByCarrierNo.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByCarrierNo.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByCarrierNo.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByCarrierNo.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByCarrierType.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByCarrierType.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByCarrierType.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByCarrierType.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByCategory.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByCategory.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByCategory.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByCategory.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByConsumption.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByConsumption.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByConsumption.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByConsumption.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByCustomerID.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByCustomerID.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByCustomerID.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByCustomerID.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByDate.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByDate.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByDate.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByDate.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByDonation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByDonation.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByDonation.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByDonation.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByDonatory.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByDonatory.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByDonatory.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByDonatory.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByInvoiceDate.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByInvoiceDate.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByInvoiceDate.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByInvoiceDate.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByInvoiceNo.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByInvoiceNo.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByInvoiceNo.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByInvoiceNo.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByPeriod.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByPeriod.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByPeriod.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByPeriod.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByPrintMark.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByPrintMark.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByPrintMark.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByPrintMark.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\BySeller.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BySeller.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\BySeller.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BySeller.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByWinningNumber.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByWinningNumber.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InquireInvoice\ByWinningNumber.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ByWinningNumber.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\DataAction\DataProcess.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataProcess.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\DataAction\DataProcess.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataProcess.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\InvoiceQuery.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceQuery.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\InvoiceQuery.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceQuery.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\EditInvoiceBuyer.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditInvoiceBuyer.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\EditInvoiceBuyer.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditInvoiceBuyer.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\ItemTable.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemTable.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\ItemTable.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemTable.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\QueryDirective.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryDirective.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\QueryDirective.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryDirective.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\QueryResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\QueryResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryResult.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\MainQueryAction.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainQueryAction.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\MainQueryAction.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainQueryAction.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ScriptHelper\Common.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ScriptHelper\Common.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\OrganizationQuery\Module\CompanyList.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -711,6 +1076,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WinningNoQuery.en-US.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controllers\AllowanceProcess.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AllowanceProcess.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\AllowanceProcess.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AllowanceProcess.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controllers\BusinessRelationship.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>BusinessRelationship.en-US.Designer.cs</LastGenOutput>
@@ -742,6 +1115,14 @@
     <EmbeddedResource Include="Controllers\InvoiceBusiness.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceBusiness.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\InvoiceProcess.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceProcess.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\InvoiceProcess.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceProcess.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Controllers\Organization.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -841,6 +1222,54 @@
     <EmbeddedResource Include="Models\ViewModel\CommittingDataExtensions.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommittingDataExtensions.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AllowanceProcess\AllowanceQuery.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AllowanceQuery.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AllowanceProcess\AllowanceQuery.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AllowanceQuery.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AllowanceProcess\Module\AllowanceItemTable.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AllowanceItemTable.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AllowanceProcess\Module\AllowanceItemTable.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AllowanceItemTable.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AllowanceProcess\Module\DoVoidAllowance.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DoVoidAllowance.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AllowanceProcess\Module\DoVoidAllowance.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DoVoidAllowance.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AllowanceProcess\Module\InvokeCommitAction.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvokeCommitAction.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AllowanceProcess\Module\InvokeCommitAction.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvokeCommitAction.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AllowanceProcess\Module\PrintResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrintResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AllowanceProcess\Module\PrintResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrintResult.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AllowanceProcess\Module\ResultAction.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResultAction.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AllowanceProcess\Module\ResultAction.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResultAction.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\BusinessRelationship\ImportCounterpartBusiness.en-US.resx" />
     <EmbeddedResource Include="Views\BusinessRelationship\ImportCounterpartBusiness.resx">
@@ -959,9 +1388,12 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MemberCategoryID.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Common\Page.en-US.resx" />
-    <EmbeddedResource Include="Views\Common\Page.resx">
+    <EmbeddedResource Include="Views\Common\Page.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Page.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Page.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Page.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Home\Module\CompanyQuickSearch.en-US.resx">
@@ -1044,6 +1476,230 @@
     <EmbeddedResource Include="Views\Home\Module\TodoList.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TodoList.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByAgent.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByAgent.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByAgent.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByAgent.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByAllowanceConsumption.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByAllowanceConsumption.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByAllowanceConsumption.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByAllowanceConsumption.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByAttachment.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByAttachment.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByAttachment.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByAttachment.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByBuyer.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByBuyer.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByBuyer.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByBuyer.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByBuyerName.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByBuyerName.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByBuyerName.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByBuyerName.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByCancellation.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByCancellation.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByCancellation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByCancellation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByCarrierNo.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByCarrierNo.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByCarrierNo.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByCarrierNo.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByCarrierType.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByCarrierType.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByCarrierType.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByCarrierType.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByCategory.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByCategory.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByCategory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByCategory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByConsumption.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByConsumption.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByConsumption.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByConsumption.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByCustomerID.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByCustomerID.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByCustomerID.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByCustomerID.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByDate.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByDate.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByDate.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByDate.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByDonation.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByDonation.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByDonation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByDonation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByDonatory.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByDonatory.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByDonatory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByDonatory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByInvoiceDate.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByInvoiceDate.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByInvoiceDate.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByInvoiceDate.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByInvoiceNo.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByInvoiceNo.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByInvoiceNo.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByInvoiceNo.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByPeriod.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByPeriod.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByPeriod.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByPeriod.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByPrintMark.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByPrintMark.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByPrintMark.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByPrintMark.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\BySeller.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BySeller.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\BySeller.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BySeller.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByWinningNumber.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByWinningNumber.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InquireInvoice\ByWinningNumber.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ByWinningNumber.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\DataAction\DataProcess.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataProcess.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\DataAction\DataProcess.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataProcess.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQuery.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceQuery.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQuery.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceQuery.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\EditInvoiceBuyer.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditInvoiceBuyer.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\EditInvoiceBuyer.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditInvoiceBuyer.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\ItemTable.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemTable.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\ItemTable.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemTable.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\QueryDirective.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryDirective.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\QueryDirective.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryDirective.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\QueryResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\QueryResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryResult.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\MainQueryAction.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainQueryAction.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\MainQueryAction.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainQueryAction.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ScriptHelper\Common.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ScriptHelper\Common.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\OrganizationQuery\Module\CompanyList.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -1,5 +1,4 @@
-
-@using System.IO
+﻿@using System.IO
 @using System.Linq.Expressions
 
 @using eIVOGo.Helper
@@ -9,6 +8,7 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+
 <script>
     $(function () {
         var $postForm;
@@ -113,14 +113,3 @@
 
     });
 </script>
-<script runat="server">
-
-    ModelSource<InvoiceItem> models;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-    }
-</script>
-

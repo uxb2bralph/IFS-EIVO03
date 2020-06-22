@@ -1,15 +1,4 @@
-
-@using System.IO
-@using System.Linq.Expressions
-
-@using eIVOGo.Helper
-@using eIVOGo.Models
-@using Model.DataEntity
-@using Model.Helper
-@using Model.Locale
-@using Utility
-@using Uxnet.Web.WebUI
-<script>
+﻿<script>
     $(function () {
         var $postForm;
         var $postFrame = $('<iframe name="dataFrame" width="0" height="0">').appendTo($('body'));
@@ -67,14 +56,3 @@
         };
     });
 </script>
-<script runat="server">
-
-    ModelSource<InvoiceItem> models;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-    }
-</script>
-

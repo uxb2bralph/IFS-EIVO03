@@ -1,5 +1,4 @@
-
-@using System.IO
+﻿@using System.IO
 @using System.Linq.Expressions
 
 @using eIVOGo.Helper
@@ -12,6 +11,13 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using res = eIVOGo.Resource.Views.InvoiceProcess.ScriptHelper.Common
+
+@{
+    ModelSource<InvoiceItem> models;
+    InquireInvoiceViewModel _viewModel;
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
 
 <script>
     var uiInvoiceQuery;
@@ -21,7 +27,7 @@
             inquire: function (pageNum, onPaging) {
 
                 var $this = uiInvoiceQuery;
-                var $placement = $('button:contains("查詢")').closest('table');
+                var $placement = $('button:contains(@res.查詢)').closest('table');
                 var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
 
                 if (isNaN(pageNum)) {
@@ -63,7 +69,7 @@
             },
             print: function (style,processType) {
                 if (!$('input[name="chkItem"]').is(':checked')) {
-                    alert('請選擇列印資料!!');
+                    alert('@res.請選擇列印資料__');
                     return false;
                 }
 
@@ -149,16 +155,3 @@
         };
     });
 </script>
-<script runat="server">
-
-    ModelSource<InvoiceItem> models;
-    InquireInvoiceViewModel _viewModel;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-
-    }
-</script>
-

@@ -1,5 +1,4 @@
-
-@using System.IO
+﻿@using System.IO
 @using System.Linq.Expressions
 
 @using eIVOGo.Helper
@@ -12,6 +11,12 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+
+@{
+    InquireInvoiceViewModel _viewModel;
+
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
 
 <script>
     $(function () {
@@ -47,15 +52,3 @@
         };
     });
 </script>
-<script runat="server">
-
-    ModelSource<InvoiceItem> models;
-    InquireInvoiceViewModel _viewModel;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-    }
-</script>
-

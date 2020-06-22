@@ -1,5 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl" %>
 <%@ Register Src="~/Module/JsGrid/JsGridInitialization.ascx" TagPrefix="uc1" TagName="JsGridInitialization" %>
+<%@ Register Src="~/Views/Module/InquiryAlert.ascx" TagPrefix="uc1" TagName="InquiryAlert" %>
+
 
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
@@ -78,7 +80,7 @@
             itemTemplate: function (value, item) {
                 return $('<pre>')
                     .append(value).append('<br/>')
-                    .append(item.TaxAmount).append('<br/>')
+                    .append(item.TaxAmount).append('<br/>') < uc1: InquiryAlert runat = "server" id = "InquiryAlert" />
                     .append(item.TotalAmount);
             },
             footerTemplate: function () { return "<%= String.Format("{0:##,###,###,##0.##}", ((ModelSource<InvoiceItem>)Model).Items.Sum(i => i.InvoiceAmountType.TotalAmount)) %>"; }
