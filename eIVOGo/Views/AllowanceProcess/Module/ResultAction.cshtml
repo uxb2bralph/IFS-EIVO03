@@ -12,6 +12,8 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using res=eIVOGo.Resource.Views.AllowanceProcess.Module.ResultAction
+
 @{
     ModelSource<InvoiceItem> models;
     IQueryable<InvoiceAllowance> _model;
@@ -29,14 +31,14 @@
             <td class="Bargain_btn">
                 @if (_viewModel.ProcessType == Naming.InvoiceProcessType.B0401)
                 {
-                    <button type="button" class="btn" name="paperStyle" value="A4" onclick="uiAllowanceQuery.print('A4');">A4格式列印</button>
+                    <button type="button" class="btn" name="paperStyle" value="A4" onclick="uiAllowanceQuery.print('A4');">@res.A4格式列印</button>
                 }
                 else if (_viewModel.ProcessType == Naming.InvoiceProcessType.D0401)
                 {
-                    <button type="button" class="btn" name="paperStyle" value="POS" onclick="uiAllowanceQuery.print('POS');">熱感紙規格列印</button>
+                    <button type="button" class="btn" name="paperStyle" value="POS" onclick="uiAllowanceQuery.print('POS');">@res.熱感紙規格列印</button>
                 }
-                <input type="button" class="btn" name="btnPrint" value="Excel下載" onclick="uiAllowanceQuery.download();" />
-                <button type="button" class="btn" name="btnNotify" onclick="uiAllowanceQuery.notify();">重送開立通知</button>
+                <input type="button" class="btn" name="btnPrint" value="@res.Excel下載" onclick="uiAllowanceQuery.download();" />
+                <button type="button" class="btn" name="btnNotify" onclick="uiAllowanceQuery.notify();">@res.重送開立通知</button>
                 @{ 
                     Html.RenderPartial("~/Views/AllowanceProcess/Module/DoVoidAllowance.cshtml");
                 }

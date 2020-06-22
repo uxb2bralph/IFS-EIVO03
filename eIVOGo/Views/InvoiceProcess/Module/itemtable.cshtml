@@ -14,44 +14,75 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using res = eIVOGo.Resource.Views.InvoiceProcess.Module.ItemTable
+
+@{
+
+    ModelSource<InvoiceItem> models;
+    IQueryable<InvoiceItem> _model;
+    String _listID = "itemList" + DateTime.Now.Ticks;
+    InquireInvoiceViewModel _viewModel;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<InvoiceItem>)this.Model;
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+
+    List<string> amountShow = new List<String>();
+}
 
 <table id="@(_listID)" class="table01 itemList">
     <thead>
         <tr>
             <th aria-sort="other">
-                <input name="chkAll" type="checkbox" /></th>
-            <th data-sort="1">日期</th>
-            <th data-sort="2">客戶 ID</th>
-            <th data-sort="3">序號</th>
-            <th data-sort="4">開立發票營業人</th>
-            <th data-sort="5">統編</th>
-            <th data-sort="6">發票號碼</th>
-            <th data-sort="7">未稅金額</th>
-            <th data-sort="8">稅額</th>
-            <th data-sort="9">含稅金額</th>
-            <th data-sort="10">是否中獎</th>
-            <th data-sort="11">買受人統編</th>
-            <th aria-sort="other">發票狀態</th>
-            <th aria-sort="other">名稱</th>
-            <th aria-sort="other">連絡人名稱</th>
-            <th aria-sort="other">地址</th>
-            <th aria-sort="other">email</th>
-            <th aria-sort="other">備註</th>
-            <th aria-sort="other">開立通知</th>
-            <th aria-sort="other">載具資訊</th>
-            <th aria-sort="other">列印註記</th>
-            <th aria-sort="other" style="min-width: 140px;">管理</th>
+                <input name="chkAll" type="checkbox" />
+            </th>
+            <th data-sort="1">@res.日期</th>
+            <th data-sort="2">@res.客戶_ID</th>
+            <th data-sort="3">@res.序號</th>
+            <th data-sort="4">@res.開立發票營業人</th>
+            <th data-sort="5">@res.統編</th>
+            <th data-sort="6">@res.發票號碼</th>
+            <th data-sort="7">@res.未稅金額</th>
+            <th data-sort="8">@res.稅額</th>
+            <th data-sort="9">@res.含稅金額</th>
+            <th aria-sort="other">@res.幣別</th>
+            <th data-sort="10">@res.是否中獎</th>
+            <th data-sort="11">@res.買受人統編</th>
+            <th aria-sort="other">@res.發票狀態</th>
+            <th aria-sort="other">@res.名稱</th>
+            <th aria-sort="other">@res.連絡人名稱</th>
+            <th aria-sort="other">@res.地址</th>
+            <th aria-sort="other">@res.email</th>
+            <th aria-sort="other">@res.備註</th>
+            <th aria-sort="other">@res.開立通知</th>
+            <th aria-sort="other">@res.載具資訊</th>
+            <th aria-sort="other">@res.列印註記</th>
+            <th aria-sort="other" style="min-width: 140px;">@res.管理</th>
         </tr>
     </thead>
     <tbody>
-        @{ Html.RenderPartial("~/Views/InvoiceProcess/Module/ItemList.ascx", _model);}
+        @{ Html.RenderPartial("~/Views/InvoiceProcess/Module/ItemList.cshtml", _model);}
 
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="22">含稅金額總計：&nbsp;@(String.Format("{0:##,###,###,##0}",_model.Sum(i=>i.InvoiceAmountType.TotalAmount)))，
-                未稅金額總計：&nbsp;@(String.Format("{0:##,###,###,##0}",_model.Sum(i=>i.InvoiceAmountType.SalesAmount)))，
-                稅額總計：&nbsp;@(String.Format("{0:##,###,###,##0}",_model.Sum(i=>i.InvoiceAmountType.TaxAmount)))
+            <td colspan="25">
+                @{
+                    foreach (var g in _model.GroupBy(i => i.InvoiceAmountType.CurrencyID))
+                    {
+                        var currency = g.Key.HasValue ? models.GetTable<CurrencyType>().Where(c => c.CurrencyID == g.Key).FirstOrDefault()?.AbbrevName : "TWD";
+                        string totalAmount = res.含稅金額總計 + "(" + currency + ")： " + String.Format("{0:##,###,###,##0}", g.Sum(i => i.InvoiceAmountType.TotalAmount)) + "，";
+                        string salesAmount = res.未稅金額總計 + "(" + currency + ")： " + String.Format("{0:##,###,###,##0}", g.Sum(i => i.InvoiceAmountType.SalesAmount)) + "，";
+                        string taxAmount = res.稅額總計 + "(" + currency + ")： " + String.Format("{0:##,###,###,##0}", g.Sum(i => i.InvoiceAmountType.TaxAmount)) ;
+
+                        amountShow.Add(totalAmount + salesAmount + taxAmount);
+                    }
+                }
+                
+                @foreach (var item in amountShow)
+                {
+                    @item <br />
+                }
 
                 <script>
                     debugger;
@@ -96,7 +127,7 @@
                                 $(".itemList input[name='chkAll']").prop('checked', false);
                             }
                         });
-                        
+
                     });
                 </script>
             </td>
@@ -104,22 +135,4 @@
     </tfoot>
 </table>
 
-<script runat="server">
 
-    ModelSource<InvoiceItem> models;
-    IQueryable<InvoiceItem> _model;
-    String _listID = "itemList" + DateTime.Now.Ticks;
-    InquireInvoiceViewModel _viewModel;
-
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<InvoiceItem>)this.Model;
-        _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-
-    }
-
-</script>

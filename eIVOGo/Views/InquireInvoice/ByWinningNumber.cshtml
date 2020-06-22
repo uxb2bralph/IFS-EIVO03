@@ -14,17 +14,19 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res = eIVOGo.Resource.Views.InquireInvoice.ByWinningNumber
+
 @{
     InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 }
 <tr>
     <th>
-        是否中獎
+        @res.是否中獎
     </th>
     <td class="tdleft">
         <select name="Winning" class="form-control">
-            <option value="">全部</option>
-            <option value="1">是</option>
+            <option value="">@res.全部</option>
+            <option value="1">@res.是</option>
         </select>
     </td>
 </tr>

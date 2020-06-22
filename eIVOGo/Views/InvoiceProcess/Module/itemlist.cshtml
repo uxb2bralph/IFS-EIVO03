@@ -1,4 +1,4 @@
-
+﻿
 @using System.Linq
 @using System.IO
 @using System.Linq.Expressions
@@ -14,66 +14,60 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using Business.Helper
 
-@{ int idx = 0;}
- @foreach (var item in _items)
-    {
-        idx++;
-<tr>
-    @{ Html.RenderPartial(_dataItemView, item);}
-
-</tr>
-}
-
-<script runat="server">
-
+@{
     ModelSource<InvoiceItem> models;
     IQueryable<InvoiceItem> _items;
     IQueryable<InvoiceItem> _model;
-    IOrderedQueryable<InvoiceItem> _order;
+    
     int[] _sort;
     String _dataItemView;
     InquireInvoiceViewModel _viewModel;
     Dictionary<int, LambdaExpression> _sortExpr;
 
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<InvoiceItem>)this.Model;
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 
-    protected override void OnInit(EventArgs e)
+    _dataItemView = ViewBag.DataItemView ?? "~/Views/InvoiceProcess/Module/DataItem.cshtml";
+
+    _sort = _viewModel.SortIndex();
+
+    if (ViewBag.SortExpression == null)
     {
-        base.OnInit(e);
-
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<InvoiceItem>)this.Model;
-        _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-
-        _dataItemView = ViewBag.DataItemView ?? "~/Views/InvoiceProcess/Module/DataItem.ascx";
-
-        _sort = _viewModel.SortIndex();
-
-        if (ViewBag.SortExpression == null)
-        {
-            ViewBag.SortExpression = _sortExpr = new Dictionary<int, LambdaExpression>();
-        }
-        else
-        {
-            _sortExpr = (Dictionary<int, LambdaExpression>)ViewBag.SortExpression;
-        }
-
-        if (_sort != null && _sort.Length > 0)
-        {
-            sorting();
-            sortBy();
-        }
-        else
-        {
-            _model = _model.OrderByDescending(i => i.InvoiceID);
-        }
-
-        _items = _model
-            .Skip((int)_viewModel.PageIndex * (int)_viewModel.PageSize)
-            .Take((int)_viewModel.PageSize);
+        ViewBag.SortExpression = _sortExpr = new Dictionary<int, LambdaExpression>();
+    }
+    else
+    {
+        _sortExpr = (Dictionary<int, LambdaExpression>)ViewBag.SortExpression;
     }
 
-    void sorting()
+    if (_sort != null && _sort.Length > 0)
+    {
+        sorting(_sortExpr);
+        sortBy(_sort,_model,_sortExpr);
+    }
+    else
+    {
+        _model = _model.OrderByDescending(i => i.InvoiceID);
+    }
+
+    _items = _model
+        .Skip((int)_viewModel.PageIndex * (int)_viewModel.PageSize)
+        .Take((int)_viewModel.PageSize);
+}
+
+
+@foreach (var item in _items)
+{
+    <tr>
+        @{ Html.RenderPartial(_dataItemView, item);}
+    </tr>
+}
+
+@functions {
+    void sorting( Dictionary<int, LambdaExpression> _sortExpr)
     {
         _sortExpr.Add(1, (Expression<Func<InvoiceItem, DateTime?>>)(p => p.InvoiceDate));
         _sortExpr.Add(2, (Expression<Func<InvoiceItem, String>>)(i => i.InvoiceBuyer.CustomerID));
@@ -89,7 +83,7 @@
         _sortExpr.Add(6, (Expression<Func<InvoiceItem, String>>)(i => i.TrackCode + i.No));
     }
 
-    void sortBy()
+    void sortBy(int[] _sort,IQueryable<InvoiceItem> _model, Dictionary<int, LambdaExpression> _sortExpr)
     {
         Expression sort;
         int idx = _sort[0];
@@ -118,8 +112,4 @@
             _model = _model.Provider.CreateQuery<InvoiceItem>(sort);
         }
     }
-
-
-
-
-</script>
+}

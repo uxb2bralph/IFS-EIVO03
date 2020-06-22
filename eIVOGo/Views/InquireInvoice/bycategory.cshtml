@@ -1,15 +1,13 @@
+﻿@using res = eIVOGo.Resource.Views.InquireInvoice.ByCategory
 
-@using System.Linq.Expressions
-@using Model.DataEntity
-@using Model.Locale
-@using Utility
 <tr>
-    <th>單據類型
+    <th>
+        @res.單據類型
     </th>
     <td class="tdleft">
         <select name="Category">
-            <option value="10">發票</option>
-            <option value="11">折讓證明</option>
+            <option value="10">@res.發票</option>
+            <option value="11">@res.折讓證明</option>
         </select>
         <script>
             $(function () {

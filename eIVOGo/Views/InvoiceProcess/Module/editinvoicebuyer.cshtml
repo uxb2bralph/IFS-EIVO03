@@ -14,6 +14,20 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using res = eIVOGo.Resource.Views.InvoiceProcess.Module.EditInvoiceBuyer
+
+@{
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    InvoiceBuyer _model;
+    InvoiceBuyerViewModel _viewModel;
+    String _dialogID = "buyer" + DateTime.Now.Ticks;
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = this.Model as InvoiceBuyer;
+    _viewModel = (InvoiceBuyerViewModel)ViewBag.ViewModel;
+}
 
 <div id="@(_dialogID)">
 
@@ -21,25 +35,25 @@
         <table class="table01 itemList" cellspacing="0" cellpadding="0" style="width: 100%;">
             <thead>
                 <tr>
-                    <th>發票號碼</th>
+                    <th>@res.發票號碼</th>
                     <th>@($"{_model.InvoiceItem.TrackCode}{_model.InvoiceItem.No}")</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <th>買受人名稱</th>
+                    <th>@res.買受人名稱</th>
                     <td>
                         <input type="text" name="CustomerName" value="@(_viewModel.CustomerName)" />
                     </td>
                 </tr>
                 <tr>
-                    <th>買受人統編</th>
+                    <th>@res.買受人統編</th>
                     <td>
                         <input type="text" name="ReceiptNo" value="@(_viewModel.ReceiptNo)" />
                     </td>
                 </tr>
                 <tr>
-                    <th>顧客ID</th>
+                    <th>@res.顧客ID</th>
                     <td>
                         <input type="text" name="CustomerID" value="@(_viewModel.CustomerID)" />
                     </td>
@@ -51,19 +65,19 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>連絡人名稱</th>
+                    <th>@res.連絡人名稱</th>
                     <td>
                         <input type="text" name="ContactName" value="@(_viewModel.ContactName)" />
                     </td>
-                </tr>               
+                </tr>
                 <tr>
-                    <th>連絡人電話</th>
+                    <th>@res.連絡人電話</th>
                     <td>
                         <input type="text" name="Phone" value="@(_viewModel.Phone)" />
                     </td>
                 </tr>
                 <tr>
-                    <th>連絡人地址</th>
+                    <th>@res.連絡人地址</th>
                     <td>
                         <input type="text" name="Address" value="@(_viewModel.Address)" />
                         <script>
@@ -92,18 +106,18 @@
 
                         </script>
                     </td>
-                </tr> 
+                </tr>
                 <tr>
-                    <th>郵遞區號</th>
+                    <th>@res.郵遞區號</th>
                     <td>
                         <input type="text" name="PostCode" value="@(_viewModel.PostCode)" />
                     </td>
-                </tr>                 
+                </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan="2" style="text-align:center;">
-                        <input type="button" value="確定" class="btn"/>
+                        <input type="button" value="@res.確定" class="btn" />
                     </td>
                 </tr>
             </tfoot>
@@ -116,7 +130,7 @@
             width: 'auto',
             resizable: true,
             //modal: true,
-            title: "<div class='modal-title'><h4><i class='fa fa-clock-o'></i> 編輯買受人資料</h4></div>",
+            title: "<div class='modal-title'><h4><i class='fa fa-clock-o'></i> @res.編輯買受人資料</h4></div>",
             buttons: [
             ],
             close: function (event, ui) {
@@ -125,7 +139,7 @@
         });
         debugger;
             $(function () {
-                $('#@(_dialogID) input:button[value="確定"]').on('click', function () {
+                $('#@(_dialogID) input:button[value="@res.確定"]').on('click', function () {
 
                 var event = event || window.event;
                 var $formData = $('#@(_dialogID)').find('input,select,textarea').serializeObject();
@@ -136,7 +150,7 @@
                     hideLoading();
                     if ($.isPlainObject(data)) {
                         if (data.result) {
-                            alert('作業完成!!');
+                            alert('@res.作業完成__');
                             $('#@(_dialogID)').dialog("close");
                             if (uiInvoiceQuery.refreshDataRow) {
                                 uiInvoiceQuery.refreshDataRow();
@@ -150,7 +164,7 @@
                 });
             });
 
-            $('#@(_dialogID) input:button[value="關閉"]').on('click', function () {
+            $('#@(_dialogID) input:button[value="@res.關閉"]').on('click', function () {
                 $('#@(_dialogID)').dialog("close");
             });
 
@@ -161,23 +175,3 @@
 </div>
 
 
-<script runat="server">
-
-    ModelStateDictionary _modelState;
-    ModelSource<InvoiceItem> models;
-    InvoiceBuyer _model;
-    InvoiceBuyerViewModel _viewModel;
-    String _dialogID = "buyer" + DateTime.Now.Ticks;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = this.Model as InvoiceBuyer;
-        _viewModel = (InvoiceBuyerViewModel)ViewBag.ViewModel;
-
-    }
-
-</script>

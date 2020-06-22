@@ -1,5 +1,4 @@
-
-@using System.Linq
+﻿@using System.Linq
 @using System.IO
 @using System.Linq.Expressions
 
@@ -17,6 +16,12 @@
 @using Business.Helper
 @using Uxnet.Web.WebUI
 
+@{
+    RenderStyleViewModel _viewModel;
+    _viewModel = (RenderStyleViewModel)ViewBag.ViewModel;
+    _viewModel.PrintCuttingLine = true;
+}
+
 <div>
     <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401
             ? "PrintA0401AsPDF"
@@ -25,23 +30,9 @@
     <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401
             ? "PrintA0401"
             : "PrintC0401","DataView",_viewModel))" target="_blank">網頁列印</a>
-    @if(_viewModel.PrintBack == true)
-            {
-    <br />
-    <span style="color: blue;">***列印時請記得選取雙面列印模式***</span>
+    @if (_viewModel.PrintBack == true)
+    {
+        <br />
+        <span style="color: blue;">***列印時請記得選取雙面列印模式***</span>
     }
 </div>
-
-
-<script runat="server">
-
-    RenderStyleViewModel _viewModel;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _viewModel = (RenderStyleViewModel)ViewBag.ViewModel;
-        _viewModel.PrintCuttingLine = true;
-    }
-
-</script>

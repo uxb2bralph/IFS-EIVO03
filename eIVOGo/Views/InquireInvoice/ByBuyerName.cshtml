@@ -14,12 +14,13 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res= eIVOGo.Resource.Views.InquireInvoice.ByBuyerName
 @{
     InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 }
 <tr>
     <th>
-        買受人名稱
+        @res.買受人名稱
     </th>
     <td class="tdleft">
         <input name="BuyerName" type="text" value="@(_viewModel?.BuyerName)" class="form-control"/>

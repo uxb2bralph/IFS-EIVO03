@@ -1,5 +1,4 @@
-
-@using System.IO
+﻿@using System.IO
 @using System.Linq.Expressions
 
 @using eIVOGo.Helper
@@ -12,41 +11,37 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using page = eIVOGo.Resource.Views.Common.Page
 
-    <input type="hidden" name="pageIndex" />
-    <nav aria-label="Page navigation">
-        <ul class="pagination" id="@(_paginationID)"></ul>
-    </nav>
-    <script>
+@{    
+    ModelSource<InvoiceItem> models;
+    QueryViewModel _queryViewModel;
+    String _paginationID = "itemPagination" + DateTime.Now.Ticks;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _queryViewModel = (QueryViewModel)ViewBag.QueryViewModel;
+}
+
+<input type="hidden" name="pageIndex" />
+<nav aria-label="Page navigation">
+    <ul class="pagination" id="@(_paginationID)"></ul>
+</nav>
+<script>
         $(function () {
             var obj = $('#@(_paginationID)').twbsPagination({
-                totalPages: @((_viewModel.RecordCount + _viewModel.PageSize - 1) / _viewModel.PageSize),
-                        totalRecordCount: @(_viewModel.RecordCount),
+                totalPages: @((_queryViewModel.RecordCount + _queryViewModel.PageSize - 1) / _queryViewModel.PageSize),
+                totalRecordCount: @(_queryViewModel.RecordCount),
+                        displayTotalPages: '@page.總頁數',
+                        displayTotalRecordCount:'@page.總筆數',
                         visiblePages: 10,
-                        first: '最前',
-                        prev: '上頁',
-                        next: '下頁',
-                        last: '最後',
+                        first: '@page.最前',
+                        prev: '@page.上頁',
+                        next: '@page.下頁',
+                        last: '@page.最後',
                         initiateStartPageClick: false,
                         onPageClick: function (event, page) {
-                            @(_viewModel.OnPageCallScript);
+                            @(_queryViewModel.OnPageCallScript);
                         }
                     });
                 });
-    </script>
-
-<script runat="server">
-
-    ModelSource<InvoiceItem> models;
-    QueryViewModel _viewModel;
-    String _paginationID = "itemPagination" + DateTime.Now.Ticks;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _viewModel = (QueryViewModel)ViewBag.ViewModel;
-    }
-
 </script>
-

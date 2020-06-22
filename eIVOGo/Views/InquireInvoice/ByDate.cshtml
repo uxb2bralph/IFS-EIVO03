@@ -14,17 +14,19 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res = eIVOGo.Resource.Views.InquireInvoice.ByDate
+
 @{
     InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 }
 <tr>
     <th>
-        日期區間
+        @res.日期區間
     </th>
     <td class="tdleft">
-        自&nbsp;<input name="DateFrom" class="form_date form-control" type="text" size="10" readonly="readonly" value="@($"{_viewModel?.DateFrom:yyyy/MM/dd}")" />
-        &nbsp;至&nbsp;
-        <input name="DateTo" class="form_date form-control" type="text" size="10" readonly="readonly" value="@($"{_viewModel?.DateTo:yyyy/MM/dd}")"  />
+        @res.自&nbsp;<input name="DateFrom" class="form_date form-control" type="text" size="10" readonly="readonly" value="@($"{_viewModel?.DateFrom:yyyy/MM/dd}")" />
+        &nbsp;@res.至&nbsp;
+        <input name="DateTo" class="form_date form-control" type="text" size="10" readonly="readonly" value="@($"{_viewModel?.DateTo:yyyy/MM/dd}")" />
     </td>
 </tr>
 

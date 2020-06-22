@@ -1,7 +1,4 @@
-
-@{ Register Src="~/Module/Common/PagingControl.ascx" TagName="PagingControl" TagPrefix="uc2" }
-@{ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" }
-@{ Register Src="~/Module/Common/ActionHandler.ascx" TagName="ActionHandler" TagPrefix="uc1" }
+﻿
 @using System.IO
 @using System.Linq.Expressions
 
@@ -15,11 +12,25 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using page=eIVOGo.Resource.Views.Common.Page
 
-@{ var recordCount = _model.Count();}
- @if (recordCount > 0)
-    {
-    @{ Html.RenderPartial("~/Views/InvoiceProcess/Module/ItemTable.ascx", _model);}
+@{
+    ModelSource<InvoiceItem> models;
+    IQueryable<InvoiceItem> _model;
+    InquireInvoiceViewModel _viewModel;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+
+    _model = (IQueryable<InvoiceItem>)this.Model;
+
+    var recordCount = _model.Count();
+}
+
+@if (recordCount > 0)
+{
+    Html.RenderPartial("~/Views/InvoiceProcess/Module/ItemTable.cshtml", _model);
 
     <input type="hidden" name="pageIndex" />
     <nav aria-label="Page navigation">
@@ -29,12 +40,14 @@
         $(function () {
             var obj = $('#itemPagination').twbsPagination({
                 totalPages: @((recordCount + _viewModel.PageSize - 1) / _viewModel.PageSize),
-                        totalRecordCount: @(recordCount),
+                totalRecordCount: @(recordCount),
+                        displayTotalPages: '@page.總頁數',
+                        displayTotalRecordCount:'@page.總筆數',
                         visiblePages: 10,
-                        first: '最前',
-                        prev: '上頁',
-                        next: '下頁',
-                        last: '最後',
+                        first: '@page.最前',
+                        prev: '@page.上頁',
+                        next: '@page.下頁',
+                        last: '@page.最後',
                         initiateStartPageClick: false,
                         onPageClick: function (event, page) {
                             uiInvoiceQuery.inquire(page);
@@ -43,23 +56,3 @@
                 });
     </script>
 }
-
-<script runat="server">
-
-
-    ModelSource<InvoiceItem> models;
-    IQueryable<InvoiceItem> _model;
-    InquireInvoiceViewModel _viewModel;
-
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-
-        _model = (IQueryable<InvoiceItem>)this.Model;
-    }
-
-</script>
-

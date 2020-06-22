@@ -8,7 +8,7 @@
 @{
     Layout = "~/Views/Template/MvcMainPage.cshtml";
     ViewBag.ActionName = TreeView.首頁___發票作業;
-    string _inquiryView = (String)ViewBag.InquiryView ?? "~/Views/InvoiceProcess/InvoiceQuery.ascx";
+    string _inquiryView = (String)ViewBag.InquiryView ?? "~/Views/InvoiceProcess/InvoiceQuery.cshtml";
 }
 
 @{ Html.RenderPartial(_inquiryView);}

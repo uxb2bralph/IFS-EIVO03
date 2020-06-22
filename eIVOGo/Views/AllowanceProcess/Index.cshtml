@@ -13,6 +13,7 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res = eIVOGo.Resource.Views.Common.TreeView
 @{
     Layout = "~/Views/Template/MvcMainPage.cshtml";
 
@@ -23,7 +24,7 @@
     UserProfileMember _profile = Context.GetUser();
     _modelState = (ModelStateDictionary)ViewBag.ModelState;
 
-    ViewBag.ActionName = "首頁 > 發票作業";
+    ViewBag.ActionName = res.首頁___發票作業;
 }
 @section headContent {
 

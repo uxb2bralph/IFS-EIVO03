@@ -46,7 +46,7 @@
         _model = (IQueryable<InvoiceAllowance>)this.Model;
         _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 
-        _dataItemView = ViewBag.DataItemView ?? "~/Views/AllowanceProcess/Module/DataItem.ascx";
+        _dataItemView = ViewBag.DataItemView ?? "~/Views/AllowanceProcess/Module/DataItem.cshtml";
 
         _sort = _viewModel.SortIndex();
 

@@ -14,15 +14,17 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res=eIVOGo.Resource.Views.InquireInvoice.ByBuyer
+
 @{
     InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 }
 <tr>
     <th>
-        買受人統編
+        @res.買受人統編
     </th>
     <td class="tdleft">
-        <input name="BuyerReceiptNo" type="text" value="@(_viewModel?.BuyerReceiptNo)" placeholder="查詢個人發票請輸入0000000000" maxlength="11" size="32" class="form-control" />
+        <input name="BuyerReceiptNo" type="text" value="@(_viewModel?.BuyerReceiptNo)" placeholder="@res.查詢個人發票請輸入 0000000000" maxlength="11" size="32" class="form-control" />
     </td>
 </tr>
 
