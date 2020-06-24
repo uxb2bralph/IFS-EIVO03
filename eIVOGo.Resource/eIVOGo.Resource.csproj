@@ -916,6 +916,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MainQueryAction.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\VoidDone.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VoidDone.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\VoidDone.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VoidDone.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceProcess\ScriptHelper\Common.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1874,6 +1884,14 @@
     <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\MainQueryAction.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainQueryAction.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\VoidDone.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>VoidDone.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\VoidDone.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>VoidDone.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\ScriptHelper\Common.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
