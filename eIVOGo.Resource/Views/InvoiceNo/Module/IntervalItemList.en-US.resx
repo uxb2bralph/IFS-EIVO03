@@ -117,32 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="_2" xml:space="preserve">
-    <value>Home &gt; Member Management and Maintenance</value>
-    <comment>首頁 &gt; 會員管理維護</comment>
+  <data name="字軌" xml:space="preserve">
+    <value>Track Code</value>
   </data>
-  <data name="匯入商務關係相對營業人" xml:space="preserve">
-    <value>Remitted business relationship relative business person</value>
+  <data name="已配號" xml:space="preserve">
+    <value>Assigned number</value>
   </data>
-  <data name="相對營業人管理_匯入相對營業人資料" xml:space="preserve">
-    <value>Relative business person management-import relative business person information</value>
+  <data name="發票年度" xml:space="preserve">
+    <value>Invoice year</value>
   </data>
-  <data name="電子發票號碼維護" xml:space="preserve">
-    <value>Electronic invoice number maintenance</value>
+  <data name="發票期別" xml:space="preserve">
+    <value>Invoice period</value>
   </data>
-  <data name="首頁" xml:space="preserve">
-    <value>Home</value>
+  <data name="發票號碼起" xml:space="preserve">
+    <value>Invoice number start</value>
   </data>
-  <data name="首頁 &gt; 發票作業" xml:space="preserve">
-    <value>Home &gt; Invoice assignment</value>
-    <comment>首頁 &gt; 發票作業</comment>
+  <data name="發票號碼迄" xml:space="preserve">
+    <value>Invoice number end</value>
   </data>
-  <data name="首頁 &gt; 相對營業人管理" xml:space="preserve">
-    <value>Home &gt; Relative business management</value>
-    <comment>首頁 &gt; 相對營業人管理</comment>
+  <data name="管理" xml:space="preserve">
+    <value>management</value>
   </data>
-  <data name="首頁 &gt; 系統管理維護" xml:space="preserve">
-    <value>Home &gt; System Management and Maintenance</value>
-    <comment>首頁 &gt; 系統管理維護</comment>
+  <data name="配號總數_剩餘" xml:space="preserve">
+    <value>The total number of allocation / remaining</value>
   </data>
 </root>

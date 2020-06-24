@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace eIVOGo.Resource.Views.Common {
+namespace eIVOGo.Resource.Views.InvoiceNo.Module {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace eIVOGo.Resource.Views.Common {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class TreeView {
+    public class IntervalItemList {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal TreeView() {
+        internal IntervalItemList() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace eIVOGo.Resource.Views.Common {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Views.Common.TreeView", typeof(TreeView).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Views.InvoiceNo.Module.IntervalItemList", typeof(IntervalItemList).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,74 +61,74 @@ namespace eIVOGo.Resource.Views.Common {
         }
         
         /// <summary>
-        ///   查詢類似 首頁 &gt; 會員管理維護 的當地語系化字串。
+        ///   查詢類似 字軌 的當地語系化字串。
         /// </summary>
-        public static string _2 {
+        public static string 字軌 {
             get {
-                return ResourceManager.GetString("_2", resourceCulture);
+                return ResourceManager.GetString("字軌", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 匯入商務關係相對營業人 的當地語系化字串。
+        ///   查詢類似 已配號 的當地語系化字串。
         /// </summary>
-        public static string 匯入商務關係相對營業人 {
+        public static string 已配號 {
             get {
-                return ResourceManager.GetString("匯入商務關係相對營業人", resourceCulture);
+                return ResourceManager.GetString("已配號", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 相對營業人管理-匯入相對營業人資料 的當地語系化字串。
+        ///   查詢類似 發票年度 的當地語系化字串。
         /// </summary>
-        public static string 相對營業人管理_匯入相對營業人資料 {
+        public static string 發票年度 {
             get {
-                return ResourceManager.GetString("相對營業人管理_匯入相對營業人資料", resourceCulture);
+                return ResourceManager.GetString("發票年度", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 電子發票號碼維護 的當地語系化字串。
+        ///   查詢類似 發票期別 的當地語系化字串。
         /// </summary>
-        public static string 電子發票號碼維護 {
+        public static string 發票期別 {
             get {
-                return ResourceManager.GetString("電子發票號碼維護", resourceCulture);
+                return ResourceManager.GetString("發票期別", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 首頁 的當地語系化字串。
+        ///   查詢類似 發票號碼起 的當地語系化字串。
         /// </summary>
-        public static string 首頁 {
+        public static string 發票號碼起 {
             get {
-                return ResourceManager.GetString("首頁", resourceCulture);
+                return ResourceManager.GetString("發票號碼起", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 首頁 &gt; 發票作業 的當地語系化字串。
+        ///   查詢類似 發票號碼迄 的當地語系化字串。
         /// </summary>
-        public static string 首頁___發票作業 {
+        public static string 發票號碼迄 {
             get {
-                return ResourceManager.GetString("首頁 > 發票作業", resourceCulture);
+                return ResourceManager.GetString("發票號碼迄", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 首頁 &gt; 相對營業人管理 的當地語系化字串。
+        ///   查詢類似 管理 的當地語系化字串。
         /// </summary>
-        public static string 首頁___相對營業人管理 {
+        public static string 管理 {
             get {
-                return ResourceManager.GetString("首頁 > 相對營業人管理", resourceCulture);
+                return ResourceManager.GetString("管理", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 首頁 &gt; 系統管理維護 的當地語系化字串。
+        ///   查詢類似 配號總數／剩餘 的當地語系化字串。
         /// </summary>
-        public static string 首頁___系統管理維護 {
+        public static string 配號總數_剩餘 {
             get {
-                return ResourceManager.GetString("首頁 > 系統管理維護", resourceCulture);
+                return ResourceManager.GetString("配號總數_剩餘", resourceCulture);
             }
         }
     }

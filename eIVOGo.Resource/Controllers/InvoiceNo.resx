@@ -117,32 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="_2" xml:space="preserve">
-    <value>Home &gt; Member Management and Maintenance</value>
-    <comment>首頁 &gt; 會員管理維護</comment>
+  <data name="不符號碼大小順序與差距為50之倍數原則!!" xml:space="preserve">
+    <value>The principle of the order of the size of the symbol code and the gap is a multiple of 50!!</value>
   </data>
-  <data name="匯入商務關係相對營業人" xml:space="preserve">
-    <value>Remitted business relationship relative business person</value>
+  <data name="剩餘號碼不足單一本組數_無法分割_" xml:space="preserve">
+    <value>The remaining numbers are not enough for a single group and cannot be divided!!</value>
   </data>
-  <data name="相對營業人管理_匯入相對營業人資料" xml:space="preserve">
-    <value>Relative business person management-import relative business person information</value>
+  <data name="整理完成!!" xml:space="preserve">
+    <value>Finished!!</value>
   </data>
-  <data name="電子發票號碼維護" xml:space="preserve">
-    <value>Electronic invoice number maintenance</value>
+  <data name="未設定字軌!!" xml:space="preserve">
+    <value>No track set!!</value>
   </data>
-  <data name="首頁" xml:space="preserve">
-    <value>Home</value>
+  <data name="空白發票字軌" xml:space="preserve">
+    <value>Blank invoice track</value>
   </data>
-  <data name="首頁 &gt; 發票作業" xml:space="preserve">
-    <value>Home &gt; Invoice assignment</value>
-    <comment>首頁 &gt; 發票作業</comment>
+  <data name="系統中已存在重疊的區段!!" xml:space="preserve">
+    <value>There are already overlapping sections in the system!!</value>
   </data>
-  <data name="首頁 &gt; 相對營業人管理" xml:space="preserve">
-    <value>Home &gt; Relative business management</value>
-    <comment>首頁 &gt; 相對營業人管理</comment>
+  <data name="該區間之號碼已經被使用,不可修改!!!!" xml:space="preserve">
+    <value>The number in this section has already been used and cannot be modified!!!</value>
   </data>
-  <data name="首頁 &gt; 系統管理維護" xml:space="preserve">
-    <value>Home &gt; System Management and Maintenance</value>
-    <comment>首頁 &gt; 系統管理維護</comment>
+  <data name="請輸入均分本數!!" xml:space="preserve">
+    <value>Please enter the average share!!</value>
+  </data>
+  <data name="請選擇年份!!" xml:space="preserve">
+    <value>Please select a year!!</value>
+  </data>
+  <data name="請選擇期別!!" xml:space="preserve">
+    <value>Please choose a period!!</value>
+  </data>
+  <data name="請選擇開立人!!" xml:space="preserve">
+    <value>Please choose an opener!!</value>
+  </data>
+  <data name="資料不存在!!" xml:space="preserve">
+    <value>Information does not exist!!</value>
+  </data>
+  <data name="起號非8位整數!!" xml:space="preserve">
+    <value>The starting number is not an 8-digit integer!!</value>
+  </data>
+  <data name="迄號非8位整數!!" xml:space="preserve">
+    <value>Non-8-digit integer so far!!</value>
+  </data>
+  <data name="違反序時序號原則該區段無法修改!!" xml:space="preserve">
+    <value>This section cannot be modified in violation of the principle of serial number!!</value>
+  </data>
+  <data name="違反序時序號原則該區段無法新增!!" xml:space="preserve">
+    <value>The section cannot be added if it violates the principle of serial number!!</value>
+  </data>
+  <data name="配號區間資料錯誤!!" xml:space="preserve">
+    <value>The data in the numbering section is incorrect!!</value>
   </data>
 </root>

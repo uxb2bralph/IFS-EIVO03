@@ -1,8 +1,5 @@
-
-
-@using System.IO
+﻿@using System.IO
 @using System.Linq.Expressions
-
 
 @using eIVOGo.Helper
 @using eIVOGo.Models
@@ -14,6 +11,21 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using Business.Helper
+@using res=eIVOGo.Resource.Views.InvoiceNo.Module.AllotInterval
+
+@{
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    InvoiceNoInterval _model;
+    InvoiceNoIntervalViewModel _viewModel;
+    String _dialogID = "allot" + DateTime.Now.Ticks;
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = this.Model as InvoiceNoInterval;
+    _viewModel = (InvoiceNoIntervalViewModel)ViewBag.ViewModel;
+}
 
 <div id="@(_dialogID)">
 
@@ -21,13 +33,13 @@
         <table class="table01 itemList" cellspacing="0" cellpadding="0" style="width: 100%;">
             <thead>
                 <tr>
-                    <th>@(_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.Year)/@(_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo*2-1)~@(_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo*2)</th>
+                    <th>@(_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.Year)/@(_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo * 2 - 1)~@(_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo * 2)</th>
                     <th>@(_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode)@(_model.StartNo)~@(_model.EndNo)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <th>平均分配本數</th>
+                    <th>@res.平均分配本數</th>
                     <td>
                         <input type="text" name="Parts" value="@(_viewModel.Parts)" />
                     </td>
@@ -36,7 +48,7 @@
             <tfoot>
                 <tr>
                     <td colspan="2" style="text-align:center;">
-                        <input type="button" value="確定" class="btn"/>
+                        <input type="button" value="@res.確定" class="btn" />
                     </td>
                 </tr>
             </tfoot>
@@ -49,7 +61,7 @@
             width: 'auto',
             resizable: true,
             //modal: true,
-            title: "<div class='modal-title'><h4><i class='fa fa-clock-o'></i> 配號區間分配本數</h4></div>",
+            title: "<div class='modal-title'><h4><i class='fa fa-clock-o'></i> @res.配號區間分配本數</h4></div>",
             buttons: [
             ],
             close: function (event, ui) {
@@ -58,7 +70,7 @@
         });
 
         $(function () {
-            $('#@(_dialogID) input:button[value="確定"]').on('click', function () {
+            $('#@(_dialogID) input:button[value="@res.確定"]').on('click', function () {
 
                 var event = event || window.event;
                 var $formData = $('#@(_dialogID)').find('input,select,textarea').serializeObject();
@@ -69,7 +81,7 @@
                     hideLoading();
                     if ($.isPlainObject(data)) {
                         if (data.result) {
-                            alert('作業完成!!');
+                            alert('@res.作業完成__');
                             $('#@(_dialogID)').dialog("close");
                             if (uiTrackCodeNo.inquire) {
                                 uiTrackCodeNo.inquire();
@@ -83,7 +95,7 @@
                 });
             });
 
-            $('#@(_dialogID) input:button[value="關閉"]').on('click', function () {
+            $('#@(_dialogID) input:button[value="@res.關閉"]').on('click', function () {
                 $('#@(_dialogID)').dialog("close");
             });
 
@@ -92,25 +104,3 @@
     </script>
 
 </div>
-
-
-<script runat="server">
-
-    ModelStateDictionary _modelState;
-    ModelSource<InvoiceItem> models;
-    InvoiceNoInterval _model;
-    InvoiceNoIntervalViewModel _viewModel;
-    String _dialogID = "allot" + DateTime.Now.Ticks;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = this.Model as InvoiceNoInterval;
-        _viewModel = (InvoiceNoIntervalViewModel)ViewBag.ViewModel;
-
-    }
-
-</script>

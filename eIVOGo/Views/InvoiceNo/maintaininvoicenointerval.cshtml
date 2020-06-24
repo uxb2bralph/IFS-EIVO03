@@ -1,4 +1,4 @@
-
+﻿
 @using System.IO
 @using System.Linq.Expressions
 
@@ -10,18 +10,12 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using eIVOGo.Helper
+@using tv = eIVOGo.Resource.Views.Common.TreeView
 
-@section headContent { 
- 
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
+
+    ViewBag.ActionName = tv.首頁 + " > " + tv.電子發票號碼維護;
 }
-@{ Html.RenderPartial("~/Views/InvoiceNo/InvoiceNoIntervalManager.ascx");}
 
-<script runat="server">
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        ViewBag.ActionName = "首頁 > 電子發票號碼維護";
-    }
-
-</script>
+@{ Html.RenderPartial("~/Views/InvoiceNo/InvoiceNoIntervalManager.cshtml");}

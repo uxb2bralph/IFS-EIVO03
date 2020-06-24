@@ -1,0 +1,62 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using Model.Locale
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Security.MembershipManagement
+@using eIVOGo.Controllers
+@using Business.Helper
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    IQueryable<Organization> _model;
+    SellerSelectorViewModel _viewModel = ViewBag.ViewModel as SellerSelectorViewModel;
+
+    if (_viewModel == null)
+    {
+        ViewBag.ViewModel = _viewModel = new SellerSelectorViewModel { };
+        _viewModel.FieldName = ViewBag.FieldName ?? "SellerID";
+    }
+
+    String _fieldName;
+    String _contentID = "id" + DateTime.Now.Ticks;
+    String _valueID = "value" + DateTime.Now.Ticks;
+    UserProfileMember _profile;
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<Organization>)this.Model;
+    _fieldName = _viewModel.FieldName ?? ViewBag.FieldName ?? "SellerID";
+    _profile = Context.GetUser();
+
+    // 開立人統編下拉選單
+    EnumSelectorViewModel enumSelectorViewModel = new EnumSelectorViewModel
+    {
+        FieldName = _fieldName,
+        FieldClass = "form-control"
+    };
+
+    if (ViewBag.SelectorIndication != null)
+    {
+        enumSelectorViewModel.SelectorIndication = ViewBag.SelectorIndicationValue;
+    }
+}
+
+@if (_profile.IsSystemAdmin())
+{
+    Html.RenderPartial("~/Views/Home/Module/CompanyQuickSearch.cshtml", _model);
+}
+else
+{
+    Html.RenderPartial("~/Views/Common/Module/EnumSelect.cshtml", enumSelectorViewModel);
+}
+
+
+
+

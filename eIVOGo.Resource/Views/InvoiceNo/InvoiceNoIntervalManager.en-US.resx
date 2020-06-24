@@ -117,32 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="_2" xml:space="preserve">
-    <value>Home &gt; Member Management and Maintenance</value>
-    <comment>首頁 &gt; 會員管理維護</comment>
+  <data name="POS本組數配置" xml:space="preserve">
+    <value>POS group configuration</value>
   </data>
-  <data name="匯入商務關係相對營業人" xml:space="preserve">
-    <value>Remitted business relationship relative business person</value>
+  <data name="全部" xml:space="preserve">
+    <value>All</value>
   </data>
-  <data name="相對營業人管理_匯入相對營業人資料" xml:space="preserve">
-    <value>Relative business person management-import relative business person information</value>
+  <data name="新增/修改發票號碼區間" xml:space="preserve">
+    <value>Add/modify invoice number range</value>
   </data>
-  <data name="電子發票號碼維護" xml:space="preserve">
-    <value>Electronic invoice number maintenance</value>
+  <data name="月" xml:space="preserve">
+    <value>Month</value>
   </data>
-  <data name="首頁" xml:space="preserve">
-    <value>Home</value>
+  <data name="查詢" xml:space="preserve">
+    <value>Inquire</value>
   </data>
-  <data name="首頁 &gt; 發票作業" xml:space="preserve">
-    <value>Home &gt; Invoice assignment</value>
-    <comment>首頁 &gt; 發票作業</comment>
+  <data name="查詢條件" xml:space="preserve">
+    <value>Query conditions</value>
   </data>
-  <data name="首頁 &gt; 相對營業人管理" xml:space="preserve">
-    <value>Home &gt; Relative business management</value>
-    <comment>首頁 &gt; 相對營業人管理</comment>
+  <data name="發票年度_民國年_" xml:space="preserve">
+    <value>Invoice year (the year of the Republic of China)</value>
   </data>
-  <data name="首頁 &gt; 系統管理維護" xml:space="preserve">
-    <value>Home &gt; System Management and Maintenance</value>
-    <comment>首頁 &gt; 系統管理維護</comment>
+  <data name="發票期別" xml:space="preserve">
+    <value>Invoice period</value>
+  </data>
+  <data name="確定分割此配號區間?" xml:space="preserve">
+    <value>Are you sure to split this numbering interval?</value>
+  </data>
+  <data name="確定刪除此筆資料?" xml:space="preserve">
+    <value>Are you sure you want to delete this information?</value>
+  </data>
+  <data name="資料已刪除!!" xml:space="preserve">
+    <value>Information deleted!!</value>
+  </data>
+  <data name="資料已更新!!" xml:space="preserve">
+    <value>Information has been updated!!</value>
+  </data>
+  <data name="配號區間已分割!!" xml:space="preserve">
+    <value>The numbering section has been divided!!</value>
+  </data>
+  <data name="開立人統編" xml:space="preserve">
+    <value>Opener unified number</value>
   </data>
 </root>

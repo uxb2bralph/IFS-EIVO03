@@ -99,6 +99,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceBusiness.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\InvoiceNo.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceNo.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\InvoiceNo.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceNo.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\InvoiceProcess.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -746,6 +756,96 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ByWinningNumber.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceNo\InvoiceNoIntervalManager.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceNoIntervalManager.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\InvoiceNoIntervalManager.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceNoIntervalManager.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\AddItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\AddItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\AllotInterval.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AllotInterval.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\AllotInterval.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AllotInterval.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\DataItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\DataItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\EditItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\EditItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\EditPOSBooklets.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditPOSBooklets.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\EditPOSBooklets.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EditPOSBooklets.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\IntervalItemList.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IntervalItemList.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\IntervalItemList.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IntervalItemList.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\QueryResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\QueryResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryResult.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\SellerSelector.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SellerSelector.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\Module\SellerSelector.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SellerSelector.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceProcess\DataAction\DataProcess.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1115,6 +1215,14 @@
     <EmbeddedResource Include="Controllers\InvoiceBusiness.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceBusiness.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\InvoiceNo.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceNo.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\InvoiceNo.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceNo.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Controllers\InvoiceProcess.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1637,6 +1745,79 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ByWinningNumber.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\InvoiceNoIntervalManager.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceNoIntervalManager.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\InvoiceNoIntervalManager.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceNoIntervalManager.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\AddItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\AddItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\AllotInterval.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AllotInterval.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\AllotInterval.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AllotInterval.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\DataItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\DataItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\EditItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\EditItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\EditPOSBooklets.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditPOSBooklets.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\EditPOSBooklets.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditPOSBooklets.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\IntervalItemList.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IntervalItemList.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\IntervalItemList.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IntervalItemList.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\QueryResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\QueryResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryResult.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\SellerSelector.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SellerSelector.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\Module\SellerSelector.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SellerSelector.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\DataAction\DataProcess.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DataProcess.en-US.Designer.cs</LastGenOutput>
@@ -1656,6 +1837,7 @@
     <EmbeddedResource Include="Views\InvoiceProcess\Module\EditInvoiceBuyer.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EditInvoiceBuyer.en-US.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\Module\EditInvoiceBuyer.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1729,6 +1911,7 @@
     <EmbeddedResource Include="Views\Organization\Module\ApplyIssuerAgent.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ApplyIssuerAgent.en-US.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Organization\Module\ApplyIssuerAgent.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -1,5 +1,4 @@
-
-@using System.IO
+﻿@using System.IO
 @using System.Linq.Expressions
 
 @using Model.DataEntity
@@ -7,36 +6,36 @@
 @using Model.DataEntity
 @using eIVOGo.Models.ViewModel
 @using Model.Models.ViewModel
-@{ Register Src="~/Module/jQuery/EnumSelector.ascx" TagPrefix="uc1" TagName="EnumSelector" }
+@using res=eIVOGo.Resource.Views.InvoiceNo.Module.AddItem
+
+@{
+    InquireNoIntervalViewModel _viewModel;
+    _viewModel = (InquireNoIntervalViewModel)ViewBag.ViewModel;
+
+    // 字軌下拉選單
+    EnumSelectorViewModel enumSelectorViewModel = new EnumSelectorViewModel
+    {
+        FieldName = "TrackID",
+        FieldClass = "form-control"
+    };
+}
 
 <tr>
     <td>@(_viewModel.Year)</td>
-    <td>@(String.Format("{0:00}-{1:00}月",_viewModel.PeriodNo*2-1,_viewModel.PeriodNo*2))</td>
-    <td>
-        @{ Html.RenderPartial("~/Views/InvoiceNo/Module/TrackCodeSelector.ascx");}
-
+    <td>@(String.Format("{0:00}-{1:00}{2}", _viewModel.PeriodNo * 2 - 1, _viewModel.PeriodNo * 2,res.月))</td>
+    <td>        
+        @{ Html.RenderPartial("~/Views/InvoiceNo/Module/TrackCodeSelector.cshtml", enumSelectorViewModel);}
         <input name="SellerID" type="hidden" value="@(_viewModel.SellerID)" />
     </td>
     <td>
-        <input type="text" name="StartNo" placeholder="請輸入配號區間起始號碼" value="" data-role="add" />
+        <input type="text" name="StartNo" placeholder="@res.請輸入配號區間起始號碼" value="" data-role="add" />
     </td>
     <td>
-        <input type="text" name="EndNo" placeholder="請輸入配號區間結尾號碼" value="" data-role="add" />
+        <input type="text" name="EndNo" placeholder="@res.請輸入配號區間結尾號碼" value="" data-role="add" />
     </td>
+    <td></td>
+    <td></td>
     <td>
-        <a class="btn" onclick="uiTrackCodeNo.commitItem();">新增配號區間</a>
+        <a class="btn" onclick="uiTrackCodeNo.commitItem();">@res.新增配號區間</a>
     </td>
 </tr>
-
-
-<script runat="server">
-
-    InquireNoIntervalViewModel _viewModel;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _viewModel = (InquireNoIntervalViewModel)ViewBag.ViewModel;
-    }
-
-</script>

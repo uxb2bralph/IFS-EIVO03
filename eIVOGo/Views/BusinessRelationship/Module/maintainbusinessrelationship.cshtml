@@ -191,7 +191,6 @@
         uiInquireBusiness = {
             $result: null,
             commitItem: function (value) {
-                alert('test');
                 var event = event || window.event;
                 var $tr = $(event.target).closest('tr');
                 $.post('@(Url.Action("CommitItem","BusinessRelationship"))', $.param($tr.find('input,select,textarea')), function (data) {

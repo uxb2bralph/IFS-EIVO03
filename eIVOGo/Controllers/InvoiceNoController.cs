@@ -1,31 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Linq;
-using System.Data.SqlClient;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
-
 using Business.Helper;
-using ClosedXML.Excel;
 using eIVOGo.Helper;
-using eIVOGo.Models;
-using eIVOGo.Models.ViewModel;
-using Model.Models.ViewModel;
-using eIVOGo.Properties;
 using Model.DataEntity;
-using Model.Locale;
+using Model.Models.ViewModel;
 using Model.Schema.TurnKey.E0402;
-using Model.Security.MembershipManagement;
 using Utility;
+using res = eIVOGo.Resource.Controllers.InvoiceNo;
 
 namespace eIVOGo.Controllers
 {
@@ -35,7 +21,7 @@ namespace eIVOGo.Controllers
         // GET: InvoiceNo
         public ActionResult MaintainInvoiceNoInterval()
         {
-            return View();
+            return View("~/Views/InvoiceNo/MaintainInvoiceNoInterval.cshtml");
         }
 
         public ActionResult InquireInterval(InquireNoIntervalViewModel viewModel)
@@ -47,7 +33,7 @@ namespace eIVOGo.Controllers
             IQueryable<InvoiceNoInterval> items = models.GetTable<InvoiceNoInterval>();
             if (profile.IsSystemAdmin())
             {
-                if(viewModel.SellerID.HasValue)
+                if (viewModel.SellerID.HasValue)
                 {
                     items = items.Where(t => t.InvoiceTrackCodeAssignment.SellerID == viewModel.SellerID);
                 }
@@ -66,13 +52,14 @@ namespace eIVOGo.Controllers
             if (viewModel.PeriodNo.HasValue)
                 items = items.Where(i => i.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo == viewModel.PeriodNo);
 
-            return View("~/Views/InvoiceNo/Module/QueryResult.ascx", items);
+            return View("~/Views/InvoiceNo/Module/QueryResult.cshtml", items);
+
         }
 
         public ActionResult InquireVacantNo(InquireNoIntervalViewModel viewModel)
         {
             var profile = HttpContext.GetUser();
-            
+
             ViewBag.ViewModel = viewModel;
 
             //if (!viewModel.SellerID.HasValue)
@@ -82,12 +69,12 @@ namespace eIVOGo.Controllers
 
             if (!viewModel.Year.HasValue)
             {
-                ModelState.AddModelError("Year", "請選擇年份!!");
+                ModelState.AddModelError("Year", res.請選擇年份__);
             }
 
             if (!viewModel.PeriodNo.HasValue)
             {
-                ModelState.AddModelError("PeriodNo", "請選擇期別!!");
+                ModelState.AddModelError("PeriodNo", res.請選擇期別__);
             }
 
             if (!ModelState.IsValid)
@@ -107,9 +94,9 @@ namespace eIVOGo.Controllers
             }
 
             List<InquireVacantNoResult> items = new List<InquireVacantNoResult>();
-            foreach(var org in orgItems)
+            foreach (var org in orgItems)
             {
-                items.AddRange(((EIVOEntityDataContext)models.GetDataContext()).InquireVacantNo(org.CompanyID,viewModel.Year,viewModel.PeriodNo));
+                items.AddRange(((EIVOEntityDataContext)models.GetDataContext()).InquireVacantNo(org.CompanyID, viewModel.Year, viewModel.PeriodNo));
             }
 
             return View("~/Views/InvoiceNo/VacantNo/QueryResult.ascx", items);
@@ -125,9 +112,9 @@ namespace eIVOGo.Controllers
 
             List<InquireVacantNoResult> items = (List<InquireVacantNoResult>)result.Model;
 
-            if(items.Count<=0)
+            if (items.Count <= 0)
             {
-                ViewBag.Message = "資料不存在!!";
+                ViewBag.Message = res.資料不存在__;
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
@@ -168,15 +155,15 @@ namespace eIVOGo.Controllers
 
                         List<DetailsBranchTrackBlankItem> details = new List<DetailsBranchTrackBlankItem>();
                         var detailItems = item.ToList();
-                        foreach(var blank in detailItems.Where(r => !r.CheckPrev.HasValue))
+                        foreach (var blank in detailItems.Where(r => !r.CheckPrev.HasValue))
                         {
-                            if(blank.CheckNext.HasValue)
+                            if (blank.CheckNext.HasValue)
                             {
                                 var index = detailItems.IndexOf(blank);
                                 details.Add(new DetailsBranchTrackBlankItem
                                 {
                                     InvoiceBeginNo = String.Format("{0:00000000}", blank.InvoiceNo),
-                                    InvoiceEndNo = String.Format("{0:00000000}", detailItems[index+1].InvoiceNo)
+                                    InvoiceEndNo = String.Format("{0:00000000}", detailItems[index + 1].InvoiceNo)
                                 });
                             }
                             else
@@ -196,13 +183,13 @@ namespace eIVOGo.Controllers
                         {
                             blankItem.ConvertToXml().Save(outStream);
                         }
-                        
+
                     }
                 }
             }
 
             var result = new FilePathResult(outFile, "message/rfc822");
-            result.FileDownloadName = "空白發票字軌.zip";
+            result.FileDownloadName = res.空白發票字軌 + ".zip";
             return result;
         }
 
@@ -218,7 +205,7 @@ namespace eIVOGo.Controllers
 
             if (items.Count <= 0)
             {
-                ViewBag.Message = "資料不存在!!";
+                ViewBag.Message = res.資料不存在__;
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
@@ -238,27 +225,27 @@ namespace eIVOGo.Controllers
             {
                 if (!viewModel.TrackID.HasValue)
                 {
-                    ModelState.AddModelError("TrackID", "未設定字軌!!");
+                    ModelState.AddModelError("TrackID", res.未設定字軌__);
                 }
 
                 if (!viewModel.SellerID.HasValue)
                 {
-                    ModelState.AddModelError("SellerID", "請選擇開立人!!");
+                    ModelState.AddModelError("SellerID", res.請選擇開立人__);
                 }
 
             }
 
             if (!viewModel.StartNo.HasValue || !(viewModel.StartNo >= 0 && viewModel.StartNo < 100000000))
             {
-                ModelState.AddModelError("StartNo", "起號非8位整數!!");
+                ModelState.AddModelError("StartNo", res.起號非8位整數__);
             }
             else if (!viewModel.EndNo.HasValue || !(viewModel.EndNo >= 0 && viewModel.EndNo < 100000000))
             {
-                ModelState.AddModelError("EndNo", "迄號非8位整數!!");
+                ModelState.AddModelError("EndNo", res.迄號非8位整數__);
             }
             else if (viewModel.EndNo <= viewModel.StartNo || ((viewModel.EndNo - viewModel.StartNo + 1) % 50 != 0))
             {
-                ModelState.AddModelError("StartNo", "不符號碼大小順序與差距為50之倍數原則!!");
+                ModelState.AddModelError("StartNo", res.不符號碼大小順序與差距為50之倍數原則__);
             }
             else
             {
@@ -266,17 +253,17 @@ namespace eIVOGo.Controllers
                 {
                     if (model.InvoiceNoAssignments.Count > 0)
                     {
-                        ModelState.AddModelError("IntervalID", "該區間之號碼已經被使用,不可修改!!!!");
+                        ModelState.AddModelError("IntervalID", res.該區間之號碼已經被使用_不可修改____);
                     }
                     else if (table.Any(t => t.IntervalID != model.IntervalID && t.TrackID == model.TrackID && t.StartNo >= viewModel.EndNo && t.InvoiceNoAssignments.Count > 0
                         && t.SellerID == model.SellerID))
                     {
-                        ModelState.AddModelError("StartNo", "違反序時序號原則該區段無法修改!!");
+                        ModelState.AddModelError("StartNo", res.違反序時序號原則該區段無法修改__);
                     }
                     else if (table.Any(t => t.IntervalID != model.IntervalID && t.TrackID == model.TrackID
                         && ((t.EndNo <= viewModel.EndNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.StartNo >= viewModel.StartNo) || (t.StartNo <= viewModel.StartNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.EndNo >= viewModel.EndNo))))
                     {
-                        ModelState.AddModelError("StartNo", "系統中已存在重疊的區段!!");
+                        ModelState.AddModelError("StartNo", res.系統中已存在重疊的區段__);
                     }
                 }
                 else
@@ -284,12 +271,12 @@ namespace eIVOGo.Controllers
                     if (table.Any(t => t.TrackID == viewModel.TrackID && t.StartNo >= viewModel.EndNo && t.InvoiceNoAssignments.Count > 0
                         && t.SellerID == viewModel.SellerID))
                     {
-                        ModelState.AddModelError("StartNo", "違反序時序號原則該區段無法新增!!");
+                        ModelState.AddModelError("StartNo", res.違反序時序號原則該區段無法新增__);
                     }
                     else if (table.Any(t => t.TrackID == viewModel.TrackID
                         && ((t.EndNo <= viewModel.EndNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.StartNo >= viewModel.StartNo) || (t.StartNo <= viewModel.StartNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.EndNo >= viewModel.EndNo))))
                     {
-                        ModelState.AddModelError("StartNo", "系統中已存在重疊的區段!!");
+                        ModelState.AddModelError("StartNo", res.系統中已存在重疊的區段__);
                     }
                 }
             }
@@ -327,14 +314,14 @@ namespace eIVOGo.Controllers
 
             models.SubmitChanges();
 
-            return View("~/Views/InvoiceNo/Module/DataItem.ascx", model);
+            return View("~/Views/InvoiceNo/Module/DataItem.cshtml", model);
 
         }
 
         public ActionResult EditNoInterval(InvoiceNoIntervalViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            if(viewModel.KeyID!=null)
+            if (viewModel.KeyID != null)
             {
                 viewModel.IntervalID = viewModel.DecryptKeyValue();
             }
@@ -345,17 +332,17 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "配號區間資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.配號區間資料錯誤__);
             }
 
             var profile = HttpContext.GetUser();
-            if(!profile.IsSystemAdmin())
+            if (!profile.IsSystemAdmin())
             {
-                if(item.InvoiceTrackCodeAssignment.SellerID!=profile.CurrentUserRole.OrganizationCategory.CompanyID)
-                    return View("~/Views/Shared/JsAlert.cshtml", model: "配號區間資料錯誤!!");
+                if (item.InvoiceTrackCodeAssignment.SellerID != profile.CurrentUserRole.OrganizationCategory.CompanyID)
+                    return View("~/Views/Shared/JsAlert.cshtml", model: res.配號區間資料錯誤__);
             }
 
-            return View("~/Views/InvoiceNo/Module/EditItem.ascx", item);
+            return View("~/Views/InvoiceNo/Module/EditItem.cshtml", item);
 
         }
 
@@ -372,8 +359,8 @@ namespace eIVOGo.Controllers
 
                 models.ExecuteCommand("delete InvoiceNoInterval where IntervalID = {0}", item.IntervalID);
                 return Json(new { result = true }, JsonRequestBehavior.AllowGet);
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logger.Error(ex);
                 return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
@@ -400,7 +387,7 @@ namespace eIVOGo.Controllers
                         var cutpoint = item.EndNo - ((remained - 100) / 50 * 50);
                         if (cutpoint == item.EndNo)
                         {
-                            return Json(new { result = false, message = "剩餘號碼不足單一本組數，無法分割！" }, JsonRequestBehavior.AllowGet);
+                            return Json(new { result = false, message = res.剩餘號碼不足單一本組數_無法分割_ }, JsonRequestBehavior.AllowGet);
                         }
 
                         InvoiceNoInterval newItem = new InvoiceNoInterval
@@ -436,9 +423,9 @@ namespace eIVOGo.Controllers
             if (item == null)
                 return result;
 
-            if(!viewModel.Parts.HasValue || viewModel.Parts<=0)
+            if (!viewModel.Parts.HasValue || viewModel.Parts <= 0)
             {
-                ModelState.AddModelError("Parts", "請輸入均分本數!!");
+                ModelState.AddModelError("Parts", res.請輸入均分本數__);
             }
 
             if (!ModelState.IsValid)
@@ -480,7 +467,7 @@ namespace eIVOGo.Controllers
 
             if (item != null)
             {
-                result.ViewName = "~/Views/InvoiceNo/Module/AllotInterval.ascx";
+                result.ViewName = "~/Views/InvoiceNo/Module/AllotInterval.cshtml";
             }
             return result;
         }
@@ -494,7 +481,7 @@ namespace eIVOGo.Controllers
             if (item == null)
                 return result;
 
-            return View("~/Views/InvoiceNo/Module/DataItem.ascx", item);
+            return View("~/Views/InvoiceNo/Module/DataItem.cshtml", item);
         }
 
         public ActionResult TrackCodeSelector(InquireNoIntervalViewModel viewModel)
@@ -516,17 +503,17 @@ namespace eIVOGo.Controllers
 
             if (!viewModel.SellerID.HasValue)
             {
-                ModelState.AddModelError("SellerID", "請選擇開立人!!");
+                ModelState.AddModelError("SellerID", res.請選擇開立人__);
             }
 
             if (!viewModel.Year.HasValue)
             {
-                ModelState.AddModelError("Year", "請選擇年份!!");
+                ModelState.AddModelError("Year", res.請選擇年份__);
             }
 
             if (!viewModel.PeriodNo.HasValue)
             {
-                ModelState.AddModelError("PeriodNo", "請選擇期別!!");
+                ModelState.AddModelError("PeriodNo", res.請選擇期別__);
             }
 
             if (!ModelState.IsValid)
@@ -537,7 +524,7 @@ namespace eIVOGo.Controllers
 
             models.GetDataContext().ProcessInvoiceNo(viewModel.SellerID, viewModel.Year, viewModel.PeriodNo);
 
-            ViewBag.Message = "整理完成!!";
+            ViewBag.Message = res.整理完成__;
             return View("~/Views/Shared/AlertMessage.cshtml");
 
 
@@ -550,10 +537,10 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlertMessage.ascx",model:"配號區間資料錯誤!!");
+                return View("~/Views/Shared/JsAlertMessage.ascx", model: res.配號區間資料錯誤__);
             }
 
-            return View("~/Views/InvoiceNo/Module/EditPOSBooklets.ascx", item);
+            return View("~/Views/InvoiceNo/Module/EditPOSBooklets.cshtml", item);
         }
 
     }

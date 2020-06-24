@@ -117,32 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="_2" xml:space="preserve">
-    <value>Home &gt; Member Management and Maintenance</value>
-    <comment>首頁 &gt; 會員管理維護</comment>
+  <data name="POS本組數配置" xml:space="preserve">
+    <value>POS group configuration</value>
   </data>
-  <data name="匯入商務關係相對營業人" xml:space="preserve">
-    <value>Remitted business relationship relative business person</value>
+  <data name="POS機號" xml:space="preserve">
+    <value>POS machine number</value>
   </data>
-  <data name="相對營業人管理_匯入相對營業人資料" xml:space="preserve">
-    <value>Relative business person management-import relative business person information</value>
+  <data name="共" xml:space="preserve">
+    <value>Total</value>
   </data>
-  <data name="電子發票號碼維護" xml:space="preserve">
-    <value>Electronic invoice number maintenance</value>
+  <data name="年" xml:space="preserve">
+    <value>Year</value>
   </data>
-  <data name="首頁" xml:space="preserve">
-    <value>Home</value>
+  <data name="月" xml:space="preserve">
+    <value>Month</value>
   </data>
-  <data name="首頁 &gt; 發票作業" xml:space="preserve">
-    <value>Home &gt; Invoice assignment</value>
-    <comment>首頁 &gt; 發票作業</comment>
+  <data name="本" xml:space="preserve">
+    <value />
   </data>
-  <data name="首頁 &gt; 相對營業人管理" xml:space="preserve">
-    <value>Home &gt; Relative business management</value>
-    <comment>首頁 &gt; 相對營業人管理</comment>
+  <data name="本組數" xml:space="preserve">
+    <value>Number of this group</value>
   </data>
-  <data name="首頁 &gt; 系統管理維護" xml:space="preserve">
-    <value>Home &gt; System Management and Maintenance</value>
-    <comment>首頁 &gt; 系統管理維護</comment>
+  <data name="本組數配置" xml:space="preserve">
+    <value>This group number configuration</value>
+  </data>
+  <data name="確定" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="重填" xml:space="preserve">
+    <value>Refill</value>
   </data>
 </root>
