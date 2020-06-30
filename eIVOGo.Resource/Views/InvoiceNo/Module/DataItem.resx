@@ -123,6 +123,9 @@
   <data name="修改" xml:space="preserve">
     <value>修改</value>
   </data>
+  <data name="分割" xml:space="preserve">
+    <value>分割</value>
+  </data>
   <data name="刪除" xml:space="preserve">
     <value>刪除</value>
   </data>

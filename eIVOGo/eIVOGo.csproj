@@ -1107,6 +1107,7 @@
     <Content Include="Views\AllowanceProcess\Module\AllowanceItemTable.cshtml" />
     <Content Include="Views\AllowanceProcess\Module\PrintResult.cshtml" />
     <Content Include="Views\Common\Module\Pagination.cshtml" />
+    <Content Include="Views\DataFlow\CounterpartBusinessSelector.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="Views\Home\MainPage.aspx" />
     <Content Include="Module\Ajax\PagingControl.ascx" />
@@ -2117,6 +2118,11 @@
     <Content Include="Views\InvoiceNo\Module\EditPOSBooklets.cshtml" />
     <Content Include="Views\InvoiceNo\Module\AllotInterval.cshtml" />
     <Content Include="Views\InvoiceNo\Module\EditItem.cshtml" />
+    <Content Include="Views\InvoiceBusiness\POSDevice\DataItem.cshtml" />
+    <Content Include="Views\InvoiceBusiness\POSDevice\EditItem.cshtml" />
+    <Content Include="Views\InvoiceBusiness\Module\InvoiceCreated.cshtml" />
+    <Content Include="Views\InvoiceBusiness\Module\A0401Created.cshtml" />
+    <Content Include="Views\InvoiceBusiness\Module\AllowanceCreated.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

@@ -34,6 +34,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{2F1547B6-2DD4-4A57-A40F-258103591603}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eIVOGo", "eIVOGo\eIVOGo.csproj", "{9E9ABA84-E224-4984-991C-6584573404B3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{74474526-6D59-455B-8E3C-C156AA4A8945} = {74474526-6D59-455B-8E3C-C156AA4A8945}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceClient", "InvoiceClient\InvoiceClient.csproj", "{90365DBC-0D13-4FA9-977E-9A8DF4A66E38}"
 EndProject
@@ -50,6 +53,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessorRecord", "ProcessorRecord\ProcessorRecord.csproj", "{0E0974E1-401D-4CA3-B38A-C94F8C8B9054}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfVerifier", "PdfVerifier\PdfVerifier.csproj", "{D2A43901-0A04-42F7-B4E1-7DD45395E11B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eIVOGo.Resource", "eIVOGo.Resource\eIVOGo.Resource.csproj", "{74474526-6D59-455B-8E3C-C156AA4A8945}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -255,6 +260,18 @@ Global
 		{D2A43901-0A04-42F7-B4E1-7DD45395E11B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D2A43901-0A04-42F7-B4E1-7DD45395E11B}.Release|x86.ActiveCfg = Release|Any CPU
 		{D2A43901-0A04-42F7-B4E1-7DD45395E11B}.Release|x86.Build.0 = Release|Any CPU
+		{74474526-6D59-455B-8E3C-C156AA4A8945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74474526-6D59-455B-8E3C-C156AA4A8945}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74474526-6D59-455B-8E3C-C156AA4A8945}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{74474526-6D59-455B-8E3C-C156AA4A8945}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{74474526-6D59-455B-8E3C-C156AA4A8945}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{74474526-6D59-455B-8E3C-C156AA4A8945}.Debug|x86.Build.0 = Debug|Any CPU
+		{74474526-6D59-455B-8E3C-C156AA4A8945}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74474526-6D59-455B-8E3C-C156AA4A8945}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74474526-6D59-455B-8E3C-C156AA4A8945}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{74474526-6D59-455B-8E3C-C156AA4A8945}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{74474526-6D59-455B-8E3C-C156AA4A8945}.Release|x86.ActiveCfg = Release|Any CPU
+		{74474526-6D59-455B-8E3C-C156AA4A8945}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

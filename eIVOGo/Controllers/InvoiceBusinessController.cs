@@ -59,7 +59,7 @@ namespace eIVOGo.Controllers
 
             models.SubmitChanges();
 
-            return View("~/Views/InvoiceBusiness/POSDevice/DataItem.ascx", item);
+            return View("~/Views/InvoiceBusiness/POSDevice/DataItem.cshtml", item);
 
         }
 
@@ -85,7 +85,7 @@ namespace eIVOGo.Controllers
                 return View("~/Views/Shared/JsAlert.cshtml", model: InvoiceBusiness.POS機編號錯誤);
             }
 
-            return View("~/Views/InvoiceBusiness/POSDevice/EditItem.ascx", item);
+            return View("~/Views/InvoiceBusiness/POSDevice/EditItem.cshtml", item);
 
         }
 
@@ -98,7 +98,7 @@ namespace eIVOGo.Controllers
                 return View("~/Views/Shared/JsAlert.cshtml", model: InvoiceBusiness.POS機編號錯誤);
             }
 
-            return View("~/Views/InvoiceBusiness/POSDevice/DataItem.ascx", item);
+            return View("~/Views/InvoiceBusiness/POSDevice/DataItem.cshtml", item);
         }
 
         public ActionResult GenerateGUID()
@@ -217,7 +217,7 @@ namespace eIVOGo.Controllers
                 viewModel.No = newItem.No;
 
 
-                return View("~/Views/InvoiceBusiness/Module/InvoiceCreated.ascx", newItem);
+                return View("~/Views/InvoiceBusiness/Module/InvoiceCreated.cshtml", newItem);
             }
             catch (Exception ex)
             {
@@ -264,7 +264,7 @@ namespace eIVOGo.Controllers
             viewModel.TrackCode = newItem.TrackCode;
             viewModel.No = newItem.No;
 
-            return View("~/Views/InvoiceBusiness/Module/A0401Created.ascx", newItem);
+            return View("~/Views/InvoiceBusiness/Module/A0401Created.cshtml", newItem);
 
         }
 
@@ -298,7 +298,7 @@ namespace eIVOGo.Controllers
             viewModel.TrackCode = newItem.TrackCode;
             viewModel.No = newItem.No;
 
-            return View("~/Views/InvoiceBusiness/Module/A0401Created.ascx", newItem);
+            return View("~/Views/InvoiceBusiness/Module/A0401Created.cshtml", newItem);
 
         }
 
@@ -332,7 +332,7 @@ namespace eIVOGo.Controllers
             }
             models.SubmitChanges();
 
-            return View("~/Views/InvoiceBusiness/Module/AllowanceCreated.ascx", newItem);
+            return View("~/Views/InvoiceBusiness/Module/AllowanceCreated.cshtml", newItem);
 
         }
 

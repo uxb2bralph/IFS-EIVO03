@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace eIVOGo.Resource.Views.InvoiceNo.Module {
+namespace eIVOGo.Resource.Views.Forms {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace eIVOGo.Resource.Views.InvoiceNo.Module {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class DataItem {
+    public class SimpleInvoice {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal DataItem() {
+        internal SimpleInvoice() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace eIVOGo.Resource.Views.InvoiceNo.Module {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Views.InvoiceNo.Module.DataItem", typeof(DataItem).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Views.Forms.SimpleInvoice", typeof(SimpleInvoice).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,65 +61,11 @@ namespace eIVOGo.Resource.Views.InvoiceNo.Module {
         }
         
         /// <summary>
-        ///   查詢類似 POS本組數配置 的當地語系化字串。
+        ///   查詢類似 首頁 &gt; 電子發票開立 的當地語系化字串。
         /// </summary>
-        public static string POS本組數配置 {
+        public static string 首頁___電子發票開立 {
             get {
-                return ResourceManager.GetString("POS本組數配置", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 修改 的當地語系化字串。
-        /// </summary>
-        public static string 修改 {
-            get {
-                return ResourceManager.GetString("修改", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 分割 的當地語系化字串。
-        /// </summary>
-        public static string 分割 {
-            get {
-                return ResourceManager.GetString("分割", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 刪除 的當地語系化字串。
-        /// </summary>
-        public static string 刪除 {
-            get {
-                return ResourceManager.GetString("刪除", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 月 的當地語系化字串。
-        /// </summary>
-        public static string 月 {
-            get {
-                return ResourceManager.GetString("月", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 本組數均分 的當地語系化字串。
-        /// </summary>
-        public static string 本組數均分 {
-            get {
-                return ResourceManager.GetString("本組數均分", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 請選擇功能 的當地語系化字串。
-        /// </summary>
-        public static string 請選擇功能 {
-            get {
-                return ResourceManager.GetString("請選擇功能", resourceCulture);
+                return ResourceManager.GetString("首頁 > 電子發票開立", resourceCulture);
             }
         }
     }

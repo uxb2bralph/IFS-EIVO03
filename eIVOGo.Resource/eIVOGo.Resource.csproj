@@ -456,6 +456,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Page.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\Forms\SimpleInvoice.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SimpleInvoice.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\SimpleInvoice.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SimpleInvoice.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Home\Module\CompanyQuickSearch.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1514,6 +1524,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Page.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\SimpleInvoice.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SimpleInvoice.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\SimpleInvoice.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SimpleInvoice.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Home\Module\CompanyQuickSearch.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CompanyQuickSearch.en-US.Designer.cs</LastGenOutput>
@@ -1758,10 +1776,12 @@
     <EmbeddedResource Include="Views\InvoiceNo\InvoiceNoIntervalManager.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceNoIntervalManager.en-US.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceNo\InvoiceNoIntervalManager.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceNoIntervalManager.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceNo\Module\AddItem.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -2119,6 +2139,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\DataView\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

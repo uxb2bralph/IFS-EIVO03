@@ -6,6 +6,14 @@
 @using Model.Locale
 @using Model.DataEntity
 
+@{ 
+
+    POSDevice _model;
+
+    _model = (POSDevice)this.Model;
+
+}
+
 <tr>
     <td>@(_model.POSNo)</td>
     <td>
@@ -21,14 +29,3 @@
 </tr>
 
 
-<script runat="server">
-
-    POSDevice _model;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _model = (POSDevice)this.Model;
-    }
-
-</script>

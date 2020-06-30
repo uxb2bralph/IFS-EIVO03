@@ -1,14 +1,13 @@
 
 @using System.IO
 @using System.Linq.Expressions
-
-
 @using eIVOGo.Helper
 @using Model.Locale
 @using eIVOGo.Models.ViewModel
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
+
 @{
 
     InvoiceViewModel _viewModel;
@@ -41,7 +40,7 @@
                 </th>
                 <td class="tdleft">
                     @{ ViewBag.FieldID = "SearchBuyer";
-                        Html.RenderPartial("~/Views/DataFlow/CounterpartBusinessSelector.ascx");}
+                        Html.RenderPartial("~/Views/DataFlow/CounterpartBusinessSelector.cshtml");}
 
                     <input name="BuyerReceiptNo" type="hidden" />
                     <input class="form-control" name="CustomerID" id="CustomerID" type="text" />

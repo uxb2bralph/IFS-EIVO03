@@ -130,6 +130,9 @@
   <data name="電子發票號碼維護" xml:space="preserve">
     <value>Electronic invoice number maintenance</value>
   </data>
+  <data name="電子發票開立" xml:space="preserve">
+    <value>Electronic invoice number issuance</value>
+  </data>
   <data name="首頁" xml:space="preserve">
     <value>Home</value>
   </data>

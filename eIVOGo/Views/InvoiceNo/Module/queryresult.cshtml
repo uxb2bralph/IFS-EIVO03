@@ -11,7 +11,7 @@
     _model = (IEnumerable<InvoiceNoInterval>)this.Model;
 }
 
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", res.查詢結果);}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.查詢結果);}
 
     <div class="border_gray" style="overflow-x: auto; max-width: 1024px;">
         @{ var recordCount = _model.Count();}

@@ -422,27 +422,27 @@ namespace eIVOGo.Controllers
                 DataTable table = new DataTable("發票資料明細");
                 ds.Tables.Add(table);
                 table.Columns.Add("InvoiceID", typeof(int));
-                table.Columns.Add(res.發票號碼);
-                table.Columns.Add(res.發票日期);
-                table.Columns.Add(res.附件檔名);
-                table.Columns.Add(res.附件檔頁數);
-                table.Columns.Add(res.客戶ID);
-                table.Columns.Add(res.序號);
-                table.Columns.Add(res.發票開立人);
-                table.Columns.Add(res.開立人統編);
-                table.Columns.Add(res.未稅金額);
-                table.Columns.Add(res.稅額);
-                table.Columns.Add(res.含稅金額);
-                table.Columns.Add(res.買受人名稱);
-                table.Columns.Add(res.買受人統編);
-                table.Columns.Add(res.連絡人名稱);
-                table.Columns.Add(res.連絡人地址);
-                table.Columns.Add(res.買受人EMail);
-                table.Columns.Add(res.愛心碼);
-                table.Columns.Add(res.是否中獎);
-                table.Columns.Add(res.載具類別);
-                table.Columns.Add(res.載具號碼);
-                table.Columns.Add(res.備註);
+                table.Columns.Add("發票號碼");
+                table.Columns.Add("發票日期");
+                table.Columns.Add("附件檔名");
+                table.Columns.Add("附件檔頁數");
+                table.Columns.Add("客戶ID");
+                table.Columns.Add("序號");
+                table.Columns.Add("發票開立人");
+                table.Columns.Add("開立人統編");
+                table.Columns.Add("未稅金額");
+                table.Columns.Add("稅額");
+                table.Columns.Add("含稅金額");
+                table.Columns.Add("買受人名稱");
+                table.Columns.Add("買受人統編");
+                table.Columns.Add("連絡人名稱");
+                table.Columns.Add("連絡人地址");
+                table.Columns.Add("買受人EMail");
+                table.Columns.Add("愛心碼");
+                table.Columns.Add("是否中獎");
+                table.Columns.Add("載具類別");
+                table.Columns.Add("載具號碼");
+                table.Columns.Add("備註");
 
                 //void InvoiceXls_RowChanged(object sender, DataRowChangeEventArgs e)
                 //{
@@ -455,7 +455,7 @@ namespace eIVOGo.Controllers
                 {
                     foreach (DataRow row in table.Rows)
                     {
-                        row[(res.附件檔頁數)] = ((int)row["InvoiceID"]).GetAttachedPdfPageCount(models);
+                        row[("附件檔頁數")] = ((int)row["InvoiceID"]).GetAttachedPdfPageCount(models);
                     }
                 }
 
@@ -471,11 +471,33 @@ namespace eIVOGo.Controllers
 
                 foreach (DataRow r in table.Rows)
                 {
-                    if ("0000000000".Equals(r[res.買受人統編]))
+                    if ("0000000000".Equals(r["買受人統編"]))
                     {
-                        r[res.買受人統編] = "";
+                        r["買受人統編"] = "";
                     }
                 }
+
+                table.Columns[0].Caption = res.發票號碼;
+                table.Columns[1].Caption = res.發票日期;
+                table.Columns[2].Caption = res.附件檔名;
+                table.Columns[3].Caption = res.附件檔頁數;
+                table.Columns[4].Caption = res.客戶ID;
+                table.Columns[5].Caption = res.序號;
+                table.Columns[6].Caption = res.發票開立人;
+                table.Columns[7].Caption = res.開立人統編;
+                table.Columns[8].Caption = res.未稅金額;
+                table.Columns[9].Caption = res.稅額;
+                table.Columns[10].Caption = res.含稅金額;
+                table.Columns[11].Caption = res.買受人名稱;
+                table.Columns[12].Caption = res.買受人統編;
+                table.Columns[13].Caption = res.連絡人名稱;
+                table.Columns[14].Caption = res.連絡人地址;
+                table.Columns[15].Caption = res.買受人EMail;
+                table.Columns[16].Caption = res.愛心碼;
+                table.Columns[17].Caption = res.是否中獎;
+                table.Columns[18].Caption = res.載具類別;
+                table.Columns[19].Caption = res.載具號碼;
+                table.Columns[20].Caption = res.備註;
 
                 using (var xls = ds.ConvertToExcel())
                 {
@@ -516,7 +538,7 @@ namespace eIVOGo.Controllers
                     EMail = i.InvoiceBuyer.EMail,
                 });
 
-            string filename= $"{res.發票買受人資料}.xlsx";
+            string filename = $"{res.發票買受人資料}.xlsx";
             Response.Clear();
             Response.ClearContent();
             Response.ClearHeaders();
@@ -528,14 +550,20 @@ namespace eIVOGo.Controllers
             {
                 DataTable table = new DataTable("買受人");
                 ds.Tables.Add(table);
-                table.Columns.Add(res.發票號碼);
-                table.Columns.Add(res.營業人名稱);
-                table.Columns.Add(res.收件人姓名);
-                table.Columns.Add(res.地址);
-                table.Columns.Add(res.電話);
+                table.Columns.Add("發票號碼");
+                table.Columns.Add("營業人名稱");
+                table.Columns.Add("收件人姓名");
+                table.Columns.Add("地址");
+                table.Columns.Add("電話");
                 table.Columns.Add("EMail");
 
                 DataSource.GetDataSetResult(items, table);
+
+                table.Columns[0].Caption = res.發票號碼;
+                table.Columns[1].Caption = res.營業人名稱;
+                table.Columns[2].Caption = res.收件人姓名;
+                table.Columns[3].Caption = res.地址;
+                table.Columns[4].Caption = res.電話;
 
                 using (var xls = ds.ConvertToExcel())
                 {
@@ -677,7 +705,7 @@ namespace eIVOGo.Controllers
                 mgr.VoidInvoice(chkItem);
                 if (mgr.EventItems != null && mgr.EventItems.Count > 0)
                 {
-                    ViewBag.Message = res.下列發票已作廢完成__+"\r\n" + String.Join("\r\n", mgr.EventItems.Select(i => i.TrackCode + i.No));
+                    ViewBag.Message = res.下列發票已作廢完成__ + "\r\n" + String.Join("\r\n", mgr.EventItems.Select(i => i.TrackCode + i.No));
                     EIVOPlatformFactory.Notify();
                 }
                 return View("~/Views/Shared/AlertMessage.cshtml");
@@ -741,7 +769,7 @@ namespace eIVOGo.Controllers
                 models.GetTable<DocumentAuthorization>().InsertAllOnSubmit(items);
                 models.SubmitChanges();
 
-                ViewBag.Message = res.下列發票已核准重印__+"\r\n" + String.Join("\r\n", items.Select(i => i.CDS_Document.InvoiceItem.TrackCode + i.CDS_Document.InvoiceItem.No));
+                ViewBag.Message = res.下列發票已核准重印__ + "\r\n" + String.Join("\r\n", items.Select(i => i.CDS_Document.InvoiceItem.TrackCode + i.CDS_Document.InvoiceItem.No));
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
             else

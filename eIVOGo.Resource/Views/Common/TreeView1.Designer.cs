@@ -97,6 +97,15 @@ namespace eIVOGo.Resource.Views.Common {
         }
         
         /// <summary>
+        ///   查詢類似 電子發票開立 的當地語系化字串。
+        /// </summary>
+        public static string 電子發票開立 {
+            get {
+                return ResourceManager.GetString("電子發票開立", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 首頁 的當地語系化字串。
         /// </summary>
         public static string 首頁 {
