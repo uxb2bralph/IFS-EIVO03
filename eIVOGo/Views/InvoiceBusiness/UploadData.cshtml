@@ -9,6 +9,7 @@
 @using Model.Security.MembershipManagement
 @using Business.Helper
 @using eIVOGo.Controllers
+@using res=eIVOGo.Resource.Views.InvoiceBusiness.UploadData
 
 @{
     Layout = "~/Views/Template/MvcMainPage.cshtml";
@@ -22,7 +23,7 @@
     _viewModel = (InvoiceViewModel)ViewBag.ViewModel;
 
     UserProfileMember _profile = Context.GetUser();
-    ViewBag.ActionName = "首頁 > 上傳開立資料";
+    ViewBag.ActionName = res.首頁___上傳開立資料;
     var _orgItem = models.GetTable<Organization>().Where(c => c.CompanyID == _profile.CurrentUserRole.OrganizationCategory.CompanyID).FirstOrDefault();
 }
 
@@ -37,7 +38,7 @@
     }
 }
 
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "傳送Excel資料");}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.傳送Excel資料);}
 
 <form role="form" method="post">
     @{ Html.RenderPartial("~/Views/InvoiceBusiness/Module/InvoiceProcessTypeDirection.cshtml");}
@@ -47,7 +48,7 @@
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
             <tr>
                 <th>
-                    請選擇營業人
+                    @res.請選擇營業人
                 </th>
                 <td class="tdleft">
                     @{
@@ -57,14 +58,14 @@
             </tr>
             <tr>
                 <th colspan="2" class="Head_style_a">
-                    各項資料
+                    @res.各項資料
                 </th>
             </tr>
             @{ 
                 Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadInvoice.cshtml",
                     new InvoiceRequestViewModel
                     {
-                        Comment = "【配號通用格式】",
+                        Comment = $"【{res.配號通用格式}】",
                         ProcessType = Naming.InvoiceProcessType.C0401_Xlsx,
                     });
                 if (_profile.IsSystemAdmin() || _orgItem?.OrganizationStatus?.InvoiceClientDefaultProcessType == (int)Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC)
@@ -72,7 +73,7 @@
                     Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadInvoice.cshtml",
                         new InvoiceRequestViewModel
                         {
-                            Comment = "【加值中心配號】",
+                            Comment = $"【{res.加值中心配號}】",
                             ProcessType = Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC,
                         });
                 }
@@ -81,7 +82,7 @@
                     Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadInvoice.cshtml",
                         new InvoiceRequestViewModel
                         {
-                            Comment = "【開立人配號】",
+                            Comment = $"【{res.開立人配號}】",
                             ProcessType = Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer,
                         });
                 }
@@ -91,7 +92,7 @@
                     Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadInvoice.cshtml",
                         new InvoiceRequestViewModel
                         {
-                            Comment = "【境外電商專用】",
+                            Comment = $"【{res.境外電商專用}】",
                             ProcessType = Naming.InvoiceProcessType.C0401_Xlsx_CBE,
                         });
                 }

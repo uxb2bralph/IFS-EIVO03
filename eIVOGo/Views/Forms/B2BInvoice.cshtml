@@ -9,37 +9,69 @@
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
+@using eIVOGo.Resource.Views.Common.Enum
+@using res = eIVOGo.Resource.Views.Forms.B2BInvoice
+
 @{
 
     InvoiceViewModel _viewModel;
 
     ViewBag.ActionName = "首頁 > 電子發票開立";
     _viewModel = (InvoiceViewModel)ViewBag.ViewModel;
+
+    //發票類別下拉選單
+    string[] enumList = Enum.GetNames(typeof(Naming.InvoiceTypeDefinition));
+    var _items = new Dictionary<string, string>();
+
+    foreach (string item in enumList)
+    {
+        var name = item;
+
+        switch (item)
+        {
+            case "一般稅額計算之電子發票":
+                name = InvoiceTypeDefinition.一般稅額計算之電子發票;
+                break;
+            case "特種稅額計算之電子發票":
+                name = InvoiceTypeDefinition.特種稅額計算之電子發票;
+                break;
+        }
+
+        _items.Add(((int)Enum.Parse(typeof(Naming.InvoiceTypeDefinition), item)).ToString(), name);
+
+    }
+
+    EnumSelectorViewModel enumSelectorViewModel = new EnumSelectorViewModel
+    {
+        FieldName = "InvoiceType",
+        OptionItems = _items,
+        FieldClass = "form-control"
+    };
 }
 
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "電子發票開立");}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.電子發票開立);}
 
 <form role="form" method="post">
     @{ Html.RenderPartial("~/Views/InvoiceBusiness/Module/InvoiceProcessTypeDirection.cshtml");}
 
     <div class="border_gray">
         <!--表格 開始-->
-        <h2>營業人</h2>
+        <h2>@res.營業人</h2>
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
             <tr>
                 <th nowrap="nowrap" width="120">
-                    發票開立人
+                    @res.發票開立人
                 </th>
                 <td class="tdleft">
                     @{ Html.RenderAction("SellerSelector", "DataFlow");}
 
                 </td>
                 <th nowrap="nowrap" width="120">
-                    買受人統編
+                    @res.買受人統編
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="BuyerReceiptNo" type="text" onchange="loadCounterpart(this.value);" />
-                    <input type="checkbox" name="Counterpart" value="@($"{true}")" />設為相對營業人
+                    <input type="checkbox" name="Counterpart" value="@($"{true}")" />@res.設為相對營業人
                     <script>
                         function loadCounterpart(term) {
                             showLoading();
@@ -52,7 +84,7 @@
                                     $('input[name="Phone"]').val(data.Phone);
                                     $('input[name="EMail"]').val(data.ContactEmail);
                                 } else {
-                                    if (confirm('買受人為新客戶，是否設為相對營業人？')) {
+                                    if (confirm('@res.買受人為新客戶_是否設為相對營業人_')) {
                                         $('input[name="Counterpart"]').prop('checked', true);
                                     }
                                 }
@@ -63,13 +95,13 @@
             </tr>
             <tr>
                 <th nowrap="nowrap" width="120">
-                    買受人名稱
+                    @res.買受人名稱
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="BuyerName" type="text" value="@(_viewModel.BuyerName)" />
                 </td>
                 <th nowrap="nowrap" width="120">
-                    買受人地址
+                    @res.買受人地址
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="Address" type="text" value="@(_viewModel.Address)" />
@@ -77,13 +109,13 @@
             </tr>
             <tr>
                 <th nowrap="nowrap" width="120">
-                    買受人電話
+                    @res.買受人電話
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="Phone" type="text" value="@(_viewModel.Phone)" />
                 </td>
                 <th nowrap="nowrap" width="120">
-                    買受人email
+                    @res.買受人email
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="EMail" type="text" value="@(_viewModel.EMail)" />
@@ -91,45 +123,45 @@
             </tr>
             <tr>
                 <th nowrap="nowrap" width="120">
-                    發票檢查碼
+                    @res.發票檢查碼
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="CheckNo" type="text" value="@(_viewModel.CheckNo)" maxlength="10" />
                 </td>
                 <th nowrap="nowrap" width="120">
-                    銷售品項稅額
+                    @res.銷售品項稅額
                 </th>
                 <td class="tdleft">
-                    <input name="TaxCalc" type="radio" value="TaxIncluded" />含稅
-                    <input name="TaxCalc" type="radio" value="NonTaxed" checked="checked" />未稅
+                    <input name="TaxCalc" type="radio" value="TaxIncluded" />@res.含稅
+                    <input name="TaxCalc" type="radio" value="NonTaxed" checked="checked" />@res.未稅
                 </td>
             </tr>
             <tr>
                 <th nowrap="nowrap" width="120">
-                    買受人註記
+                    @res.買受人註記
                 </th>
                 <td class="tdleft">
                     <select name="BuyerRemark">
                         <option value=""></option>
-                        <option value="1">得抵扣之進貨及費用</option>
-                        <option value="2">得抵扣之固定資產</option>
-                        <option value="3">不得抵扣之進貨及費用</option>
-                        <option value="4">不得抵扣之固定資產</option>
+                        <option value="1">@res.得抵扣之進貨及費用</option>
+                        <option value="2">@res.得抵扣之固定資產</option>
+                        <option value="3">@res.不得抵扣之進貨及費用</option>
+                        <option value="4">@res.不得抵扣之固定資產</option>
                     </select>
                 </td>
-                <th nowrap="nowrap">沖帳別</th>
+                <th nowrap="nowrap">@res.沖帳別</th>
                 <td class="tdleft">
                     <input class="form-control" name="Category" type="text" value="" maxlength="2" size="2" />
                 </td>
             </tr>
             <tr>
                 <th nowrap="nowrap" width="120">
-                    相關號碼
+                    @res.相關號碼
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="RelateNumber" type="text" value="" maxlength="20" size="20" />
                 </td>
-                <th nowrap="nowrap">總備註</th>
+                <th nowrap="nowrap">@res.總備註</th>
                 <td class="tdleft">
                     <textarea name="Remark" maxlength="200" cols="56" rows="5"></textarea>
                 </td>
@@ -139,57 +171,54 @@
     </div>
     <div class="border_gray">
         <!--表格 開始-->
-        <h2>發票</h2>
+        <h2>@res.發票</h2>
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
             <tr>
                 <th colspan="4" class="Head_style_a">
-                    新增發票主檔
+                    @res.新增發票主檔
                 </th>
             </tr>
             <tr>
                 <th nowrap="nowrap" width="150">
-                    發票類別
+                    @res.發票類別
                 </th>
                 <td class="tdleft" colspan="3">
-                    <select class="form-control" name="InvoiceType">
-                        <option value="@((int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)">@(Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)</option>
-                        <option value="@((int)Naming.InvoiceTypeDefinition.特種稅額計算之電子發票)">@(Naming.InvoiceTypeDefinition.特種稅額計算之電子發票)</option>
-                    </select>
+                    @{Html.RenderPartial("~/Views/Common/Module/EnumSelect.cshtml", enumSelectorViewModel);}
                 </td>
             </tr>
             <tr>
                 <th nowrap="nowrap" width="150">
-                    課稅別
+                    @res.課稅別
                 </th>
                 <td class="tdleft">
                     <select class="form-control" name="TaxType">
-                        <option value="1">應稅</option>
-                        <option value="2">零稅率</option>
-                        <option value="3">免稅</option>
-                        <option value="4">特種稅率</option>
+                        <option value="1">@res.應稅</option>
+                        <option value="2">@res.零稅率</option>
+                        <option value="3">@res.免稅</option>
+                        <option value="4">@res.特種稅率</option>
                     </select>
                 </td>
                 <th nowrap="nowrap" width="150">
-                    通關方式註記<br />
-                    (若為零稅率發票，此為必填欄位)
+                    @res.通關方式註記<br />
+                    (@res.若為零稅率發票_此為必填欄位)
                 </th>
                 <td class="tdleft">
                     <select name="CustomsClearanceMark">
                         <option value=""></option>
-                        <option value="1">非經海關出口</option>
-                        <option value="2">經海關出口</option>
+                        <option value="1">@res.非經海關出口</option>
+                        <option value="2">@res.經海關出口</option>
                     </select>
                 </td>
             </tr>
             <tr>
                 <th nowrap="nowrap">
-                    稅率
+                    @res.稅率
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="TaxRate" type="text" value="0.05" />
                 </td>
                 <th nowrap="nowrap">
-                    銷售額合計(新台幣)
+                    @res.銷售額合計 (@res.新台幣)
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="SalesAmount" type="text" value="" />
@@ -197,13 +226,13 @@
             </tr>
             <tr>
                 <th nowrap="nowrap" width="150">
-                    營業稅額
+                    @res.營業稅額
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="TaxAmount" type="text" value="" />
                 </td>
                 <th nowrap="nowrap" width="150">
-                    總計(含稅)
+                    @res.總計 (@res.含稅)
                 </th>
                 <td class="tdleft">
                     <input class="form-control" name="TotalAmount" type="text" value="" />
@@ -213,16 +242,16 @@
     </div>
     <div class="border_gray">
         <!--表格 開始-->
-        <h2>發票明細</h2>
+        <h2>@res.發票明細</h2>
         <table class="table table-striped table-bordered table-hover dataTable no-footer dtr-inline left_title">
             <thead>
                 <tr>
-                    <th>產品編號</th>
-                    <th>品名</th>
-                    <th>數量</th>
-                    <th>單價</th>
-                    <th>小計</th>
-                    <th>備註</th>
+                    <th>@res.產品編號</th>
+                    <th>@res.品名</th>
+                    <th>@res.數量</th>
+                    <th>@res.單價</th>
+                    <th>@res.小計</th>
+                    <th>@res.備註</th>
                     <th></th>
                 </tr>
             </thead>
@@ -236,16 +265,16 @@
         <tbody>
             <tr>
                 <td class="Bargain_btn">
-                    <button type="button" class="btn" onclick="uiInvoice.sum();">小計</button>
-                    <a class="btn" onclick="uiInvoice.commit(true);">發票預覽</a>
-                    <button type="button" class="btn" onclick="uiInvoice.commit();">發票開立</button>
-                    <button type="reset" class="btn">清除</button>
+                    <button type="button" class="btn" onclick="uiInvoice.sum();">@res.小計</button>
+                    <a class="btn" onclick="uiInvoice.commit(true);">@res.發票預覽</a>
+                    <button type="button" class="btn" onclick="uiInvoice.commit();">@res.發票開立</button>
+                    <button type="reset" class="btn">@res.清除</button>
                 </td>
             </tr>
         </tbody>
     </table>
     <input type="hidden" name="Remark" />
-    @{ 
+    @{
         ViewBag.DialogID = "searchDialog";
         Html.RenderPartial("~/Views/ProductCatalog/Module/ProductQuickSearch.cshtml");
     }
@@ -289,7 +318,7 @@
                                     width: 640,
                                     buttons: [
                                         {
-                                            text: "關閉",
+                                            text: "@res.關閉",
                                             icons: {
                                                 primary: "ui-icon-close"
                                             },
@@ -359,10 +388,10 @@
                 var $row = $tr.clone(true);
                 $row.find('input').val('');
                 $tr.after($row);
-                $tr.find('td').last().empty().append($('<a class="btn" onclick="uiInvoice.deleteRow();">刪除</a>'));
+                $tr.find('td').last().empty().append($('<a class="btn" onclick="uiInvoice.deleteRow();">@res.刪除</a>'));
             },
             deleteRow: function () {
-                if (confirm('確定刪除此項資料?')) {
+                if (confirm('@res.確定刪除此項資料_')) {
                     var event = event || window.event;
                     var $tr = $(event.target).parents('tr');
                     $tr.remove();

@@ -14,6 +14,7 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res=eIVOGo.Resource.Views.InvoiceBusiness.InvoiceProduct.AddItem
 
 @{
     ModelStateDictionary _modelState;
@@ -30,14 +31,14 @@
 <tr>
     <td><input class="form-control" name="ItemNo" type="text" /></td>
     <td>
-        <input class="form-control" name="Brief" onclick="@(items.Count()>0 ? "uiInvoice.quickSearch(this);" : null)" required type="text" placeholder="請輸入品名!!" />
+        <input class="form-control" name="Brief" onclick="@(items.Count()>0 ? "uiInvoice.quickSearch(this);" : null)" required type="text" placeholder="@res.請輸入品名__" />
     </td>
-    <td><input class="form-control" name="Piece" type="number" required min="1" step="1" value="1" placeholder="請輸入件數!!" /></td>
-    <td><input class="form-control" name="UnitCost" type="number" required min="1" step="1" value="1" placeholder="請輸入單價!!" /></td>
+    <td><input class="form-control" name="Piece" type="number" required min="1" step="1" value="1" placeholder="@res.請輸入件數__" /></td>
+    <td><input class="form-control" name="UnitCost" type="number" required min="1" step="1" value="1" placeholder="@res.請輸入單價__" /></td>
     <td><input class="form-control" name="CostAmount" type="number" /></td>
     <td><input class="form-control" name="ItemRemark" type="text" /></td>
     <td>
-        <button type="button" class="btn" onclick="uiInvoice.addRow();">新增</button>
+        <button type="button" class="btn" onclick="uiInvoice.addRow();">@res.新增</button>
     </td>
 </tr>
 

@@ -16,6 +16,8 @@
 @using Model.Schema.EIVO
 @using Utility
 @using Uxnet.Web.WebUI
+@using res=eIVOGo.Resource.Views.DataView.Module.Invoice
+
 @{
 
     ModelSource<InvoiceItem> models;
@@ -30,13 +32,13 @@
     <tbody>
         <tr>
             <th>
-                開立人名稱
+                @res.開立人名稱
             </th>
             <td class="tdleft" style="white-space:nowrap;">
                 @(_model.InvoiceSeller.CustomerName)
             </td>
             <th style="white-space:nowrap;">
-                開立人統一編號
+                @res.開立人統一編號
             </th>
             <td class="tdleft">
                 @(_model.InvoiceSeller.ReceiptNo)
@@ -44,13 +46,13 @@
         </tr>
         <tr>
             <th>
-                客戶編號
+                @res.客戶編號
             </th>
             <td class="tdleft">
                 @(_model.InvoiceBuyer.CustomerID.StringMask(4, 3, '*'))
             </td>
             <th>
-                檢查號碼
+                @res.檢查號碼
             </th>
             <td class="tdleft">
                 @(_model.CheckNo)
@@ -58,13 +60,13 @@
         </tr>
         <tr>
             <th>
-                發票號碼
+                @res.發票號碼
             </th>
             <td class="tdleft">
                 @(_model.TrackCode + _model.No)
             </td>
             <th>
-                發票日期
+                @res.發票日期
             </th>
             <td class="tdleft">
                 @(ValueValidity.ConvertChineseDateString(_model.InvoiceDate.Value))
@@ -72,13 +74,13 @@
         </tr>
         <tr>
             <th>
-                隨機碼
+                @res.隨機碼
             </th>
             <td class="tdleft">
                 @(_model.RandomNo)
             </td>
             <th>
-                含稅金額
+                @res.含稅金額
             </th>
             <td class="tdleft">
                 @(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TotalAmount))
@@ -86,13 +88,13 @@
         </tr>
         <tr>
             <th>
-                未稅金額
+                @res.未稅金額
             </th>
             <td class="tdleft">
                 @(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.SalesAmount))
             </td>
             <th>
-                稅 額
+                @res.稅_額
             </th>
             <td class="tdleft">
                 @(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TaxAmount))
@@ -100,13 +102,13 @@
         </tr>
         <tr>
             <th>
-                買方名稱
+                @res.買方名稱
             </th>
             <td class="tdleft" style="white-space:nowrap;">
                 @(_model.InvoiceBuyer.CustomerName)
             </td>
             <th style="white-space:nowrap;">
-                買方統一編號
+                @res.買方統一編號
             </th>
             <td class="tdleft">
                 @(_model.InvoiceBuyer.IsB2C() ? "*" : _model.InvoiceBuyer.ReceiptNo)
@@ -114,7 +116,7 @@
         </tr>
         <tr>
             <th>
-                地 址
+                @res.地_址
             </th>
             <td colspan="3" class="tdleft">
                 @(_model.InvoiceBuyer.IsB2C() ? "*" : _model.InvoiceBuyer.Address)
@@ -126,19 +128,19 @@
     <tbody>
         <tr>
             <th style="white-space:nowrap;">
-                品名
+                @res.品名
             </th>
             <th style="white-space:nowrap;">
-                數量
+                @res.數量
             </th>
             <th style="white-space:nowrap;">
-                單價
+                @res.單價
             </th>
             <th style="white-space:nowrap;">
-                金額
+                @res.金額
             </th>
             <th style="white-space:nowrap;">
-                備註
+                @res.備註
             </th>
         </tr>
         @foreach (var p in _model.InvoiceDetails)

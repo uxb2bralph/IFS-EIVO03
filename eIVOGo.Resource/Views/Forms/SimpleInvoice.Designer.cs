@@ -61,6 +61,123 @@ namespace eIVOGo.Resource.Views.Forms {
         }
         
         /// <summary>
+        ///   查詢類似 不使用 的當地語系化字串。
+        /// </summary>
+        public static string 不使用 {
+            get {
+                return ResourceManager.GetString("不使用", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 分店號碼 的當地語系化字串。
+        /// </summary>
+        public static string 分店號碼 {
+            get {
+                return ResourceManager.GetString("分店號碼", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 愛心碼 的當地語系化字串。
+        /// </summary>
+        public static string 愛心碼 {
+            get {
+                return ResourceManager.GetString("愛心碼", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 手機條碼 的當地語系化字串。
+        /// </summary>
+        public static string 手機條碼 {
+            get {
+                return ResourceManager.GetString("手機條碼", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 無 的當地語系化字串。
+        /// </summary>
+        public static string 無 {
+            get {
+                return ResourceManager.GetString("無", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 自然人憑證條碼 的當地語系化字串。
+        /// </summary>
+        public static string 自然人憑證條碼 {
+            get {
+                return ResourceManager.GetString("自然人憑證條碼", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 買受人為保稅區(自由貿易港區) 的當地語系化字串。
+        /// </summary>
+        public static string 買受人為保稅區_自由貿易港區_ {
+            get {
+                return ResourceManager.GetString("買受人為保稅區(自由貿易港區)", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 買受人為園區事業 的當地語系化字串。
+        /// </summary>
+        public static string 買受人為園區事業 {
+            get {
+                return ResourceManager.GetString("買受人為園區事業", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 買受人為遠洋漁業 的當地語系化字串。
+        /// </summary>
+        public static string 買受人為遠洋漁業 {
+            get {
+                return ResourceManager.GetString("買受人為遠洋漁業", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 買受人簽署適用零稅率註記 的當地語系化字串。
+        /// </summary>
+        public static string 買受人簽署適用零稅率註記 {
+            get {
+                return ResourceManager.GetString("買受人簽署適用零稅率註記", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 載具號碼 的當地語系化字串。
+        /// </summary>
+        public static string 載具號碼 {
+            get {
+                return ResourceManager.GetString("載具號碼", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 載具類型 的當地語系化字串。
+        /// </summary>
+        public static string 載具類型 {
+            get {
+                return ResourceManager.GetString("載具類型", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 隨機碼 的當地語系化字串。
+        /// </summary>
+        public static string 隨機碼 {
+            get {
+                return ResourceManager.GetString("隨機碼", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 首頁 &gt; 電子發票開立 的當地語系化字串。
         /// </summary>
         public static string 首頁___電子發票開立 {

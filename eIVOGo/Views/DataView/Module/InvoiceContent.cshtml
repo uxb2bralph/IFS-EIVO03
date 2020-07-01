@@ -16,6 +16,8 @@
 @using Model.Schema.EIVO
 @using Utility
 @using Uxnet.Web.WebUI
+@using res=eIVOGo.Resource.Views.DataView.Module.InvoiceContent
+
 @{
     ModelSource<InvoiceItem> models;
     InvoiceItem _model;
@@ -26,7 +28,7 @@
 
 }
 <div>
-    @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "發票");}
+    @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.發票);}
 
     <div class="border_gray">
         @{ Html.RenderPartial("~/Views/DataView/Module/Invoice.cshtml", _model);}

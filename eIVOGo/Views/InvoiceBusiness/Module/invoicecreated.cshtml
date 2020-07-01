@@ -7,6 +7,7 @@
 @using Model.DataEntity
 @using eIVOGo.Controllers
 @using Business.Helper
+@using res=eIVOGo.Resource.Views.InvoiceBusiness.Module.InvoiceCreated
 
 @{
     ModelStateDictionary _modelState;
@@ -23,14 +24,14 @@
     if (_model.PrintMark == "Y")
     {
         <div>
-            發票已開立，號碼：@(_model.TrackCode)@(_model.No)<br />
-            <a href="@(Url.Action("PrintSingleInvoiceAsPDF","DataView",new { keyID = _model.InvoiceID.EncryptKey() }))" target="_blank">列印資料下載(A4)</a>
+            @res.發票已開立_號碼：@(_model.TrackCode)@(_model.No)<br />
+                                                         <a href="@(Url.Action("PrintSingleInvoiceAsPDF","DataView",new { keyID = _model.InvoiceID.EncryptKey() }))" target="_blank">@res.列印資料下載_A4_</a>
             <br />
-            <a href="@(Url.Action("PrintSingleInvoiceAsPDF","DataView",new { keyID = _model.InvoiceID.EncryptKey(),PaperStyle = "POS" }))" target="_blank">列印資料下載(熱感紙)</a>
+            <a href="@(Url.Action("PrintSingleInvoiceAsPDF","DataView",new { keyID = _model.InvoiceID.EncryptKey(),PaperStyle = "POS" }))" target="_blank">@res.列印資料下載_熱感紙_</a>
             <br />
-            <a href="@(Url.Action("ShowInvoice","DataView",new { keyID = _model.InvoiceID.EncryptKey(),ResultMode = Naming.DataResultMode.Print }))" target="_blank">立即檢視列印(A4)</a>
+            <a href="@(Url.Action("ShowInvoice","DataView",new { keyID = _model.InvoiceID.EncryptKey(),ResultMode = Naming.DataResultMode.Print }))" target="_blank">@res.立即檢視列印_A4_</a>
             <br />
-            <a href="@(Url.Action("ShowInvoice","DataView",new { keyID = _model.InvoiceID.EncryptKey(),ResultMode = Naming.DataResultMode.Print,PaperStyle = "POS" }))" target="_blank">立即檢視列印(熱感紙)</a>
+            <a href="@(Url.Action("ShowInvoice","DataView",new { keyID = _model.InvoiceID.EncryptKey(),ResultMode = Naming.DataResultMode.Print,PaperStyle = "POS" }))" target="_blank">@res.立即檢視列印_熱感紙_</a>
             <br />
         </div>
     }
@@ -38,7 +39,7 @@
     {
         <div>
             發票已開立，號碼：@(_model.TrackCode)@(_model.No)<br />，
-            @(_model.InvoiceCarrier != null ? "使用載具，不列印證明聯!!" : "。")
+            @(_model.InvoiceCarrier != null ? @res.使用載具_不列印證明聯__ : "。")
         </div>
     }
     <script>

@@ -436,6 +436,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceCenterBusinessQueryType.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\Common\Enum\InvoiceTypeDefinition.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceTypeDefinition.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Enum\InvoiceTypeDefinition.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceTypeDefinition.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Common\Enum\MemberCategoryID.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -455,6 +465,36 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Page.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataView\Module\Invoice.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Invoice.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataView\Module\Invoice.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Invoice.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataView\Module\InvoiceContent.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceContent.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataView\Module\InvoiceContent.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceContent.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\B2BInvoice.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>B2BInvoice.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\B2BInvoice.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>B2BInvoice.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\Forms\SimpleInvoice.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -766,6 +806,86 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ByWinningNumber.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceBusiness\InvoiceProduct\AddItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\InvoiceProduct\AddItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\InvoiceCreated.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceCreated.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\InvoiceCreated.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceCreated.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\InvoiceProcessTypeDirection.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceProcessTypeDirection.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\InvoiceProcessTypeDirection.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceProcessTypeDirection.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\UploadAllowance.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadAllowance.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\UploadAllowance.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadAllowance.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\UploadInvoice.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadInvoice.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\UploadInvoice.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadInvoice.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\UploadVoidAllowance.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadVoidAllowance.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\UploadVoidAllowance.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadVoidAllowance.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\UploadVoidInvoice.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadVoidInvoice.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\UploadVoidInvoice.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadVoidInvoice.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\UploadData.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadData.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\UploadData.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadData.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceNo\InvoiceNoIntervalManager.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1015,6 +1135,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ItemForm.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProductCatalog\Module\ProductQuickSearch.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductQuickSearch.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProductCatalog\Module\ProductQuickSearch.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProductQuickSearch.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\Template\MvcMainPage.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1508,6 +1638,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceCenterBusinessQueryType.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Enum\InvoiceTypeDefinition.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceTypeDefinition.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Enum\InvoiceTypeDefinition.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceTypeDefinition.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Common\Enum\MemberCategoryID.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MemberCategoryID.en-US.Designer.cs</LastGenOutput>
@@ -1523,6 +1661,30 @@
     <EmbeddedResource Include="Views\Common\Page.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Page.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataView\Module\Invoice.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Invoice.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataView\Module\Invoice.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Invoice.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataView\Module\InvoiceContent.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceContent.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataView\Module\InvoiceContent.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceContent.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\B2BInvoice.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>B2BInvoice.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\B2BInvoice.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>B2BInvoice.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\SimpleInvoice.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1773,6 +1935,70 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ByWinningNumber.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\InvoiceProduct\AddItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\InvoiceProduct\AddItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\InvoiceCreated.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceCreated.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\InvoiceCreated.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceCreated.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\InvoiceProcessTypeDirection.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceProcessTypeDirection.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\InvoiceProcessTypeDirection.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceProcessTypeDirection.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\UploadAllowance.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UploadAllowance.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\UploadAllowance.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UploadAllowance.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\UploadInvoice.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UploadInvoice.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\UploadInvoice.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UploadInvoice.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\UploadVoidAllowance.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UploadVoidAllowance.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\UploadVoidAllowance.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UploadVoidAllowance.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\UploadVoidInvoice.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UploadVoidInvoice.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\UploadVoidInvoice.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UploadVoidInvoice.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\UploadData.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UploadData.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\UploadData.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UploadData.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceNo\InvoiceNoIntervalManager.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceNoIntervalManager.en-US.Designer.cs</LastGenOutput>
@@ -1979,6 +2205,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ItemForm.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\ProductCatalog\Module\ProductQuickSearch.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductQuickSearch.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ProductCatalog\Module\ProductQuickSearch.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProductQuickSearch.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Template\MvcMainPage.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MvcMainPage.en-US.Designer.cs</LastGenOutput>
@@ -2139,7 +2373,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\DataView\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
