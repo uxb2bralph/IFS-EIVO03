@@ -61,7 +61,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 The principle of the order of the size of the symbol code and the gap is a multiple of 50!! 的當地語系化字串。
+        ///   查詢類似 不符號碼大小順序與差距為50之倍數原則!! 的當地語系化字串。
         /// </summary>
         public static string 不符號碼大小順序與差距為50之倍數原則__ {
             get {
@@ -70,7 +70,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 The remaining numbers are not enough for a single group and cannot be divided!! 的當地語系化字串。
+        ///   查詢類似 剩餘號碼不足單一本組數_無法分割_ 的當地語系化字串。
         /// </summary>
         public static string 剩餘號碼不足單一本組數_無法分割_ {
             get {
@@ -79,7 +79,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 Finished!! 的當地語系化字串。
+        ///   查詢類似 整理完成!! 的當地語系化字串。
         /// </summary>
         public static string 整理完成__ {
             get {
@@ -88,7 +88,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 No track set!! 的當地語系化字串。
+        ///   查詢類似 未設定字軌!! 的當地語系化字串。
         /// </summary>
         public static string 未設定字軌__ {
             get {
@@ -97,7 +97,16 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 Blank invoice track 的當地語系化字串。
+        ///   查詢類似 營業人統編錯誤!! 的當地語系化字串。
+        /// </summary>
+        public static string 營業人統編錯誤__ {
+            get {
+                return ResourceManager.GetString("營業人統編錯誤!!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 空白發票字軌 的當地語系化字串。
         /// </summary>
         public static string 空白發票字軌 {
             get {
@@ -106,7 +115,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 There are already overlapping sections in the system!! 的當地語系化字串。
+        ///   查詢類似 系統中已存在重疊的區段!! 的當地語系化字串。
         /// </summary>
         public static string 系統中已存在重疊的區段__ {
             get {
@@ -115,7 +124,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 The number in this section has already been used and cannot be modified!!! 的當地語系化字串。
+        ///   查詢類似 該區間之號碼已經被使用,不可修改!!!! 的當地語系化字串。
         /// </summary>
         public static string 該區間之號碼已經被使用_不可修改____ {
             get {
@@ -124,7 +133,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 Please enter the average share!! 的當地語系化字串。
+        ///   查詢類似 請輸入均分本數!! 的當地語系化字串。
         /// </summary>
         public static string 請輸入均分本數__ {
             get {
@@ -133,7 +142,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 Please select a year!! 的當地語系化字串。
+        ///   查詢類似 請選擇年份!! 的當地語系化字串。
         /// </summary>
         public static string 請選擇年份__ {
             get {
@@ -142,7 +151,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 Please choose a period!! 的當地語系化字串。
+        ///   查詢類似 請選擇期別!! 的當地語系化字串。
         /// </summary>
         public static string 請選擇期別__ {
             get {
@@ -151,7 +160,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 Please choose an opener!! 的當地語系化字串。
+        ///   查詢類似 請選擇開立人!! 的當地語系化字串。
         /// </summary>
         public static string 請選擇開立人__ {
             get {
@@ -160,7 +169,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 Information does not exist!! 的當地語系化字串。
+        ///   查詢類似 資料不存在!! 的當地語系化字串。
         /// </summary>
         public static string 資料不存在__ {
             get {
@@ -169,7 +178,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 The starting number is not an 8-digit integer!! 的當地語系化字串。
+        ///   查詢類似 起號非8位整數!! 的當地語系化字串。
         /// </summary>
         public static string 起號非8位整數__ {
             get {
@@ -178,7 +187,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 Non-8-digit integer so far!! 的當地語系化字串。
+        ///   查詢類似 迄號非8位整數!! 的當地語系化字串。
         /// </summary>
         public static string 迄號非8位整數__ {
             get {
@@ -187,7 +196,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 This section cannot be modified in violation of the principle of serial number!! 的當地語系化字串。
+        ///   查詢類似 違反序時序號原則該區段無法修改!! 的當地語系化字串。
         /// </summary>
         public static string 違反序時序號原則該區段無法修改__ {
             get {
@@ -196,7 +205,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 The section cannot be added if it violates the principle of serial number!! 的當地語系化字串。
+        ///   查詢類似 違反序時序號原則該區段無法新增!! 的當地語系化字串。
         /// </summary>
         public static string 違反序時序號原則該區段無法新增__ {
             get {
@@ -205,7 +214,7 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 The data in the numbering section is incorrect!! 的當地語系化字串。
+        ///   查詢類似 配號區間資料錯誤!! 的當地語系化字串。
         /// </summary>
         public static string 配號區間資料錯誤__ {
             get {

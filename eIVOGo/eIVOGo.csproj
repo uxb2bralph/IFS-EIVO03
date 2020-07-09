@@ -201,6 +201,9 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="ThirdParties">
+      <HintPath>..\..\..\temp\新增資料夾\bin\ThirdParties.dll</HintPath>
+    </Reference>
     <Reference Include="ThoughtWorks.QRCode">
       <HintPath>..\..\eInvoice\Tools\QRCodeLib\ThoughtWorks.QRCode.dll</HintPath>
     </Reference>
@@ -2123,6 +2126,8 @@
     <Content Include="Views\InvoiceBusiness\Module\InvoiceCreated.cshtml" />
     <Content Include="Views\InvoiceBusiness\Module\A0401Created.cshtml" />
     <Content Include="Views\InvoiceBusiness\Module\AllowanceCreated.cshtml" />
+    <Content Include="Views\InvoiceNo\Module\UploadInvoiceTrackCode.cshtml" />
+    <Content Include="Views\InvoiceNo\Module\ShowUploadActionLink.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

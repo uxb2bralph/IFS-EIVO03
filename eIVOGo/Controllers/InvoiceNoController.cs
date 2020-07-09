@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.OleDb;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Mvc;
 using Business.Helper;
+using ClosedXML.Excel;
 using eIVOGo.Helper;
 using Model.DataEntity;
+using Model.Models;
 using Model.Models.ViewModel;
 using Model.Schema.TurnKey.E0402;
+using ModelExtension.Helper;
+using Newtonsoft.Json;
 using Utility;
+
 using res = eIVOGo.Resource.Controllers.InvoiceNo;
 
 namespace eIVOGo.Controllers
@@ -543,5 +551,308 @@ namespace eIVOGo.Controllers
             return View("~/Views/InvoiceNo/Module/EditPOSBooklets.cshtml", item);
         }
 
+        public ActionResult UploadInvoiceTrackCode(InvoiceViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            return View("~/Views/InvoiceNo/Module/UploadInvoiceTrackCode.cshtml");
+        }
+
+
+        public ActionResult UploadToPreView(IEnumerable<HttpPostedFileBase> excelFile, string callback)
+        {
+            try
+            {
+                if (excelFile == null || excelFile.First() == null) throw new ApplicationException("未選取檔案或檔案上傳失敗");
+                if (excelFile.Count() != 1) throw new ApplicationException("請上傳單一檔案");
+                var file = excelFile.First();
+                if (Path.GetExtension(file.FileName) != ".xlsx") throw new ApplicationException("請使用Excel 2007(.xlsx)格式");
+                var stream = file.InputStream;
+                XLWorkbook wb = new XLWorkbook(stream);
+                if (wb.Worksheets.Count > 1)
+                    throw new ApplicationException("Excel檔包含多個工作表");
+
+                var items =
+
+                       wb.Worksheets.First().RowsUsed().Select(row =>
+                           string.Join("\t",
+                               row.Cells(1, row.LastCellUsed(false).Address.ColumnNumber)
+                               .Select(cell => cell.GetValue<string>()).ToArray()
+                           )).ToArray();
+
+                var csv =
+                    string.Join("\n",
+                        wb.Worksheets.First().RowsUsed().Select(row =>
+                            string.Join("\t",
+                                row.Cells(1, row.LastCellUsed(false).Address.ColumnNumber)
+                                .Select(cell => cell.GetValue<string>()).ToArray()
+                            )).ToArray());
+
+                var models = new List<UploadInvoiceTrackCodeModel>();
+                if (items.Count() > 1)
+                {
+                    for (int i = 1; i < items.Count(); i++)
+                    {
+                        var cells = items[i].Split('\t');
+
+                        Regex reg1 = new Regex(@"^[A-Za-z]+$");
+
+                        if (!(Convert.ToInt32(cells[0]) > 0) || cells[0].Length != 8)
+                        {
+                            throw new ApplicationException("營業人統編格式錯誤");
+                        }
+
+                        if (!(Convert.ToInt32(cells[1]) > 0) || cells[1].Length != 3)
+                        {
+                            throw new ApplicationException("年份格式錯誤");
+                        }
+
+                        if (!(Convert.ToInt32(cells[2]) > 0))
+                        {
+                            throw new ApplicationException("發票期別格式錯誤");
+                        }
+
+                        switch (Convert.ToInt32(cells[2]))
+                        {
+                            case 2:
+                            case 4:
+                            case 6:
+                            case 8:
+                            case 10:
+                            case 12:
+                                break;
+                            default:
+                                throw new ApplicationException("發票期別格式錯誤");
+                        }
+
+                        if (!reg1.IsMatch(cells[3]))
+                        {
+                            throw new ApplicationException("字軌格式錯誤");
+                        }
+
+                        if (!(Convert.ToInt32(cells[4]) > 0) || cells[4].Length != 8)
+                        {
+                            throw new ApplicationException("發票起號錯誤");
+                        }
+
+                        if (!(Convert.ToInt32(cells[5]) > 0) || cells[5].Length != 8)
+                        {
+                            throw new ApplicationException("發票迄號錯誤");
+                        }
+
+                        var model = new UploadInvoiceTrackCodeModel();
+                        short year = Convert.ToInt16(cells[1]);
+                        model.ReceiptNo = cells[0];
+                        model.Year = year;
+                        model.PeriodNo = Convert.ToInt32(cells[2]);
+                        model.TrackCode = cells[3];
+                        model.StartNo = Convert.ToInt32(cells[4]);
+                        model.EndNo = Convert.ToInt32(cells[5]);
+
+                        models.Add(model);
+                    }
+                }
+
+                ViewBag.Models = models;
+
+                return Content($@"<script>
+{callback}({JsonConvert.SerializeObject(models)});
+</script>", "text/html");
+            }
+            catch (Exception ex)
+            {
+                return Content($"<script>alert({JsonConvert.SerializeObject(ex.Message)})</script>", "text/html");
+            }
+        }
+
+
+        /// <summary>
+        /// 上傳發票字軌資料
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
+        public ActionResult Upload(string viewModel)
+        {
+            // 取畫面資料
+            List<UploadInvoiceTrackCodeModel> datas = JsonConvert.DeserializeObject<List<UploadInvoiceTrackCodeModel>>(viewModel);
+            var insertDatas = new List<InvoiceNoInterval>();
+
+            foreach (var item in datas)
+            {
+                // step1.
+                string result = string.Empty;
+                var year = item.Year + 1911;
+                var periodNo = item.PeriodNo / 2;
+                var startNo = item.StartNo;
+                var endNo = item.EndNo;
+                var model = new InvoiceNoInterval { };
+                var sellerID = 0;
+                var trackID = 0;
+
+                //try
+                //{
+                // step1.判斷是否有此營業人
+                var Organization = models.GetTable<Organization>().Where(t => t.ReceiptNo == item.ReceiptNo).FirstOrDefault();
+                if (Organization != null)
+                {
+                    sellerID = Organization.CompanyID;
+
+                    // step2.判斷是否設定字軌
+                    try
+                    {
+                        trackID = models.GetTable<InvoiceTrackCode>()
+                                   .Where(t => t.TrackCode == item.TrackCode
+                                   && t.Year == year
+                                   && t.PeriodNo == periodNo)
+                                   .FirstOrDefault().TrackID;
+
+                        if (trackID == 0)
+                        {
+                            ModelState.AddModelError("ErrorMsg", res.未設定字軌__);
+                        }
+                    }
+                    catch
+                    {
+                        ModelState.AddModelError("ErrorMsg", res.未設定字軌__);
+                    }                   
+
+                    // step3.判斷發票起迄號正確性
+                    if (!startNo.HasValue || !(startNo >= 0 && startNo < 100000000))
+                    {
+                        ModelState.AddModelError("ErrorMsg", res.起號非8位整數__);
+                    }
+                    else if (!endNo.HasValue || !(endNo >= 0 && endNo < 100000000))
+                    {
+                        ModelState.AddModelError("ErrorMsg", res.迄號非8位整數__);
+                    }
+                    else if (endNo <= startNo || ((endNo - startNo + 1) % 50 != 0))
+                    {
+                        ModelState.AddModelError("ErrorMsg", res.不符號碼大小順序與差距為50之倍數原則__);
+                    }
+                    else
+                    {
+                        var invoiceNoIntervals = models.GetTable<InvoiceNoInterval>();
+                        if (invoiceNoIntervals.Any(t => t.TrackID == trackID && t.StartNo >= endNo && t.InvoiceNoAssignments.Count > 0
+                            && t.SellerID == sellerID))
+                        {
+                            ModelState.AddModelError("ErrorMsg", res.違反序時序號原則該區段無法新增__);
+                        }
+                        else if (invoiceNoIntervals.Any(t => t.TrackID == trackID
+                            && ((t.EndNo <= endNo && t.EndNo >= startNo) || (t.StartNo <= endNo && t.StartNo >= startNo) || (t.StartNo <= startNo && t.EndNo >= startNo) || (t.StartNo <= endNo && t.EndNo >= endNo))))
+                        {
+                            ModelState.AddModelError("ErrorMsg", res.系統中已存在重疊的區段__);
+                        }
+
+                    }
+
+                    if (!ModelState.IsValid)
+                    {
+                        ViewBag.ModelState = ModelState;
+
+                        ViewBag.DataRole = "add";
+
+                        return View("~/Views/Shared/ReportInputError.cshtml");
+                    }
+
+                    // step4.判斷此供應商是否以分配發票字軌，若無則儲存一筆 
+                    InvoiceTrackCodeAssignment codeAssignment;
+                    codeAssignment = models.GetTable<InvoiceTrackCodeAssignment>().Where(t => t.SellerID == sellerID && t.TrackID == trackID).FirstOrDefault();
+
+                    if (codeAssignment == null)
+                    {
+                        codeAssignment = new InvoiceTrackCodeAssignment
+                        {
+                            SellerID = sellerID,
+                            TrackID = trackID
+                        };
+
+                        models.GetTable<InvoiceTrackCodeAssignment>().InsertOnSubmit(codeAssignment);
+                    }
+
+                    var insertData = new InvoiceNoInterval()
+                    {
+                        TrackID = trackID,
+                        SellerID = sellerID,
+                        StartNo = item.StartNo.Value,
+                        EndNo = item.EndNo.Value
+                    };
+
+                    insertDatas.Add(insertData);
+                }
+                else
+                {
+                    // 營業人統編錯誤
+                    ModelState.AddModelError("ErrorMsg", "營業人統編錯誤!!");
+
+                    if (!ModelState.IsValid)
+                    {
+                        ViewBag.ModelState = ModelState;
+
+                        ViewBag.DataRole = "add";
+
+                        return View("~/Views/Shared/ReportInputError.cshtml");
+                    }
+                }  
+            }
+
+            // step5.儲存發票字軌資料
+            foreach (var item in insertDatas)
+            {
+                models.GetTable<InvoiceNoInterval>().InsertOnSubmit(item);
+            }
+
+            models.SubmitChanges();
+
+            return Content($"<script>alert({JsonConvert.SerializeObject("已匯入成功")})</script>", "text/html");
+            //return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+            //return View("~/Views/InvoiceNo/MaintainInvoiceNoInterval.cshtml");
+        }
+
+        /// <summary>
+        /// 取得上傳發票字軌資料的範例檔
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetUploadInvoiceTrackCodeSample()
+        {
+            var items = models.GetTable<InvoiceItem>().Where(i => false).Take(100);
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/octet-stream";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("UploadInvoiceTrackCodeSample.xlsx")));
+
+            using (DataSet ds = new DataSet())
+            {
+                DataTable table = new DataTable("Sheet1");
+                ds.Tables.Add(table);
+                
+                table.Columns.Add("營業人統編");
+                table.Columns.Add("年份");
+                table.Columns.Add("發票期別");
+                table.Columns.Add("字軌");
+                table.Columns.Add("發票起號");
+                table.Columns.Add("發票迄號");
+
+                DataRow row = table.NewRow();
+                row[0] = "42523557";
+                row[1] = "109";
+                row[2] = "8";
+                row[3] = "CY";
+                row[4] = "00000001";
+                row[5] = "00000100";
+
+                table.Rows.Add(row);
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            Response.End();
+
+            return new EmptyResult();
+        }
     }
 }

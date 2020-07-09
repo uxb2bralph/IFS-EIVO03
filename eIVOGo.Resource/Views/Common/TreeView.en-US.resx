@@ -127,6 +127,9 @@
   <data name="相對營業人管理_匯入相對營業人資料" xml:space="preserve">
     <value>Relative business person management-import relative business person information</value>
   </data>
+  <data name="電子發票字軌號碼上傳" xml:space="preserve">
+    <value>Electronic invoice track number upload</value>
+  </data>
   <data name="電子發票號碼維護" xml:space="preserve">
     <value>Electronic invoice number maintenance</value>
   </data>

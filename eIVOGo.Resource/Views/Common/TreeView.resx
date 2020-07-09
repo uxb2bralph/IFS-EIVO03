@@ -127,6 +127,10 @@
   <data name="相對營業人管理_匯入相對營業人資料" xml:space="preserve">
     <value>相對營業人管理-匯入相對營業人資料</value>
   </data>
+  <data name="電子發票字軌號碼上傳" xml:space="preserve">
+    <value>電子發票字軌號碼上傳</value>
+    <comment>電子發票字軌號碼上傳</comment>
+  </data>
   <data name="電子發票號碼維護" xml:space="preserve">
     <value>電子發票號碼維護</value>
     <comment>電子發票號碼維護</comment>
