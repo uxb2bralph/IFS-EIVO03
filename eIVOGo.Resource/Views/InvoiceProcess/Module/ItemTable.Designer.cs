@@ -284,5 +284,23 @@ namespace eIVOGo.Resource.Views.InvoiceProcess.Module {
                 return ResourceManager.GetString("開立通知", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查詢類似 附件檔 的當地語系化字串。
+        /// </summary>
+        public static string 附件檔 {
+            get {
+                return ResourceManager.GetString("附件檔", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 附件檔頁數 的當地語系化字串。
+        /// </summary>
+        public static string 附件檔頁數 {
+            get {
+                return ResourceManager.GetString("附件檔頁數", resourceCulture);
+            }
+        }
     }
 }

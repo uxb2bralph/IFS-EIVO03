@@ -996,6 +996,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceQuery.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceProcess\InvoiceQueryForAction.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceQueryForAction.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\InvoiceQueryForAction.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceQueryForAction.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\DataItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\DataItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceProcess\Module\EditInvoiceBuyer.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1036,6 +1056,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QueryResult.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\DoAction.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DoAction.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\DoAction.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DoAction.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceProcess\ResultAction\MainQueryAction.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1065,6 +1095,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Common.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ScriptHelper\InvoiceAction.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceAction.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ScriptHelper\InvoiceAction.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceAction.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\OrganizationQuery\Module\CompanyList.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2090,6 +2130,22 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceQuery.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQueryForAction.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceQueryForAction.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQueryForAction.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceQueryForAction.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\DataItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\DataItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\Module\EditInvoiceBuyer.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EditInvoiceBuyer.en-US.Designer.cs</LastGenOutput>
@@ -2123,6 +2179,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QueryResult.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DoAction.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DoAction.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DoAction.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DoAction.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\MainQueryAction.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainQueryAction.en-US.Designer.cs</LastGenOutput>
@@ -2146,6 +2210,14 @@
     <EmbeddedResource Include="Views\InvoiceProcess\ScriptHelper\Common.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ScriptHelper\InvoiceAction.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceAction.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ScriptHelper\InvoiceAction.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceAction.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\OrganizationQuery\Module\CompanyList.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

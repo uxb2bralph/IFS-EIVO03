@@ -265,10 +265,12 @@
                     $postForm.remove();
                 }
 
+                var $formData = $('#queryArea').find('input,select,textarea').serializeArray();
+
                 $postForm = $('<form method="post" />').prop('action', '@Html.Raw(Url.Action("CreateXlsx","AllowanceProcess"))')
                     .css('display', 'none').appendTo($('body'));
 
-                $('#theForm').serializeArray().forEach(function (item, index) {
+                $formData.forEach(function (item, index) {
                     $('<input type="hidden">')
                         .prop('name', item.name).prop('value', item.value)
                         .appendTo($postForm);

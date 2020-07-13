@@ -419,7 +419,7 @@ namespace eIVOGo.Controllers
 
             using (DataSet ds = new DataSet())
             {
-                DataTable table = new DataTable("發票資料明細");
+                DataTable table = new DataTable(res.發票資料明細);
                 ds.Tables.Add(table);
                 table.Columns.Add("InvoiceID", typeof(int));
                 table.Columns.Add("發票號碼");
@@ -508,6 +508,89 @@ namespace eIVOGo.Controllers
             Response.End();
 
             return new EmptyResult();
+
+            //Response.Clear();
+            //Response.ClearContent();
+            //Response.ClearHeaders();
+            //Response.AddHeader("Cache-control", "max-age=1");
+            //Response.ContentType = "application/octet-stream";
+            //Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("UploadInvoiceTrackCodeSample.xlsx")));
+
+            //using (DataSet ds = new DataSet())
+            //{
+            //    DataTable table = new DataTable("Sheet1");
+            //    ds.Tables.Add(table);
+
+            //    table.Columns.Add("營業人統編");
+            //    table.Columns.Add("年份");
+            //    table.Columns.Add("發票期別");
+            //    table.Columns.Add("字軌");
+            //    table.Columns.Add("發票起號");
+            //    table.Columns.Add("發票迄號");
+
+            //    DataRow row = table.NewRow();
+            //    row[0] = "42523557";
+            //    row[1] = "109";
+            //    row[2] = "8";
+            //    row[3] = "CY";
+            //    row[4] = "00000001";
+            //    row[5] = "00000100";
+
+            //    table.Rows.Add(row);
+
+            //    using (var xls = ds.ConvertToExcel())
+            //    {
+            //        xls.SaveAs(Response.OutputStream);
+            //    }
+            //}
+
+            //Response.End();
+            
+            //return new EmptyResult();
+        }
+
+        public ActionResult GetUploadInvoiceTrackCodeSample()
+        {
+            var items = models.GetTable<InvoiceItem>().Where(i => false).Take(100);
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/octet-stream";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("UploadInvoiceTrackCodeSample.xlsx")));
+
+            using (DataSet ds = new DataSet())
+            {
+                DataTable table = new DataTable("Sheet1");
+                ds.Tables.Add(table);
+
+                table.Columns.Add("營業人統編");
+                table.Columns.Add("年份");
+                table.Columns.Add("發票期別");
+                table.Columns.Add("字軌");
+                table.Columns.Add("發票起號");
+                table.Columns.Add("發票迄號");
+
+                DataRow row = table.NewRow();
+                row[0] = "42523557";
+                row[1] = "109";
+                row[2] = "8";
+                row[3] = "CY";
+                row[4] = "00000001";
+                row[5] = "00000100";
+
+                table.Rows.Add(row);
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            Response.End();
+
+            return new EmptyResult();
         }
 
         public ActionResult ExportInvoiceBuyer(InquireInvoiceViewModel viewModel)
@@ -548,7 +631,7 @@ namespace eIVOGo.Controllers
 
             using (DataSet ds = new DataSet())
             {
-                DataTable table = new DataTable("買受人");
+                DataTable table = new DataTable(res.買受人);
                 ds.Tables.Add(table);
                 table.Columns.Add("發票號碼");
                 table.Columns.Add("營業人名稱");

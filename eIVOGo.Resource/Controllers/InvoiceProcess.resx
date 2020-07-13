@@ -262,6 +262,9 @@
     <value>請選擇重送資料!!</value>
     <comment>請選擇重送資料!!</comment>
   </data>
+  <data name="買受人" xml:space="preserve">
+    <value>買受人</value>
+  </data>
   <data name="買受人EMail" xml:space="preserve">
     <value>買受人EMail</value>
     <comment>買受人EMail</comment>

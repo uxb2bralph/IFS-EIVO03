@@ -145,7 +145,7 @@
     <value>Allowance date</value>
   </data>
   <data name="折讓資料明細" xml:space="preserve">
-    <value>Allowance data details</value>
+    <value>AllowanceDataDetails</value>
   </data>
   <data name="未稅金額" xml:space="preserve">
     <value>Untaxed amount</value>

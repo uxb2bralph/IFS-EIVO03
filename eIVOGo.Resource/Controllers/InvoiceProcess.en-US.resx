@@ -133,7 +133,7 @@
     <value>Download data request has been sent!!</value>
   </data>
   <data name="作廢電子發票" xml:space="preserve">
-    <value>Void electronic invoice</value>
+    <value> void electronic invoice</value>
   </data>
   <data name="備註" xml:space="preserve">
     <value>Remarks</value>
@@ -227,6 +227,9 @@
   </data>
   <data name="請選擇重送資料!!" xml:space="preserve">
     <value>Please choose to resend the information!!</value>
+  </data>
+  <data name="買受人" xml:space="preserve">
+    <value>Buyer</value>
   </data>
   <data name="買受人EMail" xml:space="preserve">
     <value>Buyer EMail</value>

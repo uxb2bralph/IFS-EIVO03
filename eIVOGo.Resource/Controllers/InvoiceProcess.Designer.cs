@@ -394,6 +394,15 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
+        ///   查詢類似 買受人 的當地語系化字串。
+        /// </summary>
+        public static string 買受人 {
+            get {
+                return ResourceManager.GetString("買受人", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 買受人EMail 的當地語系化字串。
         /// </summary>
         public static string 買受人EMail {

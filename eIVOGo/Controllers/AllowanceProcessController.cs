@@ -124,7 +124,6 @@ namespace eIVOGo.Controllers
                     //    .Select(p => p.Remark))
                 });
 
-
             Response.Clear();
             Response.ClearContent();
             Response.ClearHeaders();
@@ -134,36 +133,53 @@ namespace eIVOGo.Controllers
 
             using (DataSet ds = new DataSet())
             {
-                DataTable table = new DataTable("折讓資料明細");
+                DataTable table = new DataTable(res.折讓資料明細);
                 ds.Tables.Add(table);
-                table.Columns.Add(res.折讓單號碼);
-                table.Columns.Add(res.原發票號碼);
-                table.Columns.Add(res.折讓日期);
-                table.Columns.Add(res.客戶ID);
-                table.Columns.Add(res.發票開立人);
-                table.Columns.Add(res.開立人統編);
-                table.Columns.Add(res.未稅金額);
-                table.Columns.Add(res.稅額);
-                table.Columns.Add(res.含稅金額);
-                table.Columns.Add(res.買受人名稱);
-                table.Columns.Add(res.買受人統編);
-                table.Columns.Add(res.連絡人名稱);
-                table.Columns.Add(res.連絡人地址);
-                table.Columns.Add(res.買受人EMail);
-                table.Columns.Add(res.備註);
+                table.Columns.Add("折讓單號碼");
+                table.Columns.Add("原發票號碼");
+                table.Columns.Add("折讓日期");
+                table.Columns.Add("客戶ID");
+                table.Columns.Add("發票開立人");
+                table.Columns.Add("開立人統編");
+                table.Columns.Add("未稅金額");
+                table.Columns.Add("稅額");
+                table.Columns.Add("含稅金額");
+                table.Columns.Add("買受人名稱");
+                table.Columns.Add("買受人統編");
+                table.Columns.Add("連絡人名稱");
+                table.Columns.Add("連絡人地址");
+                table.Columns.Add("買受人EMail");
+                table.Columns.Add("備註");
 
                 DataSource.GetDataSetResult(items, table);
-                var aa = res.買受人統編 + " = '0000000000'";
-                foreach (var r in table.Select(aa))
+                foreach (var r in table.Select("買受人統編 = '0000000000'"))
                 {
-                    r[res.買受人統編] = "";
+                    r["買受人統編"] = "";
                 }
+
+                table.Columns[0].Caption = res.折讓單號碼;
+                table.Columns[1].Caption = res.原發票號碼;
+                table.Columns[2].Caption = res.折讓日期;
+                table.Columns[3].Caption = res.客戶ID;
+                table.Columns[4].Caption = res.發票開立人;
+                table.Columns[5].Caption = res.開立人統編;
+                table.Columns[6].Caption = res.未稅金額;
+                table.Columns[7].Caption = res.稅額;
+                table.Columns[8].Caption = res.含稅金額;
+                table.Columns[9].Caption = res.買受人名稱;
+                table.Columns[10].Caption = res.買受人統編;
+                table.Columns[11].Caption = res.連絡人名稱;
+                table.Columns[12].Caption = res.連絡人地址;
+                table.Columns[13].Caption = res.買受人EMail;  
+                table.Columns[14].Caption = res.備註;
 
                 using (var xls = ds.ConvertToExcel())
                 {
                     xls.SaveAs(Response.OutputStream);
                 }
             }
+
+
 
             return new EmptyResult();
         }

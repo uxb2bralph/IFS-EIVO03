@@ -192,4 +192,10 @@
   <data name="開立通知" xml:space="preserve">
     <value>Opening notice</value>
   </data>
+  <data name="附件檔" xml:space="preserve">
+    <value>Attachment file</value>
+  </data>
+  <data name="附件檔頁數" xml:space="preserve">
+    <value>Number of attachment files</value>
+  </data>
 </root>

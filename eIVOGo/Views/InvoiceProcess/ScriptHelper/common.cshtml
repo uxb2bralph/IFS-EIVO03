@@ -19,7 +19,7 @@
     _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 }
 
-<script>
+    <script>
     var uiInvoiceQuery;
     $(function () {
         var $postForm;
@@ -98,10 +98,12 @@
                     $postForm.remove();
                 }
 
+                var $formData = $('#queryArea').find('input,select,textarea').serializeArray();
+
                 $postForm = $('<form method="post" />').prop('action', '@(Url.Action("CreateXlsx","InvoiceProcess"))')
                     .css('display', 'none').appendTo($('body'));
 
-                $('#theForm').serializeArray().forEach(function (item, index) {
+                $formData.forEach(function (item, index) {
                     $('<input type="hidden">')
                         .prop('name', item.name).prop('value', item.value)
                         .appendTo($postForm);
@@ -114,10 +116,12 @@
                     $postForm.remove();
                 }
 
+                var $formData = $('#queryArea').find('input,select,textarea').serializeArray();
+
                 $postForm = $('<form method="post" />').prop('action', '@(Url.Action("ExportInvoiceBuyer","InvoiceProcess"))')
                     .css('display', 'none').appendTo($('body'));
 
-                $('#theForm').serializeArray().forEach(function (item, index) {
+                $formData.forEach(function (item, index) {
                     $('<input type="hidden">')
                         .prop('name', item.name).prop('value', item.value)
                         .appendTo($postForm);
@@ -154,4 +158,4 @@
             },
         };
     });
-</script>
+    </script>

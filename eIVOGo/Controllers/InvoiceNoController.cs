@@ -813,7 +813,7 @@ namespace eIVOGo.Controllers
         /// <returns></returns>
         public ActionResult GetUploadInvoiceTrackCodeSample()
         {
-            var items = models.GetTable<InvoiceItem>().Where(i => false).Take(100);
+            //var items = models.GetTable<InvoiceItem>().Where(i => false).Take(100);
 
             Response.Clear();
             Response.ClearContent();
