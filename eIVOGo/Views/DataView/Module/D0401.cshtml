@@ -15,6 +15,8 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using res=eIVOGo.Resource.Views.DataView.Module.D0401
+
 @{
 
     ModelSource<InvoiceItem> models;
@@ -37,19 +39,19 @@
             {
                 <p style="text-align:center;max-width:5cm;">@(_model.InvoiceAllowanceSeller.CustomerName)</p>
             }
-            <p style="text-align:center">營業人銷貨退回、進貨退出<Br />或折讓證明單</p>
+            <p style="text-align:center">@res.營業人銷貨退回_進貨退出<Br />@res.或折讓證明單</p>
             <p style="text-align:center">@(String.Format("{0:yyyy-MM-dd}", _model.AllowanceDate))</p>
             <p>
-                賣方統編：@(_model.InvoiceAllowanceSeller.ReceiptNo)<br />
-                賣方名稱：@(_model.InvoiceAllowanceSeller.CustomerName)<br />
-                發票開立日期：@(String.Format("{0:yyyy-MM-dd}", details.InvoiceDate))<br />
+                @res.賣方統編_@(_model.InvoiceAllowanceSeller.ReceiptNo)<br />
+                @res.賣方名稱_@(_model.InvoiceAllowanceSeller.CustomerName)<br />
+                @res.發票開立日期_@(String.Format("{0:yyyy-MM-dd}", details.InvoiceDate))<br />
                 @(details.InvoiceNo.Substring(0, 2))-@(details.InvoiceNo.Substring(2))<br />
-                買方統編：@(!_model.InvoiceAllowanceBuyer.IsB2C() ? _model.InvoiceAllowanceBuyer.ReceiptNo : null)<br />
-                買方名稱：@(!_model.InvoiceAllowanceBuyer.IsB2C() ? _model.InvoiceAllowanceBuyer.CustomerName : null)<br />
+                @res.買方統編_@(!_model.InvoiceAllowanceBuyer.IsB2C() ? _model.InvoiceAllowanceBuyer.ReceiptNo : null)<br />
+                @res.買方名稱_@(!_model.InvoiceAllowanceBuyer.IsB2C() ? _model.InvoiceAllowanceBuyer.CustomerName : null)<br />
             </p>
             <p></p>
             <p>
-                @{ 
+                @{
                     var items = _model.InvoiceAllowanceDetails.Select(d => d.InvoiceAllowanceItem);
                     bool specialTaxType = false;
                 }
@@ -60,37 +62,37 @@
                     {
                         specialTaxType = withTax;
                     }
-                    <text>品名：@(d.OriginalDescription)</text><br />
-                    <text>數量：@(String.Format("{0:##,###,###,##0.##}", d.Piece))</text><br />
+                    <text>@res.品名_@(d.OriginalDescription)</text><br />
+                    <text>@res.數量_@(String.Format("{0:##,###,###,##0.##}", d.Piece))</text><br />
                     <br />
                     if (withTax)
                     {
-                        <text>金額(含稅)：</text>
+                        <text>@res.金額_含稅__</text>
                     }
                     else
                     {
-                        <text>金額(不含稅)：</text>
+                        <text>@res.金額_不含稅__</text>
 
                     }
                     @(String.Format("{0:##,###,###,##0.##}", d.Amount))<br />
-                    <text>課稅別：@((d.TaxType == (byte)Naming.TaxTypeDefinition.零稅率 || d.TaxType == (byte)Naming.TaxTypeDefinition.零稅率) ? "TZ" : "TX")</text>
+                    <text>@res.課稅別_@((d.TaxType == (byte)Naming.TaxTypeDefinition.零稅率 || d.TaxType == (byte)Naming.TaxTypeDefinition.零稅率) ? "TZ" : "TX")</text>
                 }
             </p>
             <p>
-                營業稅額合計：@(String.Format("{0:##,###,###,##0.##}", _model.TaxAmount))<br />
+                @res.營業稅額合計_@(String.Format("{0:##,###,###,##0.##}", _model.TaxAmount))<br />
                 @if (specialTaxType)
                 {
-                    <text>金額(含稅)合計：</text>
+                    <text>@res.金額_含稅_合計_</text>
                 }
                 else
                 {
-                    <text>金額(不含稅)合計：</text>
+                    <text>@res.金額_不含稅_合計_</text>
                 }
                 @(String.Format("{0:##,###,###,##0.##}", _model.TotalAmount))<br />
             </p>
             <p></p>
             <p>
-                簽收人：
+                @res.簽收人_
             </p>
         </div>
     </div>

@@ -466,6 +466,21 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Page.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\DataView\D0401.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>D0401.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataView\Module\D0401.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>D0401.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataView\Module\D0401.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>D0401.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\DataView\Module\Invoice.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -495,6 +510,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>B2BInvoice.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\SimpleAllowance.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SimpleAllowance.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Forms\SimpleAllowance.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SimpleAllowance.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\Forms\SimpleInvoice.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -816,6 +841,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddItem.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\AllowanceCreated.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AllowanceCreated.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceBusiness\Module\AllowanceCreated.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AllowanceCreated.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceBusiness\Module\InvoiceCreated.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1025,6 +1060,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EditInvoiceBuyer.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\IssueAllowance.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IssueAllowance.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\IssueAllowance.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IssueAllowance.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\InvoiceProcess\Module\ItemTable.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1702,6 +1747,18 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Page.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataView\D0401.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>D0401.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataView\Module\D0401.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>D0401.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataView\Module\D0401.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>D0401.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\DataView\Module\Invoice.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Invoice.en-US.Designer.cs</LastGenOutput>
@@ -1725,6 +1782,14 @@
     <EmbeddedResource Include="Views\Forms\B2BInvoice.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>B2BInvoice.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\SimpleAllowance.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SimpleAllowance.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Forms\SimpleAllowance.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SimpleAllowance.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\SimpleInvoice.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1983,6 +2048,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AddItem.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\AllowanceCreated.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AllowanceCreated.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceBusiness\Module\AllowanceCreated.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AllowanceCreated.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceBusiness\Module\InvoiceCreated.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceCreated.en-US.Designer.cs</LastGenOutput>
@@ -2154,6 +2227,14 @@
     <EmbeddedResource Include="Views\InvoiceProcess\Module\EditInvoiceBuyer.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EditInvoiceBuyer.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\IssueAllowance.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IssueAllowance.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\IssueAllowance.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IssueAllowance.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\Module\ItemTable.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
