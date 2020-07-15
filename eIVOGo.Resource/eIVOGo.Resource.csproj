@@ -1081,6 +1081,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceQueryForAction.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceProcess\InvoiceQueryForNotice.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceQueryForNotice.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\InvoiceQueryForNotice.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceQueryForNotice.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceProcess\Module\DataItem.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1151,6 +1161,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DoAction.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\DoNotify.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DoNotify.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\DoNotify.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DoNotify.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceProcess\ResultAction\MainQueryAction.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1190,6 +1210,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceAction.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ScriptHelper\Notify.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Notify.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ScriptHelper\Notify.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Notify.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\OrganizationQuery\Module\CompanyList.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2283,6 +2313,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceQueryForAction.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQueryForNotice.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceQueryForNotice.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQueryForNotice.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceQueryForNotice.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\Module\DataItem.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DataItem.en-US.Designer.cs</LastGenOutput>
@@ -2340,6 +2378,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DoAction.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DoNotify.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DoNotify.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DoNotify.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DoNotify.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\MainQueryAction.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainQueryAction.en-US.Designer.cs</LastGenOutput>
@@ -2371,6 +2417,14 @@
     <EmbeddedResource Include="Views\InvoiceProcess\ScriptHelper\InvoiceAction.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceAction.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ScriptHelper\Notify.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Notify.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ScriptHelper\Notify.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Notify.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\OrganizationQuery\Module\CompanyList.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

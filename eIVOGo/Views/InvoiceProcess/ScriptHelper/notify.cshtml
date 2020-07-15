@@ -1,15 +1,6 @@
-﻿@using System.IO
-@using System.Linq.Expressions
+﻿@using res=eIVOGo.Resource.Views.InvoiceProcess.ScriptHelper.Notify
 
-@using eIVOGo.Helper
-@using eIVOGo.Models
-@using Model.DataEntity
-@using Model.Helper
-@using Model.Locale
-@using Utility
-@using Uxnet.Web.WebUI
-
-<script>
+    <script>
     $(function () {
         var $postForm;
         if (!window.uiInvoiceQuery) {
@@ -17,7 +8,7 @@
         }
         window.uiInvoiceQuery.notify = function () {
             if (!$('input[name="chkItem"]').is(':checked')) {
-                alert('請選擇重送資料!!');
+                alert('@res.請選擇重送資料__');
                 return false;
             }
 
@@ -38,7 +29,7 @@
         };
         window.uiInvoiceQuery.authorize = function () {
             if (!$('input[name="chkItem"]').is(':checked')) {
-                alert('請選擇核准重印資料!!');
+                alert('@res.請選擇核准重印資料__');
                 return false;
             }
 
@@ -63,7 +54,7 @@
 
         window.uiInvoiceQuery.voidInvoice = function (mode) {
             if (!$('input[name="chkItem"]').is(':checked')) {
-                alert('請選擇註銷資料!!');
+                alert('@res.請選擇核准註銷資料__');
                 return false;
             }
 
@@ -88,7 +79,7 @@
 
         window.uiInvoiceQuery.desireToVoid = function (allow) {
             if (!$('input[name="chkItem"]').is(':checked')) {
-                alert('請選擇核准註銷資料!!');
+                alert('@res.請選擇核准註銷資料__');
                 return false;
             }
 
@@ -112,4 +103,4 @@
         };
 
     });
-</script>
+    </script>

@@ -1,11 +1,5 @@
 ﻿
-@using System.IO
-@using System.Linq.Expressions
-
-
-@using Model.DataEntity
-@using Model.Locale
-@using Utility
+@using res=eIVOGo.Resource.Views.InvoiceProcess.ResultAction.DoNotify
 
 @{ 
 
@@ -14,7 +8,7 @@
 <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td class="Bargain_btn">
-            <button type="button" class="btn" name="btnNotify" onclick="uiInvoiceQuery.notify();">重送開立通知</button>
+            <button type="button" class="btn" name="btnNotify" onclick="uiInvoiceQuery.notify();">@res.重送開立通知</button>
         </td>
     </tr>
 </table>
