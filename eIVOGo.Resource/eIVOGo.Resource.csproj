@@ -1081,6 +1081,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceQueryForAction.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceProcess\InvoiceQueryForMIG.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceQueryForMIG.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\InvoiceQueryForMIG.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceQueryForMIG.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceProcess\InvoiceQueryForNotice.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1170,6 +1180,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DoNotify.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\DownloadMIG.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DownloadMIG.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\DownloadMIG.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DownloadMIG.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\InvoiceProcess\ResultAction\MainQueryAction.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2313,6 +2333,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceQueryForAction.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQueryForMIG.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceQueryForMIG.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQueryForMIG.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceQueryForMIG.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQueryForNotice.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceQueryForNotice.en-US.Designer.cs</LastGenOutput>
@@ -2385,6 +2413,14 @@
     <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DoNotify.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DoNotify.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DownloadMIG.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DownloadMIG.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DownloadMIG.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DownloadMIG.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\MainQueryAction.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

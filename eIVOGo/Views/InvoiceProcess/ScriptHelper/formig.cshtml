@@ -10,10 +10,12 @@
                 $postForm.remove();
             }
 
+            var $formData = $('input[name="chkItem"]:checked').serializeArray();
+
             $postForm = $('<form method="post" target="dataFrame" />').prop('action', '@(Url.Action("DownloadC0401","InvoiceProcess"))')
                 .css('display', 'none').appendTo($('body'));
 
-            $('#theForm').serializeArray().forEach(function (item, index) {
+            $formData.forEach(function (item, index) {
                 $('<input type="hidden">')
                     .prop('name', item.name).prop('value',item.value)
                     .appendTo($postForm);
@@ -27,10 +29,12 @@
                 $postForm.remove();
             }
 
+            var $formData = $('input[name="chkItem"]:checked').serializeArray();
+
             $postForm = $('<form method="post" target="dataFrame" />').prop('action', '@(Url.Action("DownloadC0701","InvoiceProcess"))')
                 .css('display', 'none').appendTo($('body'));
 
-            $('#theForm').serializeArray().forEach(function (item, index) {
+            $formData.forEach(function (item, index) {
                 $('<input type="hidden">')
                     .prop('name', item.name).prop('value',item.value)
                     .appendTo($postForm);
@@ -43,10 +47,12 @@
                 $postForm.remove();
             }
 
+            var $formData = $('input[name="chkItem"]:checked').serializeArray();
+
             $postForm = $('<form method="post" target="dataFrame" />').prop('action', '@(Url.Action("DownloadC0501","InvoiceProcess"))')
                 .css('display', 'none').appendTo($('body'));
 
-            $('#theForm').serializeArray().forEach(function (item, index) {
+            $formData.forEach(function (item, index) {
                 $('<input type="hidden">')
                     .prop('name', item.name).prop('value',item.value)
                     .appendTo($postForm);
