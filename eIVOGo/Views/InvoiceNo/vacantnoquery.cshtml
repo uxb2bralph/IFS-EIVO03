@@ -11,6 +11,7 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using res=eIVOGo.Resource.Views.InvoiceNo.VacantNoQuery
 
 @{ 
         Model.Security.MembershipManagement.UserProfileMember _profile;
@@ -23,31 +24,36 @@
 }
 
 <!--交易畫面標題-->
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "上期發票空白號碼查詢／匯出");}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.上期發票空白號碼查詢_匯出);}
 
 <div class="border_gray">
     <!--表格 開始-->
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title" id="queryArea">
         <tr>
             <th colspan="2" class="Head_style_a">
-                查詢條件
+                @res.查詢條件
             </th>
         </tr>
         <tr>
             <th>
-                開立人統編
+                @res.開立人統編
             </th>
             <td class="tdleft">
                 @{
-                    Html.RenderAction("SellerSelector", "DataFlow", new SellerSelectorViewModel { FieldName = "KeyID", Encrypt = true, SelectorIndication="全部" });
-                }
-            </td>
-        </tr>
-        <tr>
-            <th>
-                發票年度（民國年）
-            </th>
-            <td class="tdleft">
+                            Html.RenderAction("SellerSelector", "DataFlow", new SellerSelectorViewModel { FieldName = "SellerID", SelectorIndication= @res.全部 });
+                            }
+                    </td>
+        
+                </tr>
+        
+                <tr>
+        
+                    <th>
+                        @res.發票年度_民國年_
+
+                    </th>
+        
+                    <td class="tdleft">
                 <select name="Year">
                     @for (int y = DateTime.Today.Year; y >= 2011; y--)
                     {
@@ -64,12 +70,12 @@
             </td>
         </tr>
         <tr>
-            <th>發票期別</th>
+            <th>@res.發票期別</th>
             <td class="tdleft">
                 <select name="PeriodNo">
                     @for (int y = 1; y < 7; y++)
                     {
-                        <option value="@(y)">@(String.Format("{0:00}-{1:00}月",y*2-1,y*2))</option>
+                        <option value="@(y)">@(String.Format("{0:00}-{1:00}{2}",y*2-1,y*2,res.月))</option>
                     }
                 </select>
                 @*<script>
@@ -99,8 +105,8 @@
     <tbody>
         <tr>
             <td class="Bargain_btn">
-                <button type="button" onclick="uiVacantNoQuery.inquire();">查詢</button>&nbsp;&nbsp;
-                <button type="button" onclick="uiVacantNoQuery.process();">重新整理空白發票</button>
+                <button type="button" onclick="uiVacantNoQuery.inquire();">@res.查詢</button>&nbsp;&nbsp;
+                <button type="button" onclick="uiVacantNoQuery.process();">@res.重新整理空白發票</button>
             </td>
         </tr>
     </tbody>
@@ -117,17 +123,17 @@
                 } else {
                     $('input[name="sort"]').remove();
                 }
-
-                var $tr = $(event.target).closest('tr');
-                var $formData = $tr.find('input,select,textarea').serializeObject();
-                var obj;
+                
+                var $formData = $('#queryArea').find('input,select,textarea').serializeObject();                
 
                 $.ajax({
                     type: "POST",
-                    url: "@(Url.Action("InquireVacantNo","InvoiceNo",new { obj = "$formData" }))",
+                    url: "@Url.Action("InquireVacantNo","InvoiceNo", new { obj = "$formData" })",                    
                     beforeSubmit: function () {
                         showLoading();
                     },
+                    data: $formData,
+                    datatype: "text",
                     success: function (data) {
                         if (data) {
                             if (onPaging) {
@@ -144,7 +150,7 @@
                     error: function () {
                         hideLoading();
                     }
-                }).submit();
+                });
             },
 
             download: function () {

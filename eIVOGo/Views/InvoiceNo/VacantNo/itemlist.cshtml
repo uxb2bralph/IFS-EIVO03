@@ -1,9 +1,8 @@
 ﻿@using System.IO
 @using System.Linq.Expressions
-
-
 @using Model.DataEntity
 @using Model.Locale
+@using res=eIVOGo.Resource.Views.InvoiceNo.VacantNo.ItemList
 
 @{ 
     List<InquireVacantNoResult> _model;
@@ -20,12 +19,12 @@
 <table class="table01 itemList">
     <thead>
         <tr>
-            <th style="min-width: 100px">發票年度</th>
-            <th style="min-width: 100px">發票期別</th>
-            <th style="min-width: 80px">字軌</th>
-            <th style="min-width: 160px">發票號碼起</th>
-            <th style="min-width: 160px">發票號碼迄</th>
-            <th style="min-width: 150px">數量</th>
+            <th style="min-width: 100px">@res.發票年度</th>
+            <th style="min-width: 100px">@res.發票期別</th>
+            <th style="min-width: 80px">@res.字軌</th>
+            <th style="min-width: 160px">@res.發票號碼起</th>
+            <th style="min-width: 160px">@res.發票號碼迄</th>
+            <th style="min-width: 150px">@res.數量</th>
         </tr>
     </thead>
     <tbody>

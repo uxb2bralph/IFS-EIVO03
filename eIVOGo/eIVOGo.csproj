@@ -1502,7 +1502,6 @@
     <Content Include="Views\InvoiceBusiness\POSDevice\DataItem.ascx" />
     <Content Include="Views\InvoiceNo\Module\EditPOSBooklets.ascx" />
     <Content Include="Views\InvoiceNo\VacantNoQuery.ascx" />
-    <Content Include="Views\InvoiceNo\VacantNoIndex.aspx" />
     <Content Include="Views\InvoiceNo\InvoiceNoIntervalManager.ascx" />
     <Content Include="Views\InvoiceNo\MaintainInvoiceNoInterval.aspx" />
     <Content Include="Views\InvoiceNo\Module\EditItem.ascx" />

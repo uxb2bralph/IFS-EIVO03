@@ -3,9 +3,10 @@
 @using Model.DataEntity
 @using Model.Locale
 @using Utility
+@using res=eIVOGo.Resource.Views.InvoiceNo.VacantNo.QueryResult
 
 @{
-    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.查詢結果);
 
     List<InquireVacantNoResult> _model;
 
@@ -22,15 +23,15 @@
         <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="Bargain_btn">
-                    <input type="button" class="btn" name="btnPrint" value="下載Xml" onclick="uiVacantNoQuery.download();" />
-                    <input type="button" class="btn" name="btnPrint" value="下載Csv" onclick="uiVacantNoQuery.downloadCsv();" />
+                    <input type="button" class="btn" name="btnPrint" value="@res.下載Xml" onclick="uiVacantNoQuery.download();" />
+                    <input type="button" class="btn" name="btnPrint" value="@res.下載Csv" onclick="uiVacantNoQuery.downloadCsv();" />
                 </td>
             </tr>
         </table>
     }
     else
     {
-        <font color="red">查無資料!!</font>
+        <font color="red">@res.查無資料__</font>
     }
 </div>
 

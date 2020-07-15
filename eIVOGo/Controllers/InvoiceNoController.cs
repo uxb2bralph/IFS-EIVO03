@@ -5,6 +5,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
@@ -107,7 +108,7 @@ namespace eIVOGo.Controllers
                 items.AddRange(((EIVOEntityDataContext)models.GetDataContext()).InquireVacantNo(org.CompanyID, viewModel.Year, viewModel.PeriodNo));
             }
 
-            return View("~/Views/InvoiceNo/VacantNo/QueryResult.ascx", items);
+            return View("~/Views/InvoiceNo/VacantNo/QueryResult.cshtml", items);
         }
 
         public ActionResult DownloadVacantNo(InquireNoIntervalViewModel viewModel)
@@ -203,22 +204,90 @@ namespace eIVOGo.Controllers
 
         public ActionResult DownloadVacantNoCsv(InquireNoIntervalViewModel viewModel)
         {
+            //舊的.ascx用==================================================
+            //ViewResult result = (ViewResult)InquireVacantNo(viewModel);
+            //if (!ModelState.IsValid)
+            //{
+            //    return result;
+            //}
+
+            //List<InquireVacantNoResult> items = (List<InquireVacantNoResult>)result.Model;
+
+            //if (items.Count <= 0)
+            //{
+            //    ViewBag.Message = res.資料不存在__;
+            //    return View("~/Views/Shared/AlertMessage.cshtml");
+            //}
+
+            //return View("~/Views/InvoiceNo/VacantNo/DownloadCsv.cshtml", items);
+
             ViewResult result = (ViewResult)InquireVacantNo(viewModel);
             if (!ModelState.IsValid)
             {
                 return result;
             }
 
-            List<InquireVacantNoResult> items = (List<InquireVacantNoResult>)result.Model;
+            List<InquireVacantNoResult> _model = (List<InquireVacantNoResult>)result.Model;
 
-            if (items.Count <= 0)
+            if (_model.Count <= 0)
             {
                 ViewBag.Message = res.資料不存在__;
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
-            return View("~/Views/InvoiceNo/VacantNo/DownloadCsv.ascx", items);
+            IEnumerable<InquireVacantNoResult> _items = _model.Where(r => !r.CheckPrev.HasValue);
+            ViewBag.DataItems = _model;
 
+            var item = _model.First();
+
+            //取檔名
+            var orgItem = models.GetTable<Organization>().Where(o => o.CompanyID == item.SellerID).First();
+            var fileName = res.空白發票 +"_" + orgItem.ReceiptNo + "(" + String.Format("{0}{1:00}", item.Year - 1911, item.PeriodNo * 2) + ").csv";
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "text/csv";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));  
+
+            //.csv方法==================================================================================
+            StreamWriter sw = new StreamWriter(Response.OutputStream, Encoding.GetEncoding("BIG5"));            
+
+            int idx = 1;
+
+            foreach (var _item in _items)
+            {
+                var _orgItem = models.GetTable<Organization>().Where(o => o.CompanyID == _item.SellerID).First();
+
+                InquireVacantNoResult tailItem;
+
+                if (item.CheckNext.HasValue)
+                {
+                    tailItem = _model[_model.IndexOf(_item) + 1];
+                }
+                else
+                {
+                    tailItem = _item;
+                }
+
+                sw.Write(String.Format("{0:00000}", idx++) + "," 
+                    + _orgItem.ReceiptNo + ","
+                    + String.Format("{0}{1:00}", _item.Year - 1911, _item.PeriodNo * 2)+","
+                    + _item.TrackCode+","
+                    + String.Format("{0:00000000}", _item.InvoiceNo)+","
+                    + String.Format("{0:00000000}", tailItem.InvoiceNo)+","
+                    + $"{tailItem.InvoiceType:00}"+","
+                    + "\r\n");
+            }
+
+            sw.WriteLine();
+
+            sw.Close();
+
+            Response.End();
+
+            return new EmptyResult();
         }
 
 

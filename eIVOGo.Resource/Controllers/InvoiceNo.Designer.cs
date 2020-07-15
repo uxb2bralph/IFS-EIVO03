@@ -106,6 +106,15 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
+        ///   查詢類似 空白發票 的當地語系化字串。
+        /// </summary>
+        public static string 空白發票 {
+            get {
+                return ResourceManager.GetString("空白發票", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 空白發票字軌 的當地語系化字串。
         /// </summary>
         public static string 空白發票字軌 {

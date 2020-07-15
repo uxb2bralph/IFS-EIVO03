@@ -132,8 +132,11 @@
   <data name="營業人統編錯誤!!" xml:space="preserve">
     <value>The salesperson is wrong!!</value>
   </data>
+  <data name="空白發票" xml:space="preserve">
+    <value>BlankInvoice</value>
+  </data>
   <data name="空白發票字軌" xml:space="preserve">
-    <value>Blank invoice track</value>
+    <value>BlankInvoiceTtrack</value>
   </data>
   <data name="系統中已存在重疊的區段!!" xml:space="preserve">
     <value>There are already overlapping sections in the system!!</value>

@@ -117,61 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="不符號碼大小順序與差距為50之倍數原則!!" xml:space="preserve">
-    <value>不符號碼大小順序與差距為50之倍數原則!!</value>
+  <data name="下載Csv" xml:space="preserve">
+    <value>下載Csv</value>
   </data>
-  <data name="剩餘號碼不足單一本組數_無法分割_" xml:space="preserve">
-    <value>剩餘號碼不足單一本組數_無法分割_</value>
+  <data name="下載Xml" xml:space="preserve">
+    <value>下載Xml</value>
   </data>
-  <data name="整理完成!!" xml:space="preserve">
-    <value>整理完成!!</value>
+  <data name="查無資料!!" xml:space="preserve">
+    <value>查無資料!!</value>
   </data>
-  <data name="未設定字軌!!" xml:space="preserve">
-    <value>未設定字軌!!</value>
-  </data>
-  <data name="營業人統編錯誤!!" xml:space="preserve">
-    <value>營業人統編錯誤!!</value>
-  </data>
-  <data name="空白發票" xml:space="preserve">
-    <value>空白發票</value>
-  </data>
-  <data name="空白發票字軌" xml:space="preserve">
-    <value>空白發票字軌</value>
-  </data>
-  <data name="系統中已存在重疊的區段!!" xml:space="preserve">
-    <value>系統中已存在重疊的區段!!</value>
-  </data>
-  <data name="該區間之號碼已經被使用,不可修改!!!!" xml:space="preserve">
-    <value>該區間之號碼已經被使用,不可修改!!!!</value>
-  </data>
-  <data name="請輸入均分本數!!" xml:space="preserve">
-    <value>請輸入均分本數!!</value>
-  </data>
-  <data name="請選擇年份!!" xml:space="preserve">
-    <value>請選擇年份!!</value>
-  </data>
-  <data name="請選擇期別!!" xml:space="preserve">
-    <value>請選擇期別!!</value>
-  </data>
-  <data name="請選擇開立人!!" xml:space="preserve">
-    <value>請選擇開立人!!</value>
-  </data>
-  <data name="資料不存在!!" xml:space="preserve">
-    <value>資料不存在!!</value>
-  </data>
-  <data name="起號非8位整數!!" xml:space="preserve">
-    <value>起號非8位整數!!</value>
-  </data>
-  <data name="迄號非8位整數!!" xml:space="preserve">
-    <value>迄號非8位整數!!</value>
-  </data>
-  <data name="違反序時序號原則該區段無法修改!!" xml:space="preserve">
-    <value>違反序時序號原則該區段無法修改!!</value>
-  </data>
-  <data name="違反序時序號原則該區段無法新增!!" xml:space="preserve">
-    <value>違反序時序號原則該區段無法新增!!</value>
-  </data>
-  <data name="配號區間資料錯誤!!" xml:space="preserve">
-    <value>配號區間資料錯誤!!</value>
+  <data name="查詢結果" xml:space="preserve">
+    <value>查詢結果</value>
   </data>
 </root>

@@ -1011,6 +1011,46 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SellerSelector.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceNo\VacantNoQuery.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VacantNoQuery.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\VacantNoQuery.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VacantNoQuery.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\VacantNo\DataItem.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\VacantNo\DataItem.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataItem.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\VacantNo\ItemList.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemList.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\VacantNo\ItemList.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ItemList.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\VacantNo\QueryResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceNo\VacantNo\QueryResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QueryResult.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceProcess\DataAction\DataProcess.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2186,6 +2226,38 @@
     <EmbeddedResource Include="Views\InvoiceNo\Module\SellerSelector.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SellerSelector.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\VacantNoQuery.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>VacantNoQuery.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\VacantNoQuery.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>VacantNoQuery.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\VacantNo\DataItem.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\VacantNo\DataItem.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataItem.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\VacantNo\ItemList.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemList.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\VacantNo\ItemList.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ItemList.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\VacantNo\QueryResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceNo\VacantNo\QueryResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryResult.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\DataAction\DataProcess.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

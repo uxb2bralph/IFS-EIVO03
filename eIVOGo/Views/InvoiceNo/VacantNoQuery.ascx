@@ -15,8 +15,9 @@
 <%@ Import Namespace="Model.Locale" %>
 <%@ Import Namespace="Utility" %>
 <%@ Import Namespace="Uxnet.Web.WebUI" %>
+<a href="../InvoiceProcess/InvoiceQueryByBuyer.cshtml">../InvoiceProcess/InvoiceQueryByBuyer.cshtml</a>
 <!--交易畫面標題-->
-<%  Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "上期發票空白號碼查詢／匯出"); %>
+<%  Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "上期發票空白號碼查詢／匯出"); %><a href="../InvoiceQuery/PrintInvoiceSummary.aspx">../InvoiceQuery/PrintInvoiceSummary.aspx</a>
 <div class="border_gray">
     <!--表格 開始-->
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
