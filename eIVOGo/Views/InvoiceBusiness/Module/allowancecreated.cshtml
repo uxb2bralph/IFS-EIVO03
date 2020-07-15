@@ -7,6 +7,7 @@
 @using Model.DataEntity
 @using eIVOGo.Controllers
 @using Business.Helper
+@using res= eIVOGo.Resource.Views.InvoiceBusiness.Module.AllowanceCreated
 
 @{
     ModelStateDictionary _modelState;
@@ -21,11 +22,11 @@
 @if (_model != null)
 {
     <div>
-        折讓證明單已開立，<br />
-        號碼：@(_model.AllowanceNumber)<br />
-        <a href="@(Url.Action("PrintSingleAllowanceAsPDF", "DataView", new { keyID = _model.AllowanceID.EncryptKey() }))" target="_blank">列印資料下載</a>
+        @res.折讓證明單已開立_<br />
+        @res.號碼_@(_model.AllowanceNumber)<br />
+        <a href="@(Url.Action("PrintSingleAllowanceAsPDF", "DataView", new { keyID = _model.AllowanceID.EncryptKey() }))" target="_blank">@res.列印資料下載</a>
         <br />
-        <a href="@(Url.Action("ShowAllowance", "DataView", new { keyID = _model.AllowanceID.EncryptKey(), ResultMode = Naming.DataResultMode.Print }))" target="_blank">立即檢視列印</a>
+        <a href="@(Url.Action("ShowAllowance", "DataView", new { keyID = _model.AllowanceID.EncryptKey(), ResultMode = Naming.DataResultMode.Print }))" target="_blank">@res.立即檢視列印</a>
         <br />
     </div>
 }

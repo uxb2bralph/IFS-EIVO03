@@ -1,4 +1,4 @@
-
+﻿
 @using System.IO
 @using System.Linq.Expressions
 
@@ -11,17 +11,11 @@
 @using Uxnet.Web.WebUI
 @using eIVOGo.Helper
 
-@section headContent { 
- 
+@{ 
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
+
+    ViewBag.ActionName = "首頁 > 發票作業";
 }
-@{ Html.RenderPartial("~/Views/InvoiceNo/VacantNoQuery.ascx");}
 
-<script runat="server">
+@{ Html.RenderPartial("~/Views/InvoiceNo/VacantNoQuery.cshtml");}
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        ViewBag.ActionName = "首頁 > 發票作業";
-    }
-
-</script>

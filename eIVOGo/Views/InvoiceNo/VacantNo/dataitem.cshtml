@@ -1,43 +1,43 @@
-
-@using System.IO
+﻿@using System.IO
 @using System.Linq.Expressions
 
 @using Model.DataEntity
 @using Model.Locale
 @using Model.DataEntity
 
+@{
+
+    InquireVacantNoResult _model;
+    InquireVacantNoResult _tailItem = new InquireVacantNoResult();
+    List<InquireVacantNoResult> _items;
+
+
+    _model = (InquireVacantNoResult)this.Model;
+    _items = (List<InquireVacantNoResult>)ViewBag.DataItems;
+    if (_model.CheckNext.HasValue)
+    { checkSummary(_model, _tailItem, _items); }
+    else
+    { _tailItem = _model; }
+}
+@functions  {
+
+    long checkSummary(InquireVacantNoResult model, InquireVacantNoResult tailItem, List<InquireVacantNoResult> items)
+    {
+        var index = items.IndexOf(model);
+        tailItem = items[index + 1];
+        return tailItem.InvoiceNo - model.InvoiceNo + 1;
+    }
+
+}
+
 <tr>
     <td>@(_model.Year)</td>
-    <td>@(String.Format("{0:00}-{1:00}月",_model.PeriodNo*2-1,_model.PeriodNo*2))</td>
+    <td>@(String.Format("{0:00}-{1:00}月", _model.PeriodNo * 2 - 1, _model.PeriodNo * 2))</td>
     <td>@(_model.TrackCode)</td>
-    <td>@(String.Format("{0:00000000}",_model.InvoiceNo))</td>
-    <td>@(String.Format("{0:00000000}",_tailItem.InvoiceNo))</td>
+    <td>@(String.Format("{0:00000000}", _model.InvoiceNo))</td>
+    <td>@(String.Format("{0:00000000}", _tailItem.InvoiceNo))</td>
     <td>@(_tailItem.InvoiceNo - _model.InvoiceNo + 1)</td>
 </tr>
 
 
-<script runat="server">
 
-    InquireVacantNoResult _model;
-    InquireVacantNoResult _tailItem;
-    List<InquireVacantNoResult> _items;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _model = (InquireVacantNoResult)this.Model;
-        _items = (List<InquireVacantNoResult>)ViewBag.DataItems;
-        if (_model.CheckNext.HasValue)
-            checkSummary();
-        else
-            _tailItem = _model;
-    }
-
-    long checkSummary()
-    {
-        var index = _items.IndexOf(_model);
-        _tailItem = _items[index + 1];
-        return _tailItem.InvoiceNo - _model.InvoiceNo + 1;
-    }
-
-</script>

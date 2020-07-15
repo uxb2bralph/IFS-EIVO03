@@ -43,9 +43,9 @@
 else
 {
     <select class="form-control" name="@(_fieldName)">
-        @if (ViewBag.SelectorIndication != null)
+        @if (_viewModel.SelectorIndication != null)
         {
-            <option value="@(ViewBag.SelectorIndicationValue ?? "")">@(ViewBag.SelectorIndication)</option>
+            <option value="@(_viewModel.SelectorIndicationValue ?? "")">@(_viewModel.SelectorIndication)</option>
         }
         @foreach (var o in _model.OrderBy(o => o.ReceiptNo))
         {

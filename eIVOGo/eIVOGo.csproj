@@ -1512,7 +1512,6 @@
     <Content Include="Views\InvoiceNo\Module\IntervalItemList.ascx" />
     <Content Include="Views\InvoiceNo\Module\QueryResult.ascx" />
     <Content Include="Views\InvoiceNo\VacantNo\DataItem.ascx" />
-    <Content Include="Views\InvoiceNo\VacantNo\DownloadCsv.ascx" />
     <Content Include="Views\InvoiceNo\VacantNo\ItemList.ascx" />
     <Content Include="Views\InvoiceNo\VacantNo\QueryResult.ascx" />
     <Content Include="Views\InvoiceProcess\Buyer\DataItem.ascx" />
@@ -2128,6 +2127,11 @@
     <Content Include="Views\InvoiceBusiness\Module\AllowanceCreated.cshtml" />
     <Content Include="Views\InvoiceNo\Module\UploadInvoiceTrackCode.cshtml" />
     <Content Include="Views\InvoiceNo\Module\ShowUploadActionLink.cshtml" />
+    <Content Include="Views\InvoiceNo\VacantNoIndex.cshtml" />
+    <Content Include="Views\InvoiceNo\VacantNoQuery.cshtml" />
+    <Content Include="Views\InvoiceNo\VacantNo\QueryResult.cshtml" />
+    <Content Include="Views\InvoiceNo\VacantNo\ItemList.cshtml" />
+    <Content Include="Views\InvoiceNo\VacantNo\DataItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

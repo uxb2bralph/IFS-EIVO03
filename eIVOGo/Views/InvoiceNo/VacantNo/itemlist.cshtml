@@ -1,12 +1,21 @@
-
-@{ Register Src="~/Module/Common/ActionHandler.ascx" TagName="ActionHandler" TagPrefix="uc1" }
-@{ Register Src="~/Module/Common/PagingControl.ascx" TagName="PagingControl" TagPrefix="uc2" }
-@using System.IO
+﻿@using System.IO
 @using System.Linq.Expressions
 
 
 @using Model.DataEntity
 @using Model.Locale
+
+@{ 
+    List<InquireVacantNoResult> _model;
+
+    IEnumerable<InquireVacantNoResult> _items;
+
+    _model = (List<InquireVacantNoResult>)this.Model;
+
+    _items = _model.Where(r => !r.CheckPrev.HasValue);
+
+    ViewBag.DataItems = _model;
+}
 
 <table class="table01 itemList">
     <thead>
@@ -21,11 +30,11 @@
     </thead>
     <tbody>
         @{ int idx = 0;}
- @foreach (var item in _items)
-            {
-                idx++;
-                Html.RenderPartial("~/Views/InvoiceNo/VacantNo/DataItem.ascx", item);
-            }
+        @foreach (var item in _items)
+        {
+            idx++;
+            Html.RenderPartial("~/Views/InvoiceNo/VacantNo/DataItem.cshtml", item);
+        }
     </tbody>
     <tfoot>
         <tr>
@@ -34,17 +43,3 @@
     </tfoot>
 </table>
 
-<script runat="server">
-
-    List<InquireVacantNoResult> _model;
-    IEnumerable<InquireVacantNoResult> _items;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _model = (List<InquireVacantNoResult>)this.Model;
-        _items = _model.Where(r => !r.CheckPrev.HasValue);
-        ViewBag.DataItems = _model;
-    }
-
-</script>
