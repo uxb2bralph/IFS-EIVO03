@@ -1081,6 +1081,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceQueryForAction.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceProcess\InvoiceQueryForAllowingToVoid.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceQueryForAllowingToVoid.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\InvoiceQueryForAllowingToVoid.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceQueryForAllowingToVoid.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceProcess\InvoiceQueryForMIG.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2352,6 +2362,14 @@
     <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQueryForAction.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceQueryForAction.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQueryForAllowingToVoid.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceQueryForAllowingToVoid.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQueryForAllowingToVoid.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceQueryForAllowingToVoid.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\InvoiceQueryForMIG.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

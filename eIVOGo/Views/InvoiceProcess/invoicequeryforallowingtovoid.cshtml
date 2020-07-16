@@ -9,6 +9,7 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using res=eIVOGo.Resource.Views.InvoiceProcess.InvoiceQueryForAllowingToVoid
 
 @{
     ModelSource<InvoiceItem> models;
@@ -17,7 +18,7 @@
 
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
 
-    _title = ViewBag.Title ?? "重送開立發票通知";
+    _title = ViewBag.Title ?? res.重送開立發票通知;
 }
 
 <!--交易畫面標題-->
@@ -28,7 +29,7 @@
     <table id="queryArea" width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
         <tr>
             <th colspan="2" class="Head_style_a">
-                查詢條件
+                @res.查詢條件
             </th>
         </tr>
         @{ ((CommonInquiry<InvoiceItem>)this.Model).Render(Html);}
@@ -37,7 +38,7 @@
         <uc5:ByCancellation runat="server" ID="ByCancellation" />
         <tr>
             <th>
-                每頁資料筆數
+                @res.每頁資料筆數
             </th>
             <td class="tdleft">
                 <input name="pageSize" type="text" value="@(Request["pageSize"] ?? Uxnet.Web.Properties.Settings.Default.PageSize.ToString())" />
@@ -53,7 +54,7 @@
     <tbody>
         <tr>
             <td class="Bargain_btn">
-                <button type="button" onclick="uiInvoiceQuery.initQuery = true;uiInvoiceQuery.inquire();">查詢</button>
+                <button type="button" onclick="uiInvoiceQuery.initQuery = true;uiInvoiceQuery.inquire();">@res.查詢</button>
             </td>
         </tr>
     </tbody>
