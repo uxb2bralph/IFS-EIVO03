@@ -33,11 +33,14 @@
                 return false;
             }
 
-            $('#theForm').ajaxForm({
-                url: "@(Url.Action("AuthorizeToPrint","InvoiceProcess"))",
+            var $formData = $('input[name="chkItem"]:checked').serializeObject();
+
+            $.ajax({
+                url: "@(Url.Action("AuthorizeToPrint","InvoiceProcess",new { obj = "$formData" }))",
                 beforeSubmit: function () {
                     showLoading();
                 },
+                data: $formData,
                 success: function (data) {
                     hideLoading();
                     if (data) {
@@ -49,7 +52,7 @@
                 error: function () {
                     hideLoading();
                 }
-            }).submit();
+            });
         };
 
         window.uiInvoiceQuery.voidInvoice = function (mode) {
@@ -58,11 +61,15 @@
                 return false;
             }
 
-            $('#theForm').ajaxForm({
-                url: "@(Url.Action("VoidInvoice","InvoiceProcess"))" + '?mode=' + mode,
+            var $formData = $('input[name="chkItem"]:checked').serializeObject();
+            $formData.mode = mode;
+            
+            $.ajax({
+                url: "@(Url.Action("VoidInvoice","InvoiceProcess", new { obj = "$formData" }))",
                 beforeSubmit: function () {
                     showLoading();
                 },
+                data: $formData,
                 success: function (data) {
                     hideLoading();
                     if (data) {
@@ -74,7 +81,7 @@
                 error: function () {
                     hideLoading();
                 }
-            }).submit();
+            });
         };
 
         window.uiInvoiceQuery.desireToVoid = function (allow) {
@@ -83,11 +90,15 @@
                 return false;
             }
 
-            $('#theForm').ajaxForm({
-                url: "@(Url.Action("DesireToVoidInvoice","InvoiceProcess"))" + '?allow=' + allow,
+            var $formData = $('input[name="chkItem"]:checked').serializeObject();
+            $formData.allow = allow;
+
+            $.ajax({
+                url: "@(Url.Action("DesireToVoidInvoice","InvoiceProcess", new { obj = "$formData" }))",
                 beforeSubmit: function () {
                     showLoading();
                 },
+                data: $formData,
                 success: function (data) {
                     hideLoading();
                     if (data) {
@@ -99,7 +110,7 @@
                 error: function () {
                     hideLoading();
                 }
-            }).submit();
+            });
         };
 
     });

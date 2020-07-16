@@ -1171,6 +1171,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DoAction.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\DoAuthorize.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DoAuthorize.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\DoAuthorize.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DoAuthorize.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceProcess\ResultAction\DoNotify.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1180,6 +1190,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DoNotify.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\DoVoid.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DoVoid.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\DoVoid.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DoVoid.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\InvoiceProcess\ResultAction\DownloadMIG.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2406,6 +2426,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DoAction.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DoAuthorize.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DoAuthorize.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DoAuthorize.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DoAuthorize.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DoNotify.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DoNotify.en-US.Designer.cs</LastGenOutput>
@@ -2413,6 +2441,14 @@
     <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DoNotify.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DoNotify.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DoVoid.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DoVoid.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DoVoid.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DoVoid.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\DownloadMIG.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

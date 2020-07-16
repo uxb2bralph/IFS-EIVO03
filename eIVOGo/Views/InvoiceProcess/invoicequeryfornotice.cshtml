@@ -35,15 +35,13 @@
         </tr>
         @{ ((CommonInquiry<InvoiceItem>)this.Model).Render(Html);}
 
-        <uc5:ByInvoiceNo runat="server" ID="ByInvoiceNo" />
-        <uc5:ByWinningNumber runat="server" ID="ByWinningNumber" />
-        <uc5:ByCancellation runat="server" ID="ByCancellation" />
+        @{  Html.RenderPartial("~/Views/InquireInvoice/ByCancellation.cshtml");}
         <tr>
             <th>
                 @res.通知未送出
             </th>
             <td class="tdleft">
-                <select name="IsNoticed">
+                <select name="IsNoticed" class="form-control">
                     <option value="">@res.全部</option>
                     <option value="@(false)">@res.是</option>
                 </select>
