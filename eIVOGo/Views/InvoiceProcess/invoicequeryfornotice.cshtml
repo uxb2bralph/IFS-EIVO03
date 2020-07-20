@@ -9,7 +9,7 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@using res=eIVOGo.Resource.Views.InvoiceProcess.InvoiceQueryForNotice
+@using res = eIVOGo.Resource.Views.InvoiceProcess.InvoiceQueryForNotice
 
 @{
     ModelSource<InvoiceItem> models;
@@ -35,7 +35,7 @@
         </tr>
         @{ ((CommonInquiry<InvoiceItem>)this.Model).Render(Html);}
 
-        @{  Html.RenderPartial("~/Views/InquireInvoice/ByCancellation.cshtml");}
+        @{ Html.RenderPartial("~/Views/InquireInvoice/ByCancellation.cshtml");}
         <tr>
             <th>
                 @res.通知未送出

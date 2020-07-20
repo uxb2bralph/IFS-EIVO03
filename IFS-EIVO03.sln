@@ -15,6 +15,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uxnet.ToolAdapter", "Uxnet.ToolAdapter\Uxnet.ToolAdapter.csproj", "{B3AE4AFA-632C-493A-AC5A-9E6B7F9A2B30}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelExtension", "ModelExtension\ModelExtension.csproj", "{772BDEAA-BFA0-4BF8-BC1E-A841C3D7DAFF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{74474526-6D59-455B-8E3C-C156AA4A8945} = {74474526-6D59-455B-8E3C-C156AA4A8945}
+	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "InvoiceClientInstaller(TEST)", "InvoiceClientInstaller(TEST)\InvoiceClientInstaller(TEST).vdproj", "{E049BAE2-E4EE-452F-955C-02976720C0E9}"
 EndProject

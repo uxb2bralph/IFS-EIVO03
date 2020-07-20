@@ -387,6 +387,7 @@
     <Content Include="Views\BusinessRelationship\Module\CounterpartBusinessXmlResult.ascx" />
     <Content Include="Views\BusinessRelationship\Module\GroupMemberOptions.ascx" />
     <Content Include="Views\BusinessRelationship\Module\ImportCounterpartBusinessXmlList.ascx" />
+    <Content Include="Views\DataExchange\IndexTemp.aspx" />
     <Content Include="Views\DataExchange\Module\ImportInvoiceResult.ascx" />
     <Content Include="Views\DataView\ConvertDataToAllowance.aspx" />
     <Content Include="Views\DataView\Module\C0401_Notification.ascx" />
@@ -1111,6 +1112,9 @@
     <Content Include="Views\AllowanceProcess\Module\PrintResult.cshtml" />
     <Content Include="Views\Common\Module\Pagination.cshtml" />
     <Content Include="Views\DataFlow\CounterpartBusinessSelector.cshtml" />
+    <Content Include="Views\DataExchange\Index.cshtml" />
+    <Content Include="Views\DataExchange\Module\DataIndex.cshtml" />
+    <Content Include="Views\DataExchange\Module\ImportInvoiceResult.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="Views\Home\MainPage.aspx" />
     <Content Include="Module\Ajax\PagingControl.ascx" />
@@ -1480,7 +1484,6 @@
     <Content Include="Views\BusinessRelationship\Module\MaintainBusinessRelationship.ascx" />
     <Content Include="Views\BusinessRelationship\MaintainRelationship.aspx" />
     <Content Include="Views\BusinessRelationship\Module\QueryResult.ascx" />
-    <Content Include="Views\DataExchange\Index.aspx" />
     <Content Include="Views\DataExchange\Module\DataIndex.ascx" />
     <Content Include="Views\DonatedInvoice\DownloadCSV.aspx" />
     <Content Include="Views\DonatedInvoice\Module\ReportResult.ascx" />

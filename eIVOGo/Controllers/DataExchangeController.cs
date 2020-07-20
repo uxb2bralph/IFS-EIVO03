@@ -15,6 +15,7 @@ using ModelExtension.DataExchange;
 using Utility;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using res = eIVOGo.Resource.Controllers.DataExchange;
 
 namespace eIVOGo.Controllers
 {
@@ -58,10 +59,10 @@ namespace eIVOGo.Controllers
 
                         String result = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".xslx");
                         xlwb.SaveAs(result);
-                        return File(result, "message/rfc822", "修改買受人資料(回應).xlsx");
+                        return File(result, "message/rfc822", res.修改買受人資料_回應_+".xlsx");
                     }
                 }
-                ViewBag.AlertMessage = "檔案錯誤!!";
+                ViewBag.AlertMessage = res.檔案錯誤__;
             }
             catch(Exception ex)
             {
@@ -94,10 +95,10 @@ namespace eIVOGo.Controllers
 
                         String result = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".xslx");
                         xlwb.SaveAs(result);
-                        return File(result, "message/rfc822", "修改發票字軌(回應).xlsx");
+                        return File(result, "message/rfc822", res.修改發票字軌_回應_+".xlsx");
                     }
                 }
-                ViewBag.AlertMessage = "檔案錯誤!!";
+                ViewBag.AlertMessage = res.檔案錯誤__;
             }
             catch (Exception ex)
             {
@@ -126,7 +127,7 @@ namespace eIVOGo.Controllers
 
             if (Request.Files.Count <= 0)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "請選擇匯入檔!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.請選擇匯入檔__);
             }
 
             var file = Request.Files[0];
@@ -170,7 +171,7 @@ namespace eIVOGo.Controllers
                     return result;
                 });
 
-            return View("~/Views/DataExchange/Module/ImportInvoiceResult.ascx", items);
+            return View("~/Views/DataExchange/Module/ImportInvoiceResult.cshtml", items);
 
         }
 

@@ -69,6 +69,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BusinessRelationship.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\DataExchange.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataExchange.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\DataView.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -129,6 +134,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Organization.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\DataExchange.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataExchange.resx</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\TrackCode.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -169,6 +179,16 @@
     </Compile>
     <Compile Include="Helpers\CultureHelper.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\GetSample.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GetSample.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\GetSample.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GetSample.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\MvcValidation.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -178,6 +198,26 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MvcValidation.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ModelExtension\DataExchange\InvoiceBuyerExchange.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceBuyerExchange.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ModelExtension\DataExchange\InvoiceBuyerExchange.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceBuyerExchange.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ModelExtension\DataExchange\TrackCodeExchange.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrackCodeExchange.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ModelExtension\DataExchange\TrackCodeExchange.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrackCodeExchange.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -465,6 +505,36 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Page.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataExchange\Index.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataExchange\Index.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataExchange\Module\DataIndex.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataIndex.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataExchange\Module\DataIndex.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataIndex.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataExchange\Module\ImportInvoiceResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImportInvoiceResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataExchange\Module\ImportInvoiceResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImportInvoiceResult.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\DataView\D0401.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1595,6 +1665,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Organization.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\DataExchange.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataExchange.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\DataExchange.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataExchange.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controllers\TrackCode.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TrackCode.en-US.Designer.cs</LastGenOutput>
@@ -1620,6 +1698,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WinningNumber.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\GetSample.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GetSample.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\GetSample.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GetSample.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Helpers\MvcValidation.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MvcValidation.en-US.Designer.cs</LastGenOutput>
@@ -1627,6 +1713,22 @@
     <EmbeddedResource Include="Helpers\MvcValidation.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MvcValidation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModelExtension\DataExchange\InvoiceBuyerExchange.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceBuyerExchange.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModelExtension\DataExchange\InvoiceBuyerExchange.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceBuyerExchange.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModelExtension\DataExchange\TrackCodeExchange.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TrackCodeExchange.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModelExtension\DataExchange\TrackCodeExchange.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TrackCodeExchange.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -1866,6 +1968,30 @@
     <EmbeddedResource Include="Views\Common\Page.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Page.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataExchange\Index.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Index.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataExchange\Index.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Index.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataExchange\Module\DataIndex.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataIndex.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataExchange\Module\DataIndex.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataIndex.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataExchange\Module\ImportInvoiceResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ImportInvoiceResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataExchange\Module\ImportInvoiceResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ImportInvoiceResult.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\DataView\D0401.resx">
       <Generator>ResXFileCodeGenerator</Generator>

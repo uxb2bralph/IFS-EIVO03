@@ -9,6 +9,7 @@ using Model.DataEntity;
 using Model.InvoiceManagement;
 using Model.Locale;
 using Utility;
+using res = eIVOGo.Resource.ModelExtension.DataExchange.TrackCodeExchange;
 
 namespace ModelExtension.DataExchange
 {
@@ -27,11 +28,16 @@ namespace ModelExtension.DataExchange
         {
             XLWorkbook xls = new XLWorkbook();
 
-            var workSheet = xls.Worksheets.Add("發票字軌");
+            var workSheet = xls.Worksheets.Add(res.發票字軌);
 
-            var names = Enum.GetNames(typeof(ColumnIndex));
-            for (int i = 0; i < names.Length - 1; i++)
-                workSheet.Cell(1, i + 1).Value = names[i];
+            //var names = Enum.GetNames(typeof(ColumnIndex));
+            //for (int i = 0; i < names.Length - 1; i++)
+            //    workSheet.Cell(1, i + 1).Value = names[i];
+           
+            workSheet.Cells("A1").Value = res.期別;
+            workSheet.Cells("B1").Value = res.發票類別;
+            workSheet.Cells("C1").Value = res.字軌;
+            workSheet.Cells("D1").Value = res.字軌種類;           
 
             var row = workSheet.Row(2);
             using (InvoiceManager mgr = new InvoiceManager())
@@ -68,9 +74,9 @@ namespace ModelExtension.DataExchange
             if (row == null)
                 return;
 
-            ///title row
-            ///
-            row.Cell((int)ColumnIndex.處理狀態).Value = ColumnIndex.處理狀態.ToString();
+            ///title row            
+            //row.Cell((int)ColumnIndex.處理狀態).Value = ColumnIndex.處理狀態.ToString();
+            row.Cell((int)ColumnIndex.處理狀態).Value = res.處理狀態;
 
             ///data row
             row = row.RowBelow();
@@ -88,12 +94,12 @@ namespace ModelExtension.DataExchange
                         int intVal;
                         if (String.IsNullOrEmpty(period))
                         {
-                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = "未設定期別";
+                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = res.未設定期別;
                             continue;
                         }
                         if (!int.TryParse(period, out intVal))
                         {
-                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = "期別格式錯誤";
+                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = res.期別格式錯誤;
                             continue;
                         }
 
@@ -104,7 +110,7 @@ namespace ModelExtension.DataExchange
                         String trackCode;
                         if (cell.IsEmpty())
                         {
-                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = "字軌錯誤";
+                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = res.字軌錯誤;
                             continue;
                         }
                         else
@@ -114,7 +120,7 @@ namespace ModelExtension.DataExchange
 
                         if (trackCode == null || !Regex.IsMatch(trackCode, "^[A-Z]{2}$"))
                         {
-                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = "字軌格式錯誤";
+                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = res.字軌格式錯誤;
                             continue;
                         }
 
@@ -122,14 +128,14 @@ namespace ModelExtension.DataExchange
                             && i.Year == year && i.PeriodNo == periodNo).FirstOrDefault();
                         if (item != null)
                         {
-                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = "字軌已存在";
+                            dataRow.Cell((int)ColumnIndex.處理狀態).Value =res.字軌已存在;
                             continue;
                         }
 
                         cell = dataRow.Cell((int)ColumnIndex.發票類別);
                         if (cell.IsEmpty() || !(cell.GetString() == "7" || cell.GetString() == "8"))
                         {
-                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = "只接受發票類別07、08";
+                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = res.只接受發票類別07_08;
                             continue;
                         }
 
@@ -142,7 +148,7 @@ namespace ModelExtension.DataExchange
                         });
 
                         mgr.SubmitChanges();
-                        dataRow.Cell((int)ColumnIndex.處理狀態).Value = "字軌已新增";
+                        dataRow.Cell((int)ColumnIndex.處理狀態).Value = res.字軌已新增;
                     }
                     catch (Exception ex)
                     {

@@ -1,21 +1,10 @@
+@using res = eIVOGo.Resource.Views.DataExchange.Index;
 
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
 
-@using eIVOGo.Helper
-@{ Register Src="~/Views/DataExchange/Module/DataIndex.ascx" TagPrefix="uc1" TagName="DataIndex" }
-
-@section headContent { 
- 
+    ViewBag.ActionName = res.首頁___資料管理;
 }
-<uc1:DataIndex runat="server" ID="DataIndex" />
-<script runat="server">
 
-    public override void Dispose()
-    {
-        var models = TempData.GetGenericModelSource();
-        if (models != null)
-            models.Dispose();
-        
-        base.Dispose();
-    }
+@{ Html.RenderPartial("~/Views/DataExchange/Module/DataIndex.cshtml");}
 
-</script>
