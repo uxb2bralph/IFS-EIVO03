@@ -13,7 +13,7 @@
     {
         base.OnInit(e);
 
-        JavaScriptSerializer serializer = new JavaScriptSerializer();
+        JavaScriptSerializer serializer = new JavaScriptSerializer(); 
         IQueryable<InvoiceItem> items = (IQueryable<InvoiceItem>)Model;
         models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
 
