@@ -1,0 +1,79 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+@using Business.Helper
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    UserProfileMember _profile = Context.GetUser();
+    ModelSource<InvoiceItem> models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    var mgr = TempData.InvokeModelSource<Organization>();
+    IQueryable<Organization> _model = mgr.GetTable<Organization>();
+    _model = _model.Where(o => o.InvoiceInsurerAgent.Any(i => i.AgentID == o.CompanyID));
+    InquireInvoiceViewModel _viewModel = ViewBag.ViewModel as InquireInvoiceViewModel;
+    String _fieldName;
+}
+@{
+    if (_viewModel == null)
+    {
+        ViewBag.ViewModel = _viewModel = new InquireInvoiceViewModel { };
+        _viewModel.FieldName = ViewBag.FieldName ?? "agentID";
+    }
+    _fieldName = _viewModel.FieldName ?? ViewBag.FieldName ?? "agentID";
+    if (_profile.CurrentUserRole.OrganizationCategory.CategoryID == (int)Naming.CategoryID.COMP_SYS)
+    {
+        <tr>
+            <th>@(ViewBag.Title ?? "代理業者統編")</th>
+            <td class="tdleft">
+                <select class="form-control" name="@(_fieldName)">
+                    @{ViewBag.SelectorIndication = "全部";}
+                    @if (ViewBag.SelectorIndication != null)
+                    {
+                        <option value="@(ViewBag.SelectorIndicationValue ?? "")">@(ViewBag.SelectorIndication)</option>
+                    }
+                    @foreach (var o in _model.OrderBy(o => o.ReceiptNo))
+                    {
+                        <option value="@(_viewModel.Encrypt==true ? o.CompanyID.EncryptKey() : o.CompanyID.ToString())">@(String.Format("({0}) {1}", o.ReceiptNo, o.CompanyName))</option>
+                    }
+                </select>
+              </td>
+         </tr>
+                @*<tr>
+                        <th>
+                            代理業者統編
+                        </th>
+                        <td class="tdleft">
+                            <select name="agentID">
+                                <option value="">全部</option>
+                                @foreach (var a in _model)
+                                {
+                            <option value="@( a.CompanyID )">(@(a.ReceiptNo)) @(a.CompanyName)</option>
+                                }
+                            </select>
+                            @if (Request["agentID"] != null)
+                            {
+                            <script>
+                            $(function () {
+                                $('select[name="agentID"]').val('@( Request["agentID"] )');
+                            });
+                            </script>
+                            }
+                        </td>
+                    </tr>*@
+                }
+
+                }
+                
+
+
+
