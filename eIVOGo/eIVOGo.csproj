@@ -254,6 +254,8 @@
     <Content Include="App_Themes\Visitor\table.css" />
     <Content Include="App_Themes\Visitor\Visitor.skin" />
     <Content Include="App_Themes\Web.config" />
+    <Content Include="bin\Ionic.Zip.dll" />
+    <Content Include="bin\QREncrypter.dll" />
     <Content Include="bin\zxing.dll" />
     <Content Include="bin\zxing.presentation.dll" />
     <Content Include="Content\bootstrap-theme.css" />
