@@ -18,15 +18,16 @@
     ModelSource<InvoiceItem> models;
     Model.Security.MembershipManagement.UserProfileMember _profile;
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-    _profile = Business.Helper.WebPageUtility.UserProfile;    
+    _profile = Business.Helper.WebPageUtility.UserProfile;
     IQueryable<InvoiceItem> _model = (IQueryable<InvoiceItem>)this.Model;
-    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;    
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 }
 @if (!models.InquiryHasError)
 {
     Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");
 
-    <div class="container border_gray" style="overflow-x: auto;">
+    @*<div class="container border_gray" style="overflow-x: auto;">*@
+    <div class="border_gray" style="overflow-x: auto;">
         @{ var recordCount = _model.Count();}
         @if (recordCount > 0)
         {
@@ -57,12 +58,12 @@
                 });
 
             </script>
-          if (recordCount <= 50000)
-         { 
-            Html.RenderPartial("~/Views/InvoiceQuery/Module/DataDownloadResult.cshtml");
-         }
-         
-           
+            if (recordCount <= 50000)
+            {
+                Html.RenderPartial("~/Views/InvoiceQuery/Module/DataDownloadResult.cshtml");
+            }
+
+
         }
         else
         {
