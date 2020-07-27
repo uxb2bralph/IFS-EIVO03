@@ -56,11 +56,8 @@ namespace eIVOGo.Controllers
             ViewBag.QueryAction = "Inquire";
             ViewBag.ViewModel = viewModel;
             models.Inquiry = createModelInquiry();
-            return View(models.Inquiry);//[Amy]:原導向InvoiceReport.ascx
-            //return View("~/Views/InvoiceQuery/Index.cshtml", models.Inquiry);
+            return View(models.Inquiry);
         }
-
-
 
 
         public ActionResult InvoiceMediaReport(TaxMediaQueryViewModel viewModel)
@@ -156,7 +153,6 @@ namespace eIVOGo.Controllers
         }
 
 
-
         public ActionResult Inquire(InquireInvoiceViewModel viewModel)
         {
             //ViewBag.HasQuery = true;
@@ -166,26 +162,18 @@ namespace eIVOGo.Controllers
             models.Inquiry = createModelInquiry();
             models.BuildQuery();
 
-            return View("InquiryResult", models.Inquiry);//[Amy]
-            //return View("~/Views/InvoiceQuery/Module/ItemList.cshtml", models.Inquiry);
+            return View("InquiryResult", models.Inquiry);
         }
 
         public ActionResult InvoiceQueryIndex(InquireInvoiceViewModel viewModel)
         {
-            //ModelSource<InvoiceItem> tmpModels = new ModelSource<InvoiceItem>(models);
-            //tmpModels.Items = tmpModels.Items.Where(o => o.InvoiceID > 0);
-            //models.Inquiry = createModelInquiry();
-            //return View("~/Views/InvoiceQuery/Index.cshtml", tmpModels.Items);
-            return View("~/Views/InvoiceQuery/InvoiceQueryIndex.cshtml"); //[Amy]
-
+            return View("~/Views/InvoiceQuery/InvoiceQueryIndex.cshtml"); 
         }
         public ActionResult InvoiceQuery_Inquire(InquireInvoiceViewModel viewModel, int? pageIndex)
         {
-            //[Amy]-改寫
             ViewBag.ViewModel = viewModel;
             ModelSource<InvoiceItem> tmpModels = new ModelSource<InvoiceItem>(models);
             tmpModels.Items = tmpModels.Items;
-            //tmpModels.Items = tmpModels.Items.Where(i => i.InvoiceID > 5875380);
             tmpModels.Inquiry = createModelInquiry();
             tmpModels.BuildQuery();
             models.InquiryHasError = tmpModels.InquiryHasError;
@@ -207,9 +195,8 @@ namespace eIVOGo.Controllers
             ViewBag.ViewModel = viewModel;
             ModelSource<InvoiceItem> tmpModels = new ModelSource<InvoiceItem>(models);
             tmpModels.Items = tmpModels.Items;
-            //tmpModels.Items = tmpModels.Items.Where(i => i.InvoiceID > 5875380);
-            tmpModels.Inquiry = createModelInquiry();//amy
-            tmpModels.BuildQuery();//amy
+            tmpModels.Inquiry = createModelInquiry();
+            tmpModels.BuildQuery();
             Response.ContentEncoding = Encoding.GetEncoding(950);
             return View(tmpModels.Items);
         }
@@ -218,9 +205,8 @@ namespace eIVOGo.Controllers
             ViewBag.ViewModel = viewModel;
             ModelSource<InvoiceItem> tmpModels = new ModelSource<InvoiceItem>(models);
             tmpModels.Items = tmpModels.Items;
-            //tmpModels.Items = tmpModels.Items.Where(i => i.InvoiceID > 5875380);
             tmpModels.Inquiry = createModelInquiry();
-            tmpModels.BuildQuery();//amy
+            tmpModels.BuildQuery();
             _userProfile["modelSource"] = tmpModels;
 
             Server.Transfer("~/MvcHelper/CreateInvoiceReport.aspx");
@@ -237,12 +223,11 @@ namespace eIVOGo.Controllers
                 return View("~/Views/Shared/JsAlert.cshtml", model: "請選擇開立人!!");
             }
 
-            ModelSource<InvoiceItem> tmpModels = new ModelSource<InvoiceItem>(models);//amy
-            //tmpModels.Items = tmpModels.Items.Where(i => i.InvoiceID > 5875380);//amy
-            tmpModels.Items = tmpModels.Items;//amy
-            tmpModels.Inquiry = createModelInquiry();//amy
-            tmpModels.BuildQuery();//amy
-            var items = tmpModels.Items;//amy
+            ModelSource<InvoiceItem> tmpModels = new ModelSource<InvoiceItem>(models);
+            tmpModels.Items = tmpModels.Items;
+            tmpModels.Inquiry = createModelInquiry();
+            tmpModels.BuildQuery();
+            var items = tmpModels.Items;
 
             if (items.Count() <= 0)
             {
@@ -312,28 +297,40 @@ namespace eIVOGo.Controllers
             return new EmptyResult();
         }
 
-
+        public ActionResult InvoiceSummary(InquireInvoiceViewModel viewModel)
+        {
+            //ViewBag.HasQuery = false;
+            ViewBag.QueryAction = "InquireSummary";
+            ViewBag.ViewModel = viewModel;
+            models.Inquiry = createModelInquiry();
+            return View("~/Views/InvoiceQuery/InvoiceReport.cshtml", models.Inquiry);
+        }
+        public ActionResult InquireSummary(InquireInvoiceViewModel viewModel)
+        {
+            //ViewBag.HasQuery = true;
+            ViewBag.PrintAction = "PrintInvoiceSummary";
+            ViewBag.ViewModel = viewModel;
+            models.Inquiry = createModelInquiry();
+            models.BuildQuery();
+            return View("~/Views/InvoiceQuery/InvoiceSummaryResult.cshtml", models.Inquiry);
+        }
 
         public ActionResult InvoiceAttachment(InquireInvoiceViewModel viewModel)
         {
             //ViewBag.HasQuery = false;
             ViewBag.QueryAction = "InquireAttachment";
             ViewBag.ViewModel = viewModel;
-
             models.Inquiry = createModelInquiry();
-
-            return View("InvoiceReport", models.Inquiry);
+            return View("~/Views/InvoiceQuery/InvoiceAttachment.cshtml", models.Inquiry);
         }
 
         public ActionResult InquireAttachment(InquireInvoiceViewModel viewModel)
         {
             //ViewBag.HasQuery = true;
             ViewBag.ViewModel = viewModel;
-
             models.Inquiry = createModelInquiry();
             models.BuildQuery();
-
-            return View("AttachmentResult", models.Inquiry);
+            return View("~/Views/InvoiceQuery/AttachmentResult.cshtml", models.Inquiry);
         }
 
         public ActionResult AttachmentGridPage(int index, int size, InquireInvoiceViewModel viewModel)
@@ -509,42 +506,8 @@ namespace eIVOGo.Controllers
 
         }
 
-        public ActionResult InvoiceSummary(InquireInvoiceViewModel viewModel)
-        {
-            //ViewBag.HasQuery = false;
-            ViewBag.QueryAction = "InquireSummary";
-            ViewBag.ViewModel = viewModel;
-            models.Inquiry = createModelInquiry();
-
-            return View("InvoiceReport", models.Inquiry);
-        }
-        /// <summary>
-        /// [Amy]
-        /// 1090714
-        /// 發票統計表
-        /// 原Method：InvoiceSummary(InquireInvoiceViewModel viewModel)
-        /// </summary>
-        /// <param name="viewModel"></param>
-        /// <returns></returns>
-        public ActionResult InvoiceSummaryAmy(InquireInvoiceViewModel viewModel)
-        {
-            ViewBag.QueryAction = "InquireSummary";
-            ViewBag.ViewModel = viewModel;
-            models.Inquiry = createModelInquiry();
-
-            return View("~/Views/InvoiceQuery/InvoiceReport.cshtml", models.Inquiry);
-        }
-
-        /// <summary>
-        /// [Amy]
-        /// 1090714
-        /// 發票統計表:查詢Model
-        /// </summary>
-        /// <param name="viewModel"></param>
-        /// <returns></returns>
         public ActionResult InvoiceSummary_Inquire(InquireInvoiceViewModel viewModel, int? pageIndex)
         {
-            //[Amy]-改寫
             ViewBag.ViewModel = viewModel;
             ModelSource<InvoiceItem> tmpModels = new ModelSource<InvoiceItem>(models);
             tmpModels.Items = tmpModels.Items;
@@ -562,17 +525,7 @@ namespace eIVOGo.Controllers
                 return View("~/Views/InvoiceQuery/Module/InvoiceSummaryItemResult.cshtml", tmpModels.Items);
             }            
         }
-        public ActionResult InquireSummary(InquireInvoiceViewModel viewModel)
-        {
-            //ViewBag.HasQuery = true;
-            ViewBag.PrintAction = "PrintInvoiceSummary";
-            ViewBag.ViewModel = viewModel;
-            models.Inquiry = createModelInquiry();
-            models.BuildQuery();
-            //return View("InvoiceSummaryResult", models.Inquiry); //[Amy]:原始程式
-            return View("~/Views/InvoiceQuery/InvoiceSummaryResult.cshtml", models.Inquiry);//[Amy]:修改後cshtml
 
-        }
 
         public ActionResult CreateMonthlyReportXlsx(InquireInvoiceViewModel viewModel)
         {
@@ -656,12 +609,11 @@ namespace eIVOGo.Controllers
             return new EmptyResult();
         }
 
-
+  
         public ActionResult InvoiceSummaryGridPage(int index, int size, InquireInvoiceViewModel viewModel)
         {
             //ViewBag.HasQuery = true;
             ViewBag.ViewModel = viewModel;
-
             models.Inquiry = createModelInquiry();
             models.BuildQuery();
 
@@ -697,7 +649,6 @@ namespace eIVOGo.Controllers
             models.BuildQuery();
             ((ModelSource<InvoiceItem>)models).ResultModel = Naming.DataResultMode.Print;
             return View(models.Inquiry);
-            //return View("~/Views/InvoiceQuery/PrintInvoiceSummary.cshtml", models.Inquiry);
         }
 
 
