@@ -1,0 +1,43 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{    
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+      if (_viewModel == null)
+    {
+        ViewBag.ViewModel = _viewModel = new InquireInvoiceViewModel { };
+        _viewModel.FieldName = ViewBag.FieldName ?? "Cancelled";
+    }  
+}
+<tr>
+    <th>
+        單據狀態
+    </th>
+    <td class="tdleft">
+
+        <select class="form-control" name="Cancelled">
+            @*@if (ViewBag.SelectorIndication != null)
+            {
+                <option value="@(ViewBag.Cancelled ?? "")">全部</option>
+            }*@
+            <option value="@(ViewBag.Cancelled ?? "")">全部</option>
+            <option value="@(_viewModel.Cancelled ?? false)">未作廢</option>
+            <option value="@(_viewModel.Cancelled ?? true)">已作廢</option>
+        </select>
+
+
+    </td>
+</tr>

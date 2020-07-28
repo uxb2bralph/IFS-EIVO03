@@ -1,0 +1,40 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+<table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td class="Bargain_btn">            
+            <input type="button" value="CSV下載" name="btnMonthlyReport" class="btn" onclick="DownloadCSV();" />
+            <input type="button" value="Excel下載" name="btnMonthlyReport" class="btn" onclick="CreateXlsx();" />
+        </td>
+    </tr>
+</table>
+
+<script>
+
+   function DownloadCSV() {
+        var event = event || window.event;
+        var $form = $(event.target).closest('form');
+        $form.launchDownload('@(Url.Action("InvoiceQuery_DownloadCSV", "InvoiceQuery"))');
+    }
+
+   function CreateXlsx() {
+        var event = event || window.event;
+        var $form = $(event.target).closest('form');
+        $form.launchDownload('@(Url.Action("InvoiceQuery_CreateXlsx", "InvoiceQuery"))');
+    }
+
+</script>

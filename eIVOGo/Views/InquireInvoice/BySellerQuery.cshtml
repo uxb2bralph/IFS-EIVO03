@@ -1,0 +1,34 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+var userProfile = Business.Helper.WebPageUtility.UserProfile;
+var mgr = TempData.InvokeModelSource<Organization>();
+IEnumerable<SelectListItem> items = null;
+IQueryable<Organization> _model = mgr.GetTable<Organization>();
+InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+
+}
+<tr>
+    <th>@(ViewBag.Title ?? "開立人統編")</th>
+    <td class="tdleft">
+        @{
+            ViewBag.SelectorIndication = "全部";
+            Html.RenderPartial("~/Views/DataFlow/SellerSelectorQuery.cshtml", _model);
+        }
+    </td>
+</tr>
+

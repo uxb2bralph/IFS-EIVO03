@@ -184,8 +184,11 @@
             <li>
                 <a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>統計報表<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li>
+                    @*<li>
                         <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceQuery/InvoiceReport"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>發票明細查詢</a>
+                    </li>*@
+                    <li>
+                        <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceQuery/InvoiceQueryIndex"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>發票明細查詢</a>
                     </li>
                     <li>
                         <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceQuery/InvoiceSummary"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>發票統計表</a>

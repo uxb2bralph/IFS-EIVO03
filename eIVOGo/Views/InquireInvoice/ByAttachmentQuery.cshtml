@@ -1,0 +1,36 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+    if (_viewModel == null)
+    {
+        ViewBag.ViewModel = _viewModel = new InquireInvoiceViewModel { };
+        _viewModel.FieldName = ViewBag.FieldName ?? "Attachment";
+    }
+}
+<tr>
+    <th>
+        附件檔
+    </th>
+    <td class="tdleft">
+        <select class="form-control" name="Attachment">
+            <option value="@(ViewBag.Attachment ?? "")">全部</option>
+            <option value="@(_viewModel.Attachment ?? 1)">有</option>
+            <option value="@(_viewModel.Attachment ?? 0)">無</option>
+        </select>
+    </td>
+</tr>

@@ -1,0 +1,81 @@
+﻿
+
+<script>
+    $(function () {
+        var $postForm;
+        console.log('$postForm=' + $postForm);
+        if (!window.uiQuery) {
+            window.uiQuery = {};
+        }
+        console.log(window.uiQuery);
+         window.uiQuery.inquire = function (pageNum, onPaging) {
+             var sort = $('input[name="sort"]').serializeObject().sort;
+             console.log('sort=' + sort);
+             var _Object = {PageIndex: pageNum,Sort:sort };
+             //
+            if (pageNum) {
+                $('input[name="pageIndex"]').val(pageNum);
+                if (sort != null) {
+                    _Object.Sort = sort;
+                }
+            } else {
+                $('input[name="sort"]').remove();
+             }
+            //
+            $.ajax({
+                type: "POST",
+                url: 'InvoiceQuery_Inquire',
+                data: _Object,
+                dataType: "text",
+                success: function (_result) {
+                    if (_result) {
+                        if (onPaging) {
+                            onPaging(_result);
+                        } else {
+                            if (uiQuery.$result)
+                                uiQuery.$result.remove();
+                            uiQuery.$result = $(_result);
+                            $('.queryAction').after(uiQuery.$result);
+                        }
+                    }
+                },
+                error: function (error) {
+                    hideLoading();
+                }
+            });
+        };
+
+        window.uiQuery.showItem = function (value) {
+            var event = event || window.event;
+            var $tr = $(event.target).closest('tr');
+            uiQuery.dataItem($tr, value);
+        };
+
+        window.uiQuery.dataItem = function ($tr, value) {
+            $.post('@(Url.Action("DataItem","InvoiceQuery"))', 'id=' + value, function (data) {
+                console.log(data);
+                if (data) {
+                    var $data = $(data);
+                    if ($data.is('tr')) {
+                        $tr.before($data);
+                        $tr.remove();
+                    } else {
+                        $('body').append($data);
+                        $data.remove();
+                    }
+                }
+            });
+        };
+
+    });
+</script>
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+
+    }
+</script>

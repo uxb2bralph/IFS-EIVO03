@@ -1,4 +1,4 @@
-@using System.IO
+﻿@using System.IO
 @using System.Linq.Expressions
 @using System.Web.Mvc.Html
 @using eIVOGo.Controllers
@@ -27,11 +27,6 @@
                 查詢條件
             </th>
         </tr>
-        @*@{ ((CommonInquiry<InvoiceItem>)this.Model).Render(Html);
-            Html.RenderPartial("~/Views/InquireInvoice/ByInvoiceNo.cshtml");
-            Html.RenderPartial("~/Views/InquireInvoice/ByWinningNumber.cshtml");
-            Html.RenderPartial("~/Views/InquireInvoice/ByCancellation.cshtml");
-        }*@
         @{
             Html.RenderPartial("~/Views/InquireInvoice/ByConsumption.cshtml");       //發票類別
             Html.RenderPartial("~/Views/InquireInvoice/BySellerQuery.cshtml");       //開立人統編
@@ -47,8 +42,6 @@
     </table>
     <!--表格 結束-->
 </div>
-@*@{ ((CommonInquiry<InvoiceItem>)this.Model).RenderAlert(Html);}*@
-
 <!--按鈕-->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
@@ -77,7 +70,7 @@
     $(function () {
         uiInvoiceReport = {
             download: function () {
-                $('').launchDownload('@Html.Raw(Url.Action("InquireSummary","InvoiceQuery"))', $('#queryArea').find('input,select,textarea').serializeObject());
+                $('').launchDownload('@Html.Raw(Url.Action("InquireAttachment","InvoiceQuery"))', $('#queryArea').find('input,select,textarea').serializeObject());
             },
         };
     });

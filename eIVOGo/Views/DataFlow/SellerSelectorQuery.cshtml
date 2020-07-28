@@ -1,4 +1,4 @@
-
+﻿
 @using System.IO
 @using System.Linq.Expressions
 
@@ -12,14 +12,15 @@
 @using eIVOGo.Controllers
 @using Business.Helper
 @{
+
     ModelStateDictionary _modelState;
     ModelSource<InvoiceItem> models;
     IQueryable<Organization> _model;
-    SellerSelectorViewModel _viewModel = ViewBag.ViewModel as SellerSelectorViewModel;
+    InquireInvoiceViewModel _viewModel = ViewBag.ViewModel as InquireInvoiceViewModel;
 
     if (_viewModel == null)
     {
-        ViewBag.ViewModel = _viewModel = new SellerSelectorViewModel { };
+        ViewBag.ViewModel = _viewModel = new InquireInvoiceViewModel { };
         _viewModel.FieldName = ViewBag.FieldName ?? "SellerID";
     }
 
@@ -37,14 +38,14 @@
 
 @if (_profile.IsSystemAdmin())
 {
-    Html.RenderPartial("~/Views/Home/Module/CompanyQuickSearch.cshtml", _model);
+    Html.RenderPartial("~/Views/Home/Module/CompanyQuickSearchQuery.cshtml", _model);
 }
 else
 {
     <select class="form-control" name="@(_fieldName)">
-        @if (_viewModel.SelectorIndication != null)
+        @if (ViewBag.SelectorIndication != null)
         {
-            <option value="@(_viewModel.SelectorIndicationValue ?? "")">@(_viewModel.SelectorIndication)</option>
+            <option value="@(ViewBag.SelectorIndicationValue ?? "")">@(ViewBag.SelectorIndication)</option>
         }
         @foreach (var o in _model.OrderBy(o => o.ReceiptNo))
         {

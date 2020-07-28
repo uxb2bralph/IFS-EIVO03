@@ -1,0 +1,35 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+@using eIVOGo.Helper
+@using Model.Locale
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Security.MembershipManagement
+@using eIVOGo.Controllers
+@using Business.Helper
+@{
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    InvoiceItem _model;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (InvoiceItem)this.Model;
+}
+
+    <tr>
+        <td>@(_model.InvoiceID)<br />@(_model.InvoiceDate)</td>
+        @*日期 *@
+        <td>@(_model.InvoiceBuyer.CustomerID)</td> @*GoogleID/客戶ID*@
+        <td>@(_model.InvoicePurchaseOrder.OrderNo)</td> @*序號 *@
+        <td>@(_model.Organization.CompanyName)</td> @*開立發票營業人 *@
+        <td>@(_model.Organization.ReceiptNo)</td> @* 統編*@
+        <td>@(_model.TrackCode+_model.No)</td> @*發票 *@
+        <td>@(_model.InvoiceAmountType.SalesAmount.Value)<br />@(_model.InvoiceAmountType.TaxAmount.Value)<br />@(_model.InvoiceAmountType.TotalAmount.Value)</td>    @*未稅金額/稅額/含稅金額 *@
+        <td>@(_model.InvoiceWinningNumber == null ? "N/A" : "Y")</td>    @*是否中獎 *@
+        <td>@(_model.InvoiceBuyer.ReceiptNo)<br />@(_model.InvoiceBuyer.Name)<br />@(_model.InvoiceBuyer.Address)<br />@(_model.InvoiceBuyer.EMail)</td> @* 買受人統編/名稱/連絡人名稱/地址/email*@
+        <td>@(_model.Remark)</td>
+        @* 備註*@
+        <td>@(_model.InvoiceCarrier.CarrierNo)</td>
+        @*載具資訊 *@
+    </tr>

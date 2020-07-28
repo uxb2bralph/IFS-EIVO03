@@ -1,0 +1,96 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+
+    IQueryable<InvoiceItem> _model = (IQueryable<InvoiceItem>)this.Model;
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+    //int _pageSize = _viewModel.PageSize.Value;
+    //int pageIndex = _viewModel.PageIndex ?? 0;
+    int? pageIndex = (int?)ViewBag.PageIndex ?? 0;
+
+    _model = _model.Skip((int)ViewBag.PageIndex * Uxnet.Web.Properties.Settings.Default.PageSize).Take(Uxnet.Web.Properties.Settings.Default.PageSize);
+    int intPage = (int)ViewBag.PageIndex * Uxnet.Web.Properties.Settings.Default.PageSize;
+    int intPageT = Uxnet.Web.Properties.Settings.Default.PageSize;
+    Console.WriteLine(_model);
+
+}
+@*<table class="table01 itemList" width="100%">*@
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table01 itemList">
+    <thead>
+        <tr>
+            <th style="min-width: 120px;" aria-sort="other">日期</th>
+            <th style="min-width: 120px;">GoogleID/客戶ID</th>
+            <th style="min-width: 120px;">序號</th>
+            <th style="min-width: 120px;">開立發票營業人</th>
+            <th style="min-width: 120px;">統編</th>
+            <th style="min-width: 120px;">發票號碼</th>
+            <th style="min-width: 120px;">未稅金額<br />稅額<br />含稅金額</th>
+            <th style="min-width: 120px;">是否中獎</th>
+            <th style="min-width: 120px;">買受人統編<br />名稱<br />連絡人名稱<br />地址<br />email</th>
+            <th style="min-width: 120px;">備註</th>
+            <th style="min-width: 120px;">載具資訊</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int idx = 0;}
+        @foreach (var item in _model)
+        {
+            idx++;
+
+            <tr>
+                @*日期 *@
+                <td>@*@(item.InvoiceID)<br />*@
+                    @(item.InvoiceDate)
+                </td>
+                @*GoogleID/客戶ID*@
+                <td>@(item.InvoiceBuyer.CustomerID)</td>
+                @*序號 *@
+                <td>@(item.InvoicePurchaseOrder == null ? "" : item.InvoicePurchaseOrder.OrderNo)</td>
+                @*開立發票營業人 *@
+                <td>@(item.InvoiceSeller.CustomerName)</td>
+                @* 統編*@
+                <td>@(item.InvoiceSeller.ReceiptNo)</td>
+                @*發票 *@
+                <td>@(item.TrackCode + item.No)</td>
+                @*未稅金額/稅額/含稅金額 *@
+                <td>@(item.InvoiceAmountType.SalesAmount.Value)<br />@(item.InvoiceAmountType.TaxAmount.Value)<br />@(item.InvoiceAmountType.TotalAmount.Value)</td>
+                @*是否中獎 *@
+                <td>@(item.InvoiceWinningNumber == null ? "N/A" : "Y")</td>
+                @* 買受人統編/名稱/連絡人名稱/地址/email*@
+                <td>
+                    @(item.InvoiceBuyer.ReceiptNo == null ? "" : item.InvoiceBuyer.ReceiptNo)<br />
+                @(item.InvoiceBuyer.Name == null ? "" : item.InvoiceBuyer.Name)<br />
+                @(item.InvoiceBuyer.Address == null ? "" : item.InvoiceBuyer.Address)<br />
+                @(item.InvoiceBuyer.EMail == null ? "" : item.InvoiceBuyer.EMail)
+            </td>
+            @* 備註*@
+            <td>@(item.Remark == null ? "" : item.Remark)</td>
+            @*載具資訊 *@
+            <td>@(item.InvoiceCarrier == null ? "" : item.InvoiceCarrier.CarrierNo)</td>
+        </tr>
+    }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="11">
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+

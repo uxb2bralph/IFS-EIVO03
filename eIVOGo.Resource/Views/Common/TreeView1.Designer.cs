@@ -149,5 +149,14 @@ namespace eIVOGo.Resource.Views.Common {
                 return ResourceManager.GetString("首頁 > 系統管理維護", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查詢類似 首頁 &gt; 統計報表 的當地語系化字串。
+        /// </summary>
+        public static string 首頁___統計報表 {
+            get {
+                return ResourceManager.GetString("首頁 > 統計報表", resourceCulture);
+            }
+        }
     }
 }
