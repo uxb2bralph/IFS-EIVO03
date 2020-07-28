@@ -11,6 +11,7 @@
 <%@ Import Namespace="Model.Locale" %>
 <%@ Import Namespace="Utility" %>
 <%@ Import Namespace="Uxnet.Web.WebUI" %>
+<%@ Import Namespace="eIVOGo.Resource.Views.Module" %>
 
 <div id="fieldsContainer"></div>
 <div id="jsGrid"></div>
@@ -22,41 +23,42 @@
                 {
                     "name": "SellerReceiptNo",
                     "type": "text",
-                    "title": "統編",
+                    "title": "<%=WinningInvoiceReport.統編%>",
                     "width": "80",
                     "align": "center"
                 },
                 {
                     "name": "SellerName",
                     "type": "text",
-                    "title": "開立發票營業人",
+                    "title": "<%=WinningInvoiceReport.開立發票營業人%>",
                     "width": "160",
                     "align": "left"
                 },
                 {
                     "name": "Addr",
                     "type": "text",
-                    "title": "營業人地址",
+                    "title": "<%=WinningInvoiceReport.營業人地址%>",
                     "width": "360",
                     "align": "left"
                 },
             {
                 "name": "WinningCount",
                 "type": "text",
-                "title": "中獎張數",
+                "title": "<%=WinningInvoiceReport.中獎張數%>",
                 "width": "80",
                 "align": "left"
             },
             {
                 "name": "DonationCount",
                 "type": "text",
-                "title": "捐贈張數",
+                "title": "<%=WinningInvoiceReport.捐贈張數%>",
                 "width": "80",
                 "align": "left"
             }
     ];
 
         </script>
+
 <script runat="server">
     protected override void OnInit(EventArgs e)
     {

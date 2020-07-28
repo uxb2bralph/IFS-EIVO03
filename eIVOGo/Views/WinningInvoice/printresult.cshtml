@@ -10,17 +10,19 @@
 }
 @section mainContent { 
 查詢條件：
-    @{ ((CommonInquiry<InvoiceItem>)this.Model).RenderQueryMessage(Html);
-        Html.RenderPartial("~/Views/Module/HidePostData.ascx");
-       Html.RenderPartial("~/Views/Module/WinningInvoiceReport.ascx", models);}
- 
-}
-<script runat="server">
+    @{ ((CommonInquiry<InvoiceItem>
+    )this.Model).RenderQueryMessage(Html);
+    Html.RenderPartial("~/Views/Module/HidePostData.ascx");
+    <a href="~/Views/WinningInvoice/printresult.cshtml">~/Views/WinningInvoice/printresult.cshtml</a>
+    Html.RenderPartial("~/Views/Module/WinningInvoiceReport.ascx", models);}
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        ViewBag.ActionName = "首頁 > 發票作業";
     }
+    <script runat="server">
 
-</script>
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
+            ViewBag.ActionName = "首頁 > 發票作業";
+        }
+
+    </script>

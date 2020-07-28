@@ -1341,6 +1341,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Notify.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\Module\PrintData.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintData.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Module\PrintData.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintData.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Module\WinningInvoiceReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WinningInvoiceReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Module\WinningInvoiceReport.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WinningInvoiceReport.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\OrganizationQuery\Module\CompanyList.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1521,6 +1541,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ItemForm.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\WinningInvoice\Module\InquireWinning.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InquireWinning.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningInvoice\Module\InquireWinning.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InquireWinning.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\WinningInvoice\Module\ReportResult.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1530,6 +1560,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ReportResult.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningInvoice\PrintResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningInvoice\PrintResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintResult.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\WinningNumber\Module\AddItem.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2652,6 +2692,22 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Notify.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\Module\PrintData.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrintData.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Module\PrintData.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrintData.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Module\WinningInvoiceReport.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WinningInvoiceReport.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Module\WinningInvoiceReport.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WinningInvoiceReport.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\OrganizationQuery\Module\CompanyList.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CompanyList.en-US.Designer.cs</LastGenOutput>
@@ -2800,6 +2856,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ItemForm.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningInvoice\Module\InquireWinning.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InquireWinning.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningInvoice\Module\InquireWinning.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InquireWinning.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\WinningInvoice\Module\ReportResult.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ReportResult.en-US.Designer.cs</LastGenOutput>
@@ -2807,6 +2871,14 @@
     <EmbeddedResource Include="Views\WinningInvoice\Module\ReportResult.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ReportResult.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningInvoice\PrintResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrintResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningInvoice\PrintResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrintResult.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\WinningNumber\Module\AddItem.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

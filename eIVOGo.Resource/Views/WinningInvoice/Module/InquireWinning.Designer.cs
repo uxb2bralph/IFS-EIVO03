@@ -22,14 +22,14 @@ namespace eIVOGo.Resource.Views.WinningInvoice.Module {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ReportResult {
+    public class InquireWinning {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ReportResult() {
+        internal InquireWinning() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace eIVOGo.Resource.Views.WinningInvoice.Module {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Views.WinningInvoice.Module.ReportResult", typeof(ReportResult).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Views.WinningInvoice.Module.InquireWinning", typeof(InquireWinning).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,20 +61,38 @@ namespace eIVOGo.Resource.Views.WinningInvoice.Module {
         }
         
         /// <summary>
-        ///   查詢類似 CSV下載 的當地語系化字串。
+        ///   查詢類似 中獎統計表 的當地語系化字串。
         /// </summary>
-        public static string CSV下載 {
+        public static string 中獎統計表 {
             get {
-                return ResourceManager.GetString("CSV下載", resourceCulture);
+                return ResourceManager.GetString("中獎統計表", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 查詢結果 的當地語系化字串。
+        ///   查詢類似 查詢 的當地語系化字串。
         /// </summary>
-        public static string 查詢結果 {
+        public static string 查詢 {
             get {
-                return ResourceManager.GetString("查詢結果", resourceCulture);
+                return ResourceManager.GetString("查詢", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 查詢條件 的當地語系化字串。
+        /// </summary>
+        public static string 查詢條件 {
+            get {
+                return ResourceManager.GetString("查詢條件", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 首頁 &gt; 中獎統計表 的當地語系化字串。
+        /// </summary>
+        public static string 首頁___中獎統計表 {
+            get {
+                return ResourceManager.GetString("首頁 > 中獎統計表", resourceCulture);
             }
         }
     }

@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CSV下載" xml:space="preserve">
-    <value>CSV下載</value>
+  <data name="列印作業即將進行_請稍後" xml:space="preserve">
+    <value>The print job is about to start, please wait...!!</value>
   </data>
-  <data name="查詢結果" xml:space="preserve">
-    <value>查詢結果</value>
+  <data name="資料列印" xml:space="preserve">
+    <value>Data printing</value>
   </data>
 </root>

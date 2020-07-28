@@ -15,10 +15,13 @@
 <%@ Import Namespace="Model.Locale" %>
 <%@ Import Namespace="Utility" %>
 <%@ Import Namespace="Uxnet.Web.WebUI" %>
+<%@ Import Namespace="eIVOGo.Resource.Views.WinningInvoice.Module" %>
 
 <% Html.RenderPartial("Module/InquireWinning", Model); %>
 <% if(!models.InquiryHasError) {  %>
-<uc6:functiontitlebar id="resultTitle" runat="server" itemname="查詢結果" />
+<h1>
+    <img runat="server" enableviewstate="false" id="img3" src="~/images/icon_search.gif"
+        width="29" height="28" border="0" align="absmiddle" /><%=ReportResult.查詢結果%></h1>
 <div class="border_gray">
     <% 
        Html.RenderPartial("~/Views/Module/WinningInvoiceReport.ascx", models); 
@@ -29,7 +32,7 @@
     <tr>
         <td class="Bargain_btn">
             <% Html.RenderPartial("~/Views/Module/PrintData.ascx"); %>
-            <input type="button" value="CSV下載" name="btnCsv" class="btn" onclick="$('form').prop('action', '<%= Url.Action("DownloadCSV") %>').submit();" />
+            <input type="button" value=<%=ReportResult.CSV下載%> name="btnCsv" class="btn" onclick="$('form').prop('action', '<%= Url.Action("DownloadCSV") %>').submit();" />
         </td>
     </tr>
 </table>
@@ -45,3 +48,4 @@
     }
 
 </script>
+

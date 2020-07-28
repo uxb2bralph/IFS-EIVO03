@@ -1,4 +1,5 @@
-﻿(function (window) {
+﻿
+(function (window) {
     if (window.$eivo != undefined)
         return;
     window.$eivo = {

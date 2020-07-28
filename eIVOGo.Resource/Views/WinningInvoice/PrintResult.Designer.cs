@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace eIVOGo.Resource.Views.WinningInvoice.Module {
+namespace eIVOGo.Resource.Views.WinningInvoice {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace eIVOGo.Resource.Views.WinningInvoice.Module {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ReportResult {
+    public class PrintResult {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ReportResult() {
+        internal PrintResult() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace eIVOGo.Resource.Views.WinningInvoice.Module {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Views.WinningInvoice.Module.ReportResult", typeof(ReportResult).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Views.WinningInvoice.PrintResult", typeof(PrintResult).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,24 +57,6 @@ namespace eIVOGo.Resource.Views.WinningInvoice.Module {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 CSV下載 的當地語系化字串。
-        /// </summary>
-        public static string CSV下載 {
-            get {
-                return ResourceManager.GetString("CSV下載", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 查詢結果 的當地語系化字串。
-        /// </summary>
-        public static string 查詢結果 {
-            get {
-                return ResourceManager.GetString("查詢結果", resourceCulture);
             }
         }
     }

@@ -117,10 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CSV下載" xml:space="preserve">
-    <value>CSV下載</value>
+  <data name="中獎張數" xml:space="preserve">
+    <value>umber of winning tickets</value>
   </data>
-  <data name="查詢結果" xml:space="preserve">
-    <value>查詢結果</value>
+  <data name="捐贈張數" xml:space="preserve">
+    <value>Number of donated sheets</value>
+  </data>
+  <data name="營業人地址" xml:space="preserve">
+    <value>Business address</value>
+  </data>
+  <data name="統編" xml:space="preserve">
+    <value>Uniform numbers</value>
+  </data>
+  <data name="開立發票營業人" xml:space="preserve">
+    <value>Invoicing business person</value>
   </data>
 </root>

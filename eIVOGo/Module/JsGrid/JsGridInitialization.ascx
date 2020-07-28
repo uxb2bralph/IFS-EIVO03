@@ -44,5 +44,10 @@
 
         <% } %>
         grid.jsGrid.jsGrid(grid.gridConfig);
+
+        $("<%= JsGridSelector %>").jsGrid({
+            noDataContent: "<%=eIVOGo.Resource.Views.Common.Page.查無資料%>"
+        });
     });
+    
 </script>

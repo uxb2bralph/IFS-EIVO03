@@ -4,6 +4,7 @@
 <%@ Import Namespace="eIVOGo.Helper" %>
 <%@ Import Namespace="eIVOGo.Models" %>
 <%@ Import Namespace="Model.DataEntity" %>
+<%@ Import Namespace="eIVOGo.Controllers" %>
 
 <asp:Content ID="header" ContentPlaceHolderID="headContent" runat="server">
 </asp:Content>
@@ -16,11 +17,13 @@
     %>
 </asp:Content>
 <script runat="server">
+    ModelSource<InvoiceItem> models;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        ViewBag.ActionName = "首頁 > 發票作業";
+        ViewBag.ActionName = eIVOGo.Resource.Views.Common.TreeView.首頁___發票作業;
+         models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     }
 
 </script>

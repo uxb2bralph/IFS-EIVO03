@@ -48,7 +48,8 @@ namespace eIVOGo.Controllers
             //ViewBag.RequiredError = false;
             models.Inquiry = createModelInquiry();
 
-            return View(models.Inquiry);
+            return View("ReportIndex", models.Inquiry);
+            //return View("~/Views/WinningInvoice/ReportIndex.cshtml", models.Inquiry);
         }
 
         public ActionResult InquireReport(InquireInvoiceViewModel viewModel)
@@ -59,7 +60,8 @@ namespace eIVOGo.Controllers
             models.BuildQuery();
             models.Items = models.Items.Where(i => i.InvoiceWinningNumber != null);
 
-            return View("ReportResult",models.Inquiry);
+            return View("ReportResult", models.Inquiry);
+            //eturn View("~/Views/WinningInvoice/ReportResult.cshtml", models.Inquiry);
         }
 
         //public ActionResult GridPage(int index,int size)

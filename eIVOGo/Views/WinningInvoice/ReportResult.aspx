@@ -8,12 +8,14 @@
 <asp:Content ID="mainContent" ContentPlaceHolderID="formContent" runat="server">
     <% Html.RenderPartial("Module/ReportResult", Model); %>
 </asp:Content>
+
 <script runat="server">
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        ViewBag.ActionName = "首頁 > 發票作業";
+        ViewBag.ActionName = eIVOGo.Resource.Views.Common.TreeView.首頁___發票作業;
     }
 
 </script>
+
