@@ -1115,6 +1115,7 @@
     <Content Include="Views\DataExchange\Index.cshtml" />
     <Content Include="Views\DataExchange\Module\DataIndex.cshtml" />
     <Content Include="Views\DataExchange\Module\ImportInvoiceResult.cshtml" />
+    <Content Include="Views\Common\Module\JsGridInitialization.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="Views\Home\MainPage.aspx" />
     <Content Include="Module\Ajax\PagingControl.ascx" />
@@ -2134,6 +2135,11 @@
     <Content Include="Views\InvoiceNo\VacantNo\QueryResult.cshtml" />
     <Content Include="Views\InvoiceNo\VacantNo\ItemList.cshtml" />
     <Content Include="Views\InvoiceNo\VacantNo\DataItem.cshtml" />
+    <Content Include="Views\WinningInvoice\ReportIndex.cshtml" />
+    <Content Include="Views\WinningInvoice\Module\InquireWinning.cshtml" />
+    <Content Include="Views\WinningInvoice\Module\ReportResult.cshtml" />
+    <Content Include="Views\Module\WinningInvoiceReport.cshtml" />
+    <Content Include="Views\WinningInvoice\ReportResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

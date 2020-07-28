@@ -1,0 +1,78 @@
+﻿
+@using eIVOGo.Module.JsGrid
+@using Model.Models.ViewModel
+@using Utility
+
+@using System
+@using System.Collections.Generic
+@using System.Linq
+@using System.Web
+
+
+
+@{
+    JsGridInitializationViewModel _model = this.Model;
+    var FieldName = _model.FieldName;
+
+
+    //HttpRequest Request;
+    //HttpRequest Request=new HttpRequest();
+
+    int queryPageSize = _model.QueryPageSize;
+    int size = 0;
+    var isResult = queryPageSize > 0;
+}
+
+<script>
+    $(function () {
+
+        var f = @(FieldName != null ? FieldName : JsGridHelper.JsGridFieldArray(_model.FieldObject) );
+
+        var grid = $eivo.preparJsGrid('@(_model.JsGridSelector)', f, '@(_model.FieldsContainerSelector)');
+
+        var _isResult =@isResult.ToString();
+        var _size =@size.ToString();
+        var _AllowPaging =@_model.AllowPaging.ToString();
+        var _GetRecordCount =@_model.GetRecordCount.ToString();
+        var _PrintMode =@_model.PrintMode.ToString();
+
+        if (_isResult) {
+            grid.gridConfig.pageSize = _size;
+        }
+
+        grid.gridConfig.controller = {
+            loadData: function (filter) {
+
+                var d = $.Deferred();
+
+                $.post('<%= DataSourceUrl %>?q=1&index=' + filter.pageIndex + '&size=' + filter.pageSize, $('form').serialize())
+                .done(function (response) {
+                    d.resolve(response);
+                });
+
+                return d.promise();
+            }
+        };
+
+        if(!_AllowPaging) {
+            grid.gridConfig.paging = false;
+            grid.gridConfig.pageSize = _GetRecordCount;
+            };
+
+            if(_PrintMode) {
+            grid.gridConfig.onDataLoaded = function(args) {
+                setTimeout(function() {self.focus();self.print();},1000);
+                };
+
+            var $colIdx = $('input:checkbox[name="colIdx"]');
+            $colIdx.prop('checked',false);
+            $([@(Request["colIdx"])]).each(function() {
+                $colIdx.eq(this).prop('checked',true);
+            });
+
+            grid.gridConfig.fields = $eivo.resetJsGridFields(f);
+        }
+
+        grid.jsGrid.jsGrid(grid.gridConfig);
+    });
+</script>

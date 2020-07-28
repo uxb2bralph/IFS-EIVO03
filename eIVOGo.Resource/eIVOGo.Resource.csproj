@@ -1521,6 +1521,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ItemForm.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\WinningInvoice\Module\ReportResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinningInvoice\Module\ReportResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportResult.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\WinningNumber\Module\AddItem.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2789,6 +2799,14 @@
     <EmbeddedResource Include="Views\UserProfile\Module\ItemForm.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ItemForm.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningInvoice\Module\ReportResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ReportResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinningInvoice\Module\ReportResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ReportResult.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\WinningNumber\Module\AddItem.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

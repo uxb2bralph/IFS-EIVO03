@@ -242,17 +242,17 @@ namespace eIVOGo.Controllers
 
             //取檔名
             var orgItem = models.GetTable<Organization>().Where(o => o.CompanyID == item.SellerID).First();
-            var fileName = res.空白發票 +"_" + orgItem.ReceiptNo + "(" + String.Format("{0}{1:00}", item.Year - 1911, item.PeriodNo * 2) + ").csv";
+            var fileName = res.空白發票 + "_" + orgItem.ReceiptNo + "(" + String.Format("{0}{1:00}", item.Year - 1911, item.PeriodNo * 2) + ").csv";
 
             Response.Clear();
             Response.ClearContent();
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "text/csv";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));  
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode(fileName)));
 
             //.csv方法==================================================================================
-            StreamWriter sw = new StreamWriter(Response.OutputStream, Encoding.GetEncoding("BIG5"));            
+            StreamWriter sw = new StreamWriter(Response.OutputStream, Encoding.GetEncoding("BIG5"));
 
             int idx = 1;
 
@@ -271,13 +271,13 @@ namespace eIVOGo.Controllers
                     tailItem = _item;
                 }
 
-                sw.Write(String.Format("{0:00000}", idx++) + "," 
+                sw.Write(String.Format("{0:00000}", idx++) + ","
                     + _orgItem.ReceiptNo + ","
-                    + String.Format("{0}{1:00}", _item.Year - 1911, _item.PeriodNo * 2)+","
-                    + _item.TrackCode+","
-                    + String.Format("{0:00000000}", _item.InvoiceNo)+","
-                    + String.Format("{0:00000000}", tailItem.InvoiceNo)+","
-                    + $"{tailItem.InvoiceType:00}"+","
+                    + String.Format("{0}{1:00}", _item.Year - 1911, _item.PeriodNo * 2) + ","
+                    + _item.TrackCode + ","
+                    + String.Format("{0:00000000}", _item.InvoiceNo) + ","
+                    + String.Format("{0:00000000}", tailItem.InvoiceNo) + ","
+                    + $"{tailItem.InvoiceType:00}" + ","
                     + "\r\n");
             }
 
@@ -717,6 +717,15 @@ namespace eIVOGo.Controllers
                         model.StartNo = Convert.ToInt32(cells[4]);
                         model.EndNo = Convert.ToInt32(cells[5]);
 
+                        //判斷是否有相同字軌、起迄號配號 
+                        List<UploadInvoiceTrackCodeModel> newList = models
+    .Where(m => m.TrackCode == cells[3]
+            && m.StartNo == Convert.ToInt32(cells[4]) && m.EndNo == Convert.ToInt32(cells[5])).ToList();
+                        if (newList.Count() > 0)
+                        {
+                            throw new ApplicationException("已存在重疊的區段");
+                        }
+
                         models.Add(model);
                     }
                 }
@@ -782,7 +791,7 @@ namespace eIVOGo.Controllers
                     catch
                     {
                         ModelState.AddModelError("ErrorMsg", res.未設定字軌__);
-                    }                   
+                    }
 
                     // step3.判斷發票起迄號正確性
                     if (!startNo.HasValue || !(startNo >= 0 && startNo < 100000000))
@@ -860,7 +869,7 @@ namespace eIVOGo.Controllers
 
                         return View("~/Views/Shared/ReportInputError.cshtml");
                     }
-                }  
+                }
             }
 
             // step5.儲存發票字軌資料
@@ -895,7 +904,7 @@ namespace eIVOGo.Controllers
             {
                 DataTable table = new DataTable("Sheet1");
                 ds.Tables.Add(table);
-                
+
                 table.Columns.Add("營業人統編");
                 table.Columns.Add("年份");
                 table.Columns.Add("發票期別");

@@ -119,7 +119,7 @@ namespace eIVOGo.Controllers
                 }
             }
 
-            return View(items);
+            return View("~/Views/InquireInvoice/ByPeriod.cshtml",items);
         }
 
         public ActionResult ByDonation(InquireInvoiceViewModel viewModel)

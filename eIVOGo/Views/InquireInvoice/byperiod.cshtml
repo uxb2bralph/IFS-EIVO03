@@ -5,10 +5,25 @@
         @res.期別
     </th>
     <td class="tdleft">
-        @(this.Model != null ? Html.DropDownList("period", (IEnumerable<SelectListItem>)this.Model) : null)
+        @(this.Model != null ? Html.DropDownList("PeriodNo", (IEnumerable<SelectListItem>)this.Model) : null)
+        <input type="hidden" id="period" name="period" />
         <script>
             $(function () {
-                $('select[name="period"]').val('@(Request["period"])');
+                var d = new Date();
+                var y = d.getFullYear();
+                var n = d.getMonth();
+                //alert(y + "," + n);
+                $("#PeriodNo").children().each(function () {
+                    if ($(this).val() == y+","+n) {
+                        //jQuery給法
+                        $(this).attr("selected", "true");
+                    }
+                });
+                @*if (!'@(Request["period"])' == null) {
+                    $('select[name="period"]').val('@(Request["period"])');
+                }*@
+
+                $('input[name="period"]:hidden').val($('select[name="PeriodNo"]').val());
             });
         </script>
     </td>
