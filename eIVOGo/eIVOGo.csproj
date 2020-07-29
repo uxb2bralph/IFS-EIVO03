@@ -254,6 +254,8 @@
     <Content Include="App_Themes\Visitor\table.css" />
     <Content Include="App_Themes\Visitor\Visitor.skin" />
     <Content Include="App_Themes\Web.config" />
+    <Content Include="bin\Ionic.Zip.dll" />
+    <Content Include="bin\QREncrypter.dll" />
     <Content Include="bin\zxing.dll" />
     <Content Include="bin\zxing.presentation.dll" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -402,6 +404,7 @@
     <Content Include="Helper\LoadInvoiceBuyer.aspx" />
     <Content Include="logs\SystemKey.json" />
     <Content Include="Published\UploadAttachmentForGoogleByStream.ashx" />
+    <Content Include="Views\InvoiceQuery\InvoiceQuery_DownloadCSV.aspx" />
     <Content Include="Views\Notification\Shared\ServiceNotation.cshtml" />
     <Content Include="Views\SiteAction\FunctionTitleBar.cshtml" />
     <Content Include="Views\Common\Module\EnumSelector.cshtml" />
@@ -1116,6 +1119,7 @@
     <Content Include="Views\DataExchange\Module\DataIndex.cshtml" />
     <Content Include="Views\DataExchange\Module\ImportInvoiceResult.cshtml" />
     <Content Include="Views\Common\Module\JsGridInitialization.cshtml" />
+    <Content Include="Views\DataFlow\SellerSelectorQuery.cshtml" />      
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="Views\Home\MainPage.aspx" />
     <Content Include="Module\Ajax\PagingControl.ascx" />
@@ -2137,9 +2141,20 @@
     <Content Include="Views\InvoiceNo\VacantNo\DataItem.cshtml" />
     <Content Include="Views\WinningInvoice\ReportIndex.cshtml" />
     <Content Include="Views\WinningInvoice\Module\InquireWinning.cshtml" />
-    <Content Include="Views\WinningInvoice\Module\ReportResult.cshtml" />
-    <Content Include="Views\Module\WinningInvoiceReport.cshtml" />
-    <Content Include="Views\WinningInvoice\ReportResult.cshtml" />
+    <Content Include="Views\WinningInvoice\Module\ReportResult.cshtml" /> 
+    <Content Include="Views\Home\Module\CompanyQuickSearchQuery.cshtml" />
+    <Content Include="Views\InquireInvoice\ByAgentQuery.cshtml" />
+    <Content Include="Views\InquireInvoice\ByAttachmentQuery.cshtml" />
+    <Content Include="Views\InquireInvoice\ByCancellationQuery.cshtml" />
+    <Content Include="Views\InquireInvoice\BySellerQuery.cshtml" />
+    <Content Include="Views\InquireInvoice\ByWinningNumberQuery.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\DataDownloadResult.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\InvoiceQueryDataItem.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\InvoiceQueryInquire.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\InvoiceQueryItemList.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\InvoiceQueryItemResult.cshtml" />
+    <Content Include="Views\InvoiceQuery\ScriptHelper\Common.cshtml" />
+    <Content Include="Views\InvoiceQuery\InvoiceQueryIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">
