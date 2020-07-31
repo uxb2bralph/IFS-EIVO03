@@ -1,0 +1,13 @@
+﻿@using Model.DataEntity
+@{
+    Organization _model = (Organization)this.Model;
+}
+<p class="red">
+    ※本電子信箱為系統發送通知信用，請勿直接回覆，如發票內容或消費內容有問題，請與"@_model.CompanyName" 聯絡。
+</p>
+<p class="rde">
+    消費問題客服專線：<span class="blue">@_model.CustomerServiceHotline</span>
+</p>
+<p class="red">
+    消費問題客服信箱：<span class="blue">@_model.CustomerServiceEmail</span>
+</p>

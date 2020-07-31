@@ -189,6 +189,14 @@
     <value>基本資料</value>
     <comment>基本資料</comment>
   </data>
+  <data name="客服專用電子郵件" xml:space="preserve">
+    <value>客服專用電子郵件</value>
+    <comment>客服專用電子郵件</comment>
+  </data>
+  <data name="客服專線" xml:space="preserve">
+    <value>客服專線</value>
+    <comment>客服專線</comment>
+  </data>
   <data name="客訂樣式" xml:space="preserve">
     <value>客訂樣式</value>
     <comment>客訂樣式</comment>

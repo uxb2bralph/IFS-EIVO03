@@ -223,6 +223,24 @@ namespace eIVOGo.Resource.Views.Organization.Module {
         }
         
         /// <summary>
+        ///   查詢類似 客服專用電子郵件 的當地語系化字串。
+        /// </summary>
+        public static string 客服專用電子郵件 {
+            get {
+                return ResourceManager.GetString("客服專用電子郵件", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 客服專線 的當地語系化字串。
+        /// </summary>
+        public static string 客服專線 {
+            get {
+                return ResourceManager.GetString("客服專線", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 客訂樣式 的當地語系化字串。
         /// </summary>
         public static string 客訂樣式 {

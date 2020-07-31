@@ -189,6 +189,12 @@
     <value>Basic information</value>
     <comment>基本資料</comment>
   </data>
+  <data name="客服專用電子郵件" xml:space="preserve">
+    <value>Customer service email</value>
+  </data>
+  <data name="客服專線" xml:space="preserve">
+    <value>Customer service hotline</value>
+  </data>
   <data name="客訂樣式" xml:space="preserve">
     <value>Custom style</value>
     <comment>客訂樣式</comment>

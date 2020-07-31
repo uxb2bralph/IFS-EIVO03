@@ -99,6 +99,10 @@ namespace eIVOGo.Models.ViewModel
             item.ContactPhone = viewModel.ContactPhone;
             item.ContactMobilePhone = viewModel.ContactMobilePhone;
             item.ContactEmail = viewModel.ContactEmail;
+            //yuki加入客服專線 start
+            item.CustomerServiceHotline = viewModel.CustomerServiceHotline;
+            item.CustomerServiceEmail = viewModel.CustomerServiceEmail;
+            //yuki加入客服專線 end
             item.OrganizationStatus.SetToPrintInvoice = viewModel.SetToPrintInvoice;
             item.OrganizationStatus.SetToOutsourcingCS = viewModel.SetToOutsourcingCS;
             item.OrganizationStatus.InvoicePrintView = viewModel.SetToPrintInvoice == true ? viewModel.InvoicePrintView.GetEfficientString() : null;

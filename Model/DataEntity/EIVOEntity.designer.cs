@@ -1766,6 +1766,10 @@ namespace Model.DataEntity
 		
 		private string _ContactTitle;
 		
+		private string _Property1;
+		
+		private string _CustomerServiceEmail;
+		
 		private EntitySet<OrganizationCategory> _OrganizationCategory;
 		
 		private EntitySet<InvoiceWelfareAgency> _InvoiceWelfareAgencies;
@@ -1880,6 +1884,10 @@ namespace Model.DataEntity
     partial void OnUndertakerIDChanged();
     partial void OnContactTitleChanging(string value);
     partial void OnContactTitleChanged();
+    partial void OnCustomerServiceHotlineChanging(string value);
+    partial void OnCustomerServiceHotlineChanged();
+    partial void OnCustomerServiceEmailChanging(string value);
+    partial void OnCustomerServiceEmailChanged();
     #endregion
 		
 		public Organization()
@@ -2370,8 +2378,50 @@ namespace Model.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Property1", DbType="NVarChar(20)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=24)]
+		public string CustomerServiceHotline
+		{
+			get
+			{
+				return this._Property1;
+			}
+			set
+			{
+				if ((this._Property1 != value))
+				{
+					this.OnCustomerServiceHotlineChanging(value);
+					this.SendPropertyChanging();
+					this._Property1 = value;
+					this.SendPropertyChanged("CustomerServiceHotline");
+					this.OnCustomerServiceHotlineChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerServiceEmail", DbType="NVarChar(512)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=25)]
+		public string CustomerServiceEmail
+		{
+			get
+			{
+				return this._CustomerServiceEmail;
+			}
+			set
+			{
+				if ((this._CustomerServiceEmail != value))
+				{
+					this.OnCustomerServiceEmailChanging(value);
+					this.SendPropertyChanging();
+					this._CustomerServiceEmail = value;
+					this.SendPropertyChanged("CustomerServiceEmail");
+					this.OnCustomerServiceEmailChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationCategory", Storage="_OrganizationCategory", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=24, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=26, EmitDefaultValue=false)]
 		public EntitySet<OrganizationCategory> OrganizationCategory
 		{
 			get
@@ -2390,7 +2440,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceWelfareAgency", Storage="_InvoiceWelfareAgencies", ThisKey="CompanyID", OtherKey="SellerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=25, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=27, EmitDefaultValue=false)]
 		public EntitySet<InvoiceWelfareAgency> InvoiceWelfareAgencies
 		{
 			get
@@ -2409,7 +2459,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_WelfareAgency", Storage="_WelfareAgency", ThisKey="CompanyID", OtherKey="AgencyID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=26, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=28, EmitDefaultValue=false)]
 		public WelfareAgency WelfareAgency
 		{
 			get
@@ -2444,7 +2494,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceItem", Storage="_InvoiceItems", ThisKey="CompanyID", OtherKey="SellerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=27, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=29, EmitDefaultValue=false)]
 		public EntitySet<InvoiceItem> InvoiceItems
 		{
 			get
@@ -2463,7 +2513,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceItem1", Storage="_InvoiceItems1", ThisKey="CompanyID", OtherKey="DonationID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=28, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=30, EmitDefaultValue=false)]
 		public EntitySet<InvoiceItem> DonatedInvoiceItems
 		{
 			get
@@ -2482,7 +2532,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_MemberCode", Storage="_MemberCodes", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=29, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=31, EmitDefaultValue=false)]
 		public EntitySet<MemberCode> MemberCodes
 		{
 			get
@@ -2501,7 +2551,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceTrackCodeAssignment", Storage="_InvoiceTrackCodeAssignments", ThisKey="CompanyID", OtherKey="SellerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=30, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=32, EmitDefaultValue=false)]
 		public EntitySet<InvoiceTrackCodeAssignment> InvoiceTrackCodeAssignments
 		{
 			get
@@ -2520,7 +2570,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_DocumentOwner", Storage="_DocumentOwners", ThisKey="CompanyID", OtherKey="OwnerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=31, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=33, EmitDefaultValue=false)]
 		public EntitySet<DocumentOwner> DocumentOwners
 		{
 			get
@@ -2539,7 +2589,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceAllowanceBuyer", Storage="_InvoiceAllowanceBuyer", ThisKey="CompanyID", OtherKey="BuyerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=32, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=34, EmitDefaultValue=false)]
 		public EntitySet<InvoiceAllowanceBuyer> InvoiceAllowanceBuyer
 		{
 			get
@@ -2558,7 +2608,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceAllowanceSeller", Storage="_InvoiceAllowanceSeller", ThisKey="CompanyID", OtherKey="SellerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=33, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=35, EmitDefaultValue=false)]
 		public EntitySet<InvoiceAllowanceSeller> InvoiceAllowanceSeller
 		{
 			get
@@ -2577,7 +2627,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceSeller", Storage="_InvoiceSeller", ThisKey="CompanyID", OtherKey="SellerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=34, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=36, EmitDefaultValue=false)]
 		public EntitySet<InvoiceSeller> InvoiceSeller
 		{
 			get
@@ -2596,7 +2646,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_EnterpriseGroupMember", Storage="_EnterpriseGroupMember", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=35, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=37, EmitDefaultValue=false)]
 		public EntitySet<EnterpriseGroupMember> EnterpriseGroupMember
 		{
 			get
@@ -2615,7 +2665,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_DocumentTypeFlow", Storage="_DocumentTypeFlow", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=36, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=38, EmitDefaultValue=false)]
 		public EntitySet<DocumentTypeFlow> DocumentTypeFlow
 		{
 			get
@@ -2634,7 +2684,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_BusinessRelationship", Storage="_BusinessRelationship", ThisKey="CompanyID", OtherKey="MasterID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=37, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=39, EmitDefaultValue=false)]
 		public EntitySet<BusinessRelationship> MasterRelation
 		{
 			get
@@ -2653,7 +2703,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_BusinessRelationship1", Storage="_BusinessRelationship1", ThisKey="CompanyID", OtherKey="RelativeID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=38, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=40, EmitDefaultValue=false)]
 		public EntitySet<BusinessRelationship> RelativeRelation
 		{
 			get
@@ -2672,7 +2722,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ReceiptItem", Storage="_ReceiptItemForSeller", ThisKey="CompanyID", OtherKey="SellerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=39, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=41, EmitDefaultValue=false)]
 		public EntitySet<ReceiptItem> ReceiptItemForSeller
 		{
 			get
@@ -2691,7 +2741,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ReceiptItem1", Storage="_ReceiptItemForBuyer", ThisKey="CompanyID", OtherKey="BuyerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=40, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=42, EmitDefaultValue=false)]
 		public EntitySet<ReceiptItem> ReceiptItemForBuyer
 		{
 			get
@@ -2710,7 +2760,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ExceptionLog", Storage="_ExceptionLog", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=41, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=43, EmitDefaultValue=false)]
 		public EntitySet<ExceptionLog> ExceptionLog
 		{
 			get
@@ -2729,7 +2779,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationToken", Storage="_OrganizationToken", ThisKey="CompanyID", OtherKey="CompanyID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=42, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=44, EmitDefaultValue=false)]
 		public OrganizationToken OrganizationToken
 		{
 			get
@@ -2764,7 +2814,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_CALog", Storage="_CALog", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=43, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=45, EmitDefaultValue=false)]
 		public EntitySet<CALog> CALog
 		{
 			get
@@ -2783,7 +2833,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_SMSNotificationLog", Storage="_SMSNotificationLogs", ThisKey="CompanyID", OtherKey="OwnerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=44, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=46, EmitDefaultValue=false)]
 		public EntitySet<SMSNotificationLog> SMSNotificationLogs
 		{
 			get
@@ -2802,7 +2852,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationStatus", Storage="_OrganizationStatus", ThisKey="CompanyID", OtherKey="CompanyID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=45, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=47, EmitDefaultValue=false)]
 		public OrganizationStatus OrganizationStatus
 		{
 			get
@@ -2837,7 +2887,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceBuyer", Storage="_InvoiceBuyer", ThisKey="CompanyID", OtherKey="BuyerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=46, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=48, EmitDefaultValue=false)]
 		public EntitySet<InvoiceBuyer> InvoiceBuyer
 		{
 			get
@@ -2856,7 +2906,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceIssuerAgent", Storage="_InvoiceInsurerAgent", ThisKey="CompanyID", OtherKey="AgentID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=47, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=49, EmitDefaultValue=false)]
 		public EntitySet<InvoiceIssuerAgent> InvoiceInsurerAgent
 		{
 			get
@@ -2875,7 +2925,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceIssuerAgent1", Storage="_AsInvoiceInsurer", ThisKey="CompanyID", OtherKey="IssuerID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=48, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=50, EmitDefaultValue=false)]
 		public EntitySet<InvoiceIssuerAgent> AsInvoiceInsurer
 		{
 			get
@@ -2894,7 +2944,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_POSDevice", Storage="_POSDevice", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=49, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=51, EmitDefaultValue=false)]
 		public EntitySet<POSDevice> POSDevice
 		{
 			get
@@ -2913,7 +2963,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationExtension", Storage="_OrganizationExtension", ThisKey="CompanyID", OtherKey="CompanyID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=50, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=52, EmitDefaultValue=false)]
 		public OrganizationExtension OrganizationExtension
 		{
 			get
@@ -2948,7 +2998,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationBranch", Storage="_OrganizationBranch", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=51, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=53, EmitDefaultValue=false)]
 		public EntitySet<OrganizationBranch> OrganizationBranch
 		{
 			get
@@ -2967,7 +3017,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ProcessRequest", Storage="_ProcessRequest", ThisKey="CompanyID", OtherKey="AgentID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=52, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=54, EmitDefaultValue=false)]
 		public EntitySet<ProcessRequest> ProcessRequest
 		{
 			get
@@ -2986,7 +3036,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ProcessExceptionNotification", Storage="_ProcessExceptionNotification", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=53, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=55, EmitDefaultValue=false)]
 		public EntitySet<ProcessExceptionNotification> ProcessExceptionNotification
 		{
 			get
@@ -3005,7 +3055,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ProductSupplier", Storage="_ProductSupplier", ThisKey="CompanyID", OtherKey="SupplierID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=54, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=56, EmitDefaultValue=false)]
 		public EntitySet<ProductSupplier> ProductSupplier
 		{
 			get

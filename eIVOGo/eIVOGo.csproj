@@ -1119,7 +1119,7 @@
     <Content Include="Views\DataExchange\Module\DataIndex.cshtml" />
     <Content Include="Views\DataExchange\Module\ImportInvoiceResult.cshtml" />
     <Content Include="Views\Common\Module\JsGridInitialization.cshtml" />
-    <Content Include="Views\DataFlow\SellerSelectorQuery.cshtml" />      
+    <Content Include="Views\DataFlow\SellerSelectorQuery.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="Views\Home\MainPage.aspx" />
     <Content Include="Module\Ajax\PagingControl.ascx" />
@@ -2141,7 +2141,7 @@
     <Content Include="Views\InvoiceNo\VacantNo\DataItem.cshtml" />
     <Content Include="Views\WinningInvoice\ReportIndex.cshtml" />
     <Content Include="Views\WinningInvoice\Module\InquireWinning.cshtml" />
-    <Content Include="Views\WinningInvoice\Module\ReportResult.cshtml" /> 
+    <Content Include="Views\WinningInvoice\Module\ReportResult.cshtml" />
     <Content Include="Views\Home\Module\CompanyQuickSearchQuery.cshtml" />
     <Content Include="Views\InquireInvoice\ByAgentQuery.cshtml" />
     <Content Include="Views\InquireInvoice\ByAttachmentQuery.cshtml" />
@@ -2155,6 +2155,8 @@
     <Content Include="Views\InvoiceQuery\Module\InvoiceQueryItemResult.cshtml" />
     <Content Include="Views\InvoiceQuery\ScriptHelper\Common.cshtml" />
     <Content Include="Views\InvoiceQuery\InvoiceQueryIndex.cshtml" />
+    <Content Include="Views\Notification\Module\IssuedC0401_old.cshtml" />
+    <Content Include="Views\Module\SYS\Info\ServiceNotation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

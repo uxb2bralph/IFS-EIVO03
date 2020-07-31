@@ -76,7 +76,7 @@
                             </div>
                             <div class="code2">
                                 @*<img id="qrcode1" alt="" width="80" height="80" src="@(_model.GetLeftQRCodeImageSrc())" />
-                                <img id="qrcode2" alt="" width="80" height="80" src="@("**".CreateQRCodeImageSrc(width:180,height:180,qrVersion:10))" />*@
+                                    <img id="qrcode2" alt="" width="80" height="80" src="@("**".CreateQRCodeImageSrc(width:180,height:180,qrVersion:10))" />*@
                                 @*<img id="qrcode1" alt="" width="80" height="80" src="@(String.Format("{0}{1}?invoiceID={2}", Uxnet.Web.Properties.Settings.Default.HostUrl, VirtualPathUtility.ToAbsolute("~/DataView/GetLeftQRCode"), _model.InvoiceID))" />
                                     <img id="qrcode2" alt="" width="80" height="80" src="@(String.Format("{0}{1}?invoiceID={2}", Uxnet.Web.Properties.Settings.Default.HostUrl, VirtualPathUtility.ToAbsolute("~/DataView/GetRightQRCode"), _model.InvoiceID))" />*@
                             </div>
@@ -223,6 +223,7 @@
             <div class="br" style="page-break-after: always">&nbsp;</div>
         }
     }
+    Html.RenderPartial("~/Views/Module/SYS/Info/ServiceNotation.cshtml", _model.Organization);
 }
 
 

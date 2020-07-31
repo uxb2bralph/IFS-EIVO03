@@ -276,7 +276,7 @@ namespace Model.InvoiceManagement
             get;
             set;
         }
-
+    
         public static int ResetBusyCount()
         {
             return __Handler.ResetBusyCount();
