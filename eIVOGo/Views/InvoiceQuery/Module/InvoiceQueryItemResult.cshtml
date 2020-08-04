@@ -14,6 +14,8 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using pg=eIVOGo.Resource.Views.Common.Page
+
 @{
     ModelSource<InvoiceItem> models;
     Model.Security.MembershipManagement.UserProfileMember _profile;
@@ -24,7 +26,7 @@
 }
 @if (!models.InquiryHasError)
 {
-    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", pg.查詢結果);
 
     @*<div class="container border_gray" style="overflow-x: auto;">*@
     <div class="border_gray" style="overflow-x: auto;">
@@ -41,12 +43,13 @@
                 $(function () {
                     var obj = $('#Pagination').twbsPagination({
                         totalPages: @((recordCount + Uxnet.Web.Properties.Settings.Default.PageSize - 1) / Uxnet.Web.Properties.Settings.Default.PageSize),
+                        displayTotalPages: '@pg.總頁數',
                         visiblePages: 10,
                         initiateStartPageClick: false,
-                        first: '最前',
-                        prev: '上頁',
-                        next: '下頁',
-                        last: '最後',
+                        first: '@pg.最前',
+                        prev: '@pg.上頁',
+                        next: '@pg.下頁',
+                        last: '@pg.最後',
                         onPageClick: function (event, page) {
                             pageNum = page;
                             InvoiceQuery_Inquire(page, function (data) {
@@ -67,7 +70,7 @@
         }
         else
         {
-            <font color="red">查無資料!!</font>
+            <font color="red">@pg.查無資料!!</font>
         }
     </div>
 }

@@ -11,6 +11,7 @@
 @using Uxnet.Web.WebUI
 @using eIVOGo.Models.ViewModel
 @using Model.Models.ViewModel
+@using res=eIVOGo.Resource.Views.InvoiceQuery.Module.InvoiceSummaryResult
 
 @{
     ModelSource<InvoiceItem> models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
@@ -20,7 +21,7 @@
 
 @{
     Html.RenderPartial("~/Views/InvoiceQuery/Module/InvoiceReport.cshtml");
-    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.查詢結果);
 }
 @if (!models.InquiryHasError)
 {
@@ -38,7 +39,7 @@
             <tr>
                 <td class="Bargain_btn">
                     @{Html.RenderPartial("~/Views/Module/PrintData.cshtml");}
-                    <input type="button" value="Excel下載" name="btnExcel" class="btn" onclick="$('form').prop('action', '@(Url.Action("CreateInvoiceSummaryXlsx"))    ').submit();" />
+                    <input type="button" value=@res.Excel下載 name="btnExcel" class="btn" onclick="$('form').prop('action', '@(Url.Action("CreateInvoiceSummaryXlsx"))    ').submit();" />
                 </td>
             </tr>
         </table>

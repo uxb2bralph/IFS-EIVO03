@@ -14,6 +14,8 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res=eIVOGo.Resource.Views.InquireInvoice.ByCancellationQuery
+
 @{    
     InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
       if (_viewModel == null)
@@ -24,7 +26,7 @@
 }
 <tr>
     <th>
-        單據狀態
+        @res.單據狀態
     </th>
     <td class="tdleft">
 
@@ -33,9 +35,9 @@
             {
                 <option value="@(ViewBag.Cancelled ?? "")">全部</option>
             }*@
-            <option value="@(ViewBag.Cancelled ?? "")">全部</option>
-            <option value="@(_viewModel.Cancelled ?? false)">未作廢</option>
-            <option value="@(_viewModel.Cancelled ?? true)">已作廢</option>
+            <option value="@(ViewBag.Cancelled ?? "")">@res.全部</option>
+            <option value="@(_viewModel.Cancelled ?? false)">@res.未作廢</option>
+            <option value="@(_viewModel.Cancelled ?? true)">@res.已作廢</option>
         </select>
 
 

@@ -14,6 +14,8 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res=eIVOGo.Resource.Views.InquireInvoice.BySellerQuery 
+
 @{
 var userProfile = Business.Helper.WebPageUtility.UserProfile;
 var mgr = TempData.InvokeModelSource<Organization>();
@@ -23,10 +25,10 @@ InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 
 }
 <tr>
-    <th>@(ViewBag.Title ?? "開立人統編")</th>
+    <th>@(ViewBag.Title ?? res.開立人統編)</th>
     <td class="tdleft">
         @{
-            ViewBag.SelectorIndication = "全部";
+            ViewBag.SelectorIndication = res.全部;
             Html.RenderPartial("~/Views/DataFlow/SellerSelectorQuery.cshtml", _model);
         }
     </td>

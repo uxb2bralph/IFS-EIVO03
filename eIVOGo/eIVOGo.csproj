@@ -2157,6 +2157,13 @@
     <Content Include="Views\InvoiceQuery\InvoiceQueryIndex.cshtml" />
     <Content Include="Views\Notification\Module\IssuedC0401_old.cshtml" />
     <Content Include="Views\Module\SYS\Info\ServiceNotation.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\InvoiceSummaryResult.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\AttachmentResult.cshtml" />
+    <Content Include="Views\InvoiceQuery\InvoiceAttachment.cshtml" />
+    <Content Include="Views\InvoiceQuery\InvoiceSummaryResult.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\InvoiceReport.cshtml" />
+    <Content Include="Views\InvoiceQuery\InvoiceReport.cshtml" />
+    <Content Include="Views\Module\PrintData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

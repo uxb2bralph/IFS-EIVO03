@@ -117,8 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="上10頁" xml:space="preserve">
+    <value>Previous 10 pages</value>
+  </data>
+  <data name="上一頁" xml:space="preserve">
+    <value>Previous page</value>
+  </data>
   <data name="上頁" xml:space="preserve">
     <value>Prev</value>
+  </data>
+  <data name="下10頁" xml:space="preserve">
+    <value>Next 10 pages</value>
+  </data>
+  <data name="下一頁" xml:space="preserve">
+    <value>Next page</value>
   </data>
   <data name="下頁" xml:space="preserve">
     <value>Next</value>
@@ -129,6 +141,9 @@
   <data name="最後" xml:space="preserve">
     <value>Last</value>
   </data>
+  <data name="末頁" xml:space="preserve">
+    <value>last page</value>
+  </data>
   <data name="查無資料" xml:space="preserve">
     <value>No data found</value>
   </data>
@@ -138,7 +153,13 @@
   <data name="總筆數" xml:space="preserve">
     <value>Total Record Count</value>
   </data>
+  <data name="總筆數_" xml:space="preserve">
+    <value>Total number:</value>
+  </data>
   <data name="總頁數" xml:space="preserve">
     <value>Total Pages</value>
+  </data>
+  <data name="首頁" xml:space="preserve">
+    <value>Home</value>
   </data>
 </root>

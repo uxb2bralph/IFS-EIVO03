@@ -14,6 +14,8 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res=eIVOGo.Resource.Views.InquireInvoice.ByWinningNumberQuery
+
 @{
     InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
     if (_viewModel == null)
@@ -24,7 +26,7 @@
 }
 <tr>
     <th>
-        是否中獎
+        @res.是否中獎
     </th>
     <td class="tdleft">
         <select class="form-control" name="Winning">
@@ -32,8 +34,8 @@
             {
                 <option value="@(ViewBag.Winning ?? "")">全部</option>
             }*@
-            <option value="@(ViewBag.Winning ?? "")">全部</option>
-            <option value="@(_viewModel.Winning ?? 1)">是</option>
+            <option value="@(ViewBag.Winning ?? "")">@res.全部</option>
+            <option value="@(_viewModel.Winning ?? 1)">@res.是</option>
         </select>
     </td>
 </tr>

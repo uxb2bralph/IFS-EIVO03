@@ -61,11 +61,47 @@ namespace eIVOGo.Resource.Views.Common {
         }
         
         /// <summary>
+        ///   查詢類似 上10頁 的當地語系化字串。
+        /// </summary>
+        public static string 上10頁 {
+            get {
+                return ResourceManager.GetString("上10頁", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 上一頁 的當地語系化字串。
+        /// </summary>
+        public static string 上一頁 {
+            get {
+                return ResourceManager.GetString("上一頁", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 上頁 的當地語系化字串。
         /// </summary>
         public static string 上頁 {
             get {
                 return ResourceManager.GetString("上頁", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 下10頁 的當地語系化字串。
+        /// </summary>
+        public static string 下10頁 {
+            get {
+                return ResourceManager.GetString("下10頁", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 下一頁 的當地語系化字串。
+        /// </summary>
+        public static string 下一頁 {
+            get {
+                return ResourceManager.GetString("下一頁", resourceCulture);
             }
         }
         
@@ -97,6 +133,15 @@ namespace eIVOGo.Resource.Views.Common {
         }
         
         /// <summary>
+        ///   查詢類似 末頁 的當地語系化字串。
+        /// </summary>
+        public static string 末頁 {
+            get {
+                return ResourceManager.GetString("末頁", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 查無資料 的當地語系化字串。
         /// </summary>
         public static string 查無資料 {
@@ -124,11 +169,29 @@ namespace eIVOGo.Resource.Views.Common {
         }
         
         /// <summary>
+        ///   查詢類似 總筆數： 的當地語系化字串。
+        /// </summary>
+        public static string 總筆數_ {
+            get {
+                return ResourceManager.GetString("總筆數_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 總頁數 的當地語系化字串。
         /// </summary>
         public static string 總頁數 {
             get {
                 return ResourceManager.GetString("總頁數", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 首頁 的當地語系化字串。
+        /// </summary>
+        public static string 首頁 {
+            get {
+                return ResourceManager.GetString("首頁", resourceCulture);
             }
         }
     }

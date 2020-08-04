@@ -117,9 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="上10頁" xml:space="preserve">
+    <value>上10頁</value>
+  </data>
+  <data name="上一頁" xml:space="preserve">
+    <value>上一頁</value>
+  </data>
   <data name="上頁" xml:space="preserve">
     <value>上頁</value>
     <comment>上頁</comment>
+  </data>
+  <data name="下10頁" xml:space="preserve">
+    <value>下10頁</value>
+  </data>
+  <data name="下一頁" xml:space="preserve">
+    <value>下一頁</value>
   </data>
   <data name="下頁" xml:space="preserve">
     <value>下頁</value>
@@ -133,6 +145,9 @@
     <value>最後</value>
     <comment>最後</comment>
   </data>
+  <data name="末頁" xml:space="preserve">
+    <value>末頁</value>
+  </data>
   <data name="查無資料" xml:space="preserve">
     <value>查無資料</value>
     <comment>查無資料</comment>
@@ -145,8 +160,14 @@
     <value>總筆數</value>
     <comment>總筆數</comment>
   </data>
+  <data name="總筆數_" xml:space="preserve">
+    <value>總筆數：</value>
+  </data>
   <data name="總頁數" xml:space="preserve">
     <value>總頁數</value>
     <comment>總頁數</comment>
+  </data>
+  <data name="首頁" xml:space="preserve">
+    <value>首頁</value>
   </data>
 </root>

@@ -9,6 +9,7 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using res=eIVOGo.Resource.Views.InvoiceQuery.Module.AttachmentResult
 
 @{ 
     ModelSource<InvoiceItem> models;
@@ -16,7 +17,7 @@
     models.DataSourcePath = VirtualPathUtility.ToAbsolute("~/InvoiceQuery/AttachmentGridPage");
 
     Html.RenderPartial("~/Views/InvoiceQuery/Module/InvoiceReport.cshtml");
-    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.查詢結果);
 }
 
 @if (!models.InquiryHasError)
@@ -30,8 +31,8 @@
         <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="Bargain_btn">
-                    <input type="button" value="選取下載" name="btnDownload" class="btn" />&nbsp;&nbsp;
-                    <input type="button" value="全部下載" name="btnDownloadAll" class="btn" onclick="$('form').prop('action', '@(Url.Action("DownloadAll"))    ').submit();" />
+                    <input type="button" value=@res.選取下載 name="btnDownload" class="btn" />&nbsp;&nbsp;
+                    <input type="button" value=@res.全部下載 name="btnDownloadAll" class="btn" onclick="$('form').prop('action', '@(Url.Action("DownloadAll"))    ').submit();" />
                 </td>
             </tr>
         </table>
@@ -58,7 +59,7 @@
                         $data.val(JSON.stringify(data));
                         $formDownload.submit();
                     } else {
-                        alert('請選擇下載資料項!!');
+                        alert('@res.請選擇下載資料項__');
                     }
                 });
             });

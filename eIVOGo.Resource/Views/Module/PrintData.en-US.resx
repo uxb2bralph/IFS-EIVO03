@@ -121,6 +121,6 @@
     <value>The print job is about to start, please wait...!!</value>
   </data>
   <data name="資料列印" xml:space="preserve">
-    <value>Data printing</value>
+    <value>DataPrinting</value>
   </data>
 </root>

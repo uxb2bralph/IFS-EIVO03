@@ -13,6 +13,7 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res=eIVOGo.Resource.Views.InquireInvoice.ByAgentQuery
 
 @{
     UserProfileMember _profile = Context.GetUser();
@@ -33,10 +34,10 @@
     if (_profile.CurrentUserRole.OrganizationCategory.CategoryID == (int)Naming.CategoryID.COMP_SYS)
     {
         <tr>
-            <th>@(ViewBag.Title ?? "代理業者統編")</th>
+            <th>@(ViewBag.Title ?? res.代理業者統編)</th>
             <td class="tdleft">
                 <select class="form-control" name="@(_fieldName)">
-                    @{ViewBag.SelectorIndication = "全部";}
+                    @{ViewBag.SelectorIndication = res.全部;}
                     @if (ViewBag.SelectorIndication != null)
                     {
                         <option value="@(ViewBag.SelectorIndicationValue ?? "")">@(ViewBag.SelectorIndication)</option>

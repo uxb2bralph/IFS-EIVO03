@@ -4,19 +4,23 @@
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="Model.DataEntity" %>
 <%@ Import Namespace="System.Web.Optimization" %>
+<%@ Register Src="~/Module/Common/CommonScriptInclude.ascx" TagPrefix="uc1" TagName="CommonScriptInclude" %>
+<%@ Register Src="~/Views/Shared/JsGrid.ascx" TagPrefix="uc2" TagName="JsGrid" %>
 
 <!DOCTYPE html>
 <html lang="en">
-<head runat="server">
+<head runat="server">   
     <title>電子發票系統</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="~/Content/eivo-bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap-theme.css" rel="stylesheet" type="text/css" />
     <link href="~/css/rwd-table.min.css" rel="stylesheet" type="text/css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
-    <%=  Styles.Render("~/App_Themes/Visitor") %>
-    <%  Html.RenderPartial("~/Module/Common/CommonScriptInclude.ascx"); %>
-    <%  Html.RenderPartial("~/Views/Shared/JsGrid.ascx"); %>
+    <link href="~/App_Themes/Visitor/*.css" rel="stylesheet" type="text/css" />
+
+    <uc1:CommonScriptInclude runat="server" ID="CommonScriptInclude" />
+    <uc2:JsGrid runat="server" ID="JsGrid" />
+   
     <asp:ContentPlaceHolder ID="headContent" runat="server">
     </asp:ContentPlaceHolder>
 </head>

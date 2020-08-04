@@ -1,3 +1,4 @@
+﻿
 @using System.IO
 @using eIVOGo.Helper
 @using eIVOGo.Module.Base
@@ -6,9 +7,11 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-<input type="button" class="btn" name="btnPrint" value="資料列印" onclick="$('form').prop('target','prnFrame').prop('action', '@(Url.Action(ViewBag.PrintAction ?? "PrintResult"))').submit();" />
+@using res=eIVOGo.Resource.Views.Module.PrintData
 
-    <script>
+<input type="button" class="btn" name="btnPrint" value=@res.資料列印 onclick="$('form').prop('target','prnFrame').prop('action', '@(Url.Action(ViewBag.PrintAction ?? "PrintResult"))').submit();" />
+
+<script>
         if (Page.Items["prnFrame"] == null) {
         $(function () {
             var $dialog;
@@ -30,7 +33,7 @@
                 if ($dialog) {
                     $dialog.dialog();
                 } else {
-                    $dialog = $("<div align='center'>列印作業即將進行，請稍後...!!</div>")
+                    $dialog = $("<div align='center'>"+@res.列印作業即將進行_請稍後+"</div>")
                         .dialog({
                             width: 480,
                             modal: true,
@@ -43,7 +46,7 @@
             });
         });
         Page.Items["prnFrame"] = this;
-    </script>
+</script>
 
 
 

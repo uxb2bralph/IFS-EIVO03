@@ -151,4 +151,7 @@
     <value>Home &gt; System Management and Maintenance</value>
     <comment>首頁 &gt; 系統管理維護</comment>
   </data>
+  <data name="首頁 &gt; 統計報表" xml:space="preserve">
+    <value>Home&gt; Statistical Report</value>
+  </data>
 </root>

@@ -14,11 +14,13 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res=eIVOGo.Resource.Views.InvoiceQuery.Module.DataDownloadResult 
+
 <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td class="Bargain_btn">            
-            <input type="button" value="CSV下載" name="btnMonthlyReport" class="btn" onclick="DownloadCSV();" />
-            <input type="button" value="Excel下載" name="btnMonthlyReport" class="btn" onclick="CreateXlsx();" />
+            <input type="button" value=@res.CSV下載 name="btnMonthlyReport" class="btn" onclick="DownloadCSV();" />
+            <input type="button" value=@res.Excel下載 name="btnMonthlyReport" class="btn" onclick="CreateXlsx();" />
         </td>
     </tr>
 </table>

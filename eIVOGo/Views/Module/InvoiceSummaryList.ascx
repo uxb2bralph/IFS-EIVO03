@@ -5,7 +5,6 @@
 <%@ Register Src="~/Module/JsGrid/DataField/CheckBox.ascx" TagPrefix="uc1" TagName="CheckBox" %>
 <%@ Register Src="~/Module/JsGrid/DataField/JsGridField.ascx" TagPrefix="uc1" TagName="JsGridField" %>
 
-
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="System.Linq.Expressions" %>
@@ -16,6 +15,8 @@
 <%@ Import Namespace="Model.Locale" %>
 <%@ Import Namespace="Utility" %>
 <%@ Import Namespace="Uxnet.Web.WebUI" %>
+<%@ Import Namespace="eIVOGo.Controllers" %>
+<%@ Import Namespace="eIVOGo.Resource.Views.Module" %>
 
 <div id="fieldsContainer"></div>
 <div id="jsGrid"></div>
@@ -37,26 +38,49 @@
         fields[fields.length] = {
             "name": "RecordCount",
             "type": "text",
-            "title": "資料筆數",
+            "title": "<%#InvoiceSummaryList.資料筆數%>",
             "width": "200",
             "align": "right",
-            footerTemplate: function () { return "<%= String.Format("{0:##,###,###,##0.##}", ((ModelSource<InvoiceItem>)Model).Items.Count()) %>"; }
+            footerTemplate: function () { return "<%= String.Format("{0:##,###,###,##0.##}", models.Items.Count()) %>"; }
         };
     </script>
 </asp:PlaceHolder>
 
 <script runat="server">
-    protected override void OnInit(EventArgs e)
+
+    ModelSource<InvoiceItem> models;
+
+    protected void Page_Load(object sender, EventArgs e)
     {
-        base.OnInit(e);
-        gridInit.DataSourceUrl = ((ModelSource<InvoiceItem>)Model).DataSourcePath;
-        gridInit.GetRecordCount = () =>
-            {
-                return ((ModelSource<InvoiceItem>)Model).Items
-                    .GroupBy(i=>i.SellerID)
-                    .Count();
-            };
-        gridInit.AllowPaging = ((ModelSource<InvoiceItem>)Model).ResultModel == Naming.DataResultMode.Display;
-        gridInit.PrintMode = ((ModelSource<InvoiceItem>)Model).ResultModel == Naming.DataResultMode.Print;
+        SellerName.title = InvoiceSummaryList.開立發票營業人;
+        SellerReceiptNo.title = InvoiceSummaryList.統編;
+        var count = InvoiceSummaryList.總筆數_;
+        SellerReceiptNo.footerTemplate="function () { return '" +count +"'}";        
     }
+
+    protected override void OnInit(EventArgs e)
+    {        
+        base.OnInit(e);
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        models.DataSourcePath = VirtualPathUtility.ToAbsolute("~/InvoiceQuery/InvoiceSummaryGridPage");
+
+        gridInit.DataSourceUrl =   models.DataSourcePath.ToString();
+        gridInit.GetRecordCount = () =>
+        {
+            return models.Items           
+                .GroupBy(i => i.SellerID)
+                .Count();
+        };
+        gridInit.AllowPaging = models.ResultModel == Naming.DataResultMode.Display;
+        gridInit.PrintMode = models.ResultModel == Naming.DataResultMode.Print;
+    }
+
+    public override void Dispose()
+    {
+        if (models != null)
+            models.Dispose();
+
+        base.Dispose();
+    }
+
 </script>

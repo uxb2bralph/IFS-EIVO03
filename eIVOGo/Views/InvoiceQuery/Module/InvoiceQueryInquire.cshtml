@@ -14,11 +14,14 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using tv=eIVOGo.Resource.Views.Common.TreeView
+@using res=eIVOGo.Resource.Views.InvoiceQuery.Module.InvoiceQueryInquire
+
 @{
-    ViewBag.ActionName = "首頁 > 統計報表";
+    ViewBag.ActionName = tv.首頁___統計報表;
 }
 <!--交易畫面標題-->
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "發票明細資料");}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.發票明細資料);}
 @{
 
     IQueryable<InvoiceItem> _model = (IQueryable<InvoiceItem>)this.Model;
@@ -31,7 +34,7 @@
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
         <tr>
             <th colspan="2" class="Head_style_a">
-                查詢條件
+                @res.查詢條件
             </th>
         </tr>
         @{
@@ -53,8 +56,8 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="queryAction">
     <tr>
         <td class="Bargain_btn">
-            <input type="button" value="查詢" name="btnQuery" class="btn" onclick="InvoiceQuery_Inquire()" />
-            <input type="button" value="下載月報表" name="btnMonthlyReport" class="btn" onclick="downloadMonthlyReport();" />
+            <input type="button" value=@res.查詢 name="btnQuery" class="btn" onclick="InvoiceQuery_Inquire()" />
+            <input type="button" value=@res.下載月報表 name="btnMonthlyReport" class="btn" onclick="downloadMonthlyReport();" />
         </td>
     </tr>
 </table>

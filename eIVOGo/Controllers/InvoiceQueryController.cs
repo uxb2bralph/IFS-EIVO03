@@ -22,7 +22,7 @@ using System.Data.Linq;
 using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
 using ModelExtension.Helper;
-
+using res = eIVOGo.Resource.Controllers.InvoiceQuery;
 
 namespace eIVOGo.Controllers
 {
@@ -81,23 +81,23 @@ namespace eIVOGo.Controllers
                 viewModel.TaxNo = viewModel.TaxNo.GetEfficientString();
                 if (viewModel.TaxNo == null || viewModel.TaxNo.Length != 9)
                 {
-                    ModelState.AddModelError("TaxNo", "請輸入9位數稅籍編號!!");
+                    ModelState.AddModelError("TaxNo", res.請輸入9位數稅籍編號__);
                 }
             }
 
             if (!viewModel.Year.HasValue)
             {
-                ModelState.AddModelError("Year", "請選擇年度!!");
+                ModelState.AddModelError("Year", res.請選擇年度__);
             }
 
             if (!viewModel.PeriodNo.HasValue)
             {
-                ModelState.AddModelError("PeriodNo", "請選擇期別!!");
+                ModelState.AddModelError("PeriodNo", res.請選擇期別__);
             }
 
             if (!viewModel.SellerID.HasValue)
             {
-                ModelState.AddModelError("SellerID", "請選擇發票開立人!!");
+                ModelState.AddModelError("SellerID", res.請選擇發票開立人__);
             }
 
             if (!ModelState.IsValid)
@@ -145,7 +145,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                ViewBag.Message = "資料不存在!!";
+                ViewBag.Message = res.資料不存在__;
                 return View("InvoiceMediaReport");
             }
 
@@ -198,6 +198,7 @@ namespace eIVOGo.Controllers
             tmpModels.Inquiry = createModelInquiry();
             tmpModels.BuildQuery();
             Response.ContentEncoding = Encoding.GetEncoding(950);
+            //TODO:要做多國語系
             return View(tmpModels.Items);
         }
         public ActionResult InvoiceQuery_CreateXlsx(InquireInvoiceViewModel viewModel)
@@ -208,7 +209,7 @@ namespace eIVOGo.Controllers
             tmpModels.Inquiry = createModelInquiry();
             tmpModels.BuildQuery();
             _userProfile["modelSource"] = tmpModels;
-
+            //TODO:要做多國語系
             Server.Transfer("~/MvcHelper/CreateInvoiceReport.aspx");
 
             return new EmptyResult();
@@ -220,7 +221,7 @@ namespace eIVOGo.Controllers
             if (!viewModel.SellerID.HasValue)
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "請選擇開立人!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.請選擇開立人__);
             }
 
             ModelSource<InvoiceItem> tmpModels = new ModelSource<InvoiceItem>(models);
@@ -232,7 +233,7 @@ namespace eIVOGo.Controllers
             if (items.Count() <= 0)
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "查無資料!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.查無資料__);
             }
 
             using (DataSet ds = new DataSet())
@@ -242,11 +243,11 @@ namespace eIVOGo.Controllers
                     foreach (var mm in yy.GroupBy(i => i.InvoiceDate.Value.Month))
                     {
                         DataTable table = new DataTable();
-                        table.Columns.Add(new DataColumn("日期", typeof(String)));
-                        table.Columns.Add(new DataColumn("未作廢總筆數", typeof(int)));
-                        table.Columns.Add(new DataColumn("未作廢總金額", typeof(decimal)));
-                        table.Columns.Add(new DataColumn("已作廢總筆數", typeof(int)));
-                        table.Columns.Add(new DataColumn("已作廢總金額", typeof(decimal)));
+                        table.Columns.Add(new DataColumn(res.日期, typeof(String)));
+                        table.Columns.Add(new DataColumn(res.未作廢總筆數, typeof(int)));
+                        table.Columns.Add(new DataColumn(res.未作廢總金額, typeof(decimal)));
+                        table.Columns.Add(new DataColumn(res.已作廢總筆數, typeof(int)));
+                        table.Columns.Add(new DataColumn(res.已作廢總金額, typeof(decimal)));
                         table.TableName = yy.Key + "-" + mm.Key;
 
                         ds.Tables.Add(table);
@@ -270,7 +271,7 @@ namespace eIVOGo.Controllers
                         v0 = mm.Where(i => i.InvoiceCancellation == null);
                         v1 = mm.Where(i => i.InvoiceCancellation != null);
                         r = table.NewRow();
-                        r[0] = "總計";
+                        r[0] = res.總計;
                         r[1] = v0.Count();
                         r[2] = v0.Sum(i => i.InvoiceAmountType.TotalAmount);
                         r[3] = v1.Count();
@@ -285,7 +286,7 @@ namespace eIVOGo.Controllers
                 Response.ClearHeaders();
                 Response.AddHeader("Cache-control", "max-age=1");
                 Response.ContentType = "application/vnd.ms-excel";
-                Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({0}){1}.xlsx", items.First().Organization.ReceiptNo, HttpUtility.UrlEncode("開立發票月報表")));
+                Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({0}){1}.xlsx", items.First().Organization.ReceiptNo, HttpUtility.UrlEncode(res.開立發票月報表)));
 
                 using (var xls = ds.ConvertToExcel())
                 {
@@ -425,7 +426,7 @@ namespace eIVOGo.Controllers
                 }
             });
 
-            return Content("下載資料請求已送出!!");
+            return Content(res.下載資料請求已送出__);
         }
 
 
@@ -501,7 +502,7 @@ namespace eIVOGo.Controllers
                 }
             }
             var result = new FilePathResult(outFile, "message/rfc822");
-            result.FileDownloadName = "發票附件.zip";
+            result.FileDownloadName = res.發票附件+".zip";
             return result;
 
         }
@@ -534,7 +535,7 @@ namespace eIVOGo.Controllers
             if (!viewModel.SellerID.HasValue)
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "請選擇開立人!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.請選擇開立人__);
             }
 
             models.Inquiry = createModelInquiry();
@@ -544,7 +545,7 @@ namespace eIVOGo.Controllers
             if (items.Count() <= 0)
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "查無資料!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.查無資料__);
             }
 
             using (DataSet ds = new DataSet())
@@ -554,11 +555,11 @@ namespace eIVOGo.Controllers
                     foreach (var mm in yy.GroupBy(i => i.InvoiceDate.Value.Month))
                     {
                         DataTable table = new DataTable();
-                        table.Columns.Add(new DataColumn("日期", typeof(String)));
-                        table.Columns.Add(new DataColumn("未作廢總筆數", typeof(int)));
-                        table.Columns.Add(new DataColumn("未作廢總金額", typeof(decimal)));
-                        table.Columns.Add(new DataColumn("已作廢總筆數", typeof(int)));
-                        table.Columns.Add(new DataColumn("已作廢總金額", typeof(decimal)));
+                        table.Columns.Add(new DataColumn(res.日期, typeof(String)));
+                        table.Columns.Add(new DataColumn(res.未作廢總筆數, typeof(int)));
+                        table.Columns.Add(new DataColumn(res.未作廢總金額, typeof(decimal)));
+                        table.Columns.Add(new DataColumn(res.已作廢總筆數, typeof(int)));
+                        table.Columns.Add(new DataColumn(res.已作廢總金額, typeof(decimal)));
                         table.TableName = yy.Key + "-" + mm.Key;
 
                         ds.Tables.Add(table);
@@ -597,7 +598,7 @@ namespace eIVOGo.Controllers
                 Response.ClearHeaders();
                 Response.AddHeader("Cache-control", "max-age=1");
                 Response.ContentType = "application/vnd.ms-excel";
-                Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({0}){1}.xlsx", items.First().Organization.ReceiptNo, HttpUtility.UrlEncode("開立發票月報表")));
+                Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({0}){1}.xlsx", items.First().Organization.ReceiptNo, HttpUtility.UrlEncode(res.開立發票月報表)));
 
                 using (var xls = ds.ConvertToExcel())
                 {

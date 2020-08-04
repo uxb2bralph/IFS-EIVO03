@@ -14,6 +14,8 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res=eIVOGo.Resource.Views.InquireInvoice.ByAttachmentQuery
+
 @{
     InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
     if (_viewModel == null)
@@ -24,13 +26,13 @@
 }
 <tr>
     <th>
-        附件檔
+        @res.附件檔
     </th>
     <td class="tdleft">
         <select class="form-control" name="Attachment">
-            <option value="@(ViewBag.Attachment ?? "")">全部</option>
-            <option value="@(_viewModel.Attachment ?? 1)">有</option>
-            <option value="@(_viewModel.Attachment ?? 0)">無</option>
+            <option value="@(ViewBag.Attachment ?? "")">@res.全部</option>
+            <option value="@(_viewModel.Attachment ?? 1)">@res.有</option>
+            <option value="@(_viewModel.Attachment ?? 0)">@res.無</option>
         </select>
     </td>
 </tr>

@@ -15,6 +15,8 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using res=eIVOGo.Resource.Views.InvoiceQuery.Module.InvoiceQueryItemList
+
 @{
 
     IQueryable<InvoiceItem> _model = (IQueryable<InvoiceItem>)this.Model;
@@ -33,17 +35,17 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table01 itemList">
     <thead>
         <tr>
-            <th style="min-width: 120px;" aria-sort="other">日期</th>
-            <th style="min-width: 120px;">GoogleID/客戶ID</th>
-            <th style="min-width: 120px;">序號</th>
-            <th style="min-width: 120px;">開立發票營業人</th>
-            <th style="min-width: 120px;">統編</th>
-            <th style="min-width: 120px;">發票號碼</th>
-            <th style="min-width: 120px;">未稅金額<br />稅額<br />含稅金額</th>
-            <th style="min-width: 120px;">是否中獎</th>
-            <th style="min-width: 120px;">買受人統編<br />名稱<br />連絡人名稱<br />地址<br />email</th>
-            <th style="min-width: 120px;">備註</th>
-            <th style="min-width: 120px;">載具資訊</th>
+            <th style="min-width: 120px;" aria-sort="other">@res.日期</th>
+            <th style="min-width: 120px;">GoogleID/@res.客戶ID</th>
+            <th style="min-width: 120px;">@res.序號</th>
+            <th style="min-width: 120px;">@res.開立發票營業人</th>
+            <th style="min-width: 120px;">@res.統編</th>
+            <th style="min-width: 120px;">@res.發票號碼</th>
+            <th style="min-width: 120px;">@res.未稅金額<br />@res.稅額<br />@res.含稅金額</th>
+            <th style="min-width: 120px;">@res.是否中獎</th>
+            <th style="min-width: 120px;">@res.買受人統編<br />@res.名稱<br />@res.連絡人名稱<br />@res.地址<br />email</th>
+            <th style="min-width: 120px;">@res.備註</th>
+            <th style="min-width: 120px;">@res.載具資訊</th>
         </tr>
     </thead>
     <tbody>
