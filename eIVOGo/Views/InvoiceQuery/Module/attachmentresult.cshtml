@@ -16,7 +16,7 @@
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     models.DataSourcePath = VirtualPathUtility.ToAbsolute("~/InvoiceQuery/AttachmentGridPage");
 
-    Html.RenderPartial("~/Views/InvoiceQuery/Module/InvoiceReport.cshtml");
+    Html.RenderPartial("~/Views/InvoiceQuery/Module/InvoiceAttachment.cshtml");
     Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.查詢結果);
 }
 
