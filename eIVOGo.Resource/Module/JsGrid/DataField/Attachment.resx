@@ -117,16 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="下載月報表" xml:space="preserve">
-    <value>DownloadMonthlyReport</value>
-  </data>
-  <data name="查詢" xml:space="preserve">
-    <value>Inquire</value>
-  </data>
-  <data name="查詢條件" xml:space="preserve">
-    <value>Query conditions</value>
-  </data>
-  <data name="發票統計表" xml:space="preserve">
-    <value>Invoice statistics</value>
+  <data name="附件檔" xml:space="preserve">
+    <value>附件檔</value>
   </data>
 </root>

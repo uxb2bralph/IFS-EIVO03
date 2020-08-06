@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace eIVOGo.Resource.Views.InvoiceQuery.Module {
+namespace eIVOGo.Resource.Module.JsGrid.DataField {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace eIVOGo.Resource.Views.InvoiceQuery.Module {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class InvoiceAttachment {
+    public class Attachment {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal InvoiceAttachment() {
+        internal Attachment() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace eIVOGo.Resource.Views.InvoiceQuery.Module {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Views.InvoiceQuery.Module.InvoiceAttachment", typeof(InvoiceAttachment).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Module.JsGrid.DataField.Attachment", typeof(Attachment).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,38 +61,11 @@ namespace eIVOGo.Resource.Views.InvoiceQuery.Module {
         }
         
         /// <summary>
-        ///   查詢類似 下載月報表 的當地語系化字串。
+        ///   查詢類似 附件檔 的當地語系化字串。
         /// </summary>
-        public static string 下載月報表 {
+        public static string 附件檔 {
             get {
-                return ResourceManager.GetString("下載月報表", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 查詢 的當地語系化字串。
-        /// </summary>
-        public static string 查詢 {
-            get {
-                return ResourceManager.GetString("查詢", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 查詢條件 的當地語系化字串。
-        /// </summary>
-        public static string 查詢條件 {
-            get {
-                return ResourceManager.GetString("查詢條件", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 發票統計表 的當地語系化字串。
-        /// </summary>
-        public static string 發票統計表 {
-            get {
-                return ResourceManager.GetString("發票統計表", resourceCulture);
+                return ResourceManager.GetString("附件檔", resourceCulture);
             }
         }
     }

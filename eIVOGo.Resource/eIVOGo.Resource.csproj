@@ -229,6 +229,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TrackCodeExchange.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Module\JsGrid\DataField\Attachment.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Attachment.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\JsGrid\DataField\Attachment.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Attachment.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\JsGrid\DataField\InvoiceNo.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceNo.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Module\JsGrid\DataField\InvoiceNo.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceNo.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="MvcHelper\CreateInvoiceSummaryReport.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1456,10 +1476,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AttachmentResult.resx</DependentUpon>
     </Compile>
-    <Compile Include="Views\InvoiceQuery\Module\AttachmentResult.ne-US.Designer.cs">
+    <Compile Include="Views\InvoiceQuery\Module\AttachmentResult.en-US.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AttachmentResult.ne-US.resx</DependentUpon>
+      <DependentUpon>AttachmentResult.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\InvoiceQuery\Module\DataDownloadResult.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1475,6 +1495,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceAttachment.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceQuery\Module\InvoiceAttachment.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceAttachment.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\InvoiceQuery\Module\InvoiceQueryInquire.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1525,6 +1550,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DonatedInvoiceReport.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Module\InvoiceAttachmentList.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceAttachmentList.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Module\InvoiceAttachmentList.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceAttachmentList.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\Module\InvoiceSummaryList.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1982,6 +2017,22 @@
     <EmbeddedResource Include="ModelExtension\DataExchange\TrackCodeExchange.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TrackCodeExchange.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Module\JsGrid\DataField\Attachment.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Attachment.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Module\JsGrid\DataField\Attachment.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Attachment.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Module\JsGrid\DataField\InvoiceNo.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceNo.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Module\JsGrid\DataField\InvoiceNo.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceNo.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="MvcHelper\CreateInvoiceSummaryReport.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -2977,9 +3028,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Notify.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\InvoiceQuery\Module\AttachmentResult.ne-US.resx">
+    <EmbeddedResource Include="Views\InvoiceQuery\Module\AttachmentResult.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AttachmentResult.ne-US.Designer.cs</LastGenOutput>
+      <LastGenOutput>AttachmentResult.en-US.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceQuery\Module\AttachmentResult.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -2993,9 +3044,12 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DataDownloadResult.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\InvoiceQuery\Module\InvoiceAttachment.en-US.resx" />
+    <EmbeddedResource Include="Views\InvoiceQuery\Module\InvoiceAttachment.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceAttachment.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceQuery\Module\InvoiceAttachment.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceAttachment.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceQuery\Module\InvoiceQueryInquire.en-US.resx">
@@ -3037,6 +3091,14 @@
     <EmbeddedResource Include="Views\Module\DonatedInvoiceReport.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DonatedInvoiceReport.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Module\InvoiceAttachmentList.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceAttachmentList.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Module\InvoiceAttachmentList.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceAttachmentList.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Module\InvoiceSummaryList.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

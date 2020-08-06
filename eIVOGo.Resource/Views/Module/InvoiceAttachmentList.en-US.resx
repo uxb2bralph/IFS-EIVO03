@@ -117,16 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="下載月報表" xml:space="preserve">
-    <value>DownloadMonthlyReport</value>
+  <data name="Google ID/客戶ID" xml:space="preserve">
+    <value>Google ID/Customer ID</value>
   </data>
-  <data name="查詢" xml:space="preserve">
-    <value>Inquire</value>
+  <data name="含稅金額" xml:space="preserve">
+    <value>Tax-included amount</value>
   </data>
-  <data name="查詢條件" xml:space="preserve">
-    <value>Query conditions</value>
+  <data name="客戶ID" xml:space="preserve">
+    <value>Customer ID</value>
   </data>
-  <data name="發票統計表" xml:space="preserve">
-    <value>Invoice statistics</value>
+  <data name="序號" xml:space="preserve">
+    <value>Order No</value>
+  </data>
+  <data name="日期" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="未稅金額" xml:space="preserve">
+    <value>Untaxed amount</value>
+  </data>
+  <data name="發票號碼" xml:space="preserve">
+    <value>Invoice number</value>
+  </data>
+  <data name="稅額" xml:space="preserve">
+    <value>Tax</value>
+  </data>
+  <data name="統編" xml:space="preserve">
+    <value>Uniform numbers</value>
+  </data>
+  <data name="總計金額_" xml:space="preserve">
+    <value>Total Amount:</value>
+  </data>
+  <data name="開立發票營業人" xml:space="preserve">
+    <value>Invoicing business person</value>
   </data>
 </root>
