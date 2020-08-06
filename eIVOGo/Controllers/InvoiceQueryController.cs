@@ -22,6 +22,7 @@ using System.Data.Linq;
 using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
 using ModelExtension.Helper;
+using Uxnet.Com.DataAccessLayer;
 using res = eIVOGo.Resource.Controllers.InvoiceQuery;
 
 namespace eIVOGo.Controllers
@@ -203,16 +204,82 @@ namespace eIVOGo.Controllers
         }
         public ActionResult InvoiceQuery_CreateXlsx(InquireInvoiceViewModel viewModel)
         {
+            //TODO:要做多國語系
             ViewBag.ViewModel = viewModel;
             ModelSource<InvoiceItem> tmpModels = new ModelSource<InvoiceItem>(models);
             tmpModels.Items = tmpModels.Items;
             tmpModels.Inquiry = createModelInquiry();
             tmpModels.BuildQuery();
             _userProfile["modelSource"] = tmpModels;
-            //TODO:要做多國語系
-            Server.Transfer("~/MvcHelper/CreateInvoiceReport.aspx");
 
+            var items = tmpModels.Items.OrderBy(i => i.InvoiceID)
+            .Select(i => new
+            {
+                發票號碼 = i.TrackCode + i.No,
+                發票日期 = i.InvoiceDate,
+                附件檔名 = i.CDS_Document.Attachment.Count > 0 ? i.CDS_Document.Attachment.First().KeyName : null,
+                客戶ID = i.InvoiceBuyer.CustomerID,
+                序號 = i.InvoicePurchaseOrder != null ? i.InvoicePurchaseOrder.OrderNo : null,
+                發票開立人 = i.InvoiceSeller.CustomerName,
+                開立人統編 = i.InvoiceSeller.ReceiptNo,
+                未稅金額 = i.InvoiceAmountType.SalesAmount,
+                稅額 = i.InvoiceAmountType.TaxAmount,
+                含稅金額 = i.InvoiceAmountType.TotalAmount,
+                買受人名稱 = i.InvoiceBuyer.CustomerName,
+                買受人統編 = i.InvoiceBuyer.ReceiptNo,
+                連絡人名稱 = i.InvoiceBuyer.ContactName,
+                連絡人地址 = i.InvoiceBuyer.Address,
+                買受人EMail = i.InvoiceBuyer.EMail,
+                愛心碼 = i.InvoiceDonation.AgencyCode,
+                是否中獎 = i.InvoiceWinningNumber.UniformInvoiceWinningNumber.PrizeType,
+                載具類別 = i.InvoiceCarrier.CarrierType,
+                載具號碼 = i.InvoiceCarrier.CarrierNo,
+                //備註 = String.Join("", i.InvoiceDetails.Select(t => t.InvoiceProduct.InvoiceProductItem.FirstOrDefault())
+                //    .Select(p => p.Remark))
+            });
+
+            var details = items
+                .Select(item => new
+                {
+                    發票號碼 = item.發票號碼,
+                    發票日期 = item.發票日期,
+                    附件檔名 = item.附件檔名,
+                    客戶ID = item.客戶ID,
+                    序號 = item.序號,
+                    發票開立人 = item.發票開立人,
+                    開立人統編 = item.開立人統編,
+                    未稅金額 = item.未稅金額,
+                    稅額 = item.稅額,
+                    含稅金額 = item.含稅金額,
+                    買受人名稱 = item.買受人名稱,
+                    買受人統編 = item.買受人統編,
+                    連絡人名稱 = item.連絡人名稱,
+                    連絡人地址 = item.連絡人地址,
+                    買受人EMail = item.買受人EMail,
+                    愛心碼 = item.愛心碼,
+                    是否中獎 = item.是否中獎,
+                    載具類別 = item.載具類別,
+                    載具號碼 = item.載具號碼,
+                });
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "message/rfc822";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("發票資料明細.xlsx")));
+
+            using (DataSet ds = new DataSet())
+            {
+                DataTable table = details.ToDataTable();
+                table.TableName = "發票資料明細";
+                ds.Tables.Add(table);
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
             return new EmptyResult();
+
         }
         public ActionResult InvoiceQuery_CreateMonthlyReportXlsx(InquireInvoiceViewModel viewModel)
         {
@@ -381,13 +448,78 @@ namespace eIVOGo.Controllers
         public ActionResult CreateXlsx(InquireInvoiceViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
+            ModelSource<InvoiceItem> tmpModels = new ModelSource<InvoiceItem>(models);
+            tmpModels.Items = tmpModels.Items;
+            tmpModels.Inquiry = createModelInquiry();
+            tmpModels.BuildQuery();
+            _userProfile["modelSource"] = tmpModels;
 
-            models.Inquiry = createModelInquiry();
-            models.BuildQuery();
+            var items = tmpModels.Items.OrderBy(i => i.InvoiceID)
+            .Select(i => new
+            {
+                發票號碼 = i.TrackCode + i.No,
+                發票日期 = i.InvoiceDate,
+                附件檔名 = i.CDS_Document.Attachment.Count > 0 ? i.CDS_Document.Attachment.First().KeyName : null,
+                客戶ID = i.InvoiceBuyer.CustomerID,
+                序號 = i.InvoicePurchaseOrder != null ? i.InvoicePurchaseOrder.OrderNo : null,
+                發票開立人 = i.InvoiceSeller.CustomerName,
+                開立人統編 = i.InvoiceSeller.ReceiptNo,
+                未稅金額 = i.InvoiceAmountType.SalesAmount,
+                稅額 = i.InvoiceAmountType.TaxAmount,
+                含稅金額 = i.InvoiceAmountType.TotalAmount,
+                買受人名稱 = i.InvoiceBuyer.CustomerName,
+                買受人統編 = i.InvoiceBuyer.ReceiptNo,
+                連絡人名稱 = i.InvoiceBuyer.ContactName,
+                連絡人地址 = i.InvoiceBuyer.Address,
+                買受人EMail = i.InvoiceBuyer.EMail,
+                愛心碼 = i.InvoiceDonation.AgencyCode,
+                是否中獎 = i.InvoiceWinningNumber.UniformInvoiceWinningNumber.PrizeType,
+                載具類別 = i.InvoiceCarrier.CarrierType,
+                載具號碼 = i.InvoiceCarrier.CarrierNo,
+                //備註 = String.Join("", i.InvoiceDetails.Select(t => t.InvoiceProduct.InvoiceProductItem.FirstOrDefault())
+                //    .Select(p => p.Remark))
+            });
 
-            _userProfile["modelSource"] = models;
-            Server.Transfer("~/MvcHelper/CreateInvoiceReport.aspx");
+            var details = items
+                .Select(item => new
+                {
+                    發票號碼 = item.發票號碼,
+                    發票日期 = item.發票日期,
+                    附件檔名 = item.附件檔名,
+                    客戶ID = item.客戶ID,
+                    序號 = item.序號,
+                    發票開立人 = item.發票開立人,
+                    開立人統編 = item.開立人統編,
+                    未稅金額 = item.未稅金額,
+                    稅額 = item.稅額,
+                    含稅金額 = item.含稅金額,
+                    買受人名稱 = item.買受人名稱,
+                    買受人統編 = item.買受人統編,
+                    連絡人名稱 = item.連絡人名稱,
+                    連絡人地址 = item.連絡人地址,
+                    買受人EMail = item.買受人EMail,
+                    愛心碼 = item.愛心碼,
+                    是否中獎 = item.是否中獎,
+                    載具類別 = item.載具類別,
+                    載具號碼 = item.載具號碼,
+                });
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "message/rfc822";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("發票資料明細.xlsx")));
 
+            using (DataSet ds = new DataSet())
+            {
+                DataTable table = details.ToDataTable();
+                table.TableName = "發票資料明細";
+                ds.Tables.Add(table);
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
             return new EmptyResult();
         }
 
@@ -507,27 +639,6 @@ namespace eIVOGo.Controllers
 
         }
 
-        public ActionResult InvoiceSummary_Inquire(InquireInvoiceViewModel viewModel, int? pageIndex)
-        {
-            ViewBag.ViewModel = viewModel;
-            ModelSource<InvoiceItem> tmpModels = new ModelSource<InvoiceItem>(models);
-            tmpModels.Items = tmpModels.Items;
-            tmpModels.Inquiry = createModelInquiry();
-            tmpModels.BuildQuery();
-            models.InquiryHasError = tmpModels.InquiryHasError;
-            if (pageIndex.HasValue)
-            {
-                ViewBag.PageIndex = pageIndex - 1;
-                return View("~/Views/InvoiceQuery/Module/InvoiceSummaryItemList.cshtml", tmpModels.Items);
-            }
-            else
-            {
-                ViewBag.PageIndex = 0;
-                return View("~/Views/InvoiceQuery/Module/InvoiceSummaryItemResult.cshtml", tmpModels.Items);
-            }            
-        }
-
-
         public ActionResult CreateMonthlyReportXlsx(InquireInvoiceViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -635,10 +746,39 @@ namespace eIVOGo.Controllers
 
             models.Inquiry = createModelInquiry();
             models.BuildQuery();
+            var items = models.Items.GroupBy(i => i.SellerID)
+               .Join(models.GetTable<Organization>(), i => i.Key, o => o.CompanyID, (i, o) => new
+               {
+                   Seller = o,
+                   Items = i
+               });
+            var details = items
+                .Select(item => new
+                {
+                    開立發票營業人 = item.Seller.CompanyName,
+                    統編 = item.Seller.ReceiptNo,
+                    上線日期 = item.Seller.InvoiceItems.OrderBy(i => i.InvoiceDate).First().InvoiceDate,
+                    發票筆數 = item.Items.Count(),
+                });
 
-            _userProfile["modelSource"] = models;
-            Server.Transfer("~/MvcHelper/CreateInvoiceSummaryReport.aspx");
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("發票資料統計.xlsx")));
 
+            using (DataSet ds = new DataSet())
+            {
+                DataTable table = details.ToDataTable();
+                table.TableName = "發票資料統計";
+                ds.Tables.Add(table);
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
             return new EmptyResult();
         }
 
