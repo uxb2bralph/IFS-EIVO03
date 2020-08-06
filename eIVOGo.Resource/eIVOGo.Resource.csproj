@@ -591,6 +591,46 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceContent.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\DonatedInvoice\DownloadCSV.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DownloadCSV.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DonatedInvoice\DownloadCSV.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DownloadCSV.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DonatedInvoice\Module\InquireDonation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InquireDonation.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DonatedInvoice\Module\InquireDonation.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InquireDonation.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DonatedInvoice\Module\ReportResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DonatedInvoice\Module\ReportResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportResult.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DonatedInvoice\ReportGridPage.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportGridPage.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DonatedInvoice\ReportGridPage.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportGridPage.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Forms\B2BInvoice.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1431,6 +1471,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataDownloadResult.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceQuery\Module\InvoiceAttachment.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceAttachment.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceQuery\Module\InvoiceQueryInquire.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1470,6 +1515,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceSummaryResult.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Module\DonatedInvoiceReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DonatedInvoiceReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Module\DonatedInvoiceReport.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DonatedInvoiceReport.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\Module\InvoiceSummaryList.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2228,6 +2283,38 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceContent.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\DonatedInvoice\DownloadCSV.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DownloadCSV.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DonatedInvoice\DownloadCSV.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DownloadCSV.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DonatedInvoice\Module\InquireDonation.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InquireDonation.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DonatedInvoice\Module\InquireDonation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InquireDonation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DonatedInvoice\Module\ReportResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ReportResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DonatedInvoice\Module\ReportResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ReportResult.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DonatedInvoice\ReportGridPage.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ReportGridPage.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DonatedInvoice\ReportGridPage.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ReportGridPage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Forms\B2BInvoice.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>B2BInvoice.en-US.Designer.cs</LastGenOutput>
@@ -2906,6 +2993,11 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DataDownloadResult.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceQuery\Module\InvoiceAttachment.en-US.resx" />
+    <EmbeddedResource Include="Views\InvoiceQuery\Module\InvoiceAttachment.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceAttachment.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceQuery\Module\InvoiceQueryInquire.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceQueryInquire.en-US.Designer.cs</LastGenOutput>
@@ -2937,6 +3029,14 @@
     <EmbeddedResource Include="Views\InvoiceQuery\Module\InvoiceSummaryResult.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceSummaryResult.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Module\DonatedInvoiceReport.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DonatedInvoiceReport.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Module\DonatedInvoiceReport.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DonatedInvoiceReport.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Module\InvoiceSummaryList.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

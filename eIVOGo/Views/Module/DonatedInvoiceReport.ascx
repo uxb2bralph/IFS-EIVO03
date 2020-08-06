@@ -11,6 +11,7 @@
 <%@ Import Namespace="Model.Locale" %>
 <%@ Import Namespace="Utility" %>
 <%@ Import Namespace="Uxnet.Web.WebUI" %>
+<%@ Import Namespace="eIVOGo.Resource.Views.Module" %>
 
 <div id="fieldsContainer"></div>
 <div id="jsGrid"></div>
@@ -22,21 +23,21 @@
                 {
                     "name": "AgencyCode",
                     "type": "text",
-                    "title": "愛心碼",
+                    "title": "<%#DonatedInvoiceReport.愛心碼%>",
                     "width": "80",
                     "align": "left"
                 },
                 {
                     "name": "SellerName",
                     "type": "text",
-                    "title": "開立發票營業人",
+                    "title": "<%#DonatedInvoiceReport.開立發票營業人%>",
                     "width": "320",
                     "align": "left"
                 },
         {
             "name": "InvoiceNo",
             "type": "text",
-            "title": "發票號碼",
+            "title": "<%#DonatedInvoiceReport.發票號碼%>",
             "width": "120",
             "align": "center",
             itemTemplate: function (value, item) {
@@ -51,7 +52,7 @@
         {
                 "name": "IsWinning",
                 "type": "text",
-                "title": "是否中獎",
+            "title": "<%#DonatedInvoiceReport.是否中獎%>",
                 "width": "80",
                 "align": "center"
             }

@@ -141,6 +141,9 @@
   <data name="首頁" xml:space="preserve">
     <value>首頁</value>
   </data>
+  <data name="首頁 &gt; 捐贈統計表" xml:space="preserve">
+    <value>首頁 &gt; 捐贈統計表</value>
+  </data>
   <data name="首頁 &gt; 發票作業" xml:space="preserve">
     <value>首頁 &gt; 發票作業</value>
     <comment>Home &gt; Invoice assignment</comment>
