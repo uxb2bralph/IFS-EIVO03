@@ -694,7 +694,7 @@ namespace eIVOGo.Controllers
                         v0 = mm.Where(i => i.InvoiceCancellation == null);
                         v1 = mm.Where(i => i.InvoiceCancellation != null);
                         r = table.NewRow();
-                        r[0] = "總計";
+                        r[0] = res.總計;
                         r[1] = v0.Count();
                         r[2] = v0.Sum(i => i.InvoiceAmountType.TotalAmount);
                         r[3] = v1.Count();

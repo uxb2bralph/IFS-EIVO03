@@ -2164,6 +2164,8 @@
     <Content Include="Views\InvoiceQuery\Module\InvoiceReport.cshtml" />
     <Content Include="Views\InvoiceQuery\InvoiceReport.cshtml" />
     <Content Include="Views\Module\PrintData.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\InvoiceAttachment.cshtml" />
+    <Content Include="Views\InvoiceQuery\AttachmentResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

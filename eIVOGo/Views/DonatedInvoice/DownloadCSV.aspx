@@ -5,6 +5,7 @@
 <%@ Import Namespace="eIVOGo.Controllers" %>
 <%@ Import Namespace="Model.DataEntity" %>
 <%@ Import Namespace="Utility" %>
+<%@ Import Namespace="eIVOGo.Resource.Views.DonatedInvoice" %>
 
 <script runat="server">
 
@@ -16,21 +17,21 @@
         
         JavaScriptSerializer serializer = new JavaScriptSerializer();
         IQueryable<InvoiceItem> items = (IQueryable<InvoiceItem>)Model;
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;        
         Response.CsvDownload(GetCsvResult(items), null, "text/csv");
     }
 
     public IEnumerable<object> GetCsvResult(IQueryable<InvoiceItem> items)
-    {
-        return items.Select(d => new
+    {        
+        IEnumerable<object> obj =items.Select(d => new
         {
             愛心碼 = d.InvoiceDonation != null ? d.InvoiceDonation.AgencyCode : "",
             開立發票營業人 = d.InvoiceSeller.CustomerName,
             發票號碼 = d.TrackCode + d.No,
-            是否中獎 = d.InvoiceWinningNumber != null ? "是" : "否"
-
+            是否中獎 = d.InvoiceWinningNumber != null ? DownloadCSV.是 : DownloadCSV.否
         });
+
+        return obj; 
     }      
 
     public override void Dispose()

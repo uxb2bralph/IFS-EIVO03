@@ -10,6 +10,7 @@
 <%@ Import Namespace="Model.Locale" %>
 <%@ Import Namespace="Utility" %>
 <%@ Import Namespace="Uxnet.Web.WebUI" %>
+<%@ Import Namespace="eIVOGo.Resource.Views.DonatedInvoice.Module" %>
 <%@ Register Src="~/Module/UI/PageAction.ascx" TagName="PageAction" TagPrefix="uc1" %>
 <!--路徑名稱-->
 
@@ -18,14 +19,14 @@
 <!--交易畫面標題-->
 <h1>
     <img runat="server" enableviewstate="false" id="img3" src="~/images/icon_search.gif"
-        width="29" height="28" border="0" align="absmiddle" />捐贈統計表
+        width="29" height="28" border="0" align="absmiddle" /><%=InquireDonation.捐贈統計表 %>
 </h1>
 <div class="border_gray">
     <!--表格 開始-->
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
         <tr>
             <th colspan="2" class="Head_style_a">
-                查詢條件
+                <%=InquireDonation.查詢條件%>
             </th>
         </tr>
         <% 
@@ -42,7 +43,16 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td class="Bargain_btn">
-            <input type="button" value="查詢" name="btnQuery" class="btn" onclick="$('form').prop('action', '<%= Url.Action("InquireReport") %>    ').submit();" />
+            <input type="button" value=<%=InquireDonation.查詢%> name="btnQuery" class="btn" onclick="$('form').prop('action', '<%= Url.Action("InquireReport") %>    ').submit();" />
         </td>
     </tr>
 </table>
+
+<script runat="server">    
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        actionItem.ItemName = eIVOGo.Resource.Views.Common.TreeView.首頁___捐贈統計表;  
+    }   
+
+</script>

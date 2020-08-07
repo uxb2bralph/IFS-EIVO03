@@ -4,6 +4,7 @@
 <%@ Import Namespace="eIVOGo.Helper" %>
 <%@ Import Namespace="eIVOGo.Controllers" %>
 <%@ Import Namespace="Model.DataEntity" %>
+<%@ Import Namespace="eIVOGo.Resource.Views.DonatedInvoice" %>
 
 <script runat="server">
 
@@ -36,7 +37,7 @@
             AgencyCode = d.InvoiceDonation != null ? d.InvoiceDonation.AgencyCode : "",
             SellerName = d.InvoiceSeller.CustomerName,
             InvoiceNo = d.TrackCode + d.No,
-            IsWinning = d.InvoiceWinningNumber != null ? "是" : "否"
+            IsWinning = d.InvoiceWinningNumber != null ? ReportGridPage.是 : ReportGridPage.否
         });
     }    
 

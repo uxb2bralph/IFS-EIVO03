@@ -117,44 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="_2" xml:space="preserve">
-    <value>Home &gt; Member Management and Maintenance</value>
-    <comment>首頁 &gt; 會員管理維護</comment>
+  <data name="否" xml:space="preserve">
+    <value>No</value>
   </data>
-  <data name="匯入商務關係相對營業人" xml:space="preserve">
-    <value>Remitted business relationship relative business person</value>
+  <data name="愛心碼" xml:space="preserve">
+    <value>Love code</value>
   </data>
-  <data name="相對營業人管理_匯入相對營業人資料" xml:space="preserve">
-    <value>Relative business person management-import relative business person information</value>
+  <data name="是" xml:space="preserve">
+    <value>Yes</value>
   </data>
-  <data name="電子發票字軌號碼上傳" xml:space="preserve">
-    <value>Electronic invoice track number upload</value>
+  <data name="是否中獎" xml:space="preserve">
+    <value>Whether to win</value>
   </data>
-  <data name="電子發票號碼維護" xml:space="preserve">
-    <value>Electronic invoice number maintenance</value>
+  <data name="發票號碼" xml:space="preserve">
+    <value>Invoice number</value>
   </data>
-  <data name="電子發票開立" xml:space="preserve">
-    <value>Electronic invoice number issuance</value>
-  </data>
-  <data name="首頁" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="首頁 &gt; 捐贈統計表" xml:space="preserve">
-    <value>Home&gt; Donation Statistics</value>
-  </data>
-  <data name="首頁 &gt; 發票作業" xml:space="preserve">
-    <value>Home &gt; Invoice assignment</value>
-    <comment>首頁 &gt; 發票作業</comment>
-  </data>
-  <data name="首頁 &gt; 相對營業人管理" xml:space="preserve">
-    <value>Home &gt; Relative business management</value>
-    <comment>首頁 &gt; 相對營業人管理</comment>
-  </data>
-  <data name="首頁 &gt; 系統管理維護" xml:space="preserve">
-    <value>Home &gt; System Management and Maintenance</value>
-    <comment>首頁 &gt; 系統管理維護</comment>
-  </data>
-  <data name="首頁 &gt; 統計報表" xml:space="preserve">
-    <value>Home&gt; Statistical Report</value>
+  <data name="開立發票營業人" xml:space="preserve">
+    <value>Invoicing business person</value>
   </data>
 </root>

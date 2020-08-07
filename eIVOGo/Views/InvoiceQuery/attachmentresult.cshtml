@@ -1,4 +1,4 @@
-@using System.IO
+﻿@using System.IO
 @using System.Web.Mvc.Html
 @using System.Linq.Expressions
 @using eIVOGo.Helper
@@ -18,7 +18,7 @@
     var models = TempData.GetGenericModelSource();
 
     string _inquiryView = (String)ViewBag.InquiryView ?? "~/Views/InvoiceQuery/Module/AttachmentResult.cshtml";
-    
+
 }
 @section formContent
 {
