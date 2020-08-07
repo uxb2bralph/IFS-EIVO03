@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="上線日期" xml:space="preserve">
+    <value>上線日期</value>
+  </data>
   <data name="下載資料請求已送出!!" xml:space="preserve">
     <value>下載資料請求已送出!!</value>
+  </data>
+  <data name="含稅金額" xml:space="preserve">
+    <value>含稅金額</value>
+  </data>
+  <data name="客戶ID" xml:space="preserve">
+    <value>客戶ID</value>
   </data>
   <data name="已作廢總筆數" xml:space="preserve">
     <value>已作廢總筆數</value>
@@ -126,8 +135,17 @@
   <data name="已作廢總金額" xml:space="preserve">
     <value>已作廢總金額</value>
   </data>
+  <data name="序號" xml:space="preserve">
+    <value>序號</value>
+  </data>
+  <data name="愛心碼" xml:space="preserve">
+    <value>愛心碼</value>
+  </data>
   <data name="日期" xml:space="preserve">
     <value>日期</value>
+  </data>
+  <data name="是否中獎" xml:space="preserve">
+    <value>是否中獎</value>
   </data>
   <data name="未作廢總筆數" xml:space="preserve">
     <value>未作廢總筆數</value>
@@ -135,11 +153,38 @@
   <data name="未作廢總金額" xml:space="preserve">
     <value>未作廢總金額</value>
   </data>
+  <data name="未稅金額" xml:space="preserve">
+    <value>未稅金額</value>
+  </data>
   <data name="查無資料!!" xml:space="preserve">
     <value>查無資料!!</value>
   </data>
+  <data name="發票日期" xml:space="preserve">
+    <value>發票日期</value>
+  </data>
+  <data name="發票筆數" xml:space="preserve">
+    <value>發票筆數</value>
+  </data>
+  <data name="發票號碼" xml:space="preserve">
+    <value>發票號碼</value>
+  </data>
+  <data name="發票資料明細" xml:space="preserve">
+    <value>發票資料明細</value>
+  </data>
+  <data name="發票資料統計" xml:space="preserve">
+    <value>發票資料統計</value>
+  </data>
+  <data name="發票開立人" xml:space="preserve">
+    <value>發票開立人</value>
+  </data>
   <data name="發票附件" xml:space="preserve">
     <value>發票附件</value>
+  </data>
+  <data name="稅額" xml:space="preserve">
+    <value>稅額</value>
+  </data>
+  <data name="統編" xml:space="preserve">
+    <value>統編</value>
   </data>
   <data name="總計" xml:space="preserve">
     <value>總計</value>
@@ -159,10 +204,40 @@
   <data name="請選擇開立人!!" xml:space="preserve">
     <value>請選擇開立人!!</value>
   </data>
+  <data name="買受人EMail" xml:space="preserve">
+    <value>買受人EMail</value>
+  </data>
+  <data name="買受人名稱" xml:space="preserve">
+    <value>買受人名稱</value>
+  </data>
+  <data name="買受人統編" xml:space="preserve">
+    <value>買受人統編</value>
+  </data>
   <data name="資料不存在!!" xml:space="preserve">
     <value>資料不存在!!</value>
   </data>
+  <data name="載具號碼" xml:space="preserve">
+    <value>載具號碼</value>
+  </data>
+  <data name="載具類別" xml:space="preserve">
+    <value>載具類別</value>
+  </data>
+  <data name="連絡人名稱" xml:space="preserve">
+    <value>連絡人名稱</value>
+  </data>
+  <data name="連絡人地址" xml:space="preserve">
+    <value>連絡人地址</value>
+  </data>
+  <data name="開立人統編" xml:space="preserve">
+    <value>開立人統編</value>
+  </data>
   <data name="開立發票月報表" xml:space="preserve">
     <value>開立發票月報表</value>
+  </data>
+  <data name="開立發票營業人" xml:space="preserve">
+    <value>開立發票營業人</value>
+  </data>
+  <data name="附件檔名" xml:space="preserve">
+    <value>附件檔名</value>
   </data>
 </root>

@@ -9,14 +9,14 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@using res=eIVOGo.Resource.Views.InvoiceQuery.Module.AttachmentResult
+@using res = eIVOGo.Resource.Views.InvoiceQuery.Module.AttachmentResult
 
-@{ 
+@{
     ModelSource<InvoiceItem> models;
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     models.DataSourcePath = VirtualPathUtility.ToAbsolute("~/InvoiceQuery/AttachmentGridPage");
 
-    Html.RenderPartial("~/Views/InvoiceQuery/Module/InvoiceReport.cshtml");
+    Html.RenderPartial("~/Views/InvoiceQuery/Module/InvoiceAttachment.cshtml");
     Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.查詢結果);
 }
 

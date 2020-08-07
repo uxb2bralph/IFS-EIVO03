@@ -204,7 +204,6 @@ namespace eIVOGo.Controllers
         }
         public ActionResult InvoiceQuery_CreateXlsx(InquireInvoiceViewModel viewModel)
         {
-            //TODO:要做多國語系
             ViewBag.ViewModel = viewModel;
             ModelSource<InvoiceItem> tmpModels = new ModelSource<InvoiceItem>(models);
             tmpModels.Items = tmpModels.Items;
@@ -266,12 +265,33 @@ namespace eIVOGo.Controllers
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "message/rfc822";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("發票資料明細.xlsx")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode($"{res.發票資料明細}.xlsx")));
 
             using (DataSet ds = new DataSet())
             {
                 DataTable table = details.ToDataTable();
-                table.TableName = "發票資料明細";
+                table.TableName = res.發票資料明細;
+
+                table.Columns[0].Caption = res.發票號碼;
+                table.Columns[1].Caption = res.發票日期;
+                table.Columns[2].Caption = res.附件檔名;
+                table.Columns[3].Caption = res.客戶ID;
+                table.Columns[4].Caption = res.序號;
+                table.Columns[5].Caption = res.發票開立人;
+                table.Columns[6].Caption = res.開立人統編;
+                table.Columns[7].Caption = res.未稅金額;            
+                table.Columns[8].Caption = res.稅額;
+                table.Columns[9].Caption = res.含稅金額;
+                table.Columns[10].Caption = res.買受人名稱;
+                table.Columns[11].Caption = res.買受人統編;
+                table.Columns[12].Caption = res.連絡人名稱;
+                table.Columns[13].Caption = res.連絡人地址;
+                table.Columns[14].Caption = res.買受人EMail;
+                table.Columns[15].Caption = res.愛心碼;
+                table.Columns[16].Caption = res.是否中獎;
+                table.Columns[17].Caption = res.載具類別;
+                table.Columns[18].Caption = res.載具號碼;                
+
                 ds.Tables.Add(table);
                 using (var xls = ds.ConvertToExcel())
                 {
@@ -513,7 +533,28 @@ namespace eIVOGo.Controllers
             using (DataSet ds = new DataSet())
             {
                 DataTable table = details.ToDataTable();
-                table.TableName = "發票資料明細";
+                table.TableName = res.發票資料明細;
+
+                table.Columns[0].Caption = res.發票號碼;
+                table.Columns[1].Caption = res.發票日期;
+                table.Columns[2].Caption = res.附件檔名;
+                table.Columns[3].Caption = res.客戶ID;
+                table.Columns[4].Caption = res.序號;
+                table.Columns[5].Caption = res.發票開立人;
+                table.Columns[6].Caption = res.開立人統編;
+                table.Columns[7].Caption = res.未稅金額;
+                table.Columns[8].Caption = res.稅額;
+                table.Columns[9].Caption = res.含稅金額;
+                table.Columns[10].Caption = res.買受人名稱;
+                table.Columns[11].Caption = res.買受人統編;
+                table.Columns[12].Caption = res.連絡人名稱;
+                table.Columns[13].Caption = res.連絡人地址;
+                table.Columns[14].Caption = res.買受人EMail;
+                table.Columns[15].Caption = res.愛心碼;
+                table.Columns[16].Caption = res.是否中獎;
+                table.Columns[17].Caption = res.載具類別;
+                table.Columns[18].Caption = res.載具號碼;
+
                 ds.Tables.Add(table);
                 using (var xls = ds.ConvertToExcel())
                 {
@@ -766,12 +807,18 @@ namespace eIVOGo.Controllers
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("發票資料統計.xlsx")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode($"{res.發票資料統計}.xlsx")));
 
             using (DataSet ds = new DataSet())
             {
                 DataTable table = details.ToDataTable();
-                table.TableName = "發票資料統計";
+                table.TableName = res.發票資料統計;
+
+                table.Columns[0].Caption = res.開立發票營業人;
+                table.Columns[1].Caption = res.統編;
+                table.Columns[2].Caption = res.上線日期;
+                table.Columns[3].Caption = res.發票筆數;
+
                 ds.Tables.Add(table);
 
                 using (var xls = ds.ConvertToExcel())

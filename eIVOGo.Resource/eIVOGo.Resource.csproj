@@ -1471,6 +1471,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Notify.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceQuery\InvoiceMediaReportCBM.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceMediaReportCBM.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceQuery\InvoiceMediaReportCBM.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceMediaReportCBM.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceQuery\Module\AttachmentResult.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1500,6 +1510,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceAttachment.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceQuery\Module\InvoiceMediaReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceMediaReport.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceQuery\Module\InvoiceMediaReport.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceMediaReport.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\InvoiceQuery\Module\InvoiceQueryInquire.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -3028,6 +3048,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Notify.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceQuery\InvoiceMediaReportCBM.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceMediaReportCBM.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceQuery\InvoiceMediaReportCBM.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceMediaReportCBM.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceQuery\Module\AttachmentResult.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AttachmentResult.en-US.Designer.cs</LastGenOutput>
@@ -3051,6 +3079,14 @@
     <EmbeddedResource Include="Views\InvoiceQuery\Module\InvoiceAttachment.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceAttachment.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceQuery\Module\InvoiceMediaReport.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceMediaReport.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceQuery\Module\InvoiceMediaReport.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceMediaReport.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceQuery\Module\InvoiceQueryInquire.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

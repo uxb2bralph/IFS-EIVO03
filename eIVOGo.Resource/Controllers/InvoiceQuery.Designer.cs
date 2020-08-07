@@ -61,11 +61,38 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
+        ///   查詢類似 上線日期 的當地語系化字串。
+        /// </summary>
+        public static string 上線日期 {
+            get {
+                return ResourceManager.GetString("上線日期", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 下載資料請求已送出!! 的當地語系化字串。
         /// </summary>
         public static string 下載資料請求已送出__ {
             get {
                 return ResourceManager.GetString("下載資料請求已送出!!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 含稅金額 的當地語系化字串。
+        /// </summary>
+        public static string 含稅金額 {
+            get {
+                return ResourceManager.GetString("含稅金額", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 客戶ID 的當地語系化字串。
+        /// </summary>
+        public static string 客戶ID {
+            get {
+                return ResourceManager.GetString("客戶ID", resourceCulture);
             }
         }
         
@@ -88,11 +115,38 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
+        ///   查詢類似 序號 的當地語系化字串。
+        /// </summary>
+        public static string 序號 {
+            get {
+                return ResourceManager.GetString("序號", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 愛心碼 的當地語系化字串。
+        /// </summary>
+        public static string 愛心碼 {
+            get {
+                return ResourceManager.GetString("愛心碼", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 日期 的當地語系化字串。
         /// </summary>
         public static string 日期 {
             get {
                 return ResourceManager.GetString("日期", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 是否中獎 的當地語系化字串。
+        /// </summary>
+        public static string 是否中獎 {
+            get {
+                return ResourceManager.GetString("是否中獎", resourceCulture);
             }
         }
         
@@ -115,6 +169,15 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
+        ///   查詢類似 未稅金額 的當地語系化字串。
+        /// </summary>
+        public static string 未稅金額 {
+            get {
+                return ResourceManager.GetString("未稅金額", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 查無資料!! 的當地語系化字串。
         /// </summary>
         public static string 查無資料__ {
@@ -124,11 +187,83 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
+        ///   查詢類似 發票日期 的當地語系化字串。
+        /// </summary>
+        public static string 發票日期 {
+            get {
+                return ResourceManager.GetString("發票日期", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 發票筆數 的當地語系化字串。
+        /// </summary>
+        public static string 發票筆數 {
+            get {
+                return ResourceManager.GetString("發票筆數", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 發票號碼 的當地語系化字串。
+        /// </summary>
+        public static string 發票號碼 {
+            get {
+                return ResourceManager.GetString("發票號碼", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 發票資料明細 的當地語系化字串。
+        /// </summary>
+        public static string 發票資料明細 {
+            get {
+                return ResourceManager.GetString("發票資料明細", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 發票資料統計 的當地語系化字串。
+        /// </summary>
+        public static string 發票資料統計 {
+            get {
+                return ResourceManager.GetString("發票資料統計", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 發票開立人 的當地語系化字串。
+        /// </summary>
+        public static string 發票開立人 {
+            get {
+                return ResourceManager.GetString("發票開立人", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 發票附件 的當地語系化字串。
         /// </summary>
         public static string 發票附件 {
             get {
                 return ResourceManager.GetString("發票附件", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 稅額 的當地語系化字串。
+        /// </summary>
+        public static string 稅額 {
+            get {
+                return ResourceManager.GetString("稅額", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 統編 的當地語系化字串。
+        /// </summary>
+        public static string 統編 {
+            get {
+                return ResourceManager.GetString("統編", resourceCulture);
             }
         }
         
@@ -187,6 +322,33 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
+        ///   查詢類似 買受人EMail 的當地語系化字串。
+        /// </summary>
+        public static string 買受人EMail {
+            get {
+                return ResourceManager.GetString("買受人EMail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 買受人名稱 的當地語系化字串。
+        /// </summary>
+        public static string 買受人名稱 {
+            get {
+                return ResourceManager.GetString("買受人名稱", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 買受人統編 的當地語系化字串。
+        /// </summary>
+        public static string 買受人統編 {
+            get {
+                return ResourceManager.GetString("買受人統編", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 資料不存在!! 的當地語系化字串。
         /// </summary>
         public static string 資料不存在__ {
@@ -196,11 +358,74 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
+        ///   查詢類似 載具號碼 的當地語系化字串。
+        /// </summary>
+        public static string 載具號碼 {
+            get {
+                return ResourceManager.GetString("載具號碼", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 載具類別 的當地語系化字串。
+        /// </summary>
+        public static string 載具類別 {
+            get {
+                return ResourceManager.GetString("載具類別", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 連絡人名稱 的當地語系化字串。
+        /// </summary>
+        public static string 連絡人名稱 {
+            get {
+                return ResourceManager.GetString("連絡人名稱", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 連絡人地址 的當地語系化字串。
+        /// </summary>
+        public static string 連絡人地址 {
+            get {
+                return ResourceManager.GetString("連絡人地址", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 開立人統編 的當地語系化字串。
+        /// </summary>
+        public static string 開立人統編 {
+            get {
+                return ResourceManager.GetString("開立人統編", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 開立發票月報表 的當地語系化字串。
         /// </summary>
         public static string 開立發票月報表 {
             get {
                 return ResourceManager.GetString("開立發票月報表", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 開立發票營業人 的當地語系化字串。
+        /// </summary>
+        public static string 開立發票營業人 {
+            get {
+                return ResourceManager.GetString("開立發票營業人", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 附件檔名 的當地語系化字串。
+        /// </summary>
+        public static string 附件檔名 {
+            get {
+                return ResourceManager.GetString("附件檔名", resourceCulture);
             }
         }
     }

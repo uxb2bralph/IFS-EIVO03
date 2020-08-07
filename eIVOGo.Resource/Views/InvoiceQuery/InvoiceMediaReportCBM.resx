@@ -117,127 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="上線日期" xml:space="preserve">
-    <value>Online date</value>
+  <data name="交易筆數" xml:space="preserve">
+    <value>交易筆數</value>
   </data>
-  <data name="下載資料請求已送出!!" xml:space="preserve">
-    <value>The download request has been sent!!</value>
+  <data name="匯率" xml:space="preserve">
+    <value>匯率</value>
   </data>
-  <data name="含稅金額" xml:space="preserve">
-    <value>Tax-included amount</value>
+  <data name="幣別" xml:space="preserve">
+    <value>幣別</value>
   </data>
-  <data name="客戶ID" xml:space="preserve">
-    <value>Customer ID</value>
+  <data name="換算後銷售總計金額" xml:space="preserve">
+    <value>換算後銷售總計金額</value>
   </data>
-  <data name="已作廢總筆數" xml:space="preserve">
-    <value>Total number of voided</value>
+  <data name="格式代號" xml:space="preserve">
+    <value>格式代號</value>
   </data>
-  <data name="已作廢總金額" xml:space="preserve">
-    <value>Total amount voided</value>
+  <data name="發票起號" xml:space="preserve">
+    <value>發票起號</value>
   </data>
-  <data name="序號" xml:space="preserve">
-    <value>Serial number</value>
+  <data name="發票迄號" xml:space="preserve">
+    <value>發票迄號</value>
   </data>
-  <data name="愛心碼" xml:space="preserve">
-    <value>Love code</value>
+  <data name="統一發票字軌" xml:space="preserve">
+    <value>統一發票字軌</value>
   </data>
-  <data name="日期" xml:space="preserve">
-    <value>Date</value>
+  <data name="資料所屬期別(年月)" xml:space="preserve">
+    <value>資料所屬期別(年月)</value>
   </data>
-  <data name="是否中獎" xml:space="preserve">
-    <value>Whether to win</value>
+  <data name="銷售總計金額" xml:space="preserve">
+    <value>銷售總計金額</value>
   </data>
-  <data name="未作廢總筆數" xml:space="preserve">
-    <value>The total number of outstanding transactions</value>
+  <data name="銷售額" xml:space="preserve">
+    <value>銷售額</value>
   </data>
-  <data name="未作廢總金額" xml:space="preserve">
-    <value>Total unspent amount</value>
-  </data>
-  <data name="未稅金額" xml:space="preserve">
-    <value>Untaxed amount</value>
-  </data>
-  <data name="查無資料!!" xml:space="preserve">
-    <value>Check no data!!</value>
-  </data>
-  <data name="發票日期" xml:space="preserve">
-    <value>Invoice date</value>
-  </data>
-  <data name="發票筆數" xml:space="preserve">
-    <value>Number of invoices</value>
-  </data>
-  <data name="發票號碼" xml:space="preserve">
-    <value>Invoice number</value>
-  </data>
-  <data name="發票資料明細" xml:space="preserve">
-    <value>InvoiceDetails</value>
-  </data>
-  <data name="發票資料統計" xml:space="preserve">
-    <value>InvoiceStatistics</value>
-  </data>
-  <data name="發票開立人" xml:space="preserve">
-    <value>Invoice Issuer</value>
-  </data>
-  <data name="發票附件" xml:space="preserve">
-    <value>InvoiceAttachment</value>
-  </data>
-  <data name="稅額" xml:space="preserve">
-    <value>Tax</value>
-  </data>
-  <data name="統編" xml:space="preserve">
-    <value>Uniform numbers</value>
-  </data>
-  <data name="總計" xml:space="preserve">
-    <value>Total</value>
-  </data>
-  <data name="請輸入9位數稅籍編號!!" xml:space="preserve">
-    <value>Please enter the 9-digit tax registration number!!</value>
-  </data>
-  <data name="請選擇年度!!" xml:space="preserve">
-    <value>Please select the year!!</value>
-  </data>
-  <data name="請選擇期別!!" xml:space="preserve">
-    <value>Please choose a date!!</value>
-  </data>
-  <data name="請選擇發票開立人!!" xml:space="preserve">
-    <value>Please select the invoice issuer!!</value>
-  </data>
-  <data name="請選擇開立人!!" xml:space="preserve">
-    <value>Please choose the issuer!!</value>
-  </data>
-  <data name="買受人EMail" xml:space="preserve">
-    <value>Buyer Email</value>
-  </data>
-  <data name="買受人名稱" xml:space="preserve">
-    <value>Name of buyer</value>
-  </data>
-  <data name="買受人統編" xml:space="preserve">
-    <value>Buyer's Editor</value>
-  </data>
-  <data name="資料不存在!!" xml:space="preserve">
-    <value>The data does not exist!!</value>
-  </data>
-  <data name="載具號碼" xml:space="preserve">
-    <value>Vehicle number</value>
-  </data>
-  <data name="載具類別" xml:space="preserve">
-    <value>Vehicle category</value>
-  </data>
-  <data name="連絡人名稱" xml:space="preserve">
-    <value>Contact name</value>
-  </data>
-  <data name="連絡人地址" xml:space="preserve">
-    <value>Contact address</value>
-  </data>
-  <data name="開立人統編" xml:space="preserve">
-    <value>Uniform Number of Issuer</value>
-  </data>
-  <data name="開立發票月報表" xml:space="preserve">
-    <value>MonthlyInvoices</value>
-  </data>
-  <data name="開立發票營業人" xml:space="preserve">
-    <value>Invoicing business person</value>
-  </data>
-  <data name="附件檔名" xml:space="preserve">
-    <value>Attachment file name</value>
+  <data name="銷項稅額" xml:space="preserve">
+    <value>銷項稅額</value>
   </data>
 </root>
