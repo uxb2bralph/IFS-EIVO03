@@ -19,7 +19,7 @@
                         $(this).attr("selected", "true");
                     }
                 });
-                alert('PeriodNo:' + '@(Request["PeriodNo"])' +',period:'+'@(Request["period"])')
+                //alert('PeriodNo:' + '@(Request["PeriodNo"])' +',period:'+'@(Request["period"])')
                 if (!'@(Request["period"])' == null) {
                     $('select[name="period"]').val('@(Request["period"])');
                 }

@@ -43,9 +43,7 @@
                 發票號碼 = d.TrackCode + d.No,
                 是否中獎 = d.InvoiceWinningNumber != null ? DownloadCSV.是 : DownloadCSV.否
             });
-        }
-
-        return obj;
+        }        
     }
 
     public override void Dispose()
