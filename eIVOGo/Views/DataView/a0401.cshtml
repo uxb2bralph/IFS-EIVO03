@@ -1,5 +1,4 @@
-
-@using System.Linq
+﻿@using System.Linq
 @using System.IO
 @using System.Linq.Expressions
 
@@ -16,6 +15,16 @@
 @using Utility
 @using Uxnet.Web.WebUI
 
+@{
+    ModelSource<InvoiceItem> models;
+    InvoiceItem _model;
+    RenderStyleViewModel _viewModel;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (InvoiceItem)this.Model;
+    _viewModel = (RenderStyleViewModel)ViewBag.ViewModel;
+}
+
 <!DOCTYPE html>
 <html>
 <head runat="server">
@@ -26,39 +35,23 @@
 <body style="font-family:KaiTi">
     <form id="theForm" runat="server">
         @{ String invoicePrintView;}
- @if (_viewModel?.UseCustomView == true && (invoicePrintView = _model.Organization.OrganizationStatus.InvoicePrintView.GetEfficientString()) != null)
-            {
-                Html.RenderPartial(invoicePrintView, _model);
-            }
-            else
-            {
-                Html.RenderPartial("~/Views/DataView/Module/InvoiceView2016.ascx", _model);
-            }
+        @if (_viewModel?.UseCustomView == true && (invoicePrintView = _model.Organization.OrganizationStatus.InvoicePrintView.GetEfficientString()) != null)
+        {
+            Html.RenderPartial(invoicePrintView, _model);
+        }
+        else
+        {
+            Html.RenderPartial("~/Views/DataView/Module/InvoiceView2016.cshtml", _model);
+        }
     </form>
 </body>
 </html>
 @if (_viewModel?.ResultMode == Naming.DataResultMode.Print)
-    {
-<script>
-    window.onload = function () {
-        window.print();
-    };
-</script>
+{
+    <script>
+        window.onload = function () {
+            window.print();
+        };
+    </script>
 }
-<script runat="server">
 
-    ModelSource<InvoiceItem> models;
-    InvoiceItem _model;
-    RenderStyleViewModel _viewModel;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (InvoiceItem)this.Model;
-        _viewModel = (RenderStyleViewModel)ViewBag.ViewModel;
-    }
-
-
-</script>

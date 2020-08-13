@@ -73,12 +73,16 @@
                     return false;
                 }
 
-                var $formData = $('#theForm').serializeObject();
-                $formData.paperStyle = style;
+                var _Object = $('input[name="chkItem"]:checked').serializeObject();
+                
+                _Object["paperStyle"] = style;              
+                _Object["ProcessType"] = processType;
+                //var $formData = $('#theForm').serializeObject();
+                //$formData.paperStyle = style;
                 //$formData.processType = processType;
 
                 showLoading();
-                $.post('@(Url.Action("Print","InvoiceProcess"))', $formData, function (data) {
+                $.post('@(Url.Action("Print","InvoiceProcess"))', _Object, function (data) {
                     hideLoading();
                     if ($.isPlainObject(data)) {
                         alert(data.message);

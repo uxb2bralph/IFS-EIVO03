@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="品項過長_詳列於發票明細" xml:space="preserve">
+    <value>The item is too long, listed in the invoice details</value>
+  </data>
+  <data name="產生發票QR Code失敗" xml:space="preserve">
+    <value>Failed to generate invoice QR Code</value>
+  </data>
   <data name="發票列印下載" xml:space="preserve">
     <value>InvoicePrintingDownload</value>
     <comment>發票列印下載</comment>
@@ -124,5 +130,8 @@
   <data name="請選擇郵寄項目" xml:space="preserve">
     <value>Please select mail item!!</value>
     <comment>請選擇郵寄項目</comment>
+  </data>
+  <data name="資料錯誤!!" xml:space="preserve">
+    <value>Information error!!</value>
   </data>
 </root>

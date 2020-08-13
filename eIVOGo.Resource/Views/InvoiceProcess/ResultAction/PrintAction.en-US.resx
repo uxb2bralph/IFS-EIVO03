@@ -117,19 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="品項過長_詳列於發票明細" xml:space="preserve">
-    <value>品項過長，詳列於發票明細</value>
+  <data name="A4格式列印" xml:space="preserve">
+    <value>A4FormatPrinting</value>
   </data>
-  <data name="產生發票QR Code失敗" xml:space="preserve">
-    <value>產生發票QR Code失敗</value>
+  <data name="列印兌獎訊息_" xml:space="preserve">
+    <value>Print the redemption message:</value>
   </data>
-  <data name="發票列印下載" xml:space="preserve">
-    <value>發票列印下載</value>
+  <data name="列印買受人地址_" xml:space="preserve">
+    <value>Print the buyer's address:</value>
   </data>
-  <data name="請選擇郵寄項目" xml:space="preserve">
-    <value>請選擇郵寄項目</value>
+  <data name="否" xml:space="preserve">
+    <value>No</value>
   </data>
-  <data name="資料錯誤!!" xml:space="preserve">
-    <value>資料錯誤!!</value>
+  <data name="是" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="熱感紙規格列印" xml:space="preserve">
+    <value>ThermalPaperSpecificationPrinting</value>
   </data>
 </root>

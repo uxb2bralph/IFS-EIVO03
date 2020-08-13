@@ -1120,6 +1120,15 @@
     <Content Include="Views\DataExchange\Module\ImportInvoiceResult.cshtml" />
     <Content Include="Views\Common\Module\JsGridInitialization.cshtml" />
     <Content Include="Views\DataFlow\SellerSelectorQuery.cshtml" />
+    <Content Include="Views\DataView\PrintC0401A4.cshtml" />
+    <Content Include="Views\DataView\PrintC0401POS.cshtml" />
+    <Content Include="Views\DataView\Module\C0401_POS.cshtml" />
+    <Content Include="Views\DataView\Module\C0401_A4_Print.cshtml" />
+    <Content Include="Views\DataView\Module\C0401_A4.cshtml" />
+    <Content Include="Views\DataView\C0401_A4.cshtml" />
+    <Content Include="Views\DataView\C0401_POS.cshtml" />
+    <Content Include="Views\DataView\PrintA0401.cshtml" />
+    <Content Include="Views\DataView\A0401.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="Views\Home\MainPage.aspx" />
     <Content Include="Module\Ajax\PagingControl.ascx" />

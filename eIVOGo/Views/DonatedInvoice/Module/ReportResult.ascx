@@ -27,8 +27,7 @@
 </div>
 <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
-        <td class="Bargain_btn">
-            <% Html.RenderPartial("~/Views/Module/PrintData.ascx"); %>
+        <td class="Bargain_btn">           
             <input type="button" value="<%=ReportResult.CSV下載 %>" name="btnCsv" class="btn" onclick="$('form').prop('action', '<%= Url.Action("DownloadCSV") %>').submit();" />
         </td>
     </tr>

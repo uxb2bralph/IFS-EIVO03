@@ -18,7 +18,7 @@ using Model.Models.ViewModel;
 using Model.Schema.EIVO;
 using Newtonsoft.Json;
 using Utility;
-using DataView = eIVOGo.Resource.Controllers.DataView;
+using res = eIVOGo.Resource.Controllers.DataView;
 
 namespace eIVOGo.Controllers
 {
@@ -38,7 +38,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<InvoiceAllowance>().Where(a => a.AllowanceID == viewModel.id).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
             }
 
 
@@ -62,16 +62,16 @@ namespace eIVOGo.Controllers
             useThermalPOSArgs = null;
             if (item.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.A0401)
             {
-                return "~/Views/DataView/A0401.aspx";
+                return "~/Views/DataView/A0401.cshtml";
             }
             else if (paperStyle == "POS")
             {
                 useThermalPOSArgs = ThermalPOSPaper;
-                return "~/Views/DataView/C0401_POS.aspx";
+                return "~/Views/DataView/C0401_POS.cshtml";
             }
             else
             {
-                return "~/Views/DataView/C0401_A4.aspx";
+                return "~/Views/DataView/C0401_A4.cshtml";
             }
         }
 
@@ -223,7 +223,7 @@ namespace eIVOGo.Controllers
             }
 
             var result = new FilePathResult(outFile, "application/octet-stream");
-            result.FileDownloadName = "發票列印下載.zip";
+            result.FileDownloadName = res.發票列印下載+".zip";
             return result;
         }
 
@@ -307,7 +307,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<InvoiceItem>().Where(a => a.InvoiceID == viewModel.DocID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
             }
 
             return View(item);
@@ -378,7 +378,7 @@ namespace eIVOGo.Controllers
             else
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
             }
         }
 
@@ -395,7 +395,7 @@ namespace eIVOGo.Controllers
             else
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
             }
         }
 
@@ -412,9 +412,9 @@ namespace eIVOGo.Controllers
                         || d.ProcessType == (int)Naming.InvoiceProcessType.C0401)
                     .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice),
                     i => i.DocID, d => d.DocID, (i, d) => i);
-
+           
             if (viewModel.PaperStyle == "A4")
-                return View("PrintC0401A4", items);
+                return View("~/Views/DataView/PrintC0401A4.cshtml", items);
             else
                 return View("PrintC0401POS", items);
         }
@@ -444,8 +444,8 @@ namespace eIVOGo.Controllers
             ViewResult result = (ViewResult)PrintC0401(viewModel);
             IQueryable<DocumentPrintQueue> items = result.Model as IQueryable<DocumentPrintQueue>;
             String pdfFile = viewModel.PaperStyle == "A4"
-                    ? this.CreateContentAsPDF("~/Views/DataView/PrintC0401A4.aspx", items, Session.Timeout)
-                    : this.CreateContentAsPDF("~/Views/DataView/PrintC0401POS.aspx", items, Session.Timeout, ThermalPOSPaper);
+                    ? this.CreateContentAsPDF("~/Views/DataView/PrintC0401A4.cshtml", items, Session.Timeout)
+                    : this.CreateContentAsPDF("~/Views/DataView/PrintC0401POS.cshtml", items, Session.Timeout, ThermalPOSPaper);
 
             if (pdfFile != null)
             {
@@ -454,7 +454,7 @@ namespace eIVOGo.Controllers
             else
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
             }
         }
 
@@ -471,7 +471,7 @@ namespace eIVOGo.Controllers
             else
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
             }
         }
 
@@ -509,14 +509,14 @@ namespace eIVOGo.Controllers
                 {
                     retry = true;
                     Logger.Error(ex);
-                    Logger.Warn($"產生發票QR Code失敗 => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
+                    Logger.Warn($"{res.產生發票QR_Code失敗} => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
                 }
 
                 if(retry)
                 {
                     try
                     {
-                        qrContent = $"{qrContent.Substring(0, 88)}:1:0:1:品項過長，詳列於發票明細:1:1:";
+                        qrContent = $"{qrContent.Substring(0, 88)}:1:0:1:{res.品項過長_詳列於發票明細}:1:1:";
                         using (Bitmap qrcode = qrContent.CreateQRCode(width: 180, height: 180, qrVersion: 10))
                         {
                             Response.Clear();
@@ -527,7 +527,7 @@ namespace eIVOGo.Controllers
                     catch (Exception ex)
                     {
                         Logger.Error(ex);
-                        Logger.Warn($"產生發票QR Code失敗 => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
+                        Logger.Warn($"{res.產生發票QR_Code失敗} => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
                     }
                 }
             }
@@ -595,7 +595,7 @@ namespace eIVOGo.Controllers
             if (items == null || items.Length == 0)
             {
                 ViewBag.CloseWindow = true;
-                ViewBag.Message = DataView.請選擇郵寄項目;
+                ViewBag.Message = res.請選擇郵寄項目;
                 return View("~/Views/Shared/JsAlert.cshtml");
             }
 
@@ -633,7 +633,7 @@ namespace eIVOGo.Controllers
             }
 
             var result = new FilePathResult(outFile, "application/octet-stream");
-            result.FileDownloadName = DataView.發票列印下載+".zip";
+            result.FileDownloadName = res.發票列印下載+".zip";
             return result;
         }
 

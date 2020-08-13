@@ -15,6 +15,7 @@
 @using Utility
 @using Business.Helper
 @using Uxnet.Web.WebUI
+@using res=eIVOGo.Resource.Views.InvoiceProcess.Module.PrintResult
 
 @{
     RenderStyleViewModel _viewModel;
@@ -25,14 +26,14 @@
 <div>
     <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401
             ? "PrintA0401AsPDF"
-            : "PrintC0401AsPDF","DataView",_viewModel))" target="_blank">列印資料下載</a>
+            : "PrintC0401AsPDF","DataView",_viewModel))" target="_blank">@res.列印資料下載</a>
     <br />
     <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401
             ? "PrintA0401"
-            : "PrintC0401","DataView",_viewModel))" target="_blank">網頁列印</a>
+            : "PrintC0401","DataView",_viewModel))" target="_blank">@res.網頁列印</a>
     @if (_viewModel.PrintBack == true)
     {
         <br />
-        <span style="color: blue;">***列印時請記得選取雙面列印模式***</span>
+        <span style="color: blue;">@res.___列印時請記得選取雙面列印模式___</span>
     }
 </div>

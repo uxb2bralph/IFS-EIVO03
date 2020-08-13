@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace eIVOGo.Resource.Controllers {
+namespace eIVOGo.Resource.Helpers {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace eIVOGo.Resource.Controllers {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class DataView {
+    public class ExtensionMethods {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal DataView() {
+        internal ExtensionMethods() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace eIVOGo.Resource.Controllers {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Controllers.DataView", typeof(DataView).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Helpers.ExtensionMethods", typeof(ExtensionMethods).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,24 @@ namespace eIVOGo.Resource.Controllers {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 不提供自行列印，如有需要紙本請與管理部承辦人員連絡，謝謝配合。 的當地語系化字串。
+        /// </summary>
+        public static string 不提供自行列印_如有需要紙本請與管理部承辦人員連絡_謝謝配合_ {
+            get {
+                return ResourceManager.GetString("不提供自行列印_如有需要紙本請與管理部承辦人員連絡_謝謝配合_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 個人發票 的當地語系化字串。
+        /// </summary>
+        public static string 個人發票 {
+            get {
+                return ResourceManager.GetString("個人發票", resourceCulture);
             }
         }
         
@@ -79,29 +97,65 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 發票列印下載 的當地語系化字串。
+        ///   查詢類似 發票已列印 的當地語系化字串。
         /// </summary>
-        public static string 發票列印下載 {
+        public static string 發票已列印 {
             get {
-                return ResourceManager.GetString("發票列印下載", resourceCulture);
+                return ResourceManager.GetString("發票已列印", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 請選擇郵寄項目 的當地語系化字串。
+        ///   查詢類似 請取得授權列印!! 的當地語系化字串。
         /// </summary>
-        public static string 請選擇郵寄項目 {
+        public static string 請取得授權列印__ {
             get {
-                return ResourceManager.GetString("請選擇郵寄項目", resourceCulture);
+                return ResourceManager.GetString("請取得授權列印!!", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 資料錯誤!! 的當地語系化字串。
+        ///   查詢類似 請輸入公司名稱!! 的當地語系化字串。
         /// </summary>
-        public static string 資料錯誤__ {
+        public static string 請輸入公司名稱__ {
             get {
-                return ResourceManager.GetString("資料錯誤!!", resourceCulture);
+                return ResourceManager.GetString("請輸入公司名稱!!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 請輸入公司地址!! 的當地語系化字串。
+        /// </summary>
+        public static string 請輸入公司地址__ {
+            get {
+                return ResourceManager.GetString("請輸入公司地址!!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 請輸入公司統編!! 的當地語系化字串。
+        /// </summary>
+        public static string 請輸入公司統編__ {
+            get {
+                return ResourceManager.GetString("請輸入公司統編!!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 請輸入公司電話!! 的當地語系化字串。
+        /// </summary>
+        public static string 請輸入公司電話__ {
+            get {
+                return ResourceManager.GetString("請輸入公司電話!!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 電子信箱尚未輸入或輸入錯誤!! 的當地語系化字串。
+        /// </summary>
+        public static string 電子信箱尚未輸入或輸入錯誤__ {
+            get {
+                return ResourceManager.GetString("電子信箱尚未輸入或輸入錯誤!!", resourceCulture);
             }
         }
     }

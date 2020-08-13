@@ -117,19 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="不提供自行列印_如有需要紙本請與管理部承辦人員連絡_謝謝配合_" xml:space="preserve">
+    <value>不提供自行列印，如有需要紙本請與管理部承辦人員連絡，謝謝配合。</value>
+  </data>
+  <data name="個人發票" xml:space="preserve">
+    <value>個人發票</value>
+  </data>
   <data name="品項過長_詳列於發票明細" xml:space="preserve">
     <value>品項過長，詳列於發票明細</value>
   </data>
   <data name="產生發票QR Code失敗" xml:space="preserve">
     <value>產生發票QR Code失敗</value>
   </data>
-  <data name="發票列印下載" xml:space="preserve">
-    <value>發票列印下載</value>
+  <data name="發票已列印" xml:space="preserve">
+    <value>發票已列印</value>
   </data>
-  <data name="請選擇郵寄項目" xml:space="preserve">
-    <value>請選擇郵寄項目</value>
+  <data name="請取得授權列印!!" xml:space="preserve">
+    <value>請取得授權列印!!</value>
   </data>
-  <data name="資料錯誤!!" xml:space="preserve">
-    <value>資料錯誤!!</value>
+  <data name="請輸入公司名稱!!" xml:space="preserve">
+    <value>請輸入公司名稱!!</value>
+  </data>
+  <data name="請輸入公司地址!!" xml:space="preserve">
+    <value>請輸入公司地址!!</value>
+  </data>
+  <data name="請輸入公司統編!!" xml:space="preserve">
+    <value>請輸入公司統編!!</value>
+  </data>
+  <data name="請輸入公司電話!!" xml:space="preserve">
+    <value>請輸入公司電話!!</value>
+  </data>
+  <data name="電子信箱尚未輸入或輸入錯誤!!" xml:space="preserve">
+    <value>電子信箱尚未輸入或輸入錯誤!!</value>
   </data>
 </root>

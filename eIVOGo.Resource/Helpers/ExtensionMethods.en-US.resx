@@ -117,19 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="不提供自行列印_如有需要紙本請與管理部承辦人員連絡_謝謝配合_" xml:space="preserve">
+    <value>Self-printing is not provided. If you need a paper copy, please contact the manager of the management department. Thank you for your cooperation.</value>
+  </data>
+  <data name="個人發票" xml:space="preserve">
+    <value>Personal invoice</value>
+  </data>
   <data name="品項過長_詳列於發票明細" xml:space="preserve">
-    <value>品項過長，詳列於發票明細</value>
+    <value>The item is too long, listed in the invoice details</value>
   </data>
   <data name="產生發票QR Code失敗" xml:space="preserve">
-    <value>產生發票QR Code失敗</value>
+    <value>Failed to generate invoice QR Code</value>
   </data>
-  <data name="發票列印下載" xml:space="preserve">
-    <value>發票列印下載</value>
+  <data name="發票已列印" xml:space="preserve">
+    <value>The invoice has been printed</value>
   </data>
-  <data name="請選擇郵寄項目" xml:space="preserve">
-    <value>請選擇郵寄項目</value>
+  <data name="請取得授權列印!!" xml:space="preserve">
+    <value>Please get authorization to print!!</value>
   </data>
-  <data name="資料錯誤!!" xml:space="preserve">
-    <value>資料錯誤!!</value>
+  <data name="請輸入公司名稱!!" xml:space="preserve">
+    <value>Please enter the company name!!</value>
+  </data>
+  <data name="請輸入公司地址!!" xml:space="preserve">
+    <value>Please enter the company address!!</value>
+  </data>
+  <data name="請輸入公司統編!!" xml:space="preserve">
+    <value>Please enter the company uniform number!!</value>
+  </data>
+  <data name="請輸入公司電話!!" xml:space="preserve">
+    <value>Please enter the company phone!!</value>
+  </data>
+  <data name="電子信箱尚未輸入或輸入錯誤!!" xml:space="preserve">
+    <value>E-mail has not been entered or entered incorrectly!!</value>
   </data>
 </root>

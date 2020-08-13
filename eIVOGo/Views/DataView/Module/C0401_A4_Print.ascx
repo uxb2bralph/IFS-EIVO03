@@ -17,6 +17,14 @@
 <%@ Import Namespace="Uxnet.Web.WebUI" %>
 
 <% if(_model!=null) { %>
+<%
+    var size = 1;   
+
+    if (Encoding.Default.GetBytes(_model.InvoiceSeller.CustomerName).Length > 48)
+        size = 3;
+    else if  (Encoding.Default.GetBytes(_model.InvoiceSeller.CustomerName).Length > 32)
+        size = 2;
+%>
 <div style="text-align:center; position:absolute;margin-left:0.3cm;height:7cm;margin-top:2cm;font-size:small" >請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
 <div style="text-align:center; position:absolute;margin-left:19.4cm;height:7cm;margin-top:2cm;font-size:small" >請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
 <div style="page-break-after: always;margin-left:0.5cm;margin-right:0.5cm;margin-bottom:0cm;margin-top:0.5cm;">
@@ -48,7 +56,18 @@
             <%  }
                 else
                 { %>
-                    <h3 style="width:4.2cm;" class="title-small"><%= _model.InvoiceSeller.CustomerName  %></h3>
+                    <%if (size == 3)
+                      {%>
+                        <h3 style="width:4.2cm;padding-top: 0.2cm;font-size:11pt;" class="title-smal"><%= _model.InvoiceSeller.CustomerName  %></h3>
+                    <%} %>
+                    <%else if (size == 2)
+                      {%>
+                        <h3 style="width:4.2cm;padding-top: 0.5cm;" class="title-smal"><%= _model.InvoiceSeller.CustomerName  %></h3>
+                    <%} %>
+                    <%else 
+                      {%>
+                        <h3 style="width:4.2cm;padding-top: 1cm;" class="title-smal"><%= _model.InvoiceSeller.CustomerName  %></h3>
+                    <%} %>
             <%  }
                 if (_isDuplicatedPrint)
                 { %>

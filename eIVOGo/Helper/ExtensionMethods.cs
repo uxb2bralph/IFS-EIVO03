@@ -29,6 +29,7 @@ using ZXing;
 using ZXing.Common;
 using ZXing.QrCode;
 using ZXing.QrCode.Internal;
+using res = eIVOGo.Resource.Helpers.ExtensionMethods;
 
 namespace eIVOGo.Helper
 {
@@ -75,25 +76,25 @@ namespace eIVOGo.Helper
             if (String.IsNullOrEmpty(dataItem.CompanyName))
             {
                 //檢查名稱
-                WebMessageBox.AjaxAlert(control, "請輸入公司名稱!!");
+                WebMessageBox.AjaxAlert(control, res.請輸入公司名稱__);
                 return false;
             }
             if (String.IsNullOrEmpty(dataItem.ReceiptNo))
             {
                 //檢查名稱
-                WebMessageBox.AjaxAlert(control, "請輸入公司統編!!");
+                WebMessageBox.AjaxAlert(control, res.請輸入公司統編__);
                 return false;
             }
             if (String.IsNullOrEmpty(dataItem.Addr))
             {
                 //檢查名稱
-                WebMessageBox.AjaxAlert(control, "請輸入公司地址!!");
+                WebMessageBox.AjaxAlert(control, res.請輸入公司地址__);
                 return false;
             }
             if (String.IsNullOrEmpty(dataItem.Phone))
             {
                 //檢查名稱
-                WebMessageBox.AjaxAlert(control, "請輸入公司電話!!");
+                WebMessageBox.AjaxAlert(control, res.請輸入公司電話__);
                 return false;
             }
 
@@ -102,7 +103,7 @@ namespace eIVOGo.Helper
             if (String.IsNullOrEmpty(dataItem.ContactEmail) || !reg.IsMatch(dataItem.ContactEmail))
             {
                 //檢查email
-                WebMessageBox.AjaxAlert(control, "電子信箱尚未輸入或輸入錯誤!!");
+                WebMessageBox.AjaxAlert(control, res.電子信箱尚未輸入或輸入錯誤__);
                 return false;
             }
             return true;
@@ -156,9 +157,10 @@ namespace eIVOGo.Helper
                 var item = mgr.GetTable<CDS_Document>().Where(i => i.DocID == id).FirstOrDefault();
                 if (item == null || item.InvoiceItem == null)
                     continue;
+                //判斷發票是否可列印
                 if (item.InvoiceItem.Organization.OrganizationStatus.EntrustToPrint == false && item.DocumentPrintLog.Any() && item.DocumentAuthorization == null)
                 {
-                    reason = $"發票已列印({item.InvoiceItem.TrackCode}{item.InvoiceItem.No})，請取得授權列印!!";
+                    reason = $"{res.發票已列印}({item.InvoiceItem.TrackCode}{item.InvoiceItem.No})，{res.請取得授權列印__}";
                     return false;
                 }
                 if (item.DocumentPrintQueue == null)
@@ -174,7 +176,7 @@ namespace eIVOGo.Helper
                     }
                     else
                     {
-                        reason = $"個人發票({item.InvoiceItem.TrackCode}{item.InvoiceItem.No})不提供自行列印，如有需要紙本請與管理部承辦人員連絡，謝謝配合。";
+                        reason = $"{res.個人發票}({item.InvoiceItem.TrackCode}{item.InvoiceItem.No}){res.不提供自行列印_如有需要紙本請與管理部承辦人員連絡_謝謝配合_}";
                         return false;
                     }
                 }
@@ -486,20 +488,20 @@ namespace eIVOGo.Helper
             {
                 retry = true;
                 Logger.Error(ex);
-                Logger.Warn($"產生發票QR Code失敗 => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
+                Logger.Warn($"{res.產生發票QR_Code失敗} => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
             }
 
             if (retry)
             {
                 try
                 {
-                    qrContent = $"{qrContent.Substring(0, 88)}:1:1:1:品項過長，詳列於發票明細:1:1:";
+                    qrContent = $"{qrContent.Substring(0, 88)}:1:1:1:{res.品項過長_詳列於發票明細}:1:1:";
                     return qrContent.CreateQRCodeImageSrc(width: 180, height: 180, qrVersion: 10);
                 }
                 catch (Exception ex)
                 {
                     Logger.Error(ex);
-                    Logger.Warn($"產生發票QR Code失敗 => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
+                    Logger.Warn($"{res.產生發票QR_Code失敗} => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
                 }
             }
 

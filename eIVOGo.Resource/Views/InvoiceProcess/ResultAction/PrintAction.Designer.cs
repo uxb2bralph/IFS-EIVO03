@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace eIVOGo.Resource.Controllers {
+namespace eIVOGo.Resource.Views.InvoiceProcess.ResultAction {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace eIVOGo.Resource.Controllers {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class DataView {
+    public class PrintAction {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal DataView() {
+        internal PrintAction() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace eIVOGo.Resource.Controllers {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Controllers.DataView", typeof(DataView).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Views.InvoiceProcess.ResultAction.PrintAction", typeof(PrintAction).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,47 +61,56 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 品項過長，詳列於發票明細 的當地語系化字串。
+        ///   查詢類似 A4格式列印 的當地語系化字串。
         /// </summary>
-        public static string 品項過長_詳列於發票明細 {
+        public static string A4格式列印 {
             get {
-                return ResourceManager.GetString("品項過長_詳列於發票明細", resourceCulture);
+                return ResourceManager.GetString("A4格式列印", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 產生發票QR Code失敗 的當地語系化字串。
+        ///   查詢類似 列印兌獎訊息： 的當地語系化字串。
         /// </summary>
-        public static string 產生發票QR_Code失敗 {
+        public static string 列印兌獎訊息_ {
             get {
-                return ResourceManager.GetString("產生發票QR Code失敗", resourceCulture);
+                return ResourceManager.GetString("列印兌獎訊息_", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 發票列印下載 的當地語系化字串。
+        ///   查詢類似 列印買受人地址： 的當地語系化字串。
         /// </summary>
-        public static string 發票列印下載 {
+        public static string 列印買受人地址_ {
             get {
-                return ResourceManager.GetString("發票列印下載", resourceCulture);
+                return ResourceManager.GetString("列印買受人地址_", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 請選擇郵寄項目 的當地語系化字串。
+        ///   查詢類似 否 的當地語系化字串。
         /// </summary>
-        public static string 請選擇郵寄項目 {
+        public static string 否 {
             get {
-                return ResourceManager.GetString("請選擇郵寄項目", resourceCulture);
+                return ResourceManager.GetString("否", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查詢類似 資料錯誤!! 的當地語系化字串。
+        ///   查詢類似 是 的當地語系化字串。
         /// </summary>
-        public static string 資料錯誤__ {
+        public static string 是 {
             get {
-                return ResourceManager.GetString("資料錯誤!!", resourceCulture);
+                return ResourceManager.GetString("是", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ThermalPaperSpecificationPrinting 的當地語系化字串。
+        /// </summary>
+        public static string 熱感紙規格列印 {
+            get {
+                return ResourceManager.GetString("熱感紙規格列印", resourceCulture);
             }
         }
     }

@@ -189,6 +189,16 @@
     </Compile>
     <Compile Include="Helpers\CultureHelper.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\ExtensionMethods.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExtensionMethods.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\ExtensionMethods.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExtensionMethods.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\GetSample.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -546,6 +556,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Page.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\Common\Print.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Print.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Print.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Print.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\DataExchange\Index.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -576,11 +596,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ImportInvoiceResult.en-US.resx</DependentUpon>
     </Compile>
-    <Compile Include="Views\DataView\D0401.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>D0401.resx</DependentUpon>
-    </Compile>
     <Compile Include="Views\DataView\Module\D0401.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -610,6 +625,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InvoiceContent.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataView\PrintD0401.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintD0401.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataView\PrintD0401.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintD0401.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\DonatedInvoice\DownloadCSV.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1351,6 +1376,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ItemTable.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\PrintResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintResult.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\Module\PrintResult.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintResult.en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\InvoiceProcess\Module\QueryDirective.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1430,6 +1465,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MainQueryAction.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\PrintAction.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintAction.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InvoiceProcess\ResultAction\PrintAction.en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintAction.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\InvoiceProcess\ResultAction\VoidDone.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2006,6 +2051,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WinningNumber.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\ExtensionMethods.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExtensionMethods.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\ExtensionMethods.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExtensionMethods.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Helpers\GetSample.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>GetSample.en-US.Designer.cs</LastGenOutput>
@@ -2302,6 +2355,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Page.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Print.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Print.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Common\Print.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Print.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\DataExchange\Index.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Index.en-US.Designer.cs</LastGenOutput>
@@ -2326,10 +2387,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ImportInvoiceResult.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\DataView\D0401.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>D0401.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\DataView\Module\D0401.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>D0401.en-US.Designer.cs</LastGenOutput>
@@ -2353,6 +2410,14 @@
     <EmbeddedResource Include="Views\DataView\Module\InvoiceContent.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InvoiceContent.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataView\PrintD0401.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrintD0401.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DataView\PrintD0401.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrintD0401.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\DonatedInvoice\DownloadCSV.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -2952,6 +3017,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ItemTable.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\PrintResult.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrintResult.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\Module\PrintResult.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrintResult.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\Module\QueryDirective.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QueryDirective.en-US.Designer.cs</LastGenOutput>
@@ -3015,6 +3088,14 @@
     <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\MainQueryAction.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainQueryAction.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\PrintAction.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrintAction.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\PrintAction.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrintAction.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\InvoiceProcess\ResultAction\VoidDone.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace eIVOGo.Resource.Controllers {
+namespace eIVOGo.Resource.Views.DataView {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace eIVOGo.Resource.Controllers {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class DataView {
+    public class PrintD0401 {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal DataView() {
+        internal PrintD0401() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace eIVOGo.Resource.Controllers {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Controllers.DataView", typeof(DataView).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("eIVOGo.Resource.Views.DataView.PrintD0401", typeof(PrintD0401).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,47 +61,11 @@ namespace eIVOGo.Resource.Controllers {
         }
         
         /// <summary>
-        ///   查詢類似 品項過長，詳列於發票明細 的當地語系化字串。
+        ///   查詢類似 電子發票系統 的當地語系化字串。
         /// </summary>
-        public static string 品項過長_詳列於發票明細 {
+        public static string 電子發票系統 {
             get {
-                return ResourceManager.GetString("品項過長_詳列於發票明細", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 產生發票QR Code失敗 的當地語系化字串。
-        /// </summary>
-        public static string 產生發票QR_Code失敗 {
-            get {
-                return ResourceManager.GetString("產生發票QR Code失敗", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 發票列印下載 的當地語系化字串。
-        /// </summary>
-        public static string 發票列印下載 {
-            get {
-                return ResourceManager.GetString("發票列印下載", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 請選擇郵寄項目 的當地語系化字串。
-        /// </summary>
-        public static string 請選擇郵寄項目 {
-            get {
-                return ResourceManager.GetString("請選擇郵寄項目", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 資料錯誤!! 的當地語系化字串。
-        /// </summary>
-        public static string 資料錯誤__ {
-            get {
-                return ResourceManager.GetString("資料錯誤!!", resourceCulture);
+                return ResourceManager.GetString("電子發票系統", resourceCulture);
             }
         }
     }

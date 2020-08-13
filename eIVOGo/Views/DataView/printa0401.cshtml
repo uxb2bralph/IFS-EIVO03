@@ -1,5 +1,4 @@
-
-@using System.Linq
+﻿@using System.Linq
 @using System.IO
 @using System.Linq.Expressions
 
@@ -17,6 +16,14 @@
 @using Business.Helper
 @using Uxnet.Web.WebUI
 
+@{
+    ModelSource<InvoiceItem> models;
+    IQueryable<DocumentPrintQueue> _model;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<DocumentPrintQueue>)this.Model;
+}
+
 <!DOCTYPE html>
 <html>
 <head runat="server">
@@ -28,11 +35,11 @@
     <form id="theForm" runat="server">
         @{ var profile = Context.GetUser();
             DocumentPrintQueue item;}
- @while((item = _model.FirstOrDefault())!=null)
-            {
-                Html.RenderPartial("~/Views/DataView/Module/InvoiceView2016.ascx", item.CDS_Document.InvoiceItem);
-                models.MarkPrintedLog(item.CDS_Document.InvoiceItem, profile);
-            }
+        @while ((item = _model.FirstOrDefault()) != null)
+        {
+            Html.RenderPartial("~/Views/DataView/Module/InvoiceView2016.cshtml", item.CDS_Document.InvoiceItem);
+            models.MarkPrintedLog(item.CDS_Document.InvoiceItem, profile);
+        }
     </form>
 </body>
 </html>
@@ -42,18 +49,4 @@
         window.print();
     };
 </script>
-<script runat="server">
 
-    ModelSource<InvoiceItem> models;
-    IQueryable<DocumentPrintQueue> _model;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<DocumentPrintQueue>)this.Model;
-    }
-
-
-</script>
