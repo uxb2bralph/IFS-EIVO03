@@ -118,7 +118,7 @@ namespace Model.InvoiceManagement.Validator
                     InvoiceField.NPOBAN = 26;
                     InvoiceField.Random_Number = 27;
                     InvoiceField.Main_Remark = 28;
-
+                    
                     DetailsField.Data_ID = 0;
                     DetailsField.Description = 1;
                     DetailsField.Quantity = 2;

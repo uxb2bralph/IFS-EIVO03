@@ -338,16 +338,30 @@ namespace eIVOGo.Controllers
         [Authorize]
         public ActionResult PrintA0401()
         {
+            var items = GetA0401Items();
+
+            return View("~/Views/DataView/PrintA0401.cshtml",items);
+        }
+
+        [Authorize]
+        public ActionResult PrintA0401_B5()
+        {
+            var items = GetA0401Items();
+
+            return View("~/Views/DataView/PrintA0401_B5.cshtml", items);
+        }
+
+        public IQueryable<DocumentPrintQueue> GetA0401Items()
+        {
             var profile = HttpContext.GetUser();
 
             var items = models.GetTable<DocumentPrintQueue>()
-                .Where(i => i.UID == profile.UID)
-                .Join(models.GetTable<CDS_Document>()
-                        .Where(d => d.ProcessType == (int)Naming.InvoiceProcessType.A0401)
-                        .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice), 
-                    i => i.DocID, d => d.DocID, (i, d) => i);
-
-            return View(items);
+               .Where(i => i.UID == profile.UID)
+               .Join(models.GetTable<CDS_Document>()
+                       .Where(d => d.ProcessType == (int)Naming.InvoiceProcessType.A0401)
+                       .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice),
+                   i => i.DocID, d => d.DocID, (i, d) => i);
+            return items;
         }
 
         [Authorize]
@@ -369,7 +383,24 @@ namespace eIVOGo.Controllers
         {
             ViewResult result = (ViewResult)PrintA0401();
             IQueryable<DocumentPrintQueue> items = result.Model as IQueryable<DocumentPrintQueue>;
-            String pdfFile = this.CreateContentAsPDF("~/Views/DataView/PrintA0401.aspx", items, Session.Timeout);
+            String pdfFile = this.CreateContentAsPDF("~/Views/DataView/PrintA0401.cshtml", items, Session.Timeout);
+
+            if (pdfFile != null)
+            {
+                return File(pdfFile, "application/pdf", $"{DateTime.Today:yyyy-MM-dd}.pdf");
+            }
+            else
+            {
+                ViewBag.CloseWindow = true;
+                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
+            }
+        }
+
+        public ActionResult PrintA0401_B5AsPDF()
+        {
+            ViewResult result = (ViewResult)PrintA0401_B5();
+            IQueryable<DocumentPrintQueue> items = result.Model as IQueryable<DocumentPrintQueue>;
+            String pdfFile = this.CreateContentAsPDF("~/Views/DataView/PrintA0401_B5.cshtml", items, Session.Timeout);
 
             if (pdfFile != null)
             {

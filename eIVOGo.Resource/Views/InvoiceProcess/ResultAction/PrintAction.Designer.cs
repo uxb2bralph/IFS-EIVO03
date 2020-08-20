@@ -70,6 +70,15 @@ namespace eIVOGo.Resource.Views.InvoiceProcess.ResultAction {
         }
         
         /// <summary>
+        ///   查詢類似 B5格式列印 的當地語系化字串。
+        /// </summary>
+        public static string B5格式列印 {
+            get {
+                return ResourceManager.GetString("B5格式列印", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 列印兌獎訊息： 的當地語系化字串。
         /// </summary>
         public static string 列印兌獎訊息_ {

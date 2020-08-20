@@ -223,6 +223,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Themes\Allowance\cancel_eivo.css" />
+    <Content Include="App_Themes\InvoicePrint\A0401_B5.css" />
     <Content Include="App_Themes\Login\login.css" />
     <Content Include="App_Themes\NewPrint\New_eivo.css" />
     <Content Include="App_Themes\Paper\eivo.css" />
@@ -1129,6 +1130,8 @@
     <Content Include="Views\DataView\C0401_POS.cshtml" />
     <Content Include="Views\DataView\PrintA0401.cshtml" />
     <Content Include="Views\DataView\A0401.cshtml" />
+    <Content Include="Views\DataView\Module\A0401_B5.cshtml" />
+    <Content Include="Views\DataView\PrintA0401_B5.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="Views\Home\MainPage.aspx" />
     <Content Include="Module\Ajax\PagingControl.ascx" />
@@ -2175,6 +2178,7 @@
     <Content Include="Views\Module\PrintData.cshtml" />
     <Content Include="Views\InvoiceQuery\Module\InvoiceAttachment.cshtml" />
     <Content Include="Views\InvoiceQuery\AttachmentResult.cshtml" />
+    <Content Include="Views\InvoiceProcess\Module\PrintA0401B5Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

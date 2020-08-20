@@ -1,0 +1,54 @@
+﻿@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Business.Helper
+@using Uxnet.Web.WebUI
+@using res=eIVOGo.Resource.Views.InvoiceProcess.Module.PrintResult
+
+@{
+    RenderStyleViewModel _viewModel;
+    _viewModel = (RenderStyleViewModel)ViewBag.ViewModel;
+    _viewModel.PrintCuttingLine = true;
+    _viewModel.CreateNew = true;
+}
+
+    <div>
+        <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401_B5
+            ? "PrintA0401_B5AsPDF"
+            : "PrintC0401AsPDF","DataView",_viewModel))" target="_blank">@res.列印資料下載_PDF合併_</a>
+            @{
+                var viewModel = new
+                {
+                    _viewModel.CreateNew,
+                    _viewModel.KeyID,
+                    _viewModel.NameOnly,
+                    _viewModel.PaperStyle,
+                    _viewModel.PrintBack,
+                    _viewModel.PrintBuyerAddr,
+                    _viewModel.PrintCuttingLine,
+                    _viewModel.ProcessType,
+                };
+            }
+            <a href='javascript:$("").launchDownload("@( Url.Action("ZipInvoicePDF", "DataView") )", @( JsonConvert.SerializeObject(viewModel) ), "report", true);'>列印資料下載(ZIP)</a>
+            <br />
+            <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401_B5
+            ? "PrintA0401_B5"
+            : "PrintC0401","DataView",_viewModel))" target="_blank">@res.網頁列印</a>
+            @if (_viewModel.PrintBack == true)
+            {
+                <br />
+                <span style="color: blue;">@res.___列印時請記得選取雙面列印模式___</span>
+            }
+        </div>

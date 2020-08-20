@@ -123,6 +123,9 @@
   <data name="列印資料下載" xml:space="preserve">
     <value>Print data download</value>
   </data>
+  <data name="列印資料下載(PDF合併)" xml:space="preserve">
+    <value>Print data download (PDF merge)</value>
+  </data>
   <data name="網頁列印" xml:space="preserve">
     <value>Web printing</value>
   </data>

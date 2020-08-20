@@ -352,6 +352,7 @@ namespace eIVOGo.Helper
                 sw.Flush();
                 sw.Close();
             }
+            //Yuki test File.Copy(tempHtml, saveTo);
             File.Move(tempHtml, saveTo);
 
             saveTo.ConvertHtmlToPDF(pdfFile, timeOutInMinute, args);

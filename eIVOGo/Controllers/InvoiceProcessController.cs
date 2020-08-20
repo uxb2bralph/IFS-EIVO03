@@ -705,8 +705,14 @@ namespace eIVOGo.Controllers
             if (viewModel.ProcessType == Naming.InvoiceProcessType.A0401)
             {
                 profile.EnqueueInvoicePrint(models, chkItem);
+                
                 //printUrl = "~/DataView/PrintA0401AsPDF";
                 //ViewBag.PrintView = "~/DataView/PrintA0401";
+            }
+            else if(viewModel.ProcessType == Naming.InvoiceProcessType.A0401_B5)
+            {
+                profile.EnqueueInvoicePrint(models, chkItem);
+                return View("~/Views/InvoiceProcess/Module/PrintA0401B5Result.cshtml");
             }
             else
             {
@@ -745,6 +751,7 @@ namespace eIVOGo.Controllers
                     return Json(new { result = false, message = res.無QRCode金鑰檔_無法列印__ });
                 }
             }
+
             return View("~/Views/InvoiceProcess/Module/PrintResult.cshtml");
         }
 

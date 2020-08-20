@@ -28,7 +28,7 @@
 <html>
 <head runat="server">
     <title>電子發票系統</title>
-    <link href='@(eIVOGo.Properties.Settings.Default.WebApDomain +VirtualPathUtility.ToAbsolute("~/App_Themes/Ver2016/eivo.css?202008171733"))' rel="stylesheet" type="text/css" />
+    <link href='@(eIVOGo.Properties.Settings.Default.WebApDomain +VirtualPathUtility.ToAbsolute("~/App_Themes/InvoicePrint/A0401_B5.css?202008171733"))' rel="stylesheet" type="text/css" />    
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 </head>
 <body style="font-family:KaiTi">
@@ -37,7 +37,7 @@
             DocumentPrintQueue item;}
         @while ((item = _model.FirstOrDefault()) != null)
         {
-            Html.RenderPartial("~/Views/DataView/Module/InvoiceView2016.cshtml", item.CDS_Document.InvoiceItem);
+            Html.RenderPartial("~/Views/DataView/Module/A0401_B5.cshtml", item.CDS_Document.InvoiceItem);
             models.MarkPrintedLog(item.CDS_Document.InvoiceItem, profile);
         }
     </form>

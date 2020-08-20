@@ -79,6 +79,15 @@ namespace eIVOGo.Resource.Views.InvoiceProcess.Module {
         }
         
         /// <summary>
+        ///   查詢類似 列印資料下載(PDF合併) 的當地語系化字串。
+        /// </summary>
+        public static string 列印資料下載_PDF合併_ {
+            get {
+                return ResourceManager.GetString("列印資料下載(PDF合併)", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 網頁列印 的當地語系化字串。
         /// </summary>
         public static string 網頁列印 {
