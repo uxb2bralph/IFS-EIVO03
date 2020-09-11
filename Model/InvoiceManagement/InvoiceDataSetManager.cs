@@ -244,6 +244,7 @@ namespace Model.InvoiceManagement
 
             InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer);
 
+            //建立回覆table
             DataTable result = InitializeInvoiceResponseTable();
 
             IEnumerable<DataRow> invoiceItems = item.Tables["Invoice"].Rows.Cast<DataRow>();

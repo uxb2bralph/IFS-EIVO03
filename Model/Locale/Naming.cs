@@ -506,6 +506,7 @@ namespace Model.Locale
             B0201,
             E0401 = 31,
             CounterpartBusiness = 81,
+            A0401_Xlsx_Allocation_ByIssuer = 311,
             C0401_Xlsx = 101,
             C0401_Xlsx_Allocation_ByVAC = 201,
             C0401_Xlsx_Allocation_ByIssuer = 301,

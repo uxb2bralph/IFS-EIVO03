@@ -31,15 +31,117 @@
     }
     else if (_viewModel.ProcessType == Naming.InvoiceProcessType.A0401)
     {
-        <button type="button" class="btn" name="paperStyle" value="A4" onclick="uiInvoiceQuery.print('A4',@((int)Naming.InvoiceProcessType.A0401));">@res.A4格式列印</button>
-        <button type="button" class="btn" name="paperStyle" value="B5" onclick="uiInvoiceQuery.print('B5',@((int)Naming.InvoiceProcessType.A0401_B5));">@res.B5格式列印</button>
-        <div>
+        <div style="display:none" name="目前已不使用">
+            <button type="button" class="btn" name="paperStyle" value="A4" onclick="uiInvoiceQuery.print('A4',@((int)Naming.InvoiceProcessType.A0401));">@res.A4格式列印</button>
+            <button type="button" class="btn" name="paperStyle" value="B5" onclick="uiInvoiceQuery.print('B5',@((int)Naming.InvoiceProcessType.A0401_B5));">@res.B5格式列印</button>
+
             <button type="button" class="btn" name="paperStyle" value="A4" onclick="uiInvoiceQuery.print('A4');">@res.A4格式列印</button>
             (@res.列印兌獎訊息_<input name="printBack" type="radio" value="true" /> @res.是
             <input name="printBack" type="radio" value="false" /> @res.否)
             <input type="button" class="btn" name="btnPrint" value=@res.熱感紙規格列印 onclick="uiInvoiceQuery.print('POS');" />
             (@res.列印買受人地址_<input name="printBuyerAddr" type="radio" value="true" />@res.是
             <input name="printBuyerAddr" type="radio" value="false" /> @res.否)
+        </div>
+
+        <div maign="left" mvalign="top">
+            @res.列印格式選擇：
+            <input name="rblBtn" type="radio" value="true" />A4
+            <input name="rblBtn" type="radio" value="false" />B5
+            <input name="rblBtn" type="radio" value="false" />@res.郵簡紙
+            <input name="rblBtn" type="radio" value="false" />@res.熱感紙
+            <input type="button" class="btn" name="btnPrint1" value="@res.列印" id="btnPrint" />
+
+            <div style="display: none" id="C">
+                (@res.列印兌獎訊息_<input name="printBack" type="radio" value="true" /> @res.是
+                <input name="printBack" type="radio" value="false" /> @res.否)
+            </div>
+            <div style="display: none" id="D">
+                (@res.列印買受人地址_<input name="printBuyerAddr" type="radio" value="true" />@res.是
+                <input name="printBuyerAddr" type="radio" value="false" /> @res.否)
+            </div>
+
+            <script>
+        $(function () {
+            var rb = $("input[name*='rblBtn']");
+            $('#btnPrint').click(function () {
+                var index = $("input[name*='rblBtn']").index($("input[name*='rblBtn']").filter(":checked"));
+                
+                switch (index) {
+                    case 0:
+                        //A4格式列印
+                        uiInvoiceQuery.print('A4',@((int)Naming.InvoiceProcessType.A0401));
+                        break;
+                    case 1:
+                        //B5格式列印
+                        uiInvoiceQuery.print('B5',@((int)Naming.InvoiceProcessType.A0401_B5));
+                        break;
+                    case 2:
+                        //郵簡紙格式列印
+                        uiInvoiceQuery.print('A4');
+                        break;
+                    case 3:
+                        //熱感紙規格列印
+                        uiInvoiceQuery.print('POS');
+                        break;Ｌ
+
+                    default:
+                }
+            });
+
+            rb.change(function () {
+                $('#C').hide();
+                $('#D').hide();
+                var tbl = $('.tblAction');
+                var params = $('.tblAction').find('input').serializeObject();
+                var index = $("input[name*='rblBtn']").index($("input[name*='rblBtn']").filter(":checked"));
+                if (params) {
+                    $.extend(data, params);
+                }
+
+                var data = tbl.serializeObject();
+
+                Object.keys(data).forEach(function (key) {
+                    var value = data[key];
+
+                    if (value instanceof Array) {
+                        value.forEach(function (v) {
+                            tbl.append($("<input></input>").attr('type', 'hidden').attr('name', key).attr('value', v));
+                        });
+                    } else {
+                        tbl.append($("<input></input>").attr('type', 'hidden').attr('name', key).attr('value', value));
+                    }
+
+                });
+
+                switch (index) {
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        $('#C').show();
+                        break;
+                    case 3:
+                        $('#D').show();
+                        break;
+
+                    default:
+                }
+
+                //alert($("input[name*='rblBtn']").index(rb.filter(":checked")));
+
+            });
+
+
+        });
+        $.fn.print = function (style, processType) {
+            alert('hi');
+        }
+
+
+
+
+            </script>
         </div>
     }
 }

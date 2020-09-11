@@ -27,36 +27,129 @@ namespace Model.InvoiceManagement.Validator
         internal InvoiceFieldIndex InvoiceField = new InvoiceFieldIndex { };
         internal class InvoiceFieldIndex
         {
+            /// <summary>
+            /// 發票號碼
+            /// </summary>
             public int Invoice_No { get; internal set; } = 0;
+            /// <summary>
+            /// 發票日期
+            /// </summary>
             public int Invoice_Date { get; internal set; } = 1;
+            /// <summary>
+            /// 訂單編號
+            /// </summary>
             public int Data_ID { get; internal set; } = 2;
+            /// <summary>
+            /// 訂單日期
+            /// </summary>
             public int Data_Date { get; internal set; } = 3;
+            /// <summary>
+            /// 賣方統編
+            /// </summary>
             public int Seller_ID { get; internal set; } = 4;
+            /// <summary>
+            /// 買方名稱
+            /// </summary>
             public int Buyer_Name { get; internal set; } = 5;
+            /// <summary>
+            /// 買方統編
+            /// </summary>
             public int Buyer_ID { get; internal set; } = 6;
+            /// <summary>
+            /// 買受人註記
+            /// </summary>
             public int Buyer_Mark { get; internal set; } = 7;
+            /// <summary>
+            /// 通關方式註記
+            /// </summary>
             public int Customs_Clearance_Mark { get; internal set; } = 8;
+            /// <summary>
+            /// 客戶編號
+            /// </summary>
             public int Customer_ID { get; internal set; } = 9;
+            /// <summary>
+            /// 客戶名稱
+            /// </summary>
             public int Contact_Name { get; internal set; } = 10;
+            /// <summary>
+            /// 信箱
+            /// </summary>
             public int EMail { get; internal set; } = 11;
+            /// <summary>
+            /// 地址
+            /// </summary>
             public int Address { get; internal set; } = 12;
+            /// <summary>
+            /// 電話
+            /// </summary>
             public int Phone { get; internal set; } = 13;
+            /// <summary>
+            /// 應稅銷售額
+            /// </summary>
             public int Sales_Amount { get; internal set; } = 14;
+            /// <summary>
+            /// 免稅銷售額
+            /// </summary>
             public int Free_Tax_Sales_Amount { get; internal set; } = 15;
+            /// <summary>
+            /// 零稅銷售額
+            /// </summary>
             public int Zero_Tax_Sales_Amount { get; internal set; } = 16;
+            /// <summary>
+            /// 發票類別
+            /// </summary>
             public int Invoice_Type { get; internal set; } = 17;
+            /// <summary>
+            /// 課稅別
+            /// </summary>
             public int Tax_Type { get; internal set; } = 18;
+            /// <summary>
+            /// 稅率
+            /// </summary>
             public int Tax_Rate { get; internal set; } = 19;
+            /// <summary>
+            /// 營業稅額
+            /// </summary>
             public int Tax_Amount { get; internal set; } = 20;
+            /// <summary>
+            /// 含稅金額
+            /// </summary>
             public int Total_Amount { get; internal set; } = 21;
+            /// <summary>
+            /// 幣別
+            /// </summary>
             public int Currency { get; internal set; } = 22;
+            /// <summary>
+            /// 列印註記
+            /// </summary>
             public int Print_Mark { get; internal set; } = 23;
+            /// <summary>
+            /// 載具類別號碼
+            /// </summary>
             public int Carrier_Type { get; internal set; } = 24;
+            /// <summary>
+            /// 載具號碼id
+            /// </summary>
             public int Carrier_Id1 { get; internal set; } = 25;
+            /// <summary>
+            /// 載具隱碼id
+            /// </summary>
             public int Carrier_Id2 { get; internal set; } = 26;
+            /// <summary>
+            /// 捐贈註記
+            /// </summary>
             public int Donate_Mark { get; internal set; } = 27;
+            /// <summary>
+            /// 發票捐贈對象統一編號
+            /// </summary>
             public int NPOBAN { get; internal set; } = 28;
+            /// <summary>
+            /// 發票防偽隨機碼
+            /// </summary>
             public int Random_Number { get; internal set; } = 29;
+            /// <summary>
+            /// 總備註
+            /// </summary>
             public int Main_Remark { get; internal set; } = 30;
 
         }
@@ -64,14 +157,41 @@ namespace Model.InvoiceManagement.Validator
         internal DetailsFieldIndex DetailsField = new DetailsFieldIndex { } ;
         internal class DetailsFieldIndex
         {
+            /// <summary>
+            /// 發票號碼
+            /// </summary>
             public int Invoice_No { get; internal set; } = 0;
+            /// <summary>
+            /// 訂單編號
+            /// </summary>
             public int Data_ID { get; internal set; } = 1;
+            /// <summary>
+            /// 品名
+            /// </summary>
             public int Description { get; internal set; } = 2;
+            /// <summary>
+            /// 數量
+            /// </summary>
             public int Quantity { get; internal set; } = 3;
+            /// <summary>
+            /// 單位
+            /// </summary>
             public int Unit { get; internal set; } = 4;
+            /// <summary>
+            /// 單價
+            /// </summary>
             public int Unit_Price { get; internal set; } = 5;
+            /// <summary>
+            /// 金額
+            /// </summary>
             public int Amount { get; internal set; } = 6;
+            /// <summary>
+            /// 課稅別
+            /// </summary>
             public int Item_Tax_Type { get; internal set; } = 7;
+            /// <summary>
+            /// 單一欄位備註
+            /// </summary>
             public int Remark { get; internal set; } = 8;
 
         }
