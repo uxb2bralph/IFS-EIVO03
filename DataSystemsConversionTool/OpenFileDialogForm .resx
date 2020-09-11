@@ -117,37 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="A4格式列印" xml:space="preserve">
-    <value>A4格式列印</value>
-  </data>
-  <data name="B5格式列印" xml:space="preserve">
-    <value>B5格式列印</value>
-  </data>
-  <data name="列印" xml:space="preserve">
-    <value>列印</value>
-  </data>
-  <data name="列印兌獎訊息_" xml:space="preserve">
-    <value>列印兌獎訊息：</value>
-  </data>
-  <data name="列印格式選擇" xml:space="preserve">
-    <value>列印格式選擇</value>
-  </data>
-  <data name="列印買受人地址_" xml:space="preserve">
-    <value>列印買受人地址：</value>
-  </data>
-  <data name="否" xml:space="preserve">
-    <value>否</value>
-  </data>
-  <data name="是" xml:space="preserve">
-    <value>是</value>
-  </data>
-  <data name="熱感紙" xml:space="preserve">
-    <value>熱感紙</value>
-  </data>
-  <data name="熱感紙規格列印" xml:space="preserve">
-    <value>ThermalPaperSpecificationPrinting</value>
-  </data>
-  <data name="郵簡紙" xml:space="preserve">
-    <value>郵簡紙</value>
-  </data>
 </root>

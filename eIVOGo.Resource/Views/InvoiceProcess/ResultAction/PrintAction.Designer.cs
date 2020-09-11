@@ -79,11 +79,29 @@ namespace eIVOGo.Resource.Views.InvoiceProcess.ResultAction {
         }
         
         /// <summary>
+        ///   查詢類似 列印 的當地語系化字串。
+        /// </summary>
+        public static string 列印 {
+            get {
+                return ResourceManager.GetString("列印", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 列印兌獎訊息： 的當地語系化字串。
         /// </summary>
         public static string 列印兌獎訊息_ {
             get {
                 return ResourceManager.GetString("列印兌獎訊息_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 列印格式選擇 的當地語系化字串。
+        /// </summary>
+        public static string 列印格式選擇 {
+            get {
+                return ResourceManager.GetString("列印格式選擇", resourceCulture);
             }
         }
         
@@ -115,11 +133,29 @@ namespace eIVOGo.Resource.Views.InvoiceProcess.ResultAction {
         }
         
         /// <summary>
+        ///   查詢類似 熱感紙 的當地語系化字串。
+        /// </summary>
+        public static string 熱感紙 {
+            get {
+                return ResourceManager.GetString("熱感紙", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 ThermalPaperSpecificationPrinting 的當地語系化字串。
         /// </summary>
         public static string 熱感紙規格列印 {
             get {
                 return ResourceManager.GetString("熱感紙規格列印", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 郵簡紙 的當地語系化字串。
+        /// </summary>
+        public static string 郵簡紙 {
+            get {
+                return ResourceManager.GetString("郵簡紙", resourceCulture);
             }
         }
     }

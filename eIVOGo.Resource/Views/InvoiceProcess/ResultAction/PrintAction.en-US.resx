@@ -123,8 +123,14 @@
   <data name="B5格式列印" xml:space="preserve">
     <value>B5FormatPrinting</value>
   </data>
+  <data name="列印" xml:space="preserve">
+    <value>Print</value>
+  </data>
   <data name="列印兌獎訊息_" xml:space="preserve">
     <value>Print the redemption message:</value>
+  </data>
+  <data name="列印格式選擇" xml:space="preserve">
+    <value>Print format selection</value>
   </data>
   <data name="列印買受人地址_" xml:space="preserve">
     <value>Print the buyer's address:</value>
@@ -135,7 +141,13 @@
   <data name="是" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="熱感紙" xml:space="preserve">
+    <value>Thermal paper</value>
+  </data>
   <data name="熱感紙規格列印" xml:space="preserve">
     <value>ThermalPaperSpecificationPrinting</value>
+  </data>
+  <data name="郵簡紙" xml:space="preserve">
+    <value>Postal paper</value>
   </data>
 </root>

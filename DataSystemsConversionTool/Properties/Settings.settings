@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DataSystemsConversionTool.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SourceInvoiceDataDtsx" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SourceInvoiceData.dtsx</Value>
+    </Setting>
+    <Setting Name="SourceInvoiceDetailDataDtsx" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SourceInvoiceDetailData.dtsx</Value>
+    </Setting>
+    <Setting Name="DestinationFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">InvoiceRequest</Value>
+    </Setting>
+    <Setting Name="StoreRoot" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">WebStore</Value>
+    </Setting>
+    <Setting Name="ERPFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ERP</Value>
+    </Setting>
+    <Setting Name="InvoiceRequestTemp" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">InvoiceRequestTemp</Value>
+    </Setting>
+    <Setting Name="InvoiceRequestSample" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">InvoiceRequestSample</Value>
+    </Setting>
+    <Setting Name="UploadFileUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://localhost:44329/InvoiceData/UploadInvoiceRequestXlsx?</Value>
+    </Setting>
+    <Setting Name="AgentID" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">999</Value>
+    </Setting>
+    <Setting Name="Sender" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">220</Value>
+    </Setting>
+    <Setting Name="ProcessType" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">311</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
