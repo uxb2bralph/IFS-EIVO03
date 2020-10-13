@@ -177,6 +177,7 @@
     <Compile Include="Models\ViewModel\InvoiceViewModelValidator.cs" />
     <Compile Include="Models\ViewModel\OrganizationViewModel.cs" />
     <Compile Include="Models\ViewModel\POSDeviceViewModel.cs" />
+    <Compile Include="Models\ViewModel\ProcessorUnit.Web\CommonViewModel.cs" />
     <Compile Include="Models\ViewModel\ValidatorExtensions.cs" />
     <Compile Include="ProcessorUnitHelper\ExtensionMethods.cs" />
     <Compile Include="Resource\MessageResources.en-US.Designer.cs">

@@ -322,6 +322,15 @@ namespace eIVOGo.Resource.Views.Organization.Module {
         }
         
         /// <summary>
+        ///   查詢類似 營業人資訊 的當地語系化字串。
+        /// </summary>
+        public static string 營業人資訊 {
+            get {
+                return ResourceManager.GetString("營業人資訊", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 特種稅額計算之電子發票 的當地語系化字串。
         /// </summary>
         public static string 特種稅額計算之電子發票 {

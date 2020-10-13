@@ -406,6 +406,7 @@
     <Content Include="logs\SystemKey.json" />
     <Content Include="Published\UploadAttachmentForGoogleByStream.ashx" />
     <Content Include="Views\InvoiceQuery\InvoiceQuery_DownloadCSV.aspx" />
+    <Content Include="Views\Notification\Module\NotifyCommissionedToReceiveInvoice.ascx" />
     <Content Include="Views\Notification\Shared\ServiceNotation.cshtml" />
     <Content Include="Views\SiteAction\FunctionTitleBar.cshtml" />
     <Content Include="Views\Common\Module\EnumSelector.cshtml" />
@@ -2179,6 +2180,7 @@
     <Content Include="Views\InvoiceQuery\Module\InvoiceAttachment.cshtml" />
     <Content Include="Views\InvoiceQuery\AttachmentResult.cshtml" />
     <Content Include="Views\InvoiceProcess\Module\PrintA0401B5Result.cshtml" />
+    <Content Include="Views\Notification\Module\NotifyCommissionedToReceiveInvoice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

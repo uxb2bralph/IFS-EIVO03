@@ -358,7 +358,7 @@ namespace eIVOGo.Controllers
             var items = models.GetTable<DocumentPrintQueue>()
                .Where(i => i.UID == profile.UID)
                .Join(models.GetTable<CDS_Document>()
-                       .Where(d => d.ProcessType == (int)Naming.InvoiceProcessType.A0401)
+                       //.Where(d => d.ProcessType == (int)Naming.InvoiceProcessType.A0401)
                        .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice),
                    i => i.DocID, d => d.DocID, (i, d) => i);
             return items;
@@ -439,8 +439,8 @@ namespace eIVOGo.Controllers
             var items = models.GetTable<DocumentPrintQueue>()
                 .Where(i => i.UID == profile.UID)
                 .Join(models.GetTable<CDS_Document>()
-                    .Where(d => !d.ProcessType.HasValue
-                        || d.ProcessType == (int)Naming.InvoiceProcessType.C0401)
+                    //.Where(d => !d.ProcessType.HasValue
+                    //    || d.ProcessType == (int)Naming.InvoiceProcessType.C0401)
                     .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice),
                     i => i.DocID, d => d.DocID, (i, d) => i);
            

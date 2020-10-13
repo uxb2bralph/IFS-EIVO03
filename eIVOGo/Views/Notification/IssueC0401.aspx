@@ -69,12 +69,12 @@
                 {
                     var attached = _model.CDS_Document.Attachment.Select(a => a.StoredPath).ToList();
                     attached.Insert(0, pdfFile);
-                    String body = Html.Partial("~/Views/Notification/Module/IssuedC0401.cshtml", _model).ToString();
+                    String body = @Html.Partial("~/Views/Notification/Module/IssuedC0401.cshtml", _model).ToString();
                     body.SendMailMessage(mailTo, subject, attached.ToArray());
                 }
                 else
                 {
-                    String body = Html.Partial("~/Views/Notification/Module/IssuedC0401.cshtml", _model).ToString();
+                    String body = @Html.Partial("~/Views/Notification/Module/IssuedC0401.cshtml", _model).ToString();
                     body.SendMailMessage(mailTo, subject, pdfFile);
                 }
             }

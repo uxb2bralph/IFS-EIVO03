@@ -85,17 +85,35 @@ namespace eIVOGo.Models.ViewModel
             {
                 if (viewModel.ProcessType == Naming.InvoiceProcessType.C0401)
                 {
+                    //items = items
+                    //    .Join(models.GetTable<CDS_Document>()
+                    //        .Where(d => !d.ProcessType.HasValue || d.ProcessType == (int)viewModel.ProcessType),
+                    //        i => i.InvoiceID, d => d.DocID, (i, d) => i);
                     items = items
-                        .Join(models.GetTable<CDS_Document>()
-                            .Where(d => !d.ProcessType.HasValue || d.ProcessType == (int)viewModel.ProcessType),
+                        .Join(models.GetTable<CDS_Document>(),
                             i => i.InvoiceID, d => d.DocID, (i, d) => i);
                 }
-                else
+                else//修改為若為A0401 或 C0401但有統編 
                 {
+                    //items = items
+                    //    .Join(models.GetTable<CDS_Document>()
+                    //        .Where(d => d.ProcessType == (int)viewModel.ProcessType),
+                    //        i => i.InvoiceID, d => d.DocID, (i, d) => i);
+
+
+
                     items = items
-                        .Join(models.GetTable<CDS_Document>()
-                            .Where(d => d.ProcessType == (int)viewModel.ProcessType),
-                            i => i.InvoiceID, d => d.DocID, (i, d) => i);
+                                .Join(models.GetTable<CDS_Document>(), i => i.InvoiceID, j => j.DocID
+                                    , (i, j) => new { i, j })
+                                .Join(models.GetTable<InvoiceBuyer>(), a => a.i.InvoiceID, b => b.InvoiceID
+                                    , (a, b) => new { a, b })
+                                .Where(c => (c.a.j.ProcessType == (int)viewModel.ProcessType)
+                                        || (c.a.j.ProcessType == (int)Naming.InvoiceProcessType.C0401
+                                            && c.b.BuyerID == null
+                                            && (c.b.ReceiptNo != null)
+                                            && (c.b.ReceiptNo != "0000000000"))
+                                        )
+                                .Select(c=> c.a.i);
                 }
                 effective = true;
             }

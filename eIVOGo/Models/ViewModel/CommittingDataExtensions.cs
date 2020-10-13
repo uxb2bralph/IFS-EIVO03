@@ -103,6 +103,8 @@ namespace eIVOGo.Models.ViewModel
             item.CustomerServiceHotline = viewModel.CustomerServiceHotline;
             item.CustomerServiceEmail = viewModel.CustomerServiceEmail;
             //yuki加入客服專線 end
+            //營業人資訊
+            item.BusinessPersonInformation = @viewModel.BusinessPersonInformation;
             item.OrganizationStatus.SetToPrintInvoice = viewModel.SetToPrintInvoice;
             item.OrganizationStatus.SetToOutsourcingCS = viewModel.SetToOutsourcingCS;
             item.OrganizationStatus.InvoicePrintView = viewModel.SetToPrintInvoice == true ? viewModel.InvoicePrintView.GetEfficientString() : null;

@@ -1,0 +1,27 @@
+﻿@using BotDetect.Web.Mvc
+
+@{
+    ViewBag.Title = "Test";
+}
+
+<div>
+    <h4>驗證碼</h4>
+    @{
+        MvcCaptcha validbox = new MvcCaptcha("validatedigit");  //需跟controller設定一致
+        validbox.UserInputID = "CaptchaCode";
+
+        validbox.CodeLength = 4; //幾個字元
+        validbox.ImageSize = new System.Drawing.Size(120, 40); //調整寬高
+        validbox.SoundEnabled = false; //不顯示聲音辨識 此完整功能需付費 否則有一半機率你聽到的都是voice demo
+        validbox.UseSmallIcons = false; //不使用小的icon 言下之意就是正常版icon
+    }
+    @Html.Captcha(validbox)
+    @Html.TextBox("CaptchaCode", null, new { placeholder = "請輸入驗證碼" })
+</div>
+
+<div>
+    <button class="btn btn-primary" type="button" title="查詢" onclick="uiAPConsumerQuery.post();">查詢</button>
+</div>
+
+@{ Html.RenderPartial("~/Views/Shared/CommonScriptInclude.cshtml");}
+@{ Html.RenderPartial("~/Views/APConsumer/ScriptHelper/Common.cshtml");}

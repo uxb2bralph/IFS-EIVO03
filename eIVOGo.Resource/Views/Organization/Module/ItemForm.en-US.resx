@@ -231,6 +231,10 @@
     <value>Business person</value>
     <comment>營業人</comment>
   </data>
+  <data name="營業人資訊" xml:space="preserve">
+    <value>Business Person Information</value>
+    <comment>營業人資訊</comment>
+  </data>
   <data name="特種稅額計算之電子發票" xml:space="preserve">
     <value>Electronic invoice for special tax calculation</value>
     <comment>特種稅額計算之電子發票</comment>

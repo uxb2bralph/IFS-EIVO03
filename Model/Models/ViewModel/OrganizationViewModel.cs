@@ -69,6 +69,10 @@ namespace Model.Models.ViewModel
         /// </summary>
         public String CustomerServiceEmail { get; set; }
 
+        /// <summary>
+        /// 營業人資訊
+        /// </summary>
+        public String BusinessPersonInformation { get; set; }
     }
 
 }

@@ -503,10 +503,11 @@
             if ((_productItem.Length - _SecondCheckCount) / 43 % 2 == 0)
             {
                 <div class="br" style="page-break-after: always">&nbsp;</div>
-            }
-        }
-        Html.RenderPartial("~/Views/Module/SYS/Info/ServiceNotation.cshtml", _model.Organization);
-    }
+                        }
+                    }
+                    Html.RenderPartial("~/Views/Module/SYS/Info/ServiceNotation.cshtml", _model.Organization);
+                    Html.RenderPartial("~/Views/Notification/Module/NotifyCommissionedToReceiveInvoice.cshtml" ,_model.Organization);
+     }
 
 </body>
 </html>

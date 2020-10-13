@@ -61,6 +61,15 @@ namespace eIVOGo.Resource.Views.InvoiceProcess.ScriptHelper {
         }
         
         /// <summary>
+        ///   查詢類似 A4或B5需有統一編號資訊!! 的當地語系化字串。
+        /// </summary>
+        public static string A4或B5需有統一編號資訊__ {
+            get {
+                return ResourceManager.GetString("A4或B5需有統一編號資訊!!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 查詢 的當地語系化字串。
         /// </summary>
         public static string 查詢 {

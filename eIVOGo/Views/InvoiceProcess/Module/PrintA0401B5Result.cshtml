@@ -25,7 +25,7 @@
 }
 
     <div>
-        <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401_B5
+        <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401
             ? "PrintA0401_B5AsPDF"
             : "PrintC0401AsPDF","DataView",_viewModel))" target="_blank">@res.列印資料下載_PDF合併_</a>
             @{
@@ -43,7 +43,7 @@
             }
             <a href='javascript:$("").launchDownload("@( Url.Action("ZipInvoicePDF", "DataView") )", @( JsonConvert.SerializeObject(viewModel) ), "report", true);'>列印資料下載(ZIP)</a>
             <br />
-            <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401_B5
+            <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401
             ? "PrintA0401_B5"
             : "PrintC0401","DataView",_viewModel))" target="_blank">@res.網頁列印</a>
             @if (_viewModel.PrintBack == true)

@@ -1,0 +1,317 @@
+﻿
+@{
+    ViewBag.Title = "Common";
+}
+
+<script>
+    $(document).ready(function () {
+        $('#invoiceDate').val(new Date().toDateInputValue());
+
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+    })
+
+    var form = $("#myform");
+    form.validate();
+
+    $("input:text").on("input", function () {
+            if (form.valid()) {
+                $("#btn").prop("disabled", false);
+            }
+            else {
+                $("#btn").prop("disabled", true);
+            }
+    });
+
+    $('#invoiceDate').change(function () {
+        var date = $(this).val();
+        var reg = /^(\d{4})-(\d{2})-(\d{2})$/;
+        var arr = reg.exec(date);
+        if (!reg.test(date) && RegExp.$2 <= 12 && RegExp.$3 <= 31) {
+            $("#btn").prop("disabled", true);
+        } else {
+            if (form.valid()) {
+                $("#btn").prop("disabled", false);
+            }
+            else {
+                $("#btn").prop("disabled", true);
+            }            
+        }
+    });
+
+    @*function query1(s) {
+
+        var $formData = $('#myform').find('input,select,textarea').serializeObject();
+
+        $.ajax({
+            url: '@(Url.Action("Post", "APConsumer"))',
+            data: $formData,
+            type: 'get',
+            dataType: 'JSON',
+            success: function (response) {
+                var len = response.length;
+                for (var i = 0; i < len; i++) {
+                    var id = response[i].id;
+                    var username = response[i].username;
+                    var name = response[i].name;
+                    var email = response[i].email;
+
+                    var tr_str = "<tr>" +
+                        "<td align='center'>" + (i + 1) + "</td>" +
+                        "<td align='center'>" + username + "</td>" +
+                        "<td align='center'>" + name + "</td>" +
+                        "<td align='center'>" + email + "</td>" +
+                        "</tr>";
+
+                    $("#userTable tbody").append(tr_str);
+                }
+
+            }
+        });
+    }*@
+
+    function query(s) {
+        //alert(s);
+        //進後端查
+
+        var $formData = $('#myform').find('input,select,textarea').serializeObject();
+
+        $.post('@(Url.Action("Post", "APConsumer"))', $formData, function (response) {            
+
+            var results;
+            if (response.Result != undefined) {
+
+                showDetail();//顯示
+
+                //明細               
+                detail(response);
+
+            } else {   
+
+                showMask();//顯示
+
+                //查無資料                
+                noData(response);                
+            }
+        });
+    }
+
+    $('.button-close-x').click(function () {
+        $('.div-result-no-data').hide();
+    });
+
+    function detail(response) {
+        var r = response.Result;
+        var currency = (r.Currency==null?'':r.Currency);
+
+        var title = "<div class='div-result-no-data-title'>" +
+            "<button class = 'button-close-x'>X</button>" +
+            "查詢結果</div><hr>";
+
+        $('.div-result-detail').append(title);
+
+        //發票內容
+        var content = '<div class="WRAPPER">' +            
+            '<div class="BOX_A">' +
+            '發票號碼'+
+            '</div>'+
+            '<div class="BOX_B">' +
+            r.InvoiceNumber +
+            '</div>' +
+            '<div class="BOX_C">' +
+            '發票日期' +
+            '</div>' +
+            '<div class="BOX_D">' +
+            r.InvoiceDate+
+            '</div>' +
+            '<div class="BOX_A">' +
+            '金額' +
+            '</div>' +
+            '<div class="BOX_B">' +
+            r.TotalAmount +
+            '</div>' +
+            '<div class="BOX_C">' +
+            '幣別' +
+            '</div>' +
+            '<div class="BOX_D">' +
+            currency +
+            '</div>' +            
+        '<div class="BOX_A">' +
+            '發票狀態' +
+            '</div>' +
+            '<div class="BOX_B">' +
+            r.InvoiceStatus +
+            '</div>' +
+            '<div class="BOX_C">' +
+            '發票開立公司名稱' +
+            '</div>' +
+            '<div class="BOX_D">' +
+            r.CompanyName +
+            '</div>' +
+        '<div class="BOX_A">' +
+            '賣方統編' +
+            '</div>' +
+            '<div class="BOX_B">' +
+            r.ReceiptNo +
+            '</div>' +
+            '<div class="BOX_C">' +
+            '賣方地址' +
+            '</div>' +
+            '<div class="BOX_D">' +
+            r.Address +
+            '</div>' +
+            '<div class="BOX_A">' +
+            '備註' +
+            '</div>' +
+            '<div class="BOX_E">' +
+            r.Remarks +  
+            '<span style="color:white">'+
+            " <a class='print' href='javascript:printScreen(\".div-result-detail\")' target='_self'>列印</a>" +
+            '</span>'+
+            '</div>' +            
+        '</div>' 
+            ;
+        $('.div-result-detail').append(content);
+
+        //明細
+        var rr = response.Result.Results;
+        var items="";
+
+        rr.forEach(function (item, index, array) {
+            items = items+'<tr>' +
+                '<td>' +
+                item.ProductName +
+                '</td>' +
+                '<td style="text-align:right">' +
+                item.Quantity +
+                '</td>' +
+                '<td style="text-align:right">' +
+                item.UnitPrice +
+                '</td>' +
+                '<td style="text-align:right">' +
+                item.Subtotal +
+                '</td>' +
+                '</tr>';
+                
+        });
+
+        var detail = '<div class="page-container">' +
+            '<div class="panel panel-default">' +
+            '<div class="panel-heading">' +
+            '消費明細'+
+            '</div>' +
+            '<div class="consumer-detail">' +
+            '<div>' +
+            '<table class="table">' +
+            '  <thead>' +
+            '    <tr>' +
+            '      <th>產品名稱</th>' +
+            '      <th style="text-align:right">數量</th>' +
+            '      <th style="text-align:right">單價</th>' +
+            '      <th style="text-align:right">小計</th>' +
+            '    </tr>' +
+            '  </thead>' +
+            '  <tfoot style=" border-top: 1px solid DimGray;">' +
+            '    <tr>' +
+            '      <td></td>' +
+            '      <td></td>' +
+            '      <td></td>' +
+            '      <td style="text-align:right">共 ' + rr.length + ' 筆' +
+            '      </td > ' +
+            '    </tr>' +
+            '  </tfoot>' +
+            '  <tbody>' +
+                items+
+            '  </tbody>' +
+            '</table>' +
+            '</div>'+
+            '</div>' +
+            '</div>' +
+            '</div>' 
+            ;
+
+        $('.div-result-detail').append(detail);
+    }
+
+    function noData(response) {
+        var invoiceNo = response.InvoiceNumber;
+        var invoiceDate = response.InvoiceDate;
+
+        var title = "<div class='div-result-no-data-title'>" +
+            "<button class = 'button-close-x'>X</button>" +
+            "查無發票開立資料</div><hr>";
+
+        $('.div-result-no-data').append(title);
+
+        var content = "<div class='row' style='margin: 15px 0px;'><div id='divLeft'>發票號碼：" +
+            invoiceNo + "</div> " +
+            "<div id='divRight' >發票日期：" +
+            invoiceDate +
+
+            " <a class='print' href='javascript:printScreen(\".div-result-no-data\")' target='_self'>列印</a>" +
+            "</div></div>" +
+
+            "<div id='divRow'>發票狀態：查無發票訊息</div>"
+            ;
+        $('.div-result-no-data').append(content);
+    }
+
+    function printScreen(divName) {
+        var value = $(divName).html();
+        var printPage = window.open("", "Printing...", "");
+        printPage.document.open();
+        printPage.document.write("<HTML><head></head><BODY onload='window.print();window.close()'>");
+        printPage.document.write("<PRE>");
+        printPage.document.write(value);
+        printPage.document.write("</PRE>");
+        printPage.document.close("</BODY></HTML>");
+    }
+
+    //$("#btn").click(function () {
+    //    alert("Valid: " + form.valid());
+    //});
+
+    function reset(s) {
+        document.getElementById("myform").reset();
+    }
+
+    //兼容火狐、IE8
+    //显示遮罩层
+    function showMask() {
+        $(".mask").css("height", $(document).height());
+        $(".mask").css("width", $(document).width());
+        $(".mask").show();
+    }
+
+    function showDetail() {
+        $(".maskDetail").css("height", $(document).height());
+        $(".maskDetail").css("width", $(document).width());
+        $(".maskDetail").show();
+    }
+
+    //隐藏遮罩层
+    function hideMask() {
+        $(".mask").hide();
+    }
+
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+
+</script>
+

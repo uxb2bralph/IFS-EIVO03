@@ -78,6 +78,7 @@ namespace eIVOGo.Controllers
             return View("~/Views/Organization/Module/EditItem.cshtml", item);
         }
 
+        [ValidateInput(false)]
         public ActionResult CommitItem(OrganizationViewModel viewModel)
         {
 

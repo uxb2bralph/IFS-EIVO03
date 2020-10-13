@@ -167,11 +167,11 @@
                                                                                 ? _model.InvoiceAmountType.SalesAmount
                                                                                 : _model.InvoiceAmountType.TaxType == 4
                                                                                     ? _model.InvoiceAmountType.TotalAmount
-                                                                                    : 0)) & nbsp; &nbsp;
-                                零稅率銷售額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxType == (byte)2 ? _model.InvoiceAmountType.SalesAmount : 0)) & nbsp; &nbsp;
-                                免稅銷售額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxType == (byte)3 ? _model.InvoiceAmountType.SalesAmount : 0)) & nbsp; &nbsp;
-                                稅額：@(String.Format("{0:##,###,###,##0} ", _model.InvoiceBuyer.BuyerMark == 3 || _model.InvoiceBuyer.BuyerMark == 4 ? 0 : _model.InvoiceAmountType.TaxAmount)) & nbsp; &nbsp;
-                                }
+                                                                                    : 0)) &nbsp; &nbsp;
+                                零稅率銷售額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxType == (byte)2 ? _model.InvoiceAmountType.SalesAmount : 0)) &nbsp; &nbsp;
+                                免稅銷售額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxType == (byte)3 ? _model.InvoiceAmountType.SalesAmount : 0)) &nbsp; &nbsp;
+                                稅額：@(String.Format("{0:##,###,###,##0} ", _model.InvoiceBuyer.BuyerMark == 3 || _model.InvoiceBuyer.BuyerMark == 4 ? 0 : _model.InvoiceAmountType.TaxAmount)) &nbsp; &nbsp;
+                                
                                 備註：@(String.Join(";", _model.InvoiceDetails.Select(d => d.InvoiceProduct.InvoiceProductItem.FirstOrDefault().Remark)).Replace("\r\n", "<br/>").Replace("\n", "<br/>"))<br />
                                 退貨請憑電子發票證明聯辦理
                             </span>
@@ -208,7 +208,7 @@
                     <div class="content_box">
                         <p style="border-top: 1px dotted #808080;">
                             <span style="font-size: 12pt; font-weight: bold;">總計：@(_model.InvoiceDetails.Count)項&nbsp;&nbsp;金額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TotalAmount))</span><br />
-                            課稅別：@((_model.InvoiceAmountType.TaxType == (byte)2 || _model.InvoiceAmountType.TaxType == (byte)3) ? "TZ" : "TX")&nbsp;&nbsp;
+                            課稅別：@((_model.InvoiceAmountType.TaxType == (byte)2 || _model.InvoiceAmountType.TaxType == (byte)3) ? "TZ" : "TX") &nbsp;&nbsp;
                             @if (!_buyer.IsB2C())
                             {
                                 <span style="font-size: 12pt; font-weight: bold;">
@@ -216,10 +216,10 @@
                                                                                           ? _model.InvoiceAmountType.SalesAmount
                                                                                           : _model.InvoiceAmountType.TaxType == 4
                                                                                               ? _model.InvoiceAmountType.TotalAmount
-                                                                                              : 0)) & nbsp; &nbsp;
-                                    零稅率銷售額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxType == (byte)2 ? _model.InvoiceAmountType.SalesAmount : 0)) & nbsp; &nbsp;
-                                    免稅銷售額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxType == (byte)3 ? _model.InvoiceAmountType.SalesAmount : 0)) & nbsp; &nbsp;
-                                    稅額：@(String.Format("{0:##,###,###,##0} ", _model.InvoiceBuyer.BuyerMark == 3 || _model.InvoiceBuyer.BuyerMark == 4 ? 0 : _model.InvoiceAmountType.TaxAmount)) & nbsp; &nbsp;
+                                                                                              : 0)) &nbsp; &nbsp;
+                                    零稅率銷售額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxType == (byte)2 ? _model.InvoiceAmountType.SalesAmount : 0)) &nbsp; &nbsp;
+                                    免稅銷售額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxType == (byte)3 ? _model.InvoiceAmountType.SalesAmount : 0)) &nbsp; &nbsp;
+                                    稅額：@(String.Format("{0:##,###,###,##0} ", _model.InvoiceBuyer.BuyerMark == 3 || _model.InvoiceBuyer.BuyerMark == 4 ? 0 : _model.InvoiceAmountType.TaxAmount)) &nbsp; &nbsp;
                                 </span>
                             }
                             備註：@(String.Join(";", _model.InvoiceDetails.Select(d => d.InvoiceProduct.InvoiceProductItem.FirstOrDefault().Remark)).Replace("\r\n", "<br/>").Replace("\n", "<br/>"))<br />
@@ -278,10 +278,10 @@
                                                                                       ? _model.InvoiceAmountType.SalesAmount
                                                                                       : _model.InvoiceAmountType.TaxType == 4
                                                                                           ? _model.InvoiceAmountType.TotalAmount
-                                                                                          : 0)) & nbsp; &nbsp;
-                                零稅率銷售額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxType == (byte)2 ? _model.InvoiceAmountType.SalesAmount : 0)) & nbsp; &nbsp;
-                                免稅銷售額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxType == (byte)3 ? _model.InvoiceAmountType.SalesAmount : 0)) & nbsp; &nbsp;
-                                稅額：@(String.Format("{0:##,###,###,##0} ", _model.InvoiceBuyer.BuyerMark == 3 || _model.InvoiceBuyer.BuyerMark == 4 ? 0 : _model.InvoiceAmountType.TaxAmount)) & nbsp; &nbsp;
+                                                                                          : 0)) &nbsp; &nbsp;
+                                零稅率銷售額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxType == (byte)2 ? _model.InvoiceAmountType.SalesAmount : 0)) &nbsp; &nbsp;
+                                免稅銷售額：@(String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxType == (byte)3 ? _model.InvoiceAmountType.SalesAmount : 0)) &nbsp; &nbsp;
+                                稅額：@(String.Format("{0:##,###,###,##0} ", _model.InvoiceBuyer.BuyerMark == 3 || _model.InvoiceBuyer.BuyerMark == 4 ? 0 : _model.InvoiceAmountType.TaxAmount)) &nbsp; &nbsp;
                             </span>
                         }
                         備註：@(String.Join(";", _model.InvoiceDetails.Select(d => d.InvoiceProduct.InvoiceProductItem.FirstOrDefault().Remark)).Replace("\r\n", "<br/>").Replace("\n", "<br/>"))<br />

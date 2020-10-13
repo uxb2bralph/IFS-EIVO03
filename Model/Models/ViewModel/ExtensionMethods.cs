@@ -66,6 +66,7 @@ namespace Model.Models.ViewModel
                 viewModel.IgnoreDuplicatedDataNumber = item.OrganizationStatus.IgnoreDuplicatedDataNumber;
                 viewModel.CustomerServiceHotline = item.CustomerServiceHotline;
                 viewModel.CustomerServiceEmail = item.CustomerServiceEmail;
+                viewModel.BusinessPersonInformation = item.BusinessPersonInformation;
             }
             return viewModel;
         }

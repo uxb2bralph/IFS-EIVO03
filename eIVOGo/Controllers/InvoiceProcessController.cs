@@ -702,14 +702,14 @@ namespace eIVOGo.Controllers
             ViewBag.ViewModel = viewModel;
             var profile = HttpContext.GetUser();
 
-            if (viewModel.ProcessType == Naming.InvoiceProcessType.A0401)
+            if (viewModel.ProcessType == Naming.InvoiceProcessType.A0401 && viewModel.PaperStyle=="A4")
             {
                 profile.EnqueueInvoicePrint(models, chkItem);
                 
                 //printUrl = "~/DataView/PrintA0401AsPDF";
                 //ViewBag.PrintView = "~/DataView/PrintA0401";
             }
-            else if(viewModel.ProcessType == Naming.InvoiceProcessType.A0401_B5)
+            else if(viewModel.ProcessType == Naming.InvoiceProcessType.A0401 && viewModel.PaperStyle == "B5")
             {
                 profile.EnqueueInvoicePrint(models, chkItem);
                 return View("~/Views/InvoiceProcess/Module/PrintA0401B5Result.cshtml");

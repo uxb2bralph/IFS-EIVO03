@@ -27,6 +27,7 @@
       <Column Name="ContactTitle" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
       <Column Name="CustomerServiceHotline" Storage="_Property1" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
       <Column Name="CustomerServiceEmail" Type="System.String" DbType="NVarChar(512)" CanBeNull="true" />
+      <Column Name="BusinessPersonInformation" Type="System.String" DbType="NVarchar(2048)" CanBeNull="true" />
       <Association Name="Organization_OrganizationCategory" Member="OrganizationCategory" ThisKey="CompanyID" OtherKey="CompanyID" Type="OrganizationCategory" />
       <Association Name="Organization_InvoiceWelfareAgency" Member="InvoiceWelfareAgencies" ThisKey="CompanyID" OtherKey="SellerID" Type="InvoiceWelfareAgency" />
       <Association Name="Organization_WelfareAgency" Member="WelfareAgency" ThisKey="CompanyID" OtherKey="AgencyID" Type="WelfareAgency" Cardinality="One" />

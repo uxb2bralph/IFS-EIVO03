@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <div class="btn-group btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-default" title="圖形驗證碼" style="padding: 0;">
+            <img eCaptcha="captcha-image" alt="圖形驗證碼" style="width: 102px; height: 34px;" data-src="/APCONSUMER/images/captcha">
+        </button>
+        <button id="captcha-refresh-button" type="button" class="btn btn-default" title="更換圖形驗證碼" data-ng-click="$ctrl.refresh(true)" data-ng-init="eCaptcha.refresh()">
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+        </button>
+        <button id="captcha-audio-play-button" type="button" class="btn btn-default" title="語音" data-ng-click="$ctrl.play()">
+            <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
+        </button>
+    </div>
+    <audio eCaptcha="captcha-audio">
+        <span>您的瀏覽器不支援</span>
+        <code>audio</code>
+        <span>元素，無法播放聲音。</span>
+        <source type="audio/mpeg" data-src="/APCONSUMER/images/captcha/captcha.mp3">
+    </audio>
+</body>
+</html>

@@ -1,0 +1,11 @@
+﻿@using InvoiceCarrierHome.Models.ViewModel
+@model InvoiceCarrierHome.Models.ViewModel.APConsumerViewModel
+
+@{
+    ViewBag.Title = "Detail";
+    APConsumerViewModel _model = this.Model;
+}
+
+<h2>Detail</h2>
+<input type="text">@_model.Results.InvoiceDate
+

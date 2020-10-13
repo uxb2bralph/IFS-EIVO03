@@ -1,0 +1,155 @@
+﻿@using BotDetect.Web.Mvc
+@using InvoiceCarrierHome.Models.ViewModel
+@model InvoiceCarrierHome.Models.ViewModel.APConsumerViewModel
+
+@{
+    ViewBag.Title = "Index";
+    APConsumerViewModel _model = (APConsumerViewModel)this.Model;
+}
+<head>
+    @Styles.Render("~/styles/style.css")
+    @Styles.Render("~/styles/theme.css")
+    <link href="@BotDetect.Web.CaptchaUrls.Absolute.LayoutStyleSheetUrl"
+          rel="stylesheet" type="text/css" />
+    @Scripts.Render("~/Scripts/APConsumer.js")
+</head>
+<li class="ng-scope" title="一般性發票查詢">
+    <a href="/APConsumer/Index">一般性發票查詢</a>
+</li>
+<form id="myform" action="Index" method="post">
+    <div class="env_bannerTitle">
+        <img src="../images/titlePrev.png?v=ea55e7865c5f6e4d7553bdd2d7222f32" alt="" class="env_PrevBg">
+        <div class="wrap">
+            <h3 menu-name="BTC601W">一般性發票查詢</h3>
+        </div>
+        <img src="../images/titleNext.png?v=0be56bb5ff9b31aa4ec0ea54de8d6960" alt="" class="env_NextBg">
+    </div>
+
+    <div class="text-center">
+        <p>
+            <span class="env_red">*</span>
+            <span>為必填(選)欄位，不能為空白</span>
+        </p>
+    </div>
+    <fieldset>
+        <div class="panel-body">
+            <div class="form-horizontal env_form">
+                <!-- 發票號碼 -->
+                <div class="form-group">
+                    <label for="invoiceNumber" class="col-sm-2 control-label">
+                        <span class="env_red">*</span>
+                        <span>發票號碼</span>
+                    </label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required ng-valid-pattern ng-valid-maxlength" id="invoiceNumber" name="invoiceNumber" title="發票號碼" data-ng-model="btc601wDto.invoiceNumber" data-ng-pattern="[A-Z]{2}[0-9]{8}" maxlength="10" minlength="10" required>
+                    </div>
+                    <div class="col-sm-7 help-block">
+                        <small class="text-danger">前2碼英文大寫，後8碼數字(AB00000001)</small>
+                    </div>
+                </div>
+                <!-- 發票日期 -->
+                <div class="form-group">
+                    <label for="invoiceDate" class="col-sm-2 control-label">
+                        <span class="env_red">*</span>
+                        <span>發票日期</span>
+                    </label>
+                    <div class="col-sm-3">
+                        <input type="date" id="invoiceDate" name="invoiceDate" class="form-control ng-valid Wdate ng-not-empty ng-valid-required ng-dirty ng-valid-parse ng-touched" title="發票日期" required>
+                    </div>
+                    <div class="col-sm-3 help-block">
+                        <small class="text-danger">請輸入日期格式(ex: 2020/1/1)</small>
+                    </div>
+                </div>
+                <!-- 個人識別碼 -->
+                <div class="form-group">
+                    <label for="userCode" class="col-sm-2 control-label">
+                        <span>個人識別碼</span>
+                    </label>
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" aria-describedby="basic-addon2" class="form-control ng-pristine ng-untouched ng-valid ng-empty ng-valid-pattern" id="userCode" name="userCode" title="個人識別碼" data-ng-model="btc601wDto.userCode" data-ng-pattern=".{4}" maxlength="4" minlength="4">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary etooltip">
+                                    <span class="glyphicon glyphicon-info-sign">
+                                        <img src="../images/infor-text.png?v=f978046db196f56648259ab95c09da0e" alt="" class="etooltiptext">
+                                    </span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-7 help-block">
+                        <small class="text-danger">業者通知之識別碼前4碼(ex: test)</small>
+                    </div>
+                </div>
+                <!-- 四位隨機碼 -->
+                <div class="form-group">
+                    <label for="randomCode" class="col-sm-2 control-label">
+                        <span>4位隨機碼</span>
+                    </label>
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty ng-valid-pattern" aria-describedby="basic-addon2" id="randomCode" name="randomCode" title="4位隨機碼" data-ng-model="btc601wDto.randomCode" data-ng-pattern="[0-9]{4}" maxlength="4" minlength="4">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary etooltip">
+                                    <span class="glyphicon glyphicon-info-sign">
+                                        <img src="../images/reanomCode.jpg?v=1e72edb8f423bb9118480a1b040c57a2" alt="" class="etooltiptext">
+                                    </span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 help-block">
+                        <small class="text-danger">請輸入電子發票證明聯內的4位隨機碼(ex: 1234)</small>
+                    </div>
+                </div>
+                <!-- 圖形驗證碼 -->
+                <div class="form-group">
+                    <label for="imagecode" class="col-sm-2 control-label">
+                        <span class="env_red">*</span>
+                        <span>圖形驗證碼</span>
+                    </label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required" id="imagecode" name="imagecode" title="圖形驗證碼" data-ng-model="btc601wDto.imagecode" maxlength="4" minlength="4" required />
+                    </div>
+                    @{
+                        MvcCaptcha validbox = new MvcCaptcha("validatedigit");  //需跟controller設定一致
+                        validbox.CodeLength = 4; //幾個字元
+                        validbox.ImageSize = new System.Drawing.Size(120, 40); //調整寬高
+                        validbox.SoundEnabled = false; //不顯示聲音辨識 此完整功能需付費 否則有一半機率你聽到的都是voice demo
+                        validbox.UseSmallIcons = false; //不使用小的icon 言下之意就是正常版icon
+                        validbox.UserInputID = "imagecode";
+                    }
+
+                    <div class="col-sm-7">
+                        <e-captcha trigger-refresh="eCaptchaSettings.triggerRefresh" class="ng-isolate-scope">
+                            <div class="verify">
+                                @Html.Captcha(validbox)
+                            </div>
+                        </e-captcha>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button id="btn" class="btn btn-primary" type="button" title="查詢" onclick="query(true);" disabled="disabled">查詢</button>
+                        <button class="btn btn-primary" type="button" title="清除" onclick="reset();">清除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mask">
+            <div class="div-result-no-data" id="div-result-no-data">
+
+
+            </div>
+        </div>
+        <div class="maskDetail">
+            <div class="div-result-detail">
+
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+@{ Html.RenderPartial("~/Views/APConsumer/ScriptHelper/Common.cshtml");}
+
+

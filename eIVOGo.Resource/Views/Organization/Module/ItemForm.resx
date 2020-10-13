@@ -233,6 +233,10 @@
     <value>營業人</value>
     <comment>營業人</comment>
   </data>
+  <data name="營業人資訊" xml:space="preserve">
+    <value>營業人資訊</value>
+    <comment>營業人資訊</comment>
+  </data>
   <data name="特種稅額計算之電子發票" xml:space="preserve">
     <value>特種稅額計算之電子發票</value>
     <comment>特種稅額計算之電子發票</comment>
