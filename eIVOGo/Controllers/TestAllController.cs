@@ -22,6 +22,7 @@ using Model.DataEntity;
 using Model.Helper;
 using Model.InvoiceManagement;
 using Model.Locale;
+using Model.Models.ViewModel;
 using Model.Security.MembershipManagement;
 using Utility;
 
@@ -57,7 +58,7 @@ namespace eIVOGo.Controllers
                 EIVOPlatformFactory.ResetBusyCount();
             }
             EIVOPlatformFactory.Notify();
-            return Content(DateTime.Now.ToString());
+            return Json(EIVOPlatformFactory.CurrentStatus, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult MatchAttachment()
@@ -123,6 +124,50 @@ namespace eIVOGo.Controllers
 
         }
 
+        public ActionResult CheckInvoiceNo(POSDeviceViewModel viewModel)
+        {
+            //if (String.IsNullOrEmpty(Request.ContentType) && String.IsNullOrEmpty(Request.Params["Query_String"]))
+            //{
+            //    using (StreamReader reader = new StreamReader(Request.InputStream, Request.ContentEncoding))
+            //    {
+            //        viewModel = JsonConvert.DeserializeObject<POSDeviceViewModel>(reader.ReadToEnd());
+            //    }
+            //}
 
+            /**
+                Http Header
+                Seed: RANDOM[16]
+                Authorization: Base64(ToHexString(SHA256([Vendor 統編] + [Activation Key] + [Seed])))
+
+                {
+	                "SellerID": "[商家統編]",
+	                "Booklet": 1
+                }
+             */
+
+            Request.SaveAs(Path.Combine(Logger.LogDailyPath, String.Format("{0}.txt", DateTime.Now.Ticks)), true);
+
+            if (viewModel.Booklet.HasValue)
+            {
+                viewModel.quantity = viewModel.Booklet * 50;
+            }
+
+            viewModel.Seed = Request.Headers["Seed"].GetEfficientString();
+            viewModel.Authorization = Request.Headers["Authorization"].GetEfficientString();
+
+            String reason;
+            var result = models.CheckAvailableInterval(viewModel,out reason);
+
+            return Json(new
+            {
+                result = result,
+                message = reason,
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Echo(POSDeviceViewModel viewModel)
+        {
+            return Json(viewModel);
+        }
     }
 }

@@ -4,20 +4,16 @@
 <%@ Import Namespace="eIVOGo.Helper" %>
 <%@ Import Namespace="eIVOGo.Controllers" %>
 <%@ Import Namespace="Model.DataEntity" %>
-<%@ Register Src="~/Views/Module/HidePostData.ascx" TagPrefix="uc1" TagName="HidePostData" %>
-<%@ Register Src="~/Views/Module/InvoiceSummaryList.ascx" TagPrefix="uc2" TagName="InvoiceSummaryList" %>
 
 <asp:Content ID="header" ContentPlaceHolderID="headContent" runat="server">
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
-
-    <uc1:HidePostData runat="server" ID="HidePostData" />
-    <uc2:InvoiceSummaryList runat="server" ID="InvoiceSummaryList" />
-
+    <% 
+       Html.RenderPartial("~/Views/Module/HidePostData.ascx");
+       Html.RenderPartial("~/Views/Module/InvoiceSummaryList.ascx", models); 
+    %>
 </asp:Content>
-
-
-<%--<script runat="server">
+<script runat="server">
 
     ModelSource<InvoiceItem> models;
     protected override void OnInit(EventArgs e)
@@ -35,4 +31,4 @@
         base.Dispose();
     }
 
-</script>--%>
+</script>

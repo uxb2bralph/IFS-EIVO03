@@ -1,52 +1,47 @@
-@using eIVOGo.Resource.Views.WinningNumber.ScriptHelper
 
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
 <script>
     var uiWinningNo;
     $(function () {
+        var $postForm;
         uiWinningNo = {
             inquire: function (pageNum, onPaging) {
-                //alert('test');
-                var year = $('input[name="Year"]').val();
-                var periodno = $('input[name="PeriodNo"]').val();
-                var sort = $('input[name="sort"]').serializeObject().sort;
-                var _Object = { Year: year, PeriodNo: periodno, PageIndex: pageNum, Sort: sort };
-
                 if (pageNum) {
                     $('input[name="pageIndex"]').val(pageNum);
-                    if (sort != null) {
-                        _Object.Sort = sort;
-                    }
                 } else {
                     $('input[name="sort"]').remove();
                 }
-
-                $.ajax({
-                type: "POST",
-                    url: '@Url.Action("Inquire","WinningNumber", new { resultAction = ViewBag.ResultAction, obj="_Object"})',
-                beforeSubmit: function () {
+                $('#theForm').ajaxForm({
+                    url: "@(Url.Action("Inquire","WinningNumber",new { resultAction = ViewBag.ResultAction }))",
+                    beforeSubmit: function () {
                         showLoading();
                     },
-                data: _Object,
-                dataType: "text",
-                success: function (data) {
-                    if (data) {
-                        if (onPaging) {
-                            onPaging(data);
-                        } else {
-                            if (uiWinningNo.$result)
-                                uiWinningNo.$result.remove();
-                            uiWinningNo.$result = $(data);
-                            $('.queryAction').after(uiWinningNo.$result);
+                    success: function (data) {
+                        if (data) {
+                            if (onPaging) {
+                                onPaging(data);
+                            } else {
+                                if (uiWinningNo.$result)
+                                    uiWinningNo.$result.remove();
+                                uiWinningNo.$result = $(data);
+                                $('.queryAction').after(uiWinningNo.$result);
+                            }
                         }
+                        hideLoading();
+                    },
+                    error: function () {
+                        hideLoading();
                     }
-                    hideLoading();
-                },
-                error: function (error) {
-                    hideLoading();
-                }
-                });
-
-
+                }).submit();
             },
             editItem: function (value) {
                 var event = event || window.event;
@@ -65,12 +60,12 @@
                 });
             },
             deleteItem: function (value) {
-                if (confirm('@Common.確定刪除此筆資料')) {
+                if (confirm('確定刪除此筆資料?')) {
                     var event = event || window.event;
                     var $tr = $(event.target).closest('tr');
                     $.post('@(Url.Action("DeleteItem","WinningNumber"))', { 'id': value }, function (data) {
                         if (data.result) {
-                            alert('@Common.資料已刪除')
+                            alert('資料已刪除!!')
                             $tr.remove();
                             uiWinningNo.inquire();
                         } else {
@@ -89,7 +84,7 @@
                         if ($data.is('tr')) {
                             $tr.before($data);
                             if (value) {
-                                alert('@Common.資料已更新');
+                                alert('資料已更新!!');
                                 $tr.remove();
                             }
                         } else {
@@ -98,8 +93,6 @@
                         }
                     }
                 });
-
-                
             },
             showItem: function (value) {
                 var event = event || window.event;

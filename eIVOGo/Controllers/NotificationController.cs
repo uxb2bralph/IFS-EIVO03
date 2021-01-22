@@ -83,7 +83,7 @@ namespace eIVOGo.Controllers
                 return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
 
-            return View(item);
+            return View("~/Views/Notification/IssueA0401.cshtml", item);
         }
 
         public ActionResult CommissionedToReceiveA0401(DocumentQueryViewModel viewModel)
@@ -156,7 +156,7 @@ namespace eIVOGo.Controllers
             if (item == null)
                 return result;
 
-            return View("IssueC0401", item);
+            return View("~/Views/Notification/IssueC0401.cshtml", item);
         }
 
         public ActionResult IssueC0501(DocumentQueryViewModel viewModel)

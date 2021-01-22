@@ -1,37 +1,32 @@
-﻿@using System.IO
+
+@using System.IO
 @using System.Linq.Expressions
-@using System.Web.Mvc.Html
-@using System.Web.Mvc
+
+
 @using eIVOGo.Helper
 @using Model.Locale
 @using eIVOGo.Models.ViewModel
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
-@using eIVOGo.Resource.Views.Home.Module
-
 @{
+
     ModelStateDictionary _modelState;
     ModelSource<InvoiceItem> models;
 
     _modelState = (ModelStateDictionary)ViewBag.ModelState;
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
 }
-
 <ul>
     @{ var count = models.GetTable<AuthorizeToVoid>().Count();}
     @if (count > 0)
     {
-    <li>
-        <a href="@(Url.Action("AllowToVoid","InvoiceProcess"))">
-            <i class="fa fa-hand-o-right" aria-hidden="true"></i>
-            @TodoList.營業人已送出 (@count)
-            @if (count > 1)
-            {@TodoList.複數筆註銷發票待核准} 
-            else 
-            { @TodoList.單數筆註銷發票待核准}
-        </a>
-    </li>
+        <li>
+            <a href="@(Url.Action("AllowToVoid", "InvoiceProcess"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>營業人已送出@(count)筆註銷發票待核准</a>
+        </li>
     }
 </ul>
+
+
+
 

@@ -27,129 +27,36 @@ namespace Model.InvoiceManagement.Validator
         internal InvoiceFieldIndex InvoiceField = new InvoiceFieldIndex { };
         internal class InvoiceFieldIndex
         {
-            /// <summary>
-            /// 發票號碼
-            /// </summary>
             public int Invoice_No { get; internal set; } = 0;
-            /// <summary>
-            /// 發票日期
-            /// </summary>
             public int Invoice_Date { get; internal set; } = 1;
-            /// <summary>
-            /// 訂單編號
-            /// </summary>
             public int Data_ID { get; internal set; } = 2;
-            /// <summary>
-            /// 訂單日期
-            /// </summary>
             public int Data_Date { get; internal set; } = 3;
-            /// <summary>
-            /// 賣方統編
-            /// </summary>
             public int Seller_ID { get; internal set; } = 4;
-            /// <summary>
-            /// 買方名稱
-            /// </summary>
             public int Buyer_Name { get; internal set; } = 5;
-            /// <summary>
-            /// 買方統編
-            /// </summary>
             public int Buyer_ID { get; internal set; } = 6;
-            /// <summary>
-            /// 買受人註記
-            /// </summary>
             public int Buyer_Mark { get; internal set; } = 7;
-            /// <summary>
-            /// 通關方式註記
-            /// </summary>
             public int Customs_Clearance_Mark { get; internal set; } = 8;
-            /// <summary>
-            /// 客戶編號
-            /// </summary>
             public int Customer_ID { get; internal set; } = 9;
-            /// <summary>
-            /// 客戶名稱
-            /// </summary>
             public int Contact_Name { get; internal set; } = 10;
-            /// <summary>
-            /// 信箱
-            /// </summary>
             public int EMail { get; internal set; } = 11;
-            /// <summary>
-            /// 地址
-            /// </summary>
             public int Address { get; internal set; } = 12;
-            /// <summary>
-            /// 電話
-            /// </summary>
             public int Phone { get; internal set; } = 13;
-            /// <summary>
-            /// 應稅銷售額
-            /// </summary>
             public int Sales_Amount { get; internal set; } = 14;
-            /// <summary>
-            /// 免稅銷售額
-            /// </summary>
             public int Free_Tax_Sales_Amount { get; internal set; } = 15;
-            /// <summary>
-            /// 零稅銷售額
-            /// </summary>
             public int Zero_Tax_Sales_Amount { get; internal set; } = 16;
-            /// <summary>
-            /// 發票類別
-            /// </summary>
             public int Invoice_Type { get; internal set; } = 17;
-            /// <summary>
-            /// 課稅別
-            /// </summary>
             public int Tax_Type { get; internal set; } = 18;
-            /// <summary>
-            /// 稅率
-            /// </summary>
             public int Tax_Rate { get; internal set; } = 19;
-            /// <summary>
-            /// 營業稅額
-            /// </summary>
             public int Tax_Amount { get; internal set; } = 20;
-            /// <summary>
-            /// 含稅金額
-            /// </summary>
             public int Total_Amount { get; internal set; } = 21;
-            /// <summary>
-            /// 幣別
-            /// </summary>
             public int Currency { get; internal set; } = 22;
-            /// <summary>
-            /// 列印註記
-            /// </summary>
             public int Print_Mark { get; internal set; } = 23;
-            /// <summary>
-            /// 載具類別號碼
-            /// </summary>
             public int Carrier_Type { get; internal set; } = 24;
-            /// <summary>
-            /// 載具號碼id
-            /// </summary>
             public int Carrier_Id1 { get; internal set; } = 25;
-            /// <summary>
-            /// 載具隱碼id
-            /// </summary>
             public int Carrier_Id2 { get; internal set; } = 26;
-            /// <summary>
-            /// 捐贈註記
-            /// </summary>
             public int Donate_Mark { get; internal set; } = 27;
-            /// <summary>
-            /// 發票捐贈對象統一編號
-            /// </summary>
             public int NPOBAN { get; internal set; } = 28;
-            /// <summary>
-            /// 發票防偽隨機碼
-            /// </summary>
             public int Random_Number { get; internal set; } = 29;
-            /// <summary>
-            /// 總備註
-            /// </summary>
             public int Main_Remark { get; internal set; } = 30;
 
         }
@@ -157,46 +64,18 @@ namespace Model.InvoiceManagement.Validator
         internal DetailsFieldIndex DetailsField = new DetailsFieldIndex { } ;
         internal class DetailsFieldIndex
         {
-            /// <summary>
-            /// 發票號碼
-            /// </summary>
             public int Invoice_No { get; internal set; } = 0;
-            /// <summary>
-            /// 訂單編號
-            /// </summary>
             public int Data_ID { get; internal set; } = 1;
-            /// <summary>
-            /// 品名
-            /// </summary>
             public int Description { get; internal set; } = 2;
-            /// <summary>
-            /// 數量
-            /// </summary>
             public int Quantity { get; internal set; } = 3;
-            /// <summary>
-            /// 單位
-            /// </summary>
             public int Unit { get; internal set; } = 4;
-            /// <summary>
-            /// 單價
-            /// </summary>
             public int Unit_Price { get; internal set; } = 5;
-            /// <summary>
-            /// 金額
-            /// </summary>
             public int Amount { get; internal set; } = 6;
-            /// <summary>
-            /// 課稅別
-            /// </summary>
             public int Item_Tax_Type { get; internal set; } = 7;
-            /// <summary>
-            /// 單一欄位備註
-            /// </summary>
             public int Remark { get; internal set; } = 8;
 
         }
 
-        protected Naming.InvoiceProcessType processType;
         public InvoiceDataSetValidator(GenericManager<EIVOEntityDataContext> mgr, Organization owner, Naming.InvoiceProcessType processType) : base(mgr, owner)
         {
             this.processType = processType;
@@ -238,7 +117,7 @@ namespace Model.InvoiceManagement.Validator
                     InvoiceField.NPOBAN = 26;
                     InvoiceField.Random_Number = 27;
                     InvoiceField.Main_Remark = 28;
-                    
+
                     DetailsField.Data_ID = 0;
                     DetailsField.Description = 1;
                     DetailsField.Quantity = 2;
@@ -270,6 +149,8 @@ namespace Model.InvoiceManagement.Validator
                     DetailsField.Remark = 6;
 
                     break;
+
+                case Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer:
                 case Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer:
                     InvoiceField.Invoice_No = 0;
                     InvoiceField.Invoice_Date = 1;
@@ -355,11 +236,14 @@ namespace Model.InvoiceManagement.Validator
         string PrintMark() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? "N" : GetString(InvoiceField.Print_Mark); }
         string MainRemark() { return GetString(InvoiceField.Main_Remark); }
         DateTime? InvoiceDate() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? null : GetData<DateTime>(InvoiceField.Invoice_Date); }
-        String InvoiceNo() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? null : GetString(InvoiceField.Invoice_No); }
+        String InvoiceNo()
+        {
+            return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE || processType== Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC ? null : GetString(InvoiceField.Invoice_No);
+        }
         String DataID() { return GetString(InvoiceField.Data_ID); }
         DateTime? DataDate() { return GetData<DateTime>(InvoiceField.Data_Date); }
         String SellerID() { return GetString(InvoiceField.Seller_ID); }
-        String BuyerID() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? null : GetString(InvoiceField.Buyer_ID); }
+        String BuyerID() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? "0000000000" : GetString(InvoiceField.Buyer_ID).GetEfficientString() ?? "0000000000"; }
         String BuyerName() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? null : GetString(InvoiceField.Buyer_Name); }
         String CarrierType() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? __CROSS_BORDER_MURCHANT : GetString(InvoiceField.Carrier_Type); }
         String CarrierId1() { return GetString(InvoiceField.Carrier_Id1); }
@@ -530,7 +414,9 @@ namespace Model.InvoiceManagement.Validator
                     {
                         OwnerID = _owner.CompanyID
                     },
-                    ProcessType = (int)Naming.InvoiceProcessType.C0401,
+                    ProcessType = processType== Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer
+                        ? (int)Naming.InvoiceProcessType.A0401
+                        : (int)Naming.InvoiceProcessType.C0401,
                 },
                 DonateMark = _donation == null ? "0" : "1",
                 InvoiceType = InvoiceTypeIndication == Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 
@@ -592,7 +478,7 @@ namespace Model.InvoiceManagement.Validator
                     }
                     else
                     {
-                        trackNoMgr = new TrackNoManager(_mgr, _seller.CompanyID);
+                        trackNoMgr = new TrackNoManager(_models, _seller.CompanyID);
                         if(InvoiceTypeIndication!=Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
                         {
                             trackNoMgr.ApplyInvoiceTypeIndication(InvoiceTypeIndication);
@@ -632,19 +518,13 @@ namespace Model.InvoiceManagement.Validator
                     return new Exception(String.Format(MessageResources.AlertInvoiceNumber, InvoiceNo()));
                 }
 
-                _newItem.TrackCode = InvoiceNo().Substring(0, 2);
-                _newItem.No = InvoiceNo().Substring(2);
-                int periodNo = (invoiceDate.Value.Month + 1) / 2;
-
-                if (_seller.OrganizationStatus?.EnableTrackCodeInvoiceNoValidation == true)
+                var ex = checkInvoiceNo(_newItem, invoiceDate.Value, InvoiceNo());
+                if (ex != null)
                 {
-                    if (!_mgr.GetTable<InvoiceTrackCode>().Any(t => t.Year == invoiceDate.Value.Year && t.PeriodNo == periodNo && t.TrackCode == _newItem.TrackCode))
-                    {
-                        return new Exception(String.Format(MessageResources.InvalidTrackCode, InvoiceNo()));
-                    }
+                    return ex;
                 }
 
-                var currentItem = _mgr.GetTable<InvoiceItem>().Where(i => i.TrackCode == _newItem.TrackCode && i.No == _newItem.No
+                var currentItem = _models.GetTable<InvoiceItem>().Where(i => i.TrackCode == _newItem.TrackCode && i.No == _newItem.No
                             && i.InvoiceDate >= periodStart && i.InvoiceDate < periodStart.AddMonths(2)).FirstOrDefault();
 
                 if (currentItem != null)
@@ -663,7 +543,7 @@ namespace Model.InvoiceManagement.Validator
 
                 if (_seller.OrganizationStatus?.EnableTrackCodeInvoiceNoValidation == true)
                 {
-                    TrackNoManager trackMgr = new TrackNoManager(_mgr, _seller.CompanyID);
+                    TrackNoManager trackMgr = new TrackNoManager(_models, _seller.CompanyID);
                     var item = trackMgr.GetAppliedInterval(invoiceDate.Value, _newItem.TrackCode, int.Parse(_newItem.No));
 
                     if (item == null)
@@ -689,7 +569,7 @@ namespace Model.InvoiceManagement.Validator
                 return new Exception(String.Format(MessageResources.AlertDataNumberLimitedLength, DataID()));
             }
 
-            var po = _mgr.GetTable<InvoicePurchaseOrder>().Where(d => d.OrderNo == DataID()
+            var po = _models.GetTable<InvoicePurchaseOrder>().Where(d => d.OrderNo == DataID()
                     && d.InvoiceItem.SellerID == _seller.CompanyID).FirstOrDefault();
             if (po!=null)
             {
@@ -733,7 +613,7 @@ namespace Model.InvoiceManagement.Validator
             if (_seller == null || _seller.ReceiptNo != SellerID())
             {
 
-                _seller = _mgr.GetTable<Organization>().Where(o => o.ReceiptNo == SellerID()).FirstOrDefault();
+                _seller = _models.GetTable<Organization>().Where(o => o.ReceiptNo == SellerID()).FirstOrDefault();
                 if (_seller == null)
                 {
                     return new Exception(String.Format(MessageResources.AlertInvalidSeller, SellerID()));
@@ -741,7 +621,7 @@ namespace Model.InvoiceManagement.Validator
 
                 ExpectedSeller = _seller;
 
-                if (_seller.CompanyID != _owner.CompanyID && !_mgr.GetTable<InvoiceIssuerAgent>().Any(a => a.AgentID == _owner.CompanyID && a.IssuerID == _seller.CompanyID))
+                if (_seller.CompanyID != _owner.CompanyID && !_models.GetTable<InvoiceIssuerAgent>().Any(a => a.AgentID == _owner.CompanyID && a.IssuerID == _seller.CompanyID))
                 {
                     //return new Exception(String.Format(MessageResources.AlertSellerSignature, SellerID()));
                     return new Exception(String.Format(MessageResources.InvalidSellerOrAgent, SellerID(), _owner.ReceiptNo));
@@ -752,7 +632,7 @@ namespace Model.InvoiceManagement.Validator
                     return new Exception(String.Format("開立人已註記停用,開立人統一編號:{0}，TAG:<SellerId />", SellerID()));
                 }
 
-                _isCrossBorderMerchant = _mgr.GetTable<OrganizationCategory>().Any(c => c.CompanyID == _seller.CompanyID && c.CategoryID == (int)Naming.CategoryID.COMP_CROSS_BORDER_MURCHANT);
+                _isCrossBorderMerchant = _models.GetTable<OrganizationCategory>().Any(c => c.CompanyID == _seller.CompanyID && c.CategoryID == (int)Naming.CategoryID.COMP_CROSS_BORDER_MURCHANT);
 
             }
 
@@ -774,11 +654,11 @@ namespace Model.InvoiceManagement.Validator
             {
                 return new Exception(String.Format(MessageResources.InvalidBuyerId, BuyerID()));
             }
-            else if (_seller.OrganizationStatus.EnableBuyerIDValidation == true && !BuyerID().CheckRegno())
+            else if (_seller.OrganizationStatus.EnableBuyerIDValidation != false && !BuyerID().CheckRegno())
             {
                 return new Exception(String.Format(MessageResources.InvalidReceiptNo, BuyerID()));
             }
-            else if (String.IsNullOrEmpty(BuyerName()) || BuyerName().Length > 60)
+            else if (/*String.IsNullOrEmpty(BuyerName()) ||*/ BuyerName().Length > 60)
             {
                 return new Exception(String.Format(MessageResources.InvalidBuyerNameLengthLimit, BuyerName()));
             }
@@ -923,13 +803,32 @@ namespace Model.InvoiceManagement.Validator
 
         protected override Exception checkBusinessDetails()
         {
+            Organization buyer = null;
+            BusinessRelationship relationship = null;
+            String buyerName = null;
+            String receiptNo = BuyerID();
+            if (receiptNo == "0000000000")
+            {
+                buyerName = BuyerName().CheckB2CMIGName();
+            }   
+            else
+            {
+                buyer = _models.GetTable<Organization>().Where(o => o.ReceiptNo == receiptNo).FirstOrDefault();
+                if (buyer != null)
+                {
+                    relationship = _models.GetTable<BusinessRelationship>().Where(r => r.MasterID == _seller.CompanyID && r.RelativeID == buyer.CompanyID).FirstOrDefault();
+                }
+
+                buyerName = BuyerName().GetEfficientString() ?? relationship?.CompanyName ?? buyer?.CompanyName ?? null;
+            }
+
             _buyer = new InvoiceBuyer
             {
                 BuyerMark = BuyerMark(),
-                Name = BuyerID() == "0000000000" ? BuyerName().CheckB2CMIGName() : BuyerName(),
+                Name = buyerName,
                 ReceiptNo = BuyerID(),
                 CustomerID = String.IsNullOrEmpty(CustomerID()) ? "" : CustomerID(),
-                CustomerName = BuyerName(),
+                CustomerName = receiptNo != "0000000000" ? buyerName : null,
             };   
             
             if(_isCrossBorderMerchant)
@@ -938,10 +837,10 @@ namespace Model.InvoiceManagement.Validator
                 _buyer.ReceiptNo = "0000000000";
             }
 
-            _buyer.ContactName = ContactName();
-            _buyer.Address = Address();
-            _buyer.Phone = Phone();
-            _buyer.EMail = !String.IsNullOrEmpty(EMail()) ? EMail().Replace(';', ',').Replace('、', ',').Replace(' ', ',') : null;
+            _buyer.ContactName = ContactName().GetEfficientString() ?? buyer?.ContactName ?? null;
+            _buyer.Address = Address().GetEfficientString() ?? relationship?.Addr ?? buyer?.Addr ?? null;
+            _buyer.Phone = Phone().GetEfficientString() ?? relationship?.Phone ?? buyer?.Phone ?? null;
+            _buyer.EMail = EMail().GetEfficientString()?.Replace(';', ',').Replace('、', ',').Replace(' ', ',') ?? relationship?.ContactEmail ?? buyer?.ContactEmail ?? null;
 
             return null;
         }
@@ -1026,7 +925,7 @@ namespace Model.InvoiceManagement.Validator
             _currency = null;
             if (!String.IsNullOrEmpty(Currency()))
             {
-                _currency = _mgr.GetTable<CurrencyType>().Where(c => c.AbbrevName == Currency()).FirstOrDefault();
+                _currency = _models.GetTable<CurrencyType>().Where(c => c.AbbrevName == Currency()).FirstOrDefault();
                 if (_currency == null)
                 {
                     return new Exception($"Invalid currency code：{Currency()}，TAG：<Currency/>");
@@ -1074,23 +973,23 @@ namespace Model.InvoiceManagement.Validator
                 }
 
 
-                if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
-                {
-                    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
-                }
+                //if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
+                //}
 
-                if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
-                {
-                    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
-                }
+                //if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
+                //}
 
-                if (product.CostAmount.HasValue && product.UnitCost.HasValue && product.Piece.HasValue)
-                {
-                    if (product.CostAmount != product.UnitCost * product.Piece)
-                    {
-                        return new Exception(MessageResources.InvalidProductAmount);
-                    }
-                }
+                //if (product.CostAmount.HasValue && product.UnitCost.HasValue && product.Piece.HasValue)
+                //{
+                //    if (product.CostAmount != product.UnitCost * product.Piece)
+                //    {
+                //        return new Exception(MessageResources.InvalidProductAmount);
+                //    }
+                //}
             }
             return null;
         }

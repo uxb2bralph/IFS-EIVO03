@@ -11,8 +11,10 @@ using InvoiceClient.Properties;
 using Utility;
 using Model.Schema.TXN;
 using InvoiceClient.Helper;
-using Model.Models;
-using Model.Locale;
+using InvoiceClient.TransferManagement;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using DataContructor.Models;
 
 namespace InvoiceClient.Agent
 {
@@ -42,30 +44,11 @@ namespace InvoiceClient.Agent
 
                 XmlDocument signedReq = token.ConvertToXml().Sign();
                 string[] items = invSvc.ReceiveContentAsPDFForIssuer(signedReq, Settings.Default.ClientID);
-
-                ////為了有測試資料
-                //int enviroment;
-                //enviroment = int.TryParse(Settings.Default.Environment, out enviroment) == true ? enviroment : 3;
-                //if (items != null && items.Length < 2 && (enviroment == (int)Naming.Environment.Dev || enviroment == (int)Naming.Environment.Test))//yuki:加判斷是否為本機
-                //{
-                //    items = invSvc.ReceiveContentAsPDFForSeller(signedReq, Settings.Default.ClientID);
-                //}
-
                 if (items != null && items.Length > 1)
                 {
                     String serviceUrl = items[0];
 
                     List<InvoicePDFGeneratorForGooglePlayModel> logItems = new List<InvoicePDFGeneratorForGooglePlayModel>();
-
-                    string path = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), "logs");
-                    string filePath = ValueValidity.GetDateStylePath(path);
-
-                    filePath = $"{filePath}\\InvoicePDFGeneratorForGooglePlay.xml";
-
-                    if (!File.Exists(filePath))
-                    {
-                        logItems.ConvertToXml().Save(filePath);
-                    }
 
                     void proc(int i)
                     {
@@ -78,16 +61,12 @@ namespace InvoiceClient.Agent
                         var url = $"{serviceUrl}?keyID={paramValue[2]}";
                         fetchPDF(pdfFile, url);
 
-                        //Generate pdf write to log
-                        //var textContent = $"{pdfFile} {paramValue[1]}";
-
-                        //Logger.GeneratePdfInfo(textContent);
-                        
                         InvoicePDFGeneratorForGooglePlayModel logItem = new InvoicePDFGeneratorForGooglePlayModel
                         {
-                            Date = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                            Date = DateTime.Now,
                             Path = pdfFile,
-                            OrderNo = paramValue[1]
+                            OrderNo = paramValue[1],
+                            Url = url,
                         };
 
                         logItems.Add(logItem);
@@ -102,8 +81,18 @@ namespace InvoiceClient.Agent
                         proc(idx);
                     }
 
-                    //log write to xml
-                    logItems.AppendChildToXml(filePath);
+                    String filePath = Path.Combine(Logger.LogDailyPath, "InvoicePDFGeneratorForGooglePlay.csv");
+                    using (StreamWriter writer = new StreamWriter(filePath, true))
+                    {
+                        using(CsvHelper.CsvWriter csv = new CsvHelper.CsvWriter(writer,true))
+                        {
+                            foreach (var item in logItems)
+                            {
+                                csv.WriteRecord<InvoicePDFGeneratorForGooglePlayModel>(item);
+                                csv.NextRecord();
+                            }
+                        }
+                    }
 
                     Logger.Debug($"fetch count:{items.Length - 1}");
                     return storedPath;
@@ -121,7 +110,6 @@ namespace InvoiceClient.Agent
         protected override void fetchPDF(string pdfFile, string url)
         {
             url = $"{url}&html={true}";
-            Logger.Debug(url);
             url.ConvertHtmlToPDF(pdfFile, 1);
         }
 

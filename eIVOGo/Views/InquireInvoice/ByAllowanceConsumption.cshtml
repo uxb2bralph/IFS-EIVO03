@@ -14,24 +14,23 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
-@using res = eIVOGo.Resource.Views.InquireInvoice.ByAllowanceConsumption
 @{
     InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 }
 <tr>
     <th>
-        @res.發票類別
+        發票類別
     </th>
     <td class="tdleft">
         <select name="ProcessType" class="form-control">
             @if (ViewBag.QueryAll == true)
             {
-            <option value="">@res.查詢全部</option>
+                <option value="">查詢全部</option>
             }
-        <option value="@((int)Naming.InvoiceProcessType.D0401)">@res.查詢QR_Code證明聯類型</option>
-        <option value="@((int)Naming.InvoiceProcessType.B0401)">@res.查詢營業人交易類型</option>
+            <option value="@((int)Naming.InvoiceProcessType.D0401)">查詢QR Code證明聯類型</option>
+            <option value="@((int)Naming.InvoiceProcessType.B0401)">查詢營業人交易類型</option>
         </select>
-        @if (_viewModel != null && _viewModel.ProcessType.HasValue)
+        @if (_viewModel!=null && _viewModel.ProcessType.HasValue)
         {
             <script>
             $(function () {

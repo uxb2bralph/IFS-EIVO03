@@ -14,17 +14,13 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@using res=eIVOGo.Resource.Views.AllowanceProcess.Module.InvokeCommitAction
-
 @{ 
-    InquireInvoiceViewModel _viewModel=(InquireInvoiceViewModel)this.Model;
-
-    //string msg = "為什麼";// $"{res.請選擇待} {_viewModel.ActionTitle} {res.資料}!!";
+        InquireInvoiceViewModel _viewModel;
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 }
-
-    <script>
+<script>
     $(function () {
-        
+
         if (!$('input[name="chkItem"]').is(':checked')) {
             alert('@Html.Raw($"請選擇待{_viewModel.ActionTitle}資料!!")');
             return false;
@@ -42,5 +38,4 @@
             }
         });
     });
-    </script>
-
+</script>

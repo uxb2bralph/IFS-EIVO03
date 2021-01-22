@@ -196,12 +196,15 @@ namespace Model.Helper
                     int maxLogID = items.OrderByDescending(e => e.LogID).First().LogID;
                     foreach (var item in items.GroupBy(i => i.CompanyID))
                     {
-                        SendExceptionNotification(mgr, new ExceptionEventArgs
+                        if (item.Key.HasValue)
                         {
-                            CompanyID = item.Key,
-                            EMail = item.ElementAt(0).Organization.ContactEmail,
-                            MaxLogID = maxLogID
-                        });
+                            SendExceptionNotification(mgr, new ExceptionEventArgs
+                            {
+                                CompanyID = item.Key,
+                                EMail = item.First().Organization.ContactEmail,
+                                MaxLogID = maxLogID
+                            });
+                        }
                     }
 
                     SendExceptionNotification(mgr, new ExceptionEventArgs

@@ -121,7 +121,11 @@ namespace Model.InvoiceManagement.InvoiceProcess
                 try
                 {
 
-                    EIVOPlatformFactory.NotifyIssuedInvoice(item.DocID, true);
+                    EIVOPlatformFactory.NotifyIssuedInvoice(new NotifyToProcessID
+                    {
+                        DocID = item.DocID,
+                        AppendAttachment = true,
+                    });
 
                     models.ExecuteCommand("delete [proc].C0401DispatchQueue where DocID={0} and StepID={1}",
                         item.DocID, item.StepID);

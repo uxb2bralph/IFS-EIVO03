@@ -46,7 +46,7 @@
             <table border="0" cellspacing="0" cellpadding="0" class="verifyno">
                 <tr>
                     <td>
-                        <%  Html.RenderPartial("~/Views/Shared/CaptchaImg.ascx"); %>
+                        <%  Html.RenderPartial("~/Views/Shared/CaptchaImg.cshtml"); %>
                     </td>
                 </tr>
             </table>

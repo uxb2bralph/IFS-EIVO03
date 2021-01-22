@@ -2,14 +2,13 @@
 
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="eIVOGo.Helper" %>
-<%@ Register Src="~/Views/DonatedInvoice/Module/ReportResult.ascx" TagPrefix="uc1" TagName="ReportResult" %>
 
 <asp:Content ID="header" ContentPlaceHolderID="headContent" runat="server">
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="formContent" runat="server">
-    <uc1:ReportResult runat="server" ID="ReportResult" />
+    <% Html.RenderPartial("Module/ReportResult", Model); %>
 </asp:Content>
-<%--<script runat="server">
+<script runat="server">
 
     public override void Dispose()
     {
@@ -20,4 +19,4 @@
         base.Dispose();
     }
 
-</script>--%>
+</script>

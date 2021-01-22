@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Model.Helper;
+using Model.InvoiceManagement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -25,6 +27,11 @@ namespace TaskCenter.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult MatchAttachment()
+        {
+            return Content($"{AttachmentManager.MatchAttachment()}");
         }
     }
 }

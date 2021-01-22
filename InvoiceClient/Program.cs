@@ -10,7 +10,7 @@ using System.IO;
 using InvoiceClient.Properties;
 using System.Threading;
 using InvoiceClient.Agent;
-using System.Diagnostics;
+using Model.Resource;
 
 namespace InvoiceClient
 {
@@ -21,38 +21,33 @@ namespace InvoiceClient
         /// </summary>
         [STAThread]
         static void Main(string[] args)
-        {
-            if (InvoiceClient.Properties.Settings.Default.IsLocalMachine)
-            {
-                System.Diagnostics.Debugger.Launch();
-            }
-
+        {     
             /// SSL憑證信任設定
             System.Net.ServicePointManager.ServerCertificateValidationCallback = (s, certificate, chain, sslPolicyErrors) => true;
 
             if (!String.IsNullOrEmpty(Settings.Default.AppCulture))
             {
-                Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(Settings.Default.AppCulture);
+                Thread.CurrentThread.CurrentUICulture = MessageResources.Culture = System.Globalization.CultureInfo.GetCultureInfo(Settings.Default.AppCulture);
             }
 
             if (Environment.UserInteractive /*|| Debugger.IsAttached*/)
             {
-                Uxnet.Com.Helper.JobScheduler.StartUp(int.Parse(Settings.Default.JobSchedulerPeriod) * 60000);
                 if (Settings.Default.ClearTxnPath
                         && Directory.Exists(Settings.Default.InvoiceTxnPath))
                     ClearDirectory();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MainForm());               
+                Application.Run(new MainForm());
             }
             else
             {
-                ServiceBase[] services =
+                ServiceBase[] services = 
                     {
-                        new InvoiceClientService()
+                        new InvoiceClientService() 
                     };
                 ServiceBase.Run(services);
-            }                       
+            }
+            
         }
 
         internal static void Install(bool undo, string[] args)
@@ -99,13 +94,13 @@ namespace InvoiceClient
 
         static void ClearDirectory()
         {
-            foreach (var item in Directory.GetDirectories(Settings.Default.InvoiceTxnPath))
+            foreach(var item in Directory.GetDirectories(Settings.Default.InvoiceTxnPath))
             {
                 try
                 {
                     Directory.Delete(item);
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }

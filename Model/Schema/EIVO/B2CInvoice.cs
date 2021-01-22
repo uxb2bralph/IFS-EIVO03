@@ -9,14 +9,14 @@
 //------------------------------------------------------------------------------
 
 // 
-// 此原始程式碼由 xsd 版本=4.7.3081.0 自動產生。
+// 此原始程式碼由 xsd 版本=4.8.3928.0 自動產生。
 // 
 namespace Model.Schema.EIVO {
     using System.Xml.Serialization;
     
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.7.3081.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -30,10 +30,18 @@ namespace Model.Schema.EIVO {
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Invoice")]
         public InvoiceRootInvoice[] Invoice;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<short> Notification;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool NotificationSpecified;
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.7.3081.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -111,14 +119,16 @@ namespace Model.Schema.EIVO {
         public decimal SalesAmount;
         
         /// <remarks/>
-        public decimal FreeTaxSalesAmount;
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<decimal> FreeTaxSalesAmount;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FreeTaxSalesAmountSpecified;
         
         /// <remarks/>
-        public decimal ZeroTaxSalesAmount;
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<decimal> ZeroTaxSalesAmount;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -184,10 +194,14 @@ namespace Model.Schema.EIVO {
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool LineNoSpecified;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<byte> BondedAreaConfirm;
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.7.3081.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -219,7 +233,8 @@ namespace Model.Schema.EIVO {
         public string Remark;
         
         /// <remarks/>
-        public byte TaxType;
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<byte> TaxType;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -227,7 +242,7 @@ namespace Model.Schema.EIVO {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.7.3081.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -248,7 +263,7 @@ namespace Model.Schema.EIVO {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.7.3081.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -262,10 +277,30 @@ namespace Model.Schema.EIVO {
         public string PurchaseNo;
         
         /// <remarks/>
-        public short StampDutyFlag;
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<short> StampDutyFlag;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool StampDutyFlagSpecified;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Payment")]
+        public InvoiceRootInvoiceCustomerDefinedPayment[] Payment;
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    public partial class InvoiceRootInvoiceCustomerDefinedPayment {
+        
+        /// <remarks/>
+        public string Method;
+        
+        /// <remarks/>
+        public decimal Amount;
     }
 }

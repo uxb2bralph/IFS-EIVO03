@@ -7,8 +7,6 @@
 @using eIVOGo.Models
 @using eIVOGo.Controllers
 @using eIVOGo.Models.ViewModel
-@using eIVOGo.Resource.Views.Common
-@using eIVOGo.Resource.Views.OrganizationQuery.Module
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
@@ -18,10 +16,10 @@
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
 @{
-    ViewBag.ActionName = TreeView._2;
+    ViewBag.ActionName = "首頁 > 系統管理維護";
 }
 <!--交易畫面標題-->
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", InquireOrganization.店家資料維護);}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "店家資料維護");}
 
 <!--路徑名稱-->
 <div class="border_gray">
@@ -29,12 +27,12 @@
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
         <tr>
             <th colspan="2" class="Head_style_a">
-                @InquireOrganization.查詢條件
+                查詢條件
             </th>
         </tr>
         <tr>
             <th nowrap="nowrap" width="120">
-                @InquireOrganization.統編
+                統編
             </th>
             <td class="tdleft">
                 <input name="receiptNo" type="text" value="@(Request["receiptNo"])" />
@@ -42,7 +40,7 @@
         </tr>
         <tr>
             <th nowrap="nowrap" width="120">
-                @InquireOrganization.店家名稱
+                店家名稱
             </th>
             <td class="tdleft">
                 <input name="companyName" type="text" value="@(Request["companyName"])" />
@@ -50,13 +48,13 @@
         </tr>
         <tr>
             <th nowrap="nowrap" width="120">
-                @InquireOrganization.店家狀態
+                店家狀態
             </th>
             <td class="tdleft">
                 <select name="organizationStatus">
-                    <option value="">@InquireOrganization.全部</option>
-                    <option value="1103">@InquireOrganization.已啟用</option>
-                    <option value="1101">@InquireOrganization.已停用</option>
+                    <option value="">全部</option>
+                    <option value="1103">已啟用</option>
+                    <option value="1101">已停用</option>
                 </select>
                 @if (Request["organizationStatus"] != null)
                 {
@@ -76,17 +74,13 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="queryAction">
     <tr>
         <td class="Bargain_btn">
-            <input type="button" value="@InquireOrganization.查詢" name="btnQuery" class="btn" onclick="inquireCompany()" />
+            <input type="button" value="查詢" name="btnQuery" class="btn" onclick="inquireCompany()" />
         </td>
     </tr>
 </table>
 <script>
     var $result;
     function inquireCompany(pageNum, onPaging) {
-        
-         var $form = this.$form;
-        
-
         $('form').ajaxForm({
             url: "@(Url.Action("InquireCompany","OrganizationQuery"))" + "?pageIndex=" + pageNum,
             beforeSubmit: function () {
@@ -113,12 +107,12 @@
 
     function editCompany(value) {
         $.post('@(Url.Action("EditItem", "Organization"))', { 'keyID': value }, function (data) {
-            $global.createTab('editOrganization', '@InquireOrganization.營業人管理', data, true);
+            $global.createTab('editOrganization', '營業人管理', data, true);
         });
     }
 
     function disableCompany(value) {
-        if (confirm('@InquireOrganization.確認停用此筆資料')) {
+        if (confirm('確認停用此筆資料?')) {
             invokeAction('@(VirtualPathUtility.ToAbsolute("~/Handling/DisableCompany"))',
                 { 'companyID': value },
                 function () {
@@ -130,7 +124,7 @@
     }
 
     function enableCompany(value) {
-        if (confirm('@InquireOrganization.確認啟用此筆資料')) {
+        if (confirm('確認啟用此筆資料?')) {
             invokeAction('@(VirtualPathUtility.ToAbsolute("~/Handling/EnableCompany"))',
                 { 'companyID': value },
                 function () {
@@ -151,7 +145,7 @@
 
     function applyAgency(value) {
         $.post('@(Url.Action("ApplyIssuerAgent", "Organization"))', { 'keyID': value }, function (data) {
-            $global.createTab('applyIssuerAgent', '@InquireOrganization.發票代傳管理', data, true);
+            $global.createTab('applyIssuerAgent', '發票代傳管理', data, true);
         });
     }
 
@@ -163,7 +157,7 @@
     }
 
     function applyRelationship(value) {
-        if (confirm('@InquireOrganization.確認設定此開立人為B2B營業人')) {
+        if (confirm('確認設定此開立人為B2B營業人?')) {
             invokeAction('@(VirtualPathUtility.ToAbsolute("~/Handling/ApplyRelationship"))',
                 { 'companyID': value },
                 function () {
@@ -176,14 +170,14 @@
 
     function inquireUser(value) {
         $.post('@(Url.Action("AccountIndex", "Account", new { showTab = true }))', { 'sellerID': value }, function (data) {
-            $global.createTab('@("listUser" + DateTime.Now.Ticks)', '@InquireOrganization.使用者管理', data, true);
+            $global.createTab('@("listUser" + DateTime.Now.Ticks)', '使用者管理', data, true);
         });
     }
 
     function createCompany(keyID) {
 
         $.post('@(Url.Action("EditItem", "Organization"))', { 'keyID': keyID }, function (data) {
-            $global.createTab('editOrganization', '@InquireOrganization.營業人管理', data, true);
+            $global.createTab('editOrganization', '營業人管理', data, true);
         });
     }
 </script>

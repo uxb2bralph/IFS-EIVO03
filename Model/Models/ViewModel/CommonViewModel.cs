@@ -4,21 +4,18 @@ using System.Linq;
 using System.Web;
 using Model.DataEntity;
 using Model.Locale;
+using Newtonsoft.Json;
 using static Model.Locale.Naming;
 
 namespace Model.Models.ViewModel
 {
-
     public partial class InquireInvoiceViewModel : CommonQueryViewModel
     {
-        //public List<InquireInvoiceItem> Results { get; set; }//amy
-        public IQueryable<InvoiceItem> Results { get; set; }//amy
         public int? CompanyID { get; set; }
         public int? AgentID { get; set; }
         public String DataNo { get; set; }
         public String Consumption { get; set; }
         public String BuyerReceiptNo { get; set; }
-        public String SellerReceiptNo { get; set; } //[Amy](開立人)統編
         public String BuyerName { get; set; }
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
@@ -43,68 +40,8 @@ namespace Model.Models.ViewModel
         public DateTime? InvoiceDateTo { get; set; }
         public DateTime? InvoiceDate { get; set; }
         public Naming.DocumentTypeDefinition? DocType { get; set; }
+        public String RandomNo { get; set; }
 
-        public bool? SelectAll { get; set; }
-        public String SelectorIndication { get; set; }
-        public String SelectorIndicationValue { get; set; }
-        public String JS_OnSelect { get; set; }
-        public int? BuyerID { get; set; } //[Amy]-1090611
-        public String ReMark { get; set; }//[Amy]-備註欄位
-        public String BuyerAddr { get; set; }  //[Amy]-買受人地址
-        public String BuyerMail { get; set; }  //[Amy]-買受人Mail
-        public decimal? TotalAmount { get; set; }//[Amy]-含稅金額
-        public decimal? SalesAmount { get; set; }//[Amy]-未稅金額
-        public decimal? TaxAmount { get; set; }//[Amy]-稅額
-        public String WinningState { get; set; } //[Amy]-是否中獎
-        public String OrderNO { get; set; } //[Amy]-序號
-
-    }
-
-    /// <summary>
-    /// Amy-1090609
-    /// 統計報表>發票明細查詢欄位
-    /// </summary>
-    public class InquireInvoiceItem
-    {
-        public int CompanyID;
-        public int AgentID;
-        public String DataNo;
-        public String Consumption;
-        public String BuyerReceiptNo;
-        public String SellerReceiptNo;
-        public String BuyerName;
-        public String SellerName;
-        public DateTime DateFrom;
-        public DateTime DateTo;
-        public bool IsWinning;
-        public int Winning;
-        public bool Cancelled;
-        public bool IsAttached;
-        public bool QueryAtStart;
-        public int SellerID;
-        public bool IsNoticed;
-        public String CarrierType;
-        public String CarrierNo;
-        public String PrintMark;
-        public int InvoiceID;
-        public String InvoiceNo;
-        public String AgencyCode;
-        public String CustomerID;
-        public System.Nullable<byte> ProcessType;
-        public String ActionTitle;
-        public int Attachment;
-        public DateTime InvoiceDateFrom;
-        public DateTime InvoiceDateTo;
-        public DateTime InvoiceDate;
-        public String ReMark;       //[Amy]-備註欄位
-        public String BuyerAddr;     //[Amy]-買受人地址
-        public String BuyerMail;     //[Amy]-買受人Mail        
-        public decimal SalesAmount;  //[Amy]-未稅金額
-        public decimal TaxAmount;    //[Amy]-稅額
-        public decimal TotalAmount;  //[Amy]-含稅金額
-        public String WinningState;  //[Amy]-是否中獎
-        public String OrderNo;       //[Amy]-序號
-        public System.Nullable<byte> DocType;
     }
 
     public partial class InquireNoIntervalViewModel
@@ -113,6 +50,7 @@ namespace Model.Models.ViewModel
         public int? PeriodNo { get; set; }
         public int? SellerID { get; set; }
         public String SelectIndication { get; set; }
+        public bool? BranchRelation { get; set; }
     }
 
     public partial class BusinessRelationshipViewModel
@@ -142,7 +80,7 @@ namespace Model.Models.ViewModel
         public String PID { get; set; }
         public String UserName { get; set; }
         public String Password { get; set; }
-        public String Password1 { get; set; }
+        public String Password1 {get;set;}
         public String EMail { get; set; }
         public String Address { get; set; }
         public String Phone { get; set; }
@@ -162,6 +100,15 @@ namespace Model.Models.ViewModel
         public int? StartNo { get; set; }
         public int? EndNo { get; set; }
         public int? Parts { get; set; }
+        public int? LockID { get; set; }
+    }
+
+    public class UploadInvoiceTrackCodeModel : InvoiceNoIntervalViewModel
+    {
+        public string ReceiptNo { get; set; }
+        public short? Year { get; set; }
+        public int? PeriodNo { get; set; }
+        public string TrackCode { get; set; }
     }
 
     public partial class CommonQueryViewModel : QueryViewModel
@@ -186,21 +133,6 @@ namespace Model.Models.ViewModel
     {
         public int? Year { get; set; }
         public int? PeriodNo { get; set; }
-
-        public List<InvoiceTrackCodeItem> Results { get; set; }
-    }
-
-    public class InvoiceTrackCodeItem
-    {
-        public int TrackID;
-
-        public string TrackCode;
-
-        public short Year;
-
-        public short PeriodNo;
-
-        public System.Nullable<byte> InvoiceType;
     }
 
     public partial class TrackCodeViewModel
@@ -218,28 +150,6 @@ namespace Model.Models.ViewModel
 
     }
 
-    /// <summary>
-    /// Amy-1090526
-    /// 取得角色維護資料
-    /// </summary>
-    public partial class UserRoleDefinitionViewModel : CommonQueryViewModel
-    {
-        public int RoleID { get; set; }
-        public String Role { get; set; }
-        public String SiteMenu { get; set; }
-        public List<UserRoleDefinitionItem> Results { get; set; }
-    }
-    /// <summary>
-    /// Amy-1090526
-    /// 使用者角色維護-欄位
-    /// </summary>
-    public class UserRoleDefinitionItem
-    {
-        public int RoleID;
-        public string SiteMenu;
-        public string Role;
-
-    }
     public partial class WinningNumberViewModel
     {
         public int? WinningID { get; set; }
@@ -281,6 +191,8 @@ namespace Model.Models.ViewModel
         public bool? Encrypt { get; set; }
         public String QuickSearch { get; set; }
         public Naming.FieldDisplayType? DisplayType { get; set; }
+        public String[] KeyItems { get; set; }
+        public String Message { get; set; }
 
     }
 
@@ -298,6 +210,7 @@ namespace Model.Models.ViewModel
 
     public class DocumentQueryViewModel : QueryViewModel
     {
+        [JsonIgnore]
         public int? id
         {
             get
@@ -315,6 +228,8 @@ namespace Model.Models.ViewModel
         public bool? NameOnly { get; set; }
         public bool? AppendAttachment { get; set; }
         public int[] ChkItem { get; set; }
+        public String MailTo { get; set; }
+
     }
 
     public class ExceptionLogQueryViewModel : QueryViewModel
@@ -341,6 +256,7 @@ namespace Model.Models.ViewModel
         public int? TaskID { get; set; }
         public String Comment { get; set; }
         public InvoiceProcessType? ProcessType { get; set; }
+        public ProcessRequestCondition.ConditionType?[] ConditionID { get; set; }
     }
 
     public class ActionResultViewModel
@@ -373,14 +289,12 @@ namespace Model.Models.ViewModel
         public int? SupplierID { get; set; }
     }
 
-    public class EnumSelectorViewModel
+    public partial class AttachmentViewModel : QueryViewModel
     {
-        public string FieldName { get; set; }
-        public string SelectorIndication { get; set; }
-        public string SelectorIndicationValue { get; set; }
-        public Dictionary<string, string> OptionItems { get; set; }
-        public string DefaultValue { get; set; }
-
-        public string FieldClass { get; set; }
+        public String KeyName { get; set; }
+        public int? DocID { get; set; }
+        public String StoredPath { get; set; }
     }
+
+
 }

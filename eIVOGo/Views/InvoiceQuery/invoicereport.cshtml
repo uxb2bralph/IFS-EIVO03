@@ -1,21 +1,28 @@
-﻿
-@using System.IO
-@using System.Linq.Expressions
-@using System.Web.Mvc.Html
+
+
+@{ Register Src="~/Views/InvoiceQuery/Module/InvoiceReport.ascx" TagPrefix="uc1" TagName="InvoiceReport" }
 @using eIVOGo.Helper
-@using eIVOGo.Models
-@using eIVOGo.Resource.Views.Common
-
-@{
-    Layout = "~/Views/Template/MvcMainPage.cshtml";
-    ViewBag.ActionName = TreeView.首頁___統計報表;
-    string _inquiryView = (String)ViewBag.InquiryView ?? "~/Views/InvoiceQuery/Module/InvoiceReport.cshtml";
+@section headContent { 
+ 
 }
-
-@section formContent
-{
-    @{ Html.RenderPartial(_inquiryView);}
+@section formContent { 
+<uc1:InvoiceReport runat="server" ID="InvoiceReport" /> 
 }
+<script runat="server">
 
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        ViewBag.ActionName = "首頁 > 資料管理";
+    }
 
+    //public override void Dispose()
+    //{
+    //    var models = TempData.GetGenericModelSource();
+    //    if (models != null)
+    //        models.Dispose();
 
+    //    base.Dispose();
+    //}
+
+</script>

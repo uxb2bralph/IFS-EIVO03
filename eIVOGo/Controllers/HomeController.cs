@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+
 using Model.DataEntity;
 using eIVOGo.Helper;
 using Utility;
@@ -12,7 +13,6 @@ using Business.Helper;
 using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
 using Newtonsoft.Json;
-using eIVOGo.Resource.Helpers;
 
 namespace eIVOGo.Controllers
 {
@@ -21,8 +21,7 @@ namespace eIVOGo.Controllers
         // GET: Home
         public ActionResult MainPage()
         {
-            //return View();
-            return View("~/Views/Home/MainPage.cshtml");
+            return View();
         }
 
         public ActionResult SearchCompany(String term,bool? encrypt)
@@ -94,17 +93,7 @@ namespace eIVOGo.Controllers
         {
             var profile = HttpContext.GetUser();
 
-            IQueryable<Organization> items;
-
-            if (profile.IsSystemAdmin())
-            {
-                items = models.GetTable<Organization>();
-            }
-            else
-            {
-                items = models.GetTable<BusinessRelationship>().Where(b => b.MasterID == profile.CurrentUserRole.OrganizationCategory.CompanyID)
-                    .Join(models.GetTable<Organization>(), b => b.RelativeID, o => o.CompanyID, (b, o) => o);
-            }
+            IQueryable<Organization> items = models.GetTable<Organization>();
 
             if (!String.IsNullOrEmpty(term))
             {
@@ -118,16 +107,34 @@ namespace eIVOGo.Controllers
 
             ViewBag.DataItems = items;
 
-            var item = items.FirstOrDefault();
-
-            if (item != null)
+            if (profile.IsSystemAdmin())
             {
-                return Content(JsonConvert.SerializeObject(item), "application/json");
+                var item = items.FirstOrDefault();
+
+                if (item != null)
+                {
+                    return Content(JsonConvert.SerializeObject(item), "application/json");
+                }
+                else
+                {
+                    return new EmptyResult();
+                }
             }
             else
             {
-                return new EmptyResult();
+                var item = models.GetTable<BusinessRelationship>().Where(b => b.MasterID == profile.CurrentUserRole.OrganizationCategory.CompanyID)
+                    .Join(items, b => b.RelativeID, o => o.CompanyID, (b, o) => b).FirstOrDefault();
+
+                if (item != null)
+                {
+                    return Json(new { item.Counterpart.ReceiptNo, item.CompanyName, item.Addr, item.Phone, item.ContactEmail, item.CustomerNo }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return new EmptyResult();
+                }
             }
+
         }
 
         public ActionResult ReportError(ActionResultViewModel viewModel)
@@ -136,35 +143,5 @@ namespace eIVOGo.Controllers
             return View("~/Views/Home/Module/ReportError.cshtml");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="culture"></param>
-        /// <param name="returnUrl"></param>
-        /// <returns></returns>
-        public ActionResult SetCulture(string culture,string returnUrl)
-        {
-            // Validate input 
-            culture = CultureHelper.GetImplementedCulture(culture);
-
-            // Save culture in a cookie 
-            HttpCookie cookie = Request.Cookies["_culture"];
-
-            if (cookie != null)
-            {
-                // update cookie value 
-                cookie.Value = culture;
-            }
-            else
-            {
-                // create cookie value 
-                cookie = new HttpCookie("_culture");
-                cookie.Value = culture;
-                cookie.Expires = DateTime.Now.AddYears(1);
-            }
-
-            Response.Cookies.Add(cookie);
-            return Redirect(returnUrl);
-        }
     }
 }

@@ -1,28 +1,42 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.Linq;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using System.Xml;
-using Business.Helper;
-using eIVOGo.Helper;
-using eIVOGo.Properties;
 
-using Model.DataEntity;
-using Model.Locale;
+using Business.Helper;
+using ClosedXML.Excel;
+using eIVOGo.Helper;
+using eIVOGo.Models;
+using eIVOGo.Models.ViewModel;
+using eIVOGo.Properties;
 using Model.Models.ViewModel;
+using Model.DataEntity;
+using Model.Helper;
+using Model.InvoiceManagement;
+using Model.Locale;
+using Model.Schema.TXN;
+using Model.Security.MembershipManagement;
+using Utility;
+using Uxnet.Com.Security.UseCrypto;
 using Model.Schema.EIVO;
 using Newtonsoft.Json;
-using Utility;
-using res = eIVOGo.Resource.Controllers.DataView;
 
 namespace eIVOGo.Controllers
 {
-
+    
     public class DataViewController : SampleController<InvoiceItem>
     {
         // GET: DataView
@@ -38,11 +52,11 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<InvoiceAllowance>().Where(a => a.AllowanceID == viewModel.id).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
 
 
-            return View("~/Views/DataView/Module/Allowance.ascx", item);
+            return View("~/Views/DataView/Module/Allowance.cshtml", item);
         }
 
         public ActionResult ShowAllowance(DocumentQueryViewModel viewModel)
@@ -62,7 +76,7 @@ namespace eIVOGo.Controllers
             useThermalPOSArgs = null;
             if (item.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.A0401)
             {
-                return "~/Views/DataView/A0401.cshtml";
+                return "~/Views/DataView/A0401.aspx";
             }
             else if (paperStyle == "POS")
             {
@@ -71,7 +85,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                return "~/Views/DataView/C0401_A4.cshtml";
+                return "~/Views/DataView/C0401_A4.aspx";
             }
         }
 
@@ -223,7 +237,7 @@ namespace eIVOGo.Controllers
             }
 
             var result = new FilePathResult(outFile, "application/octet-stream");
-            result.FileDownloadName = res.發票列印下載+".zip";
+            result.FileDownloadName = "發票列印下載.zip";
             return result;
         }
 
@@ -248,6 +262,13 @@ namespace eIVOGo.Controllers
 
             if (item != null)
             {
+
+                models.ExecuteCommand(@"INSERT INTO [proc].DataProcessLog
+                                                            (DocID, LogDate, Status, StepID)
+                                                            VALUES          ({0},{1},{2},{3})",
+                        item.AllowanceID, DateTime.Now, (int)Naming.DataProcessStatus.Done,
+                        (int)Naming.InvoiceStepDefinition.PDF待傳輸);
+
                 if (html == true)
                 {
                     String[] useThermalPOSArgs;
@@ -307,7 +328,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<InvoiceItem>().Where(a => a.InvoiceID == viewModel.DocID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
 
             return View(item);
@@ -338,30 +359,15 @@ namespace eIVOGo.Controllers
         [Authorize]
         public ActionResult PrintA0401()
         {
-            var items = GetA0401Items();
-
-            return View("~/Views/DataView/PrintA0401.cshtml",items);
-        }
-
-        [Authorize]
-        public ActionResult PrintA0401_B5()
-        {
-            var items = GetA0401Items();
-
-            return View("~/Views/DataView/PrintA0401_B5.cshtml", items);
-        }
-
-        public IQueryable<DocumentPrintQueue> GetA0401Items()
-        {
             var profile = HttpContext.GetUser();
 
             var items = models.GetTable<DocumentPrintQueue>()
-               .Where(i => i.UID == profile.UID)
-               .Join(models.GetTable<CDS_Document>()
-                       //.Where(d => d.ProcessType == (int)Naming.InvoiceProcessType.A0401)
-                       .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice),
-                   i => i.DocID, d => d.DocID, (i, d) => i);
-            return items;
+                .Where(i => i.UID == profile.UID)
+                .Join(models.GetTable<CDS_Document>()
+                        .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice), 
+                    i => i.DocID, d => d.DocID, (i, d) => i);
+
+            return View(items);
         }
 
         [Authorize]
@@ -372,7 +378,6 @@ namespace eIVOGo.Controllers
             var items = models.GetTable<DocumentPrintQueue>()
                 .Where(i => i.UID == profile.UID)
                 .Join(models.GetTable<CDS_Document>()
-                        .Where(d => d.ProcessType == (int)Naming.InvoiceProcessType.B0401)
                         .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Allowance),
                     i => i.DocID, d => d.DocID, (i, d) => i);
 
@@ -383,7 +388,7 @@ namespace eIVOGo.Controllers
         {
             ViewResult result = (ViewResult)PrintA0401();
             IQueryable<DocumentPrintQueue> items = result.Model as IQueryable<DocumentPrintQueue>;
-            String pdfFile = this.CreateContentAsPDF("~/Views/DataView/PrintA0401.cshtml", items, Session.Timeout);
+            String pdfFile = this.CreateContentAsPDF("~/Views/DataView/PrintA0401.aspx", items, Session.Timeout);
 
             if (pdfFile != null)
             {
@@ -392,24 +397,7 @@ namespace eIVOGo.Controllers
             else
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
-            }
-        }
-
-        public ActionResult PrintA0401_B5AsPDF()
-        {
-            ViewResult result = (ViewResult)PrintA0401_B5();
-            IQueryable<DocumentPrintQueue> items = result.Model as IQueryable<DocumentPrintQueue>;
-            String pdfFile = this.CreateContentAsPDF("~/Views/DataView/PrintA0401_B5.cshtml", items, Session.Timeout);
-
-            if (pdfFile != null)
-            {
-                return File(pdfFile, "application/pdf", $"{DateTime.Today:yyyy-MM-dd}.pdf");
-            }
-            else
-            {
-                ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
         }
 
@@ -426,7 +414,7 @@ namespace eIVOGo.Controllers
             else
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
         }
 
@@ -439,15 +427,15 @@ namespace eIVOGo.Controllers
             var items = models.GetTable<DocumentPrintQueue>()
                 .Where(i => i.UID == profile.UID)
                 .Join(models.GetTable<CDS_Document>()
-                    //.Where(d => !d.ProcessType.HasValue
-                    //    || d.ProcessType == (int)Naming.InvoiceProcessType.C0401)
+                    .Where(d => !d.ProcessType.HasValue
+                        || d.ProcessType == (int)Naming.InvoiceProcessType.C0401)
                     .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice),
                     i => i.DocID, d => d.DocID, (i, d) => i);
-           
+
             if (viewModel.PaperStyle == "A4")
-                return View("~/Views/DataView/PrintC0401A4.cshtml", items);
+                return View("PrintC0401A4", items);
             else
-                return View("PrintC0401POS", items);
+                return View("~/Views/DataView/PrintC0401POS.cshtml", items);
         }
 
         [Authorize]
@@ -475,7 +463,7 @@ namespace eIVOGo.Controllers
             ViewResult result = (ViewResult)PrintC0401(viewModel);
             IQueryable<DocumentPrintQueue> items = result.Model as IQueryable<DocumentPrintQueue>;
             String pdfFile = viewModel.PaperStyle == "A4"
-                    ? this.CreateContentAsPDF("~/Views/DataView/PrintC0401A4.cshtml", items, Session.Timeout)
+                    ? this.CreateContentAsPDF("~/Views/DataView/PrintC0401A4.aspx", items, Session.Timeout)
                     : this.CreateContentAsPDF("~/Views/DataView/PrintC0401POS.cshtml", items, Session.Timeout, ThermalPOSPaper);
 
             if (pdfFile != null)
@@ -485,7 +473,7 @@ namespace eIVOGo.Controllers
             else
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
         }
 
@@ -502,7 +490,7 @@ namespace eIVOGo.Controllers
             else
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
         }
 
@@ -540,14 +528,14 @@ namespace eIVOGo.Controllers
                 {
                     retry = true;
                     Logger.Error(ex);
-                    Logger.Warn($"{res.產生發票QR_Code失敗} => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
+                    Logger.Warn($"產生發票QR Code失敗 => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
                 }
 
                 if(retry)
                 {
                     try
                     {
-                        qrContent = $"{qrContent.Substring(0, 88)}:1:0:1:{res.品項過長_詳列於發票明細}:1:1:";
+                        qrContent = $"{qrContent.Substring(0, 88)}:1:0:1:品項過長，詳列於發票明細:1:1:";
                         using (Bitmap qrcode = qrContent.CreateQRCode(width: 180, height: 180, qrVersion: 10))
                         {
                             Response.Clear();
@@ -558,7 +546,7 @@ namespace eIVOGo.Controllers
                     catch (Exception ex)
                     {
                         Logger.Error(ex);
-                        Logger.Warn($"{res.產生發票QR_Code失敗} => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
+                        Logger.Warn($"產生發票QR Code失敗 => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
                     }
                 }
             }
@@ -626,7 +614,7 @@ namespace eIVOGo.Controllers
             if (items == null || items.Length == 0)
             {
                 ViewBag.CloseWindow = true;
-                ViewBag.Message = res.請選擇郵寄項目;
+                ViewBag.Message = "請選擇郵寄項目!!";
                 return View("~/Views/Shared/JsAlert.cshtml");
             }
 
@@ -664,7 +652,7 @@ namespace eIVOGo.Controllers
             }
 
             var result = new FilePathResult(outFile, "application/octet-stream");
-            result.FileDownloadName = res.發票列印下載+".zip";
+            result.FileDownloadName = "發票列印下載.zip";
             return result;
         }
 

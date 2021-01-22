@@ -55,8 +55,8 @@
     </tbody>
 </table>
 <!--表格 開始-->
-<%  Html.RenderPartial("~/Views/InvoiceProcess/ScriptHelper/Common.ascx"); %>
-<%  Html.RenderPartial("~/Views/InvoiceProcess/ScriptHelper/Notify.ascx"); %>
+<%  Html.RenderPartial("~/Views/InvoiceProcess/ScriptHelper/Common.cshtml"); %>
+<%  Html.RenderPartial("~/Views/InvoiceProcess/ScriptHelper/Notify.cshtml"); %>
 <script runat="server">
 
     ModelSource<InvoiceItem> models;

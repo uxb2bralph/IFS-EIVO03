@@ -28,9 +28,9 @@ namespace Model.Models.ViewModel
             return __InvoiceTypeList.Contains(String.Format("{0:00}", invoiceType));
         }
 
-        public static bool IsValidInvoiceType(this String invoiceType)
+        public static bool IsValidInvoiceType(this String invoiceType, out byte data)
         {
-            if (byte.TryParse(invoiceType, out byte data))
+            if (byte.TryParse(invoiceType, out data))
             {
                 return data.IsValidInvoiceType();
             }

@@ -6,8 +6,6 @@
 @using Model.Locale
 @using eIVOGo.Controllers
 @using eIVOGo.Helper
-@using eIVOGo.Resource.Views.Handling.MailTracking
-
 @{
     ModelSource<InvoiceItem> models;
     InvoiceItem _model;
@@ -39,11 +37,11 @@
     </td>
     <td>
         <div class="btn-group dropdown" data-toggle="dropdown">
-            <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">@DataItem.請選擇功能</button>
+            <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">請選擇功能</button>
             <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
             <ul class="dropdown-menu">
-                <li><a class="btn" onclick="uiHandling.pack();">@DataItem.合併</a></li>
-                <li><a class="btn" onclick="uiHandling.delete(@(_model.PackageID));">@DataItem.刪除</a></li>
+                <li><a class="btn" onclick="uiHandling.pack();">合併</a></li>
+                <li><a class="btn" onclick="uiHandling.delete(@(_model.PackageID));">刪除</a></li>
             </ul>
         </div>
     </td>

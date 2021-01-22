@@ -1,19 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Linq;
+using System.Data.SqlClient;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+
 using Business.Helper;
+using ClosedXML.Excel;
 using eIVOGo.Helper;
 using eIVOGo.Models;
-using Model.DataEntity;
-using Model.InvoiceManagement;
-using Model.Locale;
 using Model.Models.ViewModel;
+using eIVOGo.Models.ViewModel;
+using eIVOGo.Properties;
+using Model.DataEntity;
+using Model.Locale;
+using Model.Helper;
 using Model.Security.MembershipManagement;
 using ModelExtension.Helper;
-using res = eIVOGo.Resource.Controllers.AllowanceProcess;
+using Utility;
+using Model.InvoiceManagement;
 
 namespace eIVOGo.Controllers
 {
@@ -74,7 +87,7 @@ namespace eIVOGo.Controllers
         public ActionResult InquireToVoid(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);
-            viewModel.ActionTitle = res.作廢折讓;
+            viewModel.ActionTitle = "作廢折讓";
             viewModel.CommitAction = "VoidAllowance";
             result.ViewName = "~/Views/AllowanceProcess/Index.cshtml";
             ViewBag.ResultAction = "VoidAllowance";
@@ -84,8 +97,7 @@ namespace eIVOGo.Controllers
         public ActionResult InvokeCommitAction(InquireInvoiceViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            return View("~/Views/AllowanceProcess/Module/InvokeCommitAction.cshtml",viewModel);
-            //return View("~/Views/AllowanceProcess/Module/" + viewModel.CommitAction + ".cshtml", viewModel);
+            return View("~/Views/AllowanceProcess/Module/InvokeCommitAction.cshtml");
         }
 
         public ActionResult CreateXlsx(InquireInvoiceViewModel viewModel)
@@ -102,38 +114,43 @@ namespace eIVOGo.Controllers
             modelSource.Inquiry = createModelInquiry();
             modelSource.BuildQuery();
 
-            var items = modelSource.Items.OrderBy(i => i.AllowanceID)
-                .Select(i => new
+            var prodItems = models.GetTable<InvoiceAllowanceDetail>()
+                                .Join(models.GetTable<InvoiceAllowanceItem>(), d => d.ItemID, p => p.ItemID, (d, p) => new { d.AllowanceID, p.InvoiceNo, p.Amount, p.Tax, p.Remark })
+                                .GroupBy(a => new { a.AllowanceID, a.InvoiceNo, a.Remark })
+                                .Select(g => new { g.Key, TotalAmt = g.Sum(v => v.Amount), TotalTax = g.Sum(v => v.Tax) });
+
+            var items = modelSource.Items
+                .OrderBy(i => i.AllowanceID)
+                .Join(prodItems, i => i.AllowanceID, g => g.Key.AllowanceID, (i, g) => new
                 {
                     折讓單號碼 = i.AllowanceNumber,
-                    原發票號碼 = i.InvoiceAllowanceDetails.First().InvoiceAllowanceItem.InvoiceNo,
+                    原發票號碼 = g.Key.InvoiceNo,
                     折讓日期 = i.AllowanceDate,
                     客戶ID = i.InvoiceAllowanceBuyer.CustomerID,
                     發票開立人 = i.InvoiceAllowanceSeller.CustomerName,
                     開立人統編 = i.InvoiceAllowanceSeller.ReceiptNo,
-                    未稅金額 = i.TotalAmount,
-                    稅額 = i.TaxAmount,
+                    未稅金額 = g.TotalAmt,
+                    稅額 = g.TotalTax,
                     含稅金額 = i.TotalAmount + i.TaxAmount,
                     買受人名稱 = i.InvoiceAllowanceBuyer.CustomerName,
                     買受人統編 = i.InvoiceAllowanceBuyer.ReceiptNo,
                     連絡人名稱 = i.InvoiceAllowanceBuyer.ContactName,
                     連絡人地址 = i.InvoiceAllowanceBuyer.Address,
                     買受人EMail = i.InvoiceAllowanceBuyer.EMail,
-                    備註 = i.InvoiceAllowanceDetails.First().InvoiceAllowanceItem.Remark
-                    //備註 = String.Join("", i.InvoiceAllowanceDetails.Select(t => t.InvoiceAllowanceItem)
-                    //    .Select(p => p.Remark))
+                    備註 = g.Key.Remark
                 });
+
 
             Response.Clear();
             Response.ClearContent();
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "message/rfc822";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode(res.折讓資料明細+".xlsx")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("折讓資料明細.xlsx")));
 
             using (DataSet ds = new DataSet())
             {
-                DataTable table = new DataTable(res.折讓資料明細);
+                DataTable table = new DataTable("折讓資料明細");
                 ds.Tables.Add(table);
                 table.Columns.Add("折讓單號碼");
                 table.Columns.Add("原發票號碼");
@@ -157,29 +174,11 @@ namespace eIVOGo.Controllers
                     r["買受人統編"] = "";
                 }
 
-                table.Columns[0].Caption = res.折讓單號碼;
-                table.Columns[1].Caption = res.原發票號碼;
-                table.Columns[2].Caption = res.折讓日期;
-                table.Columns[3].Caption = res.客戶ID;
-                table.Columns[4].Caption = res.發票開立人;
-                table.Columns[5].Caption = res.開立人統編;
-                table.Columns[6].Caption = res.未稅金額;
-                table.Columns[7].Caption = res.稅額;
-                table.Columns[8].Caption = res.含稅金額;
-                table.Columns[9].Caption = res.買受人名稱;
-                table.Columns[10].Caption = res.買受人統編;
-                table.Columns[11].Caption = res.連絡人名稱;
-                table.Columns[12].Caption = res.連絡人地址;
-                table.Columns[13].Caption = res.買受人EMail;  
-                table.Columns[14].Caption = res.備註;
-
                 using (var xls = ds.ConvertToExcel())
                 {
                     xls.SaveAs(Response.OutputStream);
                 }
             }
-
-
 
             return new EmptyResult();
         }
@@ -192,14 +191,14 @@ namespace eIVOGo.Controllers
                 mgr.VoidAllowance(chkItem);
                 if (mgr.EventItems_Allowance != null && mgr.EventItems_Allowance.Count > 0)
                 {
-                    ViewBag.Message = res.下列折讓已作廢完成__+"\r\n" + String.Join("\r\n", mgr.EventItems_Allowance.Select(i => i.AllowanceNumber));
+                    ViewBag.Message = "下列折讓已作廢完成!!\r\n" + String.Join("\r\n", mgr.EventItems_Allowance.Select(i => i.AllowanceNumber));
                     EIVOPlatformFactory.Notify();
                 }
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
             else
             {
-                ViewBag.Message = res.請選擇作廢資料__;
+                ViewBag.Message = "請選擇作廢資料!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
@@ -215,7 +214,7 @@ namespace eIVOGo.Controllers
                 return View("~/Views/AllowanceProcess/Module/PrintResult.cshtml");
             }
             else
-                return Json(new { result = false, message = res.資料已列印請重新選擇__ });
+                return Json(new { result = false, message = "資料已列印請重新選擇!!" });
         }
 
         public ActionResult IssueAllowanceNotice(int[] chkItem,bool? cancellation)
@@ -230,12 +229,12 @@ namespace eIVOGo.Controllers
                 {
                     chkItem.NotifyIssuedAllowance();
                 }
-                ViewBag.Message = res.Email通知已重送__;
+                ViewBag.Message = "Email通知已重送!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
             else
             {
-                ViewBag.Message = res.請選擇重送資料__;
+                ViewBag.Message = "請選擇重送資料!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 

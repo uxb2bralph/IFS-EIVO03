@@ -157,7 +157,7 @@ namespace eIVOGo.Module.SYS
                 return;
             }
             if (UpdateBlankInvoice.Checked)
-                ServiceWorkItem.doUnassignNOCheck(this.SellerID.SelectedValue,this.SelectTrackCode.SelectedValue);
+                ServiceWorkItem.doUnassignNOCheck(int.Parse(this.SellerID.SelectedValue),int.Parse(this.SelectTrackCode.SelectedValue));
             itemList.BuildQuery = table =>
             {
                 return table.Where(queryExpr);

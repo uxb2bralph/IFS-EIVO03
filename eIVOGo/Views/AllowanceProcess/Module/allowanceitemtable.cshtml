@@ -1,4 +1,3 @@
-﻿
 @using System.Linq
 @using System.IO
 @using System.Linq.Expressions
@@ -14,32 +13,35 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@using res = eIVOGo.Resource.Views.AllowanceProcess.Module.AllowanceItemTable
 @{
+
     ModelSource<InvoiceItem> models;
     IQueryable<InvoiceAllowance> _model;
-    String _listID = "itemList" + DateTime.Now.Ticks;   
+    String _listID = "itemList" + DateTime.Now.Ticks;
+    InquireInvoiceViewModel _viewModel;
 
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _model = (IQueryable<InvoiceAllowance>)this.Model;
-}
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 
+}
 <table id="@(_listID)" class="table01 itemList">
     <thead>
         <tr>
             <th aria-sort="other">
                 <input name="chkAll" type="checkbox" />
             </th>
-            <th data-sort="1">@res.日期</th>
+            <th data-sort="1">日期</th>
             <th data-sort="2">Customer ID</th>
-            <th data-sort="3">@res.開立發票營業人</th>
-            <th data-sort="4">@res.統編</th>
-            <th data-sort="5">@res.折讓號碼</th>
-            <th data-sort="6">@res.未稅金額</th>
-            <th data-sort="7">@res.稅額</th>
-            <th aria-sort="other">@res.含稅金額</th>
-            <th data-sort="9">@res.買受人統編</th>
-            <th aria-sort="other">@res.備註</th>
+            <th data-sort="3">開立發票營業人</th>
+            <th data-sort="4">統編</th>
+            <th data-sort="5">折讓號碼</th>
+            <th data-sort="6">未稅金額</th>
+            <th data-sort="7">稅額</th>
+            <th aria-sort="other">含稅金額</th>
+            <th data-sort="9">買受人統編</th>
+            <th data-sort="other">買受人EMail</th>
+            <th aria-sort="other">備註</th>
         </tr>
     </thead>
     <tbody>
@@ -48,9 +50,9 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="11">
-                @res.未稅金額總計：&nbsp;@(String.Format("{0:##,###,###,##0}", _model.Sum(i => i.TotalAmount)))，
-                @res.稅額總計：&nbsp;@(String.Format("{0:##,###,###,##0}", _model.Sum(i => i.TaxAmount)))
+            <td colspan="12">
+                未稅金額總計：&nbsp;@(String.Format("{0:##,###,###,##0.##}",_model.Sum(i=>i.TotalAmount)))，
+                稅額總計：&nbsp;@(String.Format("{0:##,###,###,##0.##}",_model.Sum(i=>i.TaxAmount)))
 
                 <script>
                     debugger;
@@ -96,3 +98,7 @@
         </tr>
     </tfoot>
 </table>
+
+
+
+

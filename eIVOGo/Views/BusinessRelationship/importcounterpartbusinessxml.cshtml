@@ -1,11 +1,13 @@
-﻿@using eIVOGo.Helper
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
 @using Model.Locale
 @using eIVOGo.Models.ViewModel
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
-@using eIVOGo.Resource.Views.Common
-
 @{
     Layout = "~/Views/Template/MvcMainPage.cshtml";
 
@@ -14,8 +16,15 @@
 
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _modelState = (ModelStateDictionary)ViewBag.ModelState;
-    ViewBag.ActionName = TreeView.首頁 + " > " + TreeView.匯入商務關係相對營業人;
+    ViewBag.ActionName = "首頁 > 匯入商務關係相對營業人";
 }
 
-@{ Html.RenderPartial("~/Views/BusinessRelationship/Module/EditImportCounterpartBusinessXml.cshtml");}
-d
+@section headContent {
+
+}
+@section formContent {
+    @{ Html.RenderPartial("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessXml.cshtml");}
+
+}
+
+

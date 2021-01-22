@@ -12,36 +12,30 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@using page = eIVOGo.Resource.Views.Common.Page
-
 @{
     ModelSource<InvoiceItem> models;
     IQueryable<InvoiceAllowance> _model;
     InquireInvoiceViewModel _viewModel;
 
-    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
 
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 
     _model = (IQueryable<InvoiceAllowance>)this.Model;
-
-    var recordCount = _model.Count();
-
-    ViewBag.ViewModel = _viewModel;
 }
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", page.查詢結果);}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "查詢結果");}
 
 <div class="border_gray" style="overflow-x: auto;">
-
+    @{ var recordCount = _model.Count();}
     @if (recordCount > 0)
     {
         Html.RenderPartial("~/Views/AllowanceProcess/Module/AllowanceQueryPaging.cshtml", _model);
-
         Html.RenderPartial("~/Views/AllowanceProcess/Module/ResultAction.cshtml", _model);
     }
     else
     {
-        <font color="red">@page.查無資料</font>
+        <font color="red">查無資料!!</font>
     }
 </div>
 

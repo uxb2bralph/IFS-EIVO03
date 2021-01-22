@@ -63,7 +63,7 @@
     </tbody>
 </table>
 <!--表格 開始-->
-<%  Html.RenderPartial("~/Views/InvoiceProcess/ScriptHelper/Common.ascx"); %>
+<%  Html.RenderPartial("~/Views/InvoiceProcess/ScriptHelper/Common.cshtml"); %>
 <script runat="server">
 
     ModelSource<InvoiceItem> models;

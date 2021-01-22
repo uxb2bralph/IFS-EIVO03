@@ -37,10 +37,9 @@ namespace InvoiceClient.Agent
             using (WebClientEx client = new WebClientEx())
             {
                 client.Timeout = 43200000;
-
-                String result = client.DownloadString(url);
                 try
                 {
+                    String result = client.DownloadString(url);
                     dynamic jsonResult = JsonConvert.DeserializeObject(result);
 
                     if (jsonResult.result == true)
@@ -54,6 +53,7 @@ namespace InvoiceClient.Agent
                 }
                 catch(Exception ex)
                 {
+                    Logger.Warn($"receive response error:{url}");
                     Logger.Error(ex);
                 }
 

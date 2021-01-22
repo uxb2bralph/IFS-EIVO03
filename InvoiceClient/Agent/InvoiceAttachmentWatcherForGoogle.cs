@@ -14,8 +14,6 @@ using Model.Schema.EIVO;
 using Model.Schema.EIVO.B2B;
 using Model.Schema.TXN;
 using Utility;
-using Model.InvoiceManagement;
-
 namespace InvoiceClient.Agent
 {
     class InvoiceAttachmentWatcherForGoogle : InvoiceWatcherForGoogle
@@ -96,10 +94,10 @@ namespace InvoiceClient.Agent
                 //}
 
                 if (contentPath != fullPath)
-                {                   
+                {
                     File.Delete(contentPath);
                 }
-                
+
                 if (result.Result.value != 1)
                 {
                     processError(result.Result.message, null, fileName);
@@ -123,13 +121,13 @@ namespace InvoiceClient.Agent
                     if (_isPGP)
                     {
                         String responseName = String.Format("{0}{1}", Path.Combine(Logger.LogDailyPath, Path.GetFileNameWithoutExtension(contentPath.Replace("request", "response").Replace("_OUT_", "_IN_"))), ".xml");
-                        auto.ConvertToXml().Save(responseName);
+                        auto.ConvertToXml().SaveDocumentWithEncoding(responseName);
 
                         String gpgName = responseName.EncryptFileTo(_ResponsedPath);
                     }
                     else
                     {
-                        auto.ConvertToXml().Save(String.Format("{0}{1}", Path.Combine(_ResponsedPath, Path.GetFileNameWithoutExtension(fileName.Replace("request", "response").Replace("_OUT_", "_IN_"))), ".xml"));
+                        auto.ConvertToXml().SaveDocumentWithEncoding(String.Format("{0}{1}", Path.Combine(_ResponsedPath, Path.GetFileNameWithoutExtension(fileName.Replace("request", "response").Replace("_OUT_", "_IN_"))), ".xml"));
                     }
                 }
             }

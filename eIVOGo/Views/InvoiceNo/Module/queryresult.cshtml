@@ -1,27 +1,32 @@
-﻿@using System.IO
+
+@using System.IO
 @using System.Linq.Expressions
+
 
 @using Model.DataEntity
 @using Model.Locale
 @using Utility
-@using res=eIVOGo.Resource.Views.InvoiceNo.Module.QueryResult
-
 @{
     IEnumerable<InvoiceNoInterval> _model;
     _model = (IEnumerable<InvoiceNoInterval>)this.Model;
 }
 
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.查詢結果);}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");}
 
-    <div class="border_gray" style="overflow-x: auto; max-width: 1024px;">
-        @{ var recordCount = _model.Count();}
-        @if (recordCount > 0)
-        {
-            Html.RenderPartial("~/Views/InvoiceNo/Module/IntervalItemList.cshtml", _model);
-        }
-        else
-        {
-            <font color="red">查無資料!!</font>
-            Html.RenderPartial("~/Views/InvoiceNo/Module/IntervalItemList.cshtml", _model);
-        }
-    </div>
+
+<div class="border_gray" style="overflow-x: auto; max-width: 1024px;">
+    @{
+        var recordCount = _model.Count();
+    }
+    @if (recordCount > 0)
+    {
+        Html.RenderPartial("~/Views/InvoiceNo/Module/IntervalItemList.cshtml", _model);
+    }
+    else
+    {
+        <font color="red">查無資料!!</font>
+        Html.RenderPartial("~/Views/InvoiceNo/Module/IntervalItemList.cshtml", _model);
+    }
+</div>
+
+

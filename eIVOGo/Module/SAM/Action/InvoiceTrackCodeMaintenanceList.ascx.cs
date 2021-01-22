@@ -39,7 +39,7 @@ namespace eIVOGo.Module.SAM.Action
             var item = mgr.EntityList.Where(t => t.TrackID == trackID).FirstOrDefault();
             if (item != null)
             {
-                if (item.InvoiceTrackCodeAssignments.Count > 0)
+                if (item.InvoiceTrackCodeAssignment.Count > 0)
                 {
                     this.AjaxAlert("該字軌已被使用,無法刪除!!");
                 }

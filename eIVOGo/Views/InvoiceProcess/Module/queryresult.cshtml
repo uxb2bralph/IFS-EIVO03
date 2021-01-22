@@ -12,48 +12,42 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@using res = eIVOGo.Resource.Views.InvoiceProcess.Module.QueryResult
-
 @{
+
     ModelSource<InvoiceItem> models;
-
     IQueryable<InvoiceItem> _model;
-
     InquireInvoiceViewModel _viewModel;
 
-    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
 
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 
     _model = (IQueryable<InvoiceItem>)this.Model;
-
-    var recordCount = _model.Count();
 }
-
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.查詢結果);}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");}
 
 
 <div class="border_gray" style="overflow-x: auto;">
-
-    @if (recordCount > 0)
-    {
-        Html.RenderPartial("~/Views/InvoiceProcess/Module/QueryPaging.cshtml", _model);
-
-
-        if (ViewBag.ResultAction != null)
+    @{
+        var recordCount = _model.Count();
+        if (recordCount > 0)
         {
-            Html.RenderPartial((String)ViewBag.ResultAction);
+            Html.RenderPartial("~/Views/InvoiceProcess/Module/QueryPaging.cshtml", _model);
+
+            if (ViewBag.ResultAction != null)
+            {
+                Html.RenderPartial((String)ViewBag.ResultAction);
+            }
+        }
+        else
+        {
+            <font color="red">查無資料!!</font>
         }
     }
-    else
-    {
-        <font color="red">@res.查無資料__</font>
-    }
-
-    @*@{ var cmd = models.GetCommand(_model);}
-
-        @(cmd.CommandText)*@
 </div>
+
+
 
 
 

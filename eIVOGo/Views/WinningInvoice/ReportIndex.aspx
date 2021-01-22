@@ -2,6 +2,7 @@
 
 <%@ Register Src="~/Views/WinningInvoice/Module/InquireWinning.ascx" TagPrefix="uc1" TagName="InquireWinning" %>
 
+
 <asp:Content ID="header" ContentPlaceHolderID="headContent" runat="server">
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="formContent" runat="server">
@@ -12,7 +13,7 @@
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        ViewBag.ActionName = eIVOGo.Resource.Views.Common.TreeView.首頁___發票作業;
+        ViewBag.ActionName = "首頁 > 發票作業";
     }
 
 </script>

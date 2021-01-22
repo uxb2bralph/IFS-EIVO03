@@ -169,19 +169,21 @@ namespace Model.InvoiceManagement.Validator
             _newItem.TrackCode = _c0401Item.Main.InvoiceNumber.Substring(0, 2);
             _newItem.No = _c0401Item.Main.InvoiceNumber.Substring(2);
 
-            if (_mgr.GetTable<InvoiceItem>().Any(i => i.TrackCode == _newItem.TrackCode && i.No == _newItem.No))
+            if (_models.GetTable<InvoiceItem>().Any(i => i.TrackCode == _newItem.TrackCode && i.No == _newItem.No))
             {
                 return new Exception(MessageResources.AlertInvoiceDuplicated);
             }
 
             if (_seller.OrganizationStatus.EnableTrackCodeInvoiceNoValidation == true)
             {
-                TrackNoManager trackMgr = new TrackNoManager(_mgr, _seller.CompanyID);
-                var item = trackMgr.GetAppliedInterval(invoiceDate, _newItem.TrackCode, int.Parse(_newItem.No));
-
-                if (item == null)
+                using (TrackNoManager trackMgr = new TrackNoManager(_models, _seller.CompanyID))
                 {
-                    return new Exception(String.Format("發票號碼錯誤:{0}，TAG:< InvoicNumber />", _c0401Item.Main.InvoiceNumber));
+                    var item = trackMgr.GetAppliedInterval(invoiceDate, _newItem.TrackCode, int.Parse(_newItem.No));
+
+                    if (item == null)
+                    {
+                        return new Exception(String.Format("發票號碼錯誤:{0}，TAG:< InvoicNumber />", _c0401Item.Main.InvoiceNumber));
+                    }
                 }
             }
 
@@ -197,14 +199,14 @@ namespace Model.InvoiceManagement.Validator
                 return new Exception("C0401資料格式錯誤");
             }
 
-            _seller = _mgr.GetTable<Organization>().Where(o => o.ReceiptNo == _c0401Item.Main.Seller.Identifier).FirstOrDefault();
+            _seller = _models.GetTable<Organization>().Where(o => o.ReceiptNo == _c0401Item.Main.Seller.Identifier).FirstOrDefault();
 
             if (_seller == null)
             {
                 return new Exception(String.Format("賣方為非註冊店家,開立人統一編號:{0}，TAG:< Identifier />", _c0401Item.Main.Seller.Identifier));
             }
 
-            if (_seller.CompanyID != _owner.CompanyID && !_mgr.GetTable<InvoiceIssuerAgent>().Any(a => a.AgentID == _owner.CompanyID && a.IssuerID == _seller.CompanyID))
+            if (_seller.CompanyID != _owner.CompanyID && !_models.GetTable<InvoiceIssuerAgent>().Any(a => a.AgentID == _owner.CompanyID && a.IssuerID == _seller.CompanyID))
             {
                 return new Exception(String.Format("簽章設定人與發票開立人不符,開立人統一編號:{0}，TAG:< Identifier />", _c0401Item.Main.Seller.Identifier));
             }
@@ -225,6 +227,10 @@ namespace Model.InvoiceManagement.Validator
             else if (_c0401Item.Main.Buyer.Identifier == null || !Regex.IsMatch(_c0401Item.Main.Buyer.Identifier, "^[0-9]{8}$"))
             {
                 return new Exception(String.Format("買方識別碼錯誤，傳送資料：{0}，TAG:< Identifier />", _c0401Item.Main.Buyer.Identifier));
+            }
+            else if (_c0401Item.Main.Buyer.Name == null)
+            {
+                return new Exception(String.Format("買方名稱格式錯誤，傳送資料：{0}，TAG:< Name />", _c0401Item.Main.Buyer.Name));
             }
             else if (_c0401Item.Main.Buyer.Name.Length > 60)
             {
@@ -670,15 +676,15 @@ namespace Model.InvoiceManagement.Validator
                 }
 
 
-                if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
-                {
-                    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
-                }
+                //if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
+                //}
 
-                if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
-                {
-                    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
-                }
+                //if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
+                //}
 
             }
             return null;

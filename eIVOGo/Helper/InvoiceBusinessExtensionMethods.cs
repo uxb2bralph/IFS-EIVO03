@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using DataAccessLayer.basis;
 using Model.DataEntity;
+using Model.Helper;
+using Model.InvoiceManagement;
 using Model.Locale;
+using Model.Models.ViewModel;
 using Model.Security.MembershipManagement;
+using Utility;
 
 namespace eIVOGo.Helper
 {
@@ -115,7 +121,10 @@ namespace eIVOGo.Helper
 
                 default:
                     var agentID = profile.CurrentUserRole.OrganizationCategory.CompanyID;
-                    return items.Where(i => i.AgentID == agentID);
+                    var issuers = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == agentID)
+                        .Select(a => a.IssuerID);
+                    return items.Where(i => i.AgentID == agentID
+                                    || issuers.Any(a => i.AgentID == a));
 
             }
 
@@ -134,6 +143,127 @@ namespace eIVOGo.Helper
 
             }
 
+        }
+
+        public static List<InvoiceNoAllocation> AllocateInvoiceNo(this GenericManager<EIVOEntityDataContext> models, POSDeviceViewModel viewModel)
+        {
+            List<InvoiceNoAllocation> items = new List<InvoiceNoAllocation>();
+
+            //receiptNo = receiptNo.GetEfficientString();
+            var seller = models.GetTable<Organization>().Where(c => c.ReceiptNo == viewModel.company_id).FirstOrDefault();
+            bool auth = true;
+            if (seller != null)
+            {
+                if (viewModel.Seed != null && viewModel.Authorization != null)
+                {
+                    auth = models.CheckAuthToken(seller, viewModel) != null;
+                }
+
+                if (auth)
+                {
+                    try
+                    {
+                        using (TrackNoManager mgr = new TrackNoManager(models, seller.CompanyID))
+                        {
+                            for (int i = 0; i < viewModel.quantity; i++)
+                            {
+                                var item = mgr.AllocateInvoiceNo();
+                                if (item == null)
+                                    break;
+
+                                item.RandomNo = String.Format("{0:0000}", (DateTime.Now.Ticks % 10000));
+                                item.EncryptedContent = String.Concat(item.InvoiceNoInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode,
+                                        String.Format("{0:00000000}", item.InvoiceNo),
+                                        item.RandomNo).EncryptContent();
+                                models.SubmitChanges();
+
+                                items.Add(item);
+                            }
+                            mgr.Close();
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.Error(ex);
+                    }
+                }
+            }
+
+            return items;
+        }
+
+        static bool checkAuth(SHA256 hash,OrganizationToken token, AuthTokenViewModel viewModel)
+        {
+            String computedAuth = Convert.ToBase64String(
+                    Encoding.Default.GetBytes(
+                        String.Concat(
+                            hash.ComputeHash(
+                                Encoding.Default.GetBytes($"{token.Organization.ReceiptNo}{token.KeyID}{viewModel.Seed}")
+                            ).Select(b => b.ToString("x2"))
+                        )
+                    )
+                );
+
+            return viewModel.Authorization == computedAuth;
+        }
+
+        public static OrganizationToken CheckAuthToken(this GenericManager<EIVOEntityDataContext> models, Organization seller, AuthTokenViewModel viewModel)
+        {
+            SHA256 hash = SHA256.Create();
+
+            var agents = models.GetTable<InvoiceIssuerAgent>().Where(i => i.IssuerID == seller.CompanyID)
+                            .Select(a => a.AgentID);
+
+            var tokenItems = models.GetTable<Organization>().Where(o => o.CompanyID == seller.CompanyID || agents.Contains(o.CompanyID))
+                        .Join(models.GetTable<OrganizationToken>(), o => o.CompanyID, t => t.CompanyID, (o, t) => t)
+                        .ToArray();
+
+            foreach (var token in tokenItems)
+            {
+                if (checkAuth(hash, token, viewModel))
+                    return token;
+            }
+
+            return null;
+        }
+
+        public static bool CheckAvailableInterval(this GenericManager<EIVOEntityDataContext> models, POSDeviceViewModel viewModel,out String reason)
+        {
+            reason = null;
+            var seller = models.GetTable<Organization>().Where(c => c.ReceiptNo == viewModel.company_id).FirstOrDefault();
+            bool auth = true;
+            if (seller != null)
+            {
+                if (viewModel.Seed != null && viewModel.Authorization != null)
+                {
+                    auth = models.CheckAuthToken(seller, viewModel) != null;
+                }
+
+                if (auth)
+                {
+                    try
+                    {
+                        using (TrackNoManager mgr = new TrackNoManager(models, seller.CompanyID))
+                        {
+                            if(!mgr.PeekInvoiceNo().HasValue)
+                            {
+                                auth = false;
+                                reason = "inovice no not available!";
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex);
+                    }
+                }
+                else
+                {
+                    reason = "auth failed!";
+                }
+            }
+
+            return auth;
         }
 
     }

@@ -1,28 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Linq;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using System.Xml;
+
 using Business.Helper;
 using ClosedXML.Excel;
 using eIVOGo.Helper;
 using eIVOGo.Models;
+using eIVOGo.Models.ViewModel;
+using Model.Models.ViewModel;
 using eIVOGo.Properties;
 using Model.DataEntity;
 using Model.Helper;
 using Model.InvoiceManagement;
 using Model.Locale;
-using Model.Models.ViewModel;
 using Model.Security.MembershipManagement;
 using ModelExtension.Helper;
 using Utility;
-using res = eIVOGo.Resource.Controllers.InvoiceProcess;
+using Uxnet.Com.DataAccessLayer;
+using Newtonsoft.Json;
 
 namespace eIVOGo.Controllers
 {
@@ -47,7 +56,7 @@ namespace eIVOGo.Controllers
                 .Append(new InquireCustomerID { ControllerName = "InquireInvoice", ActionName = "ByCustomerID", CurrentController = this })
                 .Append(new InquireInvoiceDate { ControllerName = "InquireInvoice", ActionName = "ByInvoiceDate", CurrentController = this })
                 .Append(new InquireInvoiceAttachment { /*ControllerName = "InquireInvoice", ActionName = "ByAttachment",*/ CurrentController = this })
-                .Append(new InquireInvoiceNo { ViewName = "~/Views/InquireInvoice/ByInvoiceNo.cshtml", CurrentController = this })
+                .Append(new InquireInvoiceNo { ViewName="~/Views/InquireInvoice/ByInvoiceNo.cshtml", CurrentController = this })
                 .Append(new InquireInvoiceAgent { ControllerName = "InquireInvoice", ActionName = "ByAgent", CurrentController = this })
                 .Append(new InquireWinningInvoice { CurrentController = this });
         }
@@ -75,17 +84,17 @@ namespace eIVOGo.Controllers
             {
                 case Naming.CategoryID.COMP_E_INVOICE_B2C_SELLER:
                 case Naming.CategoryID.COMP_INVOICE_AGENT:
-                    ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryBySeller.cshtml";
+                    ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryBySeller.ascx";
                     break;
                 case Naming.CategoryID.COMP_E_INVOICE_B2C_BUYER:
                     ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryByBuyer.cshtml";
                     break;
                 default:
-                    ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQuery.cshtml";
+                    ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQuery.ascx";
                     break;
             }
 
-            return View(models.Inquiry);
+            return View("~/Views/InvoiceProcess/Index.cshtml", models.Inquiry);
 
         }
 
@@ -94,6 +103,8 @@ namespace eIVOGo.Controllers
             ViewResult result = (ViewResult)Index(viewModel);
             result.ViewName = "Index";
             ViewBag.ResultAction = "Notify";
+            viewModel.ResultAction = "Process";
+
             ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForNotice.cshtml";
             return result;
         }
@@ -101,22 +112,22 @@ namespace eIVOGo.Controllers
         public ActionResult InquireToCancel(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);
-            viewModel.ActionTitle = res.作廢電子發票;
+            viewModel.ActionTitle = "作廢電子發票";
             viewModel.CommitAction = "CancelInvoice";
             result.ViewName = "Index";
             ViewBag.ResultAction = "CancelInvoice";
-            ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForAction.cshtml";
+            ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForAction.ascx";
             return result;
         }
 
         public ActionResult InquireToIssueAllowance(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);
-            viewModel.ActionTitle = res.開立折讓證明;
+            viewModel.ActionTitle = "開立折讓證明";
             viewModel.CommitAction = "IssueAllowance";
             result.ViewName = "Index";
             ViewBag.ResultAction = "IssueAllowance";
-            ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForAction.cshtml";
+            ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForAction.ascx";
             return result;
         }
 
@@ -126,7 +137,7 @@ namespace eIVOGo.Controllers
             ViewResult result = (ViewResult)Index(viewModel);
             result.ViewName = "Index";
             ViewBag.ResultAction = "CreateMIG";
-            ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForMIG.cshtml";
+            ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForMIG.ascx";
             return result;
         }
 
@@ -144,19 +155,8 @@ namespace eIVOGo.Controllers
             ViewResult result = (ViewResult)Index(viewModel);
             result.ViewName = "Index";
             ViewBag.ResultAction = "Authorize";
-            ViewBag.Title = res.核准重印發票;
+            ViewBag.Title = "核准重印發票";
             ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForNotice.cshtml";
-
-            return result;
-        }
-
-        public ActionResult InquireToPrint(InquireInvoiceViewModel viewModel)
-        {
-            ViewResult result = (ViewResult)Index(viewModel);
-            result.ViewName = "Index";
-            ViewBag.ResultAction = "Print";
-            ViewBag.Title = res.發票列印;
-            ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForPrint.cshtml";
 
             return result;
         }
@@ -166,7 +166,7 @@ namespace eIVOGo.Controllers
             ViewResult result = (ViewResult)Index(viewModel);
             result.ViewName = "Index";
             ViewBag.ResultAction = "Void";
-            ViewBag.Title = res.註銷發票 + "(C0701)";
+            ViewBag.Title = "註銷發票(C0701)";
             ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForNotice.cshtml";
 
             return result;
@@ -177,8 +177,8 @@ namespace eIVOGo.Controllers
             ViewResult result = (ViewResult)Index(viewModel);
             result.ViewName = "Index";
             ViewBag.ResultAction = "Allow";
-            ViewBag.Title = res.核准註銷發票 + "(C0701)";
-            ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForAllowingToVoid.cshtml";
+            ViewBag.Title = "核准註銷發票(C0701)";
+            ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForAllowingToVoid.ascx";
 
             return result;
         }
@@ -256,27 +256,27 @@ namespace eIVOGo.Controllers
             switch (resultAction)
             {
                 case "Print":
-                    return "~/Views/InvoiceProcess/ResultAction/DoPrint.cshtml";
+                    return "~/Views/InvoiceProcess/ResultAction/DoPrint.ascx";
                 case "Notify":
                     return "~/Views/InvoiceProcess/ResultAction/DoNotify.cshtml";
                 case "IssueAllowance":
                 case "CancelInvoice":
-                    return "~/Views/InvoiceProcess/ResultAction/DoAction.cshtml";
+                    return "~/Views/InvoiceProcess/ResultAction/DoAction.ascx";
                 case "CreateMIG":
-                    return "~/Views/InvoiceProcess/ResultAction/DownloadMIG.cshtml";
+                    return "~/Views/InvoiceProcess/ResultAction/DownloadMIG.ascx";
                 case "Authorize":
-                    ViewBag.DataItemView = "~/Views/InvoiceProcess/Module/AuthorizeDataItemToPrint.cshtml";
-                    return "~/Views/InvoiceProcess/ResultAction/DoAuthorize.cshtml";
+                    ViewBag.DataItemView = "~/Views/InvoiceProcess/Module/AuthorizeDataItemToPrint.ascx";
+                    return "~/Views/InvoiceProcess/ResultAction/DoAuthorize.ascx";
                 case "Incoming":
-                    ViewBag.DataItemView = "~/Views/InvoiceProcess/Buyer/DataItem.cshtml";
-                    return "~/Views/InvoiceProcess/ResultAction/B2CQueryAction.cshtml";
+                    ViewBag.DataItemView = "~/Views/InvoiceProcess/Buyer/DataItem.ascx";
+                    return "~/Views/InvoiceProcess/ResultAction/B2CQueryAction.ascx";
                 case "Void":
-                    return "~/Views/InvoiceProcess/ResultAction/DoVoid.cshtml";
+                    return "~/Views/InvoiceProcess/ResultAction/DoVoid.ascx";
                 case "Allow":
-                    ViewBag.DataItemView = "~/Views/InvoiceProcess/Module/AuthorizeDataItemToVoid.cshtml";
-                    return "~/Views/InvoiceProcess/ResultAction/AllowToVoid.cshtml";
+                    ViewBag.DataItemView = "~/Views/InvoiceProcess/Module/AuthorizeDataItemToVoid.ascx";
+                    return "~/Views/InvoiceProcess/ResultAction/AllowToVoid.ascx";
                 default:
-                    return "~/Views/InvoiceProcess/ResultAction/MainQueryAction.cshtml";
+                    return "~/Views/InvoiceProcess/ResultAction/MainQueryAction.ascx";
             }
         }
 
@@ -415,13 +415,13 @@ namespace eIVOGo.Controllers
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "application/octet-stream";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode($"{res.發票資料明細}.xlsx")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("發票資料明細.xlsx")));
 
             using (DataSet ds = new DataSet())
             {
-                DataTable table = new DataTable(res.發票資料明細);
+                DataTable table = new DataTable("發票資料明細");
                 ds.Tables.Add(table);
-                table.Columns.Add("InvoiceID", typeof(int));
+                table.Columns.Add("InvoiceID",typeof(int));
                 table.Columns.Add("發票號碼");
                 table.Columns.Add("發票日期");
                 table.Columns.Add("附件檔名");
@@ -453,9 +453,9 @@ namespace eIVOGo.Controllers
 
                 if (viewModel.Attachment != 0)
                 {
-                    foreach (DataRow row in table.Rows)
+                    foreach(DataRow row in table.Rows)
                     {
-                        row[("附件檔頁數")] = ((int)row["InvoiceID"]).GetAttachedPdfPageCount(models);
+                        row["附件檔頁數"] = ((int)row["InvoiceID"]).GetAttachedPdfPageCount(models);
                     }
                 }
 
@@ -476,111 +476,6 @@ namespace eIVOGo.Controllers
                         r["買受人統編"] = "";
                     }
                 }
-
-                table.Columns[0].Caption = res.發票號碼;
-                table.Columns[1].Caption = res.發票日期;
-                table.Columns[2].Caption = res.附件檔名;
-                table.Columns[3].Caption = res.附件檔頁數;
-                table.Columns[4].Caption = res.客戶ID;
-                table.Columns[5].Caption = res.序號;
-                table.Columns[6].Caption = res.發票開立人;
-                table.Columns[7].Caption = res.開立人統編;
-                table.Columns[8].Caption = res.未稅金額;
-                table.Columns[9].Caption = res.稅額;
-                table.Columns[10].Caption = res.含稅金額;
-                table.Columns[11].Caption = res.買受人名稱;
-                table.Columns[12].Caption = res.買受人統編;
-                table.Columns[13].Caption = res.連絡人名稱;
-                table.Columns[14].Caption = res.連絡人地址;
-                table.Columns[15].Caption = res.買受人EMail;
-                table.Columns[16].Caption = res.愛心碼;
-                table.Columns[17].Caption = res.是否中獎;
-                table.Columns[18].Caption = res.載具類別;
-                table.Columns[19].Caption = res.載具號碼;
-                table.Columns[20].Caption = res.備註;
-
-                using (var xls = ds.ConvertToExcel())
-                {
-                    xls.SaveAs(Response.OutputStream);
-                }
-            }
-
-            Response.End();
-
-            return new EmptyResult();
-
-            //Response.Clear();
-            //Response.ClearContent();
-            //Response.ClearHeaders();
-            //Response.AddHeader("Cache-control", "max-age=1");
-            //Response.ContentType = "application/octet-stream";
-            //Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("UploadInvoiceTrackCodeSample.xlsx")));
-
-            //using (DataSet ds = new DataSet())
-            //{
-            //    DataTable table = new DataTable("Sheet1");
-            //    ds.Tables.Add(table);
-
-            //    table.Columns.Add("營業人統編");
-            //    table.Columns.Add("年份");
-            //    table.Columns.Add("發票期別");
-            //    table.Columns.Add("字軌");
-            //    table.Columns.Add("發票起號");
-            //    table.Columns.Add("發票迄號");
-
-            //    DataRow row = table.NewRow();
-            //    row[0] = "42523557";
-            //    row[1] = "109";
-            //    row[2] = "8";
-            //    row[3] = "CY";
-            //    row[4] = "00000001";
-            //    row[5] = "00000100";
-
-            //    table.Rows.Add(row);
-
-            //    using (var xls = ds.ConvertToExcel())
-            //    {
-            //        xls.SaveAs(Response.OutputStream);
-            //    }
-            //}
-
-            //Response.End();
-            
-            //return new EmptyResult();
-        }
-
-        public ActionResult GetUploadInvoiceTrackCodeSample()
-        {
-            var items = models.GetTable<InvoiceItem>().Where(i => false).Take(100);
-
-            Response.Clear();
-            Response.ClearContent();
-            Response.ClearHeaders();
-            Response.AddHeader("Cache-control", "max-age=1");
-            Response.ContentType = "application/octet-stream";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("UploadInvoiceTrackCodeSample.xlsx")));
-
-            using (DataSet ds = new DataSet())
-            {
-                DataTable table = new DataTable("Sheet1");
-                ds.Tables.Add(table);
-
-                table.Columns.Add("營業人統編");
-                table.Columns.Add("年份");
-                table.Columns.Add("發票期別");
-                table.Columns.Add("字軌");
-                table.Columns.Add("發票起號");
-                table.Columns.Add("發票迄號");
-
-                DataRow row = table.NewRow();
-                row[0] = "42523557";
-                row[1] = "109";
-                row[2] = "8";
-                row[3] = "CY";
-                row[4] = "00000001";
-                row[5] = "00000100";
-
-                table.Rows.Add(row);
 
                 using (var xls = ds.ConvertToExcel())
                 {
@@ -621,17 +516,17 @@ namespace eIVOGo.Controllers
                     EMail = i.InvoiceBuyer.EMail,
                 });
 
-            string filename = $"{res.發票買受人資料}.xlsx";
+
             Response.Clear();
             Response.ClearContent();
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "message/rfc822";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode(filename)));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("發票買受人資料.xlsx")));
 
             using (DataSet ds = new DataSet())
             {
-                DataTable table = new DataTable(res.買受人);
+                DataTable table = new DataTable("買受人");
                 ds.Tables.Add(table);
                 table.Columns.Add("發票號碼");
                 table.Columns.Add("營業人名稱");
@@ -641,12 +536,6 @@ namespace eIVOGo.Controllers
                 table.Columns.Add("EMail");
 
                 DataSource.GetDataSetResult(items, table);
-
-                table.Columns[0].Caption = res.發票號碼;
-                table.Columns[1].Caption = res.營業人名稱;
-                table.Columns[2].Caption = res.收件人姓名;
-                table.Columns[3].Caption = res.地址;
-                table.Columns[4].Caption = res.電話;
 
                 using (var xls = ds.ConvertToExcel())
                 {
@@ -692,7 +581,7 @@ namespace eIVOGo.Controllers
                 }
             });
 
-            return Content(res.下載資料請求已送出__);
+            return Content("下載資料請求已送出!!");
         }
 
 
@@ -702,17 +591,11 @@ namespace eIVOGo.Controllers
             ViewBag.ViewModel = viewModel;
             var profile = HttpContext.GetUser();
 
-            if (viewModel.ProcessType == Naming.InvoiceProcessType.A0401 && viewModel.PaperStyle=="A4")
+            if (viewModel.ProcessType == Naming.InvoiceProcessType.A0401)
             {
                 profile.EnqueueInvoicePrint(models, chkItem);
-                
                 //printUrl = "~/DataView/PrintA0401AsPDF";
                 //ViewBag.PrintView = "~/DataView/PrintA0401";
-            }
-            else if(viewModel.ProcessType == Naming.InvoiceProcessType.A0401 && viewModel.PaperStyle == "B5")
-            {
-                profile.EnqueueInvoicePrint(models, chkItem);
-                return View("~/Views/InvoiceProcess/Module/PrintA0401B5Result.cshtml");
             }
             else
             {
@@ -743,19 +626,18 @@ namespace eIVOGo.Controllers
                     }
                     else
                     {
-                        return Json(new { result = false, message = res.QRCode金鑰檔無內容_無法列印__ });
+                        return Json(new { result = false, message = "QRCode金鑰檔無內容，無法列印!!" });
                     }
                 }
                 else
                 {
-                    return Json(new { result = false, message = res.無QRCode金鑰檔_無法列印__ });
+                    return Json(new { result = false, message = "無QRCode金鑰檔，無法列印!!" });
                 }
             }
-
             return View("~/Views/InvoiceProcess/Module/PrintResult.cshtml");
         }
 
-        public ActionResult IssueInvoiceNotice(int[] chkItem, bool? cancellation, Naming.InvoiceProcessType? procesType)
+        public ActionResult IssueInvoiceNotice(int[] chkItem, bool? cancellation,Naming.InvoiceProcessType? processType,String mailTo)
         {
             if (chkItem != null && chkItem.Count() > 0)
             {
@@ -765,22 +647,22 @@ namespace eIVOGo.Controllers
                 }
                 else
                 {
-                    if (procesType == Naming.InvoiceProcessType.A0401)
+                    if (processType == Naming.InvoiceProcessType.A0401)
                     {
-                        chkItem.NotifyIssuedA0401();
+                        chkItem.NotifyIssuedA0401(mailTo);
                     }
                     else
                     {
-                        chkItem.NotifyIssuedInvoice(true);
+                        chkItem.NotifyIssuedInvoice(true, mailTo);
                     }
                 }
 
-                ViewBag.Message = res.Email通知已重送__;
+                ViewBag.Message = "Email通知已重送!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
             else
             {
-                ViewBag.Message = res.請選擇重送資料__;
+                ViewBag.Message = "請選擇重送資料!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
@@ -795,14 +677,14 @@ namespace eIVOGo.Controllers
                 mgr.VoidInvoice(chkItem);
                 if (mgr.EventItems != null && mgr.EventItems.Count > 0)
                 {
-                    ViewBag.Message = res.下列發票已作廢完成__ + "\r\n" + String.Join("\r\n", mgr.EventItems.Select(i => i.TrackCode + i.No));
+                    ViewBag.Message = "下列發票已作廢完成!!\r\n" + String.Join("\r\n", mgr.EventItems.Select(i => i.TrackCode + i.No));
                     EIVOPlatformFactory.Notify();
                 }
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
             else
             {
-                ViewBag.Message = res.請選擇作廢資料__;
+                ViewBag.Message = "請選擇作廢資料!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
@@ -821,7 +703,7 @@ namespace eIVOGo.Controllers
                     var g = items.GroupBy(i => i.InvoiceBuyer.ReceiptNo);
                     if (g.Count() > 1)
                     {
-                        ViewBag.Message = res.請選擇相同買受人之發票資料__;
+                        ViewBag.Message = "請選擇相同買受人之發票資料!!";
                         return View("~/Views/Shared/AlertMessage.cshtml");
                     }
 
@@ -830,7 +712,7 @@ namespace eIVOGo.Controllers
 
                     if (g2.Count() > 1)
                     {
-                        ViewBag.Message = res.請選擇相同類型之發票資料__;
+                        ViewBag.Message = "請選擇相同類型之發票資料!!";
                         return View("~/Views/Shared/AlertMessage.cshtml");
                     }
                 }
@@ -839,7 +721,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                ViewBag.Message = res.請選擇發票資料__;
+                ViewBag.Message = "請選擇發票資料!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
         }
@@ -859,12 +741,12 @@ namespace eIVOGo.Controllers
                 models.GetTable<DocumentAuthorization>().InsertAllOnSubmit(items);
                 models.SubmitChanges();
 
-                ViewBag.Message = res.下列發票已核准重印__ + "\r\n" + String.Join("\r\n", items.Select(i => i.CDS_Document.InvoiceItem.TrackCode + i.CDS_Document.InvoiceItem.No));
+                ViewBag.Message = "下列發票已核准重印!!\r\n" + String.Join("\r\n", items.Select(i => i.CDS_Document.InvoiceItem.TrackCode + i.CDS_Document.InvoiceItem.No));
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
             else
             {
-                ViewBag.Message = res.請選擇核准重印資料__;
+                ViewBag.Message = "請選擇核准重印資料!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
@@ -900,11 +782,11 @@ namespace eIVOGo.Controllers
 
                 //models.DeleteAny<AuthorizeToVoid>(i => chkItem.Contains(i.InvoiceID));
 
-                return View("~/Views/InvoiceProcess/ResultAction/VoidDone.cshtml");
+                return View("~/Views/InvoiceProcess/ResultAction/VoidDone.ascx");
             }
             else
             {
-                ViewBag.Message = res.請選擇核准註銷資料__;
+                ViewBag.Message = "請選擇核准註銷資料!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
@@ -929,11 +811,11 @@ namespace eIVOGo.Controllers
                     authorizeToVoid(items, mode);
                 }
 
-                return View("~/Views/InvoiceProcess/ResultAction/VoidDone.cshtml");
+                return View("~/Views/InvoiceProcess/ResultAction/VoidDone.ascx");
             }
             else
             {
-                ViewBag.Message = res.請選擇註銷資料__;
+                ViewBag.Message = "請選擇註銷資料!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
@@ -1033,7 +915,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                ViewBag.Message = res.請選擇下載資料__;
+                ViewBag.Message = "請選擇下載資料!!";
                 return View("~/Views/Shared/ShowMessage.aspx");
             }
 
@@ -1048,7 +930,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                ViewBag.Message = res.請選擇下載資料__;
+                ViewBag.Message = "請選擇下載資料!!";
                 return View("~/Views/Shared/ShowMessage.aspx");
             }
         }
@@ -1062,7 +944,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                ViewBag.Message = res.請選擇下載資料__;
+                ViewBag.Message = "請選擇下載資料!!";
                 return View("~/Views/Shared/ShowMessage.aspx");
             }
 
@@ -1177,7 +1059,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: res.買受人資料錯誤__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "買受人資料錯誤!!");
             }
 
             return View("~/Views/InvoiceProcess/Module/EditInvoiceBuyer.cshtml", item);
@@ -1245,12 +1127,88 @@ namespace eIVOGo.Controllers
         public ActionResult InquireToProcess(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);
-            result.ViewName = "~/Views/InvoiceProcess/Index.cshtml";
+            result.ViewName = "Index";
             viewModel.ResultAction = ViewBag.ResultAction = "Process";
-            ViewBag.Title = res.發票處理作業;
-            //ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForNotice.ascx";
+            ViewBag.Title = "發票處理作業";
+            //ViewBag.InquiryView = "~/Views/InvoiceProcess/InvoiceQueryForNotice.cshtml";
 
             return result;
+        }
+
+        public ActionResult UploadAttachment(AttachmentViewModel viewModel,HttpPostedFileBase theFile)
+        {
+            if (theFile == null)
+            {
+                return Json(new { result = false, message = "未選取檔案或檔案上傳失敗" }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                String fileName = Path.GetFileName(theFile.FileName);
+                String keyName = $"{Path.GetFileNameWithoutExtension(fileName)}{DateTime.Now.Ticks}";
+                String fullPath = Path.Combine(Logger.LogDailyPath, $"{keyName}{Path.GetExtension(fileName)}");
+                theFile.SaveAs(fullPath);
+
+                Attachment item =  new Attachment
+                    {
+                        KeyName = keyName,
+                        StoredPath = fullPath,
+                        DocID = viewModel.DocID,
+                    };
+                models.GetTable<Attachment>().InsertOnSubmit(item);
+                
+                models.SubmitChanges();
+
+                return Json(new { result = true, message = keyName }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        public ActionResult DeleteAttachment(AttachmentViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            AttachmentViewModel tmp = viewModel;
+
+            if(viewModel.KeyID!=null)
+            {
+                tmp = JsonConvert.DeserializeObject<AttachmentViewModel>(viewModel.KeyID.DecryptData());
+            }
+
+            try
+            {
+                var result = models.ExecuteCommand("delete Attachment where KeyName = {0} and DocID = {1}", tmp.KeyName, tmp.DocID);
+                if (result > 0)
+                {
+                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { result = false,message="資料錯誤!!" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ArrangeAttachment(InquireInvoiceViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)LoadInvoiceItem(viewModel);
+            InvoiceItem item = result.Model as InvoiceItem;
+
+            if (item == null)
+                return result;
+
+            return View("~/Views/InvoiceProcess/Module/ArrangeAttachment.cshtml", item);
+                 
         }
 
         public ActionResult LoadInvoiceItem(InquireInvoiceViewModel viewModel)
@@ -1267,7 +1225,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: res.資料錯誤__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
             }
 
             return View("~/Views/InvoiceProcess/Module/DataItem.cshtml", item);

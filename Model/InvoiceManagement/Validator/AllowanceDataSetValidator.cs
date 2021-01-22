@@ -34,17 +34,17 @@ namespace Model.InvoiceManagement.Validator
             public int Allowance_No { get; set; } = 0;
             public int Allowance_Date { get; set; } = 1;
             public int Seller_ID { get; set; } = 2;
-            public int Customer_ID { get; set; } = 3;
-            public int Buyer_Name { get; set; } = 4;
-            public int Buyer_ID { get; set; } = 5;
-            public int Allowance_Type { get; set; } = 6;
-            public int Contact_Name { get; set; } = 7;
-            public int EMail { get; set; } = 8;
-            public int Address { get; set; } = 9;
-            public int Phone { get; set; } = 10;
-            public int Tax_Amount { get; set; } = 11;
-            public int Total_Amount { get; set; } = 12;
-            public int Currency { get; set; } = 13;
+            //public int Customer_ID { get; set; } = 3;
+            //public int Buyer_Name { get; set; } = 4;
+            //public int Buyer_ID { get; set; } = 5;
+            //public int Allowance_Type { get; set; } = 6;
+            public int Contact_Name { get; set; } = 3;
+            public int EMail { get; set; } = 4;
+            public int Address { get; set; } = 5;
+            public int Phone { get; set; } = 6;
+            public int Tax_Amount { get; set; } = 7;
+            public int Total_Amount { get; set; } = 8;
+            public int Currency { get; set; } = 9;
         }
 
         internal DetailsFieldIndex DetailsField = new DetailsFieldIndex { };
@@ -161,6 +161,7 @@ namespace Model.InvoiceManagement.Validator
             {
                 return new Exception(MessageResources.InvalidAllowanceDate);
             }
+            _allowanceDate = allowanceDate.Value;
 
             _currency = null;
             if (!String.IsNullOrEmpty(_allowanceItem.GetString(AllowanceField.Currency)))
@@ -175,29 +176,30 @@ namespace Model.InvoiceManagement.Validator
             return null;
         }
 
-        InvoiceAllowanceBuyer _allowanceBuyer = null;
         protected override Exception CheckAllowanceItem()
         {
+            InvoiceAllowanceBuyer allowanceBuyer = null;
+
             if (_details == null || _details.Count() == 0)
             {
                 return new Exception("Allowance details not found.");
             }
 
-            byte? allowanceType = _allowanceItem.GetData<byte>(AllowanceField.Allowance_Type);
-            //課稅別
-            if (!allowanceType.HasValue || !Enum.IsDefined(typeof(Naming.AllowanceTypeDefinition), (int)allowanceType.Value))
-            {
-                allowanceType = (byte)Naming.AllowanceTypeDefinition.賣方開立;
-            }
+            //byte? allowanceType = _allowanceItem.GetData<byte>(AllowanceField.Allowance_Type);
+            //if (!allowanceType.HasValue || !Enum.IsDefined(typeof(Naming.AllowanceTypeDefinition), (int)allowanceType.Value))
+            //{
+            //    allowanceType = (byte)Naming.AllowanceTypeDefinition.賣方開立;
+            //}
+            byte allowanceType = (byte)Naming.AllowanceTypeDefinition.賣方開立;
 
             _productItems = new List<InvoiceAllowanceItem>();
             var invTable = models.GetTable<InvoiceItem>();
 
+            InvoiceItem originalInvoice = null;
             foreach (var i in _details)
             {
-                InvoiceItem originalInvoice = null;
-
-                if (i.GetString(DetailsField.Original_Invoice_No) != null && i.GetString(DetailsField.Original_Invoice_No).Length == 10)
+                String invoiceNo = i.GetString(DetailsField.Original_Invoice_No).GetEfficientString();
+                if (invoiceNo != null && invoiceNo.Length == 10)
                 {
                     String invNo, trackCode;
                     trackCode = i.GetString(DetailsField.Original_Invoice_No).Substring(0, 2);
@@ -283,9 +285,9 @@ namespace Model.InvoiceManagement.Validator
                     }
                 }
 
-                if(_allowanceBuyer==null)
+                if (allowanceBuyer == null)
                 {
-                    _allowanceBuyer = new InvoiceAllowanceBuyer
+                    allowanceBuyer = new InvoiceAllowanceBuyer
                     {
                         Name = originalInvoice.InvoiceBuyer.Name,
                         ReceiptNo = originalInvoice.InvoiceBuyer.ReceiptNo,
@@ -307,13 +309,13 @@ namespace Model.InvoiceManagement.Validator
                 AllowanceDate = _allowanceDate,
                 AllowanceNumber = _allowanceItem.GetString(AllowanceField.Allowance_No),
                 AllowanceType = allowanceType,
-                BuyerId = _allowanceBuyer.ReceiptNo,
+                BuyerId = allowanceBuyer.ReceiptNo,
                 SellerId = _seller.ReceiptNo,
-                TaxAmount = _allowanceItem.GetData<decimal>(AllowanceField.Tax_Amount),
-                TotalAmount = _allowanceItem.GetData<decimal>(AllowanceField.Total_Amount),
-                CurrencyID = _currency?.CurrencyID,
+                TaxAmount = _allowanceItem.GetData<decimal>(AllowanceField.Tax_Amount) ?? _productItems.Sum(p => p.Tax),
+                TotalAmount = _allowanceItem.GetData<decimal>(AllowanceField.Total_Amount) ?? _productItems.Sum(p => p.Amount),
+                CurrencyID = _currency?.CurrencyID ?? originalInvoice.InvoiceAmountType.CurrencyID,
                 //InvoiceID =  invTable.Where(i=>i.TrackCode + i.No == item.AllowanceItem.Select(a=>a.GetString(DetailsField.Original_Invoice_No)).FirstOrDefault()).Select(i=>i.InvoiceID).FirstOrDefault(),
-                InvoiceAllowanceBuyer = _allowanceBuyer,
+                InvoiceAllowanceBuyer = allowanceBuyer,
                 InvoiceAllowanceSeller = new InvoiceAllowanceSeller
                 {
                     Name = _seller.CompanyName,

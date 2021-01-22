@@ -7,7 +7,6 @@
 @using eIVOGo.Models
 @using eIVOGo.Controllers
 @using eIVOGo.Models.ViewModel
-@using eIVOGo.Resource.Views.OrganizationQuery.Module
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
@@ -28,7 +27,7 @@
 }
 @if (!models.InquiryHasError)
 {
-    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", CompanyResult.查詢結果);
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");
 
     <div class="container border_gray" style="overflow-x: auto;">
         @{ var recordCount = _model.Count();}
@@ -40,16 +39,16 @@
                 <ul class="pagination" id="compPagination"></ul>
             </nav>
             <script>
-                var pageNum = 0;               
+                var pageNum = 0;
                 $(function () {
                     var obj = $('#compPagination').twbsPagination({
                         totalPages: @((recordCount + Uxnet.Web.Properties.Settings.Default.PageSize - 1) / Uxnet.Web.Properties.Settings.Default.PageSize),
                         visiblePages: 10,
                         initiateStartPageClick: false,
-                        first: '@CompanyResult.最前',
-                        prev: '@CompanyResult.上頁',
-                        next: '@CompanyResult.下頁',
-                        last: '@CompanyResult.最後',
+                        first: '最前',
+                        prev: '上頁',
+                        next: '下頁',
+                        last: '最後',
                         onPageClick: function (event, page) {
                             pageNum = page;
                             inquireCompany(page, function (data) {
@@ -63,8 +62,8 @@
         }
         else
         {
-            <font color="red">@CompanyResult.查無資料</font>
-            <a class="btn" onclick="createCompany();">@CompanyResult.新增營業人</a>
+            <font color="red">查無資料!!</font>
+            <a class="btn" onclick="createCompany();">新增營業人</a>
         }
     </div>
 }

@@ -269,7 +269,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\SampleController.cs" />
-    <Compile Include="Helper\DbConnection.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Module\Ajax\PagingControl.ascx.cs">
       <DependentUpon>PagingControl.ascx</DependentUpon>
@@ -552,14 +551,12 @@
     </Compile>
     <Compile Include="Module\jQuery\EnumSelector.ascx.cs">
       <DependentUpon>EnumSelector.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Module\jQuery\EnumSelector.ascx.designer.cs">
       <DependentUpon>EnumSelector.ascx</DependentUpon>
     </Compile>
     <Compile Include="Module\jQuery\HtmlSelector.ascx.cs">
       <DependentUpon>HtmlSelector.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Module\jQuery\HtmlSelector.ascx.designer.cs">
       <DependentUpon>HtmlSelector.ascx</DependentUpon>
@@ -596,9 +593,7 @@
     <Compile Include="Module\SiteAction\SiteMenuData.cs">
       <DependentUpon>SiteMenuData.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Mvc\DataModel\EntityDataSource.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+    <Compile Include="Mvc\DataModel\EntityDataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs" />
     <Compile Include="Web References\WS_DocumentService\Reference.cs">

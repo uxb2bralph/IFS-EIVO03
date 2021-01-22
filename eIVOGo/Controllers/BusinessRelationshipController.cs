@@ -32,10 +32,6 @@ using ModelExtension.DataExchange;
 using ModelExtension.Helper;
 using Utility;
 using Uxnet.Com.Security.UseCrypto;
-using BusinessResource = eIVOGo.Resource.Controllers.BusinessRelationship;
-using BusinessRelationship = Model.DataEntity.BusinessRelationship;
-using Organization = Model.DataEntity.Organization;
-using UserProfile = Model.DataEntity.UserProfile;
 
 namespace eIVOGo.Controllers
 {
@@ -80,7 +76,7 @@ namespace eIVOGo.Controllers
             userProfile["UploadManager"] = null;
 
             ViewBag.Message = message;
-            return View("~/Views/BusinessRelationship/ImportCounterpartBusiness.cshtml");
+            return View();
         }
 
         public ActionResult InquireBusinessRelationship(BusinessRelationshipQueryViewModel viewModel)
@@ -179,7 +175,7 @@ namespace eIVOGo.Controllers
             var item = models.DeleteAny<BusinessRelationship>(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID);
             if (item == null)
             {
-                return Json(new { result = false, message = BusinessResource.營業人資料錯誤__ });
+                return Json(new { result = false, message = "營業人資料錯誤!!" });
             }
 
             return Json(new { result = true });
@@ -190,7 +186,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<BusinessRelationship>().Where(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: BusinessResource.營業人資料錯誤__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
             }
 
             item.CurrentLevel = (int)Naming.MemberStatusDefinition.Mark_To_Delete;
@@ -204,7 +200,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<BusinessRelationship>().Where(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: BusinessResource.營業人資料錯誤__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
             }
 
             item.CurrentLevel = (int)Naming.MemberStatusDefinition.Checked;
@@ -218,7 +214,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<BusinessRelationship>().Where(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: BusinessResource.營業人資料錯誤__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
             }
 
             item.Counterpart.OrganizationStatus.Entrusting = status;
@@ -232,7 +228,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<BusinessRelationship>().Where(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: BusinessResource.營業人資料錯誤__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
             }
 
             item.Counterpart.OrganizationStatus.EntrustToPrint = status;
@@ -245,12 +241,12 @@ namespace eIVOGo.Controllers
         {
             if (string.IsNullOrEmpty(viewModel.CompanyName))
             {
-                ModelState.AddModelError("CompanyName", BusinessResource.營業人名稱格式錯誤);
+                ModelState.AddModelError("CompanyName", "營業人名稱格式錯誤");
             }
 
             if (viewModel.ReceiptNo == null || !Regex.IsMatch(viewModel.ReceiptNo, "\\d{8}"))
             {
-                ModelState.AddModelError("ReceiptNo", BusinessResource.統編格式錯誤);
+                ModelState.AddModelError("ReceiptNo", "統編格式錯誤");
             }
 
             //if (string.IsNullOrEmpty(viewModel.ContactEmail) || !viewModel.ContactEmail.Contains('@'))
@@ -279,7 +275,7 @@ namespace eIVOGo.Controllers
 
             if (item.ReceiptNo == "0000000000")
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: BusinessResource.修改完成__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "修改完成!!");
             }
 
             return View("~/Views/BusinessRelationship/Module/DataItem.cshtml", model);
@@ -292,15 +288,15 @@ namespace eIVOGo.Controllers
 
             if (!viewModel.CompanyID.HasValue)
             {
-                ModelState.AddModelError("CompanyID", BusinessResource.請先建立集團成員__);
+                ModelState.AddModelError("CompanyID", "請先建立集團成員!!");
             }
             else if (!viewModel.BusinessType.HasValue)
             {
-                ModelState.AddModelError("BusinessType", BusinessResource.請選擇相對營業人類別__);
+                ModelState.AddModelError("BusinessType", "請選擇相對營業人類別!!");
             }
             else if (Request.Files.Count == 0)
             {
-                ModelState.AddModelError("csvFile", BusinessResource.請匯入檔案__);
+                ModelState.AddModelError("csvFile", "請匯入檔案!!");
             }
 
             if (!ModelState.IsValid)
@@ -331,15 +327,15 @@ namespace eIVOGo.Controllers
 
             if (!viewModel.CompanyID.HasValue)
             {
-                ModelState.AddModelError("CompanyID", BusinessResource.請先建立集團成員__);
+                ModelState.AddModelError("CompanyID", "請先建立集團成員!!");
             }
             else if (!viewModel.BusinessType.HasValue)
             {
-                ModelState.AddModelError("BusinessType", BusinessResource.請選擇相對營業人類別__);
+                ModelState.AddModelError("BusinessType", "請選擇相對營業人類別!!");
             }
             else if (Request.Files.Count == 0)
             {
-                ModelState.AddModelError("theFile", BusinessResource.請匯入檔案__);
+                ModelState.AddModelError("theFile", "請匯入檔案!!");
             }
 
             if (!ModelState.IsValid)
@@ -354,7 +350,7 @@ namespace eIVOGo.Controllers
 
             CounterpartBusinessExchange exchange = new CounterpartBusinessExchange();
             exchange.ExchangeData(viewModel, fileName);
-            if (exchange.NewUsers.Count > 0)
+            if(exchange.NewUsers.Count>0)
             {
                 Task.Factory.StartNew(() =>
                 {
@@ -376,22 +372,22 @@ namespace eIVOGo.Controllers
 
             if (!viewModel.CompanyID.HasValue)
             {
-                ModelState.AddModelError("CompanyID", BusinessResource.請先建立集團成員__);
+                ModelState.AddModelError("CompanyID", "請先建立集團成員!!");
             }
             else if (!viewModel.BusinessType.HasValue)
             {
-                ModelState.AddModelError("BusinessType", BusinessResource.請選擇相對營業人類別__);
+                ModelState.AddModelError("BusinessType", "請選擇相對營業人類別!!");
             }
             else if (Request.Files.Count == 0)
             {
-                ModelState.AddModelError("csvFile", BusinessResource.請匯入檔案__);
+                ModelState.AddModelError("csvFile", "請匯入檔案!!");
             }
 
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
                 ViewBag.Message = ModelState.ErrorMessage();
-                return View("~/Views/BusinessRelationship/ImportCounterpartBusinessCsv.aspx");
+                return View("~/Views/BusinessRelationship/ImportCounterpartBusinessCsv.cshtml");
             }
 
             var file = Request.Files[0];
@@ -405,7 +401,7 @@ namespace eIVOGo.Controllers
 
             userProfile["UploadManager"] = mgr;
 
-            return View("~/Views/BusinessRelationship/ImportCounterpartBusinessCsv.aspx");
+            return View("~/Views/BusinessRelationship/ImportCounterpartBusinessCsv.cshtml");
 
         }
 
@@ -428,7 +424,7 @@ namespace eIVOGo.Controllers
 
             if (mgr == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: BusinessResource.連線逾時_請重新匯入資料__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "連線逾時，請重新匯入資料!!");
             }
 
             return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessList.cshtml");
@@ -454,10 +450,10 @@ namespace eIVOGo.Controllers
 
             if (mgr == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: BusinessResource.連線逾時_請重新匯入資料__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "連線逾時，請重新匯入資料!!");
             }
 
-            return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessCsvList.ascx");
+            return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessCsvList.cshtml");
 
         }
 
@@ -480,10 +476,10 @@ namespace eIVOGo.Controllers
 
             if (mgr == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: BusinessResource.連線逾時_請重新匯入資料__);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "連線逾時，請重新匯入資料!!");
             }
 
-            return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessXmlList.ascx");
+            return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessXmlList.cshtml");
 
         }
 
@@ -506,7 +502,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                return Json(new { result = true, message = BusinessResource.資料檔有錯_無法匯入__ }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = true, message = "資料檔有錯,無法匯入!!" }, JsonRequestBehavior.AllowGet);
             }
 
         }
@@ -530,7 +526,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                return Json(new { result = true, message = BusinessResource.資料檔有錯_無法匯入__ }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = true, message = "資料檔有錯,無法匯入!!" }, JsonRequestBehavior.AllowGet);
             }
 
         }
@@ -554,7 +550,7 @@ namespace eIVOGo.Controllers
             }
             else
             {
-                return Json(new { result = true, message = BusinessResource.資料檔有錯_無法匯入__ }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = true, message = "資料檔有錯,無法匯入!!" }, JsonRequestBehavior.AllowGet);
             }
 
         }
@@ -587,7 +583,7 @@ namespace eIVOGo.Controllers
                 Response.ClearHeaders();
                 Response.AddHeader("Cache-control", "max-age=1");
                 Response.ContentType = "application/vnd.ms-excel";
-                Response.AddHeader("Content-Disposition", $"attachment;filename={HttpUtility.UrlEncode(BusinessResource.相對營業人)}.xlsx");
+                Response.AddHeader("Content-Disposition", $"attachment;filename={HttpUtility.UrlEncode("相對營業人")}.xlsx");
 
                 xls.SaveAs(Response.OutputStream);
             }

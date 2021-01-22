@@ -1,18 +1,19 @@
-﻿@using res = eIVOGo.Resource.Views.InquireInvoice.ByAttachment
 
+@using System.Linq.Expressions
+@using Model.DataEntity
+@using Model.Locale
+@using Utility
 <tr>
-    <th>
-        @res.附件檔
+    <th>附件檔 
     </th>
     <td class="tdleft">
-        <select name="attachment" class="form-control">
-            <option value="">@res.全部</option>
-            <option value="1">@res.有</option>
-            <option value="0">@res.無</option>
+        <select name="attachment">
+            <option value="">全部</option>
+            <option value="1">有</option>
+            <option value="0">無</option>
         </select>
     </td>
 </tr>
-
 <script>
     $(function () {
         $('select[name="attachment"]').val('@(Request["attachment"])');

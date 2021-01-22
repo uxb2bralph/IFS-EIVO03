@@ -1,20 +1,36 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Linq;
+using System.Data.SqlClient;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Script.Serialization;
+
 using Business.Helper;
+using ClosedXML.Excel;
 using eIVOGo.Helper;
-using CommittingResource = eIVOGo.Resource.Models.ViewModel.CommittingDataExtensions;
-using eIVOGo.Resource.Controllers;
-using Organization = Model.DataEntity.Organization;
-using Model.Locale;
+using eIVOGo.Models;
+using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
-using Utility;
+using eIVOGo.Properties;
 using Model.DataEntity;
+using Model.Locale;
+using Model.Security.MembershipManagement;
+using Utility;
 
 namespace eIVOGo.Models.ViewModel
 {
     public static class CommittingDataExtensions
     {
-        public static Organization CommitViewModel<TEntity>(this OrganizationViewModel viewModel, eIVOGo.Controllers.SampleController<TEntity> controller)
+        public static Organization CommitViewModel<TEntity>(this OrganizationViewModel viewModel,eIVOGo.Controllers.SampleController<TEntity> controller)
             where TEntity : class, new()
         {
             dynamic ViewBag = controller.ViewBag;
@@ -38,19 +54,19 @@ namespace eIVOGo.Models.ViewModel
                 {
                     if (models.GetTable<Organization>().Any(o => o.ReceiptNo == viewModel.ReceiptNo))
                     {
-                        ModelState.AddModelError("ReceiptNo", CommittingResource.相同的企業統編已存在__);
+                        ModelState.AddModelError("ReceiptNo", "相同的企業統編已存在!!");
                     }
                 }
             }
 
             if (!viewModel.CategoryID.HasValue)
             {
-                ModelState.AddModelError("CategoryID", CommittingResource.請設定公司類別__);
+                ModelState.AddModelError("CategoryID", "請設定公司類別!!");
             }
 
             if (!viewModel.SettingInvoiceType.HasValue)
             {
-                ModelState.AddModelError("SettingInvoiceType", CommittingResource.請設定發票類別__);
+                ModelState.AddModelError("SettingInvoiceType", "請設定發票類別!!");
             }
 
             if (!ModelState.IsValid)
@@ -99,12 +115,6 @@ namespace eIVOGo.Models.ViewModel
             item.ContactPhone = viewModel.ContactPhone;
             item.ContactMobilePhone = viewModel.ContactMobilePhone;
             item.ContactEmail = viewModel.ContactEmail;
-            //yuki加入客服專線 start
-            item.CustomerServiceHotline = viewModel.CustomerServiceHotline;
-            item.CustomerServiceEmail = viewModel.CustomerServiceEmail;
-            //yuki加入客服專線 end
-            //營業人資訊
-            item.BusinessPersonInformation = @viewModel.BusinessPersonInformation;
             item.OrganizationStatus.SetToPrintInvoice = viewModel.SetToPrintInvoice;
             item.OrganizationStatus.SetToOutsourcingCS = viewModel.SetToOutsourcingCS;
             item.OrganizationStatus.InvoicePrintView = viewModel.SetToPrintInvoice == true ? viewModel.InvoicePrintView.GetEfficientString() : null;

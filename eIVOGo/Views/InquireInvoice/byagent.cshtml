@@ -1,4 +1,5 @@
-﻿@using System.IO
+
+@using System.IO
 @using System.Linq.Expressions
 
 @using eIVOGo.Helper
@@ -13,46 +14,43 @@
 @using Model.Security.MembershipManagement
 @using Utility
 @using Uxnet.Web.WebUI
-@using res = eIVOGo.Resource.Views.InquireInvoice.ByAgent
-
-@{
-    ModelSource<InvoiceItem> models;
-
-    IQueryable<Organization> _model;
-
-    UserProfileMember _profile;
-
-    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-
-    _model = (IQueryable<Organization>)this.Model;
-
-    _profile = Context.GetUser();
-}
-
-@if (_profile.CurrentUserRole.OrganizationCategory.CategoryID == (int)Naming.CategoryID.COMP_SYS)
-{
-    <tr>
-        <th>
-            @res.代理業者統編
-        </th>
-        <td class="tdleft">
-            <select name="agentID" class="form-control">
-                <option value="">@res.全部</option>
-                @foreach (var a in _model)
+@if(_profile.CurrentUserRole.OrganizationCategory.CategoryID==(int)Naming.CategoryID.COMP_SYS)
+    {
+<tr>
+    <th>代理業者統編
+    </th>
+    <td class="tdleft">
+        <select name="agentID">
+            <option value="">全部</option>
+            @foreach(var a in _model)
                 {
-                    <option value="@(a.CompanyID)">@($"({a.ReceiptNo}) {a.CompanyName}")</option>
-                }
-            </select>
-            @if (Request["agentID"] != null)
-            {
-                <script>
+            <option value="@(a.CompanyID)">@($"({a.ReceiptNo}) {a.CompanyName}")</option>
+            }
+        </select>
+        @if(Request["agentID"]!=null) {
+        <script>
             $(function () {
                 $('select[name="agentID"]').val('@(Request["agentID"])');
             });
-                </script>
-            }
-        </td>
-    </tr>
+        </script>
+        }
+    </td>
+</tr>
 }
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+    IQueryable<Organization> _model;
+    UserProfileMember _profile;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        _model = (IQueryable<Organization>)this.Model;
+        _profile = Context.GetUser();
+    }
+
+</script>
 
 

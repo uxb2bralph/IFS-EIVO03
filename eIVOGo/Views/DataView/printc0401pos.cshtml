@@ -1,4 +1,5 @@
-﻿@using System.Linq
+﻿
+@using System.Linq
 @using System.IO
 @using System.Linq.Expressions
 
@@ -15,11 +16,12 @@
 @using Utility
 @using Business.Helper
 @using Uxnet.Web.WebUI
+@{
 
-@{ 
     ModelSource<InvoiceItem> models;
     IQueryable<DocumentPrintQueue> _model;
     RenderStyleViewModel _viewModel;
+
 
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _model = (IQueryable<DocumentPrintQueue>)this.Model;
@@ -33,7 +35,6 @@
         }
     }
 }
-
 <!DOCTYPE html>
 <html>
 <head runat="server">
@@ -57,12 +58,17 @@
 </head>
 <body style="margin:0px;">
     <form id="theForm" runat="server">
-        @{ var profile = Context.GetUser();
-            DocumentPrintQueue item;}
-        @while ((item = _model.FirstOrDefault()) != null)
-        {
-            Html.RenderPartial("~/Views/DataView/Module/C0401_POS.cshtml", item.CDS_Document.InvoiceItem);
-            models.MarkPrintedLog(item.CDS_Document.InvoiceItem, profile);
+        @{ 
+            var profile = Context.GetUser();
+            String invoicePrintView;
+            foreach (var item in _model.OrderBy(d => d.SubmitID).ToList())
+            {
+                invoicePrintView = _viewModel.UseCustomView == true
+                    ? item.CDS_Document.InvoiceItem.Organization.OrganizationStatus.InvoicePrintView.GetEfficientString()
+                    : null;
+                Html.RenderPartial(invoicePrintView ?? "~/Views/DataView/Module/C0401_POS.cshtml", item.CDS_Document.InvoiceItem);
+                models.MarkPrintedLog(item.CDS_Document.InvoiceItem, profile);
+            }
         }
     </form>
 </body>
@@ -73,4 +79,6 @@
         window.print();
     };
 </script>
+
+
 

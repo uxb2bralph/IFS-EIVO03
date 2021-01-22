@@ -1,40 +1,39 @@
-﻿@using System.IO
+@using System.IO
 @using System.Linq.Expressions
+
+
 @using Model.DataEntity
 @using Model.Locale
 @using Utility
-@using res=eIVOGo.Resource.Views.InvoiceNo.VacantNo.QueryResult
-
 @{
-    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.查詢結果);
 
-    List<InquireVacantNoResult> _model;
-
-    _model = (List<InquireVacantNoResult>)this.Model;
+    IQueryable<UnassignedInvoiceNo> _model = (IQueryable<UnassignedInvoiceNo>)this.Model;
 }
+@{ 
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");
+    }
 
 
 <div class="border_gray" style="overflow-x: auto; max-width: 1024px;">
     @{ var recordCount = _model.Count();}
     @if (recordCount > 0)
     {
-        { Html.RenderPartial("~/Views/InvoiceNo/VacantNo/ItemList.cshtml", _model); }
+        Html.RenderPartial("~/Views/InvoiceNo/VacantNo/ItemList.cshtml", _model);
 
         <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="Bargain_btn">
-                    <input type="button" class="btn" name="btnPrint" value="@res.下載Xml" onclick="uiVacantNoQuery.download();" />
-                    <input type="button" class="btn" name="btnPrint" value="@res.下載Csv" onclick="uiVacantNoQuery.downloadCsv();" />
+                    <input type="button" class="btn" name="btnPrint" value="下載Xml" onclick="uiVacantNoQuery.download();" />
+                    <input type="button" class="btn" name="btnPrint" value="下載Csv" onclick="uiVacantNoQuery.downloadCsv();" />
                 </td>
             </tr>
         </table>
     }
     else
     {
-        <font color="red">@res.查無資料__</font>
+        <font color="red">查無資料!!</font>
     }
 </div>
-
 
 
 

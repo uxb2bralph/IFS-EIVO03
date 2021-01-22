@@ -20,7 +20,7 @@
 <html>
 <head runat="server">
     <title>電子發票系統</title>
-    <link href="~/App_Themes/Ver2016/eivo.css?1.0" rel="stylesheet" type="text/css" />
+    <link href="~/App_Themes/Ver2016/eivo.css?1.1" rel="stylesheet" type="text/css" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 </head>
 <body style="font-family:KaiTi">

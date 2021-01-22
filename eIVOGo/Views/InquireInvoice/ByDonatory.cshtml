@@ -14,14 +14,12 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
-@using res=eIVOGo.Resource.Views.InquireInvoice.ByDonatory
-
 @{
     InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 }
 <tr>
     <th>
-        @res.愛心碼
+        愛心碼
     </th>
     <td class="tdleft">
         <input type="text" name="Donatory" value="@(_viewModel?.AgencyCode)" class="form-control" />

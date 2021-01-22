@@ -1,5 +1,14 @@
 
+@using System.IO
+@using System.Linq.Expressions
 
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
 <script>
     $(function () {
         var $postForm;
@@ -7,58 +16,53 @@
             window.uiWinningNo = {};
         }
         uiWinningNo.match = function () {
-            var year = $('input[name="Year"]').val();
-            var periodno = $('input[name="PeriodNo"]').val();
-            var sort = $('input[name="sort"]').serializeObject().sort;
-            var _Object = { Year: year, PeriodNo: periodno, Sort: sort };
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("MatchWinningInvoiceNo", "WinningNumber", new { resultAction = ViewBag.ResultAction, obj="_Object"})',
+            $('#theForm').ajaxForm({
+                url: "@(Url.Action("MatchWinningInvoiceNo","WinningNumber",new { resultAction = ViewBag.ResultAction }))",
                 beforeSubmit: function () {
                     showLoading();
-                },    
-                data: _Object,
-                dataType: "text",
+                },
                 success: function (data) {
+                    hideLoading();
                     if (data) {
                         var $data = $(data);
                         $('body').append($data);
                         $data.remove();
                     }
-                    hideLoading();
                 },
-                error: function (error) {
+                error: function () {
                     hideLoading();
                 }
-            });
+            }).submit();
         };
         uiWinningNo.resetWinning = function () {
-            var year = $('input[name="Year"]').val();
-            var periodno = $('input[name="PeriodNo"]').val();
-            var sort = $('input[name="sort"]').serializeObject().sort;
-            var _Object = { Year: year, PeriodNo: periodno, Sort: sort };
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("ClearWinningInvoiceNo", "WinningNumber", new { resultAction = ViewBag.ResultAction, obj="_Object"})',
+            $('#theForm').ajaxForm({
+                url: "@(Url.Action("ClearWinningInvoiceNo","WinningNumber",new { resultAction = ViewBag.ResultAction }))",
                 beforeSubmit: function () {
                     showLoading();
-                },    
-                data: _Object,
-                dataType: "text",
+                },
                 success: function (data) {
+                    hideLoading();
                     if (data) {
                         var $data = $(data);
                         $('body').append($data);
                         $data.remove();
                     }
-                    hideLoading();
                 },
-                error: function (error) {
+                error: function () {
                     hideLoading();
                 }
-            });
-        };        
+            }).submit();
+        };
     });
 </script>
+<script runat="server">
 
+    ModelSource<InvoiceItem> models;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+
+    }
+</script>
 

@@ -119,14 +119,14 @@ namespace InvoiceClient.Agent
             parseData(invoiceFile, Encoding.GetEncoding(Settings.Default.CsvEncoding));
         }
 
-        protected override void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
                 IEnumerable<String> message = rootInvoiceNo.Select(i => String.Format("發票號碼:{0}=>{1}", i.Value, i.Description));
                 Logger.Warn(String.Format("在上傳發票檔({0})時,傳送失敗!!原因如下:\r\n{1}", fileName, String.Join("\r\n", message.ToArray())));
 
-                InvoiceRoot invoice = docInv.ConvertTo<InvoiceRoot>();
+                InvoiceRoot invoice = docInv.TrimAll().ConvertTo<InvoiceRoot>();
                 int errorIdx = 0;
                 foreach(var rejectItem in rootInvoiceNo.Where(i => i.ItemIndexSpecified))
                 {
@@ -151,6 +151,7 @@ namespace InvoiceClient.Agent
                 }
 
             }
+            return true;
         }
 
         void parseData(String fileName, Encoding encoding)

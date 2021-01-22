@@ -17,11 +17,11 @@ namespace eIVOGo.Models.ViewModel
 {
     public static class QueryExtensions
     {
-        public static IQueryable<InvoiceItem> InquireInvoice(this IQueryable<InvoiceItem> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models)
+        public static IQueryable<InvoiceItem> InquireInvoice(this IQueryable<InvoiceItem> items, InquireInvoiceViewModel viewModel,  GenericManager<EIVOEntityDataContext> models)
         {
             bool effective = false;
             items = items.QueryByProcessType(viewModel, models, ref effective)
-                        .QueryByInvoiceNo(viewModel, models, ref effective)
+                        .QueryByInvoiceNo(viewModel, models,ref effective)
                         .QueryByInvoiceDate(viewModel, models, ref effective)
                         .QueryByBuyerReceiptNo(viewModel, models, ref effective)
                         .QueryByBuyerName(viewModel, models, ref effective)
@@ -57,7 +57,7 @@ namespace eIVOGo.Models.ViewModel
             return items;
         }
 
-        public static IQueryable<InvoiceItem> QueryByInvoiceNo(this IQueryable<InvoiceItem> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
+        public static IQueryable<InvoiceItem> QueryByInvoiceNo(this IQueryable<InvoiceItem> items,InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
             viewModel.InvoiceNo = viewModel.InvoiceNo.GetEfficientString();
             if (viewModel.InvoiceNo != null)
@@ -85,37 +85,23 @@ namespace eIVOGo.Models.ViewModel
             {
                 if (viewModel.ProcessType == Naming.InvoiceProcessType.C0401)
                 {
-                    //items = items
-                    //    .Join(models.GetTable<CDS_Document>()
-                    //        .Where(d => !d.ProcessType.HasValue || d.ProcessType == (int)viewModel.ProcessType),
-                    //        i => i.InvoiceID, d => d.DocID, (i, d) => i);
                     items = items
-                        .Join(models.GetTable<CDS_Document>(),
+                        .Join(models.GetTable<CDS_Document>()
+                            .Where(d => !d.ProcessType.HasValue 
+                                || (d.ProcessType != (int)Naming.InvoiceProcessType.A0401
+                                    && d.ProcessType != (int)Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer)),
                             i => i.InvoiceID, d => d.DocID, (i, d) => i);
+
+                    effective = true;
                 }
-                else//修改為若為A0401 或 C0401但有統編 
+                else if (viewModel.ProcessType == Naming.InvoiceProcessType.A0401)
                 {
-                    //items = items
-                    //    .Join(models.GetTable<CDS_Document>()
-                    //        .Where(d => d.ProcessType == (int)viewModel.ProcessType),
-                    //        i => i.InvoiceID, d => d.DocID, (i, d) => i);
-
-
-
                     items = items
-                                .Join(models.GetTable<CDS_Document>(), i => i.InvoiceID, j => j.DocID
-                                    , (i, j) => new { i, j })
-                                .Join(models.GetTable<InvoiceBuyer>(), a => a.i.InvoiceID, b => b.InvoiceID
-                                    , (a, b) => new { a, b })
-                                .Where(c => (c.a.j.ProcessType == (int)viewModel.ProcessType)
-                                        || (c.a.j.ProcessType == (int)Naming.InvoiceProcessType.C0401
-                                            && c.b.BuyerID == null
-                                            && (c.b.ReceiptNo != null)
-                                            && (c.b.ReceiptNo != "0000000000"))
-                                        )
-                                .Select(c=> c.a.i);
+                        .Join(models.GetTable<InvoiceBuyer>()
+                            .Where(d => d.ReceiptNo != "0000000000"),
+                            i => i.InvoiceID, d => d.InvoiceID, (i, d) => i);
+                    effective = true;
                 }
-                effective = true;
             }
             return items;
         }
@@ -142,7 +128,7 @@ namespace eIVOGo.Models.ViewModel
         public static IQueryable<InvoiceItem> QueryByWelfare(this IQueryable<InvoiceItem> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
             viewModel.AgencyCode = viewModel.AgencyCode.GetEfficientString();
-            if (viewModel.AgencyCode != null)
+            if (viewModel.AgencyCode!=null)
             {
                 items = items.Where(i => i.InvoiceDonation.AgencyCode == viewModel.AgencyCode);
                 effective = true;
@@ -178,7 +164,7 @@ namespace eIVOGo.Models.ViewModel
         public static IQueryable<InvoiceItem> QueryByBuyerName(this IQueryable<InvoiceItem> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
             viewModel.BuyerName = viewModel.BuyerName.GetEfficientString();
-            if (viewModel.BuyerName != null)
+            if (viewModel.BuyerName!=null)
             {
                 effective = true;
                 items = items.Join(models.GetTable<InvoiceBuyer>().Where(d => d.CustomerName.Contains(viewModel.BuyerName)),
@@ -201,21 +187,17 @@ namespace eIVOGo.Models.ViewModel
 
         public static IQueryable<InvoiceItem> QueryByInvoiceDate(this IQueryable<InvoiceItem> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
-            if (viewModel != null)
+            if (viewModel.InvoiceDateFrom.HasValue)
             {
-                if (viewModel.InvoiceDateFrom.HasValue)
-                {
-                    items = items.Where(i => i.InvoiceDate >= viewModel.InvoiceDateFrom);
-                    effective = true;
-                }
-
-                if (viewModel.InvoiceDateTo.HasValue)
-                {
-                    items = items.Where(i => i.InvoiceDate < viewModel.InvoiceDateTo.Value.AddDays(1));
-                    effective = true;
-                }
+                items = items.Where(i => i.InvoiceDate >= viewModel.InvoiceDateFrom);
+                effective = true;
             }
 
+            if (viewModel.InvoiceDateTo.HasValue)
+            {
+                items = items.Where(i => i.InvoiceDate < viewModel.InvoiceDateTo.Value.AddDays(1));
+                effective = true;
+            }
             return items;
         }
 
@@ -280,7 +262,7 @@ namespace eIVOGo.Models.ViewModel
         public static IQueryable<InvoiceAllowance> QueryByBuyerName(this IQueryable<InvoiceAllowance> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
             viewModel.BuyerName = viewModel.BuyerName.GetEfficientString();
-            if (viewModel.BuyerName != null)
+            if (viewModel.BuyerName!=null)
             {
                 effective = true;
                 items = items.Where(d => d.InvoiceAllowanceBuyer.CustomerName.Contains(viewModel.BuyerName));
@@ -302,7 +284,7 @@ namespace eIVOGo.Models.ViewModel
         public static IQueryable<InvoiceAllowance> QueryByCustomerID(this IQueryable<InvoiceAllowance> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
             viewModel.CustomerID = viewModel.CustomerID.GetEfficientString();
-            if (viewModel.CustomerID != null)
+            if (viewModel.CustomerID!=null)
             {
                 effective = true;
                 items = items.Where(i => i.InvoiceAllowanceBuyer.CustomerID == viewModel.CustomerID);
@@ -313,7 +295,7 @@ namespace eIVOGo.Models.ViewModel
         public static IQueryable<InvoiceAllowance> QueryByBuyerReceiptNo(this IQueryable<InvoiceAllowance> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
             viewModel.BuyerReceiptNo = viewModel.BuyerReceiptNo.GetEfficientString();
-            if (viewModel.BuyerReceiptNo != null)
+            if (viewModel.BuyerReceiptNo!=null)
             {
                 effective = true;
                 items = items.Where(d => d.InvoiceAllowanceBuyer.ReceiptNo == viewModel.BuyerReceiptNo.GetEfficientString());

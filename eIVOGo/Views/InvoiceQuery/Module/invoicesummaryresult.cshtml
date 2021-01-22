@@ -1,49 +1,50 @@
+
+@{ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" }
+@{ Register Src="~/Module/JsGrid/InquireInvoiceTemplate.ascx" TagPrefix="uc4" TagName="InquireInvoiceTemplate" }
+@{ Register Src="~/Module/UI/FunctionTitleBar.ascx" TagName="FunctionTitleBar" TagPrefix="uc6" }
+
 @using System.IO
+
 @using System.Linq.Expressions
-@using System.Web.Mvc.Html
-@using eIVOGo.Controllers
 @using eIVOGo.Helper
-@using eIVOGo.Models
+@using eIVOGo.Module.Base
+@using eIVOGo.Controllers
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@using eIVOGo.Models.ViewModel
-@using Model.Models.ViewModel
-@using res=eIVOGo.Resource.Views.InvoiceQuery.Module.InvoiceSummaryResult
 
-@{
-    ModelSource<InvoiceItem> models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-    models.DataSourcePath = VirtualPathUtility.ToAbsolute("~/InvoiceQuery/InvoiceSummaryGridPage");
+@{ Html.RenderPartial("Module/InvoiceReport", Model);}
+
+@if(!models.InquiryHasError) {
+<uc6:functiontitlebar id="resultTitle" runat="server" itemname="查詢結果" />
+<div class="border_gray">
+    @{ Html.RenderPartial("~/Views/Module/InvoiceSummaryList.ascx", models);}
+
+    <!--按鈕-->
+</div>
+@if(models.Items.Count() > 0) {
+<table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td class="Bargain_btn">
+            @{ Html.RenderPartial("~/Views/Module/PrintData.ascx");}
+
+            <input type="button" value="Excel下載" name="btnExcel" class="btn" onclick="$('form').prop('action', '@(Url.Action("CreateInvoiceSummaryXlsx"))    ').submit();" />
+        </td>
+    </tr>
+</table>
+}
 }
 
-@{
-    Html.RenderPartial("~/Views/InvoiceQuery/Module/InvoiceReport.cshtml");
-    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.查詢結果);
-}
-@if (!models.InquiryHasError)
-{
-
-    <div class="border_gray" id="queryArea">
-        @{
-            Html.RenderPartial("~/Views/Module/InvoiceSummaryList.ascx", models);
-
-        }
-    </div>
-
-    if (models.Items.Count() > 0)
+<script runat="server">
+    ModelSource<InvoiceItem> models;
+    protected override void OnInit(EventArgs e)
     {
-        <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td class="Bargain_btn">
-                    @{Html.RenderPartial("~/Views/Module/PrintData.cshtml");}
-                    <input type="button" value=@res.Excel下載 name="btnExcel" class="btn" onclick="$('form').prop('action', '@(Url.Action("CreateInvoiceSummaryXlsx"))    ').submit();" />
-                </td>
-            </tr>
-        </table>
+        base.OnInit(e);
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        models.DataSourcePath = VirtualPathUtility.ToAbsolute("~/InvoiceQuery/InvoiceSummaryGridPage");
+        
     }
 
-}
-
+</script>

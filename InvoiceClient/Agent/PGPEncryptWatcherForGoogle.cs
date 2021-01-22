@@ -13,10 +13,7 @@ using Model.Schema.TXN;
 using System.Diagnostics;
 using System.Globalization;
 using Model.Locale;
-using System.Data.SqlClient;
-using Uxnet.Web.Helper;
-using System.Data.Linq;
-using Model.Models;
+using DataContructor.Models;
 
 namespace InvoiceClient.Agent
 {
@@ -27,6 +24,8 @@ namespace InvoiceClient.Agent
         {
 
         }
+
+        public String AddedStore { get; set; }
 
         protected override void processFile(String invFile)
         {
@@ -46,57 +45,45 @@ namespace InvoiceClient.Agent
                 Logger.Error(ex);
                 return;
             }
-            
-            Logger.Info(string.Format("EncryptFile By {0}", nameof(PGPEncryptWatcherForGoogle)));
+
             String gpgName = fullPath.EncryptFileTo(_ResponsedPath);
-
-            Logger.Info(string.Format("fullPath:{0}  gpgName:{1}", fullPath, gpgName));
-
-            string CopyPath = Path.Combine(Settings.Default.RecAllowanceResponsePath, Path.GetFileName(fullPath));
-            if (!Directory.Exists(CopyPath))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(CopyPath));
-            }
-            Logger.Info(string.Format("fullPath:{0}  CopyPath:{1}", fullPath, CopyPath));
-            File.Copy(fullPath, CopyPath, true);
-
-            var status = 0;
-
-            if (File.Exists(gpgName))
+            int status = 0;
+            if (gpgName.AssertFile())
             {
                 storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
-
+                if (AddedStore != null)
+                {
+                    try
+                    {
+                        AddedStore.CheckStoredPath();
+                        String storeTo = Path.Combine(AddedStore, Path.GetFileName(gpgName));
+                        File.Copy(gpgName, storeTo);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex);
+                    }
+                }
                 status = 1;
-                
             }
             else
             {
                 storeFile(fullPath, Path.Combine(_requestPath, fileName));
-
-                status = 0;                
-
-                Logger.Error($"Zip file failed to encrypt to gpg file: {Path.Combine(_requestPath, fileName)}");                
             }
 
-            var connectString = string.Empty;
-
-            if (InvoiceClient.Properties.Settings.Default.IsLocalMachine)
-            {
-                connectString = DbConnection.LocalDb.InvoiceClient; 
-            }
-            else
-            {
-                connectString = DbConnection.ServerDb.InvoiceClient;
-            }
-
-            using (var db = new DataContext(connectString))
-            {
-                var sqlCommand = $@"INSERT INTO [dbo].PGPEncryptLog 
-                                         (SourceFilePath, PGPFileName, Status) 
-                                         VALUES('{fullPath}','{Path.GetFileName(gpgName)}',{status})";
-                
-                var value = db.ExecuteQuery<int>(sqlCommand);
-            }
+            //String filePath = Path.Combine(Logger.LogDailyPath, "PGPEncryptWatcherForGoogle.csv");
+            //using (StreamWriter writer = new StreamWriter(filePath, true))
+            //{
+            //    using (CsvHelper.CsvWriter csv = new CsvHelper.CsvWriter(writer, true))
+            //    {
+            //        csv.WriteRecord<PGPEncryptWatcherModel>(new PGPEncryptWatcherModel
+            //        {
+            //            FileName = gpgName,
+            //            Status = status,
+            //        });
+            //        csv.NextRecord();
+            //    }
+            //}
         }
 
     }

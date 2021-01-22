@@ -1,5 +1,4 @@
 ﻿<%@ Page Title="" Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
-
 <%@ Import Namespace="System.Web.Script.Serialization" %>
 <%@ Import Namespace="eIVOGo.Helper" %>
 <%@ Import Namespace="Model.DataEntity" %>
@@ -8,7 +7,7 @@
 <%@ Import Namespace="Uxnet.Com.DataAccessLayer" %>
 <%@ Import Namespace="ClosedXML.Excel" %>
 <%@ Import Namespace="ModelExtension.Helper" %>
-<%@ Import Namespace="eIVOGo.Resource.MvcHelper" %>
+
 <script runat="server">
 
     ModelSource<InvoiceItem> models;
@@ -53,7 +52,7 @@
             {
                 開立發票營業人 = item.Seller.CompanyName,
                 統編 = item.Seller.ReceiptNo,
-                上線日期 = item.Seller.InvoiceItems.OrderBy(i => i.InvoiceDate).First().InvoiceDate,
+                上線日期 = item.Seller.InvoiceItems.OrderBy(i=>i.InvoiceDate).First().InvoiceDate,
                 發票筆數 = item.Items.Count(),
             });
 
@@ -62,18 +61,12 @@
         Response.ClearHeaders();
         Response.AddHeader("Cache-control", "max-age=1");
         Response.ContentType = "application/vnd.ms-excel";
-        Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode(CreateInvoiceSummaryReport.發票資料統計 + ".xlsx")));
+        Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("發票資料統計.xlsx")));
 
         using (DataSet ds = new DataSet())
         {
             DataTable table = details.ToDataTable();
-            table.TableName = CreateInvoiceSummaryReport.發票資料統計;
-
-            table.Columns[0].Caption = CreateInvoiceSummaryReport.開立發票營業人;
-            table.Columns[1].Caption = CreateInvoiceSummaryReport.統編;
-            table.Columns[2].Caption = CreateInvoiceSummaryReport.上線日期;
-            table.Columns[3].Caption = CreateInvoiceSummaryReport.發票筆數;
-
+            table.TableName = "發票資料統計";
             ds.Tables.Add(table);
 
             using (var xls = ds.ConvertToExcel())

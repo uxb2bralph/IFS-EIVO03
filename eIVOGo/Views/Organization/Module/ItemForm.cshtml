@@ -2,8 +2,7 @@
 @using System.IO
 @using System.Linq.Expressions
 
-@using eIVOGo.Resource.Views.Organization.Module
-@using eIVOGo.Resource.Views.Common.Enum
+
 @using eIVOGo.Helper
 @using Model.Locale
 @using eIVOGo.Models.ViewModel
@@ -23,56 +22,10 @@
     _viewModel = (OrganizationViewModel)ViewBag.ViewModel;
     _model = (Organization)this.Model;
 
-    //下拉選單
-    string[] enumList = Enum.GetNames(typeof(Naming.MemberCategoryID));
-    var _items = new Dictionary<string, string>();
-
-    foreach (string item in enumList)
-    {
-        var name = item;
-
-        switch (item)
-        {
-            case "發票開立人":
-                name = MemberCategoryID.發票開立人;
-                break;
-            case "相對營業人":
-                name = MemberCategoryID.相對營業人;
-                break;
-            case "GOOGLE_Taiwa":
-                name = MemberCategoryID.GOOGLE_Taiwa;
-                break;
-            case "集團成員":
-                name = MemberCategoryID.集團成員;
-                break;
-            case "店家發票自動配號":
-                name = MemberCategoryID.店家發票自動配號;
-                break;
-            case "開立發票店家代理":
-                name = MemberCategoryID.開立發票店家代理;
-                break;
-            case "境外電商":
-                name = MemberCategoryID.境外電商;
-                break;
-        }
-
-        _items.Add(((int)Enum.Parse(typeof(Naming.MemberCategoryID), item)).ToString(), name);
-
-    }
-
-    EnumSelectorViewModel enumSelectorViewModel = new EnumSelectorViewModel
-    {
-        FieldName = "CategoryID",
-        OptionItems = _items,
-        SelectorIndication = MemberCategoryID.請選擇,
-        FieldClass = "form-control",
-        DefaultValue=_viewModel.CategoryID.ToString()       
-    };
-
 }
 <div class="panel panel-default">
     <div class="panel-heading">
-        @ItemForm.營業人
+        營業人
     </div>
     <div class="panel-body">
         <div class="table-responsive">
@@ -80,18 +33,18 @@
             <table class="table table-striped table-bordered table-hover">
                 <tr>
                     <td colspan="4" class="Head_style_a">
-                        @ItemForm.基本資料
+                        基本資料
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        <span style="color: red">*</span>@ItemForm.公司統一編號
+                        <span style="color: red">*</span>公司統一編號
                     </th>
                     <td>
                         <input type="text" class="form-control" name="ReceiptNo" value='@(_viewModel.ReceiptNo)' />
                     </td>
                     <th>
-                        <span style="color: red">*</span>@ItemForm.名稱
+                        <span style="color: red">*</span>名稱
                     </th>
                     <td>
                         <input type="text" class="form-control" name="CompanyName" value='@(_viewModel.CompanyName)' />
@@ -99,7 +52,7 @@
                 </tr>
                 <tr>
                     <th>
-                        <span style="color: red">*</span>@ItemForm.地址
+                        <span style="color: red">*</span>地址
                     </th>
                     <td colspan="3">
                         <input type="text" class="form-control" name="Addr" maxlength="68" value='@(_viewModel.Addr)' />
@@ -107,13 +60,13 @@
                 </tr>
                 <tr>
                     <th>
-                        <span style="color: red">*</span>@ItemForm.電話
+                        <span style="color: red">*</span>電話
                     </th>
                     <td>
                         <input type="text" class="form-control" name="Phone" value='@(_viewModel.Phone)' />
                     </td>
                     <th>
-                        @ItemForm.傳真
+                        傳真
                     </th>
                     <td>
                         <input type="text" class="form-control" name="Fax" value='@(_viewModel.Fax)' />
@@ -121,32 +74,39 @@
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.公司負責人
+                        公司負責人
                     </th>
                     <td>
                         <input type="text" class="form-control" name="UndertakerName" value='@(_viewModel.UndertakerName)' />
                     </td>
                     <th>
-                        <span style="color: red">*</span>@ItemForm.類別
+                        <span style="color: red">*</span>類別
                     </th>
                     <td>
-                        @{Html.RenderPartial("~/Views/Common/Module/EnumSelect.cshtml", enumSelectorViewModel);}
+                        <select name="CategoryID" class="form-control">
+                            <option value="">請選擇</option>
+                            @{ Html.RenderPartial("~/Views/SystemInfo/OrganizationCategoryOptions.cshtml");}
+
+                        </select>
+                        <script>
+                            $('select[name="CategoryID"]').val('@(_viewModel.CategoryID)');
+                        </script>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="4" class="Head_style_a">
-                        @ItemForm.聯絡方式
+                        聯絡方式
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.聯絡人姓名
+                        聯絡人姓名
                     </th>
                     <td>
                         <input type="text" class="form-control" name="ContactName" value='@(_viewModel.ContactName)' />
                     </td>
                     <th>
-                        @ItemForm.聯絡人職稱
+                        聯絡人職稱
                     </th>
                     <td>
                         <input type="text" class="form-control" name="ContactTitle" value='@(_viewModel.ContactTitle)' />
@@ -154,13 +114,13 @@
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.聯絡人電話
+                        聯絡人電話
                     </th>
                     <td>
                         <input type="text" class="form-control" name="ContactPhone" value='@(_viewModel.ContactPhone)' />
                     </td>
                     <th>
-                        @ItemForm.聯絡人行動電話
+                        聯絡人行動電話
                     </th>
                     <td>
                         <input type="text" class="form-control" name="ContactMobilePhone" value='@(_viewModel.ContactMobilePhone)' />
@@ -169,48 +129,27 @@
                 </tr>
                 <tr>
                     <th>
-                        <span style="color: red">*</span>@ItemForm.聯絡人電子郵件
+                        <span style="color: red">*</span>聯絡人電子郵件
                     </th>
                     <td colspan="3">
                         <input type="text" class="form-control" name="ContactEmail" maxlength="512" value='@(_viewModel.ContactEmail)' />
                     </td>
                 </tr>
                 <tr>
-                    <th>
-                        @ItemForm.客服專線
-                    </th>
-                    <td>
-                        <input type="text" class="form-control" name="CustomerServiceHotline" value='@(_viewModel.CustomerServiceHotline)' />
-                    </td>
-                    <th>
-                        @ItemForm.客服專用電子郵件
-                    </th>
-                    <td>
-                        <input type="text" class="form-control" name="CustomerServiceEmail" value='@(_viewModel.CustomerServiceEmail)' />
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <th>@ItemForm.營業人資訊</th>
-                    <td colspan="3">
-                        <textarea name="BusinessPersonInformation" cols="3" rows="5" maxlength="1024" class="form-control" value='@(_viewModel.BusinessPersonInformation)'>@(_viewModel.BusinessPersonInformation)</textarea>                        
-                    </td>
-                </tr>
-                <tr>
                     <td colspan="4" class="Head_style_a">
-                        @ItemForm.設定項目
+                        設定項目
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.設定使用發票列印
+                        設定使用發票列印
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="SetToPrintInvoice" @(_viewModel.SetToPrintInvoice == true ? "checked" : null) />@ItemForm.設定使用發票列印
+                        <input type="checkbox" value="@($"{true}")" name="SetToPrintInvoice" @(_viewModel.SetToPrintInvoice == true ? "checked" : null) />設定使用發票列印
                     </td>
                     <th>
-                        @ItemForm.發票列印樣式<br />
-                        @ItemForm.折讓單列印樣式
+                        發票列印樣式<br />
+                        折讓單列印樣式
                     </th>
                     <td>
                         <input type="text" class="form-control" name="InvoicePrintView" value='@(_viewModel.InvoicePrintView)'
@@ -221,47 +160,47 @@
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.電子發票核准函號
+                        電子發票核准函號
                     </th>
                     <td>
                         <input type="text" class="form-control" name="AuthorizationNo" value='@(_viewModel.AuthorizationNo)' />
                     </td>
                     <th>
-                        @ItemForm.自動核准列印
+                        自動核准列印
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="EntrustToPrint" @(_viewModel.EntrustToPrint == true ? "checked" : null) />@ItemForm.B2B發票買受人可重複列印
+                        <input type="checkbox" value="@($"{true}")" name="EntrustToPrint" @(_viewModel.EntrustToPrint == true ? "checked" : null) />B2B發票買受人可重複列印
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.設定傳送發票對應資料
+                        設定傳送發票對應資料
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="DownloadDataNumber" @(_viewModel.DownloadDataNumber == true ? "checked" : null) />@ItemForm.使用傳送企業發票對應資料
+                        <input type="checkbox" value="@($"{true}")" name="DownloadDataNumber" @(_viewModel.DownloadDataNumber == true ? "checked" : null) />使用傳送企業發票對應資料
                     </td>
                     <th>
-                        @ItemForm.上期發票空白號碼
+                        上期發票空白號碼
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="UploadBranchTrackBlank" @(_viewModel.UploadBranchTrackBlank == true ? "checked" : null) />@ItemForm.用戶端自動下載
+                        <input type="checkbox" value="@($"{true}")" name="UploadBranchTrackBlank" @(_viewModel.UploadBranchTrackBlank == true ? "checked" : null) />用戶端自動下載
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.設定發票資料全列印
+                        設定發票資料全列印
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="PrintAll" @(_viewModel.PrintAll == true ? "checked" : null) />@ItemForm.是
+                        <input type="checkbox" value="@($"{true}")" name="PrintAll" @(_viewModel.PrintAll == true ? "checked" : null) />是
                     </td>
                     <th>
-                        <span style="color: red">*</span>@ItemForm.設定發票類別
+                        <span style="color: red">*</span>設定發票類別
                     </th>
                     <td>
                         <select name="SettingInvoiceType" class="form-control">
-                            <option value="">@ItemForm.請選擇</option>
-                            <option value="7">@ItemForm.一般稅額計算之電子發票</option>
-                            <option value="8">@ItemForm.特種稅額計算之電子發票</option>
+                            <option value="">請選擇</option>
+                            @{ Html.RenderPartial("~/Views/SystemInfo/InvoiceTypeOptions.cshtml");}
+
                         </select>
                         <script>
                             $('select[name="SettingInvoiceType"]').val('@((int?)_viewModel.SettingInvoiceType)');
@@ -270,28 +209,28 @@
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.設定接收B2B發票_PDF檔_
+                        設定接收B2B發票(PDF檔)
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="SubscribeB2BInvoicePDF" @(_viewModel.SubscribeB2BInvoicePDF == true ? "checked" : null) />@ItemForm.是
+                        <input type="checkbox" value="@($"{true}")" name="SubscribeB2BInvoicePDF" @(_viewModel.SubscribeB2BInvoicePDF == true ? "checked" : null) />是
                     </td>
                     <th>
-                        @ItemForm.開立發票字軌號碼檢核
+                        開立發票字軌號碼檢核
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="EnableTrackCodeInvoiceNoValidation" @(_viewModel.EnableTrackCodeInvoiceNoValidation == true ? "checked" : null) />@ItemForm.是
+                        <input type="checkbox" value="@($"{true}")" name="EnableTrackCodeInvoiceNoValidation" @(_viewModel.EnableTrackCodeInvoiceNoValidation == true ? "checked" : null) />是
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.設定使用委外客服
+                        設定使用委外客服
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="SetToOutsourcingCS" @(_viewModel.SetToOutsourcingCS == true ? "checked" : null) />@ItemForm.使用委外客服
+                        <input type="checkbox" value="@($"{true}")" name="SetToOutsourcingCS" @(_viewModel.SetToOutsourcingCS == true ? "checked" : null) />使用委外客服
                     </td>
                     @if (_model != null)
                     {
-                        <th>@ItemForm.公司識別標章</th>
+                        <th>公司識別標章</th>
                         <td>
                             <img id="logo" style="max-width:300px;" src="@(_model.LogoURL != null ? VirtualPathUtility.ToAbsolute("~/" + _model.LogoURL) : null)" />
                             <input type="file" id="fileLogo" style="display:inline;" name="fileLogo" />
@@ -326,99 +265,99 @@
                     }
                 </tr>
                 @*<tr>
-            <th>上傳系統格式
-            </th>
-            <td >
-                <select name="uploadType">
-                    <option>XML</option>
-                    <option>CSV</option>
-                    <option>MIG</option>
-                    <option>XML(含折讓單)</option>
-                </select>
-            </td>
-            @if (_viewModel.LogoURL!= null)
-                {
-            <th>公司LOGO</th>
-            <td>
-                <img id="logo" style="width: 300px;" src="@(_viewModel.LogoURL != null ? VirtualPathUtility.ToAbsolute("~/" + _viewModel.LogoURL) : null)" />
-                <input type="file" id="fileLogo" style="display: inline;" name="fileLogo" />
-            </td>
-            }
-        </tr>
-        <tr>
-            <th>G/W發票存放資料夾
-            </th>
-            <td  colspan="3">
-                <input type="text" size="68" name="txnPath" value="@(Request["txnPath"]!=null ? Request["txnPath"] : "C:\\UXB2B_EIVO")" />
-            </td>
-        </tr>
-        <tr>
-            <th >系統
-            </th>
-            <td colspan="3" >
-                <select name="svcType">
-                    <option value="0">測試機</option>
-                    <option value="1">正式機</option>
-                </select>
-            </td>
-        </tr>*@
+                        <th>上傳系統格式
+                        </th>
+                        <td >
+                            <select name="uploadType">
+                                <option>XML</option>
+                                <option>CSV</option>
+                                <option>MIG</option>
+                                <option>XML(含折讓單)</option>
+                            </select>
+                        </td>
+                        @if (_viewModel.LogoURL!= null)
+                            {
+                        <th>公司LOGO</th>
+                        <td>
+                            <img id="logo" style="width: 300px;" src="@(_viewModel.LogoURL != null ? VirtualPathUtility.ToAbsolute("~/" + _viewModel.LogoURL) : null)" />
+                            <input type="file" id="fileLogo" style="display: inline;" name="fileLogo" />
+                        </td>
+                        }
+                    </tr>
+                    <tr>
+                        <th>G/W發票存放資料夾
+                        </th>
+                        <td  colspan="3">
+                            <input type="text" size="68" name="txnPath" value="@(Request["txnPath"]!=null ? Request["txnPath"] : "C:\\UXB2B_EIVO")" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th >系統
+                        </th>
+                        <td colspan="3" >
+                            <select name="svcType">
+                                <option value="0">測試機</option>
+                                <option value="1">正式機</option>
+                            </select>
+                        </td>
+                    </tr>*@
                 <tr>
                     <td colspan="4" class="Head_style_a">
-                        @ItemForm.訊息通知
+                        訊息通知
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.發票開立
+                        發票開立
                     </th>
                     <td>
-                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.Issuing)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.Issuing) > 0) ? "checked" : null) />@ItemForm.寄送開立通知
+                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.Issuing)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.Issuing) > 0) ? "checked" : null) />寄送開立通知
                     </td>
                     <th>
-                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.Winning)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.Winning) > 0) ? "checked" : null) />@ItemForm.寄送中獎通知
+                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.Winning)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.Winning) > 0) ? "checked" : null) />寄送中獎通知
                     </th>
                     <td>
-                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.UseCBEStyle)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.UseCBEStyle) > 0) ? "checked" : null) />@ItemForm.使用境外電商郵件樣式
+                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.UseCBEStyle)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.UseCBEStyle) > 0) ? "checked" : null) />使用境外電商郵件樣式
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.作廢發票
+                        作廢發票
                     </th>
                     <td>
-                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.Cancelling)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.Cancelling) > 0) ? "checked" : null) />@ItemForm.寄送作廢通知
+                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.Cancelling)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.Cancelling) > 0) ? "checked" : null) />寄送作廢通知
                     </td>
                     <th>
-                        @ItemForm.發票折讓
+                        發票折讓
                     </th>
                     <td>
-                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.IssuingAllowance)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.IssuingAllowance) > 0) ? "checked" : null) />@ItemForm.寄送折讓通知
+                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.IssuingAllowance)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.IssuingAllowance) > 0) ? "checked" : null) />寄送折讓通知
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.作廢折讓
+                        作廢折讓
                     </th>
                     <td>
-                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.CancellingAllowance)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.CancellingAllowance) > 0) ? "checked" : null) />@ItemForm.寄送作廢折讓通知
+                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.CancellingAllowance)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.CancellingAllowance) > 0) ? "checked" : null) />寄送作廢折讓通知
                     </td>
                     <th>
-                        @ItemForm.客訂樣式
+                        客訂樣式
                     </th>
                     <td>
-                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.UseCustomStyle)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.UseCustomStyle) > 0) ? "checked" : null) />@ItemForm.使用客訂郵件樣式
+                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.UseCustomStyle)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.UseCustomStyle) > 0) ? "checked" : null) />使用客訂郵件樣式
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        @ItemForm.簡訊通知
+                        簡訊通知
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="SetToNotifyCounterpartBySMS" @(_viewModel.SetToNotifyCounterpartBySMS == true ? "checked" : null) />@ItemForm.使用簡訊通知買受人
+                        <input type="checkbox" value="@($"{true}")" name="SetToNotifyCounterpartBySMS" @(_viewModel.SetToNotifyCounterpartBySMS == true ? "checked" : null) />使用簡訊通知買受人
                     </td>
-                    <th>@ItemForm.B2B發票開立通知以鏈結取代附件</th>
+                    <th>B2B發票開立通知以鏈結取代附件</th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="UseB2BStandalone" @(_viewModel.UseB2BStandalone == true ? "checked" : null) />@ItemForm.是
+                        <input type="checkbox" value="@($"{true}")" name="UseB2BStandalone" @(_viewModel.UseB2BStandalone == true ? "checked" : null) />是
                     </td>
                 </tr>
             </table>

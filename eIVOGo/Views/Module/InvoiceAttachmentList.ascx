@@ -5,6 +5,7 @@
 <%@ Register Src="~/Module/JsGrid/DataField/CheckBox.ascx" TagPrefix="uc1" TagName="CheckBox" %>
 <%@ Register Src="~/Module/JsGrid/DataField/JsGridField.ascx" TagPrefix="uc1" TagName="JsGridField" %>
 
+
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="System.Linq.Expressions" %>
@@ -15,7 +16,6 @@
 <%@ Import Namespace="Model.Locale" %>
 <%@ Import Namespace="Utility" %>
 <%@ Import Namespace="Uxnet.Web.WebUI" %>
-<%@ Import Namespace="eIVOGo.Resource.Views.Module" %>
 
 <div id="fieldsContainer"></div>
 <div id="jsGrid"></div>
@@ -35,24 +35,24 @@
         fields[fields.length] = {
             "name": "SalesAmount",
             "type": "text",
-            "title": "<%=InvoiceAttachmentList.未稅金額%>",
+            "title": "未稅金額",
             "width": "120",
             "align": "right"
         };
         fields[fields.length] =
         {
             "name": "TaxAmount",
-                "type": "text",< a href = "querymessage.cshtml" > querymessage.cshtml</a >
-            "title": "<%=InvoiceAttachmentList.稅額%>",
+            "type": "text",
+            "title": "稅額",
             "width": "120",
             "align": "right",
-            footerTemplate: function () { return "<%=InvoiceAttachmentList.總計金額_%>"; }
+            footerTemplate: function () { return "總計金額："; }
         };
         fields[fields.length] =
         {
             "name": "TotalAmount",
             "type": "text",
-            "title": "<%=InvoiceAttachmentList.含稅金額%>",
+            "title": "含稅金額",
             "width": "120",
             "align": "right",
             footerTemplate: function () { return "<%= String.Format("{0:##,###,###,##0.##}", ((ModelSource<InvoiceItem>)Model).Items.Sum(i => i.InvoiceAmountType.TotalAmount)) %>"; }
@@ -62,24 +62,14 @@
 </asp:PlaceHolder>
 
 <script runat="server">
-
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        InvoiceDate.title = InvoiceAttachmentList.日期;
-        CustomerID.title = InvoiceAttachmentList.Google_ID_客戶ID;
-        OrderNo.title = InvoiceAttachmentList.序號;
-        SellerName.title = InvoiceAttachmentList.開立發票營業人;
-        SellerReceiptNo.title = InvoiceAttachmentList.統編;
-    }
-
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         gridInit.DataSourceUrl = ((ModelSource<InvoiceItem>)Model).DataSourcePath;
         gridInit.GetRecordCount = () =>
-        {
-            return ((ModelSource<InvoiceItem>)Model).Items.Count();
-        };
+            {
+                return ((ModelSource<InvoiceItem>)Model).Items.Count();
+            };
         gridInit.AllowPaging = ((ModelSource<InvoiceItem>)Model).ResultModel == Naming.DataResultMode.Display;
         gridInit.PrintMode = ((ModelSource<InvoiceItem>)Model).ResultModel == Naming.DataResultMode.Print;
     }

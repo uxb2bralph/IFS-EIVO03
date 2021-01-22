@@ -31,17 +31,17 @@ namespace Business.Helper
 
         public static String EncryptData(this String data)
         {
-            return Encoding.Default.GetBytes(data).EncryptKey();
+            return Encoding.Unicode.GetBytes(data).EncryptKey();
         }
 
         public static String DecryptData(this String data)
         {
-            return Encoding.Default.GetString(AppResource.Instance.DecryptSalted(Convert.FromBase64String(data)));
+            return Encoding.Unicode.GetString(AppResource.Instance.DecryptSalted(Convert.FromBase64String(data)));
         }
 
         public static String DecryptData(this String data,out long ticks)
         {
-            return Encoding.Default.GetString(AppResource.Instance.DecryptSalted(Convert.FromBase64String(data), out ticks));
+            return Encoding.Unicode.GetString(AppResource.Instance.DecryptSalted(Convert.FromBase64String(data), out ticks));
         }
 
         public static int DecryptKeyValue(this QueryViewModel viewModel)

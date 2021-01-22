@@ -90,8 +90,7 @@ namespace InvoiceClient.Agent
                     String responseName = fileName.Replace("request", "response")
                             .Replace("_OUT_", "_IN_");
                     responseName = Path.Combine(_ResponsedPath, responseName);
-                    auto.ConvertToXml().Save(responseName);
-
+                    auto.ConvertToXml().SaveDocumentWithEncoding(responseName);
                 }
             }
         }
@@ -106,17 +105,7 @@ namespace InvoiceClient.Agent
             //Process proc = "pgp_decrypt.bat".RunBatch(args);
             ////Process proc = Process.Start(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "pgp_decrypt.bat"), args);
             //proc.WaitForExit();
-            Logger.Info(string.Format("DecryptFile By {0}",nameof(InvoicePGPWatcherForGoogle)));
             invoiceFile.DecryptFile(contentFile);
-
-            string CopyPath = Path.Combine(Settings.Default.RecAllowanceRequestPath, Path.GetFileName(contentFile));
-            if (!Directory.Exists(CopyPath))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(CopyPath));
-            }
-            Logger.Info(string.Format("contentFile:{0}  CopyPath:{1}", contentFile, CopyPath));
-            File.Copy(contentFile, CopyPath, true);
-           
             if(File.Exists(contentFile))
             {
                 storeFile(invoiceFile, Path.Combine(Logger.LogDailyPath, fileName));

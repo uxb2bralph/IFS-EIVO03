@@ -1,4 +1,5 @@
-﻿@using System.IO
+
+@using System.IO
 @using System.Linq.Expressions
 
 @using eIVOGo.Helper
@@ -11,14 +12,14 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@using res = eIVOGo.Resource.Views.InvoiceProcess.ScriptHelper.Common
-
 @{
+
     ModelSource<InvoiceItem> models;
     InquireInvoiceViewModel _viewModel;
-    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-}
 
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+
+}
 <script>
     var uiInvoiceQuery;
     $(function () {
@@ -27,7 +28,7 @@
             inquire: function (pageNum, onPaging) {
 
                 var $this = uiInvoiceQuery;
-                var $placement = $('button:contains(@res.查詢)').closest('table');
+                var $placement = $('button:contains("查詢")').closest('table');
                 var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
 
                 if (isNaN(pageNum)) {
@@ -67,64 +68,41 @@
                     }
                 });
             },
-            print: function (style, processType) {                
+            print: function (style,processType) {
                 if (!$('input[name="chkItem"]').is(':checked')) {
-                    alert('@res.請選擇列印資料__');
+                    alert('請選擇列印資料!!');
                     return false;
                 }
 
-                var _Object = $('input[name="chkItem"]:checked').serializeObject();
-
-                _Object["paperStyle"] = style;
-                _Object["ProcessType"] = processType;
-                //var $formData = $('#theForm').serializeObject();
-                //$formData.paperStyle = style;
+                var $formData = $('#theForm').serializeObject();
+                $formData.paperStyle = style;
                 //$formData.processType = processType;
 
-                var value = false;
-                if ((style == 'A4' && processType == '11') || (style == 'B5' && processType == '12')) {    
-                    $('input[type=checkbox][name=chkItem]').each(function () {
-                        if (this.checked) {                            
-                            if ($(this).attr('receiptNo') == "") {                                   
-                                value = true;
-                            }
+                showLoading();
+                $.post('@(Url.Action("Print","InvoiceProcess"))', $formData, function (data) {
+                    hideLoading();
+                    if ($.isPlainObject(data)) {
+                        alert(data.message);
+                    } else {
+                        if (data) {
+                            var $data = $(data);
+                            $data.dialog();
+                            $data.find('a').on('click', function (evt) {
+                                $data.dialog('close');
+                            });
                         }
-                    });
-                }
-
-                if (value == false) {
-                    showLoading();
-                    $.post('@(Url.Action("Print","InvoiceProcess"))', _Object, function (data) {
-                        hideLoading();
-                        if ($.isPlainObject(data)) {
-                            alert(data.message);
-                        } else {
-                            if (data) {
-                                var $data = $(data);
-                                $data.dialog();
-                                $data.find('a').on('click', function (evt) {
-                                    $data.dialog('close');
-                                });
-                            }
-                        }
-                    });
-                }
-                else {
-                    //沒打統編的
-                    alert("@res.A4或B5需有統一編號資訊__");
-                } 
+                    }
+                });
             },
             download: function () {
                 if ($postForm) {
                     $postForm.remove();
                 }
 
-                var $formData = $('#queryArea').find('input,select,textarea').serializeArray();
-
                 $postForm = $('<form method="post" />').prop('action', '@(Url.Action("CreateXlsx","InvoiceProcess"))')
                     .css('display', 'none').appendTo($('body'));
 
-                $formData.forEach(function (item, index) {
+                $('#theForm').serializeArray().forEach(function (item, index) {
                     $('<input type="hidden">')
                         .prop('name', item.name).prop('value', item.value)
                         .appendTo($postForm);
@@ -137,12 +115,10 @@
                     $postForm.remove();
                 }
 
-                var $formData = $('#queryArea').find('input,select,textarea').serializeArray();
-
                 $postForm = $('<form method="post" />').prop('action', '@(Url.Action("ExportInvoiceBuyer","InvoiceProcess"))')
                     .css('display', 'none').appendTo($('body'));
 
-                $formData.forEach(function (item, index) {
+                $('#theForm').serializeArray().forEach(function (item, index) {
                     $('<input type="hidden">')
                         .prop('name', item.name).prop('value', item.value)
                         .appendTo($postForm);
@@ -177,6 +153,48 @@
                     }
                 });
             },
+            arrangeAttachment: function (keyID) {
+                var event = event || window.event;
+                var $tr = $(event.target).closest('tr');
+
+                uiInvoiceQuery.refreshDataRow = function () {
+                    $tr.empty();
+                    showLoading();
+                    $.post('@(Url.Action("LoadInvoiceItem", "InvoiceProcess",new { _viewModel.ResultAction }))', { 'keyID': keyID }, function (data) {
+                        hideLoading();
+                        if ($.isPlainObject(data)) {
+                            alert(data.message);
+                        } else {
+                            $(data).appendTo($('body')).appendTo($tr);
+                        }
+                    });
+                };
+
+                showLoading();
+                $.post('@(Url.Action("ArrangeAttachment", "InvoiceProcess"))', {'keyID':keyID}, function (data) {
+                    hideLoading();
+                    if ($.isPlainObject(data)) {
+                        alert(data.message);
+                    } else {
+                        $(data).appendTo($('body'));
+                    }
+                });
+            },
+            removeAttachment: function (keyID) {
+                if (confirm('確定刪除此筆資料?')) {
+                    var event = event || window.event;
+                    var $tr = $(event.target).closest('tr');
+                    $.post('@(Url.Action("DeleteAttachment", "InvoiceProcess"))', { 'keyID': keyID }, function (data) {
+                        if (data.result) {
+                            alert('資料已刪除!!')
+                            $tr.remove();
+                        } else {
+                            alert(data.message);
+                        }
+                    });
+                }
+            },
         };
     });
 </script>
+

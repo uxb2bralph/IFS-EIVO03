@@ -135,7 +135,10 @@ namespace Model.InvoiceManagement.InvoiceProcess
                 try
                 {
 
-                    EIVOPlatformFactory.NotifyIssuedA0401(item.DocID);
+                    EIVOPlatformFactory.NotifyIssuedA0401(new NotifyToProcessID
+                    {
+                        DocID = item.DocID,
+                    });
 
                     models.ExecuteCommand("delete [proc].A0401DispatchQueue where DocID={0} and StepID={1}",
                         item.DocID, item.StepID);

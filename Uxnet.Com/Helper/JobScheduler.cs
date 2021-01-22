@@ -6,6 +6,7 @@ using System.Threading;
 using System.IO;
 using Utility;
 using System.Xml;
+using Uxnet.Com.Properties;
 
 namespace Uxnet.Com.Helper
 {
@@ -19,7 +20,7 @@ namespace Uxnet.Com.Helper
 
         static JobScheduler()
         {
-            _JobFileName = Path.Combine(Logger.LogPath, "JobScheduler.xml");
+            _JobFileName = Path.Combine(Logger.LogPath, Settings.Default.JobSchedulerFile);
         }
 
         private JobScheduler(int period)
@@ -46,8 +47,9 @@ namespace Uxnet.Com.Helper
         {
             DateTime now = DateTime.Now;
             bool changed = false;
-            foreach (var item in _jobItems)
+            for (int i = 0; i < _jobItems.Count; i++)
             {
+                var item = _jobItems[i];
                 if (item.Schedule <= now)
                 {
                     try
@@ -77,11 +79,18 @@ namespace Uxnet.Com.Helper
         private void doJob(JobItem item, bool nextSchedule = true)
         {
             var type = Type.GetType(item.AssemblyQualifiedName);
-            IJob job = (IJob)type.Assembly.CreateInstance(type.FullName);
-            job.DoJob();
-            if (nextSchedule)
-                item.Schedule = job.GetScheduleToNextTurn(item.Schedule);
-            job.Dispose();
+            if (type == null)
+            {
+                _jobItems.Remove(item);
+            }
+            else
+            {
+                IJob job = (IJob)type.Assembly.CreateInstance(type.FullName);
+                job.DoJob();
+                if (nextSchedule)
+                    item.Schedule = job.GetScheduleToNextTurn(item.Schedule);
+                job.Dispose();
+            }
         }
 
         public static void StartUp(int period = 5*60000)

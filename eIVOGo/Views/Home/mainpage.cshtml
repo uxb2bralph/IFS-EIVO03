@@ -1,7 +1,6 @@
-﻿@using System.IO
+
+@using System.IO
 @using System.Linq.Expressions
-
-
 @using eIVOGo.Helper
 @using Model.Locale
 @using eIVOGo.Models.ViewModel
@@ -9,22 +8,17 @@
 @using Model.DataEntity
 @using eIVOGo.Controllers
 @using Business.Helper
-@using Model.Security.MembershipManagement
-@using DataAccessLayer.basis
-@using eIVOGo.Resource.Views.Home
-
 @{
     Layout = "~/Views/Template/MvcMainPage.cshtml";
 
-    ModelStateDictionary _modelState;
-    GenericManager<EIVOEntityDataContext> models;
-    UserProfileMember _profile = Context.GetUser();
-    _modelState = (ModelStateDictionary)ViewBag.ModelState;
-    models = ViewContext.Controller.DataSource();
-    IQueryable<ProductCatalog> _model = (IQueryable<ProductCatalog>)this.Model;
-    ProductCatalogQueryViewModel _viewModel = (ProductCatalogQueryViewModel)ViewBag.ViewModel;
+    Model.Security.MembershipManagement.UserProfileMember _profile;
 
-    ViewBag.ActionName = MainPage.首頁;   
+    ViewBag.ActionName = "首頁";
+    _profile = Context.GetUser();
+}
+
+@section headContent {
+
 }
 
 @if (_profile.IsSystemAdmin())

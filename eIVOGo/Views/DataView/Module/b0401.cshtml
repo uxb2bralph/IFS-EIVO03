@@ -26,7 +26,7 @@
         <div style="width: 60%; float: right; text-align: center;">
         @if (_model.InvoiceAllowanceSeller.Organization.LogoURL != null)
                 {
-                    <img id="logo" style="width: 200px; height: auto;" src='@(eIVOGo.Properties.Settings.Default.mailLinkAddress + VirtualPathUtility.ToAbsolute("~/" +_model.InvoiceAllowanceSeller.Organization.LogoURL))' />
+                    <img id="logo" style="width: 200px; height: auto;" src='@(eIVOGo.Properties.Settings.Default.WebApDomain + VirtualPathUtility.ToAbsolute("~/" +_model.InvoiceAllowanceSeller.Organization.LogoURL))' />
             }
             <h3>營業人銷貨退回、進貨退出或折讓證明單證明聯</h3>
             <p>開立日期：@(String.Format("{0:yyyy-MM-dd}",_model.AllowanceDate))</p>
@@ -98,10 +98,10 @@
                 <td align="center">@(prodItem.InvoiceNo.Substring(0,2))</td>
                 <td align="center">@(prodItem.InvoiceNo.Substring(2))</td>
                 <td align="center">@(prodItem.OriginalDescription)</td>
-                <td align="center">@(String.Format("{0:##,###,###,##0.###}", prodItem.Piece))</td>
-                <td align="center">@(String.Format("{0:##,###,###,##0.###}", prodItem.UnitCost))</td>
-                <td align="center" nowrap>@(String.Format("{0:##,###,###,##0.###}", prodItem.Amount))</td>
-                <td align="center" nowrap>@(String.Format("{0:##,###,###,##0.###}", prodItem.Tax))</td>
+                <td align="center">@(String.Format("{0:##,###,###,##0.##}", prodItem.Piece))</td>
+                <td align="center">@(String.Format("{0:##,###,###,##0.##}", prodItem.UnitCost))</td>
+                <td align="center" nowrap>@(String.Format("{0:##,###,###,##0.##}", prodItem.Amount))</td>
+                <td align="center" nowrap>@(String.Format("{0:##,###,###,##0.##}", prodItem.Tax))</td>
                 <td align="center">@(prodItem.TaxType==(byte)1?"V":null)</td>
                 <td align="center">@(prodItem.TaxType==(byte)2?"V":null)</td>
                 <td align="center">@(prodItem.TaxType==(byte)3?"V":null)</td>
@@ -125,8 +125,8 @@
             </tr>*@
             <tr>
                 <td colspan="9" align="center"><span class="contant-m">合　　　　　　　　　　　計</span></td>
-                <td align="right">@(String.Format("{0:##,###,###,##0.###}", _model.TotalAmount ))</td>
-                <td align="right">@(String.Format("{0:##,###,###,##0.###}", _model.TaxAmount ))</td>
+                <td align="right">@(String.Format("{0:##,###,###,##0.##}", _model.TotalAmount ))</td>
+                <td align="right">@(String.Format("{0:##,###,###,##0.##}", _model.TaxAmount ))</td>
                 <td colspan="3" align="center"></td>
             </tr>
         </table>

@@ -10,7 +10,7 @@
 <%@ Import Namespace="Model.DataEntity" %>
 <%@ Import Namespace="eIVOGo.Controllers" %>
 
-<%  Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "設定發票代傳營業人"); %><a href="http://localhost:2598/Views/Organization/Module/">http://localhost:2598/Views/Organization/Module/</a>
+<%  Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "設定發票代傳營業人"); %>
 <form>
     <div class="panel panel-default">
     <div class="panel-heading">

@@ -19,12 +19,12 @@ namespace InvoiceClient.Agent
     public class InvoiceWatcherForGoogle : InvoiceWatcher
     {
         protected bool _isPGP;
-        protected Naming.ChannelIDType _channelID = Naming.ChannelIDType.ForGoogleOnLine;
 
-        public InvoiceWatcherForGoogle(String fullPath):base(fullPath)
+        public InvoiceWatcherForGoogle(String fullPath) : base(fullPath)
         {
             _ResponsedPath = fullPath + "(Response)";
             _ResponsedPath.CheckStoredPath();
+            _channelID = Naming.ChannelIDType.ForGoogleOnLine;
         }
 
         protected override void prepareStorePath(string fullPath)
@@ -122,7 +122,7 @@ namespace InvoiceClient.Agent
                             responseName = responseName.Substring(0, idx);
                         }
                         responseName = Path.Combine(Logger.LogDailyPath, responseName + ".xml");
-                        auto.ConvertToXml().Save(responseName);
+                        auto.ConvertToXml().SaveDocumentWithEncoding(responseName);
 
                         String gpgName = responseName.EncryptFileTo(_ResponsedPath);
 
@@ -131,7 +131,7 @@ namespace InvoiceClient.Agent
                     {
                         String responseName = Path.Combine(_ResponsedPath, fileName.Replace("request", "response")
                             .Replace("_OUT_","_IN_"));
-                        auto.ConvertToXml().Save(responseName);
+                        auto.ConvertToXml().SaveDocumentWithEncoding(responseName);
                     }
                 }
             }
@@ -146,15 +146,15 @@ namespace InvoiceClient.Agent
 
 
 
-        protected override void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
                 IEnumerable<String> message = rootInvoiceNo.Select(i => String.Format("Invoice Number:{0}=>{1}", i.Value, i.Description));
                 Logger.Warn(String.Format("Failed to Send an Invoice ({0}) When Uploading Files!!For the Following Reasons:\r\n{1}", fileName, String.Join("\r\n", message.ToArray())));
 
-                InvoiceRoot invoice = docInv.ConvertTo<InvoiceRoot>();
-                InvoiceRoot stored = docInv.ConvertTo<InvoiceRoot>();
+                InvoiceRoot invoice = docInv.TrimAll().ConvertTo<InvoiceRoot>();
+                InvoiceRoot stored = docInv.TrimAll().ConvertTo<InvoiceRoot>();
                 stored.Invoice = rootInvoiceNo.Where(i=>i.ItemIndexSpecified).Select(i=>invoice.Invoice[i.ItemIndex]).ToArray();
 
                 if (_isPGP)
@@ -164,7 +164,7 @@ namespace InvoiceClient.Agent
                     if(idx>0)
                         outputName = outputName.Substring(0,idx);
                     String errOutFile = Path.Combine(Logger.LogDailyPath, outputName + ".xml");
-                    stored.ConvertToXml().Save(errOutFile);
+                    stored.ConvertToXml().SaveDocumentWithEncoding(errOutFile);
 
                     String gpgName = errOutFile.EncryptFileTo(_failedTxnPath);
 
@@ -172,9 +172,10 @@ namespace InvoiceClient.Agent
                 else
                 {
                     String errOutFile = Path.Combine(_failedTxnPath, Path.GetFileName(fileName));
-                    stored.ConvertToXml().Save(errOutFile);
+                    stored.ConvertToXml().SaveDocumentWithEncoding(errOutFile);
                 }
             }
+            return true;
         }
 
 
@@ -188,14 +189,7 @@ namespace InvoiceClient.Agent
         {
             XmlDocument docInv = new XmlDocument();
             _isPGP = false;
-            if (invoiceFile.Contains("_D_"))
-            {
-                _channelID = Naming.ChannelIDType.ForGoogleTerms;
-            }
-            else if (invoiceFile.Contains("_P_"))
-            {
-                _channelID = Naming.ChannelIDType.ForGoogleOnLine;
-            }
+            _channelID = determineChannelID(invoiceFile);
 
             if (invoiceFile.EndsWith(".gpg", StringComparison.CurrentCultureIgnoreCase)
                 || invoiceFile.EndsWith(".pgp", StringComparison.CurrentCultureIgnoreCase))
@@ -223,7 +217,18 @@ namespace InvoiceClient.Agent
             return docInv;
         }
 
-
+        protected Naming.ChannelIDType determineChannelID(String invoiceFile)
+        {
+            if (invoiceFile.Contains("_D_"))
+            {
+                return Naming.ChannelIDType.ForGoogleTerms;
+            }
+            else if (invoiceFile.Contains("_P_"))
+            {
+                return Naming.ChannelIDType.ForGoogleOnLine;
+            }
+            return Naming.ChannelIDType.FromGW;
+        }
 
     }
 }

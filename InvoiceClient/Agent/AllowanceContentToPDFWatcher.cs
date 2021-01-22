@@ -28,7 +28,7 @@ namespace InvoiceClient.Agent
 
         protected override void prepareStorePath(String fullPath)
         {
-            _inProgressPath = Path.Combine(fullPath + "(正在處理)", $"{Process.GetCurrentProcess().Id}");
+            _inProgressPath = Path.Combine(fullPath + "(Processing)", $"{Process.GetCurrentProcess().Id}");
             _inProgressPath.CheckStoredPath();
         }
 
@@ -58,7 +58,7 @@ namespace InvoiceClient.Agent
                 XmlDocument docInv = new XmlDocument();
                 docInv.Load(fullPath);
 
-                AllowanceRoot root = docInv.ConvertTo<AllowanceRoot>();
+                AllowanceRoot root = docInv.TrimAll().ConvertTo<AllowanceRoot>();
                 AllowanceRoot dummy = new AllowanceRoot();
 
                 String tmpPath = Path.Combine(Logger.LogDailyPath, $"{Guid.NewGuid()}");

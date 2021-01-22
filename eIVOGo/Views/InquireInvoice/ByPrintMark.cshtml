@@ -14,16 +14,14 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
-@using res = eIVOGo.Resource.Views.InquireInvoice.ByPrintMark
-
 @{
     InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 }
 <tr>
-    <th>@res.列印註記</th>
+    <th>列印註記</th>
     <td class="tdleft">
         <select name="PrintMark" class="form-control">
-            <option value="">@res.全部</option>
+            <option value="">全部</option>
             <option value="Y">Y</option>
             <option value="N">N</option>
         </select>

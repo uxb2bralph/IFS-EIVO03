@@ -53,7 +53,7 @@ namespace eIVOGo.Controllers
             models.InquiryHasError = tmpModels.InquiryHasError;
             if (pageIndex.HasValue)
             {
-                ViewBag.PageIndex = (pageIndex - 1)<0?0:(pageIndex - 1);
+                ViewBag.PageIndex = pageIndex - 1;
                 return View("~/Views/OrganizationQuery/Module/CompanyList.cshtml", tmpModels.Items);
             }
             else

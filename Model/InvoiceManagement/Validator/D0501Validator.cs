@@ -34,9 +34,9 @@ namespace Model.InvoiceManagement.Validator
             {
                 return new Exception("折讓證明單日期，TAG：< AllowanceDate />");
             }
-            if (!DateTime.TryParseExact(item.AllowanceDate, "yyyy/MM/dd", CultureInfo.CurrentCulture, DateTimeStyles.None, out allowanceDate))
+            if (!DateTime.TryParseExact(item.AllowanceDate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out allowanceDate))
             {
-                return new Exception(String.Format("折讓證明單日期錯誤(YYYY/MM/DD)；傳送資料:{0}", item.AllowanceDate));
+                return new Exception(String.Format("折讓證明單日期錯誤(YYYYMMDD)；傳送資料:{0}", item.AllowanceDate));
             }
 
 

@@ -84,14 +84,14 @@ namespace InvoiceClient.Agent
             return root.ToXmlDocument();
         }
 
-        protected override void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
                 IEnumerable<String> message = rootInvoiceNo.Select(i => String.Format("作廢發票號碼:{0}=>{1}", i.Value, i.Description));
                 Logger.Warn(String.Format("在上傳作廢發票檔({0})時,傳送失敗!!原因如下:\r\n{1}", fileName, String.Join("\r\n", message.ToArray())));
 
-                CancelInvoiceRoot invoice = docInv.ConvertTo<CancelInvoiceRoot>();
+                CancelInvoiceRoot invoice = docInv.TrimAll().ConvertTo<CancelInvoiceRoot>();
                 int errorIdx = 0;
                 foreach (var rejectItem in rootInvoiceNo.Where(i => i.ItemIndexSpecified))
                 {
@@ -116,6 +116,7 @@ namespace InvoiceClient.Agent
                 }
 
             }
+            return true;
         }
 
     }

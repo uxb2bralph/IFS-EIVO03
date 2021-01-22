@@ -149,9 +149,9 @@ namespace Model.Models.ViewModel
             _productItems = new List<InvoiceAllowanceItem>();
             var invTable = _mgr.GetTable<InvoiceItem>();
 
+            InvoiceItem originalInvoice = null;
             for(int i=0;i<_allowanceItem.InvoiceNo.Length;i++)
             {
-                InvoiceItem originalInvoice = null;
 
                 if (!String.IsNullOrEmpty(_allowanceItem.InvoiceNo[i]) && _allowanceItem.InvoiceNo[i].Length == 10)
                 {
@@ -231,6 +231,7 @@ namespace Model.Models.ViewModel
                 SellerId = _seller.ReceiptNo,
                 TaxAmount = _allowanceItem.TaxAmount,
                 TotalAmount = _allowanceItem.TotalAmount,
+                CurrencyID = originalInvoice.InvoiceAmountType.CurrencyID,
                 InvoiceAllowanceBuyer = new InvoiceAllowanceBuyer
                 {
                     BuyerID = _buyer?.CompanyID,

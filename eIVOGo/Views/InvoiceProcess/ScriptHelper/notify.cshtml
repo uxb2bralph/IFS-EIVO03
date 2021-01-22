@@ -1,19 +1,31 @@
-﻿@using res=eIVOGo.Resource.Views.InvoiceProcess.ScriptHelper.Notify
 
-    <script>
-    $(function () {        
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+<script>
+    $(function () {
+        var $postForm;
         if (!window.uiInvoiceQuery) {
             window.uiInvoiceQuery = {};
         }
         window.uiInvoiceQuery.notify = function () {
             if (!$('input[name="chkItem"]').is(':checked')) {
-                alert('@res.請選擇重送資料__');
+                alert('請選擇重送資料!!');
                 return false;
             }
 
             var $formData = $('input[name="chkItem"]:checked').serializeObject();
             $formData.cancellation = $('#queryArea select[name="Cancelled"]').val();
             $formData.processType = $('#queryArea select[name="ProcessType"]').val();
+            $formData.mailTo = $('input[name="MailTo"]').val();
+
 
             showLoading();
             $.post('@(Url.Action("IssueInvoiceNotice", "InvoiceProcess"))', $formData, function (data) {
@@ -28,18 +40,15 @@
         };
         window.uiInvoiceQuery.authorize = function () {
             if (!$('input[name="chkItem"]').is(':checked')) {
-                alert('@res.請選擇核准重印資料__');
+                alert('請選擇核准重印資料!!');
                 return false;
             }
 
-            var $formData = $('input[name="chkItem"]:checked').serializeObject();
-
-            $.ajax({
-                url: "@(Url.Action("AuthorizeToPrint","InvoiceProcess",new { obj = "$formData" }))",
+            $('#theForm').ajaxForm({
+                url: "@(Url.Action("AuthorizeToPrint","InvoiceProcess"))",
                 beforeSubmit: function () {
                     showLoading();
                 },
-                data: $formData,
                 success: function (data) {
                     hideLoading();
                     if (data) {
@@ -51,24 +60,20 @@
                 error: function () {
                     hideLoading();
                 }
-            });
+            }).submit();
         };
 
         window.uiInvoiceQuery.voidInvoice = function (mode) {
             if (!$('input[name="chkItem"]').is(':checked')) {
-                alert('@res.請選擇核准註銷資料__');
+                alert('請選擇註銷資料!!');
                 return false;
             }
 
-            var $formData = $('input[name="chkItem"]:checked').serializeObject();
-            $formData.mode = mode;
-            
-            $.ajax({
-                url: "@(Url.Action("VoidInvoice","InvoiceProcess", new { obj = "$formData" }))",
+            $('#theForm').ajaxForm({
+                url: "@(Url.Action("VoidInvoice","InvoiceProcess"))" + '?mode=' + mode,
                 beforeSubmit: function () {
                     showLoading();
                 },
-                data: $formData,
                 success: function (data) {
                     hideLoading();
                     if (data) {
@@ -80,24 +85,20 @@
                 error: function () {
                     hideLoading();
                 }
-            });
+            }).submit();
         };
 
         window.uiInvoiceQuery.desireToVoid = function (allow) {
             if (!$('input[name="chkItem"]').is(':checked')) {
-                alert('@res.請選擇核准註銷資料__');
+                alert('請選擇核准註銷資料!!');
                 return false;
             }
 
-            var $formData = $('input[name="chkItem"]:checked').serializeObject();
-            $formData.allow = allow;
-
-            $.ajax({
-                url: "@(Url.Action("DesireToVoidInvoice","InvoiceProcess", new { obj = "$formData" }))",
+            $('#theForm').ajaxForm({
+                url: "@(Url.Action("DesireToVoidInvoice","InvoiceProcess"))" + '?allow=' + allow,
                 beforeSubmit: function () {
                     showLoading();
                 },
-                data: $formData,
                 success: function (data) {
                     hideLoading();
                     if (data) {
@@ -109,8 +110,9 @@
                 error: function () {
                     hideLoading();
                 }
-            });
+            }).submit();
         };
 
     });
-    </script>
+</script>
+

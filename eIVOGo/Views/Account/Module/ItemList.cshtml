@@ -7,7 +7,6 @@
 @using eIVOGo.Helper
 @using eIVOGo.Models
 @using eIVOGo.Controllers
-@using eIVOGo.Resource.Views.Account.Module
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
@@ -109,12 +108,12 @@
 <table class="table01 itemList">
     <thead>
         <tr>
-            <th style="min-width: 120px;">@ItemList.公司名稱</th>
-            <th style="min-width: 120px;">@ItemList.角色</th>
-            <th style="min-width: 120px;">@ItemList.會員名稱</th>
+            <th style="min-width: 120px;">公司名稱</th>
+            <th style="min-width: 120px;">角色</th>
+            <th style="min-width: 120px;">會員名稱</th>
             <th style="min-width: 120px;">ID</th>
-            <th style="min-width: 240px;">@ItemList.電子郵件</th>
-            <th style="min-width: 150px" aria-sort="other">@ItemList.管理</th>
+            <th style="min-width: 240px;">電子郵件</th>
+            <th style="min-width: 150px" aria-sort="other">管理</th>
         </tr>
     </thead>
     <tbody>
@@ -142,7 +141,7 @@
                 </script>
             </td>
             <td>
-                <a class="btn" onclick="uiAccountQuery.edit();">@ItemList.新增</a>
+                <a class="btn" onclick="uiAccountQuery.edit();">新增</a>
             </td>
         </tr>
     </tfoot>

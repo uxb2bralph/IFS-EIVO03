@@ -4,18 +4,17 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+
 using Business.Helper;
 using eIVOGo.Helper;
-using eIVOGo.Resource.Controllers;
-
+using eIVOGo.Models.ViewModel;
+using Model.Models.ViewModel;
 using Model.DataEntity;
 using Model.Locale;
-using Model.Models.ViewModel;
 using Model.Security.MembershipManagement;
 using ModelExtension.Helper;
 using Newtonsoft.Json;
 using Utility;
-using Organization = Model.DataEntity.Organization;
 
 namespace eIVOGo.Controllers
 {
@@ -39,18 +38,18 @@ namespace eIVOGo.Controllers
         public ActionResult DisableCompany(int companyID)
         {
             updateCompanyStatus(companyID, Naming.MemberStatusDefinition.Mark_To_Delete);
-            return View("~/Views/Handling/Index.cshtml");
+            return View("Index");
         }
 
         private void updateCompanyStatus(int companyID, Naming.MemberStatusDefinition status)
         {
             if (!_userProfile.CheckSystemCompany())
             {
-                ViewBag.Message = Handling.使用者非系統管理公司;
+                ViewBag.Message = "使用者非系統管理公司!!";
                 return;
             }
 
-            ViewBag.Message = Handling.資料不存在;
+            ViewBag.Message = "資料不存在!!";
 
             using (ModelSource<Organization> models = new ModelSource<Organization>())
             {
@@ -60,7 +59,7 @@ namespace eIVOGo.Controllers
                 {
                     item.CurrentLevel = (int)status;
                     models.SubmitChanges();
-                    ViewBag.Message = Handling.資料已更新;
+                    ViewBag.Message = "資料已更新!!";
                 }
             }
         }
@@ -68,7 +67,7 @@ namespace eIVOGo.Controllers
         public ActionResult EnableCompany(int companyID)
         {
             updateCompanyStatus(companyID, Naming.MemberStatusDefinition.Checked);
-            return View("~/Views/Handling/Index.cshtml");
+            return View("Index");
         }
 
         public ActionResult ApplyRelationship(int companyID)
@@ -76,7 +75,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<Organization>().Where(o => o.CompanyID == companyID).FirstOrDefault();
             if (item == null)
             {
-                ViewBag.Message = Handling.資料不存在;
+                ViewBag.Message = "資料不存在!!";
             }
             else
             {
@@ -89,15 +88,15 @@ namespace eIVOGo.Controllers
                             CompanyID = item.CompanyID
                         });
                     models.SubmitChanges();
-                    ViewBag.Message = Handling.設定完成;
+                    ViewBag.Message = "設定完成!!";
                 }
                 else
                 {
-                    ViewBag.Message = Handling.該開立人已是B2B營業人;
+                    ViewBag.Message = "該開立人已是B2B營業人!!";
                 }
             }
 
-            return View("~/Views/Handling/Index.cshtml");
+            return View("Index");
         }
 
         public ActionResult MailTracking()
@@ -112,16 +111,16 @@ namespace eIVOGo.Controllers
             viewModel.EndNo = viewModel.EndNo.GetEfficientString();
             if (viewModel.StartNo == null || viewModel.StartNo.Length != 10)
             {
-                ModelState.AddModelError("StartNo", Handling.發票起號由2碼英文_8碼數字組成);
+                ModelState.AddModelError("StartNo", "發票起號由2碼英文+8碼數字組成，共10碼。");
             }
             else if (viewModel.EndNo == null || viewModel.EndNo.Length != 10)
             {
-                ModelState.AddModelError("EndNo", Handling.發票迄號由2碼英文_8碼數字組成);
+                ModelState.AddModelError("EndNo", "發票迄號由2碼英文+8碼數字組成，共10碼。");
             }
             else if(viewModel.StartNo.Substring(0, 2) != viewModel.EndNo.Substring(0, 2))
             {
-                ModelState.AddModelError("StartNo", Handling.發票起迄號字軌不相同);
-                ModelState.AddModelError("EndNo", Handling.發票起迄號字軌不相同);
+                ModelState.AddModelError("StartNo", "發票起、迄號字軌不相同!!");
+                ModelState.AddModelError("EndNo", "發票起、迄號字軌不相同!!");
             }
 
             if (!ModelState.IsValid)
@@ -218,7 +217,7 @@ namespace eIVOGo.Controllers
 
             if (items.Count() == 0)
             {
-                ViewBag.Message = Handling.發票資料錯誤;
+                ViewBag.Message = "發票資料錯誤!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
             else
@@ -232,13 +231,13 @@ namespace eIVOGo.Controllers
             var items = JsonConvert.DeserializeObject<MailTrackingCsvViewModel[]>(jsonData);
             if (items == null || items.Length == 0)
             {
-                ViewBag.Message = Handling.請選擇郵寄項目;
+                ViewBag.Message = "請選擇郵寄項目!!";
                 return View("~/Views/Shared/JsAlert.cshtml");
             }
 
             if (!deliveryStatus.HasValue)
             {
-                ViewBag.Message = Handling.請選擇郵寄過程;
+                ViewBag.Message = "請選擇郵寄過程!!";
                 return View("~/Views/Shared/JsAlert.cshtml");
             }
 
@@ -280,7 +279,7 @@ namespace eIVOGo.Controllers
                 }
                 else
                 {
-                    return Json(new { result = false, message = Handling.資料錯誤 });
+                    return Json(new { result = false, message = "資料錯誤!!" });
                 }
             }
             catch (Exception ex)
@@ -297,7 +296,7 @@ namespace eIVOGo.Controllers
             if (items == null || items.Length == 0)
             {
                 ViewBag.CloseWindow = true;
-                ViewBag.Message = Handling.請選擇郵寄項目;
+                ViewBag.Message = "請選擇郵寄項目!!";
                 return View("~/Views/Shared/JsAlert.cshtml");
             }
 
@@ -306,23 +305,23 @@ namespace eIVOGo.Controllers
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "message/rfc822";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode(Handling.掛號郵件號碼明細+".xlsx")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("掛號郵件號碼明細.xlsx")));
 
 
             using (DataSet ds = new DataSet())
             {
                 DataTable table = new DataTable();
                 ds.Tables.Add(table);
-                table.Columns.Add(Handling.掛號號碼);
-                table.Columns.Add(Handling.姓名);
-                table.Columns.Add(Handling.寄件地名或地址);
-                table.Columns.Add(Handling.備考);
-                table.Columns.Add(Handling.附件檔頁數);
-                table.Columns.Add(Handling.作業方式);
-                table.Columns.Add(Handling.遞件日期);
+                table.Columns.Add("掛號號碼");
+                table.Columns.Add("姓名");
+                table.Columns.Add("寄件地名或地址");
+                table.Columns.Add("備考");
+                table.Columns.Add("附件檔頁數");
+                table.Columns.Add("作業方式");
+                table.Columns.Add("遞件日期");
                 table.Columns.Add("Google_id");
-                table.Columns.Add(Handling.發票號碼);
-                table.Columns.Add(Handling.發票日期);
+                table.Columns.Add("發票號碼");
+                table.Columns.Add("發票日期");
 
                 foreach(var m in items)
                 {
@@ -370,7 +369,7 @@ namespace eIVOGo.Controllers
             {
                 // TODO: Add update logic here
 
-                return RedirectToAction("~/Views/Handling/Index.cshtml");
+                return RedirectToAction("Index");
             }
             catch
             {
@@ -392,7 +391,7 @@ namespace eIVOGo.Controllers
             {
                 // TODO: Add delete logic here
 
-                return RedirectToAction("~/Views/Handling/Index.cshtml");
+                return RedirectToAction("Index");
             }
             catch
             {

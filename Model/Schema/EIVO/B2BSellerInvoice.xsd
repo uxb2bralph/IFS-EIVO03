@@ -41,10 +41,14 @@
                 </xs:complexType>
               </xs:element>
               <xs:element name="SalesAmount" type="xs:decimal" />
-              <xs:element name="TaxType" type="xs:unsignedByte" />
+              <xs:element name="FreeTaxSalesAmount" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+              <xs:element name="ZeroTaxSalesAmount" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+              <xs:element name="TaxType" type="xs:unsignedByte"/>
+              <xs:element name="TaxRate" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
               <xs:element name="TaxAmount" type="xs:decimal" />
               <xs:element name="TotalAmount" type="xs:decimal" />
               <xs:element name="DiscountAmount" type="xs:decimal" minOccurs="0" nillable="1"/>
+              <xs:element name="MainRemark" type="xs:string" minOccurs="0" maxOccurs="1"/>
               <xs:element name="CustomerDefined" minOccurs="0">
                 <xs:complexType>
                   <xs:sequence>

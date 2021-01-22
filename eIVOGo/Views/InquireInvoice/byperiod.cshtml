@@ -1,30 +1,21 @@
-﻿@using res = eIVOGo.Resource.Views.InquireInvoice.ByPeriod
 
+@{ @ Register Src="~/Module/Common/CalendarInputDatePicker.ascx" TagName="CalendarInputDatePicker"
+    TagPrefix="uc1"}
+
+@using System.Linq.Expressions
+
+
+@using Model.DataEntity
+@using Utility
+@using eIVOGo.Helper
 <tr>
-    <th width="20%">
-        @res.期別
+    <th width="20%">期別
     </th>
     <td class="tdleft">
         @(this.Model != null ? Html.DropDownList("period", (IEnumerable<SelectListItem>)this.Model) : null)
-        <input type="hidden" id="PeriodNo" name="PeriodNo" />
         <script>
             $(function () {
-                var d = new Date();
-                var y = d.getFullYear();
-                var n = d.getMonth();
-                //alert(y + "," + n);
-                $("#period").children().each(function () {
-                    if ($(this).val() == y+","+n) {
-                        //jQuery給法
-                        $(this).attr("selected", "true");
-                    }
-                });
-                //alert('PeriodNo:' + '@(Request["PeriodNo"])' +',period:'+'@(Request["period"])')
-                if (!'@(Request["period"])' == null) {
-                    $('select[name="period"]').val('@(Request["period"])');
-                }
-
-                //$('input[name="PeriodNo"]:hidden').val($('select[name="period"]').val());
+                $('select[name="period"]').val('@(Request["period"])');
             });
         </script>
     </td>

@@ -1,4 +1,5 @@
-﻿@using System.IO
+
+@using System.IO
 @using System.Linq.Expressions
 
 @using eIVOGo.Helper
@@ -11,41 +12,50 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@using res=eIVOGo.Resource.Views.InvoiceProcess.ScriptHelper.InvoiceAction
 
-@{
-    InquireInvoiceViewModel _viewModel;
-
-    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-}
-
-    <script>
-    $(function () {       
-
+<script>
+    $(function () {
+        var $postForm;
         if (!window.uiInvoiceQuery) {
             window.uiInvoiceQuery = {};
         }
-
         window.uiInvoiceQuery.commitAction = function () {
-            var $formData = $('input[name="chkItem"]').serializeObject();
-
             if (!$('input[name="chkItem"]').is(':checked')) {
-                alert('@($"{res.請選擇}{_viewModel.ActionTitle}")');
+                alert('@($"請選擇{_viewModel.ActionTitle}")');
                 return false;
             }
-            
-            showLoading();
-            $.post('@(Url.Action(_viewModel.CommitAction, "InvoiceProcess"))', $formData, function (data) {
-                hideLoading();
-                if ($.isPlainObject(data)) {
-                    alert(data.message);
-                } else {
-                    var $data = $(data);
-                    $('body').append($data);
-                    //$data.remove();
+
+            $('#theForm').ajaxForm({
+                url: "@(Url.Action(_viewModel.CommitAction,"InvoiceProcess"))",
+                beforeSubmit: function () {
+                    showLoading();
+                },
+                success: function (data) {
+                    hideLoading();
+                    if ($.isPlainObject(data)) {
+                        alert(data.message);
+                    } else {
+                        var $data = $(data);
+                        $('body').append($data);
+                        //$data.remove();
+                    }
+                },
+                error: function () {
+                    hideLoading();
                 }
-            });
-           
+            }).submit();
         };
     });
-    </script>
+</script>
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+    InquireInvoiceViewModel _viewModel;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+    }
+</script>
+

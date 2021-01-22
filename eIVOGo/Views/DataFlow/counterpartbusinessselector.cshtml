@@ -1,4 +1,4 @@
-﻿
+
 @using System.IO
 @using System.Linq.Expressions
 
@@ -11,22 +11,6 @@
 @using Model.Security.MembershipManagement
 @using eIVOGo.Controllers
 @using Business.Helper
-
-@{
-    ModelStateDictionary _modelState;
-    ModelSource<InvoiceItem> models;
-    IEnumerable<Organization> _model;
-    String _fieldName;
-    String _contentID;
-    UserProfileMember _profile;
-
-    _modelState = (ModelStateDictionary)ViewBag.ModelState;
-    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-    _model = (IEnumerable<Organization>)this.Model;
-    _fieldName = (String)ViewBag.FieldName ?? "BuyerID";
-    _contentID = (String)ViewBag.FieldID ?? ("id" + DateTime.Now.Ticks);
-    _profile = Context.GetUser();
-}
 
 <input type="text" size="40" id="@(_contentID)" class="form-control" value="" placeholder="請輸入檢索關鍵字" />
 <input type="hidden" name="@(_fieldName)" />
@@ -60,22 +44,33 @@
         });
     });
 
+    @if (Request[_fieldName] != null)
+        {
+        $(function () {
+            $('input:hidden[name="@(_fieldName)"]').val('@(Request[_fieldName])');
+                });
+    }
 </script>
 
-@if (Request[_fieldName] != null)
-{
 
-    @section scripts {
+<script runat="server">
 
-        <script type="text/javascript">
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    IEnumerable<Organization> _model;
+    String _fieldName;
+    String _contentID;
+    UserProfileMember _profile;
 
-            $(function () {
-
-                $('input:hidden[name="@(_fieldName)"]').val('@(Request[_fieldName])');
-
-             });
-
-        </script>
-
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+        _model = (IEnumerable<Organization>)this.Model;
+        _fieldName = (String)ViewBag.FieldName ?? "BuyerID";
+        _contentID = (String)ViewBag.FieldID ?? ("id" + DateTime.Now.Ticks);
+        _profile = Context.GetUser();
     }
-}
+
+</script>

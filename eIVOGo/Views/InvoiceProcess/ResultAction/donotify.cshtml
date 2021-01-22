@@ -1,14 +1,22 @@
-﻿
-@using res=eIVOGo.Resource.Views.InvoiceProcess.ResultAction.DoNotify
+@using System.IO
+@using System.Linq.Expressions
 
-@{ 
 
-}
+@using Model.DataEntity
+@using Model.Locale
+@using Utility
 
-<table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td class="Bargain_btn">
-            <button type="button" class="btn" name="btnNotify" onclick="uiInvoiceQuery.notify();">@res.重送開立通知</button>
-        </td>
-    </tr>
-</table>
+    <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <th style="width:10%;">寄送副本至：</th>
+            <td><input type="text" name="MailTo" value="" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td colspan="2" class="Bargain_btn">
+                <button type="button" class="btn" name="btnNotify" onclick="uiInvoiceQuery.notify();">重送開立通知</button>
+            </td>
+        </tr>
+    </table>
+
+
+

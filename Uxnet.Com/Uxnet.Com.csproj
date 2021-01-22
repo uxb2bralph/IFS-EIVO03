@@ -64,6 +64,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Uxnet.Web\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -126,13 +130,16 @@
     <Compile Include="Helper\DefaultTools\PdfUtility.cs" />
     <Compile Include="Helper\DefaultTools\Program.cs" />
     <Compile Include="Helper\DynamicQueryStringParameter.cs" />
+    <Compile Include="Helper\FileIOExtensions.cs" />
     <Compile Include="Helper\JobScheduler.cs" />
     <Compile Include="Helper\LogTextWriter.cs" />
+    <Compile Include="Helper\PersistenceExtensions.cs" />
     <Compile Include="Helper\QueuedProcessHandler.cs" />
     <Compile Include="Helper\UtilityHelper.cs" />
     <Compile Include="Helper\WebClientEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Properties\AppSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs" />
     <Compile Include="Providers\UserMenuManager.cs" />
@@ -189,6 +196,7 @@
     <Compile Include="Win32\Winspool.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="_test\_testWebControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataAccessLayer\basis\dsQueryCondition.xsd">

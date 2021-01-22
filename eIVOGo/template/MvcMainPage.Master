@@ -1,5 +1,4 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewMasterPage" %>
-
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
@@ -12,12 +11,12 @@
 <html lang="en">
 <head runat="server">
     <title>電子發票系統</title>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    
     <link href="~/Content/eivo-bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap-theme.css" rel="stylesheet" type="text/css" />
     <link href="~/css/rwd-table.min.css" rel="stylesheet" type="text/css" />
@@ -48,52 +47,69 @@
 </head>
 <body>
 
-    <div id="wrapper">
+        <div id="wrapper">
 
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="<%= VirtualPathUtility.ToAbsolute("~/Home/MainPage") %>">電子發票系統</a>
-            </div>
-            <!-- /.navbar-header -->
+            <!-- Navigation -->
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="<%= VirtualPathUtility.ToAbsolute("~/Home/MainPage") %>">電子發票系統</a>
+                </div>
+                <!-- /.navbar-header -->
 
-            <ul class="nav navbar-top-links navbar-right">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-language" aria-hidden="true"></i><i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-alerts">
-                        <li>
-                            <a href="/Home/SetCulture/?culture=en-US&returnUrl=<%=this.Request.RawUrl%>">English</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="/Home/SetCulture/?culture=zh-TW&returnUrl=<%=this.Request.RawUrl%>">繁體</a>
-                        </li>
-                    </ul>
-                </li>
-                <%  if (_items.Count() > 0)
-                    { %>
-                <li>‧系統公告：
+                <ul class="nav navbar-top-links navbar-right">
+                    <%  if(_items.Count()>0)
+                        { %>
+                            <li>‧系統公告：
                             <marquee class="notice" scrollamount="2">
-                                <%  foreach (var item in _items)
+                                <%  foreach(var item in _items)
                                     { %>
                                         <font color="#434343"><%= item.MessageContents %></font>
                                 <%  } %>
                             </marquee>
-                </li>
-                <%  }%>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-envelope fa-fw"></i><i class="fa fa-caret-down"></i>
-                    </a>
-                    <%--<ul class="dropdown-menu dropdown-messages">
+                            </li>
+                    <%  }%>
+                    <%--<li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-language fa-fw"></i><i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>
+                                <a href="javascript:changeLanguage('zh-TW');">
+                                    繁體中文
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:changeLanguage('en-US');">
+                                    English
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- /.dropdown-messages -->
+                        <script>
+                            function changeLanguage(lang) {
+                                $.post('<%= Url.Action("ChangeLanguage", "Account") %>', { 'lang': lang }, function (data) {
+                                    if ($.isPlainObject(data)) {
+                                        if (data.result) {
+                                            window.location.reload();
+                                        }
+                                    } else {
+                                        $(data).appendTo($('body'));
+                                    }
+                                });
+                            }
+                        </script>
+                    </li>--%>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope fa-fw"></i><i class="fa fa-caret-down"></i>
+                        </a>
+                        <%--<ul class="dropdown-menu dropdown-messages">
                             <li>
                                 <a href="#">
                                     <div>
@@ -137,114 +153,112 @@
                                 </a>
                             </li>
                         </ul>--%>
-                    <!-- /.dropdown-messages -->
-                </li>
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-tasks fa-fw"></i><i class="fa fa-caret-down"></i>
-                    </a>
-                    <!-- /.dropdown-tasks -->
-                </li>
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-bell fa-fw"></i><i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-alerts">
-                        <li>
-                            <a href="<%= VirtualPathUtility.ToAbsolute("~/ProcessRequest/QueryIndex") %>">
-                                <div>
-                                    <i class="fa fa-tasks fa-fw"></i>工作清單
+                        <!-- /.dropdown-messages -->
+                    </li>
+                    <!-- /.dropdown -->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-tasks fa-fw"></i><i class="fa fa-caret-down"></i>
+                        </a>
+                        <!-- /.dropdown-tasks -->
+                    </li>
+                    <!-- /.dropdown -->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell fa-fw"></i><i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="<%= VirtualPathUtility.ToAbsolute("~/ProcessRequest/QueryIndex") %>">
+                                    <div>
+                                        <i class="fa fa-tasks fa-fw"></i>工作清單
                                     <span class="pull-right text-muted small"></span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                    </ul>
-                    <!-- /.dropdown-alerts -->
-                </li>
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i><i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="<%= VirtualPathUtility.ToAbsolute("~/UserProfile/EditMySelf") %>"><i class="fa fa-user fa-fw"></i>帳號管理</a>
-                        </li>
-                        <%--<li><a href="#"><i class="fa fa-gear fa-fw"></i>Settings</a>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                        </ul>
+                        <!-- /.dropdown-alerts -->
+                    </li>
+                    <!-- /.dropdown -->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-user fa-fw"></i><i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="<%= VirtualPathUtility.ToAbsolute("~/UserProfile/EditMySelf") %>"><i class="fa fa-user fa-fw"></i>帳號管理</a>
+                            </li>
+                            <%--<li><a href="#"><i class="fa fa-gear fa-fw"></i>Settings</a>
                             </li>--%>
-                        <li class="divider"></li>
-                        <li><a href="<%= VirtualPathUtility.ToAbsolute("~/Logout.aspx") %>"><i class="fa fa-sign-out fa-fw"></i>登出</a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-user -->
-                </li>
-                <!-- /.dropdown -->
-            </ul>
-            <!-- /.navbar-top-links -->
+                            <li class="divider"></li>
+                            <li><a href="<%= VirtualPathUtility.ToAbsolute("~/Logout.aspx") %>"><i class="fa fa-sign-out fa-fw"></i>登出</a>
+                            </li>
+                        </ul>
+                        <!-- /.dropdown-user -->
+                    </li>
+                    <!-- /.dropdown -->
+                </ul>
+                <!-- /.navbar-top-links -->
 
-            <%  Html.RenderPartial("~/Views/SiteAction/PageMenuBar.ascx"); %>
-            <!-- /.navbar-static-side -->
-        </nav>
+                <%  Html.RenderPartial("~/Views/SiteAction/PageMenuBar.ascx"); %>
+                <!-- /.navbar-static-side -->
+            </nav>
 
-        <!-- Page Content -->
-        <div id="page-wrapper">
+            <!-- Page Content -->
+            <div id="page-wrapper">
 
-            <ul class="nav nav-tabs" role="tablist" id="masterTab">
-                <li role="presentation" class="active">
-                    <a href="#masterHome" class="tab-link" aria-controls="masterHome" role="tab" data-toggle="tab"><%= ViewBag.ActionName ?? "首頁" %> <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-                </li>
-            </ul>
+                <ul class="nav nav-tabs" role="tablist" id="masterTab">
+                    <li role="presentation" class="active">
+                        <a href="#masterHome" class="tab-link" aria-controls="masterHome" role="tab" data-toggle="tab"><%= ViewBag.ActionName ?? "首頁" %> <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                    </li>
+                </ul>
 
-            <!-- Tab panes -->
-            <div class="tab-content" id="masterTabContent">
-                <div role="tabpanel" class="tab-pane active" id="masterHome">
-                    <div class="container-fluid">
-                        <%  if (ViewBag.ActionName != null)
-                            { %>
-                        <%--                            <div class="row">
+                <!-- Tab panes -->
+                <div class="tab-content" id="masterTabContent">
+                    <div role="tabpanel" class="tab-pane active" id="masterHome">
+                        <div class="container-fluid">
+                            <%  if (ViewBag.ActionName != null)
+                                { %>
+<%--                            <div class="row">
                                 <div class="col-lg-12">
                                     <h2 class="page-header"><%= ViewBag.ActionName %></h2>
                                 </div>
                                 <!-- /.col-lg-12 -->
                             </div>--%>
-                        <%  }  %>
-                        <h2>
-                            <br />
-                        </h2>
-                        <form id="theForm" runat="server" role="form" enctype="multipart/form-data">
-                            <asp:ContentPlaceHolder ID="formContent" runat="server">
-                            </asp:ContentPlaceHolder>
-                        </form>
-                        <div class="row">
-                            <asp:ContentPlaceHolder ID="mainContent" runat="server">
-                            </asp:ContentPlaceHolder>
+                            <%  }  %>
+                            <h2><br /></h2>
+                            <form id="theForm" runat="server" role="form" enctype="multipart/form-data">
+                                <asp:ContentPlaceHolder ID="formContent" runat="server">
+                                </asp:ContentPlaceHolder>
+                            </form>
+                            <div class="row">
+                                <asp:ContentPlaceHolder ID="mainContent" runat="server">
+                                </asp:ContentPlaceHolder>
+                            </div>
+                            <!-- /.row -->
                         </div>
-                        <!-- /.row -->
                     </div>
                 </div>
+                
+                <!-- /.container-fluid -->
             </div>
-
-            <!-- /.container-fluid -->
+            <!-- /#page-wrapper -->
         </div>
-        <!-- /#page-wrapper -->
-    </div>
 
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#c5e08a" id="footer" runat="server" clientidmode="Static">
-        <tr>
-            <td width="208" height="26" bgcolor="#d9e28e">&nbsp;
-            </td>
-            <td align="right">
-                <span class="copyright">Powered by UXB2B</span>
-            </td>
-        </tr>
-    </table>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#c5e08a" id="footer" runat="server" clientidmode="Static">
+            <tr>
+                <td width="208" height="26" bgcolor="#d9e28e">&nbsp;
+                </td>
+                <td align="right">
+                    <span class="copyright">Powered by UXB2B</span>
+                </td>
+            </tr>
+        </table>
 
 </body>
 </html>
 <% Html.RenderPartial("~/Views/Shared/GlobalScript.cshtml"); %>
-<% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
+<% Html.RenderPartial("~/Views/Shared/AlertMessage.cshtml"); %>
 
 <cc1:SystemMessagesDataSource ID="dsEntity" runat="server">
 </cc1:SystemMessagesDataSource>

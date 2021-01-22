@@ -99,6 +99,13 @@ namespace eIVOGo.Controllers
                 items = items.Where(p => p.ProcessComplete < viewModel.ProcessCompleteTo.Value.AddDays(1));
             }
 
+            viewModel.QuickSearch = viewModel.QuickSearch.GetEfficientString();
+            if (viewModel.QuickSearch != null)
+            {
+                items = items.Where(p => p.UserProfile.PID == viewModel.QuickSearch
+                    || p.Organization.ReceiptNo == viewModel.QuickSearch);
+            }
+
             viewModel.RecordCount = items.Count();
             if (viewModel.PageIndex.HasValue)
             {

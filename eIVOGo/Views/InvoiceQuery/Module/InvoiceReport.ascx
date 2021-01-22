@@ -8,7 +8,6 @@
 
 
 <%@ Import Namespace="System.IO" %>
-<a href="attachmentresult.cshtml">attachmentresult.cshtml</a>
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="eIVOGo.Helper" %>
@@ -55,7 +54,7 @@
     function downloadMonthlyReport() {
         var event = event || window.event;
         var $form = $(event.target).closest('form');
-        $form.launchDownload('<%= Url.Action("CreateMonthlyReportXlsx","InvoiceQuery") %>');
+        $form.launchDownload('<%= Url.Action("CreateMonthlyReportXlsx","InvoiceQuery") %>', null, 'report');
     }
 
     $(function() {

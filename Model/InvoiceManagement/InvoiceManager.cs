@@ -34,6 +34,8 @@ namespace Model.InvoiceManagement
 
         public int? ChannelID { get; set; }
 
+        public Naming.InvoiceProcessType? ProcessType { get; set; }
+
         public virtual Dictionary<int, Exception> SaveUploadInvoice(InvoiceRoot item,OrganizationToken owner)
         {
             Dictionary<int, Exception> result = new Dictionary<int, Exception>();
@@ -156,7 +158,8 @@ namespace Model.InvoiceManagement
                                 TaxRate = invItem.TaxRate,
                                 TaxType = invItem.TaxType,
                                 TotalAmount = invItem.TotalAmount,
-                                TotalAmountInChinese = Utility.ValueValidity.MoneyShow(invItem.TotalAmount)
+                                TotalAmountInChinese = Utility.ValueValidity.MoneyShow(invItem.TotalAmount),
+                                BondedAreaConfirm = invItem.BondedAreaConfirm,
                             },
                             DonationID = donatory != null ? donatory.CompanyID : (int?)null
                         };
@@ -832,7 +835,8 @@ namespace Model.InvoiceManagement
                                 TaxRate = invItem.TaxRate,
                                 TaxType = invItem.TaxType,
                                 TotalAmount = invItem.TotalAmount,
-                                TotalAmountInChinese = Utility.ValueValidity.MoneyShow(invItem.TotalAmount)
+                                TotalAmountInChinese = Utility.ValueValidity.MoneyShow(invItem.TotalAmount),
+                                BondedAreaConfirm = invItem.BondedAreaConfirm,
                             },
                             DonationID = donatory != null ? donatory.CompanyID : (int?)null
                         };

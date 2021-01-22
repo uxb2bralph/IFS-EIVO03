@@ -13,6 +13,8 @@ using System.Web.Mvc;
 using Utility;
 using Model.Helper;
 using TaskCenter.Helper.RequestAction;
+using TaskCenter.Properties;
+using Model.InvoiceManagement;
 
 namespace TaskCenter.Controllers
 {
@@ -47,6 +49,19 @@ namespace TaskCenter.Controllers
             {
                 return Json(new { result = false, errorCode = ModelState.AllErrorKey() }, JsonRequestBehavior.AllowGet);
             }
+
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UploadAttachment(InvoiceRequestViewModel viewModel)
+        {
+            viewModel.SaveAttachment(this);
+            if (!ModelState.IsValid)
+            {
+                return Json(new { result = false, errorCode = ModelState.AllErrorKey() }, JsonRequestBehavior.AllowGet);
+            }
+
+            AttachmentManager.MatchAttachment();
 
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
         }

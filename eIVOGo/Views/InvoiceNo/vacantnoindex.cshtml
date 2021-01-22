@@ -1,22 +1,35 @@
-﻿
 @using System.IO
 @using System.Linq.Expressions
 
+@using Business.Helper
 @using eIVOGo.Helper
 @using eIVOGo.Models
+@using eIVOGo.Controllers
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
 @using Utility
 @using Uxnet.Web.WebUI
-@using eIVOGo.Helper
-@using tv=eIVOGo.Resource.Views.Common.TreeView
+@using Newtonsoft.Json
+@{
 
-@{ 
     Layout = "~/Views/Template/MvcMainPage.cshtml";
 
-    ViewBag.ActionName = tv.首頁___發票作業;
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
 }
 
-@{ Html.RenderPartial("~/Views/InvoiceNo/VacantNoQuery.cshtml");}
+@section headContent {
 
+}
+@section formContent {
+    @{
+        Html.RenderPartial("~/Views/InvoiceNo/VacantNoQuery.cshtml");
+    }
+}

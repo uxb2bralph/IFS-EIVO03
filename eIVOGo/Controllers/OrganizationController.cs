@@ -19,14 +19,12 @@ using ClosedXML.Excel;
 using eIVOGo.Helper;
 using eIVOGo.Models;
 using eIVOGo.Models.ViewModel;
-using resource = eIVOGo.Resource.Controllers;
 using Model.Models.ViewModel;
 using eIVOGo.Properties;
 using Model.DataEntity;
 using Model.Locale;
 using Model.Security.MembershipManagement;
 using Utility;
-using Organization = Model.DataEntity.Organization;
 
 namespace eIVOGo.Controllers
 {
@@ -39,12 +37,12 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<Organization>().Where(c => c.CompanyID == id).FirstOrDefault();
             if (item == null)
             {
-                ViewBag.Message = resource.Organization.店家資料錯誤;
+                ViewBag.Message = "店家資料錯誤!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
             if (Request.Files.Count == 0)
             {
-                ViewBag.Message = resource.Organization.請設定公司LOGO標幟;
+                ViewBag.Message = "請設定公司LOGO標幟!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
@@ -78,7 +76,6 @@ namespace eIVOGo.Controllers
             return View("~/Views/Organization/Module/EditItem.cshtml", item);
         }
 
-        [ValidateInput(false)]
         public ActionResult CommitItem(OrganizationViewModel viewModel)
         {
 
@@ -105,18 +102,18 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: resource.Organization.開立人資料錯誤);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "開立人資料錯誤!!");
             }
 
-            return View("~/Views/Organization/Module/ApplyIssuerAgent.cshtml", item);
+            return View("~/Views/Organization/Module/ApplyIssuerAgent.ascx", item);
         }
 
-        public ActionResult CommitIssuerAgent(OrganizationViewModel viewModel, int?[] agentID)
+        public ActionResult CommitIssuerAgent(OrganizationViewModel viewModel,int?[] agentID)
         {
             ViewResult result = (ViewResult)ApplyIssuerAgent(viewModel);
             Organization item = result.Model as Organization;
 
-            if (item == null)
+            if(item==null)
             {
                 return result;
             }
@@ -139,7 +136,7 @@ namespace eIVOGo.Controllers
             Organization item = result.Model as Organization;
             if (item == null)
                 return result;
-
+            
             return View("~/Views/Organization/Module/GatewaySettings.cshtml", item);
         }
 

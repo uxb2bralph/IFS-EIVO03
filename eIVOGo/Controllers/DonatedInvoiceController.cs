@@ -10,7 +10,6 @@ using Model.Security.MembershipManagement;
 using Business.Helper;
 using System.Text;
 using Model.Locale;
-using Model.Models.ViewModel;
 
 namespace eIVOGo.Controllers
 {
@@ -21,26 +20,24 @@ namespace eIVOGo.Controllers
             UserProfileMember userProfile = WebPageUtility.UserProfile;
 
 
-            return (ModelSourceInquiry<InvoiceItem>)(new InquireDonatedInvoice { ViewName = "~/Views/InquireInvoice/ByDonation.cshtml", CurrentController = this })
+            return (ModelSourceInquiry<InvoiceItem>)(new InquireDonatedInvoice { ControllerName = "InquireInvoice", ActionName = "ByDonation", CurrentController = this })
                 .Append(new InquireInvoiceByRole(userProfile) { CurrentController = this })
                 .Append(new InquireInvoiceSeller { ControllerName = "InquireInvoice", ActionName = "BySeller", CurrentController = this })
                 .Append(new InquireInvoiceDate { ControllerName = "InquireInvoice", ActionName = "ByInvoiceDate", CurrentController = this })
                 .Append(new InquireDonatory { ControllerName = "InquireInvoice", ActionName = "ByDonatory", CurrentController = this });
         }
 
-        public ActionResult ReportIndex(InquireInvoiceViewModel viewModel)
+        public ActionResult ReportIndex()
         {
             ModelSource<InvoiceItem> models = new ModelSource<InvoiceItem>();
-            ViewBag.ViewModel = viewModel;
             TempData.SetModelSource(models);
             models.Inquiry = createModelInquiry();
 
             return View(models.Inquiry);
         }
 
-        public ActionResult InquireReport(InquireInvoiceViewModel viewModel)
+        public ActionResult InquireReport()
         {
-            ViewBag.ViewModel = viewModel;
             ModelSource<InvoiceItem> models = new ModelSource<InvoiceItem>();
             TempData.SetModelSource(models);
             models.Inquiry = createModelInquiry();
@@ -49,10 +46,9 @@ namespace eIVOGo.Controllers
             return View("ReportResult", models.Inquiry);
         }
 
-        public ActionResult ReportGridPage(int index,int size, InquireInvoiceViewModel viewModel)
+        public ActionResult ReportGridPage(int index,int size)
         {
             //ViewBag.HasQuery = true;
-            ViewBag.ViewModel = viewModel;
             ModelSource<InvoiceItem> models = new ModelSource<InvoiceItem>();
             TempData.SetModelSource(models);
             models.Inquiry = createModelInquiry();
@@ -64,12 +60,12 @@ namespace eIVOGo.Controllers
                 index = 0;
 
             return View(models.Items.OrderByDescending(d => d.InvoiceID)
-                .Skip(index * size).Take(size));
+                .Skip(index * size).Take(size)
+                .ToArray());
         }
 
-        public ActionResult DownloadCSV(InquireInvoiceViewModel viewModel)
+        public ActionResult DownloadCSV()
         {
-            ViewBag.ViewModel = viewModel;
             ModelSource<InvoiceItem> models = new ModelSource<InvoiceItem>();
             TempData.SetModelSource(models);
             models.Inquiry = createModelInquiry();
@@ -80,9 +76,8 @@ namespace eIVOGo.Controllers
             return View(models.Items);
         }
 
-        public ActionResult PrintResult(InquireInvoiceViewModel viewModel)
+        public ActionResult PrintResult()
         {
-            ViewBag.ViewModel = viewModel;
             ModelSource<InvoiceItem> models = new ModelSource<InvoiceItem>();
             TempData.SetModelSource(models);
             models.Inquiry = createModelInquiry();

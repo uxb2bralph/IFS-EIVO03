@@ -8,6 +8,8 @@ using System.Text;
 using InvoiceClient.Properties;
 using Model.Schema.EIVO;
 using InvoiceClient.Agent;
+using Utility;
+using Newtonsoft.Json;
 
 namespace InvoiceClient.TransferManagement
 {
@@ -20,14 +22,26 @@ namespace InvoiceClient.TransferManagement
         private InvoiceCancellationWatcherV2ForGoogle _CancellationWatcher;
         private AllowanceWatcherV2ForGoogle _AllowanceWatcher;
         private InvoiceWatcher _AllowancePGPResponseWatcher;
-        private InvoiceWatcher _AllowancePDFPGPResponseWatcher;
         private AllowanceContentToPDFWatcher _AllowanceContentWatcher;
         private AllowanceCancellationWatcherV2ForGoogle _AllowanceCancellationWatcher;
         private InvoiceWatcher _AttachmentWatcher;
         private InvoiceWatcher _InvoicePDFWatcher;
-        private InvoiceWatcher _AllowancePDFWatcher;
 
+        private InvoiceTransferManagerPGPForGoogle.LocalSettings _Settings;
 
+        public InvoiceTransferManagerPGPForGoogle()
+        {
+            string path = Path.Combine(Logger.LogPath, $"{this.GetType().Name}.json");
+            if (File.Exists(path))
+            {
+                this._Settings = JsonConvert.DeserializeObject<InvoiceTransferManagerPGPForGoogle.LocalSettings>(File.ReadAllText(path));
+            }
+            else
+            {
+                this._Settings = new InvoiceTransferManagerPGPForGoogle.LocalSettings();
+                File.WriteAllText(path, JsonConvert.SerializeObject((object)this._Settings));
+            }
+        }
 
         public void EnableAll(String fullPath)
         {
@@ -54,15 +68,10 @@ namespace InvoiceClient.TransferManagement
 
             _AllowancePGPResponseWatcher = new PGPEncryptWatcherForGoogle(_AllowanceWatcher.ResponsePath)
             {
-                ResponsePath = Path.Combine(fullPath, Settings.Default.UploadAllowanceFolder + "(Response)")
+                ResponsePath = Path.Combine(fullPath, Settings.Default.UploadAllowanceFolder + "(Response)"),
+                AddedStore = _Settings.AllowancePGPStore,
             };
             _AllowancePGPResponseWatcher.StartUp();
-
-            _AllowancePDFPGPResponseWatcher = new PGPEncryptWatcherForGoogle(Path.Combine(fullPath, "AllowanceZipPDFForPGP"))
-            {
-                ResponsePath = Path.Combine(Settings.Default.InvoiceTxnPath, Settings.Default.AllowanceDownloadSaleInvoiceFolder)
-            };
-            _AllowancePDFPGPResponseWatcher.StartUp();
 
 
             _AllowanceContentWatcher = new AllowanceContentToPDFWatcher(_AllowanceWatcher.PathToPDF)
@@ -83,11 +92,6 @@ namespace InvoiceClient.TransferManagement
             };
             _InvoicePDFWatcher.StartUp();
 
-            _AllowancePDFWatcher = new AllowancePDFWatcherForZip(Path.Combine(fullPath, Settings.Default.AllowanceZipInvoice))
-            {
-                ResponsePath = Path.Combine(fullPath, "AllowanceZipPDFForPGP")
-            };
-            _AllowancePDFWatcher.StartUp();
 
             _CancellationWatcher.InitializeDependency(_PreInvoiceWatcher);
             _AllowanceWatcher.InitializeDependency(_PreInvoiceWatcher);
@@ -174,6 +178,11 @@ namespace InvoiceClient.TransferManagement
         public Type UIConfigType
         {
             get { return typeof(InvoiceClient.MainContent.GoogleInvoiceConfig); }
+        }
+
+        private class LocalSettings
+        {
+            public String AllowancePGPStore { get; set; }
         }
     }
 }

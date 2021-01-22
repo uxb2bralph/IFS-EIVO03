@@ -17,14 +17,6 @@
 <%@ Import Namespace="Uxnet.Web.WebUI" %>
 
 <% if(_model!=null) { %>
-<%
-    var size = 1;   
-
-    if (Encoding.Default.GetBytes(_model.InvoiceSeller.CustomerName).Length > 48)
-        size = 3;
-    else if  (Encoding.Default.GetBytes(_model.InvoiceSeller.CustomerName).Length > 32)
-        size = 2;
-%>
 <div style="text-align:center; position:absolute;margin-left:0.3cm;height:7cm;margin-top:2cm;font-size:small" >請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
 <div style="text-align:center; position:absolute;margin-left:19.4cm;height:7cm;margin-top:2cm;font-size:small" >請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
 <div style="page-break-after: always;margin-left:0.5cm;margin-right:0.5cm;margin-bottom:0cm;margin-top:0.5cm;">
@@ -56,18 +48,7 @@
             <%  }
                 else
                 { %>
-                    <%if (size == 3)
-                      {%>
-                        <h3 style="width:4.2cm;padding-top: 0.2cm;font-size:11pt;" class="title-smal"><%= _model.InvoiceSeller.CustomerName  %></h3>
-                    <%} %>
-                    <%else if (size == 2)
-                      {%>
-                        <h3 style="width:4.2cm;padding-top: 0.5cm;" class="title-smal"><%= _model.InvoiceSeller.CustomerName  %></h3>
-                    <%} %>
-                    <%else 
-                      {%>
-                        <h3 style="width:4.2cm;padding-top: 1cm;" class="title-smal"><%= _model.InvoiceSeller.CustomerName  %></h3>
-                    <%} %>
+                    <h3 style="width:4.2cm;" class="title-small"><%= _model.InvoiceSeller.CustomerName  %></h3>
             <%  }
                 if (_isDuplicatedPrint)
                 { %>
@@ -195,16 +176,19 @@
         <div style="width: 7.2cm; height: 8.8cm; display: block; overflow: hidden; float: right;"></div>
         <div class="cutfield" style="float: right;">
             <h3 class="notop">領獎收據</h3>
-            <p class="sign" style="font-size: 9pt">
-                一、金額(新臺幣) &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 元整<br />
-                二、中獎人簽名(正楷)或蓋章<br />
-                <br />
-                三、電話<br /><img id="qrcode3" alt="" width="80" height="80" src="../images/invoiceqrcode.png" style="float: right;"/>
-                四、兌獎若有疑義， <br />
-                &nbsp&nbsp&nbsp&nbsp&nbsp 請洽客服專線：<br />
-                &nbsp&nbsp&nbsp&nbsp&nbsp 4128282；或請<br />
-                &nbsp&nbsp&nbsp&nbsp&nbsp 至下列網址查詢http://invoice.etax.nat.gov.tw/                
+            <p class="sign">
+                發票年期別：<br />
+                發票字軌號碼：<br />
+                金額：新台幣<br />
+                中獎人：<br />
+                身分證字號：<br />
+                地址：<br />
+                電話：
             </p>
+            <h3 class="notop">紙本電子發票注意事項</h3>
+            <p class="rule1">中獎人請於領獎期間內攜帶國民身分證及本收執聯向下列郵局兌領，逾期不得領獎，影本不得進行領獎。</p>
+            <p class="rule">(一) 特別獎、特獎及頭獎為各直轄市及各縣、市之指定郵局。</p>
+            <p class="rule">(二) 二獎、三獎、四獎、五獎及六獎為各地郵局。</p>
 
         </div>
     </div>

@@ -126,7 +126,8 @@ table.err01 {
         }
 
 .textfield {
-    font: 0.825em Arial, Helvetica, sans-serif;
+    font-size: 8pt;
+    font: /*0.825em*/ Arial, Helvetica, sans-serif;
     color: #666666;
     border: 1px solid #7f9db9;
 }
@@ -664,7 +665,8 @@ div.run {
 }
 
 label.error {
-    font: 0.825em Arial, Helvetica, sans-serif;
+    font-size: 8pt;
+    font: /*0.825em*/ Arial, Helvetica, sans-serif;
     color: red;
 }
 

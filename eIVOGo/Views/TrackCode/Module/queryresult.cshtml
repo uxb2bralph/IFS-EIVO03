@@ -1,26 +1,28 @@
-﻿@using System.IO
+@using System.IO
 @using System.Linq.Expressions
+
 
 @using Model.DataEntity
 @using Model.Locale
 @using Utility
-
 @{
-    IEnumerable<InvoiceTrackCode> _model = (IEnumerable<InvoiceTrackCode>)this.Model;
 
-    int _pageSize = (int)ViewBag.PageSize;
+    IEnumerable<InvoiceTrackCode> _model;
+    int _pageSize;
 
-    var recordCount = _model.Count();
+
+    _model = (IEnumerable<InvoiceTrackCode>)this.Model;
+    _pageSize = (int)ViewBag.PageSize;
 }
 
 @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");}
 
 
 <div class="border_gray" style="overflow-x: auto; max-width: 1024px;">
-
+    @{ var recordCount = _model.Count();}
     @if (recordCount > 0)
     {
-        { Html.RenderPartial("~/Views/TrackCode/Module/ItemList.cshtml", _model); }
+        Html.RenderPartial("~/Views/TrackCode/Module/ItemList.cshtml", _model);
 
         <input type="hidden" name="pageIndex" />
         <nav aria-label="Page navigation">
@@ -47,7 +49,6 @@
                     });
                 });
         </script>
-
         if (ViewBag.ResultAction != null)
         {
             Html.RenderPartial((String)ViewBag.ResultAction);
@@ -56,9 +57,10 @@
     else
     {
         <font color="red">查無資料!!</font>
-        { Html.RenderPartial("~/Views/TrackCode/Module/ItemList.ascx", _model); }
+        Html.RenderPartial("~/Views/TrackCode/Module/ItemList.ascx", _model);
 
     }
 </div>
+
 
 

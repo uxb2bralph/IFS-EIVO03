@@ -134,18 +134,21 @@ namespace Model.InvoiceManagement
                                 TaxRate = invItem.TaxRate,
                                 TaxType = invItem.TaxType,
                                 TotalAmount = invItem.TotalAmount,
-                                TotalAmountInChinese = Utility.ValueValidity.MoneyShow(invItem.TotalAmount)
+                                TotalAmountInChinese = Utility.ValueValidity.MoneyShow(invItem.TotalAmount),
+                                BondedAreaConfirm = invItem.BondedAreaConfirm,
                             },
                             DonationID = donatory != null ? donatory.CompanyID : (int?)null
                         };
 
                         if (seller.OrganizationStatus.EnableTrackCodeInvoiceNoValidation == true)
                         {
-                            TrackNoManager trackMgr = new TrackNoManager(this, seller.CompanyID);
-                            if (trackMgr.GetAppliedInterval(newItem.InvoiceDate.Value, newItem.TrackCode, int.Parse(newItem.No)) == null)
+                            using (TrackNoManager trackMgr = new TrackNoManager(this, seller.CompanyID))
                             {
-                                result.Add(idx, new Exception(String.Format("發票號碼錯誤:{0}，TAG:< InvoicNumber />", invItem.InvoiceNumber)));
-                                continue;
+                                if (trackMgr.GetAppliedInterval(newItem.InvoiceDate.Value, newItem.TrackCode, int.Parse(newItem.No)) == null)
+                                {
+                                    result.Add(idx, new Exception(String.Format("發票號碼錯誤:{0}，TAG:< InvoicNumber />", invItem.InvoiceNumber)));
+                                    continue;
+                                }
                             }
                         }
 

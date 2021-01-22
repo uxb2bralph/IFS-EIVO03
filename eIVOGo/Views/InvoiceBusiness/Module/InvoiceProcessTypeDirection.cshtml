@@ -9,8 +9,6 @@
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
-@using res=eIVOGo.Resource.Views.InvoiceBusiness.Module.InvoiceProcessTypeDirection
-
 @{
     InvoiceViewModel _viewModel;
 
@@ -23,19 +21,19 @@
     if (actionName == "CreateInvoice")
     {
         switchAction = "UploadData";
-        linkText = res.上傳Excel資料;
+        linkText = "上傳Excel資料";
     }
     else
     {
         switchAction = "CreateInvoice";
-        linkText = res.線上開立;
+        linkText = "線上開立";
     }
 }
     <div class="border_gray">
-        【@res.選擇電子發票型式：
-        <input type="radio" name="InvoiceProcessType" value="@((int)Naming.InvoiceProcessType.C0401)" @(_viewModel.InvoiceProcessType == Naming.InvoiceProcessType.C0401 ? "checked" : null) />@res.熱感紙證明聯_B2C_一般B2B_&nbsp;&nbsp;
-        <input type="radio" name="InvoiceProcessType" value="@((int)Naming.InvoiceProcessType.A0401)" @(_viewModel.InvoiceProcessType == Naming.InvoiceProcessType.A0401 ? "checked" : null) />@res.B2B存證&nbsp;&nbsp;
-        <input type="radio" name="InvoiceProcessType" value="@((int)Naming.InvoiceProcessType.A0101)" @(_viewModel.InvoiceProcessType == Naming.InvoiceProcessType.A0101 ? "checked" : null) />@res.B2B交換
+        【選擇電子發票型式：
+        <input type="radio" name="InvoiceProcessType" value="@((int)Naming.InvoiceProcessType.C0401)" @(_viewModel.InvoiceProcessType == Naming.InvoiceProcessType.C0401 ? "checked" : null) />熱感紙證明聯(B2C、一般B2B)&nbsp;&nbsp;
+        <input type="radio" name="InvoiceProcessType" value="@((int)Naming.InvoiceProcessType.A0401)" @(_viewModel.InvoiceProcessType == Naming.InvoiceProcessType.A0401 ? "checked" : null) />B2B存證&nbsp;&nbsp;
+        <input type="radio" name="InvoiceProcessType" value="@((int)Naming.InvoiceProcessType.A0101)" @(_viewModel.InvoiceProcessType == Naming.InvoiceProcessType.A0101 ? "checked" : null) />B2B交換
         】
         <script>
         debugger;
@@ -53,6 +51,6 @@
             });
         });
         </script>
-        【@res.選擇其他開立方式：@Html.Raw(Html.ActionLink(linkText, switchAction, "InvoiceBusiness"))】
+        【選擇其他開立方式：@Html.Raw(Html.ActionLink(linkText, switchAction, "InvoiceBusiness"))】
     </div>
 

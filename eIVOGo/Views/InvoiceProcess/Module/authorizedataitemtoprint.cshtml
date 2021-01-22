@@ -1,4 +1,4 @@
-﻿
+
 @using System.IO
 @using System.Linq.Expressions
 
@@ -6,15 +6,11 @@
 @using Model.Locale
 @using Model.DataEntity
 
-@{
-    InvoiceItem _model;
-    _model = (InvoiceItem)this.Model;
-}
 
-<td>
-    <input name="chkItem" type="checkbox" value="@(_model.InvoiceID)" />
-    @*@if (_model.InvoiceBuyer.IsB2C()
-                && _model.CDS_Document.DocumentPrintLog.Count > 0
+    <td>
+        <input name="chkItem" type="checkbox" value="@(_model.InvoiceID)" />
+@*@if (_model.InvoiceBuyer.IsB2C() 
+                && _model.CDS_Document.DocumentPrintLog.Count > 0 
                 && _model.CDS_Document.DocumentAuthorization == null)
             {
                 <input name="chkItem" type="checkbox" value="@(_model.InvoiceID)" />
@@ -23,27 +19,27 @@
             {
                 <span style="color:blue">可列印</span>
         }*@
-</td>
-<td>@(String.Format("{0:yyyy/MM/dd}", _model.InvoiceDate))</td>
-<td>@(_model.InvoiceBuyer.CustomerID)</td>
-<td>@(_model.InvoicePurchaseOrder != null ? _model.InvoicePurchaseOrder.OrderNo : null)</td>
-<td>@(_model.InvoiceSeller.CustomerName)</td>
-<td>@(_model.InvoiceSeller.ReceiptNo)</td>
-<td><a onclick="showInvoiceModal(@(_model.InvoiceID));">@(_model.TrackCode)@(_model.No)</a></td>
-<td align="right">@(String.Format("{0:0.}", _model.InvoiceAmountType.SalesAmount))</td>
-<td align="right">@(String.Format("{0:0.}", _model.InvoiceAmountType.TaxAmount))</td>
-<td align="right">@(String.Format("{0:0.}", _model.InvoiceAmountType.TotalAmount))</td>
-<td>@(_model.InvoiceWinningNumber != null ? _model.InvoiceWinningNumber.UniformInvoiceWinningNumber.PrizeType : "N/A")</td>
-<td>@(_model.InvoiceBuyer.IsB2C() ? "" : _model.InvoiceBuyer.ReceiptNo)</td>
-<td>@(_model.InvoiceBuyer.CustomerName)</td>
-<td>@(_model.InvoiceBuyer.ContactName)</td>
-<td>@(_model.InvoiceBuyer.Address)</td>
-<td>@(_model.InvoiceBuyer.EMail)</td>
-<td>@(String.Join("", _model.InvoiceDetails.Select(t => t.InvoiceProduct.InvoiceProductItem.FirstOrDefault().Remark)))</td>
-<td>@(_model.CDS_Document.SMSNotificationLogs.Any() ? "是" : "否")</td>
-<td>@(_model.InvoiceCarrier != null ? _model.InvoiceCarrier.CarrierNo : null)</td>
-<td>
-    @*<div class="btn-group dropdown" data-toggle="dropdown">
+    </td>
+    <td>@(String.Format("{0:yyyy/MM/dd}",_model.InvoiceDate))</td>
+    <td>@(_model.InvoiceBuyer.CustomerID)</td>
+    <td>@(_model.InvoicePurchaseOrder!=null ? _model.InvoicePurchaseOrder.OrderNo : null)</td>
+    <td>@(_model.InvoiceSeller.CustomerName)</td>
+    <td>@(_model.InvoiceSeller.ReceiptNo)</td>
+    <td><a onclick="showInvoiceModal(@(_model.InvoiceID));">@(_model.TrackCode)@(_model.No)</a></td>
+    <td align="right">@(String.Format("{0:##,###,###,##0.##}",_model.InvoiceAmountType.SalesAmount))</td>
+    <td align="right">@(String.Format("{0:##,###,###,##0.##}",_model.InvoiceAmountType.TaxAmount))</td>
+    <td align="right">@(String.Format("{0:##,###,###,##0.##}",_model.InvoiceAmountType.TotalAmount))</td>
+    <td>@(_model.InvoiceWinningNumber!=null ? _model.InvoiceWinningNumber.UniformInvoiceWinningNumber.PrizeType : "N/A")</td>
+    <td>@(_model.InvoiceBuyer.IsB2C() ? "" : _model.InvoiceBuyer.ReceiptNo)</td>
+    <td>@(_model.InvoiceBuyer.CustomerName)</td>
+    <td>@(_model.InvoiceBuyer.ContactName)</td>
+    <td>@(_model.InvoiceBuyer.Address)</td>
+    <td>@(_model.InvoiceBuyer.EMail)</td>
+    <td>@(String.Join("", _model.InvoiceDetails.Select(t => t.InvoiceProduct.InvoiceProductItem.FirstOrDefault().Remark)))</td>
+    <td>@(_model.CDS_Document.SMSNotificationLogs.Any() ? "是" : "否")</td>
+    <td>@(_model.InvoiceCarrier!=null ? _model.InvoiceCarrier.CarrierNo : null)</td>
+    <td>
+        @*<div class="btn-group dropdown" data-toggle="dropdown">
             <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">請選擇功能</button>
             <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
             <ul class="dropdown-menu">
@@ -74,5 +70,17 @@
                 <li><a class="btn" onclick="uiInquireBusiness.deleteItem(@(_model.BusinessID),@(_model.MasterID),@(_model.RelativeID));">刪除</a></li>
             </ul>
         </div>*@
-</td>
+    </td>
 
+
+
+<script runat="server">
+
+    InvoiceItem _model;
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _model = (InvoiceItem)this.Model;
+    }
+
+</script>

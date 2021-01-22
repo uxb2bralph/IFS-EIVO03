@@ -33,19 +33,20 @@ namespace InvoiceClient.Agent
             return count > 0 ? String.Format("{0} AllowanceCancellation Data Transfer Failure!!\r\n", count) : null;
         }
 
-        protected override void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
                 IEnumerable<String> message = rootInvoiceNo.Select(i => String.Format("AllowanceCancellation Number:{0}=>{1}", i.Value, i.Description));
                 Logger.Warn(String.Format("Failed to Send an AllowanceCancellation ({0}) When Uploading Files!!For the Following Reasons:\r\n{1}", fileName, String.Join("\r\n", message.ToArray())));
 
-                CancelAllowanceRoot invoice = docInv.ConvertTo<CancelAllowanceRoot>();
+                CancelAllowanceRoot invoice = docInv.TrimAll().ConvertTo<CancelAllowanceRoot>();
                 CancelAllowanceRoot stored = new CancelAllowanceRoot();
                 stored.CancelAllowance = rootInvoiceNo.Where(i => i.ItemIndexSpecified).Select(i => invoice.CancelAllowance[i.ItemIndex]).ToArray();
 
-                stored.ConvertToXml().Save(Path.Combine(_failedTxnPath, fileName));
+                stored.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(_failedTxnPath, fileName));
             }
+            return true;
         }
 
         protected override void processError(string message, XmlDocument docInv, string fileName)

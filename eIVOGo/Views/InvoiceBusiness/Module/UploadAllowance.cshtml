@@ -11,8 +11,6 @@
 @using Model.Security.MembershipManagement
 @using Business.Helper
 @using eIVOGo.Controllers
-@using res=eIVOGo.Resource.Views.InvoiceBusiness.Module.UploadAllowance
-
 @{
 
     InvoiceViewModel _viewModel;
@@ -23,11 +21,11 @@
 
     <tr>
         <th>
-            @res.開立折讓證明
+            開立折讓證明
         </th>
         <td class="tdleft">
-            <input type="button" name="btnAllowanceSample" value="@res.下載範本" />&nbsp;&nbsp;
-            <input type="button" name="btnImportAllowance" value="@res.立即傳送" />
+            <input type="button" name="btnAllowanceSample" value="下載範本" />&nbsp;&nbsp;
+            <input type="button" name="btnImportAllowance" value="立即傳送" />
             <script>
                         $(function () {
 
@@ -52,7 +50,7 @@
                                         $btn.before($file);
                                         if ($.isPlainObject(data)) {
                                             if (data.result) {
-                                                alert('@res.開立資料傳送完成_請至工作提示區檢視處理狀態_');
+                                                alert('開立資料傳送完成，請至工作提示區檢視處理狀態。');
                                             } else {
                                                 reportError(data);
                                             }

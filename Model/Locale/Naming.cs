@@ -23,7 +23,7 @@ namespace Model.Locale
             COMP_E_INVOICE_B2C_SELLER = 15,	            //	2	賣方	     sketch_seller.gif
             COMP_E_INVOICE_B2C_BUYER = 16,	            //	3	買方	     sketch_buyer.gif
             COMP_E_INVOICE_GOOGLE_TW = 17,              //  4   Google台灣
-            COMP_ENTERPRISE_GROUP = 18,
+            COMP_ENTERPRISE_GROUP   =   18,
             COMP_VIRTUAL_CHANNEL = 19,
             COMP_INVOICE_AGENT = 20,                    //  5   發票開立代理
             COMP_E_INVOICE_B2B_SELLER = 21,	        //	B2B 賣　　　方
@@ -169,7 +169,7 @@ namespace Model.Locale
             下載大平台作廢折讓 = 9,
             UXGW上傳資料 = 10,
             授權資料下載 = 11,
-            接收發票 = 12,
+            接收發票=12,
             接收折讓單 = 13,
             接收作廢發票 = 14,
             接收作廢折讓單 = 15,
@@ -197,7 +197,7 @@ namespace Model.Locale
             註銷作廢折讓單 = 37,
             註銷收據 = 38,
             UXGW自動開立 = 39,
-            UXGW下載資料 = 40,
+            UXGW下載資料    = 40,
             UXGW上傳發票退回 = 41,
             UXGW上傳發票註銷 = 42,
             UXGW上傳折讓單退回 = 43,
@@ -332,7 +332,14 @@ namespace Model.Locale
             註銷申請待開立 = 1315,
             退回申請待開立 = 1316,
             已接收資料待通知 = 1317,
+            文件準備中 = 1318,
+        }
 
+        public enum NotificationIndication
+        {
+            None = 0,
+            Immediate = 1,
+            Deferred = 2,
         }
 
         public enum B2BInvoiceQueryStepDefinition
@@ -354,16 +361,16 @@ namespace Model.Locale
         }
 
         public enum InvoiceCenterBusinessType
-        {
-            銷項 = 1,
-            進項 = 2
+        { 
+            銷項  =   1,
+            進項  =   2
         }
 
         public enum CounterpartBusinessQueryType
         {
             //銷項 = 1,
             進項 = 2
-        }
+        }        
 
         public enum InvoiceCenterBusinessQueryType
         {
@@ -497,7 +504,6 @@ namespace Model.Locale
             D0401 = 3,
             D0501 = 4,
             A0401 = 11,
-            A0401_B5 = 12,
             A0501,
             B0401,
             B0501,
@@ -506,10 +512,10 @@ namespace Model.Locale
             B0201,
             E0401 = 31,
             CounterpartBusiness = 81,
-            A0401_Xlsx_Allocation_ByIssuer = 311,
             C0401_Xlsx = 101,
             C0401_Xlsx_Allocation_ByVAC = 201,
             C0401_Xlsx_Allocation_ByIssuer = 301,
+            A0401_Xlsx_Allocation_ByIssuer = 311,
             C0401_Xlsx_CBE = 401,
             C0401_Xml_CBE = 501,
             C0501_Xlsx = 102,
@@ -564,11 +570,5 @@ namespace Model.Locale
             DESC = -1,
         }
 
-        public enum Environment
-        {
-            Dev = 1,
-            Test = 2,
-            formal = 3
-        }
     }
 }

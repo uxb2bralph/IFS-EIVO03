@@ -1,11 +1,10 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="eIVOGo.Module.JsGrid.DataField.JsGridField" %>
-<%@ Import Namespace="eIVOGo.Resource.Module.JsGrid.DataField" %>
 <% if (!String.IsNullOrEmpty(FieldVariable)) { %>
 <script>
 <%= FieldVariable%>[<%= FieldVariable%>.length] = {
     "name": "Attachment",
     "type": "text",
-    "title": "<%=Attachment.附件檔%>",
+    "title": "附件檔",
     "width": "220",
     "align": "left",
     itemTemplate: function (value, item) {

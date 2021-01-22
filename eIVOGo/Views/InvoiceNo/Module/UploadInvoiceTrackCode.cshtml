@@ -1,5 +1,7 @@
-﻿@using System.IO
+
+@using System.IO
 @using System.Linq.Expressions
+
 
 @using eIVOGo.Helper
 @using Model.Locale
@@ -9,173 +11,63 @@
 @using Model.Security.MembershipManagement
 @using Business.Helper
 @using eIVOGo.Controllers
-@using res = eIVOGo.Resource.Views.InvoiceBusiness.UploadData
-@using tv = eIVOGo.Resource.Views.Common.TreeView
-
 @{
-    Layout = "~/Views/Template/MvcMainPage.cshtml";
-
-    ViewBag.ActionName = "首頁 > 電子發票字軌號碼上傳";
+    UserProfileMember _profile = Context.GetUser();
+    int? _idx = (TempData["ImportData"] as int?) ?? 0;
+    TempData["ImportData"] = _idx + 1;
 }
 
-<style>
-    td input {
-        width: 80px;
-    }
-
-    input.file {
-        position: relative;
-        text-align: right;
-        -moz-opacity: 0;
-        filter: alpha(opacity: 0);
-        opacity: 0;
-        z-index: 2;
-    }
-</style>
-
-
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "上傳發票字軌號碼");}
-
-@{ Html.RenderPartial("~/Views/InvoiceNo/Module/ShowUploadActionLink.cshtml");}
-
-<div class="border_gray">
-    <form action="@Url.Content("~/InvoiceNo/UploadToPreView?callback=parent.fillCsv")" method="POST" enctype="multipart/form-data" target="resultFrame">
-        <body>
-            <table id="functionMenu">
-                <tr>
-                    <td><input type="file" name="excelFile" style="min-width: 260px" /></td>
-                    <td>
-                        <button type="submit" id="btnReadExcel">Excel預覽</button>
-                        <input type="hidden" name="ErrorMsg" placeholder="test" value="" data-role="add" />
-                    </td>
-                </tr>
-            </table>
+    <tr>
+        <th>
+            發票字軌號碼
+        </th>
+        <td class="tdleft">
+            <input type="button" id="@($"btnGetSample{_idx}")" value="下載範本" />&nbsp;&nbsp;
+            <input type="button" id="@($"btnImportData{_idx}")" value="立即傳送" />
             <script>
-                function fillCsv(models) {
+                        $(function () {
 
-                    //另一種作法
+                            $('#@($"btnGetSample{_idx}")').on('click', function (event) {
+                                $('').launchDownload('@Html.Raw(Url.Action("GetUploadInvoiceTrackCodeSample", "InvoiceNo"))', {});
+                            });
 
-                    //$("tbody").empty();
-                    $("#detail tr").remove();
-                    $("#functionMenu tr td label").remove();
+                            var $btn = $('#@($"btnImportData{_idx}")');
+                            var $file = $('<input name="excelFile" type="file" style="display: none;" />');
+                            $btn.before($file);
 
-                    var $myTable = $('#detail');
-                    var rowElements = [];
-                    var count = models.length;
+                            $btn.click(function () {
+                                $file.val('');
+                                $file.click();
+                            });
 
-                    $("#preView").show();
-                    $("#btnUpload").attr('disabled', false);;                    
+                            var $result;
 
-                    rowElements.push(
-                        $('<tr></tr>').append(
-                            $('<td></td > ').html("營業人統編"),
-                            $('<td></td > ').html("年份"),
-                            $('<td></td > ').html("發票期別"),
-                            $('<td></td > ').html("字軌"),
-                            $('<td></td > ').html("發票起號"),
-                            $('<td></td > ').html("發票迄號")
-                        )
-                    );
+                            $file.on('change', function (event) {
+                                clearErrors();
+                                var $formData = $('form').find('input,select,textArea').serializeObject();
+                                uploadFile($file, $formData, '@Html.Raw(Url.Action("UploadToPreview","InvoiceNo"))',
+                                    function (data) {
+                                        $btn.before($file);
+                                        if ($.isPlainObject(data)) {
+                                            if (data.result) {
 
-                    if (count > 0) {
-                       
-                        var i;
-                        var row;
-
-                        for (i = 0; i < count; i++) {
-                            row = models[i];
-                            var a1 = '"C' + i + '1"';
-                            var a2 = '"C' + i + '2"';
-                            var a3 = '"C' + i + '3"';
-                            var a4 = '"C' + i + '4"';
-                            var a5 = '"C' + i + '5"';
-                            var a6 = '"C' + i + '6"';
-
-                            var b1 = '"H' + i + '1"';
-                            var b2 = '"H' + i + '2"';
-                            var b3 = '"H' + i + '3"';
-                            var b4 = '"H' + i + '4"';
-                            var b5 = '"H' + i + '5"';
-                            var b6 = '"H' + i + '6"';
-
-                            rowElements.push(
-                                $('<tr></tr>').append(
-                                    $('<td name=' + a1 + '></td > ').html(row.ReceiptNo),
-                                    $('<td name=' + a2 + '></td > ').html(row.Year),
-                                    $('<td name=' + a3 + '></td > ').html(row.PeriodNo),
-                                    $('<td name=' + a4 + '></td > ').html(row.TrackCode),
-                                    $('<td name=' + a5 + '></td > ').html(row.StartNo),
-                                    $('<td name=' + a6 + '></td > ').html(row.EndNo),
-                                    $('<input name=' + b1 + ' type="hidden" value=' + row.ReceiptNo + ' /> '),
-                                    $('<input name=' + b2 + ' type="hidden" value=' + row.Year + ' /> '),
-                                    $('<input name=' + b3 + ' type="hidden" value=' + row.PeriodNo + ' /> '),
-                                    $('<input name=' + b4 + ' type="hidden" value=' + row.TrackCode + ' /> '),
-                                    $('<input name=' + b5 + ' type="hidden" value=' + row.StartNo + ' /> '),
-                                    $('<input name=' + b6 + ' type="hidden" value=' + row.EndNo + ' /> '),
-                                )
-                            );
-                        }
-                        rowElements.push(
-                            $('<input name="count" type="hidden" value="' + count + '" /> ')
-                        );
-                        
-                    }
-
-                    $myTable.append(rowElements);
-
-                }
+                                            } else {
+                                                alert(data.message);
+                                            }
+                                        } else {
+                                            if ($result) {
+                                                $result.remove();
+                                            }
+                                            $result = $(data);
+                                            $('#queryArea').after($result);
+                                        }
+                                    },
+                                    function () {
+                                        $btn.before($file);
+                                    });
+                            });
+                        });
             </script>
-        </body>
-    </form>
-    <iframe name="resultFrame" style="display:none;"></iframe>
-    <div> </div>
-    <div id="preView" style="display:none">Excel預覽</div>
-    <table class="table01 itemList" id="detail">
-        <thead></thead>
+        </td>
+    </tr>
 
-    </table>
-    <button id="btnUpload" type="button" onclick="upload();" disabled="disabled">確定上傳</button>
-</div>
-
-<script>
-    function upload() {
-        var event = event || window.event;
-
-        var $tr = $(event.target).closest('tr');
-        var list = [];
-        var rowCount = $(" input[ name='count' ] ").val();
-
-        if (rowCount > 0) {
-            for (var i =0; i <= rowCount-1; i++) {
-                list.push(
-                    {
-                        "ReceiptNo": $(" input[ name='H" + i + "1' ] ").val(),
-                        "Year": $(" input[ name='H" + i + "2' ] ").val(),
-                        "PeriodNo": $(" input[ name='H" + i + "3' ] ").val(),
-                        "TrackCode": $(" input[ name='H" + i + "4' ] ").val(),
-                        "StartNo": $(" input[ name='H" + i + "5' ] ").val(),
-                        "EndNo": $(" input[ name='H" + i + "6' ] ").val()
-                    }
-                )
-            }
-        }
-
-        clearErrors();
-
-        $.post('@(Url.Action("Upload","InvoiceNo"))', { "viewModel": JSON.stringify(list) }, function (data) {
-            if (data) {
-                var $data = $(data);
-                if ($data.is('tr')) {
-                    $tr.before($data);
-                    if (keyID) {
-                        $tr.remove();
-                        alert('資料已更新!!');
-                    }
-                } else {
-                        $('body').append($data);
-                        $data.remove();
-                }
-            }
-        });
-    }
-</script>

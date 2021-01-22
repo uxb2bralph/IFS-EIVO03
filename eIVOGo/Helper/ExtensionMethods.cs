@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
@@ -29,7 +30,6 @@ using ZXing;
 using ZXing.Common;
 using ZXing.QrCode;
 using ZXing.QrCode.Internal;
-using res = eIVOGo.Resource.Helpers.ExtensionMethods;
 
 namespace eIVOGo.Helper
 {
@@ -76,25 +76,25 @@ namespace eIVOGo.Helper
             if (String.IsNullOrEmpty(dataItem.CompanyName))
             {
                 //檢查名稱
-                WebMessageBox.AjaxAlert(control, res.請輸入公司名稱__);
+                WebMessageBox.AjaxAlert(control, "請輸入公司名稱!!");
                 return false;
             }
             if (String.IsNullOrEmpty(dataItem.ReceiptNo))
             {
                 //檢查名稱
-                WebMessageBox.AjaxAlert(control, res.請輸入公司統編__);
+                WebMessageBox.AjaxAlert(control, "請輸入公司統編!!");
                 return false;
             }
             if (String.IsNullOrEmpty(dataItem.Addr))
             {
                 //檢查名稱
-                WebMessageBox.AjaxAlert(control, res.請輸入公司地址__);
+                WebMessageBox.AjaxAlert(control, "請輸入公司地址!!");
                 return false;
             }
             if (String.IsNullOrEmpty(dataItem.Phone))
             {
                 //檢查名稱
-                WebMessageBox.AjaxAlert(control, res.請輸入公司電話__);
+                WebMessageBox.AjaxAlert(control, "請輸入公司電話!!");
                 return false;
             }
 
@@ -103,7 +103,7 @@ namespace eIVOGo.Helper
             if (String.IsNullOrEmpty(dataItem.ContactEmail) || !reg.IsMatch(dataItem.ContactEmail))
             {
                 //檢查email
-                WebMessageBox.AjaxAlert(control, res.電子信箱尚未輸入或輸入錯誤__);
+                WebMessageBox.AjaxAlert(control, "電子信箱尚未輸入或輸入錯誤!!");
                 return false;
             }
             return true;
@@ -157,10 +157,9 @@ namespace eIVOGo.Helper
                 var item = mgr.GetTable<CDS_Document>().Where(i => i.DocID == id).FirstOrDefault();
                 if (item == null || item.InvoiceItem == null)
                     continue;
-                //判斷發票是否可列印
                 if (item.InvoiceItem.Organization.OrganizationStatus.EntrustToPrint == false && item.DocumentPrintLog.Any() && item.DocumentAuthorization == null)
                 {
-                    reason = $"{res.發票已列印}({item.InvoiceItem.TrackCode}{item.InvoiceItem.No})，{res.請取得授權列印__}";
+                    reason = $"發票已列印({item.InvoiceItem.TrackCode}{item.InvoiceItem.No})，請取得授權列印!!";
                     return false;
                 }
                 if (item.DocumentPrintQueue == null)
@@ -176,7 +175,7 @@ namespace eIVOGo.Helper
                     }
                     else
                     {
-                        reason = $"{res.個人發票}({item.InvoiceItem.TrackCode}{item.InvoiceItem.No}){res.不提供自行列印_如有需要紙本請與管理部承辦人員連絡_謝謝配合_}";
+                        reason = $"個人發票({item.InvoiceItem.TrackCode}{item.InvoiceItem.No})不提供自行列印，如有需要紙本請與管理部承辦人員連絡，謝謝配合。";
                         return false;
                     }
                 }
@@ -352,7 +351,6 @@ namespace eIVOGo.Helper
                 sw.Flush();
                 sw.Close();
             }
-            //Yuki test File.Copy(tempHtml, saveTo);
             File.Move(tempHtml, saveTo);
 
             saveTo.ConvertHtmlToPDF(pdfFile, timeOutInMinute, args);
@@ -361,22 +359,29 @@ namespace eIVOGo.Helper
             {
                 File.Delete(saveTo);
 
-                bool checking = true;
-                while (checking)
+                var t = Task.Run(() =>
                 {
-                    try
+                    bool checking = true;
+                    while (checking)
                     {
-                        using (var fs = File.OpenRead(pdfFile))
+                        try
                         {
-                            fs.Close();
-                            checking = false;
+                            using (var fs = File.OpenRead(pdfFile))
+                            {
+                                fs.Close();
+                                checking = false;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error(ex);
+                            Thread.Sleep(100);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Logger.Error(ex);
-                    }
-                }
+                });
+
+                t.Wait();
+
                 return pdfFile;
             }
 
@@ -489,20 +494,20 @@ namespace eIVOGo.Helper
             {
                 retry = true;
                 Logger.Error(ex);
-                Logger.Warn($"{res.產生發票QR_Code失敗} => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
+                Logger.Warn($"產生發票QR Code失敗 => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
             }
 
             if (retry)
             {
                 try
                 {
-                    qrContent = $"{qrContent.Substring(0, 88)}:1:1:1:{res.品項過長_詳列於發票明細}:1:1:";
+                    qrContent = $"{qrContent.Substring(0, 88)}:1:1:1:品項過長，詳列於發票明細:1:1:";
                     return qrContent.CreateQRCodeImageSrc(width: 180, height: 180, qrVersion: 10);
                 }
                 catch (Exception ex)
                 {
                     Logger.Error(ex);
-                    Logger.Warn($"{res.產生發票QR_Code失敗} => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
+                    Logger.Warn($"產生發票QR Code失敗 => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
                 }
             }
 
@@ -648,7 +653,7 @@ namespace eIVOGo.Helper
             sb.Append(item.TrackCode + item.No);
             sb.Append(String.Format("{0:000}{1:00}{2:00}", item.InvoiceDate.Value.Year - 1911, item.InvoiceDate.Value.Month, item.InvoiceDate.Value.Day));
             sb.Append(item.RandomNo);
-            sb.Append(String.Format("{0:X8}", (int)item.InvoiceAmountType.SalesAmount.Value));
+            sb.Append(String.Format("{0:X8}", (int)(item.InvoiceAmountType.SalesAmount ?? 0)));
             sb.Append(String.Format("{0:X8}", (int)item.InvoiceAmountType.TotalAmount.Value));
             sb.Append(buyer.IsB2C() ? "00000000" : buyer.ReceiptNo);
             sb.Append(item.InvoiceSeller != null ? item.InvoiceSeller.ReceiptNo : item.Organization.ReceiptNo);

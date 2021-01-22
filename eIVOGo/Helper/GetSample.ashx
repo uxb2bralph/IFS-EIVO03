@@ -8,7 +8,6 @@ using Model.DataEntity;
 using ModelExtension.DataExchange;
 using Utility;
 using ClosedXML.Excel;
-using res = eIVOGo.Resource.Helpers.GetSample;
 
 namespace eIVOGo.Helper
 {
@@ -25,7 +24,7 @@ namespace eIVOGo.Helper
             context.Response.ContentType = "text/plain";
             Response = context.Response;
             Request = context.Request;
-
+            
             switch(Request["data"])
             {
                 case "InvoiceBuyer":
@@ -36,9 +35,9 @@ namespace eIVOGo.Helper
                         {
                             xls.SaveAs(Response.OutputStream);
                         }
-                    }, res.修改買受人資料+".xlsx");
+                    }, "修改買受人資料.xlsx");
                     break;
-
+                    
                 case "TrackCode":
                     createSample(() =>
                     {
@@ -47,7 +46,7 @@ namespace eIVOGo.Helper
                         {
                             xls.SaveAs(Response.OutputStream);
                         }
-                    }, res.發票字軌資料+".xlsx");
+                    }, "發票字軌資料.xlsx");
                     break;
             }
 
@@ -66,7 +65,7 @@ namespace eIVOGo.Helper
 
             Response.Flush();
             Response.End();
-        }
+        }        
 
         public bool IsReusable
         {

@@ -1,5 +1,8 @@
-﻿@using System.IO
+
+@using System.IO
 @using System.Linq.Expressions
+
+
 @using eIVOGo.Helper
 @using Model.Locale
 @using eIVOGo.Models.ViewModel
@@ -11,7 +14,6 @@
     ModelSource<InvoiceItem> models;
     InquireNoIntervalViewModel _viewModel;
     IEnumerable<InvoiceTrackCode> _items;
-    EnumSelectorViewModel enumSelectorViewModel = (EnumSelectorViewModel)this.Model;
 
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _viewModel = (InquireNoIntervalViewModel)ViewBag.ViewModel;
@@ -23,14 +25,18 @@
     {
         _items = models.GetTable<InvoiceTrackCode>().Where(t => false);
     }
-
-    var _options = new Dictionary<string, string>();
-    foreach (var item in _items)
-    {
-        _options.Add(item.TrackID.ToString(), item.TrackCode);
-    }
-
-    enumSelectorViewModel.OptionItems = _options;
 }
+<select name="TrackID">
+    @if (_items.Count() > 0 && !String.IsNullOrEmpty(_viewModel.SelectIndication))
+    {
+        <option value="">@(_viewModel.SelectIndication)</option>
+    }
+    @foreach (var item in _items)
+    {
+        <option value="@(item.TrackID)">@(item.TrackCode)</option>
+    }
+</select>
 
-@{Html.RenderPartial("~/Views/Common/Module/EnumSelect.cshtml", enumSelectorViewModel);}
+
+
+

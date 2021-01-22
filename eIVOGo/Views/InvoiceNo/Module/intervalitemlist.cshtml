@@ -1,22 +1,27 @@
-﻿@using Model.DataEntity
-@using res=eIVOGo.Resource.Views.InvoiceNo.Module.IntervalItemList
 
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using Model.DataEntity
+@using Model.Locale
 @{
     IEnumerable<InvoiceNoInterval> _items;
     _items = (IEnumerable<InvoiceNoInterval>)this.Model;
 }
-
 <table class="table01 itemList">
     <thead>
         <tr>
-            <th style="min-width: 100px">@res.發票年度</th>
-            <th style="min-width: 100px">@res.發票期別</th>
-            <th style="min-width: 80px">@res.字軌</th>
-            <th style="min-width: 160px">@res.發票號碼起</th>
-            <th style="min-width: 160px">@res.發票號碼迄</th>
-            <th style="min-width: 160px">@res.配號總數_剩餘</th>
-            <th>@res.已配號</th>
-            <th style="min-width: 150px">@res.管理</th>
+            <th style="min-width: 100px">營業人統一編號</th>
+            <th style="min-width: 100px">發票年度</th>
+            <th style="min-width: 100px">發票期別</th>
+            <th style="min-width: 80px">字軌</th>
+            <th style="min-width: 160px">發票號碼起</th>
+            <th style="min-width: 160px">發票號碼迄</th>
+            <th style="min-width: 160px">配號總數／剩餘</th>
+            <th>給號</th>
+            <th>狀態</th>
+            <th style="min-width: 150px">管理</th>
         </tr>
     </thead>
     <tbody>
@@ -25,12 +30,15 @@
         {
             idx++;
             Html.RenderPartial("~/Views/InvoiceNo/Module/DataItem.cshtml", item);
-        }@{ Html.RenderPartial("~/Views/InvoiceNo/Module/AddItem.cshtml");}
+        }
+        @{ Html.RenderPartial("~/Views/InvoiceNo/Module/AddItem.cshtml");}
 
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="10">&nbsp;</td>
+            <td colspan="11">&nbsp;</td>
         </tr>
     </tfoot>
 </table>
+
+

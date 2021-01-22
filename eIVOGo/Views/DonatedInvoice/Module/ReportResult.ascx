@@ -13,22 +13,21 @@
 <%@ Import Namespace="Model.Locale" %>
 <%@ Import Namespace="Utility" %>
 <%@ Import Namespace="Uxnet.Web.WebUI" %>
-<%@ Import Namespace="eIVOGo.Resource.Views.DonatedInvoice.Module" %>
 
 <% Html.RenderPartial("Module/InquireDonation", Model); %>
-<% if (!models.InquiryHasError)
-    {  %>
-<uc6:FunctionTitleBar ID="resultTitle" runat="server" ItemName="查詢結果" />
+<% if(!models.InquiryHasError) {  %>
+<uc6:functiontitlebar id="resultTitle" runat="server" itemname="查詢結果" />
 <div class="border_gray">
     <% 
-        Html.RenderPartial("~/Views/Module/DonatedInvoiceReport.ascx", models);
+       Html.RenderPartial("~/Views/Module/DonatedInvoiceReport.ascx", models); 
     %>
     <!--按鈕-->
 </div>
 <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
-        <td class="Bargain_btn">           
-            <input type="button" value="<%=ReportResult.CSV下載 %>" name="btnCsv" class="btn" onclick="$('form').prop('action', '<%= Url.Action("DownloadCSV") %>').submit();" />
+        <td class="Bargain_btn">
+            <% Html.RenderPartial("~/Views/Module/PrintData.ascx"); %>
+            <input type="button" value="CSV下載" name="btnCsv" class="btn" onclick="$('form').prop('action', '<%= Url.Action("DownloadCSV") %>').submit();" />
         </td>
     </tr>
 </table>
@@ -40,12 +39,7 @@
         base.OnInit(e);
         models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
         models.DataSourcePath = VirtualPathUtility.ToAbsolute("~/DonatedInvoice/ReportGridPage");
-
-    }
-
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        resultTitle.ItemName = ReportResult.查詢結果;
+        
     }
 
 </script>

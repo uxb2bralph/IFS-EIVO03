@@ -18,7 +18,7 @@
 <%@ Import Namespace="Uxnet.Web.WebUI" %>
 
 <%  ViewBag.MailTitle = "電子發票作廢通知";
-    Html.RenderPartial("~/Views/Notification/Module/MailTitle.ascx", _model.Organization); %>
+    Html.RenderPartial("~/Views/Notification/Module/MailTitle.cshtml", _model.Organization); %>
 
 <%  Html.RenderPartial("~/Views/DataView/Module/Invoice.cshtml", _model); %>
 

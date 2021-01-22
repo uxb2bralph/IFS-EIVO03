@@ -483,15 +483,15 @@ namespace Model.Models.ViewModel
                 }
 
 
-                if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
-                {
-                    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
-                }
+                //if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
+                //}
 
-                if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
-                {
-                    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
-                }
+                //if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
+                //}
 
             }
             return null;

@@ -14,14 +14,12 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
-@using res = eIVOGo.Resource.Views.InquireInvoice.ByInvoiceNo
-
 @{
     InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 }
 <tr>
     <th>
-        @res.發票號碼
+        發票號碼
     </th>
     <td class="tdleft">
         <input name="InvoiceNo" type="text" class="form-control" value="@(_viewModel?.InvoiceNo)" size="32" maxlength="10" />

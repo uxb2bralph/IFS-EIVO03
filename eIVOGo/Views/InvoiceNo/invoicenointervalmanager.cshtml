@@ -1,4 +1,6 @@
-﻿@using System.IO
+
+
+@using System.IO
 @using System.Linq.Expressions
 
 @using eIVOGo.Helper
@@ -11,39 +13,42 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@using res = eIVOGo.Resource.Views.InvoiceNo.InvoiceNoIntervalManager
-
 @{
+
     Model.Security.MembershipManagement.UserProfileMember _profile;
     ModelSource<InvoiceItem> models;
+
 
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _profile = Business.Helper.WebPageUtility.UserProfile;
 }
 
 <!--交易畫面標題-->
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.新增_修改發票號碼區間);}
+@{
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "新增/修改發票號碼區間");
+}
 
-@{ Html.RenderPartial("~/Views/InvoiceNo/Module/ShowUploadActionLink.cshtml");}
-
+<div class="border_gray">
+    【<a href="@(Url.Action("UploadInvoiceTrackCode","InvoiceNo"))">上傳發票字軌號碼</a>】
+</div>
 <div class="border_gray" id="queryArea">
     <!--表格 開始-->
-    <table id="queryArea" class="left_title" border="0" cellspacing="0" cellpadding="0" width="100%">
+    <table class="left_title" border="0" cellspacing="0" cellpadding="0" width="100%">
         <tbody>
             <tr>
                 <th class="Head_style_a" colspan="2">
-                    @res.查詢條件
+                    查詢條件
                 </th>
             </tr>
             <tr>
                 <th width="20%" nowrap>
-                    @res.發票年度_民國年_
+                    發票年度（民國年）
                 </th>
                 <td class="tdleft">
                     <select name="year">
                         @for (int yy = 2012; yy <= DateTime.Now.Year + 1; yy++)
                         {
-                            <option value="@(yy)">@(yy - 1911)</option>
+                            <option value="@(yy)">@(yy-1911)</option>
                         }
                     </select>
                     <script>
@@ -55,17 +60,17 @@
             </tr>
             <tr>
                 <th>
-                    @res.發票期別
+                    發票期別
                 </th>
                 <td class="tdleft">
                     <select name="periodNo">
-                        <option value="">@res.全部</option>
-                        <option value="1">01-02@(res.月)</option>
-                        <option value="2">03-04@(res.月)</option>
-                        <option value="3">05-06@(res.月)</option>
-                        <option value="4">07-08@(res.月)</option>
-                        <option value="5">09-10@(res.月)</option>
-                        <option value="6">11-12@(res.月)</option>
+                        <option value="">全部</option>
+                        <option value="1">01-02月</option>
+                        <option value="2">03-04月</option>
+                        <option value="3">05-06月</option>
+                        <option value="4">07-08月</option>
+                        <option value="5">09-10月</option>
+                        <option value="6">11-12月</option>
                     </select>
                     <script>
                         $(function () {
@@ -76,11 +81,11 @@
             </tr>
             <tr>
                 <th>
-                    @res.開立人統編
+                    開立人統編
                 </th>
                 <td class="tdleft">
-                    @{ Html.RenderPartial("~/Views/InvoiceNo/Module/SellerSelector.cshtml",
-                                _profile.InitializeOrganizationQuery(models));}
+                    @{ Html.RenderPartial("~/Views/DataFlow/SellerSelector.cshtml", _profile.InitializeOrganizationQuery(models));}
+
                 </td>
             </tr>
         </tbody>
@@ -93,7 +98,7 @@
     <tbody>
         <tr>
             <td class="Bargain_btn">
-                <button type="button" onclick="uiTrackCodeNo.inquire();">@res.查詢</button>
+                <button type="button" onclick="uiTrackCodeNo.inquire();">查詢</button>
             </td>
         </tr>
     </tbody>
@@ -119,7 +124,7 @@
                             $tr.before($data);
                             if (keyID) {
                                 $tr.remove();
-                                alert('@res.資料已更新__');
+                                alert('資料已更新!!');
                             }
                         } else {
                             $('body').append($data);
@@ -131,21 +136,24 @@
             inquire: function (pageNum, onPaging) {
                 var event = event || window.event;
                 var $form = $('#queryArea').closest('form');
-                var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
-
-                showLoading();
-
-                $.post('@Html.Raw(Url.Action("InquireInterval","InvoiceNo"))', $formData, function (data) {
-
-                    if (data) {
-                        if (uiTrackCodeNo.$result)
-                            uiTrackCodeNo.$result.remove();
-                        uiTrackCodeNo.$result = $(data);
-                        $('.queryAction').after(uiTrackCodeNo.$result);
+                $form.ajaxForm({
+                    url: "@(Url.Action("InquireInterval","InvoiceNo"))",
+                    beforeSubmit: function () {
+                        showLoading();
+                    },
+                    success: function (data) {
+                        if (data) {
+                            if (uiTrackCodeNo.$result)
+                                uiTrackCodeNo.$result.remove();
+                            uiTrackCodeNo.$result = $(data);
+                            $('.queryAction').after(uiTrackCodeNo.$result);
+                        }
+                        hideLoading();
+                    },
+                    error: function () {
+                        hideLoading();
                     }
-                    hideLoading();
-
-                });
+                }).submit();
             },
             editItem: function (keyID) {
                 var event = event || window.event;
@@ -164,15 +172,36 @@
                 });
             },
             deleteItem: function (keyID) {
-                if (confirm('@res.確定刪除此筆資料_')) {
+                if (confirm('確定刪除此筆資料?')) {
                     var event = event || window.event;
                     var $tr = $(event.target).closest('tr');
                     $.post('@(Url.Action("DeleteNoInterval","InvoiceNo"))', { 'keyID': keyID }, function (data) {
                         if (data.result) {
-                            alert('@res.資料已刪除__')
+                            alert('資料已刪除!!')
                             $tr.remove();
                         } else {
                             alert(data.message);
+                        }
+                    });
+                }
+            },
+            lockItem: function (keyID,lock) {
+                if (confirm('確定'+(lock ? '鎖定' : '解除鎖定')+'此筆資料?')) {
+                    var event = event || window.event;
+                    var $tr = $(event.target).closest('tr');
+                    $.post('@(Url.Action("LockInterval", "InvoiceNo"))', { 'keyID': keyID, 'lockID': lock }, function (data) {
+                        if ($.isPlainObject(data)) {
+                            alert(data.message);
+                        } else {
+                            var $data = $(data);
+                            if ($data.is('tr')) {
+                                $tr.before($data);
+                                $tr.remove();
+                                alert('資料已更新!!');
+                            } else {
+                                $('body').append($data);
+                                $data.remove();
+                            }
                         }
                     });
                 }
@@ -194,12 +223,12 @@
                 });
             },
             splitItem: function (keyID) {
-                if (confirm('@res.確定分割此配號區間_')) {
+                if (confirm('確定分割此配號區間?')) {
                     var event = event || window.event;
                     var $tr = $(event.target).closest('tr');
                     $.post('@(Url.Action("SplitNoInterval","InvoiceNo"))', { 'keyID': keyID }, function (data) {
                         if (data.result) {
-                            alert('@res.配號區間已分割__')
+                            alert('配號區間已分割!!')
                             uiTrackCodeNo.inquire();
                         } else {
                             if (data.message) {
@@ -211,7 +240,7 @@
             },
             assignPOSBooklets: function (value) {
                 $.post('@(Url.Action("EditPOSBooklets","InvoiceNo"))', { 'intervalID': value }, function (data) {
-                    $global.createTab('editPOSInterval', '@res.POS本組數配置', data, true);
+                    $global.createTab('editPOSInterval', 'POS本組數配置', data, true);
                 });
             },
             allotInterval: function (keyID) {
@@ -224,7 +253,8 @@
                         $(data).appendTo($('body'));
                     }
                 });
-            }
+            },
+
         };
     });
 </script>

@@ -10,9 +10,9 @@
  
 }
 @section dataContent { 
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "已開立發票內容檢視");}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "已開立發票內容檢視");}
 
-    @{ Html.RenderPartial("~/Views/DataView/Module/Invoice.ascx", _model);}
+    @{ Html.RenderPartial("~/Views/DataView/Module/Invoice.cshtml", _model);}
  
 }
 <script runat="server">

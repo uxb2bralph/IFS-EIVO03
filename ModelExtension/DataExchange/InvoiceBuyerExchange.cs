@@ -7,7 +7,6 @@ using ClosedXML.Excel;
 using Model.DataEntity;
 using Model.InvoiceManagement;
 using Utility;
-using res = eIVOGo.Resource.ModelExtension.DataExchange.InvoiceBuyerExchange;
 
 namespace ModelExtension.DataExchange
 {
@@ -28,12 +27,12 @@ namespace ModelExtension.DataExchange
         {
             XLWorkbook xls = new XLWorkbook();
 
-            var workSheet = xls.Worksheets.Add(res.買受人);
-            workSheet.Cells("A1").Value = res.發票號碼;
-            workSheet.Cells("B1").Value = res.營業人名稱;
-            workSheet.Cells("C1").Value = res.收件人姓名;
-            workSheet.Cells("D1").Value = res.地址;
-            workSheet.Cells("E1").Value = res.電話;
+            var workSheet = xls.Worksheets.Add("買受人");
+            workSheet.Cells("A1").Value = "發票號碼";
+            workSheet.Cells("B1").Value = "營業人名稱";
+            workSheet.Cells("C1").Value = "收件人姓名";
+            workSheet.Cells("D1").Value = "地址";
+            workSheet.Cells("E1").Value = "電話";
             workSheet.Cells("F1").Value = "EMail";
 
             return xls;
@@ -53,7 +52,7 @@ namespace ModelExtension.DataExchange
 
             ///title row
             ///
-            row.Cell((int)ColumnIndex.處理狀態).Value =res.處理狀態;
+            row.Cell((int)ColumnIndex.處理狀態).Value = ColumnIndex.處理狀態.ToString();
 
             ///data row
             row = row.RowBelow();
@@ -68,24 +67,24 @@ namespace ModelExtension.DataExchange
                         String invoiceNo = dataRow.Cell((int)ColumnIndex.發票號碼).GetString();
                         if (String.IsNullOrEmpty(invoiceNo))
                         {
-                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = res.未設定發票號碼;
+                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = "未設定發票號碼";
                             continue;
                         }
                         if (invoiceNo.Length != 10)
                         {
-                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = res.發票號碼格式錯誤;
+                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = "發票號碼格式錯誤";
                             continue;
                         }
                         var item = mgr.EntityList.Where(i => i.TrackCode == invoiceNo.Substring(0, 2) && i.No == invoiceNo.Substring(2)).FirstOrDefault();
                         if (item == null || (checkItem!=null && !checkItem(item)))
                         {
-                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = res.發票不存在;
+                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = "發票不存在";
                             continue;
                         }
                         var buyer = item.InvoiceBuyer;
                         if (buyer == null)
                         {
-                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = res.買受人資料不存在;
+                            dataRow.Cell((int)ColumnIndex.處理狀態).Value = "買受人資料不存在";
                             continue;
                         }
 
@@ -136,7 +135,7 @@ namespace ModelExtension.DataExchange
                         }
 
                         mgr.SubmitChanges();
-                        dataRow.Cell((int)ColumnIndex.處理狀態).Value = res.已更新;
+                        dataRow.Cell((int)ColumnIndex.處理狀態).Value = "已更新";
                     }
                     catch (Exception ex)
                     {

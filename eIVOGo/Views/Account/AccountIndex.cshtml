@@ -1,10 +1,16 @@
 
 @using System.IO
 @using System.Linq.Expressions
-@using eIVOGo.Resource.Views.Common
 
-@{   
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@using eIVOGo.Helper
 
+@{
     if (ViewBag.ShowTab == true)
     {
         Layout = "~/Views/Template/MvcTabPage.cshtml";
@@ -12,9 +18,8 @@
     else
     {
         Layout = "~/Views/Template/MvcMainPage.cshtml";
-        ViewBag.ActionName =TreeView._2;
     }
-    
+    ViewBag.ActionName = "首頁 > 系統管理維護";
 }
 
 @section headContent {

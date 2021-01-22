@@ -31,8 +31,6 @@ namespace InvoiceClient.Agent
             {
                 _tasks = new Task[Settings.Default.ProcessCount];
             }
-
-            Settings.Default.AllowancePDFGeneratorOutput.CheckStoredPath();
         }
 
         private void initializeCounter()

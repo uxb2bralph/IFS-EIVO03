@@ -1,14 +1,18 @@
-﻿
-@using eIVOGo.Helper
-@using Model.DataEntity
-@using eIVOGo.Resource.Views.Common
-@using eIVOGo.Models
 
-@{
-    Layout = "~/Views/Template/MvcMainPage.cshtml";
 
-    ViewBag.ActionName = TreeView.首頁___發票作業;
+@{ Register Src="~/Views/WinningInvoice/Module/InquireWinning.ascx" TagPrefix="uc1" TagName="InquireWinning" }
+
+
+@section headContent { 
+ 
 }
+<uc1:InquireWinning runat="server" ID="InquireWinning" />
+<script runat="server">
 
-@{Html.RenderPartial("~/Views/WinningInvoice/Module/InquireWinning.ascx", ((CommonInquiry<InvoiceItem>)this.Model));}
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        ViewBag.ActionName = "首頁 > 發票作業";
+    }
 
+</script>

@@ -60,19 +60,6 @@ namespace Model.Models.ViewModel
         public bool? IgnoreDuplicatedDataNumber { get; set; }
         public Naming.InvoiceProcessType? DefaultProcessType { get; set; }
 
-        /// <summary>
-        /// 客服專線
-        /// </summary>
-        public String CustomerServiceHotline { get; set; }
-        /// <summary>
-        /// 客服專用電子郵件
-        /// </summary>
-        public String CustomerServiceEmail { get; set; }
-
-        /// <summary>
-        /// 營業人資訊
-        /// </summary>
-        public String BusinessPersonInformation { get; set; }
     }
 
 }

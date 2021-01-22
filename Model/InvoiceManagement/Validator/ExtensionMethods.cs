@@ -10,6 +10,7 @@ namespace Model.InvoiceManagement.Validator
 {
     public static partial class ExtensionMethods
     {
+        public const String __InvoiceNoPattern = "([A-Za-z]{2})([0-9]{8})";
         public static Exception OrganizationValueCheck(this Organization dataItem)
         {
             if (String.IsNullOrEmpty(dataItem.CompanyName))
@@ -45,6 +46,10 @@ namespace Model.InvoiceManagement.Validator
             }
 
             return null;
+        }
+        public static Match ParseInvoiceNo(this String invoiceNo)
+        {
+            return Regex.Match(invoiceNo ?? "", __InvoiceNoPattern);
         }
     }
 }

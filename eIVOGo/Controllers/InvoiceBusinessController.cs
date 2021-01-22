@@ -1,19 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.Linq;
+using System.Data.SqlClient;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+
 using Business.Helper;
-using eIVOGo.Resource.Controllers;
-using Model.DataEntity;
-using Model.Helper;
-using Model.InvoiceManagement;
-using Model.InvoiceManagement.InvoiceProcess;
-using Model.Locale;
+using ClosedXML.Excel;
+using DataAccessLayer.basis;
+using eIVOGo.Helper;
+using eIVOGo.Models;
+using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
-using ModelExtension.Helper;
+using Model.DataEntity;
+using Model.InvoiceManagement;
+using Model.Locale;
+using Model.Helper;
+using Model.Resource;
+using Model.Security.MembershipManagement;
 using Utility;
-using Organization = Model.DataEntity.Organization;
+using Model.InvoiceManagement.InvoiceProcess;
+using Uxnet.Com.DataAccessLayer;
+using ModelExtension.Helper;
 
 namespace eIVOGo.Controllers
 {
@@ -24,7 +39,7 @@ namespace eIVOGo.Controllers
         {
             var item = models.GetTable<Organization>().Where(o => o.CompanyID == id).FirstOrDefault();
             if (item == null)
-                return Content(InvoiceBusiness.營業人資料錯誤);
+                return Content("營業人資料錯誤!!");
 
             return View("POSDeviceList", item);
         }
@@ -33,17 +48,17 @@ namespace eIVOGo.Controllers
         {
             var orgItem = models.GetTable<Organization>().Where(o => o.CompanyID == id).FirstOrDefault();
             if (orgItem == null)
-                return View("~/Views/Shared/JsAlert.cshtml", model: InvoiceBusiness.營業人資料錯誤);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
 
             POSNo = POSNo.GetEfficientString();
             if (POSNo == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: InvoiceBusiness.POS機編號錯誤);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "POS機編號錯誤!!");
             }
 
             if (orgItem.POSDevice.Any(p => p.POSNo == POSNo && p.DeviceID != deviceID))
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: InvoiceBusiness.已存在相同的POS機編號);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "已存在相同的POS機編號!!");
             }
 
             var item = models.GetTable<POSDevice>().Where(p => p.CompanyID == id && p.DeviceID == deviceID).FirstOrDefault();
@@ -59,7 +74,7 @@ namespace eIVOGo.Controllers
 
             models.SubmitChanges();
 
-            return View("~/Views/InvoiceBusiness/POSDevice/DataItem.cshtml", item);
+            return View("~/Views/InvoiceBusiness/POSDevice/DataItem.ascx", item);
 
         }
 
@@ -69,7 +84,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return Json(new { result = false, message = InvoiceBusiness.POS機編號錯誤 }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = false, message = "POS機編號錯誤!!" }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
@@ -82,10 +97,10 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: InvoiceBusiness.POS機編號錯誤);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "POS機編號錯誤!!");
             }
 
-            return View("~/Views/InvoiceBusiness/POSDevice/EditItem.cshtml", item);
+            return View("~/Views/InvoiceBusiness/POSDevice/EditItem.ascx", item);
 
         }
 
@@ -95,10 +110,10 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: InvoiceBusiness.POS機編號錯誤);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "POS機編號錯誤!!");
             }
 
-            return View("~/Views/InvoiceBusiness/POSDevice/DataItem.cshtml", item);
+            return View("~/Views/InvoiceBusiness/POSDevice/DataItem.ascx", item);
         }
 
         public ActionResult GenerateGUID()
@@ -126,7 +141,7 @@ namespace eIVOGo.Controllers
             var seller = models.GetTable<Organization>().Where(o => o.CompanyID == viewModel.SellerID).FirstOrDefault();
             if (seller == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: InvoiceBusiness.發票開立人錯誤);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "發票開立人錯誤!!");
             }
 
             viewModel.SellerName = seller.CompanyName;
@@ -167,7 +182,7 @@ namespace eIVOGo.Controllers
             var seller = models.GetTable<Organization>().Where(o => o.CompanyID == viewModel.SellerID).FirstOrDefault();
             if (seller == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: InvoiceBusiness.發票開立人錯誤);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "發票開立人錯誤!!");
             }
 
             return View(seller);
@@ -217,7 +232,7 @@ namespace eIVOGo.Controllers
                 viewModel.No = newItem.No;
 
 
-                return View("~/Views/InvoiceBusiness/Module/InvoiceCreated.cshtml", newItem);
+                return View("~/Views/InvoiceBusiness/Module/InvoiceCreated.ascx", newItem);
             }
             catch (Exception ex)
             {
@@ -264,7 +279,7 @@ namespace eIVOGo.Controllers
             viewModel.TrackCode = newItem.TrackCode;
             viewModel.No = newItem.No;
 
-            return View("~/Views/InvoiceBusiness/Module/A0401Created.cshtml", newItem);
+            return View("~/Views/InvoiceBusiness/Module/A0401Created.ascx", newItem);
 
         }
 
@@ -298,7 +313,7 @@ namespace eIVOGo.Controllers
             viewModel.TrackCode = newItem.TrackCode;
             viewModel.No = newItem.No;
 
-            return View("~/Views/InvoiceBusiness/Module/A0401Created.cshtml", newItem);
+            return View("~/Views/InvoiceBusiness/Module/A0401Created.ascx", newItem);
 
         }
 
@@ -332,7 +347,7 @@ namespace eIVOGo.Controllers
             }
             models.SubmitChanges();
 
-            return View("~/Views/InvoiceBusiness/Module/AllowanceCreated.cshtml", newItem);
+            return View("~/Views/InvoiceBusiness/Module/AllowanceCreated.ascx", newItem);
 
         }
 
@@ -357,6 +372,7 @@ namespace eIVOGo.Controllers
             DataSet ds;
             switch(viewModel.ProcessType)
             {
+                case Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer:
                 case Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer:
                     ds = items.GetInvoiceDataForIssuer(models);
                     break;

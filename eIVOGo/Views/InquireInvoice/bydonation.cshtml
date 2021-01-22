@@ -1,12 +1,14 @@
-﻿@using res = eIVOGo.Resource.Views.InquireInvoice.ByDonation
 
+@using System.Linq.Expressions
+@using Model.DataEntity
+@using Model.Locale
+@using Utility
 <tr>
-    <th>
-        @res.捐贈類別
+    <th>捐贈類別 
     </th>
     <td class="tdleft">
-        <input type="radio" name="donation" value="donated" />@res.捐贈統計表
-        <input type="radio" name="donation" value="winning" />@res.捐贈中獎統計表
+        <input type="radio" name="donation" value="donated" />捐贈統計表
+        <input type="radio" name="donation" value="winning" />捐贈中獎統計表
     </td>
 </tr>
 <script>

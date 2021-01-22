@@ -28,18 +28,19 @@ namespace InvoiceClient.Agent
             var result = invSvc.UploadInvoiceCancellationV2_C0501(docInv).ConvertTo<Root>();
             return result;
         }
-        protected override void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
                 IEnumerable<String> message = rootInvoiceNo.Select(i => String.Format("作廢發票號碼:{0}=>{1}", i.Value, i.Description));
                 Logger.Warn(String.Format("在上傳作廢發票檔({0})時,傳送失敗!!原因如下:\r\n{1}", fileName, String.Join("\r\n", message.ToArray())));
 
-                Model.Schema.TurnKey.C0501.CancelInvoice invoice = docInv.ConvertTo<Model.Schema.TurnKey.C0501.CancelInvoice>();
-                Model.Schema.TurnKey.C0501.CancelInvoice stored = docInv.ConvertTo<Model.Schema.TurnKey.C0501.CancelInvoice>();
+                Model.Schema.TurnKey.C0501.CancelInvoice invoice = docInv.TrimAll().ConvertTo<Model.Schema.TurnKey.C0501.CancelInvoice>();
+                Model.Schema.TurnKey.C0501.CancelInvoice stored = docInv.TrimAll().ConvertTo<Model.Schema.TurnKey.C0501.CancelInvoice>();
                 
-                stored.ConvertToXml().Save(Path.Combine(_failedTxnPath, fileName));
+                stored.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(_failedTxnPath, fileName));
             }
+            return true;
         }
 
     }

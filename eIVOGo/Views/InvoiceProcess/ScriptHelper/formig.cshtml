@@ -1,4 +1,15 @@
-﻿<script>
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+<script>
     $(function () {
         var $postForm;
         var $postFrame = $('<iframe name="dataFrame" width="0" height="0">').appendTo($('body'));
@@ -10,12 +21,10 @@
                 $postForm.remove();
             }
 
-            var $formData = $('input[name="chkItem"]:checked').serializeArray();
-
             $postForm = $('<form method="post" target="dataFrame" />').prop('action', '@(Url.Action("DownloadC0401","InvoiceProcess"))')
                 .css('display', 'none').appendTo($('body'));
 
-            $formData.forEach(function (item, index) {
+            $('#theForm').serializeArray().forEach(function (item, index) {
                 $('<input type="hidden">')
                     .prop('name', item.name).prop('value',item.value)
                     .appendTo($postForm);
@@ -29,12 +38,10 @@
                 $postForm.remove();
             }
 
-            var $formData = $('input[name="chkItem"]:checked').serializeArray();
-
             $postForm = $('<form method="post" target="dataFrame" />').prop('action', '@(Url.Action("DownloadC0701","InvoiceProcess"))')
                 .css('display', 'none').appendTo($('body'));
 
-            $formData.forEach(function (item, index) {
+            $('#theForm').serializeArray().forEach(function (item, index) {
                 $('<input type="hidden">')
                     .prop('name', item.name).prop('value',item.value)
                     .appendTo($postForm);
@@ -47,12 +54,10 @@
                 $postForm.remove();
             }
 
-            var $formData = $('input[name="chkItem"]:checked').serializeArray();
-
             $postForm = $('<form method="post" target="dataFrame" />').prop('action', '@(Url.Action("DownloadC0501","InvoiceProcess"))')
                 .css('display', 'none').appendTo($('body'));
 
-            $formData.forEach(function (item, index) {
+            $('#theForm').serializeArray().forEach(function (item, index) {
                 $('<input type="hidden">')
                     .prop('name', item.name).prop('value',item.value)
                     .appendTo($postForm);
@@ -62,3 +67,14 @@
         };
     });
 </script>
+<script runat="server">
+
+    ModelSource<InvoiceItem> models;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+
+    }
+</script>
+

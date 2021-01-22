@@ -1,34 +1,24 @@
-@using System.Web.Mvc.Html
-@using System.IO
-@using System.Linq.Expressions
+
+
+
 @using eIVOGo.Helper
-@using eIVOGo.Models
-@using eIVOGo.Controllers
-@using Model.DataEntity
-@using Model.Helper
-@using Model.Locale
-@using Utility
-@using Uxnet.Web.WebUI
-@using eIVOGo.Models.ViewModel
-@using Model.Models.ViewModel
 
-@{
-    Layout = "~/Views/Template/MvcMainPage.cshtml";
-    //var models = TempData.GetGenericModelSource();
-    ModelSource<InvoiceItem> models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-
-    string _inquiryView = (String)ViewBag.InquiryView ?? "~/Views/InvoiceQuery/Module/InvoiceSummaryResult.cshtml";
-    
+@section headContent { 
+ 
 }
-@section formContent
-{
-    @{ Html.RenderPartial(_inquiryView, models); }
+@section formContent { 
+@{ Html.RenderPartial("Module/InvoiceSummaryResult", Model);}
+ 
 }
+<script runat="server">
 
+    public override void Dispose()
+    {
+        var models = TempData.GetGenericModelSource();
+        if (models != null)
+            models.Dispose();
+        
+        base.Dispose();
+    }
 
-
-
-
-
-
+</script>

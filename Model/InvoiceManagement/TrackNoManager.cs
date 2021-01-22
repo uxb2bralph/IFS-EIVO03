@@ -42,17 +42,18 @@ namespace Model.InvoiceManagement
             _typeIndication = indication;
             resetInterval();
             initialize();
+            InitializeInvoiceNoInterval();
         }
 
         public Naming.InvoiceTypeDefinition? InvoiceTypeIndication => _typeIndication;
 
-
-        public InvoiceNoInterval InvoiceNoInterval
+        public InvoiceNoInterval InitializeInvoiceNoInterval()
         {
-            get
+            if (_currentInterval == null)
             {
-                return _currentInterval;
+                _currentInterval = getNextInterval(null);
             }
+            return _currentInterval;
         }
 
         private void initialize()
@@ -70,7 +71,7 @@ namespace Model.InvoiceManagement
             //}
 
             _uploadInvoiceDate = DateTime.Now;
-            _currentInterval = getNextInterval(null);
+            //_currentInterval = getNextInterval(null);
 
         }
 
@@ -78,8 +79,8 @@ namespace Model.InvoiceManagement
         {
             try
             {
-                resetInterval();
                 _closed = true;
+                resetInterval();
             }
             catch (Exception ex)
             {
@@ -122,7 +123,7 @@ namespace Model.InvoiceManagement
 
         public bool CheckInvoiceNo(InvoiceItem item)
         {
-            if (_currentInterval == null)
+            if (InitializeInvoiceNoInterval() == null)
             {
                 return false;
             }
@@ -138,7 +139,7 @@ namespace Model.InvoiceManagement
 
             item.TrackCode = _currentInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode;
             item.No = String.Format("{0:00000000}", _currentNo);
-            item.TrackID = _currentInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackID;
+            item.TrackID = _currentInterval.TrackID;
 
             _currentNo++;
             if (_currentNo > _currentInterval.EndNo)
@@ -150,7 +151,7 @@ namespace Model.InvoiceManagement
 
         public InvoiceNoAllocation AllocateInvoiceNo()
         {
-            if (_currentInterval == null)
+            if (InitializeInvoiceNoInterval() == null)
             {
                 return null;
             }
@@ -193,7 +194,7 @@ namespace Model.InvoiceManagement
         private InvoiceNoInterval getNextInterval(int? intervalID)
         {
             //lock (__lockManager)
-            lock(typeof(InvoiceNoInterval))
+            //lock(typeof(InvoiceNoInterval))
             {
                 int currentYear = _uploadInvoiceDate.Year;
                 int currentPeriodNo = (_uploadInvoiceDate.Month + 1) / 2;
@@ -205,8 +206,11 @@ namespace Model.InvoiceManagement
                 //    && n.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo == currentPeriodNo
                 //    && !n.LockID.HasValue);
 
-                intervalItems = intervalItems.Where(n => n.InvoiceNoAssignments.Count == 0
-                                || n.InvoiceNoAssignments.Max(a => a.InvoiceNo) < n.EndNo);
+                intervalItems = intervalItems
+                                .Where(n => !n.InvoiceNoAssignments.Any()
+                                    || n.InvoiceNoAssignments.Max(a => a.InvoiceNo) < n.EndNo)
+                                .Where(n => !n.InvoiceNoAllocation.Any()
+                                    || n.InvoiceNoAllocation.Max(a => a.InvoiceNo) < n.EndNo);
 
                 if (intervalID.HasValue)
                     intervalItems = intervalItems.Where(n => n.IntervalID > intervalID);
@@ -214,24 +218,19 @@ namespace Model.InvoiceManagement
                 _currentNo = null;
                 InvoiceNoInterval item = null;
 
-                while (item == null)
+                item = null;
+                foreach (var interval in intervalItems.OrderBy(n => n.IntervalID).ThenBy(n => n.StartNo).ToList())
                 {
-                    if (intervalItems.Count() == 0)
+                    if (this.ExecuteCommand("Update InvoiceNoInterval set LockID = 1 where IntervalID = {0} And LockID is null", interval.IntervalID) > 0)
                     {
-                        return null;
-                    }
-                    item = intervalItems.OrderBy(n => n.IntervalID).ThenBy(n => n.StartNo).FirstOrDefault();
-                    if (this.ExecuteCommand("Update InvoiceNoInterval set LockID = 1 where IntervalID = {0} And LockID is null", item.IntervalID) == 0)
-                    {
-                        item = null;
+                        item = interval;
+                        break;
                     }
                 }
 
                 if (item != null)
                 {
-                    _currentNo = item.InvoiceNoAssignments.Count == 0
-                        ? item.StartNo
-                        : item.InvoiceNoAssignments.Max(a => a.InvoiceNo) + 1;
+                    _currentNo = item.CurrentAllocatingNo();
                 }
 
                 return item;

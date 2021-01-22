@@ -20,6 +20,33 @@ namespace Business.Helper.InvoiceProcessor
     {
         public static void UploadInvoiceAutoTrackNo(this InvoiceManagerV2 models, XmlDocument uploadData,Root result,out OrganizationToken token)
         {
+            UploadInvoice(models, uploadData, result, out token, UploadInvoiceAutoTrackNoCore);
+        }
+
+        public static void UploadInvoice(this InvoiceManagerV2 models, XmlDocument uploadData, Root result, out OrganizationToken token)
+        {
+            UploadInvoice(models, uploadData, result, out token, UploadInvoiceCore);
+        }
+
+
+        public static void UploadInvoiceAutoTrackNo(this InvoiceManagerV2 models, Root result, OrganizationToken token, InvoiceRoot invoice)
+        {
+            try
+            {
+                UploadInvoiceAutoTrackNoCore(models, result, token, invoice);
+
+                EIVOPlatformFactory.Notify();
+                GovPlatformFactory.Notify();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                result.Result.message = ex.Message;
+            }
+        }
+
+        private static void UploadInvoice(this InvoiceManagerV2 models, XmlDocument uploadData, Root result, out OrganizationToken token, Action<InvoiceManagerV2, Root, OrganizationToken, InvoiceRoot> proc)
+        {
             token = null;
 
             try
@@ -34,7 +61,7 @@ namespace Business.Helper.InvoiceProcessor
                     token = models.GetTable<OrganizationToken>().Where(t => t.Thumbprint == crypto.SignerCertificate.Thumbprint).FirstOrDefault();
                     if (token != null)
                     {
-                        UploadInvoiceAutoTrackNoCore(models, result, token, invoice);
+                        proc(models, result, token, invoice);
                     }
                     else
                     {
@@ -45,22 +72,6 @@ namespace Business.Helper.InvoiceProcessor
                 {
                     result.Result.message = "發票資料簽章不符!!";
                 }
-
-                EIVOPlatformFactory.Notify();
-                GovPlatformFactory.Notify();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-                result.Result.message = ex.Message;
-            }
-        }
-
-        public static void UploadInvoiceAutoTrackNo(this InvoiceManagerV2 models, Root result, OrganizationToken token, InvoiceRoot invoice)
-        {
-            try
-            {
-                UploadInvoiceAutoTrackNoCore(models, result, token, invoice);
 
                 EIVOPlatformFactory.Notify();
                 GovPlatformFactory.Notify();
@@ -156,6 +167,88 @@ namespace Business.Helper.InvoiceProcessor
             }
 
             result.Automation = automation.ToArray();
+        }
+
+        private static void UploadInvoiceCore(this InvoiceManagerV2 models, Root result, OrganizationToken token, InvoiceRoot invoice)
+        {
+            models.IgnoreDuplicateDataNumberException = token.Organization.OrganizationStatus?.IgnoreDuplicatedDataNumber == true;
+
+            List<AutomationItem> automation = new List<AutomationItem>();
+            var items = models.SaveUploadInvoice(invoice, token);
+
+            if (items.Count > 0)
+            {
+                result.Response = new RootResponse
+                {
+                    InvoiceNo =
+                    items.Select(d => new RootResponseInvoiceNo
+                    {
+                        Value = invoice.Invoice[d.Key].InvoiceNumber,
+                        Description = d.Value.Message,
+                        ItemIndexSpecified = true,
+                        ItemIndex = d.Key
+                    }).ToArray()
+                };
+
+                //失敗Response
+                automation.AddRange(items.Select(d => new AutomationItem
+                {
+                    Description = d.Value.Message,
+                    Status = 0,
+                    Invoice = new AutomationItemInvoice
+                    {
+                        InvoiceNumber = invoice.Invoice[d.Key].InvoiceNumber,
+                        SellerId = invoice.Invoice[d.Key].SellerId
+                    }
+                }));
+
+                ThreadPool.QueueUserWorkItem(ExceptionNotification.SendNotification,
+                    new ExceptionInfo
+                    {
+                        Token = token,
+                        ExceptionItems = items,
+                        InvoiceData = invoice
+                    });
+            }
+            else
+            {
+                result.Result.value = 1;
+            }
+
+            //成功Response
+            if (models.EventItems != null && models.EventItems.Count > 0)
+            {
+                if (token.Organization.OrganizationStatus.DownloadDataNumber == true)
+                {
+                    automation.AddRange(models.EventItems.Select(i => new AutomationItem
+                    {
+                        Description = "",
+                        Status = 1,
+                        Invoice = new AutomationItemInvoice
+                        {
+                            SellerId = i.InvoiceSeller.ReceiptNo,
+                            InvoiceNumber = i.TrackCode + i.No,
+                            EncData = i.BuildEncryptedData()
+                        },
+                    }));
+                }
+                else
+                {
+                    automation.AddRange(models.EventItems.Select(i => new AutomationItem
+                    {
+                        Description = "",
+                        Status = 1,
+                        Invoice = new AutomationItemInvoice
+                        {
+                            SellerId = i.InvoiceSeller.ReceiptNo,
+                            InvoiceNumber = i.TrackCode + i.No
+                        }
+                    }));
+                }
+            }
+
+            result.Automation = automation.ToArray();
+
         }
 
         public static void BindProcessedItem(this InvoiceManagerV2 manager, ProcessRequest requestItem)
@@ -281,6 +374,103 @@ namespace Business.Helper.InvoiceProcessor
                         CancelInvoiceNumber = d.TrackCode + d.No,
                         SellerId = d.InvoiceSeller.ReceiptNo
                     }
+                }));
+            }
+
+            result.Automation = automation.ToArray();
+        }
+
+        public static void UploadAllowance(this InvoiceManagerV2 models, XmlDocument uploadData, Root result)
+        {
+            try
+            {
+                CryptoUtility crypto = new CryptoUtility();
+
+                uploadData.PreserveWhitespace = true;
+                if (crypto.VerifyXmlSignature(uploadData))
+                {
+                    AllowanceRoot allowance = uploadData.TrimAll().ConvertTo<AllowanceRoot>();
+
+                    ///憑證資料檢查
+                    ///
+                    var token = models.GetTable<OrganizationToken>().Where(t => t.Thumbprint == crypto.SignerCertificate.Thumbprint).FirstOrDefault();
+                    if (token != null)
+                    {
+                        models.UploadAllowance(result, allowance, token);
+                    }
+                    else
+                    {
+                        result.Result.message = "營業人憑證資料驗證不符!!";
+                    }
+                }
+                else
+                {
+                    result.Result.message = "發票資料簽章不符!!";
+                }
+                GovPlatformFactory.Notify();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                result.Result.message = ex.Message;
+            }
+
+        }
+
+        public static void UploadAllowance(this InvoiceManagerV2 models, Root result, AllowanceRoot allowance, OrganizationToken token)
+        {
+            List<AutomationItem> automation = new List<AutomationItem>();
+            var items = models.SaveUploadAllowance(allowance, token);
+            if (items.Count > 0)
+            {
+                result.Response = new RootResponse
+                {
+                    InvoiceNo =
+                    items.Select(d => new RootResponseInvoiceNo
+                    {
+                        Value = allowance.Allowance[d.Key].AllowanceNumber,
+                        Description = d.Value.Message,
+                        ItemIndexSpecified = true,
+                        ItemIndex = d.Key
+                    }).ToArray()
+                };
+
+                automation.AddRange(items.Select(d => new AutomationItem
+                {
+                    Description = d.Value.Message,
+                    Status = 0,
+                    Allowance = new AutomationItemAllowance
+                    {
+                        AllowanceNumber = allowance.Allowance[d.Key].AllowanceNumber,
+                        SellerId = allowance.Allowance[d.Key].SellerId,
+                    },
+                }));
+
+                ThreadPool.QueueUserWorkItem(ExceptionNotification.SendNotification,
+                    new ExceptionInfo
+                    {
+                        Token = token,
+                        ExceptionItems = items,
+                        AllowanceData = allowance
+                    });
+            }
+            else
+            {
+                result.Result.value = 1;
+            }
+
+            if (models.EventItems_Allowance != null && models.EventItems_Allowance.Count() > 0)
+            {
+                //上傳後折讓
+                automation.AddRange(models.EventItems_Allowance.Select(d => new AutomationItem
+                {
+                    Description = "",
+                    Status = 1,
+                    Allowance = new AutomationItemAllowance
+                    {
+                        AllowanceNumber = d.AllowanceNumber,
+                        SellerId = d.InvoiceAllowanceSeller.ReceiptNo
+                    },
                 }));
             }
 

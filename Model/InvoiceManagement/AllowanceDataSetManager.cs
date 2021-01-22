@@ -27,8 +27,6 @@ namespace Model.InvoiceManagement
             Description,
             InvoiceNo,
         }
-
-
         public DataTable InitializeAllowanceResponseTable()
         {
             DataTable table = new DataTable();
@@ -52,13 +50,13 @@ namespace Model.InvoiceManagement
             String dataID = "";
             foreach (DataRow row in details)
             {
-                if (row.IsNull(validator.DetailsField.Allowance_No) || String.IsNullOrEmpty((String)row[validator.DetailsField.Allowance_No]))
+                if (row.IsNull(validator.DetailsField.Allowance_No) || String.IsNullOrEmpty(row.GetString(validator.DetailsField.Allowance_No)))
                 {
                     row[validator.DetailsField.Allowance_No] = dataID;
                 }
                 else
                 {
-                    dataID = (String)row[validator.DetailsField.Allowance_No];
+                    dataID = row.GetString(validator.DetailsField.Allowance_No);
                 }
             }
 
@@ -76,17 +74,6 @@ namespace Model.InvoiceManagement
                         var allowanceItem = allowanceItems.ElementAt(idx);
                         dataID = allowanceItem.GetString(validator.AllowanceField.Allowance_No);
                         IEnumerable<DataRow> invoiceDetails = details.Where(d => d.GetString(validator.DetailsField.Allowance_No) == dataID);
-
-                        /*
-                        用GoogleID找InvoiceID
-                        */
-                        RecordHistoryData rec = new RecordHistoryData();
-                        int? iInvoiceID = rec.InquireInvoiceID(validator.AllowanceField.Customer_ID, validator.AllowanceField.Total_Amount);
-                        foreach (var d in invoiceDetails)
-                        {
-                            d[2] = iInvoiceID;
-                        }
-
 
                         Exception ex;
                         if ((ex = validator.Validate(allowanceItem,invoiceDetails)) != null)
@@ -130,7 +117,6 @@ namespace Model.InvoiceManagement
             return result;
         }
 
-       
 
         protected void ReportError(DataTable result, DataRow source, Exception ex, AllowanceDataSetValidator validator)
         {

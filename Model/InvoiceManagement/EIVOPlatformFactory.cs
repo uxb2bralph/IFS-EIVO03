@@ -31,6 +31,12 @@ namespace Model.InvoiceManagement
             set;
         }
 
+        public static String DefaultUserCarrierType
+        {
+            get;
+            set;
+        } = Settings.Default.DefaultUserCarrierType;
+
         public static Func<String, SignedCms> SignCms
         {
             get;
@@ -44,7 +50,7 @@ namespace Model.InvoiceManagement
         }
 
 
-        public static Action<int,bool> NotifyIssuedInvoice
+        public static Action<NotifyToProcessID> NotifyIssuedInvoice
         {
             get;
             set;
@@ -57,7 +63,7 @@ namespace Model.InvoiceManagement
         }
 
 
-        public static Action<int> NotifyIssuedInvoiceCancellation
+        public static Action<NotifyToProcessID> NotifyIssuedInvoiceCancellation
         {
             get;
             set;
@@ -70,7 +76,7 @@ namespace Model.InvoiceManagement
         }
 
 
-        public static Action<int> NotifyIssuedA0401
+        public static Action<NotifyToProcessID> NotifyIssuedA0401
         {
             get;
             set;
@@ -214,7 +220,7 @@ namespace Model.InvoiceManagement
 
                             var t = Task.Factory.ContinueWhenAll(__Tasks.ToArray(), ts =>
                             {
-                                Console.WriteLine($"EIVOPlatformFatory finished:{DateTime.Now}");
+                                Logger.Info($"EIVOPlatformFatory finished:{DateTime.Now}");
                             });
                             t.Wait();
 
@@ -276,7 +282,7 @@ namespace Model.InvoiceManagement
             get;
             set;
         }
-    
+
         public static int ResetBusyCount()
         {
             return __Handler.ResetBusyCount();
@@ -287,6 +293,15 @@ namespace Model.InvoiceManagement
             if (Settings.Default.EnableEIVOPlatform)
                 __Handler.Notify();
         }
+
+        public static dynamic CurrentStatus =>
+            new
+            {
+                Enabled = Settings.Default.EnableEIVOPlatform,
+                HasInstance = __Handler != null,
+                MaxWaitingCount = __Handler?.MaxWaitingCount ?? -1,
+                ReportDate = DateTime.Now,
+            };
 
         //private static void notifyToProcess(object stateInfo)
         //{

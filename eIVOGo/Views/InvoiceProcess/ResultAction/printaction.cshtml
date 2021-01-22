@@ -1,4 +1,4 @@
-﻿@using System.IO
+@using System.IO
 @using System.Linq.Expressions
 
 
@@ -7,32 +7,30 @@
 @using Model.DataEntity
 @using Model.Locale
 @using Utility
-@using res = eIVOGo.Resource.Views.InvoiceProcess.ResultAction.PrintAction
-
 @{
     InquireInvoiceViewModel _viewModel;
-
     _viewModel = ViewBag.ViewModel as InquireInvoiceViewModel;
 }
-
 @if (_viewModel != null)
 {
     if (_viewModel.ProcessType == Naming.InvoiceProcessType.C0401)
     {
         <div>
-            <button type="button" class="btn" name="paperStyle" value="A4" onclick="uiInvoiceQuery.print('A4');">@res.A4格式列印</button>
-            (@res.列印兌獎訊息_<input name="printBack" type="radio" value="true" /> @res.是
-            <input name="printBack" type="radio" value="false" /> @res.否)
-            <input type="button" class="btn" name="btnPrint" value=@res.熱感紙規格列印 onclick="uiInvoiceQuery.print('POS');" />
-            (@res.列印買受人地址_<input name="printBuyerAddr" type="radio" value="true" />@res.是
-            <input name="printBuyerAddr" type="radio" value="false" /> @res.否)
+            <button type="button" class="btn" name="paperStyle" value="A4" onclick="uiInvoiceQuery.print('A4');">A4格式列印</button>
+            (列印兌獎訊息：<input name="printBack" type="radio" value="true" />是
+            <input name="printBack" type="radio" value="false" />否)
+            <input type="button" class="btn" name="btnPrint" value="熱感紙規格列印" onclick="uiInvoiceQuery.print('POS');" />
+            (列印買受人地址：<input name="printBuyerAddr" type="radio" value="true" />是
+            <input name="printBuyerAddr" type="radio" value="false" />否)
         </div>
     }
     else if (_viewModel.ProcessType == Naming.InvoiceProcessType.A0401)
     {
-
-        <button type="button" class="btn" name="paperStyle" value="A4" onclick="uiInvoiceQuery.print('A4',@((int)Naming.InvoiceProcessType.A0401));">@res.A4格式列印</button>
-        <button type="button" class="btn" name="paperStyle" value="B5" onclick="uiInvoiceQuery.print('B5',@((int)Naming.InvoiceProcessType.A0401));">@res.B5格式列印</button>
-
+        <button type="button" class="btn" name="paperStyle" value="A4" onclick="uiInvoiceQuery.print('A4',@((int)Naming.InvoiceProcessType.A0401));">A4格式列印</button>
     }
 }
+
+
+
+
+

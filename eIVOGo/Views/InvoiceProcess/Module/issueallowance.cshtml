@@ -16,8 +16,6 @@
 @using Utility
 @using Business.Helper
 @using Uxnet.Web.WebUI
-@using res=eIVOGo.Resource.Views.InvoiceProcess.Module.IssueAllowance
-
 @{
     ModelSource<InvoiceItem> models;
     ModelStateDictionary _modelState;
@@ -72,7 +70,7 @@
     </div>
     <script>
     $(function () {
-        $global.createTab('issueAllowance', '@res.開立折讓證明單', $('#@(_tabID)'), true);
+        $global.createTab('issueAllowance', '開立折讓證明單', $('#@(_tabID)'), true);
     });
     </script>
 }

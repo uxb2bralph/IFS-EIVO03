@@ -22,7 +22,23 @@
         var mailing = models.GetUserListByCompanyID(_model.InvoiceAllowanceBuyer.BuyerID)
                 .Select(u => u.EMail).ToList();
 
-        mailing.Add(_model.InvoiceAllowanceBuyer.EMail);
+        if (!String.IsNullOrEmpty(_model.InvoiceAllowanceBuyer.EMail))
+        {
+            mailing.Add(_model.InvoiceAllowanceBuyer.EMail);
+        }
+        else
+        {
+            foreach (var a in _model.InvoiceAllowanceDetails)
+            {
+                String trackCode = a.InvoiceAllowanceItem.InvoiceNo.Substring(0, 2);
+                String no = a.InvoiceAllowanceItem.InvoiceNo.Substring(2);
+                var invoice = models.GetTable<InvoiceItem>().Where(i => i.TrackCode == trackCode && i.No == no).FirstOrDefault();
+                if (invoice != null)
+                {
+                    mailing.Add(invoice.InvoiceBuyer.EMail);
+                }
+            }
+        }
         var mailTo = String.Join(",",
             mailing.Where(m => m != null));
 

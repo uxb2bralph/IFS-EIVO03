@@ -83,7 +83,7 @@ namespace Model.InvoiceManagement.Validator
             _currency = null;
             if (_invItem.Currency!=null)
             {
-                _currency = _mgr.GetTable<CurrencyType>().Where(c => c.AbbrevName == _invItem.Currency).FirstOrDefault();
+                _currency = _models.GetTable<CurrencyType>().Where(c => c.AbbrevName == _invItem.Currency).FirstOrDefault();
                 if (_currency == null)
                 {
                     return new Exception($"Invalid currency code：{_invItem.Currency}，TAG：<Currency/>");
@@ -103,16 +103,16 @@ namespace Model.InvoiceManagement.Validator
             }
 
             InvoiceItem newItem = this.InvoiceItem;
-            _mgr.GetTable<InvoiceItem>().InsertOnSubmit(newItem);
+            _models.GetTable<InvoiceItem>().InsertOnSubmit(newItem);
 
-            C0401Handler.PushStepQueueOnSubmit(_mgr, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
-            C0401Handler.PushStepQueueOnSubmit(_mgr, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+            C0401Handler.PushStepQueueOnSubmit(_models, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+            C0401Handler.PushStepQueueOnSubmit(_models, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
 
-            _mgr.SubmitChanges();
+            _models.SubmitChanges();
 
             if(_pdfSubscription)
             {
-                _mgr.PushDocumentSubscriptionQueue(newItem.CDS_Document.DocID);
+                _models.PushDocumentSubscriptionQueue(newItem.CDS_Document.DocID);
             }
 
             return newItem;

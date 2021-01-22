@@ -1,5 +1,4 @@
-﻿
-<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl" %>
 <%@ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" %>
 <%@ Register Src="~/Module/UI/PageAction.ascx" TagName="PageAction" TagPrefix="uc5" %>
 <%@ Register Src="~/Module/UI/FunctionTitleBar.ascx" TagName="FunctionTitleBar" TagPrefix="uc6" %>
@@ -63,7 +62,7 @@
     </tbody>
 </table>
 <!--表格 開始-->
-<%  Html.RenderPartial("~/Views/InvoiceProcess/ScriptHelper/Common.ascx"); %>
+<%  Html.RenderPartial("~/Views/InvoiceProcess/ScriptHelper/Common.cshtml"); %>
 <script runat="server">
 
     ModelSource<InvoiceItem> models;

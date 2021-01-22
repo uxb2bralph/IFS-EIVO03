@@ -72,36 +72,7 @@
             //}
     <text>
         var newItems = @(Html.Raw(JsonConvert.SerializeObject(items)));
-        if(uiHandling.items.length>0) {
-            $.each(newItems, function (index, val) {
-
-                var isExist = false;
-                var isRepeat = false;
-                $.each(uiHandling.items, function (uIndex, uVal)
-                {
-                    if (val.InvoiceNo == uVal.InvoiceNo) {
-                        isExist = true;
-                        return false;
-                    }
-                })
-
-                if (!isExist) {
-                    var arr =
-                    {
-                        "Address": val.Address,
-                        "ContactName": val.ContactName,
-                        "CustomerID": val.CustomerID,
-                        "InvoiceID": val.InvoiceID,
-                        "InvoiceNo": val.InvoiceNo,
-                        "PackageID": val.PackageID,
-                        "Remark": val.Remark
-                    }
-                    uiHandling.items.push(arr);
-                }
-            });
-        } else {
-            uiHandling.items = uiHandling.items.concat(newItems);
-        }
+        uiHandling.items = uiHandling.items.concat(newItems);
         uiHandling.showDetails();
     </text>
         }

@@ -1,44 +1,37 @@
-﻿@using System.IO
+
+@using System.IO
 @using System.Linq.Expressions
+
+
 @using Model.DataEntity
 @using Model.Locale
 @using Utility
-@using Model.Models.ViewModel
-@using res = eIVOGo.Resource.Views.InvoiceProcess.Module.QueryDirective
 
-@{
-    int? _model = (int?)this.Model ?? 0;
-    InquireInvoiceViewModel _viewModel;
-    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-
-}
-@if (_viewModel.ResultAction != "Process")
-{
-    <tr>
-        <th>
-            @res.查詢項目
-        </th>
-        <td class="tdleft">
-            <input type="radio" name="urlTo" onchange="window.location.href='@(Url.Action("Index","InvoiceProcess"))';" />@res.發票
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" name="urlTo" onchange="window.location.href='@(Url.Action("Index","AllowanceProcess"))';" />@res.折讓單
-        </td>
-    </tr>
+<tr>
+    <th>查詢項目
+    </th>
+    <td class="tdleft">
+        <input type="radio" name="urlTo" onchange="window.location.href='@(Url.Action("Index","InvoiceProcess"))';" />發票
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="urlTo" onchange="window.location.href='@(Url.Action("Index","AllowanceProcess"))';" />折讓單
+    </td>
     <script>
         $(function () {
             $('input[name="urlTo"]').eq(@(_model)).prop('checked', true);
         });
     </script>
-}
-else
-{
-    <tr>
-        <th>
-            @res.查詢項目
-        </th>
-        <td class="tdleft">
-            <input type="radio" name="urlTo" onchange="window.location.href='@(Url.Action("Index","InvoiceProcess"))';" checked />@res.發票
-        </td>
-    </tr>
-}
+</tr>
+<script runat="server">
 
+    public String[] NamingDirection
+    { get; set; }
+    int? _model;    
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _model = (int?)this.Model ?? 0;
+    }
+   
+
+</script>

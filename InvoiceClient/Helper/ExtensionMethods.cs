@@ -75,6 +75,28 @@ namespace InvoiceClient.Helper
             return Process.Start(info);
         }
 
+        public static bool AssertFile(this String fileName)
+        {
+            return File.Exists(fileName) && (new FileInfo(fileName)).Length > 0;
+        }
+
+        public static void SaveDocumentWithEncoding(this XmlDocument doc, String path)
+        {
+            Encoding encoding = Encoding.GetEncoding(Settings.Default.OutputEncoding);
+
+            if (encoding.CodePage == 65001)
+            {
+                doc.Save(path);
+            }
+            else
+            {
+                using (StreamWriter writer = new StreamWriter(path, false, encoding))
+                {
+                    doc.Save(writer);
+                }
+            }
+        }
+
     }
 
     public interface ITabWorkItem

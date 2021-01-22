@@ -537,6 +537,7 @@ namespace Model.InvoiceManagement
                     TaxType = invItem.TaxType,
                     TotalAmount = invItem.TotalAmount,
                     TotalAmountInChinese = Utility.ValueValidity.MoneyShow(invItem.TotalAmount),
+                    BondedAreaConfirm = invItem.BondedAreaConfirm,
                 },
                 //DonationID = donatory != null ? donatory.CompanyID : (int?)null,
                 InvoiceCarrier = carrier,

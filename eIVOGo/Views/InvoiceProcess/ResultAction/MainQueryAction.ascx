@@ -18,7 +18,7 @@
     <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class="Bargain_btn">
-                <%  Html.RenderPartial("~/Views/InvoiceProcess/ResultAction/PrintAction.ascx"); %>
+                <%  Html.RenderPartial("~/Views/InvoiceProcess/ResultAction/PrintAction.cshtml"); %>
                 <input type="button" class="btn" name="btnPrint" value="Excel下載" onclick="uiInvoiceQuery.download();" />
                 <%  if (_profile.IsSystemAdmin())
                     { %>

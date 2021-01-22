@@ -37,7 +37,7 @@ namespace eIVOGo.Controllers
         // GET: Account
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> CbsLogin(CbsLoginViewModel viewModel, string returnUrl)
+        public async Task<ActionResult> CbsLogin(CbsLoginViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
             ViewBag.ModelState = this.ModelState;
@@ -54,8 +54,8 @@ namespace eIVOGo.Controllers
                 ModelState.AddModelError("PID", msg);
                 return View("~/Views/Account/CbsLogin.cshtml");
             }
-            returnUrl = viewModel.ReturnUrl.GetEfficientString();
-            return Redirect(returnUrl ?? msg ?? "~/Account/CbsLogin");
+            viewModel.ReturnUrl = viewModel.ReturnUrl.GetEfficientString();
+            return Redirect(viewModel.ReturnUrl ?? msg ?? "~/Account/CbsLogin");
 
         }
 
@@ -76,12 +76,13 @@ namespace eIVOGo.Controllers
         // GET: Account
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> Login(LoginViewModel viewModel, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel viewModel)
         {
-            var result = await CbsLogin(viewModel, returnUrl);
+            ViewBag.ViewModel = viewModel;
+            var result = await CbsLogin(viewModel);
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Account/Login.aspx");
+                return View("~/Views/Account/Login.cshtml");
             }
             else
             {
@@ -92,9 +93,10 @@ namespace eIVOGo.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
+            ViewBag.ViewModel = new LoginViewModel { };
             ViewResult result = (ViewResult)CbsLogin();
             if (Settings.Default.EIVO_Service != 0)
-                result.ViewName = "~/Views/Account/Login.aspx";
+                result.ViewName = "~/Views/Account/Login.cshtml";
             return result;
         }
 
@@ -403,6 +405,12 @@ namespace eIVOGo.Controllers
 
         }
 
+        public ActionResult ChangeLanguage(String lang)
+        {
+            var cLang = lang.GetEfficientString() ?? Settings.Default.DefaultUILanguage;
+            Response.SetCookie(new HttpCookie("cLang", cLang));
+            return Json(new { result = true, message = System.Globalization.CultureInfo.CurrentCulture.Name }, JsonRequestBehavior.AllowGet);
+        }
 
     }
 }

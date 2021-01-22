@@ -13,47 +13,47 @@ namespace Model.Helper
     {
         static StorePathExtensions()
         {
-            StoreRoot.CheckStoredPath();
+            WebStore.CheckStoredPath();
         }
-        public static String StoreRoot
+        public static String WebStore
         {
             get;
             private set;
-        } = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), Settings.Default.StoreRoot);
-        public static String AppRoot
-        {
-            get;
-            private set;
-        } = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
-
+        } = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory), AppSettings.Default.StoreRoot);
 
         public static String DailyStorePath(this DateTime date)
         {
             String dailyPath = "".GetDateStylePath(date);
-            Path.Combine(StoreRoot, dailyPath).CheckStoredPath();
-            return Path.Combine(Settings.Default.StoreRoot, dailyPath);
+            Path.Combine(WebStore, dailyPath).CheckStoredPath();
+            return Path.Combine(AppSettings.Default.StoreRoot, dailyPath);
         }
+
+        public static String PrefixStorePath(this String prefix)
+        {
+            return Path.Combine(WebStore, prefix).CheckStoredPath();
+        }
+
 
         public static String DailyStorePath(this DateTime date, out string absolutePath)
         {
             String dailyPath = "".GetDateStylePath(date);
-            absolutePath = Path.Combine(StoreRoot, dailyPath);
+            absolutePath = Path.Combine(WebStore, dailyPath);
             absolutePath.CheckStoredPath();
-            return Path.Combine(Settings.Default.StoreRoot, dailyPath);
+            return Path.Combine(AppSettings.Default.StoreRoot, dailyPath);
         }
 
         public static String DailyStorePath(this DateTime date, String fileName, out string absolutePath)
         {
             String dailyPath = "".GetDateStylePath(date);
-            String path = Path.Combine(StoreRoot, dailyPath);
+            String path = Path.Combine(WebStore, dailyPath);
             path.CheckStoredPath();
             absolutePath = Path.Combine(path, fileName);
-            return Path.Combine(Settings.Default.StoreRoot, dailyPath, fileName);
+            return Path.Combine(AppSettings.Default.StoreRoot, dailyPath, fileName);
         }
 
         public static String StoreTargetPath(this String storePath)
         {
-            return Path.Combine(AppRoot, storePath);
+            return Path.Combine(Model.Properties.AppSettings.AppRoot, storePath);
         }
     }
 }

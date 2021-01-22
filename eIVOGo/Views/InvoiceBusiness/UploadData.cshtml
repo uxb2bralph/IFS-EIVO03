@@ -9,7 +9,6 @@
 @using Model.Security.MembershipManagement
 @using Business.Helper
 @using eIVOGo.Controllers
-@using res=eIVOGo.Resource.Views.InvoiceBusiness.UploadData
 
 @{
     Layout = "~/Views/Template/MvcMainPage.cshtml";
@@ -23,7 +22,7 @@
     _viewModel = (InvoiceViewModel)ViewBag.ViewModel;
 
     UserProfileMember _profile = Context.GetUser();
-    ViewBag.ActionName = res.首頁___上傳開立資料;
+    ViewBag.ActionName = "首頁 > 上傳開立資料";
     var _orgItem = models.GetTable<Organization>().Where(c => c.CompanyID == _profile.CurrentUserRole.OrganizationCategory.CompanyID).FirstOrDefault();
 }
 
@@ -38,7 +37,7 @@
     }
 }
 
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", res.傳送Excel資料);}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "傳送Excel資料");}
 
 <form role="form" method="post">
     @{ Html.RenderPartial("~/Views/InvoiceBusiness/Module/InvoiceProcessTypeDirection.cshtml");}
@@ -48,24 +47,33 @@
         <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
             <tr>
                 <th>
-                    @res.請選擇營業人
+                    請選擇營業人
                 </th>
                 <td class="tdleft">
                     @{
-                        Html.RenderAction("SellerSelector", "DataFlow", new SellerSelectorViewModel { FieldName = "KeyID", Encrypt = true, });
+                        Html.RenderAction("SellerSelector", "DataFlow", new SellerSelectorViewModel { FieldName = "KeyID", Encrypt = true });
                     }
                 </td>
             </tr>
             <tr>
+                <th>
+                    發票開立通知
+                </th>
+                <td class="tdleft">
+                    <input type="radio" name="ConditionID" value="@((int)ProcessRequestCondition.ConditionType.ImmediateIssueNotice)" checked="checked" /> 立即寄送通知&nbsp;&nbsp;
+                    <input type="radio" name="ConditionID" value="@((int)ProcessRequestCondition.ConditionType.DeferredIssueNotice)" /> 等候附件合併通知
+                </td>
+            </tr>
+            <tr>
                 <th colspan="2" class="Head_style_a">
-                    @res.各項資料
+                    各項資料
                 </th>
             </tr>
-            @{ 
+            @{
                 Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadInvoice.cshtml",
                     new InvoiceRequestViewModel
                     {
-                        Comment = $"【{res.配號通用格式}】",
+                        Comment = "【配號通用格式】",
                         ProcessType = Naming.InvoiceProcessType.C0401_Xlsx,
                     });
                 if (_profile.IsSystemAdmin() || _orgItem?.OrganizationStatus?.InvoiceClientDefaultProcessType == (int)Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC)
@@ -73,26 +81,36 @@
                     Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadInvoice.cshtml",
                         new InvoiceRequestViewModel
                         {
-                            Comment = $"【{res.加值中心配號}】",
+                            Comment = "【加值中心配號】",
                             ProcessType = Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC,
                         });
                 }
-                if (_profile.IsSystemAdmin() || _orgItem?.OrganizationStatus?.InvoiceClientDefaultProcessType == (int)Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer)
+                if (_profile.IsSystemAdmin()
+                    || _orgItem?.OrganizationStatus?.InvoiceClientDefaultProcessType == (int)Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer
+                    || _orgItem?.OrganizationStatus?.InvoiceClientDefaultProcessType == (int)Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer)
                 {
                     Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadInvoice.cshtml",
                         new InvoiceRequestViewModel
                         {
-                            Comment = $"【{res.開立人配號}】",
+                            Comment = "【開立人配號】",
                             ProcessType = Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer,
                         });
+
+                    Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadInvoice.cshtml",
+                        new InvoiceRequestViewModel
+                        {
+                            Comment = "【A0401開立人配號】",
+                            ProcessType = Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer,
+                        });
                 }
+
                 if (_profile.IsSystemAdmin() || _orgItem?.OrganizationStatus?.InvoiceClientDefaultProcessType == (int)Naming.InvoiceProcessType.C0401_Xlsx_CBE)
                 {
 
                     Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadInvoice.cshtml",
                         new InvoiceRequestViewModel
                         {
-                            Comment = $"【{res.境外電商專用}】",
+                            Comment = "【境外電商專用】",
                             ProcessType = Naming.InvoiceProcessType.C0401_Xlsx_CBE,
                         });
                 }

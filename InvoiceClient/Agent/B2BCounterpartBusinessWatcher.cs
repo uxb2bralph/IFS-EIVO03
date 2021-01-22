@@ -29,7 +29,7 @@ namespace InvoiceClient.Agent
         }
 
 
-        protected override void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
@@ -38,6 +38,7 @@ namespace InvoiceClient.Agent
 
                 docInv.Save(Path.Combine(_failedTxnPath, fileName));
             }
+            return true;
         }
 
     }

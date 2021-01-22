@@ -1,0 +1,25 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    Layout = "~/Views/Template/ContentPage.cshtml";
+    ViewBag.ActionName = "首頁 > 全民稽核";
+}
+
+@section headContent {
+
+}
+@section formContent {
+    @{
+        Html.RenderPartial("~/Views/IndividualProcess/DataQuery/InvoiceQuery.cshtml");
+    }
+
+}

@@ -33,19 +33,20 @@ namespace InvoiceClient.Agent
             return count > 0 ? String.Format("{0} InvoiceCancellation Data Transfer Failure!!\r\n", count) : null;
         }
 
-        protected override void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
                 IEnumerable<String> message = rootInvoiceNo.Select(i => String.Format("InvoiceCancellation Number:{0}=>{1}", i.Value, i.Description));
                 Logger.Warn(String.Format("Failed to Send an InvoiceCancellation ({0}) When Uploading Files!!For the Following Reasons:\r\n{1}", fileName, String.Join("\r\n", message.ToArray())));
 
-                CancelInvoiceRoot invoice = docInv.ConvertTo<CancelInvoiceRoot>();
+                CancelInvoiceRoot invoice = docInv.TrimAll().ConvertTo<CancelInvoiceRoot>();
                 CancelInvoiceRoot stored = new CancelInvoiceRoot();
                 stored.CancelInvoice = rootInvoiceNo.Where(i => i.ItemIndexSpecified).Select(i => invoice.CancelInvoice[i.ItemIndex]).ToArray();
 
-                stored.ConvertToXml().Save(Path.Combine(_failedTxnPath, fileName));
+                stored.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(_failedTxnPath, fileName));
             }
+            return true;
         }
 
         protected override void processError(string message, XmlDocument docInv, string fileName)

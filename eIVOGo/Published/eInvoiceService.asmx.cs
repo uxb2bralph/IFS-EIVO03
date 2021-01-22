@@ -86,17 +86,18 @@ namespace eIVOGo.Published
             //    };
 
             EIVOPlatformFactory.NotifyIssuedInvoice =
-                (e, b) =>
+                p =>
                 {
                     using (WebClient client = new WebClient())
                     {
                         try
                         {
-                            client.DownloadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/IssueC0401")}?id={e}&appendAttachment={b}");
+                            client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                            client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/IssueC0401")}", p.JsonStringify());
                         }
                         catch (Exception ex)
                         {
-                            Logger.Warn(String.Format("電子發票開立郵件通知傳送失敗,ID:{0}", e));
+                            Logger.Warn(String.Format("電子發票開立郵件通知傳送失敗,ID:{0}", p.DocID));
                             Logger.Error(ex);
                         }
 
@@ -129,7 +130,8 @@ namespace eIVOGo.Published
                     {
                         using (WebClient client = new WebClient())
                         {
-                            client.DownloadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/IssueA0401")}?id={e}");
+                            client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                            client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/IssueA0401")}", e.JsonStringify());
                         }
                     }
                     catch (Exception ex)
@@ -423,6 +425,15 @@ namespace eIVOGo.Published
         protected String _clientID;
         protected int _channelID;
         protected Naming.InvoiceDataScope _dataScope = Naming.InvoiceDataScope.ForAll;
+
+        public eInvoiceService() : base()
+        {
+            var cookie = Context.Request?.Cookies?["cLang"];
+            if (cookie?.Value != null && cookie.Value != Settings.Default.DefaultUILanguage)
+            {
+                Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo(cookie.Value);
+            }
+        }
 
         [WebMethod]
         public virtual XmlDocument UploadInvoice(XmlDocument uploadData)
@@ -2342,38 +2353,49 @@ namespace eIVOGo.Published
                                 docItems = docItems.Join(mgr.GetTable<DocumentOwner>().Where(o => o.ClientID == clientID), d => d.DocID, o => o.DocID, (d, o) => d);
                             }
 
+                            DateTime executionTime = DateTime.Now;
+
                             var items = mgr.GetTable<DocumentSubscriptionQueue>()
+                                .Where(d => !d.WaitUntil.HasValue || d.WaitUntil <= executionTime)
                                 .Join(docItems, s => s.DocID, d => d.DocID, (s, d) => d)
                                 //.Where(d => d.DocumentOwner.ClientID == clientID)
                                 .Join(mgr.GetTable<InvoiceAllowance>(), d => d.DocID, i => i.AllowanceID, (d, i) => i);
                             var queryItems = mgr.DataContext.GetAllowanceByAgent(items, token.CompanyID);
-                            if (root.Request != null && root.Request.processIndexSpecified && root.Request.totalProcessCountSpecified
-                                && root.Request.processIndex >= 0 && root.Request.totalProcessCount > 0)
-                            {
-                                var mode = Math.Max(DateTime.Now.Ticks % 1048576, 1);
-                                queryItems = queryItems.Where(i => (i.AllowanceID % root.Request.totalProcessCount) == root.Request.processIndex)
-                                                .OrderBy(i => i.AllowanceID % mode);
-                            }
-                            foreach (var item in queryItems.Take(Settings.Default.MaxResponseCountPerBatch))
-                            {
-                                if (mgr.ExecuteCommand("delete DocumentSubscriptionQueue where DocID = {0}", item.AllowanceID) > 0)
-                                {
-                                    pdfFiles.Add(
-                                        String.Join("\t"
-                                            , $"{item.AllowanceNumber}"
-                                            , HttpUtility.UrlEncode(item.AllowanceID.EncryptKey())));
 
-                                    mgr.ExecuteCommand(@"INSERT INTO [proc].DataProcessLog
-                                                            (DocID, LogDate, Status, StepID)
-                                                            VALUES          ({0},{1},{2},{3})",
-                                            item.AllowanceID, DateTime.Now, (int)Naming.DataProcessStatus.Done,
-                                            (int)Naming.InvoiceStepDefinition.PDF待傳輸);
-                                }
-                                else
+                            //if (root.Request != null && root.Request.processIndexSpecified && root.Request.totalProcessCountSpecified
+                            //    && root.Request.processIndex >= 0 && root.Request.totalProcessCount > 0)
+                            //{
+                            //    var mode = Math.Max(DateTime.Now.Ticks % 1048576, 1);
+                            //    queryItems = queryItems.Where(i => (i.AllowanceID % root.Request.totalProcessCount) == root.Request.processIndex)
+                            //                    .OrderBy(i => i.AllowanceID % mode);
+                            //}
+
+                            executionTime = executionTime.AddMinutes(15);
+
+                            lock (typeof(eInvoiceService))
+                            {
+                                foreach (var item in queryItems.Take(Settings.Default.MaxResponseCountPerBatch))
                                 {
-                                    Logger.Warn($"DocumentSubscriptionQueue delete return 0 : {item.AllowanceID}");
+                                    if (mgr.ExecuteCommand("update DocumentSubscriptionQueue set WaitUntil = {1} where DocID = {0}", item.AllowanceID,executionTime) > 0)
+                                    {
+                                        pdfFiles.Add(
+                                            String.Join("\t"
+                                                , $"{item.AllowanceNumber}"
+                                                , HttpUtility.UrlEncode(item.AllowanceID.EncryptKey())));
+
+                                        //mgr.ExecuteCommand(@"INSERT INTO [proc].DataProcessLog
+                                        //                    (DocID, LogDate, Status, StepID)
+                                        //                    VALUES          ({0},{1},{2},{3})",
+                                        //        item.AllowanceID, DateTime.Now, (int)Naming.DataProcessStatus.Done,
+                                        //        (int)Naming.InvoiceStepDefinition.PDF待傳輸);
+                                    }
+                                    else
+                                    {
+                                        Logger.Warn($"DocumentSubscriptionQueue update return 0 : {item.AllowanceID}");
+                                    }
                                 }
                             }
+
                             return pdfFiles.ToArray();
 
                         }

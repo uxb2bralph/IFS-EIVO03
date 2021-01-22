@@ -1,4 +1,8 @@
-﻿@using Business.Helper
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using Business.Helper
 @using Model.Locale
 @using Model.DataEntity
 @using eIVOGo.Controllers
@@ -7,12 +11,13 @@
 @using Model.Models.ViewModel
 @using eIVOGo.Models.ViewModel
 @using ModelExtension.DataExchange
-@using res=eIVOGo.Resource.Views.BusinessRelationship.Module.CounterpartBusinessXmlResult
 
 @{
-    ModelStateDictionary _modelState;
+
+ModelStateDictionary _modelState;
     ModelSource<InvoiceItem> models;
     CounterpartBusinessExchange _model;
+
 
     _modelState = (ModelStateDictionary)ViewBag.ModelState;
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
@@ -23,22 +28,23 @@
 <table border="0" cellspacing="0" cellpadding="0" width="100%" class="tblAction">
     <tbody>
         <tr>
-
-            @if (_model.HasError)
-            {
-                <td class="Bargain_btn">
-                    @res.資料匯入處理有錯誤_請取回處理回應檔查明原因_<br />
-                    <a href="@(Url.Action("GetResource","DataExchange",new { path = ((String)ViewBag.ImportFile).EncryptData() }))"> @res.點此下載回應檔 </a>
-                </td>
-
-            }
-            else
-            {
-                <td class="Bargain_btn">
-                    @res.資料匯入完成__
-                </td>
-            }
-
+            <td class="Bargain_btn">
+                @if (_model.HasError)
+                {
+                    <span>
+                        資料匯入處理有錯誤，請取回處理回應檔查明原因。< br />
+                        <a href="@(Url.Action("GetResource","DataExchange",new { path = ((String)ViewBag.ImportFile).EncryptData() }))"> 點此下載回應檔 </a>
+                    </span>
+                }
+                else
+                {
+                    <text>資料匯入完成!!</text>
+                }
+            </td>
         </tr>
     </tbody>
 </table>
+
+
+
+

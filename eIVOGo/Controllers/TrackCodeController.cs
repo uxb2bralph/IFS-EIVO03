@@ -1,12 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Linq;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
-using Model.DataEntity;
-using Model.Locale;
+using System.Xml;
+using Business.Helper;
+using eIVOGo.Helper;
+using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
+using eIVOGo.Module.Common;
+using eIVOGo.Properties;
+using Model.DataEntity;
+using Model.DocumentManagement;
+using Model.Helper;
+using Model.InvoiceManagement;
+using Model.Locale;
+using Model.Schema.EIVO.B2B;
+using Model.Schema.TurnKey;
+using Model.Schema.TXN;
+using Model.Security.MembershipManagement;
 using Utility;
-using eIVOGo.Resource.Controllers;
+using Uxnet.Com.Security.UseCrypto;
 
 namespace eIVOGo.Controllers
 {
@@ -15,21 +36,17 @@ namespace eIVOGo.Controllers
         // GET: TrackCode
         public ActionResult Index()
         {
-            return View("~/Views/TrackCode/Index.cshtml");
-            //return View();
+            return View();
         }
 
         public ActionResult Inquire(TrackCodeQueryViewModel viewModel)
         {
+
             ViewBag.ViewModel = viewModel;
-
-            var pageIndex = viewModel.PageIndex;
-            var pageSize = viewModel.PageSize;
-
             IQueryable<InvoiceTrackCode> items = models.GetTable<InvoiceTrackCode>()
                 .Where(t => t.Year == viewModel.Year);
 
-            if (viewModel.PeriodNo.HasValue && viewModel.PeriodNo.Value != 0)
+            if(viewModel.PeriodNo.HasValue)
             {
                 items = items.Where(t => t.PeriodNo == viewModel.PeriodNo);
             }
@@ -37,104 +54,19 @@ namespace eIVOGo.Controllers
 
             ViewBag.PageSize = viewModel.PageSize.HasValue && viewModel.PageSize > 0 ? viewModel.PageSize.Value : Uxnet.Web.Properties.Settings.Default.PageSize;
 
-            List<InvoiceTrackCodeItem> datas = new List<InvoiceTrackCodeItem>();
-
-            if (items.Count() > 0)
-            {
-                foreach (var item in items)
-                {
-                    var aa = new InvoiceTrackCodeItem
-                    {
-                        TrackID = item.TrackID,
-                        TrackCode = item.TrackCode,
-                        Year = item.Year,
-                        PeriodNo = item.PeriodNo,
-                        InvoiceType = item.InvoiceType
-                    };
-
-                    datas.Add(aa);
-                }
-                viewModel.Results = datas;
-            }
-
             if (viewModel.PageIndex.HasValue)
             {
                 if (viewModel.Sort != null && viewModel.Sort.Length > 0)
                     ViewBag.Sort = viewModel.Sort.Where(s => s.HasValue).Select(s => s.Value).ToArray();
                 ViewBag.PageIndex = viewModel.PageIndex - 1;
-                return View("~/Views/TrackCode/Module/ItemList.cshtml", viewModel);
-                //return View("~/Views/TrackCode/Module/ItemList.cshtml", JsonConvert.SerializeObject(viewModel));
+                return View("~/Views/TrackCode/Module/ItemList.cshtml", items);
             }
             else
             {
                 ViewBag.PageIndex = 0;
-
-                return View("~/Views/TrackCode/Index.cshtml", viewModel);
-                //return View("~/Views/TrackCode/Module/QueryResult.ascx", items);
+                return View("~/Views/TrackCode/Module/QueryResult.cshtml", items);
             }
         }
-
-        //[HttpPost]
-        //public ActionResult Index(TrackCodeQueryViewModel viewModel)
-        //{
-        //    ViewBag.ViewModel = viewModel;
-
-        //    var pageIndex = viewModel.PageIndex;
-        //    var pageSize = viewModel.PageSize;
-
-        //    IQueryable<InvoiceTrackCode> items = models.GetTable<InvoiceTrackCode>()
-        //        .Where(t => t.Year == viewModel.Year);
-
-        //    if (viewModel.PeriodNo.HasValue)
-        //    {
-        //        items = items.Where(t => t.PeriodNo == viewModel.PeriodNo);
-        //    }
-        //    items = items.OrderBy(t => t.PeriodNo).ThenBy(t => t.TrackCode);
-
-        //    ViewBag.PageSize = viewModel.PageSize.HasValue && viewModel.PageSize > 0 ? viewModel.PageSize.Value : Uxnet.Web.Properties.Settings.Default.PageSize;
-
-        //    List<InvoiceTrackCodeItem> datas = new List<InvoiceTrackCodeItem>();
-
-        //    if (items.Count() > 0)
-        //    {
-        //        foreach (var item in items)
-        //        {
-        //            var aa = new InvoiceTrackCodeItem
-        //            {
-        //                TrackID = item.TrackID,
-        //                TrackCode = item.TrackCode,
-        //                Year = item.Year,
-        //                PeriodNo = item.PeriodNo,
-        //                InvoiceType = item.InvoiceType
-        //            };
-
-        //            datas.Add(aa);
-        //        }
-        //        viewModel.Results = datas;
-        //    }
-
-        //    if (viewModel.PageIndex.HasValue)
-        //    {
-        //        if (viewModel.Sort != null && viewModel.Sort.Length > 0)
-        //            ViewBag.Sort = viewModel.Sort.Where(s => s.HasValue).Select(s => s.Value).ToArray();
-        //        ViewBag.PageIndex = viewModel.PageIndex - 1;
-
-        //        //RedirectToAction("~/Views/TrackCode/ItemList.cshtml","TrackCode", viewModel);
-        //        //return View("~/Views/TrackCode/ItemList.cshtml", viewModel);
-        //        return View("~/Views/TrackCode/Module/ItemList.cshtml", viewModel);
-
-
-        //        //return View("~/Views/TrackCode/Module/ItemList.cshtml", JsonConvert.SerializeObject(viewModel));
-        //    }
-        //    else
-        //    {
-        //        ViewBag.PageIndex = 0;
-
-        //        return View("~/Views/TrackCode/Index.cshtml", viewModel);
-        //        //return View("~/Views/TrackCode/Module/QueryResult.ascx", items);
-        //    }
-
-        //}
 
         public ActionResult EditItem(int? id)
         {
@@ -144,7 +76,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: TrackCode.發票字軌資料錯誤);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "發票字軌資料錯誤!!");
             }
 
             return View("~/Views/TrackCode/Module/EditItem.cshtml", item);
@@ -157,7 +89,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return Json(new { result = false, message = TrackCode.發票字軌資料錯誤 }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = false, message = "發票字軌資料錯誤!!" }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
@@ -172,10 +104,10 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: TrackCode.發票字軌資料錯誤);
+                return View("~/Views/Shared/JsAlert.cshtml", model: "發票字軌資料錯誤!!");
             }
-
-            return View("~/Views/TrackCode/Module/DataItem.ascx", item);
+            
+            return View("~/Views/TrackCode/Module/DataItem.cshtml", item);
 
         }
 
@@ -184,9 +116,9 @@ namespace eIVOGo.Controllers
             ViewBag.ViewModel = viewModel;
 
             viewModel.TrackCode = viewModel.TrackCode.GetEfficientString();
-            if (viewModel.TrackCode == null || !Regex.IsMatch(viewModel.TrackCode, "^[A-Za-z]{2}$"))
+            if (viewModel.TrackCode==null || !Regex.IsMatch(viewModel.TrackCode,"^[A-Za-z]{2}$"))
             {
-                ModelState.AddModelError("TrackCode", TrackCode.字軌應為二位英文字母);
+                ModelState.AddModelError("TrackCode", "字軌應為二位英文字母!!");
             }
 
             var model = models.GetTable<InvoiceTrackCode>().Where(t => t.TrackID == viewModel.TrackID).FirstOrDefault();
@@ -194,11 +126,11 @@ namespace eIVOGo.Controllers
             {
                 if (!viewModel.PeriodNo.HasValue || viewModel.PeriodNo > 6 || viewModel.PeriodNo < 1)
                 {
-                    ModelState.AddModelError("PeriodNo", TrackCode.請選擇期別);
+                    ModelState.AddModelError("PeriodNo", "請選擇期別!!");
                 }
                 else if (!viewModel.Year.HasValue)
                 {
-                    ModelState.AddModelError("Year", TrackCode.請選擇年份);
+                    ModelState.AddModelError("Year", "請選擇年份!!");
                 }
                 else
                 {
@@ -207,7 +139,7 @@ namespace eIVOGo.Controllers
 
                     if (item != null && item.TrackID != viewModel.TrackID)
                     {
-                        ModelState.AddModelError("TrackCode", TrackCode.字軌重複);
+                        ModelState.AddModelError("TrackCode", "字軌重複!!");
                     }
                 }
             }
@@ -240,17 +172,7 @@ namespace eIVOGo.Controllers
 
             models.SubmitChanges();
 
-            InvoiceTrackCodeItem result = new InvoiceTrackCodeItem
-            {
-                InvoiceType = model.InvoiceType,
-                TrackCode = model.TrackCode,
-                PeriodNo = model.PeriodNo,
-                TrackID = model.TrackID,
-                Year = model.Year
-            };
-
-
-            return View("~/Views/TrackCode/Module/DataItem.cshtml", result);
+            return View("~/Views/TrackCode/Module/DataItem.cshtml", model);
 
         }
 
