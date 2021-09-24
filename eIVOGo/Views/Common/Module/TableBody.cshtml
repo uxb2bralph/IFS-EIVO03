@@ -1,28 +1,49 @@
 ﻿@using System.IO
 @using System.Linq.Expressions
 
-@using Business.Helper
-@using DataAccessLayer.basis
-@using eIVOGo.Helper
-@using eIVOGo.Models
 @using eIVOGo.Controllers
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
-@using Model.Security.MembershipManagement
 @using Model.Models.ViewModel
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
 
-@{
+@functions
+{
     ModelStateDictionary _modelState;
-    GenericManager<EIVOEntityDataContext> models;
-    UserProfileMember _profile = Context.GetUser();
+    ModelSource<InvoiceItem> models;
+
+    QueryViewModel _viewModel;
+    IQueryable<dynamic> _model;
+}
+
+@helper showDataRow(Object item)
+{
+    TempData["RowNo"] = (int)TempData["RowNo"] + 1;
+    <tr>
+        @if (_viewModel.RowNumber == true)
+        {
+            <td align="center">@(TempData["RowNo"])</td>
+        }
+        @{
+            Html.RenderPartial("~/Views/Common/Module/TableRow.cshtml", (object)item);
+        }
+    </tr>
+    IHtmlString expansion = TempData["RowExpansion"] as IHtmlString;
+    if (expansion != null)
+    {
+        Write(expansion);
+    }
+}
+
+@{
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _modelState = (ModelStateDictionary)ViewBag.ModelState;
-    models = ViewContext.Controller.DataSource();
-    IQueryable<dynamic> _model = (IQueryable<dynamic>)this.Model;
-    QueryViewModel _viewModel = (QueryViewModel)ViewBag.ViewModel;
+    _viewModel = (QueryViewModel)ViewBag.ViewModel;
+    _model = (IQueryable<dynamic>)this.Model;
+    TempData["RowNo"] = 0;
 }
 @{
     String currentID = $"table{DateTime.Now.Ticks}";
@@ -32,38 +53,76 @@
     String[] columns = (string[])ViewBag.TableColumns;
 
     TempData["SortedItems"] = null;
-}
-@if (_viewModel.SortName != null && _viewModel.SortName.Length > 0)
-{
-    ViewBag.DisplayType = Naming.FieldDisplayType.SortBy;
-    foreach (var c in columns)
+
+    //if (_viewModel.SortName != null && _viewModel.SortName.Length > 0)    //comment this for default sort
     {
-        Html.RenderPartial(c, _model);
+        ViewBag.DisplayType = Naming.FieldDisplayType.SortBy;
+        foreach (var c in columns)
+        {
+            Html.RenderPartial(c, _model);
+        }
     }
 }
+
 @if (TempData["SortedItems"] == null)
 {
-    items = _model
-        .Skip(pageIndex * pageSize)
-        .Take(pageSize);
+    if (_viewModel.Paging == false)
+    {
+        items = _model;
+    }
+    else
+    {
+        items = _model
+            .Skip(pageIndex * pageSize)
+            .Take(pageSize);
+
+    }
 }
 else
 {
-    items = ((IQueryable<dynamic>)TempData["SortedItems"])
-    .Skip(pageIndex * pageSize)
-    .Take(pageSize);
+    if (_viewModel.Paging == false)
+    {
+        items = ((IQueryable<dynamic>)TempData["SortedItems"]);
+    }
+    else
+    {
+        items = ((IQueryable<dynamic>)TempData["SortedItems"])
+            .Skip(pageIndex * pageSize)
+            .Take(pageSize);
+    }
 }
 @{
     ViewBag.DisplayType = Naming.FieldDisplayType.DataItem;
 }
 @foreach (var item in items)
 {
-    Html.RenderPartial("~/Views/Common/Module/TableRow.cshtml", (object)item);
+    if (_viewModel.GroupingQuery == true && item is System.Collections.IEnumerable)
+    {
+        Func<dynamic, HelperResult> renderGrouping = ViewBag.RenderGrouping as Func<dynamic, HelperResult>;
+        TempData["SortedGrouping"] = item;
+        if (renderGrouping != null)
+        {
+            Write(renderGrouping(item));
+        }
+        foreach (var v in (System.Collections.IEnumerable)TempData["SortedGrouping"])
+        {
+            Write(showDataRow(v));
+        }
+    }
+    else
+    {
+        Write(showDataRow(item));
+    }
 }
 @if (ViewBag.CreateNew != null)
 {
     ViewBag.DisplayType = Naming.FieldDisplayType.Create;
-    Html.RenderPartial("~/Views/Common/Module/TableRow.cshtml", (object)ViewBag.CreateNew);
+    <tr>
+        <td></td>
+        @{
+            Html.RenderPartial("~/Views/Common/Module/TableRow.cshtml", (object)ViewBag.CreateNew);
+        }
+    </tr>
 }
 @*<script>
         $(function () {

@@ -64,6 +64,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -118,21 +121,25 @@
     <Compile Include="DataAccessLayer\basis\OracleModalUtility.cs" />
     <Compile Include="DataAccessLayer\basis\DataAccessLayerDataSource.cs" />
     <Compile Include="DataAccessLayer\basis\SQLHelper.cs" />
+    <Compile Include="DataAccessLayer\basis\SqlLogger.cs" />
     <Compile Include="DataAccessLayer\ExtensionMethods.cs" />
     <Compile Include="DataAccessLayer\Models\ModelSource.cs" />
     <Compile Include="DataOperation\QueryBase.cs" />
-    <Compile Include="DocmentServer\DocumentFactory.cs" />
-    <Compile Include="DocmentServer\PdfDocument.cs" />
+    <Compile Include="DocumentServer\DocumentFactory.cs" />
+    <Compile Include="DocumentServer\PdfDocument.cs" />
     <Compile Include="Helper\DefaultTools\PdfUtility.cs" />
     <Compile Include="Helper\DefaultTools\Program.cs" />
     <Compile Include="Helper\DynamicQueryStringParameter.cs" />
+    <Compile Include="Helper\FileIOExtensions.cs" />
     <Compile Include="Helper\JobScheduler.cs" />
     <Compile Include="Helper\LogTextWriter.cs" />
+    <Compile Include="Helper\PersistenceExtensions.cs" />
     <Compile Include="Helper\QueuedProcessHandler.cs" />
     <Compile Include="Helper\UtilityHelper.cs" />
     <Compile Include="Helper\WebClientEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Properties\AppSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs" />
     <Compile Include="Providers\UserMenuManager.cs" />
@@ -150,9 +157,11 @@
     <Compile Include="Security\UseCrypto\X509CrlUtility.cs" />
     <Compile Include="Utility\BigInteger.cs" />
     <Compile Include="Utility\CipherDecipherSrv.cs" />
+    <Compile Include="Utility\CommonLogger\LoggerBase.cs" />
     <Compile Include="Utility\CsvSerializer.cs" />
     <Compile Include="Utility\DBTool.cs" />
     <Compile Include="Utility\ExtensionMethods.cs" />
+    <Compile Include="Utility\FtpClient.cs" />
     <Compile Include="Utility\ILog.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\LogTraceListener.cs" />
@@ -221,6 +230,7 @@
       <LastGenOutput>OracleSP.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings1.Designer.cs</LastGenOutput>

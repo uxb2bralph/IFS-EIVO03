@@ -629,10 +629,10 @@ namespace Utility
         /// 輸入的字串。(string) 
         /// 要驗証的類型，可選擇之類型如下列表。(int)         
         /// 驗証通過則傳回 True，反之則為 False。
-        public static bool ValidateString(String _value, int _kind)
+        public static bool ValidateString(this String _value, int _kind)
         {
             string RegularExpressions = null;
-            CompareValidator cv = new CompareValidator();
+            CompareValidator cv = null;
             switch (_kind)
             {
                 case 1:
@@ -752,7 +752,7 @@ namespace Utility
                     RegularExpressions = "(?=.*[@#$%^&+=])";
                     break;
                 case 30: //驗證日期格式YYYY/MM/DD
-
+                    cv = new CompareValidator();
                     cv.ControlToValidate = _value;
                     cv.Operator = ValidationCompareOperator.DataTypeCheck;
                     cv.Type = ValidationDataType.Date;
@@ -776,6 +776,40 @@ namespace Utility
             }
         }
         #endregion
+
+        /// <summary>
+        /// 驗證Email格式
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public static bool IsEmail(this string email)
+        {
+            var isEmail = Regex.IsMatch(email, @"^([\w-]+\.)*?[\w-]+@[\w-]+\.([\w-]+\.)*?[\w]+$");
+            return isEmail;
+        }
+
+
+        /// <summary>
+        /// 驗證手機格式
+        /// </summary>
+        /// <param name="mobilPhone"></param>
+        /// <returns></returns>
+        public static bool IsMobilPhone(this string mobilPhone)
+        {
+            var isMobilPhone = Regex.IsMatch(mobilPhone, @"^09[0-9]{8}$");
+            return isMobilPhone;
+        }
+
+        /// <summary>
+        /// 驗證電話格式
+        /// </summary>
+        /// <param name="tel"></param>
+        /// <returns></returns>
+        public static bool IsTel(this string tel)
+        {
+            var isTel = Regex.IsMatch(tel, @"^(\d{2,4}-)?\d{6,8}$");
+            return isTel;
+        }
 
 
     }

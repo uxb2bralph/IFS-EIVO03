@@ -33,6 +33,10 @@
         if (recordCount > 0 || ViewBag.CreateNew != null)
         {
             Html.RenderPartial("~/Views/Common/Module/QueryPaging.cshtml", _model);
+            if (_viewModel.ResultAction != null)
+            {
+                Html.RenderPartial((String)_viewModel.ResultAction);
+            }
         }
         else
         {

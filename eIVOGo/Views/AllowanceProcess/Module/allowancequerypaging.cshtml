@@ -1,4 +1,3 @@
-
 @using System.IO
 @using System.Linq.Expressions
 
@@ -12,32 +11,30 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-
-@{ var recordCount = _model.Count();}
- @if (recordCount > 0)
-    {
-        Html.RenderPartial("~/Views/AllowanceProcess/Module/AllowanceItemTable.ascx", _model);
-        _viewModel.RecordCount = recordCount;
-        _viewModel.OnPageCallScript = "uiAllowanceQuery.inquire(page)";
-        Html.RenderPartial("~/Views/Common/Module/Pagination.ascx");
-    }
-
-<script runat="server">
-
-
-    ModelSource<InvoiceItem> models;
-    IQueryable<InvoiceAllowance> _model;
+@{
+    ModelSource<InvoiceItem>
+    models;
+    IQueryable<InvoiceAllowance>
+        _model;
     InquireInvoiceViewModel _viewModel;
 
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+    _model = (IQueryable<InvoiceAllowance>)this.Model;
+}
+@{
+    var recordCount = _model.Count();
+}
+@if (recordCount > 0)
+{
+    Html.RenderPartial("~/Views/AllowanceProcess/Module/AllowanceItemTable.cshtml", _model);
+    _viewModel.RecordCount = recordCount;
+    _viewModel.OnPageCallScript = "uiAllowanceQuery.inquire(page)";
+    Html.RenderPartial("~/Views/Common/Module/Pagination.ascx");
+}
 
-        _model = (IQueryable<InvoiceAllowance>)this.Model;
-    }
 
-</script>
+
+
 

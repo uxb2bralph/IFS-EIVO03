@@ -10,6 +10,7 @@ using System.IO;
 using InvoiceClient.Properties;
 using System.Threading;
 using InvoiceClient.Agent;
+using Model.Resource;
 
 namespace InvoiceClient
 {
@@ -26,7 +27,7 @@ namespace InvoiceClient
 
             if (!String.IsNullOrEmpty(Settings.Default.AppCulture))
             {
-                Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(Settings.Default.AppCulture);
+                Thread.CurrentThread.CurrentUICulture = MessageResources.Culture = System.Globalization.CultureInfo.GetCultureInfo(Settings.Default.AppCulture);
             }
 
             if (Environment.UserInteractive /*|| Debugger.IsAttached*/)

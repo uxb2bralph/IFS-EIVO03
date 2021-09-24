@@ -11,6 +11,7 @@
 <%@ Import Namespace="eIVOGo.Controllers" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
 <%@ Import Namespace="Business.Helper" %>
+<%@ Import Namespace="Model.Helper" %>
 
 <%  if (_model != null)
     {%>

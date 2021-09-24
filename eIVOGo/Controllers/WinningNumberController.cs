@@ -21,7 +21,7 @@ using eIVOGo.Helper;
 using eIVOGo.Models;
 using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
-using eIVOGo.Module.Common;
+
 using eIVOGo.Properties;
 using Model.DataEntity;
 using Model.Helper;
@@ -29,6 +29,7 @@ using Model.InvoiceManagement;
 using Model.Locale;
 using Model.Security.MembershipManagement;
 using Utility;
+using eIVOGo.Module.Common;
 
 namespace eIVOGo.Controllers
 {
@@ -39,7 +40,7 @@ namespace eIVOGo.Controllers
         public ActionResult Index()
         {
             ViewBag.InquiryView = "~/Views/WinningNumber/WinningNoQuery.ascx";
-            return View("~/Views/InvoiceProcess/Index.aspx");
+            return View("~/Views/InvoiceProcess/Index.cshtml");
         }
 
         public ActionResult Inquire(InquireNoIntervalViewModel viewModel)
@@ -108,7 +109,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "中獎號碼資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "中獎號碼資料錯誤!!");
             }
 
             return View("~/Views/WinningNumber/Module/DataItem.ascx", item);
@@ -242,7 +243,9 @@ namespace eIVOGo.Controllers
             {
                 models.GetDataContext().MatchWinningInvoiceNo(viewModel.Year, viewModel.PeriodNo);
 
-                SharedFunction.doSendMaild(new SharedFunction._MailQueryState { setYear = viewModel.Year.Value, setPeriod = viewModel.PeriodNo.Value });
+                var invoiceItems = models.PromptWinningInvoiceForNotification(viewModel.Year ?? -1, viewModel.PeriodNo?? -1);
+                invoiceItems.Select(i => i.InvoiceID).NotifyWinningInvoice(false);
+
                 SharedFunction.doSendSMSMessage(new SharedFunction._MailQueryState { setYear = viewModel.Year.Value, setPeriod = viewModel.PeriodNo.Value });
 
                 ViewBag.Message = "對獎作業完成!!";

@@ -33,18 +33,17 @@ namespace Uxnet.Com.Helper
                 //}
                 ThreadPool.QueueUserWorkItem(t =>
                 {
-                    try
+                    do
                     {
-                        do
+                        try
                         {
                             Process();
-                        } while (Interlocked.Decrement(ref _busyCount) > 0);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Error(ex);
-                    }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error(ex);
+                        }
+                    } while (Interlocked.Decrement(ref _busyCount) > 0);
                 });
             }
 

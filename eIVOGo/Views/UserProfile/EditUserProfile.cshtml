@@ -14,7 +14,7 @@
     ModelStateDictionary _modelState;
     UserProfileViewModel _viewModel;
 
-
+    UserProfile _model = this.Model as UserProfile;
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _modelState = (ModelStateDictionary)ViewBag.ModelState;
     _viewModel = (UserProfileViewModel)ViewBag.ViewModel;

@@ -23,6 +23,11 @@ namespace Model.InvoiceManagement.Validator
         protected IEnumerable<DataRow> _details;
 
         public Organization ExpectedSeller { get; set; }
+        public DateTime ApplyInvoiceDate
+        {
+            get;
+            private set;
+        }
 
         internal InvoiceFieldIndex InvoiceField = new InvoiceFieldIndex { };
         internal class InvoiceFieldIndex
@@ -76,11 +81,12 @@ namespace Model.InvoiceManagement.Validator
 
         }
 
-        public InvoiceDataSetValidator(GenericManager<EIVOEntityDataContext> mgr, Organization owner, Naming.InvoiceProcessType processType) : base(mgr, owner)
+        public InvoiceDataSetValidator(GenericManager<EIVOEntityDataContext> mgr, Organization owner, Naming.InvoiceProcessType processType,DateTime? applyInvoiceDate) : base(mgr, owner)
         {
             this.processType = processType;
             resetFieldIndex();
             initializeDeliveryCheck();
+            ApplyInvoiceDate = applyInvoiceDate ?? DateTime.Now;
         }
 
         void resetFieldIndex()
@@ -149,6 +155,8 @@ namespace Model.InvoiceManagement.Validator
                     DetailsField.Remark = 6;
 
                     break;
+
+                case Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer:
                 case Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer:
                     InvoiceField.Invoice_No = 0;
                     InvoiceField.Invoice_Date = 1;
@@ -234,11 +242,14 @@ namespace Model.InvoiceManagement.Validator
         string PrintMark() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? "N" : GetString(InvoiceField.Print_Mark); }
         string MainRemark() { return GetString(InvoiceField.Main_Remark); }
         DateTime? InvoiceDate() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? null : GetData<DateTime>(InvoiceField.Invoice_Date); }
-        String InvoiceNo() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? null : GetString(InvoiceField.Invoice_No); }
+        String InvoiceNo()
+        {
+            return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE || processType== Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC ? null : GetString(InvoiceField.Invoice_No);
+        }
         String DataID() { return GetString(InvoiceField.Data_ID); }
         DateTime? DataDate() { return GetData<DateTime>(InvoiceField.Data_Date); }
         String SellerID() { return GetString(InvoiceField.Seller_ID); }
-        String BuyerID() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? null : GetString(InvoiceField.Buyer_ID); }
+        String BuyerID() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? "0000000000" : GetString(InvoiceField.Buyer_ID).GetEfficientString() ?? "0000000000"; }
         String BuyerName() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? null : GetString(InvoiceField.Buyer_Name); }
         String CarrierType() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? __CROSS_BORDER_MURCHANT : GetString(InvoiceField.Carrier_Type); }
         String CarrierId1() { return GetString(InvoiceField.Carrier_Id1); }
@@ -409,7 +420,9 @@ namespace Model.InvoiceManagement.Validator
                     {
                         OwnerID = _owner.CompanyID
                     },
-                    ProcessType = (int)Naming.InvoiceProcessType.C0401,
+                    ProcessType = processType== Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer
+                        ? (int)Naming.InvoiceProcessType.A0401
+                        : (int)Naming.InvoiceProcessType.C0401,
                 },
                 DonateMark = _donation == null ? "0" : "1",
                 InvoiceType = InvoiceTypeIndication == Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 
@@ -471,8 +484,10 @@ namespace Model.InvoiceManagement.Validator
                     }
                     else
                     {
-                        trackNoMgr = new TrackNoManager(_mgr, _seller.CompanyID);
-                        if(InvoiceTypeIndication!=Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+                        trackNoMgr = new TrackNoManager(_models, _seller.CompanyID);
+                        trackNoMgr.ApplyInvoiceDate(ApplyInvoiceDate);
+
+                        if (InvoiceTypeIndication != Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
                         {
                             trackNoMgr.ApplyInvoiceTypeIndication(InvoiceTypeIndication);
                         }
@@ -485,7 +500,7 @@ namespace Model.InvoiceManagement.Validator
                     }
                     else
                     {
-                        _newItem.InvoiceDate = DateTime.Now;
+                        _newItem.InvoiceDate = ApplyInvoiceDate;
                     }
 
                 }
@@ -511,19 +526,13 @@ namespace Model.InvoiceManagement.Validator
                     return new Exception(String.Format(MessageResources.AlertInvoiceNumber, InvoiceNo()));
                 }
 
-                _newItem.TrackCode = InvoiceNo().Substring(0, 2);
-                _newItem.No = InvoiceNo().Substring(2);
-                int periodNo = (invoiceDate.Value.Month + 1) / 2;
-
-                if (_seller.OrganizationStatus?.EnableTrackCodeInvoiceNoValidation == true)
+                var ex = checkInvoiceNo(_newItem, invoiceDate.Value, InvoiceNo());
+                if (ex != null)
                 {
-                    if (!_mgr.GetTable<InvoiceTrackCode>().Any(t => t.Year == invoiceDate.Value.Year && t.PeriodNo == periodNo && t.TrackCode == _newItem.TrackCode))
-                    {
-                        return new Exception(String.Format(MessageResources.InvalidTrackCode, InvoiceNo()));
-                    }
+                    return ex;
                 }
 
-                var currentItem = _mgr.GetTable<InvoiceItem>().Where(i => i.TrackCode == _newItem.TrackCode && i.No == _newItem.No
+                var currentItem = _models.GetTable<InvoiceItem>().Where(i => i.TrackCode == _newItem.TrackCode && i.No == _newItem.No
                             && i.InvoiceDate >= periodStart && i.InvoiceDate < periodStart.AddMonths(2)).FirstOrDefault();
 
                 if (currentItem != null)
@@ -542,7 +551,7 @@ namespace Model.InvoiceManagement.Validator
 
                 if (_seller.OrganizationStatus?.EnableTrackCodeInvoiceNoValidation == true)
                 {
-                    TrackNoManager trackMgr = new TrackNoManager(_mgr, _seller.CompanyID);
+                    TrackNoManager trackMgr = new TrackNoManager(_models, _seller.CompanyID);
                     var item = trackMgr.GetAppliedInterval(invoiceDate.Value, _newItem.TrackCode, int.Parse(_newItem.No));
 
                     if (item == null)
@@ -568,7 +577,7 @@ namespace Model.InvoiceManagement.Validator
                 return new Exception(String.Format(MessageResources.AlertDataNumberLimitedLength, DataID()));
             }
 
-            var po = _mgr.GetTable<InvoicePurchaseOrder>().Where(d => d.OrderNo == DataID()
+            var po = _models.GetTable<InvoicePurchaseOrder>().Where(d => d.OrderNo == DataID()
                     && d.InvoiceItem.SellerID == _seller.CompanyID).FirstOrDefault();
             if (po!=null)
             {
@@ -612,7 +621,7 @@ namespace Model.InvoiceManagement.Validator
             if (_seller == null || _seller.ReceiptNo != SellerID())
             {
 
-                _seller = _mgr.GetTable<Organization>().Where(o => o.ReceiptNo == SellerID()).FirstOrDefault();
+                _seller = _models.GetTable<Organization>().Where(o => o.ReceiptNo == SellerID()).FirstOrDefault();
                 if (_seller == null)
                 {
                     return new Exception(String.Format(MessageResources.AlertInvalidSeller, SellerID()));
@@ -620,7 +629,7 @@ namespace Model.InvoiceManagement.Validator
 
                 ExpectedSeller = _seller;
 
-                if (_seller.CompanyID != _owner.CompanyID && !_mgr.GetTable<InvoiceIssuerAgent>().Any(a => a.AgentID == _owner.CompanyID && a.IssuerID == _seller.CompanyID))
+                if (_seller.CompanyID != _owner.CompanyID && !_models.GetTable<InvoiceIssuerAgent>().Any(a => a.AgentID == _owner.CompanyID && a.IssuerID == _seller.CompanyID))
                 {
                     //return new Exception(String.Format(MessageResources.AlertSellerSignature, SellerID()));
                     return new Exception(String.Format(MessageResources.InvalidSellerOrAgent, SellerID(), _owner.ReceiptNo));
@@ -631,7 +640,7 @@ namespace Model.InvoiceManagement.Validator
                     return new Exception(String.Format("開立人已註記停用,開立人統一編號:{0}，TAG:<SellerId />", SellerID()));
                 }
 
-                _isCrossBorderMerchant = _mgr.GetTable<OrganizationCategory>().Any(c => c.CompanyID == _seller.CompanyID && c.CategoryID == (int)Naming.CategoryID.COMP_CROSS_BORDER_MURCHANT);
+                _isCrossBorderMerchant = _models.GetTable<OrganizationCategory>().Any(c => c.CompanyID == _seller.CompanyID && c.CategoryID == (int)Naming.CategoryID.COMP_CROSS_BORDER_MURCHANT);
 
             }
 
@@ -653,11 +662,11 @@ namespace Model.InvoiceManagement.Validator
             {
                 return new Exception(String.Format(MessageResources.InvalidBuyerId, BuyerID()));
             }
-            else if (_seller.OrganizationStatus.EnableBuyerIDValidation == true && !BuyerID().CheckRegno())
+            else if (_seller.OrganizationStatus.EnableBuyerIDValidation != false && !BuyerID().CheckRegno())
             {
                 return new Exception(String.Format(MessageResources.InvalidReceiptNo, BuyerID()));
             }
-            else if (String.IsNullOrEmpty(BuyerName()) || BuyerName().Length > 60)
+            else if (/*String.IsNullOrEmpty(BuyerName()) ||*/ BuyerName().Length > 60)
             {
                 return new Exception(String.Format(MessageResources.InvalidBuyerNameLengthLimit, BuyerName()));
             }
@@ -676,6 +685,109 @@ namespace Model.InvoiceManagement.Validator
             }
 
             return checkBusinessDetails();
+        }
+
+        protected override Exception usePublicCarrier(bool forced)
+        {
+            if (CarrierType() == __CELLPHONE_BARCODE)
+            {
+                if (checkPublicCarrierId(CarrierId1()))
+                {
+                    _carrier = new InvoiceCarrier
+                    {
+                        CarrierType = CarrierType(),
+                        CarrierNo = CarrierId1(),
+                        CarrierNo2 = CarrierId1()
+                    };
+
+                    return null;
+                }
+                else if (checkPublicCarrierId(CarrierId2()))
+                {
+                    _carrier = new InvoiceCarrier
+                    {
+                        CarrierType = CarrierType(),
+                        CarrierNo = CarrierId2(),
+                        CarrierNo2 = CarrierId2()
+                    };
+
+                    return null;
+                }
+                else
+                {
+                    return new Exception(String.Format(MessageResources.InvalidPublicCarrierType, CarrierType(), CarrierId1(), CarrierId2()));
+                }
+            }
+            else if (CarrierType() == __自然人憑證)
+            {
+                if (CarrierId1() != null && Regex.IsMatch(CarrierId1(), "^[A-Z]{2}[0-9]{14}$"))
+                {
+                    _carrier = new InvoiceCarrier
+                    {
+                        CarrierType = CarrierType(),
+                        CarrierNo = CarrierId1(),
+                        CarrierNo2 = CarrierId1()
+                    };
+
+                    return null;
+                }
+                else if (CarrierId2() != null && Regex.IsMatch(CarrierId2(), "^[A-Z]{2}[0-9]{14}$"))
+                {
+                    _carrier = new InvoiceCarrier
+                    {
+                        CarrierType = CarrierType(),
+                        CarrierNo = CarrierId2(),
+                        CarrierNo2 = CarrierId2()
+                    };
+
+                    return null;
+                }
+                else
+                {
+                    return new Exception(String.Format(MessageResources.InvalidPublicCarrierType, CarrierType(), CarrierId1(), CarrierId2()));
+                }
+            }
+            else if (CarrierType() == __CROSS_BORDER_MURCHANT)
+            {
+                if (CarrierId1() != null)
+                {
+                    _carrier = new InvoiceCarrier
+                    {
+                        CarrierType = CarrierType(),
+                        CarrierNo = CarrierId1(),
+                        CarrierNo2 = CarrierId1()
+                    };
+
+                    return null;
+                }
+                else if (CarrierId2() != null)
+                {
+                    _carrier = new InvoiceCarrier
+                    {
+                        CarrierType = CarrierType(),
+                        CarrierNo = CarrierId2(),
+                        CarrierNo2 = CarrierId2()
+                    };
+
+                    return null;
+                }
+                else
+                {
+                    return new Exception(String.Format(MessageResources.InvalidPublicCarrierType, CarrierType(), CarrierId1(), CarrierId2()));
+                }
+            }
+            else
+            {
+                if (forced)
+                {
+                    return new Exception(String.Format(MessageResources.InvalidPublicCarrierType, CarrierType(), CarrierId1(), CarrierId2()));
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
         }
 
         protected override Exception checkPublicCarrier()
@@ -802,13 +914,32 @@ namespace Model.InvoiceManagement.Validator
 
         protected override Exception checkBusinessDetails()
         {
+            Organization buyer = null;
+            BusinessRelationship relationship = null;
+            String buyerName = null;
+            String receiptNo = BuyerID();
+            if (receiptNo == "0000000000")
+            {
+                buyerName = BuyerName().CheckB2CMIGName();
+            }   
+            else
+            {
+                buyer = _models.GetTable<Organization>().Where(o => o.ReceiptNo == receiptNo).FirstOrDefault();
+                if (buyer != null)
+                {
+                    relationship = _models.GetTable<BusinessRelationship>().Where(r => r.MasterID == _seller.CompanyID && r.RelativeID == buyer.CompanyID).FirstOrDefault();
+                }
+
+                buyerName = BuyerName().GetEfficientString() ?? relationship?.CompanyName ?? buyer?.CompanyName ?? null;
+            }
+
             _buyer = new InvoiceBuyer
             {
                 BuyerMark = BuyerMark(),
-                Name = BuyerID() == "0000000000" ? BuyerName().CheckB2CMIGName() : BuyerName(),
+                Name = buyerName,
                 ReceiptNo = BuyerID(),
                 CustomerID = String.IsNullOrEmpty(CustomerID()) ? "" : CustomerID(),
-                CustomerName = BuyerName(),
+                CustomerName = receiptNo != "0000000000" ? buyerName : null,
             };   
             
             if(_isCrossBorderMerchant)
@@ -817,10 +948,10 @@ namespace Model.InvoiceManagement.Validator
                 _buyer.ReceiptNo = "0000000000";
             }
 
-            _buyer.ContactName = ContactName();
-            _buyer.Address = Address();
-            _buyer.Phone = Phone();
-            _buyer.EMail = !String.IsNullOrEmpty(EMail()) ? EMail().Replace(';', ',').Replace('、', ',').Replace(' ', ',') : null;
+            _buyer.ContactName = ContactName().GetEfficientString() ?? buyer?.ContactName ?? null;
+            _buyer.Address = Address().GetEfficientString() ?? relationship?.Addr ?? buyer?.Addr ?? null;
+            _buyer.Phone = Phone().GetEfficientString() ?? relationship?.Phone ?? buyer?.Phone ?? null;
+            _buyer.EMail = EMail().GetEfficientString()?.Replace(';', ',').Replace('、', ',').Replace(' ', ',') ?? relationship?.ContactEmail ?? buyer?.ContactEmail ?? null;
 
             return null;
         }
@@ -905,7 +1036,7 @@ namespace Model.InvoiceManagement.Validator
             _currency = null;
             if (!String.IsNullOrEmpty(Currency()))
             {
-                _currency = _mgr.GetTable<CurrencyType>().Where(c => c.AbbrevName == Currency()).FirstOrDefault();
+                _currency = _models.GetTable<CurrencyType>().Where(c => c.AbbrevName == Currency()).FirstOrDefault();
                 if (_currency == null)
                 {
                     return new Exception($"Invalid currency code：{Currency()}，TAG：<Currency/>");

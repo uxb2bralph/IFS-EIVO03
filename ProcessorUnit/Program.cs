@@ -85,7 +85,7 @@ namespace ProcessorUnit
 
             };
 
-            ExecutorForeverBase chainedProcessor =  new InvoiceExcelRequestForCBEProcessor
+            ExecutorForeverBase chainedProcessor = new InvoiceExcelRequestForCBEProcessor
             {
 
             };
@@ -94,25 +94,31 @@ namespace ProcessorUnit
 
             chainedProcessor.ChainedExecutor = new InvoiceExcelRequestForVACProcessor
             {
-                
+
             };
             chainedProcessor = chainedProcessor.ChainedExecutor;
 
             chainedProcessor.ChainedExecutor = new InvoiceExcelRequestForIssuerProcessor
             {
-                
+
+            };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
+            chainedProcessor.ChainedExecutor = new InvoiceExcelRequestForIssuerA0401Processor
+            {
+
             };
             chainedProcessor = chainedProcessor.ChainedExecutor;
 
             chainedProcessor.ChainedExecutor = new VoidInvoiceExcelRequestProcessor
             {
-                
+
             };
             chainedProcessor = chainedProcessor.ChainedExecutor;
 
             chainedProcessor.ChainedExecutor = new AllowanceExcelRequestProcessor
             {
-                
+
             };
             chainedProcessor = chainedProcessor.ChainedExecutor;
 
@@ -120,6 +126,12 @@ namespace ProcessorUnit
             {
             };
             chainedProcessor = chainedProcessor.ChainedExecutor;
+
+            chainedProcessor.ChainedExecutor = new FullAllowanceExcelRequestProcessor
+            {
+            };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
 
             chainedProcessor.ChainedExecutor = new VoidAllowanceExcelRequestProcessor { };
             chainedProcessor = chainedProcessor.ChainedExecutor;
@@ -133,7 +145,15 @@ namespace ProcessorUnit
             chainedProcessor.ChainedExecutor = new VoidInvoiceJsonRequestProcessor { };
             chainedProcessor = chainedProcessor.ChainedExecutor;
 
+            chainedProcessor.ChainedExecutor = new UnassignedInvoiceNOSettlementProcessor { };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
             processorStart.ReadyToGo();
+
+            //(new InvoiceExcelRequestForIssuerProcessor
+            //{
+
+            //}).ReadyToGo();
 
         }
 

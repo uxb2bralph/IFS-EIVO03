@@ -56,6 +56,7 @@
                 if (show)
                     this.showTab(tabId);
             },
+            onReady: [],
         };
     })();
 

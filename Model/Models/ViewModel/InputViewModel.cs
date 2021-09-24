@@ -41,6 +41,11 @@ namespace Model.Models.ViewModel
         public bool? AdjustTax { get; set; }
     }
 
+    public partial class DataQueryViewModel : QueryViewModel
+    {
+        public String CommandText { get; set; }
+    }
+
     public partial class SellerSelectorViewModel : CommonQueryViewModel
     {
         public bool? SelectAll { get; set; }

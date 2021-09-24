@@ -1,0 +1,27 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@using eIVOGo.Helper
+@{
+    Layout = "~/Views/Common/QueryIndex.cshtml";
+    ViewBag.ActionName = "首頁 > 系統管理維護";
+}
+@section QueryForm
+{
+    <!--交易畫面標題-->
+    @{
+        Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "資料查詢／匯出");
+        Html.RenderPartial("~/Views/InvoiceQuery/DataQuery/DataQuery.cshtml");
+    }
+}
+
+
+
+

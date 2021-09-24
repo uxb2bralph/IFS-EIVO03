@@ -23,10 +23,22 @@ namespace Model.InvoiceManagement.ErrorHandle
 
     public class DuplicateDataNumberException : Exception
     {
+        private InvoicePurchaseOrder currentPO;
+
         public DuplicateDataNumberException() : base() { }
         public DuplicateDataNumberException(string message) : base(message) { }
         public DuplicateDataNumberException(string message, Exception innerException) : base(message, innerException) { }
-        public InvoicePurchaseOrder CurrentPO { get; set; }
+        public InvoicePurchaseOrder CurrentPO
+        {
+            get => currentPO;
+            set
+            {
+                currentPO = value;
+                InvoiceItem invoice = currentPO?.InvoiceItem;
+                _ = invoice?.InvoiceSeller;
+                _ = invoice?.InvoicePurchaseOrder;
+            }
+        }
     }
 
     public class DuplicateAllowanceNumberException : Exception

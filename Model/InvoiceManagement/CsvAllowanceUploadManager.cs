@@ -106,6 +106,7 @@ namespace Model.InvoiceManagement
                     }
                 },
                 AllowanceDate = DateTime.Now,
+                IssueDate = DateTime.Now,
                 InvoiceAllowanceSeller = new InvoiceAllowanceSeller
                 {
                     SellerID = _seller.CompanyID,
@@ -219,7 +220,7 @@ namespace Model.InvoiceManagement
             DateTime dateValue;
             if (DateTime.TryParseExact(column[(int)FieldIndex.日期], "yyyy/M/d", CultureInfo.CurrentCulture, DateTimeStyles.None, out dateValue))
             {
-                item.Entity.AllowanceDate = dateValue;
+                item.Entity.AllowanceDate = item.Entity.IssueDate = dateValue;
             }
             else
             {
@@ -322,7 +323,7 @@ namespace Model.InvoiceManagement
             //}
 
             item.Entity.AllowanceType = invItem.InvoiceBuyer.IsB2C() ? (byte)2 : (byte)1;
-            item.Entity.InvoiceAllowanceDetails[0].InvoiceAllowanceItem.TaxType = invItem.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].TaxType;
+            item.Entity.InvoiceAllowanceDetails[0].InvoiceAllowanceItem.TaxType = invItem.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].TaxType ?? invItem.InvoiceAmountType.TaxType;
             item.Entity.InvoiceAllowanceDetails[0].InvoiceAllowanceItem.ProductItemID = invItem.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].ItemID;
             item.Entity.InvoiceAllowanceDetails[0].InvoiceAllowanceItem.InvoiceNo = invItem.TrackCode + invItem.No;
             if (item.Entity.InvoiceAllowanceDetails[0].InvoiceAllowanceItem.InvoiceDate.HasValue && invItem.InvoiceDate.Value.Date != item.Entity.InvoiceAllowanceDetails[0].InvoiceAllowanceItem.InvoiceDate.Value.Date)

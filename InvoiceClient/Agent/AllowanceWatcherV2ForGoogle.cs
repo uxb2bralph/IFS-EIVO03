@@ -38,14 +38,14 @@ namespace InvoiceClient.Agent
             return count > 0 ? String.Format("{0} Allowance Data Transfer Failure!!\r\n", count) : null;
         }
 
-        protected override void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
                 IEnumerable<String> message = rootInvoiceNo.Select(i => String.Format("Allowance Number:{0}=>{1}", i.Value, i.Description));
                 Logger.Warn(String.Format("Failed to Send an Allowance ({0}) When Uploading Files!!For the Following Reasons:\r\n{1}", fileName, String.Join("\r\n", message.ToArray())));
 
-                AllowanceRoot invoice = docInv.ConvertTo<AllowanceRoot>();
+                AllowanceRoot invoice = docInv.TrimAll().ConvertTo<AllowanceRoot>();
                 AllowanceRoot stored = new AllowanceRoot();
                 AllowanceRoot tryToPDF = new AllowanceRoot
                 {
@@ -55,11 +55,12 @@ namespace InvoiceClient.Agent
                     && (i.StatusCode == null || i.StatusCode != "I01")).Select(i => invoice.Allowance[i.ItemIndex]).ToArray();
 
                 if (stored.Allowance != null && stored.Allowance.Length > 0)
-                    stored.ConvertToXml().Save(Path.Combine(_failedTxnPath, fileName));
+                    stored.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(_failedTxnPath, fileName));
                 if (tryToPDF.Allowance != null && tryToPDF.Allowance.Length > 0)
-                    tryToPDF.ConvertToXml().Save(Path.Combine(_pathToPDF, fileName));
+                    tryToPDF.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(_pathToPDF, fileName));
 
             }
+            return true;
         }
 
         protected override void processError(string message, XmlDocument docInv, string fileName)

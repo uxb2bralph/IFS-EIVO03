@@ -28,14 +28,13 @@ namespace InvoiceClient.Agent
 
         }
 
-        String _invoiceRequest;
         protected override void processFile(String invFile)
         {
             if (!File.Exists(invFile))
                 return;
 
             String fileName = Path.GetFileName(invFile);
-            _invoiceRequest = fileName;
+            String invoiceRequest = fileName;
             String fullPath = Path.Combine(_inProgressPath, fileName);
             try
             {
@@ -59,7 +58,7 @@ namespace InvoiceClient.Agent
             try
             {
                 XmlDocument docInv = prepareInvoiceDocument(fullPath);
-                result = processUpload(null, docInv);
+                result = processUploadCore(null, docInv, invoiceRequest);
 
                 if (result.Result.value != 1)
                 {
@@ -92,12 +91,18 @@ namespace InvoiceClient.Agent
                     String responseName = fileName.Replace("request", "response")
                             .Replace("_OUT_", "_IN_");
                     responseName = Path.Combine(_ResponsedPath, responseName);
-                    auto.ConvertToXml().Save(responseName);
+                    auto.ConvertToXml().SaveDocumentWithEncoding(responseName);
                 }
             }
         }
 
         protected override Root processUpload(eInvoiceService invSvc, XmlDocument docInv)
+        {
+            return processUploadCore(invSvc, docInv, null);
+        }
+
+
+        private Root processUploadCore(eInvoiceService invSvc, XmlDocument docInv,String invoiceRequest)
         {
             DateTime ts = DateTime.Now;
             Console.WriteLine($"start converting xml to object at {ts}");
@@ -113,7 +118,7 @@ namespace InvoiceClient.Agent
                 }
             };
 
-            using (GoogleInvoiceManagerV2 models = new GoogleInvoiceManagerV2 { InvoiceClientID = Settings.Default.ClientID, ChannelID = (int)_channelID, IgnoreDuplicateDataNumberException = true })
+            using (GoogleInvoiceManagerV2 models = new GoogleInvoiceManagerV2 { InvoiceClientID = Settings.Default.ClientID, ChannelID = (int)determineChannelID(invoiceRequest), IgnoreDuplicateDataNumberException = true })
             {
                 ///憑證資料檢查
                 ///
@@ -124,7 +129,7 @@ namespace InvoiceClient.Agent
                     {
                         AgentID = token.CompanyID,
                         SubmitDate = DateTime.Now,
-                        RequestPath = _invoiceRequest,
+                        RequestPath = invoiceRequest,
                         ProcessType = (int)Naming.InvoiceProcessType.C0401_Xml_CBE,
                     };
                     models.GetTable<ProcessRequest>().InsertOnSubmit(requestItem);

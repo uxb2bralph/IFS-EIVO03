@@ -14,7 +14,7 @@ using InvoiceClient.Helper;
 using InvoiceClient.TransferManagement;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using DataContructor.Models;
+using DataConstructor.Models;
 
 namespace InvoiceClient.Agent
 {
@@ -86,9 +86,12 @@ namespace InvoiceClient.Agent
                     {
                         using(CsvHelper.CsvWriter csv = new CsvHelper.CsvWriter(writer,true))
                         {
-                            csv.WriteRecords<InvoicePDFGeneratorForGooglePlayModel>(logItems);
+                            foreach (var item in logItems)
+                            {
+                                csv.WriteRecord<InvoicePDFGeneratorForGooglePlayModel>(item);
+                                csv.NextRecord();
+                            }
                         }
-                        writer.WriteLine();
                     }
 
                     Logger.Debug($"fetch count:{items.Length - 1}");

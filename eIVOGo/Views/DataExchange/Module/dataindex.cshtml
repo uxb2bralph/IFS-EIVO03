@@ -1,30 +1,40 @@
-
-@{ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" }
-@{ Register Src="~/Module/UI/PageAction.ascx" TagName="PageAction" TagPrefix="uc5" }
-@{ Register Src="~/Module/UI/FunctionTitleBar.ascx" TagName="FunctionTitleBar" TagPrefix="uc6" }
-
 @using System.IO
 @using System.Linq.Expressions
 
+@using Business.Helper
+@using Model.Helper
 @using eIVOGo.Helper
 @using eIVOGo.Models
+@using eIVOGo.Controllers
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
 @using Utility
 @using Uxnet.Web.WebUI
-<uc5:PageAction ID="actionItem" runat="server" ItemName="首頁 > 資料管理" />
-<!--交易畫面標題-->
-<uc6:FunctionTitleBar ID="functionTitle" runat="server" ItemName="資料修改" />
+@using Newtonsoft.Json
+@{
+    ModelSource<InvoiceItem> models;
+    ModelStateDictionary _modelState;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+}
+@{ 
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "資料修改");
+    }
 <div id="queryArea" class="border_gray">
     <!--表格 開始-->
     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
         <tr>
-            <th colspan="2" class="Head_style_a">各項資料
+            <th colspan="2" class="Head_style_a">
+                各項資料
             </th>
         </tr>
         <tr>
-            <th>買受人
+            <th>
+                買受人
             </th>
             <td class="tdleft">
                 <input type="button" name="btnBuyerSample" value="下載範本" />&nbsp;&nbsp;
@@ -33,7 +43,8 @@
             </td>
         </tr>
         <tr>
-            <th>發票字軌
+            <th>
+                發票字軌
             </th>
             <td class="tdleft">
                 <input type="button" name="btnTrackCodeSample" value="下載範本" />&nbsp;&nbsp;
@@ -42,7 +53,8 @@
             </td>
         </tr>
         <tr>
-            <th>發票資料
+            <th>
+                發票資料
             </th>
             <td class="tdleft">
                 <input type="button" name="btnImportInvoice" value="立即傳送" />
@@ -132,22 +144,7 @@
                 alert('請選擇檔案!!');
             }
         });
-
-        @if(ViewBag.AlertMessage!=null) {
-        alert('@(HttpUtility.JavaScriptStringEncode(ViewBag.AlertMessage))');
-        }
     });
 </script>
-<script runat="server">
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        this.PreRender += views_dataexchange_module_dataindex_ascx_PreRender;
-    }
 
-    void views_dataexchange_module_dataindex_ascx_PreRender(object sender, EventArgs e)
-    {
-        Page.Form.Enctype = "multipart/form-data";
-    }
-</script>
 

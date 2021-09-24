@@ -10,6 +10,7 @@ using Model.Security.MembershipManagement;
 using Business.Helper;
 using System.Text;
 using Model.Locale;
+using Model.Models.ViewModel;
 
 namespace eIVOGo.Controllers
 {
@@ -27,30 +28,27 @@ namespace eIVOGo.Controllers
                 .Append(new InquireDonatory { ControllerName = "InquireInvoice", ActionName = "ByDonatory", CurrentController = this });
         }
 
-        public ActionResult ReportIndex()
+        public ActionResult ReportIndex(InquireInvoiceViewModel viewModel)
         {
-            ModelSource<InvoiceItem> models = new ModelSource<InvoiceItem>();
-            TempData.SetModelSource(models);
+            ViewBag.ViewModel = viewModel;
             models.Inquiry = createModelInquiry();
 
             return View(models.Inquiry);
         }
 
-        public ActionResult InquireReport()
+        public ActionResult InquireReport(InquireInvoiceViewModel viewModel)
         {
-            ModelSource<InvoiceItem> models = new ModelSource<InvoiceItem>();
-            TempData.SetModelSource(models);
+            ViewBag.ViewModel = viewModel;
             models.Inquiry = createModelInquiry();
             models.BuildQuery();
 
             return View("ReportResult", models.Inquiry);
         }
 
-        public ActionResult ReportGridPage(int index,int size)
+        public ActionResult ReportGridPage(InquireInvoiceViewModel viewModel,int index,int size)
         {
             //ViewBag.HasQuery = true;
-            ModelSource<InvoiceItem> models = new ModelSource<InvoiceItem>();
-            TempData.SetModelSource(models);
+            ViewBag.ViewModel = viewModel;
             models.Inquiry = createModelInquiry();
             models.BuildQuery();
 
@@ -59,15 +57,15 @@ namespace eIVOGo.Controllers
             else
                 index = 0;
 
-            return View(models.Items.OrderByDescending(d => d.InvoiceID)
-                .Skip(index * size).Take(size)
-                .ToArray());
+            var items = models.Items.OrderByDescending(d => d.InvoiceID)
+                .Skip(index * size).Take(size);
+
+            return View(items);
         }
 
-        public ActionResult DownloadCSV()
+        public ActionResult DownloadCSV(InquireInvoiceViewModel viewModel)
         {
-            ModelSource<InvoiceItem> models = new ModelSource<InvoiceItem>();
-            TempData.SetModelSource(models);
+            ViewBag.ViewModel = viewModel;
             models.Inquiry = createModelInquiry();
             models.BuildQuery();
 
@@ -76,13 +74,12 @@ namespace eIVOGo.Controllers
             return View(models.Items);
         }
 
-        public ActionResult PrintResult()
+        public ActionResult PrintResult(InquireInvoiceViewModel viewModel)
         {
-            ModelSource<InvoiceItem> models = new ModelSource<InvoiceItem>();
-            TempData.SetModelSource(models);
+            ViewBag.ViewModel = viewModel;
             models.Inquiry = createModelInquiry();
             models.BuildQuery();
-            models.ResultModel = Naming.DataResultMode.Print;
+            ((ModelSource<InvoiceItem>)models).ResultModel = Naming.DataResultMode.Print;
 
             return View(models.Inquiry);
         }

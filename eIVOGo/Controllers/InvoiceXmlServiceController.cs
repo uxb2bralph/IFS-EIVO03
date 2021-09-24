@@ -152,7 +152,7 @@ namespace eIVOGo.Controllers
             return new EmptyResult { };
         }
         public ActionResult UploadInvoiceAutoTrackNoV2() { var result = (new eInvoiceService()).UploadInvoiceAutoTrackNoV2(uploadData); result.Save(Response.OutputStream); return new EmptyResult { }; }
-        public ActionResult UploadInvoiceCancellation() { var result = (new eInvoiceService()).UploadInvoiceCancellation(uploadData); result.Save(Response.OutputStream); return new EmptyResult { }; }
+        public ActionResult UploadInvoiceCancellation() { var result = (new eInvoiceService()).UploadInvoiceCancellationV2(uploadData); result.Save(Response.OutputStream); return new EmptyResult { }; }
         public ActionResult UploadInvoiceCancellationV2() { var result = (new eInvoiceService()).UploadInvoiceCancellationV2(uploadData); result.Save(Response.OutputStream); return new EmptyResult { }; }
         public ActionResult UploadInvoiceCancellationV2_C0501() { var result = (new eInvoiceService()).UploadInvoiceCancellationV2_C0501(uploadData); result.Save(Response.OutputStream); return new EmptyResult { }; }
         public ActionResult UploadInvoiceEnterprise() { var result = (new eInvoiceService()).UploadInvoiceEnterprise(uploadData); result.Save(Response.OutputStream); return new EmptyResult { }; }

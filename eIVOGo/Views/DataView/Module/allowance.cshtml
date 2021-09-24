@@ -15,7 +15,14 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@{
 
+    ModelSource<InvoiceItem> models;
+    InvoiceAllowance _model;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (InvoiceAllowance)this.Model;
+}
 <div>
     @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "發票折讓證明");}
 
@@ -24,7 +31,8 @@
             <tbody>
                 <tr>
                     <th width="100" nowrap="nowrap">折讓日期</th>
-                    <td class="tdleft">@(_model.AllowanceDate.Value.Year-1911)年@(_model.AllowanceDate.Value.Month)月@(_model.AllowanceDate.Value.Day)日
+                    <td class="tdleft">
+                        @(_model.AllowanceDate.Value.Year-1911)年@(_model.AllowanceDate.Value.Month)月@(_model.AllowanceDate.Value.Day)日
                     </td>
                 </tr>
             </tbody>
@@ -36,15 +44,18 @@
                 </tr>
                 <tr>
                     <th width="100" nowrap="nowrap">統一編號</th>
-                    <td width="30%" class="tdleft">@(_model.InvoiceAllowanceSeller.ReceiptNo)
+                    <td width="30%" class="tdleft">
+                        @(_model.InvoiceAllowanceSeller.ReceiptNo)
                     </td>
                     <th width="100" nowrap="nowrap">名　　稱</th>
-                    <td class="tdleft">@(_model.InvoiceAllowanceSeller.CustomerName)
+                    <td class="tdleft">
+                        @(_model.InvoiceAllowanceSeller.CustomerName)
                     </td>
                 </tr>
                 <tr>
                     <th width="100">營業所在地址</th>
-                    <td colspan="3" class="tdleft">@(_model.InvoiceAllowanceSeller.Address)
+                    <td colspan="3" class="tdleft">
+                        @(_model.InvoiceAllowanceSeller.Address)
                     </td>
                 </tr>
             </tbody>
@@ -67,26 +78,28 @@
                         <th style="white-space:nowrap;">品名</th>
                         <th style="white-space:nowrap;">數量</th>
                         <th style="white-space:nowrap;">單價</th>
-                        <th style="white-space:nowrap;">金額<br/>
-                            (不含稅之進貨額)</th>
+                        <th style="white-space:nowrap;">
+                            金額<br />
+                            (不含稅之進貨額)
+                        </th>
                         <th style="white-space:nowrap;">營業稅額</th>
                     </tr>
                     @foreach (var d in _model.InvoiceAllowanceDetails)
-                        {
-                            var item = d.InvoiceAllowanceItem;
-                    <tr>
-                        <td></td>
-                        <td>@(item.InvoiceDate.Value.Year)</td>
-                        <td>@(item.InvoiceDate.Value.Month)</td>
-                        <td>@(item.InvoiceDate.Value.Day)</td>
-                        <td>@(item.InvoiceNo?.Substring(0,2))</td>
-                        <td>@(item.InvoiceNo?.Substring(2))</td>
-                        <td>@(item.OriginalDescription)</td>
-                        <td style="text-align:right;">@($"{item.Piece:.}")</td>
-                        <td style="text-align:right;">@(String.Format("{0:##,###,###,##0.##}", item.UnitCost))</td>
-                        <td style="text-align:right;">@(String.Format("{0:##,###,###,##0.##}", item.Amount))</td>
-                        <td style="text-align:right;">@(String.Format("{0:##,###,###,##0.##}", item.Tax))</td>
-                    </tr>
+                    {
+                        var item = d.InvoiceAllowanceItem;
+                        <tr>
+                            <td></td>
+                            <td>@(item.InvoiceDate.Value.Year)</td>
+                            <td>@(item.InvoiceDate.Value.Month)</td>
+                            <td>@(item.InvoiceDate.Value.Day)</td>
+                            <td>@(item.InvoiceNo?.Substring(0,2))</td>
+                            <td>@(item.InvoiceNo?.Substring(2))</td>
+                            <td>@(item.OriginalDescription)</td>
+                            <td style="text-align:right;">@($"{item.Piece:.}")</td>
+                            <td style="text-align:right;">@(String.Format("{0:##,###,###,##0.##}", item.UnitCost))</td>
+                            <td style="text-align:right;">@(String.Format("{0:##,###,###,##0.##}", item.Amount))</td>
+                            <td style="text-align:right;">@(String.Format("{0:##,###,###,##0.##}", item.Tax))</td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -95,21 +108,4 @@
     </div>
 </div>
 
-<script runat="server">
 
-    ModelSource<InvoiceItem> models;
-    InvoiceAllowance _model;
-
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (InvoiceAllowance)this.Model;
-    }
-
-
-
-
-</script>

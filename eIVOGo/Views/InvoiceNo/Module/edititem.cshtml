@@ -3,6 +3,7 @@
 @using System.Linq.Expressions
 
 @using Business.Helper
+@using Model.Helper
 @using eIVOGo.Helper
 @using eIVOGo.Models
 @using eIVOGo.Controllers
@@ -24,6 +25,7 @@
     _model = (InvoiceNoInterval)this.Model;
 }
     <tr>
+        <td>@(_model.InvoiceTrackCodeAssignment.Organization.ReceiptNo)</td>
         <td>@(_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.Year)</td>
         <td>@(String.Format("{0:00}-{1:00}月", _model.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo * 2 - 1, _model.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo * 2))</td>
         <td>@(_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode)</td>
@@ -33,6 +35,7 @@
         <td>
             <input type="text" name="EndNo" data-role="edit" placeholder="請輸入配號區間結尾號碼" value="@(String.Format("{0:00000000}",_model.EndNo))" />
         </td>
+        <td></td>
         <td colspan="3">
             <div class="btn-group dropdown" data-toggle="dropdown">
                 <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">請選擇功能</button>

@@ -170,7 +170,7 @@ namespace eIVOGo.Module.SAM
                 int result = doMatchNumer(year,period);
                 if (result > 0)
                 {
-                    SharedFunction. doSendMaild(new SharedFunction._MailQueryState { setYear = year, setPeriod = period });
+                    //SharedFunction. doSendMaild(new SharedFunction._MailQueryState { setYear = year, setPeriod = period });
                     SharedFunction.doSendSMSMessage(new SharedFunction._MailQueryState { setYear = year, setPeriod = period });
                 }
                 string month = period == 1 ? "1~2" : period == 2 ? "3~4" : period == 3 ? "5~6" : period == 4 ? "7~8" : period == 5 ? "9~10" : period == 6 ? "11~12" : "";

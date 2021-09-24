@@ -14,6 +14,7 @@ using InvoiceClient.Helper;
 using InvoiceClient.TransferManagement;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Model.Locale;
 
 namespace InvoiceClient.Agent
 {
@@ -29,11 +30,23 @@ namespace InvoiceClient.Agent
 
         public override String GetSaleInvoices(int? index = null)
         {
+            var ret1 = retrieveFiles(index, Naming.ChannelIDType.ForGoogleOnLine);
+            var ret2 = retrieveFiles(index,Naming.ChannelIDType.ForGoogleTerms);
+            return ret1 ?? ret2;
+        }
+
+        private string retrieveFiles(int? index,Naming.ChannelIDType? channelID = null)
+        {
             WS_Invoice.eInvoiceService invSvc = InvoiceWatcher.CreateInvoiceService();
 
             try
             {
                 Root token = this.CreateMessageToken("下載電子發票PDF");
+                if(channelID.HasValue)
+                {
+                    token.Request.channelIDSpecified = true;
+                    token.Request.channelID = (int)channelID;
+                }
                 String storedPath = Settings.Default.DownloadDataInAbsolutePath ? Settings.Default.DownloadSaleInvoiceFolder : Path.Combine(Settings.Default.InvoiceTxnPath, Settings.Default.DownloadSaleInvoiceFolder);
                 ValueValidity.CheckAndCreatePath(storedPath);
                 //storedPath = ValueValidity.GetDateStylePath(storedPath);
@@ -82,7 +95,16 @@ namespace InvoiceClient.Agent
 
                 if (hasNew)
                 {
-                    String args = String.Format("{0}{1:yyyyMMddHHmmssffff}-{4:0000}-AdWords \"{2}\" \"{3}\"", _prefix_name, DateTime.Now, tmpPath, storedPath, index ?? 0);
+                    String args = String.Format("{0}{1:yyyyMMddHHmmssffff}-{4:0000}-AdWords{5} \"{2}\" \"{3}\"",
+                        _prefix_name,
+                        DateTime.Now,
+                        tmpPath,
+                        storedPath, index ?? 0,
+                        channelID == Naming.ChannelIDType.ForGoogleOnLine
+                        ? "-Online"
+                        : channelID == Naming.ChannelIDType.ForGoogleTerms
+                            ? "-Terms"
+                            : null);
                     {
                         Logger.Info($"zip PDF:{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ZipPDF.bat")} {args}");
                         "ZipPDF.bat".RunBatch(args);

@@ -12,6 +12,7 @@ using Model.BaseManagement;
 using System.Collections.Generic;
 using System.Linq;
 using Model.DataEntity;
+using Model.Locale;
 
 namespace Model.Security.MembershipManagement
 {
@@ -305,6 +306,7 @@ namespace Model.Security.MembershipManagement
             }
             return false;
         }
+
     }
 
 }

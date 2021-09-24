@@ -37,6 +37,7 @@
                       </xs:simpleType>
                     </xs:element>
                     <xs:element name="OriginalInvoiceNumber" type="xs:string" />
+                    <xs:element name="OriginalDataNumber" type="xs:string" />
                     <xs:element name="OriginalSequenceNumber" type="xs:short" minOccurs="0" nillable="true" />
                     <xs:element name="Item" type="xs:string" />
                     <xs:element name="OriginalDescription" type="xs:string" />

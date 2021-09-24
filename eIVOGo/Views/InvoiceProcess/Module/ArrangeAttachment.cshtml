@@ -1,0 +1,106 @@
+
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Controllers
+@using Business.Helper
+@using Model.Helper
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    InvoiceItem _model;
+    InquireInvoiceViewModel _viewModel;
+    String _dialogID = "attach" + DateTime.Now.Ticks;
+
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = this.Model as InvoiceItem;
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+
+}
+<div id="@(_dialogID)">
+
+    <div class="border_gray">
+        <table class="table01 itemList" cellspacing="0" cellpadding="0" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>發票號碼</th>
+                    <th>@($"{_model.TrackCode}{_model.No}")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var attachment in _model.CDS_Document.Attachment)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@($"{VirtualPathUtility.ToAbsolute("~/Helper/DownloadAttachment.ashx")}?keyName={attachment.KeyName}")">@(attachment.KeyName),共@(attachment.GetAttachedPdfPageCount())頁</a>
+                            </td>
+                            <td>
+                                <button type="button" class="btn" onclick="uiInvoiceQuery.removeAttachment('@((new { attachment.KeyName,attachment.DocID }).JsonStringify().EncryptData())');">刪除</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                @{ 
+                    Html.RenderPartial("~/Views/InvoiceProcess/DataAction/UploadAttachment.cshtml",_model?.CDS_Document);
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" style="text-align:center;">
+                        <input type="button" value="關閉" class="btn btnClose" />
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <script>
+        $('#@(_dialogID)').dialog({
+            //autoOpen: false,
+            width: 'auto',
+            resizable: true,
+            //modal: true,
+            title: "<div class='modal-title'><h4><i class='fa fa-clock-o'></i> 管理發票附件檔</h4></div>",
+            buttons: [
+            ],
+            close: function (event, ui) {
+                $('#@(_dialogID)').remove();
+            }
+        });
+
+        $(function () {
+            $global.onAttached = function () {
+                if (uiInvoiceQuery.refreshDataRow) {
+                    uiInvoiceQuery.refreshDataRow();
+                }
+                $('#@(_dialogID)').dialog("close");
+            };
+
+            $('#@(_dialogID) input:button.btnClose').on('click', function () {
+                $global.onAttached();
+            });
+
+            $('#@(_dialogID)').find('input,select,textarea').attr('data-role', '@(_dialogID)');
+        });
+    </script>
+
+</div>
+
+
+

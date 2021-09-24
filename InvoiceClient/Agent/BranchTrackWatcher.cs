@@ -33,19 +33,20 @@ namespace InvoiceClient.Agent
             return count > 0 ? String.Format("{0}筆開立發票配號資料傳送失敗!!\r\n", count) : null;
         }
 
-        protected override void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
                 IEnumerable<String> message = rootInvoiceNo.Select(i => String.Format("開立發票配號號碼:{0}=>{1}", i.Value, i.Description));
                 Logger.Warn(String.Format("在上傳開立發票配號檔({0})時,傳送失敗!!原因如下:\r\n{1}", fileName, String.Join("\r\n", message.ToArray())));
 
-                BranchTrack invoice = docInv.ConvertTo<BranchTrack>();
+                BranchTrack invoice = docInv.TrimAll().ConvertTo<BranchTrack>();
                 BranchTrack stored = new BranchTrack();
                 stored.Main = rootInvoiceNo.Where(i => i.ItemIndexSpecified).Select(i => invoice.Main[i.ItemIndex]).ToArray();
 
-                stored.ConvertToXml().Save(Path.Combine(_failedTxnPath, fileName));
+                stored.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(_failedTxnPath, fileName));
             }
+            return true;
         }
 
         protected override void processError(string message, XmlDocument docInv, string fileName)

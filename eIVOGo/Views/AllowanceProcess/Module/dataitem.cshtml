@@ -1,28 +1,36 @@
 
 @using System.IO
 @using System.Linq.Expressions
-
-@using Model.DataEntity
 @using Model.Locale
 @using Model.DataEntity
+@{
 
-    <td><input name="chkItem" type="checkbox" value="@(_model.AllowanceID)" /></td>
-    <td>@(String.Format("{0:yyyy/MM/dd}",_model.AllowanceDate))</td>
-    <td>@(_model.InvoiceAllowanceBuyer.CustomerID)</td>
-    <td style="white-space:nowrap;">@(_model.InvoiceAllowanceSeller.CustomerName)</td>
-    <td style="white-space:nowrap;">@(_model.InvoiceAllowanceSeller.ReceiptNo)</td>
-    <td style="white-space:nowrap;"><a onclick="showAllowanceModal(@(_model.AllowanceID));">@(_model.AllowanceNumber)</a></td>
-    <td align="right" style="white-space:nowrap;">
-        @{ var amount = _model.InvoiceAllowanceDetails.Sum(d => d.InvoiceAllowanceItem.Amount);}
+    InvoiceAllowance _model;
+    _model = (InvoiceAllowance)this.Model;
+}
+<td><input name="chkItem" type="checkbox" value="@(_model.AllowanceID)" /></td>
+<td>@(String.Format("{0:yyyy/MM/dd}", _model.AllowanceDate))</td>
+<td>@(_model.InvoiceAllowanceBuyer.CustomerID)</td>
+<td style="white-space:nowrap;">@(_model.InvoiceAllowanceSeller.CustomerName)</td>
+<td style="white-space:nowrap;">@(_model.InvoiceAllowanceSeller.ReceiptNo)</td>
+<td style="white-space:nowrap;"><a onclick="showAllowanceModal(@(_model.AllowanceID));">@(_model.AllowanceNumber)</a></td>
+@*<td style="white-space:nowrap;">@(_model.AllowanceNumber.Length > 16 ? $"{_model.AllowanceID:0000000000000000}" : _model.AllowanceNumber)</td>*@
+<td style="white-space:nowrap;">@($"{_model.AllowanceID:0000000000000000}")</td>
+<td align="right" style="white-space:nowrap;">
+    @{ var amount = _model.InvoiceAllowanceDetails.Sum(d => d.InvoiceAllowanceItem.Amount);}
 
-        @(String.Format("{0:0.}",amount))</td>
-    <td align="right" style="white-space:nowrap;">
-        @{ var tax = _model.InvoiceAllowanceDetails.Sum(d => d.InvoiceAllowanceItem.Tax);}
+    @(String.Format("{0:##,###,###,##0.##}", amount))
+</td>
+<td align="right" style="white-space:nowrap;">
+    @{ var tax = _model.InvoiceAllowanceDetails.Sum(d => d.InvoiceAllowanceItem.Tax);}
 
-        @(String.Format("{0:0.}",tax))</td>
-    <td align="right" style="white-space:nowrap;">@(String.Format("{0:0.}",amount+tax))</td>
-    <td style="white-space:nowrap;">@(_model.InvoiceAllowanceBuyer.IsB2C() ? "" : _model.InvoiceAllowanceBuyer.ReceiptNo)</td>
-    <td></td>
+    @(String.Format("{0:##,###,###,##0.##}", tax))
+</td>
+<td align="right" style="white-space:nowrap;">@(String.Format("{0:##,###,###,##0.##}", amount + tax))</td>
+<td>@(_model.CurrencyType?.AbbrevName)</td>
+<td style="white-space:nowrap;">@(_model.InvoiceAllowanceBuyer.IsB2C() ? "" : _model.InvoiceAllowanceBuyer.ReceiptNo)</td>
+<td style="white-space:nowrap;">@(_model.InvoiceAllowanceBuyer.EMail)</td>
+<td></td>
 @*<td>
         <div class="btn-group dropdown" data-toggle="dropdown">
             <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">請選擇功能</button>
@@ -59,13 +67,3 @@
 
 
 
-<script runat="server">
-
-    InvoiceAllowance _model;
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _model = (InvoiceAllowance)this.Model;
-    }
-
-</script>

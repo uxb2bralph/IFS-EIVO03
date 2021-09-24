@@ -8,26 +8,25 @@ using System.Net;
 using System.Text;
 using Model.InvoiceManagement;
 using eIVOGo.Properties;
-using eIVOGo.Module.SAM;
 using Utility;
-using eIVOGo.Module.Common;
+
 using Model.DataEntity;
 using System.Diagnostics;
 using Model.Locale;
 using Uxnet.Com.Helper;
-
+using System.Threading.Tasks;
+using eIVOGo.Module.Common;
 
 namespace eIVOGo.services
 {
     public static class ServiceWorkItem
     {
-        private static bool __IsNotifyingGovPlatform;
-        private static bool __IsNotifyingClientAlert;
         private static DateTime __DailyCheck = DateTime.Today;
-        private static DateTime __UnassignNOCheck;
+
         static int _AssertionDay = 10;
         static TimeSpan _AssertionTime = new TimeSpan(5, 0, 0);
         static TimeSpan _CheckTime = new TimeSpan(9, 0, 0);
+
         static ServiceWorkItem()
         {
             var jobList = JobScheduler.JobList;
@@ -41,7 +40,7 @@ namespace eIVOGo.services
                     {
                         AssemblyQualifiedName = typeof(UnassignNOCheckSchedule).AssemblyQualifiedName,
                         Description = "計算上期空白發票",
-                        Schedule = new DateTime(DateTime.Today.Year, DateTime.Today.Month, _AssertionDay).Add(_AssertionTime)
+                        Schedule = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).Add(_AssertionTime)
                     });
                 }
                 if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(DailyCheckSchedule).AssemblyQualifiedName))
@@ -53,43 +52,17 @@ namespace eIVOGo.services
                         Schedule = new DateTime(DateTime.Today.Year, DateTime.Today.Month, _AssertionDay).Add(_AssertionTime)
                     });
                 }
-                if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(TurnKeyCheckSchedule).AssemblyQualifiedName))
-                {
-                    JobScheduler.AddJob(new JobItem
-                    {
-                        AssemblyQualifiedName = typeof(TurnKeyCheckSchedule).AssemblyQualifiedName,
-                        Description = "每日未上傳大平台統計",
-                        Schedule = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day).Add(_AssertionTime)
-                    });
-                }
+                //if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(TurnKeyCheckSchedule).AssemblyQualifiedName))
+                //{
+                //    JobScheduler.AddJob(new JobItem
+                //    {
+                //        AssemblyQualifiedName = typeof(TurnKeyCheckSchedule).AssemblyQualifiedName,
+                //        Description = "每日未上傳大平台統計",
+                //        Schedule = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day).Add(_AssertionTime)
+                //    });
+                //}
             }
-            ///設定起始執行的時間
-            ///最近的單月3日
-            ///
-            DateTime start = DateTime.Today.AddMonths(0 - ((DateTime.Today.Month + 1) % 2));
-            __UnassignNOCheck = new DateTime(start.Year, start.Month, 3);
-        }
 
-        public static void NotifyGovPlatform()
-        {
-            if (!__IsNotifyingGovPlatform)
-            {
-                if (ThreadSafeCheckEnable(ref __IsNotifyingGovPlatform))
-                {
-                    ThreadPool.QueueUserWorkItem(info =>
-                        {
-                            //doUnassignNOCheck(null,null);
-                            if (Settings.Default.EnableGovPlatform)
-                                GovPlatformFactory.Notify();
-
-                           // doDailyCheck();                            
-                            Thread.Sleep(Settings.Default.GovPlatformAutoTransferInterval);
-                            SystemMonitorControl.BackgroundService.Interrupt();
-                            __IsNotifyingGovPlatform = false;
-                        });
-                }
-
-            }
         }
 
         private static void doDailyCheck()
@@ -112,104 +85,14 @@ namespace eIVOGo.services
             }
         }
 
-        public static void doUnassignNOCheck(string SellerID, string TrackID)
+        public static void doUnassignNOCheck(int sellerID, int trackID)
         {
-            //if (__UnassignNOCheck < DateTime.Now || !string.IsNullOrEmpty(TrackID))
-            //{
-                DateTime prophase;
-                int year, period;
-                using (InvoiceManager mgr = new InvoiceManager())
-                {
-                    IQueryable<InvoiceTrackCode> trackcodes;
-                    if (string.IsNullOrEmpty( TrackID ))
-                    {
-                        prophase = __UnassignNOCheck.AddMonths(-1);
-                        year = prophase.Year;
-                        period = prophase.Month / 2;
-                        ///累進到下次執行時間
-                        ///
-                        __UnassignNOCheck = __UnassignNOCheck.AddMonths(2);
-                        //DateTime prophase = (DateTime.Now.Month % 2).Equals(0) ? DateTime.Now.AddMonths(-2) : DateTime.Now.AddMonths(-1);
-                         trackcodes = mgr.GetTable<InvoiceTrackCode>().Where(t => t.Year.Equals(year) & t.PeriodNo.Equals(period));
-                   
-                    }
-                    else
-                    {
-                        trackcodes = mgr.GetTable<InvoiceTrackCode>().Where(t => t.TrackID.Equals(TrackID));
-                   
-                    }
-
-
-
-
-                     foreach (var tcode in trackcodes)
-                    {
-                        var nointervals = mgr.GetTable<InvoiceNoInterval>().Where(i => i.TrackID.Equals(tcode.TrackID));
-                        if (!string.IsNullOrEmpty(SellerID))
-                            nointervals = nointervals.Where(n => n.SellerID.Equals(SellerID));
-                        foreach (var nointerval in nointervals)
-                        {
-                            var record = mgr.GetTable<UnassignedInvoiceNo>().Where(b => b.TrackID == nointerval.TrackID && b.SellerID == nointerval.SellerID);
-                            if (record.Count() > 0)
-                            {
-                                mgr.GetTable<UnassignedInvoiceNo>().DeleteAllOnSubmit(record);
-
-                            }
-                            List<int> allInvoiceNo = Enumerable.Range(nointerval.StartNo, (nointerval.EndNo - nointerval.StartNo + 1)).ToList();
-                            List<int> usedInvoiceNo;
-                            if (mgr.GetTable<Organization>().Where(o => o.CompanyID == nointerval.SellerID).FirstOrDefault().OrganizationCategory.FirstOrDefault().CategoryID == (int)Naming.B2CCategoryID.店家)
-                                usedInvoiceNo = mgr.GetTable<InvoiceItem>()
-                            .Where(a => a.SellerID.Equals(nointerval.SellerID))
-                            .Where(a => a.TrackCode.Equals(nointerval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode))
-                            .Select(a => Convert.ToInt32(a.No)).ToList();
-                            else
-                                usedInvoiceNo = mgr.GetTable<InvoiceNoAssignment>().Where(a => a.IntervalID.Equals(nointerval.IntervalID)).Select(a => a.InvoiceNo.Value).ToList();
-                            List<int> result = allInvoiceNo.Except(usedInvoiceNo).ToList();
-                            processUnassignNo(nointerval.TrackID, nointerval.SellerID, result, mgr);
-
-                        }
-                    }
-                    mgr.SubmitChanges();
-                }
-            //}
+            using(TrackNoIntervalManager models = new TrackNoIntervalManager())
+            {
+                models.SettleUnassignedInvoiceNO(sellerID, trackID);
+            }
         }
 
-        private static void processUnassignNo(int trackid, int sellerid, List<int> Numbers, InvoiceManager mgr)
-        {
-            //using (InvoiceManager mgr = new InvoiceManager())
-            //{
-                int startIndex = 0;
-                int endIndex = 0;
-                for (int i = 0; i < Numbers.Count; i++)
-                {
-                    if (i.Equals(Numbers.Count - 1))
-                    {
-                        UnassignedInvoiceNo item = new UnassignedInvoiceNo
-                        {
-                            TrackID = trackid,
-                            SellerID = sellerid,
-                            InvoiceBeginNo = Numbers[startIndex],
-                            InvoiceEndNo = Numbers[i]
-                        };
-                        mgr.GetTable<UnassignedInvoiceNo>().InsertOnSubmit(item);
-                    }
-                    else if (Numbers[i + 1] - Numbers[i] > 1)
-                    {
-                        endIndex = i;
-                        UnassignedInvoiceNo item = new UnassignedInvoiceNo
-                        {
-                            TrackID = trackid,
-                            SellerID = sellerid,
-                            InvoiceBeginNo = Numbers[startIndex],
-                            InvoiceEndNo = Numbers[endIndex]
-                        };
-                        mgr.GetTable<UnassignedInvoiceNo>().InsertOnSubmit(item);
-                        startIndex = i + 1;
-                    }
-                }
-               // mgr.SubmitChanges();
-           // }
-        }
         private static void doDailyTurnKeyCheck()
         {
             if (__DailyCheck < DateTime.Now)
@@ -255,11 +138,6 @@ namespace eIVOGo.services
                 }
             }
         }
-        public static void Reset()
-        {
-            __IsNotifyingGovPlatform = false;
-            __IsNotifyingClientAlert = false;
-        }
 
         public static bool ThreadSafeCheckEnable(ref bool token)
         {
@@ -275,34 +153,27 @@ namespace eIVOGo.services
             return bRun;
         }
 
-        public static void NotifyClientResponseTimeoutAlert()
-        {
-            if (!__IsNotifyingClientAlert)
-            {
-                if (ThreadSafeCheckEnable(ref __IsNotifyingClientAlert))
-                {
-                    ThreadPool.QueueUserWorkItem(info =>
-                    {
-
-                        Thread.Sleep(Settings.Default.ClientResponseTimeoutAlertInterval);
-                        SystemMonitorControl.BackgroundService.Interrupt();
-                        __IsNotifyingClientAlert = false;
-                    });
-                }
-            }
-        }
         public class UnassignNOCheckSchedule : IJob
         {
 
             public DateTime GetScheduleToNextTurn(DateTime current)
             {
-                return current.AddMonths(1);
+                return current.AddMonths(2 - ((current.Month / 2 + 1) % 2));
             }
 
             public void DoJob()
             {
-                EIVOPlatformManager mgr = new EIVOPlatformManager();
-                doUnassignNOCheck(null, null);
+                Task.Run(() =>
+                {
+                    DateTime calcPeriod = DateTime.Today.AddMonths(-2);
+                    int year = calcPeriod.Year;
+                    int periodNo = (calcPeriod.Month + 1) / 2;
+
+                    using (TrackNoIntervalManager models = new TrackNoIntervalManager())
+                    {
+                        models.SettleUnassignedInvoiceNO(year, periodNo);
+                    }
+                });
             }
 
             public void Dispose()
@@ -320,7 +191,6 @@ namespace eIVOGo.services
 
             public void DoJob()
             {
-                EIVOPlatformManager mgr = new EIVOPlatformManager();
                 doDailyCheck();
             }
 
@@ -339,7 +209,6 @@ namespace eIVOGo.services
 
             public void DoJob()
             {
-                EIVOPlatformManager mgr = new EIVOPlatformManager();
                 doDailyTurnKeyCheck();
             }
 

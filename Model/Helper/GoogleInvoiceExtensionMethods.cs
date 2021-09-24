@@ -43,7 +43,11 @@ namespace Model.Helper
                                     try
                                     {
                                         if (models.CheckAttachmentFromPool(item))
-                                            EIVOPlatformFactory.NotifyIssuedInvoice(item.InvoiceID, true);
+                                            EIVOPlatformFactory.NotifyIssuedInvoice(new NotifyToProcessID 
+                                            {
+                                                DocID = item.InvoiceID,
+                                                AppendAttachment = true,
+                                            });
                                     }
                                     catch(Exception ex)
                                     {
@@ -173,7 +177,12 @@ namespace Model.Helper
                         attachment.StoredPath = storedPath;
                         models.SubmitChanges();
 
-                        EIVOPlatformFactory.NotifyIssuedInvoice(item.InvoiceID, true);
+                        EIVOPlatformFactory.NotifyIssuedInvoice(new NotifyToProcessID
+                            {
+                                DocID = item.InvoiceID,
+                                AppendAttachment = true
+                            }
+                        );
                     }
                     catch(Exception ex)
                     {

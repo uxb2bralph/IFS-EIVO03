@@ -19,7 +19,7 @@ namespace InvoiceClient.Agent
         public InvoiceWatcherV2(String fullPath)
             : base(fullPath)
         {
-            _retryConnection = Settings.Default.RetryOnConnectException;
+
         }
 
         protected override Root processUpload(WS_Invoice.eInvoiceService invSvc, XmlDocument docInv)

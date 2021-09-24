@@ -9,28 +9,23 @@
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
-
-@section headContent { 
- 
-}
-@{ Html.RenderPartial("~/Views/BusinessRelationship/Module/ImportCounterpartBusiness.ascx");}
-
-<script runat="server">
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
 
     ModelSource<InvoiceItem> models;
     ModelStateDictionary _modelState;
 
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    ViewBag.ActionName = "首頁 > 相對營業人管理-匯入相對營業人資料";
+    //Page.Form.Enctype = "multipart/form-data";
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        ViewBag.ActionName = "首頁 > 相對營業人管理-匯入相對營業人資料";
-        Page.Form.Enctype = "multipart/form-data";
+}
+@section headContent {
 
-    }
+}
+@{ 
+    Html.RenderPartial("~/Views/BusinessRelationship/Module/ImportCounterpartBusiness.cshtml");
+ }
 
 
-
-</script>

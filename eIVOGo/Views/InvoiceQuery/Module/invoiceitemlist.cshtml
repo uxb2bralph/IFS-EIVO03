@@ -81,7 +81,7 @@
                     "title": "含稅金額",
                     "width": "120",
                     "align": "right",
-                    footerTemplate: function () { return "@(String.Format("{0:##,###,###,##0.00}", listTemplate.ModelSource.Items.Sum(i => i.InvoiceAmountType.TotalAmount)))"; }
+                    footerTemplate: function () { return "@(String.Format("{0:##,###,###,##0.##}", listTemplate.ModelSource.Items.Sum(i => i.InvoiceAmountType.TotalAmount)))"; }
 
         },
             {

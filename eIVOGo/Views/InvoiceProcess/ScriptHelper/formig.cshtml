@@ -9,6 +9,10 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@{
+    ModelSource<InvoiceItem> models;
+}
+
 <script>
     $(function () {
         var $postForm;
@@ -67,14 +71,3 @@
         };
     });
 </script>
-<script runat="server">
-
-    ModelSource<InvoiceItem> models;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-    }
-</script>
-

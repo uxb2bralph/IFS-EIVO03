@@ -243,10 +243,16 @@ namespace Model.InvoiceManagement
                         }
 
                         List<InvoiceAllowanceItem> productItems;
-                        if ((ex = allowanceItem.CheckAllowanceItem(this, out productItems)) != null)
+                        InvoiceItem originalInvoice;
+                        if ((ex = allowanceItem.CheckAllowanceItem(this, out productItems,out originalInvoice)) != null)
                         {
                             result.Add(idx, ex);
                             continue;
+                        }
+
+                        if (allowanceDate.AddDays(1) < originalInvoice.InvoiceDate)
+                        {
+                            allowanceDate = originalInvoice.InvoiceDate.Value.AddDays(1);
                         }
 
                         InvoiceAllowance newItem = new InvoiceAllowance
@@ -254,9 +260,13 @@ namespace Model.InvoiceManagement
                             CDS_Document = new CDS_Document
                             {
                                 DocDate = DateTime.Now,
-                                DocType = (int)Naming.DocumentTypeDefinition.E_Allowance
+                                DocType = (int)Naming.DocumentTypeDefinition.E_Allowance,
+                                ProcessType = originalInvoice.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.A0401
+                                    ? (int)Naming.InvoiceProcessType.B0401
+                                    : (int)Naming.InvoiceProcessType.D0401,
                             },
                             AllowanceDate = allowanceDate,
+                            IssueDate = allowanceDate,
                             AllowanceNumber = allowanceItem.AllowanceNumber,
                             AllowanceType = allowanceItem.AllowanceType,
                             BuyerId = allowanceItem.BuyerId,
@@ -303,8 +313,16 @@ namespace Model.InvoiceManagement
                         }
 
                         table.InsertOnSubmit(newItem);
-                        D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
-                        D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                        if (newItem.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.D0401)
+                        {
+                            D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                            D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                        }
+                        else
+                        {
+                            B0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                            B0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                        }
 
                         this.SubmitChanges();
 
@@ -537,6 +555,7 @@ namespace Model.InvoiceManagement
                     TaxType = invItem.TaxType,
                     TotalAmount = invItem.TotalAmount,
                     TotalAmountInChinese = Utility.ValueValidity.MoneyShow(invItem.TotalAmount),
+                    BondedAreaConfirm = invItem.BondedAreaConfirm,
                 },
                 //DonationID = donatory != null ? donatory.CompanyID : (int?)null,
                 InvoiceCarrier = carrier,

@@ -15,6 +15,8 @@ using ModelExtension.DataExchange;
 using Utility;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using eIVOGo.Helper;
+using Model.Models.ViewModel;
 
 namespace eIVOGo.Controllers
 {
@@ -24,19 +26,19 @@ namespace eIVOGo.Controllers
         // GET: DataExchange
         public ActionResult Index()
         {
-            return View();
+            return View("~/Views/DataExchange/Index.cshtml");
         }
 
-        public ActionResult UpdateBuyer()
+        public ActionResult UpdateBuyer(bool? issueNotification)
         {
             var profile = HttpContext.GetUser();
 
             try
             {
-                var xlFile = Request.Files["InvoiceBuyer"];
-                if (xlFile != null)
+                var buyerDetails = Request.Files["InvoiceBuyer"];
+                if (buyerDetails != null)
                 {
-                    using(XLWorkbook xlwb = new XLWorkbook(xlFile.InputStream))
+                    using(XLWorkbook xlwb = new XLWorkbook(buyerDetails.InputStream))
                     {
                         InvoiceBuyerExchange exchange = new InvoiceBuyerExchange();
                         switch ((Naming.RoleID)profile.CurrentUserRole.RoleID)
@@ -56,9 +58,15 @@ namespace eIVOGo.Controllers
                                 break;
                         }
 
+                        if (issueNotification == true && exchange.EffectiveItems.Count > 0)
+                        {
+                            exchange.EffectiveItems.Select(i => i.InvoiceID)
+                                .NotifyIssuedInvoice(true);
+                        }
+
                         String result = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".xslx");
                         xlwb.SaveAs(result);
-                        return File(result, "message/rfc822", "修改買受人資料(回應).xlsx");
+                        return File(result, "application/octet-stream", "修改買受人資料(回應).xlsx");
                     }
                 }
                 ViewBag.AlertMessage = "檔案錯誤!!";
@@ -70,6 +78,20 @@ namespace eIVOGo.Controllers
             }
             return View("Index");
         }
+
+        public ActionResult UpdateBuyerInfo(bool? issueNotification)
+        {
+            ActionResult result = UpdateBuyer(issueNotification);
+            if(result is FilePathResult)
+            {
+                return View("~/Views/DataExchange/Module/UpdateBuyerInfo.cshtml", result);
+            }
+            else
+            {
+                return View("~/Views/Shared/AlertMessage.cshtml");
+            }
+        }
+
 
         public ActionResult UpdateTrackCode()
         {
@@ -120,13 +142,65 @@ namespace eIVOGo.Controllers
             return new EmptyResult { };
         }
 
+        public ActionResult DownloadResource(AttachmentViewModel viewModel)
+        {
+            if (viewModel.KeyID != null)
+            {
+                viewModel = JsonConvert.DeserializeObject<AttachmentViewModel>(viewModel.KeyID.DecryptData());
+            }
+
+            ViewBag.ViewModel = viewModel;
+
+            if (System.IO.File.Exists(viewModel.FileName))
+            {
+                return File(viewModel.FileName,
+                    viewModel.ContentType ?? "application/octet-stream",
+                    viewModel.FileDownloadName ?? Path.GetFileName(viewModel.FileName));
+            }
+            else
+            {
+                return new EmptyResult { };
+            }
+        }
+
+        public ActionResult CheckResource(AttachmentViewModel viewModel)
+        {
+            if (viewModel.KeyID != null)
+            {
+                viewModel = JsonConvert.DeserializeObject<AttachmentViewModel>(viewModel.KeyID.DecryptData());
+            }
+
+            ViewBag.ViewModel = viewModel;
+
+            if (System.IO.File.Exists(viewModel.FileName))
+            {
+                return Json(new { result = true, viewModel.KeyID }, JsonRequestBehavior.AllowGet);
+            }
+            else if (viewModel.TaskID.HasValue)
+            {
+                var taskItem = models.GetTable<ProcessRequest>().Where(p => p.TaskID == viewModel.TaskID).FirstOrDefault();
+                if (taskItem != null)
+                {
+                    if (taskItem.ResponsePath != null && System.IO.File.Exists(taskItem.ResponsePath))
+                    {
+                        return Json(new { result = true, KeyID = viewModel.JsonStringify().EncryptData() }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    return Json(new { result = false, KeyID = viewModel.JsonStringify().EncryptData(), message = taskItem.ExceptionLog?.DataContent }, JsonRequestBehavior.AllowGet);
+
+                }
+            }
+
+            return Json(new { result = false, KeyID = viewModel.JsonStringify().EncryptData() }, JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<ActionResult> ImportInvoice()
         {
             var userProfile = HttpContext.GetUser();
 
             if (Request.Files.Count <= 0)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "請選擇匯入檔!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "請選擇匯入檔!!");
             }
 
             var file = Request.Files[0];
@@ -170,7 +244,7 @@ namespace eIVOGo.Controllers
                     return result;
                 });
 
-            return View("~/Views/DataExchange/Module/ImportInvoiceResult.ascx", items);
+            return View("~/Views/DataExchange/Module/ImportInvoiceResult.cshtml", items);
 
         }
 

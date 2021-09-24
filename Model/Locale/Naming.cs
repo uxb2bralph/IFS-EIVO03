@@ -332,7 +332,14 @@ namespace Model.Locale
             註銷申請待開立 = 1315,
             退回申請待開立 = 1316,
             已接收資料待通知 = 1317,
+            文件準備中 = 1318,
+        }
 
+        public enum NotificationIndication
+        {
+            None = 0,
+            Immediate = 1,
+            Deferred = 2,
         }
 
         public enum B2BInvoiceQueryStepDefinition
@@ -508,11 +515,13 @@ namespace Model.Locale
             C0401_Xlsx = 101,
             C0401_Xlsx_Allocation_ByVAC = 201,
             C0401_Xlsx_Allocation_ByIssuer = 301,
+            A0401_Xlsx_Allocation_ByIssuer = 311,
             C0401_Xlsx_CBE = 401,
             C0401_Xml_CBE = 501,
             C0501_Xlsx = 102,
             D0401_Xlsx = 103,
             D0501_Xlsx = 104,
+            D0401_Full_Xlsx = 113,
             C0401_Json_CBE = 601,
             C0501_Json = 202,
             D0401_Json = 203,
@@ -530,6 +539,8 @@ namespace Model.Locale
             ForAll = 0,
             IssuerOnly = 1,
             SellerOnly = 2,
+            ForGoogleOnLine = 3,
+            ForGoogleTerms = 4,
         }
 
         [Flags]
@@ -562,5 +573,13 @@ namespace Model.Locale
             DESC = -1,
         }
 
-    }
+        public enum GovTurnkeyTransaction
+        {
+            I = 1,  //:(Information) 準備產出MIG傳輸至TurnKey
+            P ,     //:(Passive) 已產出MIG由TurnKey處理中
+            C ,     //:(Committed) TurnKey已將MIG傳送至大平台，小平台已回收MIG備份檔
+            E ,     //:(Error) TurnKey退回MIG
+        }
+
+}
 }

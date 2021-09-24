@@ -311,8 +311,17 @@ namespace Model.Schema.TXN {
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool processIndexSpecified;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public int channelID;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool channelIDSpecified;
+
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]

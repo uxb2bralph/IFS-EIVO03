@@ -17,5 +17,15 @@ namespace Model.DataEntity
             this.CommandTimeout = 86400;
         }
     }
+
+    public partial class ProcessRequestCondition
+    {
+        public enum ConditionType
+        {
+            ImmediateIssueNotice = 1,
+            DeferredIssueNotice = 2,
+            UseLastPeriodTrackCodeNo = 3,
+        }
+    }
          
 }

@@ -23,7 +23,7 @@ namespace InvoiceClient.Agent
     {
         public ProcessTaskResponseInspector()
         {
-            
+
         }
 
         public override void StartUp()

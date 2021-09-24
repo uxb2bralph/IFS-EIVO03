@@ -1,0 +1,53 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+<!--交易畫面標題-->
+@{
+    ModelSource<InvoiceItem> models;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+
+    DataQueryViewModel _viewModel = (DataQueryViewModel)ViewBag.ViewModel;
+
+    _viewModel.UrlAction = Url.Action("InquireData");
+
+}
+
+<div class="border_gray" id="queryArea">
+    <!--表格 開始-->
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
+        <tr>
+            <th colspan="2" class="Head_style_a">
+                查詢條件
+            </th>
+        </tr>
+        <tr>
+            <th>
+                SQL:
+            </th>
+            <td class="tdleft">
+                <textarea name="CommandText" class="form-control" rows="10"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align:center;">
+                <input name="btnQuery" class="btn" type="button" value="查詢" onclick="$inquiryAgent.initQuery = true; $inquiryAgent.inquire();" />
+            </td>
+        </tr>
+    </table>
+    <!--表格 結束-->
+</div>
+
+<script>
+
+
+</script>

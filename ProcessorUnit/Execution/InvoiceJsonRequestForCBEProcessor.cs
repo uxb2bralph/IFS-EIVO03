@@ -82,7 +82,7 @@ namespace ProcessorUnit.Execution
 
                 if (SettingsHelper.Instance.ResponsePath != null)
                 {
-                    responsePath = responsePath.Replace(StorePathExtensions.AppRoot, SettingsHelper.Instance.ResponsePath);
+                    responsePath = responsePath.Replace(Uxnet.Com.Properties.AppSettings.AppRoot, SettingsHelper.Instance.ResponsePath);
                 }
 
                 File.WriteAllText(responsePath, result);

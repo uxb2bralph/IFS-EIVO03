@@ -43,13 +43,13 @@
                 賣方統編：@(_model.InvoiceAllowanceSeller.ReceiptNo)<br />
                 賣方名稱：@(_model.InvoiceAllowanceSeller.CustomerName)<br />
                 發票開立日期：@(String.Format("{0:yyyy-MM-dd}", details.InvoiceDate))<br />
-                @(details.InvoiceNo.Substring(0, 2))-@(details.InvoiceNo.Substring(2))<br />
+                發票號碼：@(details?.InvoiceNo?.Substring(0, 2))-@(details?.InvoiceNo?.Substring(2))<br />
                 買方統編：@(!_model.InvoiceAllowanceBuyer.IsB2C() ? _model.InvoiceAllowanceBuyer.ReceiptNo : null)<br />
                 買方名稱：@(!_model.InvoiceAllowanceBuyer.IsB2C() ? _model.InvoiceAllowanceBuyer.CustomerName : null)<br />
             </p>
             <p></p>
             <p>
-                @{ 
+                @{
                     var items = _model.InvoiceAllowanceDetails.Select(d => d.InvoiceAllowanceItem);
                     bool specialTaxType = false;
                 }
@@ -61,8 +61,8 @@
                         specialTaxType = withTax;
                     }
                     <text>品名：@(d.OriginalDescription)</text><br />
-                    <text>數量：@(String.Format("{0:##,###,###,##0.##}", d.Piece))</text><br />
-                    <br />
+                    <text>數量：@(String.Format("{0:##,###,###,##0.##}", d.Piece)) </text><br />
+                    <text>單價：@(String.Format("{0:##,###,###,##0.##}", d.UnitCost))</text><br />
                     if (withTax)
                     {
                         <text>金額(含稅)：</text>
@@ -74,6 +74,8 @@
                     }
                     @(String.Format("{0:##,###,###,##0.##}", d.Amount))<br />
                     <text>課稅別：@((d.TaxType == (byte)Naming.TaxTypeDefinition.零稅率 || d.TaxType == (byte)Naming.TaxTypeDefinition.零稅率) ? "TZ" : "TX")</text>
+                    <br />
+                    <br />
                 }
             </p>
             <p>

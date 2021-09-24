@@ -14,7 +14,7 @@ using Business.Helper;
 using eIVOGo.Helper;
 using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
-using eIVOGo.Module.Common;
+
 using eIVOGo.Properties;
 using Model.DataEntity;
 using Model.DocumentManagement;

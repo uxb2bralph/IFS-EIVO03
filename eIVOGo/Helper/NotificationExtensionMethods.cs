@@ -15,10 +15,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using DataAccessLayer.basis;
-using eIVOGo.Module.Common;
-using eIVOGo.Module.UI;
 using eIVOGo.Properties;
-using eIVOGo.template;
 using MessagingToolkit.QRCode.Codec;
 using Model.DataEntity;
 using Model.InvoiceManagement;
@@ -43,35 +40,64 @@ namespace eIVOGo.Helper
 
         }
 
-        public static void NotifyIssuedA0401(this IEnumerable<int> docID)
+        public static void NotifyIssuedA0401(this IEnumerable<int> docID,String mailTo = null)
         {
             ThreadPool.QueueUserWorkItem(t =>
             {
                 foreach (var id in docID)
                 {
-                    EIVOPlatformFactory.NotifyIssuedA0401(id);
+                    EIVOPlatformFactory.NotifyIssuedA0401(new NotifyToProcessID
+                    {
+                        DocID = id,
+                        MailTo = mailTo,
+                    });
                 }
             });
         }
 
-        public static void NotifyIssuedInvoice(this IEnumerable<int> docID,bool appendAttachment)
+        public static void NotifyIssuedInvoice(this IEnumerable<int> docID,bool appendAttachment,String mailTo = null)
         {
             ThreadPool.QueueUserWorkItem(state =>
             {
                 foreach (var invoiceID in docID)
                 {
-                    EIVOPlatformFactory.NotifyIssuedInvoice(invoiceID, appendAttachment);
+                    EIVOPlatformFactory.NotifyIssuedInvoice(new NotifyToProcessID
+                    {
+                        DocID = invoiceID,
+                        AppendAttachment = appendAttachment,
+                        MailTo = mailTo,
+                    });
                 }
             });
         }
 
-        public static void NotifyIssuedInvoiceCancellation(this IEnumerable<int> docID)
+        public static void NotifyWinningInvoice(this IEnumerable<int> docID, bool appendAttachment, String mailTo = null)
+        {
+            ThreadPool.QueueUserWorkItem(state =>
+            {
+                foreach (var invoiceID in docID)
+                {
+                    EIVOPlatformFactory.NotifyWinningInvoice(new NotifyToProcessID
+                    {
+                        DocID = invoiceID,
+                        AppendAttachment = appendAttachment,
+                        MailTo = mailTo,
+                    });
+                }
+            });
+        }
+
+        public static void NotifyIssuedInvoiceCancellation(this IEnumerable<int> docID,String mailTo = null)
         {
             ThreadPool.QueueUserWorkItem(t =>
             {
                 foreach (var id in docID)
                 {
-                    EIVOPlatformFactory.NotifyIssuedInvoiceCancellation(id);
+                    EIVOPlatformFactory.NotifyIssuedInvoiceCancellation(new NotifyToProcessID
+                    {
+                        DocID = id,
+                        MailTo = mailTo,
+                    });
                 }
             });
 

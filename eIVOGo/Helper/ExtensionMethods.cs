@@ -15,10 +15,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using DataAccessLayer.basis;
-using eIVOGo.Module.Common;
-using eIVOGo.Module.UI;
+
 using eIVOGo.Properties;
-using eIVOGo.template;
 using MessagingToolkit.QRCode.Codec;
 using Model.DataEntity;
 using Model.Helper;
@@ -30,6 +28,8 @@ using ZXing;
 using ZXing.Common;
 using ZXing.QrCode;
 using ZXing.QrCode.Internal;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 
 namespace eIVOGo.Helper
 {
@@ -43,32 +43,6 @@ namespace eIVOGo.Helper
         public static String[] GetItemSelection(this HttpRequest request)
         {
             return request.Form.GetValues("chkItem");
-        }
-
-        public static void SetTransferMessage(this Page page, String message)
-        {
-            page.Items[base_page.PAGE_ALERT_ITEM_KEY] = message;
-        }
-
-        public static PopupModalMessage AttachWaitingMessage(this Button button, String message, bool autoAttach)
-        {
-            PopupModalMessage modal = button.Page.Items["waitingMsg"] as PopupModalMessage;
-            if (modal == null)
-            {
-                modal = (PopupModalMessage)button.Page.LoadControl("~/Module/UI/PopupModalMessage.ascx");
-                modal.ID = "waitingMsg";
-                modal.InitializeAsUserControl(button.Page);
-                button.Parent.Controls.Add(modal);
-                button.Page.Items["waitingMsg"] = modal;
-                modal.Message = message;
-            }
-
-            if (autoAttach)
-            {
-                button.Attributes["onclick"] = modal.GetClientTriggerScript();
-            }
-
-            return modal;
         }
 
         public static bool OrganizationValueCheck(this Organization dataItem, Control control)
@@ -388,6 +362,29 @@ namespace eIVOGo.Helper
             return null;
         }
 
+        public static String MergePDF(this String pdfOut,IEnumerable<String> pdfSource)
+        {
+            using (PdfDocument outPdf = new PdfDocument())
+            {
+                foreach(var source in pdfSource)
+                {
+                    using (PdfDocument pdf = PdfReader.Open(source, PdfDocumentOpenMode.Import))
+                    {
+                        CopyPages(pdf, outPdf);
+                    }
+                }
+                outPdf.Save(pdfOut);
+            }
+            return pdfOut;
+        }
+
+        private static void CopyPages(PdfDocument from, PdfDocument to)
+        {
+            for (int i = 0; i < from.PageCount; i++)
+            {
+                to.AddPage(from.Pages[i]);
+            }
+        }
 
         public static string RenderViewToString<T>(this Controller controller, string viewPath, T model)
         {
@@ -415,47 +412,6 @@ namespace eIVOGo.Helper
         public static bool CheckSystemCompany(this UserProfileMember _userProfile)
         {
             return _userProfile.CurrentUserRole.OrganizationCategory.CategoryID == (int)Naming.CategoryID.COMP_SYS;
-        }
-
-        public static bool IsSystemAdmin(this UserProfileMember profile)
-        {
-            return profile != null && profile.CurrentUserRole.RoleID == (int)Naming.RoleID.ROLE_SYS;
-        }
-
-        public static bool IsAuthorized(this UserProfileMember profile, Naming.RoleID[] roleID)
-        {
-            return profile != null && roleID.Contains((Naming.RoleID)profile.CurrentUserRole.RoleID);
-        }
-
-        public static UserProfile CreateDefaultUser(this GenericManager<EIVOEntityDataContext> models, Organization item, OrganizationCategory orgaCate)
-        {
-            var userProfile = new UserProfile
-            {
-                PID = item.ReceiptNo,
-                Phone = item.Phone,
-                EMail = item.ContactEmail,
-                Address = item.Addr,
-                UserProfileExtension = new UserProfileExtension
-                {
-                    IDNo = item.ReceiptNo
-                },
-                UserProfileStatus = new UserProfileStatus
-                {
-                    CurrentLevel = (int)Naming.MemberStatusDefinition.Wait_For_Check
-                }
-            };
-
-            models.GetTable<UserRole>().InsertOnSubmit(new UserRole
-            {
-                RoleID = (int)Naming.RoleID.ROLE_SELLER,
-                UserProfile = userProfile,
-                OrganizationCategory = orgaCate
-            });
-
-            models.SubmitChanges();
-            userProfile.SendActivationNotice();
-
-            return userProfile;
         }
 
         public static void SendActivationNotice(this UserProfile userProfile)
@@ -653,7 +609,7 @@ namespace eIVOGo.Helper
             sb.Append(item.TrackCode + item.No);
             sb.Append(String.Format("{0:000}{1:00}{2:00}", item.InvoiceDate.Value.Year - 1911, item.InvoiceDate.Value.Month, item.InvoiceDate.Value.Day));
             sb.Append(item.RandomNo);
-            sb.Append(String.Format("{0:X8}", (int)item.InvoiceAmountType.SalesAmount.Value));
+            sb.Append(String.Format("{0:X8}", (int)(item.InvoiceAmountType.SalesAmount ?? 0)));
             sb.Append(String.Format("{0:X8}", (int)item.InvoiceAmountType.TotalAmount.Value));
             sb.Append(buyer.IsB2C() ? "00000000" : buyer.ReceiptNo);
             sb.Append(item.InvoiceSeller != null ? item.InvoiceSeller.ReceiptNo : item.Organization.ReceiptNo);

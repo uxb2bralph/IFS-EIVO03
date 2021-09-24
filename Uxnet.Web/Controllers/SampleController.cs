@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.basis;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Linq;
@@ -45,6 +46,23 @@ namespace Uxnet.Web.Controllers
         protected GenericManager<T> modelsBase;
         protected bool _dbInstance;
 
+        private String _requestBody;
+        public String RequestBody
+        {
+            get
+            {
+                if (_requestBody == null)
+                {
+                    Request.InputStream.Seek(0, SeekOrigin.Begin);
+                    using (StreamReader reader = new StreamReader(Request.InputStream, Request.ContentEncoding))
+                    {
+                        _requestBody = reader.ReadToEnd();
+                    }
+                }
+                return _requestBody;
+            }
+        }
+
         protected SampleController() : base()
         {
             modelsBase = TempData["__DB_Instance"] as GenericManager<T>;
@@ -64,6 +82,19 @@ namespace Uxnet.Web.Controllers
             base.OnResultExecuted(filterContext);
             if (_dbInstance)
                 modelsBase.Dispose();
+        }
+
+        public TModel BuildViewModel<TModel>(TModel model) 
+            where TModel : class
+        {
+            this.UpdateModel<TModel>(model);
+            return model;
+        }
+
+        public TModel FromJsonBody<TModel>()
+            where TModel : class
+        {
+            return JsonConvert.DeserializeObject<TModel>(RequestBody);
         }
     }
 

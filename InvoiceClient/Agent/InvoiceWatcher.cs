@@ -12,6 +12,9 @@ using System.Threading;
 using Model.Schema.TXN;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Net;
+using Model.Locale;
+using System.Net.Http;
 
 namespace InvoiceClient.Agent
 {
@@ -24,11 +27,21 @@ namespace InvoiceClient.Agent
         protected String _requestPath;
         protected int _busyCount;
         protected bool _retryConnection;
+        protected Naming.ChannelIDType _channelID = Naming.ChannelIDType.ForGoogleOnLine;
+
+        public static readonly HttpClient TheHttpClient = new HttpClient() 
+        {
+            Timeout = Timeout.InfiniteTimeSpan,
+        };
 
         protected static List<String> __FailedTxnPath;
+        static CookieContainer __CookieContainer;
 
         static InvoiceWatcher()
         {
+            __CookieContainer = new CookieContainer();
+            __CookieContainer.Add(new Uri(Settings.Default.InvoiceClient_WS_Invoice_eInvoiceService), new Cookie("cLang", Settings.Default.AppCulture));
+
             if (!Settings.Default.AutoRetry && Settings.Default.EnableFailedUploadAlert)
             {
                 __FailedTxnPath = new List<string>();
@@ -51,6 +64,8 @@ namespace InvoiceClient.Agent
             Logger.Info($"watching path:{fullPath}");
             fullPath.CheckStoredPath();
             _requestPath = fullPath;
+
+            _retryConnection = Settings.Default.RetryOnConnectException;
 
             _watcher = new FileSystemWatcher(fullPath);
             _watcher.Created += new FileSystemEventHandler(_watcher_Created);
@@ -117,7 +132,7 @@ namespace InvoiceClient.Agent
 
         protected virtual void prepareStorePath(String fullPath)
         {
-            _failedTxnPath = fullPath + "(傳送失敗)";
+            _failedTxnPath = fullPath + "(Failure)";
             _failedTxnPath.CheckStoredPath();
 
             if (__FailedTxnPath != null)
@@ -126,7 +141,7 @@ namespace InvoiceClient.Agent
             }
 
 
-            _inProgressPath = Path.Combine(fullPath + "(正在處理)", $"{Process.GetCurrentProcess().Id}");
+            _inProgressPath = Path.Combine(fullPath + "(Processing)", $"{Process.GetCurrentProcess().Id}");
             _inProgressPath.CheckStoredPath();
 
             if(Settings.Default.ResponseUpload)
@@ -184,7 +199,7 @@ namespace InvoiceClient.Agent
                     //{
                     try
                     {
-                        Thread.Sleep(5000);
+                        Thread.Sleep(Settings.Default.WatcherProcessDelayInSeconds * 1000);
                         String[] files;
                         bool done = false;
                         do
@@ -319,7 +334,7 @@ namespace InvoiceClient.Agent
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Logger.Error($"while processing move {invFile} => {fullPath}\r\n{ex}");
                 return;
             }
 
@@ -336,8 +351,14 @@ namespace InvoiceClient.Agent
                 {
                     if (result.Response != null && result.Response.InvoiceNo != null && result.Response.InvoiceNo.Length > 0)
                     {
-                        processError(result.Response.InvoiceNo, docInv, fileName);
-                        storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
+                        if (processError(result.Response.InvoiceNo, docInv, fileName))
+                        {
+                            storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
+                        }
+                        else
+                        {
+                            storeFile(fullPath, Path.Combine(_failedTxnPath, fileName));
+                        }
                     }
                     else
                     {
@@ -352,13 +373,13 @@ namespace InvoiceClient.Agent
             }
             catch(System.Net.WebException ex)
             {
-                Logger.Error(ex);
                 if (_retryConnection)
                 {
                     storeFile(fullPath, Path.Combine(_requestPath, fileName));
                 }
                 else
                 {
+                    Logger.Error(ex);
                     storeFile(fullPath, Path.Combine(_failedTxnPath, fileName));
                 }
             }
@@ -372,7 +393,7 @@ namespace InvoiceClient.Agent
                 if (Settings.Default.ResponseUpload && result.Automation != null)
                 {
                     Automation auto = new Automation { Item = result.Automation };
-                    auto.ConvertToXml().Save(Path.Combine(_ResponsedPath, fileName));
+                    auto.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(_ResponsedPath, fileName));
                 }
             }
 
@@ -404,6 +425,7 @@ namespace InvoiceClient.Agent
             WS_Invoice.eInvoiceService invSvc = new WS_Invoice.eInvoiceService();
             invSvc.Url = Settings.Default.InvoiceClient_WS_Invoice_eInvoiceService;
             invSvc.Timeout = Settings.Default.WS_TimeoutInMilliSeconds;
+            invSvc.CookieContainer = __CookieContainer;
             return invSvc;
         }
 
@@ -429,7 +451,7 @@ namespace InvoiceClient.Agent
             }
         }
 
-        protected virtual void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected virtual bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
@@ -440,8 +462,10 @@ namespace InvoiceClient.Agent
                 InvoiceRoot stored = docInv.TrimAll().ConvertTo<InvoiceRoot>();
                 stored.Invoice = rootInvoiceNo.Where(i=>i.ItemIndexSpecified).Select(i=>invoice.Invoice[i.ItemIndex]).ToArray();
 
-                stored.ConvertToXml().Save(Path.Combine(_failedTxnPath, Path.GetFileName(fileName)));
+                stored.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(_failedTxnPath, Path.GetFileName(fileName)));
             }
+
+            return true;
         }
 
         public virtual String ReportError()

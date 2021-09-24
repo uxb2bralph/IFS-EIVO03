@@ -14,10 +14,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using DataAccessLayer.basis;
-using eIVOGo.Module.Common;
-using eIVOGo.Module.UI;
+
 using eIVOGo.Properties;
-using eIVOGo.template;
 using MessagingToolkit.QRCode.Codec;
 using Model.DataEntity;
 using Model.Locale;

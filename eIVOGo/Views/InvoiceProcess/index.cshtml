@@ -9,31 +9,19 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@using eIVOGo.Helper
-
-@section headContent { 
- 
-}
-@{ Html.RenderPartial(_inquiryView);}
-
-<script runat="server">
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
 
     String _inquiryView;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        ViewBag.ActionName = "首頁 > 發票作業";
-        _inquiryView = (String)ViewBag.InquiryView ?? "~/Views/InvoiceProcess/InvoiceQuery.ascx";
-    }
+    ViewBag.ActionName = "首頁 > 發票作業";
+    _inquiryView = (String)ViewBag.InquiryView ?? "~/Views/InvoiceProcess/InvoiceQuery.cshtml";
+}
 
-    //public override void Dispose()
-    //{
-    //    var models = TempData.GetGenericModelSource();
-    //    if (models != null)
-    //        models.Dispose();
+@section headContent {
 
-    //    base.Dispose();
-    //}
+}
+@section formContent {
+    @{ Html.RenderPartial(_inquiryView);}
 
-</script>
+}

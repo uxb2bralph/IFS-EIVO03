@@ -1,0 +1,37 @@
+﻿
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using Model.Models.ViewModel
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
+
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    QueryViewModel _viewModel = ViewBag.ViewModel as QueryViewModel ?? new QueryViewModel { };
+
+}
+
+@section headContent
+{
+    @{
+        Html.RenderPartial("~/Views/Shared/DataTableStyle.cshtml");
+        Html.RenderPartial("~/Views/Shared/DataTableScript.cshtml");
+    }
+
+    @RenderSection("headContent", false)
+}
+
+@RenderBody()
+

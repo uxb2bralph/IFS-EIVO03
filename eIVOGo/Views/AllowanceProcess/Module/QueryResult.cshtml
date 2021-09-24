@@ -24,13 +24,13 @@
 
     _model = (IQueryable<InvoiceAllowance>)this.Model;
 }
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "查詢結果");}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");}
 
 <div class="border_gray" style="overflow-x: auto;">
     @{ var recordCount = _model.Count();}
     @if (recordCount > 0)
     {
-        Html.RenderPartial("~/Views/AllowanceProcess/Module/AllowanceQueryPaging.ascx", _model);
+        Html.RenderPartial("~/Views/AllowanceProcess/Module/AllowanceQueryPaging.cshtml", _model);
         Html.RenderPartial("~/Views/AllowanceProcess/Module/ResultAction.cshtml", _model);
     }
     else

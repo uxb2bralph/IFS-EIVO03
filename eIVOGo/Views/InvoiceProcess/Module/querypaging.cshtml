@@ -1,7 +1,3 @@
-
-@{ Register Src="~/Module/Common/PagingControl.ascx" TagName="PagingControl" TagPrefix="uc2" }
-@{ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" }
-@{ Register Src="~/Module/Common/ActionHandler.ascx" TagName="ActionHandler" TagPrefix="uc1" }
 @using System.IO
 @using System.Linq.Expressions
 
@@ -15,17 +11,30 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@{
 
-@{ var recordCount = _model.Count();}
- @if (recordCount > 0)
+    ModelSource<InvoiceItem> models;
+    IQueryable<InvoiceItem> _model;
+    InquireInvoiceViewModel _viewModel;
+
+
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+
+    _model = (IQueryable<InvoiceItem>)this.Model;
+}
+@{
+    var recordCount = _model.Count();
+    if (recordCount > 0)
     {
-    @{ Html.RenderPartial("~/Views/InvoiceProcess/Module/ItemTable.ascx", _model);}
+        Html.RenderPartial("~/Views/InvoiceProcess/Module/ItemTable.cshtml", _model);
 
-    <input type="hidden" name="pageIndex" />
-    <nav aria-label="Page navigation">
-        <ul class="pagination" id="itemPagination"></ul>
-    </nav>
-    <script>
+        <input type="hidden" name="pageIndex" />
+        <nav aria-label="Page navigation">
+            <ul class="pagination" id="itemPagination"></ul>
+        </nav>
+        <script>
         $(function () {
             var obj = $('#itemPagination').twbsPagination({
                 totalPages: @((recordCount + _viewModel.PageSize - 1) / _viewModel.PageSize),
@@ -41,25 +50,11 @@
                         }
                     });
                 });
-    </script>
+        </script>
+    }
 }
 
-<script runat="server">
 
 
-    ModelSource<InvoiceItem> models;
-    IQueryable<InvoiceItem> _model;
-    InquireInvoiceViewModel _viewModel;
 
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-
-        _model = (IQueryable<InvoiceItem>)this.Model;
-    }
-
-</script>
 

@@ -34,19 +34,20 @@ namespace InvoiceClient.Agent
             return count > 0 ? String.Format("{0}筆作廢發票折讓資料傳送失敗!!\r\n", count) : null;
         }
 
-        protected override void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
                 IEnumerable<String> message = rootInvoiceNo.Select(i => String.Format("作廢折讓證明單號碼:{0}=>{1}", i.Value, i.Description));
                 Logger.Warn(String.Format("在上傳作廢折讓證明單檔({0})時,傳送失敗!!原因如下:\r\n{1}", fileName, String.Join("\r\n", message.ToArray())));
 
-                CancelAllowanceRoot invoice = docInv.ConvertTo<CancelAllowanceRoot>();
+                CancelAllowanceRoot invoice = docInv.TrimAll().ConvertTo<CancelAllowanceRoot>();
                 CancelAllowanceRoot stored = new CancelAllowanceRoot();
                 stored.CancelAllowance = rootInvoiceNo.Where(i => i.ItemIndexSpecified).Select(i => invoice.CancelAllowance[i.ItemIndex]).ToArray();
 
-                stored.ConvertToXml().Save(Path.Combine(_failedTxnPath, String.Format("{0}-{1:yyyyMMddHHmmssfff}.xml", Path.GetFileName(fileName), DateTime.Now)));
+                stored.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(_failedTxnPath, String.Format("{0}-{1:yyyyMMddHHmmssfff}.xml", Path.GetFileNameWithoutExtension(fileName), DateTime.Now)));
             }
+            return true;
         }
 
         protected override void processError(string message, XmlDocument docInv, string fileName)

@@ -15,8 +15,12 @@
 @using Model.Locale
 @using Utility
 @using Business.Helper
+@using Model.Helper
 @using Uxnet.Web.WebUI
-
+@{
+    RenderStyleViewModel _viewModel;
+    _viewModel = (RenderStyleViewModel)ViewBag.ViewModel;
+}
 <div>
     <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.B0401
             ? "PrintB0401AsPDF"
@@ -28,14 +32,6 @@
 </div>
 
 
-<script runat="server">
 
-    RenderStyleViewModel _viewModel;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _viewModel = (RenderStyleViewModel)ViewBag.ViewModel;
-    }
 
-</script>

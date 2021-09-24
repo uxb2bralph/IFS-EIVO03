@@ -31,6 +31,12 @@ namespace Model.InvoiceManagement
             set;
         }
 
+        public static String DefaultUserCarrierType
+        {
+            get;
+            set;
+        } = Settings.Default.DefaultUserCarrierType;
+
         public static Func<String, SignedCms> SignCms
         {
             get;
@@ -44,7 +50,13 @@ namespace Model.InvoiceManagement
         }
 
 
-        public static Action<int, bool> NotifyIssuedInvoice
+        public static Action<NotifyToProcessID> NotifyIssuedInvoice
+        {
+            get;
+            set;
+        }
+
+        public static Action<NotifyToProcessID> NotifyWinningInvoice
         {
             get;
             set;
@@ -57,7 +69,7 @@ namespace Model.InvoiceManagement
         }
 
 
-        public static Action<int> NotifyIssuedInvoiceCancellation
+        public static Action<NotifyToProcessID> NotifyIssuedInvoiceCancellation
         {
             get;
             set;
@@ -70,7 +82,7 @@ namespace Model.InvoiceManagement
         }
 
 
-        public static Action<int> NotifyIssuedA0401
+        public static Action<NotifyToProcessID> NotifyIssuedA0401
         {
             get;
             set;

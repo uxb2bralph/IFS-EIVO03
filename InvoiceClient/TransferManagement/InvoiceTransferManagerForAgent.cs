@@ -8,6 +8,9 @@ using System.Text;
 using InvoiceClient.Properties;
 using Model.Schema.EIVO;
 using InvoiceClient.Agent;
+using Model.Locale;
+using Utility;
+using Newtonsoft.Json;
 
 namespace InvoiceClient.TransferManagement
 {
@@ -19,8 +22,21 @@ namespace InvoiceClient.TransferManagement
         private AllowanceWatcher _AllowanceWatcher;
         private AllowanceCancellationWatcher _AllowanceCancellationWatcher;
         private InvoiceEnterpriseWatcher _EnterpriseWatcher;
+        private LocalSettings _Settings;
 
-
+        public InvoiceTransferManagerForAgent()
+        {
+            string path = Path.Combine(Logger.LogPath, "InvoiceTransferManagerForAgent.json");
+            if (File.Exists(path))
+            {
+                this._Settings = JsonConvert.DeserializeObject<LocalSettings>(File.ReadAllText(path));
+            }
+            else
+            {
+                this._Settings = new LocalSettings();
+            }
+            File.WriteAllText(path, JsonConvert.SerializeObject((object)this._Settings));
+        }
 
         public void EnableAll(String fullPath)
         {
@@ -108,11 +124,15 @@ namespace InvoiceClient.TransferManagement
 
         }
 
-
-
         public Type UIConfigType
         {
             get { return typeof(InvoiceClient.MainContent.B2CInvoiceCenterConfig); }
         }
+
+        private class LocalSettings
+        {
+            public Naming.InvoiceProcessType? PreferredProcessType { get; set; }
+        }
+
     }
 }

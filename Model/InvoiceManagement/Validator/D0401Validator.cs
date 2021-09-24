@@ -142,9 +142,9 @@ namespace Model.InvoiceManagement.Validator
             _productItems = new List<InvoiceAllowanceItem>();
             var invTable = models.GetTable<InvoiceItem>();
 
+            InvoiceItem originalInvoice = null;
             foreach (var i in _allowanceItem.Details)
             {
-                InvoiceItem originalInvoice = null;
 
                 if (i.OriginalInvoiceNumber != null && i.OriginalInvoiceNumber.Length == 10)
                 {
@@ -164,13 +164,9 @@ namespace Model.InvoiceManagement.Validator
                     return new Exception(MessageResources.InvalidAllowance_InvoiceHasBeenCanceled);
                 }
 
-
-                var allowanceDate = String.Format("{0:yyyy/MM/dd}", i.OriginalInvoiceDate);
-                var InvDate = String.Format("{0:yyyy/MM/dd}", originalInvoice.InvoiceDate);
-
-                if (allowanceDate.ToString() != InvDate)
+                if (i.OriginalInvoiceDate != String.Format("{0:yyyyMMdd}", originalInvoice.InvoiceDate))
                 {
-                    return new Exception(String.Format(MessageResources.AlertAllowance_InvoiceDate, InvDate, allowanceDate));
+                    return new Exception(String.Format(MessageResources.AlertAllowance_InvoiceDate, $"{originalInvoice.InvoiceDate:yyyyMMdd}", i.OriginalInvoiceDate));
                 }
 
 
@@ -274,7 +270,7 @@ namespace Model.InvoiceManagement.Validator
                 SellerId = _allowanceItem.Main?.Seller?.Identifier,
                 TaxAmount = _allowanceItem.Amount?.TaxAmount,
                 TotalAmount = _allowanceItem.Amount?.TotalAmount,
-                CurrencyID = _currency?.CurrencyID,
+                CurrencyID = _currency?.CurrencyID ?? originalInvoice.InvoiceAmountType.CurrencyID,
                 //InvoiceID =  invTable.Where(i=>i.TrackCode + i.No == item.AllowanceItem.Select(a=>a.OriginalInvoiceNumber).FirstOrDefault()).Select(i=>i.InvoiceID).FirstOrDefault(),
                 InvoiceAllowanceBuyer = new InvoiceAllowanceBuyer
                 {

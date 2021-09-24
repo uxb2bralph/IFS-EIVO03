@@ -90,7 +90,7 @@ namespace InvoiceClient.Agent
                     String responseName = fileName.Replace("request", "response")
                             .Replace("_OUT_", "_IN_");
                     responseName = Path.Combine(_ResponsedPath, responseName);
-                    auto.ConvertToXml().Save(responseName);
+                    auto.ConvertToXml().SaveDocumentWithEncoding(responseName);
                 }
             }
         }

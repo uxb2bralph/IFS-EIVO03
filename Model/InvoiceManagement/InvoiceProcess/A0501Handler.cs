@@ -54,7 +54,7 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     var invoiceItem = item.CDS_Document.DerivedDocument.ParentDocument.InvoiceItem;
                     try
                     {
-                        var fileName = Path.Combine(Settings.Default.A0501Outbound, $"A0501-{DateTime.Now:yyyyMMddHHmmssf}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
+                        var fileName = Path.Combine(Settings.Default.A0501Outbound, $"A0501-{invoiceItem.InvoiceID}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
                         invoiceItem.CreateA0501().ConvertToXml().Save(fileName);
 
                         item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
@@ -94,7 +94,10 @@ namespace Model.InvoiceManagement.InvoiceProcess
                 try
                 {
 
-                    EIVOPlatformFactory.NotifyIssuedInvoiceCancellation(item.DocID);
+                    EIVOPlatformFactory.NotifyIssuedInvoiceCancellation(new NotifyToProcessID
+                    {
+                        DocID = item.DocID,
+                    });
 
                     models.ExecuteCommand("delete [proc].A0501DispatchQueue where DocID={0} and StepID={1}",
                         item.DocID, item.StepID);

@@ -32,8 +32,11 @@ namespace Model.InvoiceManagement
             if (item != null && item.Invoice != null && item.Invoice.Length > 0)
             {
                 List<InvoiceItem> eventItems = new List<InvoiceItem>();
-                InvoiceRootFormatValidator formatValidator = new InvoiceRootFormatValidator();
-                InvoiceRootInvoiceValidator validator = new InvoiceRootInvoiceValidator(this, owner.Organization);
+                InvoiceRootFormatValidator formatValidator = new InvoiceRootFormatValidator(this, owner.Organization);
+                InvoiceRootInvoiceValidator validator = new InvoiceRootInvoiceValidator(this, owner.Organization)
+                {
+                    ProcessType = this.ProcessType,
+                };
 
                 //Organization donatory = owner.Organization.InvoiceWelfareAgencies.Select(w => w.WelfareAgency.Organization).FirstOrDefault();
 
@@ -47,7 +50,7 @@ namespace Model.InvoiceManagement
                         if ((ex = validator.Validate(invItem)) != null)
                         {
 
-                            var errors = formatValidator.Validate(invItem);
+                            var errors = formatValidator.ValidateAll(invItem);
                             if (errors.Count > 0)
                             {
                                 result.Add(idx, new Exception(ex.Message + ";\r\n" + String.Join(";\r\n", errors.Where(x => x.Message != ex.Message)
@@ -76,8 +79,37 @@ namespace Model.InvoiceManagement
                         if (!validator.DuplicateProcess)
                         {
                             this.EntityList.InsertOnSubmit(newItem);
-                            C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
-                            C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+
+                            if (this.ProcessType == Naming.InvoiceProcessType.A0401)
+                            {
+                                A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                                switch((Naming.NotificationIndication?)item.Notification)
+                                {
+                                    case Naming.NotificationIndication.None:
+                                        break;
+                                    case Naming.NotificationIndication.Deferred:
+                                        A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.文件準備中);
+                                        break;
+                                    default:
+                                        A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                                switch ((Naming.NotificationIndication?)item.Notification)
+                                {
+                                    case Naming.NotificationIndication.None:
+                                        break;
+                                    case Naming.NotificationIndication.Deferred:
+                                        C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.文件準備中);
+                                        break;
+                                    default:
+                                        C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                                        break;
+                                }
+                            }
 
                             this.SubmitChanges();
                         }
@@ -112,8 +144,11 @@ namespace Model.InvoiceManagement
                 EventItems = null;
                 List<InvoiceItem> eventItems = new List<InvoiceItem>();
 
-                InvoiceRootFormatValidator formatValidator = new InvoiceRootFormatValidator();
-                InvoiceRootInvoiceValidator validator = new InvoiceRootInvoiceValidator(this, owner.Organization);
+                InvoiceRootFormatValidator formatValidator = new InvoiceRootFormatValidator(this, owner.Organization);
+                InvoiceRootInvoiceValidator validator = new InvoiceRootInvoiceValidator(this, owner.Organization)
+                {
+                    ProcessType = this.ProcessType,
+                };
                 int invSeq = 0;
                 void proc(InvoiceRootInvoice[] items,Naming.InvoiceTypeDefinition indication)
                 {
@@ -138,7 +173,7 @@ namespace Model.InvoiceManagement
                                     }
                                 }
 
-                                var errors = formatValidator.Validate(invItem);
+                                var errors = formatValidator.ValidateAll(invItem);
                                 if (errors.Count > 0)
                                 {
                                     result.Add(invSeq, new Exception(ex.Message + ";\r\n" + String.Join(";\r\n", errors.Where(x => x.Message != ex.Message)
@@ -153,8 +188,36 @@ namespace Model.InvoiceManagement
 
                             InvoiceItem newItem = validator.InvoiceItem;
 
-                            C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
-                            C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                            if (this.ProcessType == Naming.InvoiceProcessType.A0401)
+                            {
+                                A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                                switch ((Naming.NotificationIndication?)item.Notification)
+                                {
+                                    case Naming.NotificationIndication.None:
+                                        break;
+                                    case Naming.NotificationIndication.Deferred:
+                                        A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.文件準備中);
+                                        break;
+                                    default:
+                                        A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                                switch ((Naming.NotificationIndication?)item.Notification)
+                                {
+                                    case Naming.NotificationIndication.None:
+                                        break;
+                                    case Naming.NotificationIndication.Deferred:
+                                        C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.文件準備中);
+                                        break;
+                                    default:
+                                        C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                                        break;
+                                }
+                            }
 
                             this.EntityList.InsertOnSubmit(newItem);
                             this.SubmitChanges();
@@ -222,8 +285,16 @@ namespace Model.InvoiceManagement
                         InvoiceAllowance newItem = validator.Allowance;
 
                         table.InsertOnSubmit(newItem);
-                        D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
-                        D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                        if (newItem.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.B0401)
+                        {
+                            B0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                            B0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                        }
+                        else
+                        {
+                            D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                            D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                        }
 
                         this.SubmitChanges();
 

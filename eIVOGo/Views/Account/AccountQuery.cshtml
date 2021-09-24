@@ -42,7 +42,7 @@
             </th>
             <td colspan="3" class="tdleft">
                 @{
-                    Html.RenderAction("SellerSelector", "DataFlow");
+                    Html.RenderAction("SellerSelector", "DataFlow",new CommonQueryViewModel { FieldName = "EncSellerID", Encrypt = true });
                 }
             </td>
         </tr>
@@ -60,7 +60,7 @@
             </th>
             <td class="tdleft">
                 <input name="PID" type="text" value="@(Request["PID"])" class="form-control" />
-                <input name="RoleID" type="hidden" value="@(_viewModel.RoleID)" />
+                <input name="RoleID" type="hidden" value="@((int?)_viewModel.RoleID)" />
             </td>
             <th nowrap="nowrap" width="120">
                 姓名

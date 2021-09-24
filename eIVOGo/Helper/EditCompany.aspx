@@ -3,6 +3,7 @@
 <%@ Register Src="~/Module/Common/DataModelCache.ascx" TagPrefix="uc1" TagName="DataModelCache" %>
 <%@ Import Namespace="eIVOGo.Helper" %>
 <%@ Import Namespace="Utility" %>
+<%@ Import Namespace="Model.Helper" %>
 <%  if (_profile.IsSystemAdmin())
     { %>
 <iframe src="<%= VirtualPathUtility.ToAbsolute("~/Helper/RenderContent.aspx?control=~/Module/SAM/EditCompany.ascx") %>" width="100%" height="100%"></iframe>

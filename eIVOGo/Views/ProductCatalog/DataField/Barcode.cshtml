@@ -2,6 +2,7 @@
 @using System.Linq.Expressions
 
 @using Business.Helper
+@using Model.Helper
 @using DataAccessLayer.basis
 @using eIVOGo.Helper
 @using eIVOGo.Models
@@ -15,6 +16,7 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
+@using Uxnet.Com.DataAccessLayer
 
 @{
     ModelStateDictionary _modelState;
@@ -45,28 +47,7 @@
             int idx = System.Array.IndexOf(viewModel.SortName, "Barcode");
             if (idx >= 0)
             {
-                if (viewModel.SortType[idx] == (int)Naming.SortType.ASC)
-                {
-                    if (TempData["SortedItems"] != null)
-                    {
-                        TempData["SortedItems"] = ((IOrderedQueryable<ProductCatalog>)TempData["SortedItems"]).ThenBy(p => p.Barcode);
-                    }
-                    else
-                    {
-                        TempData["SortedItems"] = ((IQueryable<ProductCatalog>)this.Model).OrderBy(p => p.Barcode);
-                    }
-                }
-                else if (viewModel.SortType[idx] == (int)Naming.SortType.DESC)
-                {
-                    if (TempData["SortedItems"] != null)
-                    {
-                        TempData["SortedItems"] = ((IOrderedQueryable<ProductCatalog>)TempData["SortedItems"]).ThenByDescending(p => p.Barcode);
-                    }
-                    else
-                    {
-                        TempData["SortedItems"] = ((IQueryable<ProductCatalog>)this.Model).OrderByDescending(p => p.Barcode);
-                    }
-                }
+                TempData["SortedItems"] = (TempData["SortedItems"] as IOrderedQueryable<ProductCatalog> ?? (IQueryable<ProductCatalog>)this.Model).OrderBy(p => p.Barcode, viewModel.SortType[idx]);
             }
         }
         break;

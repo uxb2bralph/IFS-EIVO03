@@ -18,7 +18,7 @@ namespace eIVOGo.Module.Base
         where TEntity : class, new()
     {
 
-        protected global::AjaxControlToolkit.ModalPopupExtender ModalPopupExtender;
+        //protected global::AjaxControlToolkit.ModalPopupExtender ModalPopupExtender;
         protected global::Uxnet.Web.Module.Common.ActionHandler doCancel;
 
         protected override void OnInit(EventArgs e)
@@ -27,7 +27,7 @@ namespace eIVOGo.Module.Base
 
             doCancel.DoAction = arg =>
             {
-                this.ModalPopupExtender.Hide();
+                //this.ModalPopupExtender.Hide();
                 this.Visible = false;
             };
         }
@@ -35,12 +35,12 @@ namespace eIVOGo.Module.Base
         public virtual void Show()
         {
             this.Visible = true;
-            this.ModalPopupExtender.Show();
+            //this.ModalPopupExtender.Show();
         }
 
         public virtual void Close()
         {
-            ModalPopupExtender.Hide();
+            //ModalPopupExtender.Hide();
             this.Visible = false;
         }
 
@@ -48,7 +48,7 @@ namespace eIVOGo.Module.Base
         {
             base.BindData();
             this.Visible = true;
-            this.ModalPopupExtender.Show();
+            //this.ModalPopupExtender.Show();
         }
     }
 }

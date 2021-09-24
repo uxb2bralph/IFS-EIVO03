@@ -15,7 +15,7 @@ using System.Globalization;
 using Model.Locale;
 using System.IO.Compression;
 using System.Threading.Tasks;
-using DataContructor.Models;
+using DataConstructor.Models;
 
 namespace InvoiceClient.Agent
 {
@@ -106,7 +106,7 @@ namespace InvoiceClient.Agent
                         {
                             item.FileName = zipName;
                             csv.WriteRecord<InvoicePDFWatcherForZipModel>(item);
-                            writer.WriteLine();
+                            csv.NextRecord();
                         }
                     }
                 }

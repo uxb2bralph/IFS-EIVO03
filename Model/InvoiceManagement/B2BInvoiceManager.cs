@@ -16,6 +16,7 @@ using Model.Schema.EIVO;
 using Model.Schema.EIVO.B2B;
 using Utility;
 using Newtonsoft.Json;
+using Model.InvoiceManagement.Validator;
 
 namespace Model.InvoiceManagement
 {
@@ -24,10 +25,15 @@ namespace Model.InvoiceManagement
         private X509Certificate2 _signerCert;
         private bool _useSigner;
 
-        public B2BInvoiceManager() : base() { }
-        public B2BInvoiceManager(GenericManager<EIVOEntityDataContext> mgr) : base(mgr) { }
+        public B2BInvoiceManager() : base() 
+        {
+            this.ProcessType = Naming.InvoiceProcessType.A0401;
+        }
 
-        public Naming.InvoiceProcessType ProcessType { get; set; } = Naming.InvoiceProcessType.A0401;
+        public B2BInvoiceManager(GenericManager<EIVOEntityDataContext> mgr) : base(mgr) 
+        {
+            this.ProcessType = Naming.InvoiceProcessType.A0401;
+        }
 
         public X509Certificate2 PrepareSignerCertificate(Organization org)
         {
@@ -100,6 +106,71 @@ namespace Model.InvoiceManagement
 
             return result;
         }
+
+        public override Dictionary<int, Exception> SaveUploadInvoice(InvoiceRoot item, OrganizationToken owner)
+        {
+            Dictionary<int, Exception> result = new Dictionary<int, Exception>();
+
+            if (item != null && item.Invoice != null && item.Invoice.Length > 0)
+            {
+                List<InvoiceItem> eventItems = new List<InvoiceItem>();
+                InvoiceRootFormatValidator formatValidator = new InvoiceRootFormatValidator(this, owner.Organization);
+                InvoiceRootInvoiceValidator validator = new InvoiceRootInvoiceValidator(this, owner.Organization);
+
+                for (int idx = 0; idx < item.Invoice.Length; idx++)
+                {
+                    try
+                    {
+                        var invItem = item.Invoice[idx];
+
+                        Exception ex;
+                        if ((ex = validator.Validate(invItem)) != null)
+                        {
+
+                            var errors = formatValidator.ValidateAll(invItem);
+                            if (errors.Count > 0)
+                            {
+                                result.Add(idx, new Exception(ex.Message + ";\r\n" + String.Join(";\r\n", errors.Where(x => x.Message != ex.Message)
+                                    .Select(x => x.Message))));
+                            }
+                            else
+                            {
+                                result.Add(idx, ex);
+                            }
+                            continue;
+
+                        }
+
+                        InvoiceItem newItem = validator.InvoiceItem;
+
+                        if (!validator.DuplicateProcess)
+                        {
+                            this.EntityList.InsertOnSubmit(newItem);
+                            applyProcessFlow(newItem.CDS_Document);
+
+                            this.SubmitChanges();
+                        }
+
+                        eventItems.Add(newItem);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex);
+                        result.Add(idx, ex);
+                    }
+                }
+
+                if (eventItems.Count > 0)
+                {
+                    HasItem = true;
+                }
+
+                EventItems = eventItems;
+
+            }
+            return result;
+        }
+
 
         public InvoiceItem ConvertToInvoiceItem(OrganizationToken owner, SellerInvoiceRootInvoice invItem, out Exception ex)
         {
@@ -556,18 +627,20 @@ namespace Model.InvoiceManagement
                             InvoiceProduct = p.InvoiceProduct
                         }));
 
-                        var trkMgr = new TrackNoManager(this, seller.CompanyID);
-                        if (trkMgr.CheckInvoiceNo(newItem))
+                        using (var trkMgr = new TrackNoManager(this, seller.CompanyID))
                         {
-                            applyProcessFlow(newItem.CDS_Document);
+                            if (trkMgr.CheckInvoiceNo(newItem))
+                            {
+                                applyProcessFlow(newItem.CDS_Document);
 
-                            this.EntityList.InsertOnSubmit(newItem);
-                            this.SubmitChanges();
-                        }
-                        else
-                        {
-                            result.Add(idx, new Exception(String.Format("發票字軌號碼已用完或未設定!!,統一編號:{0}", invItem.SellerId)));
-                            continue;
+                                this.EntityList.InsertOnSubmit(newItem);
+                                this.SubmitChanges();
+                            }
+                            else
+                            {
+                                result.Add(idx, new Exception(String.Format("發票字軌號碼已用完或未設定!!,統一編號:{0}", invItem.SellerId)));
+                                continue;
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -679,7 +752,8 @@ namespace Model.InvoiceManagement
                     {
                         OwnerID = owner.CompanyID
                     },
-                    CurrentStep = item.AllowanceType == 1 ? (int)Naming.InvoiceStepDefinition.待傳送 : (int)Naming.InvoiceStepDefinition.待開立
+                    CurrentStep = item.AllowanceType == 1 ? (int)Naming.InvoiceStepDefinition.待傳送 : (int)Naming.InvoiceStepDefinition.待開立,
+                    ProcessType = (int)Naming.InvoiceProcessType.B0401,
                 },
                 AllowanceDate = DateTime.ParseExact(item.AllowanceDate, "yyyy/MM/dd", System.Globalization.CultureInfo.CurrentCulture),
                 AllowanceNumber = item.AllowanceNumber,
@@ -1190,7 +1264,8 @@ namespace Model.InvoiceManagement
                     {
                         OwnerID = owner.CompanyID
                     },
-                    CurrentStep = (int)Naming.InvoiceStepDefinition.待傳送
+                    CurrentStep = (int)Naming.InvoiceStepDefinition.待傳送,
+                    ProcessType = (int)Naming.InvoiceProcessType.B0401,
                 },
                 AllowanceDate = DateTime.ParseExact(allowance.Main.AllowanceDate, "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture),
                 AllowanceNumber = allowance.Main.AllowanceNumber,
@@ -2031,10 +2106,12 @@ namespace Model.InvoiceManagement
             {
                 foreach (var item in items)
                 {
-                    TrackNoManager mgr = new TrackNoManager(this, item.Key.Value);
-                    if (item.Select(i => mgr.CheckInvoiceNo(i)).Count(r => r) > 0)
+                    using (TrackNoManager mgr = new TrackNoManager(this, item.Key.Value))
                     {
-                        mgr.SubmitChanges();
+                        if (item.Select(i => mgr.CheckInvoiceNo(i)).Count(r => r) > 0)
+                        {
+                            mgr.SubmitChanges();
+                        }
                     }
                 }
             }

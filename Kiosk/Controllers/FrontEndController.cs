@@ -4,8 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Kiosk.Helper;
 using Kiosk.Models.ViewModel;
 using Kiosk.Properties;
+using Model.Schema.EIVO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Utility;
@@ -104,5 +106,18 @@ namespace Kiosk.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult PrintC0401()
+        {
+            InvoiceRootInvoice viewModel = new InvoiceRootInvoice
+            {
+
+            };
+            String data = Request.ReadToEnd();
+            if(!String.IsNullOrEmpty(data))
+            {
+                viewModel = JsonConvert.DeserializeObject<InvoiceRootInvoice>(data);
+            }
+            return View("~/Views/FrontEnd/PrintC0401POS.cshtml", viewModel);
+        }
     }
 }

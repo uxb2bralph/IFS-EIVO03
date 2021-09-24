@@ -1,5 +1,4 @@
 
-@{ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" }
 @using System.IO
 @using System.Linq.Expressions
 
@@ -10,24 +9,34 @@
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
+@{
 
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "查詢結果");}
+IQueryable<BusinessRelationship> _model;
+    BusinessRelationshipQueryViewModel _viewModel;
+
+
+    _model = (IQueryable<BusinessRelationship>)this.Model;
+    _viewModel = (BusinessRelationshipQueryViewModel)ViewBag.ViewModel;
+
+}
+
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");}
 
 
 <div class="border_gray" style="overflow-x: auto;">
     @{ var recordCount = _model.Count();}
- @if(recordCount>0)
-        {
-            @{ Html.RenderPartial("~/Views/BusinessRelationship/Module/ItemList.ascx",_model);}
+    @if (recordCount > 0)
+    {
+         Html.RenderPartial("~/Views/BusinessRelationship/Module/ItemList.cshtml", _model);
 
-            <nav aria-label="Page navigation">
-                <ul class="pagination" id="businessPagination"></ul>
-            </nav>
-    <span>總相對營業人數：@(recordCount)，總分店數：@(_model.SelectMany(m=>m.Counterpart.OrganizationBranch).Count())</span>
-            <script>
+        <nav aria-label="Page navigation">
+            <ul class="pagination" id="businessPagination"></ul>
+        </nav>
+        <span>總相對營業人數：@(recordCount)，總分店數：@(_model.SelectMany(m => m.Counterpart.OrganizationBranch).Count())</span>
+        <script>
                 $(function () {
                     var obj = $('#businessPagination').twbsPagination({
-                                totalPages: @((recordCount+_viewModel.PageSize-1) / _viewModel.PageSize),
+                                totalPages: @((recordCount + _viewModel.PageSize - 1) / _viewModel.PageSize),
                                 totalRecordCount: @(recordCount),
                                 visiblePages: 10,
                                 first: '最前',
@@ -44,28 +53,17 @@
                                 }
                             });
                         });
-            </script>
+        </script>
     }
-        else
-        {
-            <font color="red">查無資料!!</font>
-            @{ Html.RenderPartial("~/Views/BusinessRelationship/Module/ItemList.ascx",_model);}
+    else
+    {
+        <font color="red">查無資料!!</font>
+         Html.RenderPartial("~/Views/BusinessRelationship/Module/ItemList.cshtml", _model);
 
     }
 </div>
 
-<script runat="server">
 
-    IQueryable<BusinessRelationship> _model;
-    BusinessRelationshipQueryViewModel _viewModel;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _model = (IQueryable<BusinessRelationship>)this.Model;
-        _viewModel = (BusinessRelationshipQueryViewModel)ViewBag.ViewModel;
 
-    }
-
-</script>
 

@@ -2,6 +2,7 @@
 @using System.Linq.Expressions
 
 @using Business.Helper
+@using Model.Helper
 @using DataAccessLayer.basis
 @using eIVOGo.Helper
 @using eIVOGo.Models
@@ -55,6 +56,9 @@
                 Html.RenderPartial((String)ViewBag.TableFooter, _model);
             }
         }
+        <tr>
+            <td colspan="@(columns.Length)">&nbsp;</td>
+        </tr>
     </tfoot>
 </table>
 <script>

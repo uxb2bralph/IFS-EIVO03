@@ -37,7 +37,7 @@
 <!DOCTYPE html>
 
 <html>
-<head runat="server">
+<head>
     <style type="text/css">
         div.fspace {
             height: 9.0cm;
@@ -61,7 +61,7 @@
 
         .container {
             display: block;
-            width: 696px;
+            width: 100%;
             border: 1px solid
         }
 
@@ -163,7 +163,7 @@
         /*交易明細*/
         div.listfield {
             /*display:block;*/
-            width: 420px;
+            /*width: 720px;*/
             /*height:400px;*/
             margin-left: 0.1cm;
             padding: 0;
@@ -182,7 +182,7 @@
 
         .listfield .content_box {
             /*clear:both;*/
-            width:420px;
+            /*width: 420px;*/
             display: inline-block;
             padding: 2px 0px;
             margin: 0;
@@ -191,28 +191,32 @@
             line-height: 1.5;
         }
 
-            .listfield .content_box .productname {
-                width: 420px;
+            .listfield .content_box p.productname {
+                width: 280px;
                 display: inline-block;
+                float: left;
             }
 
-            .listfield .content_box .quantity {
-                width: 420px;
-                display: inline-block;
-                text-align: right;
-            }
-
-            .listfield .content_box .price {
-                width: 420px;
+            .listfield .content_box p.quantity {
+                width: 50px;
                 display: inline-block;
                 text-align: right;
+                float: left;
             }
 
-            .listfield .content_box .totalPrice {
-                width: 420px;
+            .listfield .content_box p.price {
+                width: 140px;
+                display: inline-block;
+                text-align: right;
+                float: left;
+            }
+
+            .listfield .content_box p.totalPrice {
+                width: 100px;
                 display: inline-block;
                 text-align: right;
                 /*margin-left: 6px;*/
+                float: right;
             }
 
         .listfield h3 {
@@ -228,8 +232,8 @@
             line-height: 1.4;
             padding: 0;
             padding-top: 0.1cm;
-            /*padding-left: 0.2cm;*/
-            /*padding-right: 0.2cm;*/
+            padding-left: 0.2cm;
+            padding-right: 0.2cm;
             margin: 0;
         }
 
@@ -276,7 +280,18 @@
 </head>
 <body>
     <p>親愛的客戶您好:</p>
-    <p>IQOS.COM/TW使用網際優勢電子發票平台，開立一張電子發票給您，電子發票資訊如下：</p>
+    <p>
+        IQOS.COM/TW使用網際優勢電子發票平台，
+        @if (_model.InvoiceDonation == null)
+        {
+            <text>開立一張電子發票給您</text>
+        }
+        else
+        {
+            <text>經您授權將所開立之電子發票捐贈給受贈單位@(_model.InvoiceDonation.AgencyCode)</text>
+        }
+        ，電子發票資訊如下：
+    </p>
     @{
         Html.RenderPartial("~/Views/Notification/Custom/16844527/InvoiceNotificationView.cshtml", _model);
     }

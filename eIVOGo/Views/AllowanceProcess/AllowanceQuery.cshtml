@@ -26,7 +26,7 @@
                 查詢條件
             </th>
         </tr>
-        @{ Html.RenderPartial("~/Views/InvoiceProcess/Module/QueryDirective.ascx", 1);}
+        @{ Html.RenderPartial("~/Views/InvoiceProcess/Module/QueryDirective.cshtml", 1);}
 
         <tr>
             <th>
@@ -107,7 +107,8 @@
                 每頁資料筆數
             </th>
             <td class="tdleft">
-                <input name="pageSize" type="text" value="@(Request["pageSize"] ?? Uxnet.Web.Properties.Settings.Default.PageSize.ToString())" />
+                <input name="pageSize" type="text" value="@(Request["pageSize"] ?? Uxnet.Web.Properties.Settings.Default.PageSize.ToString())" />，
+                <input name="CurrencySummary" value="True" type="checkbox" /> 顯示幣別統計
             </td>
         </tr>
     </table>
@@ -222,6 +223,22 @@
             download: function () {
                 var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
                 $('').launchDownload('@Html.Raw(Url.Action("CreateXlsx","AllowanceProcess"))', $formData, '_blank');
+            },
+            download2021: function () {
+
+                var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
+                showLoading();
+                $.post('@(Url.Action("CreateXlsx2021","AllowanceProcess"))', $formData, function (data) {
+                    hideLoading();
+                    if ($.isPlainObject(data)) {
+                        if (data.message != undefined) {
+                            alert(data.message);
+                        }
+                    } else {
+                        $(data).appendTo($('body'));
+                    }
+                });
+
             },
             downloadItems: function () {
                 if ($postForm) {

@@ -15,26 +15,16 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-
-@{ Html.RenderPartial("~/Views/DataView/Module/Allowance.ascx", _model);}
-
-@{ Html.RenderPartial("~/Module/SYS/Info/ServiceNotation.ascx");}
-
-
-<script runat="server">
+@{
 
     ModelSource<InvoiceItem> models;
     InvoiceAllowance _model;
     DocumentQueryViewModel _viewModel;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (InvoiceAllowance)this.Model;
+    _viewModel = (DocumentQueryViewModel)ViewBag.ViewModel;
+}
+@{ Html.RenderPartial("~/Views/DataView/Module/Allowance.cshtml", _model);}
 
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (InvoiceAllowance)this.Model;
-        _viewModel = (DocumentQueryViewModel)ViewBag.ViewModel;
-    }
-
-
-</script>
+@{ Html.RenderPartial("~/Views/Notification/Shared/ServiceNotation.cshtml", _model.InvoiceAllowanceSeller.Organization);}

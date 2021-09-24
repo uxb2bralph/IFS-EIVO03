@@ -32,18 +32,19 @@ namespace InvoiceClient.Agent
             var result = invSvc.UploadAllowance_D0401(docInv).ConvertTo<Root>();
             return result;
         }
-        protected override  void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected override  bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
                 IEnumerable<String> message = rootInvoiceNo.Select(i => String.Format("Allowance Number:{0}=>{1}", i.Value, i.Description));
                 Logger.Warn(String.Format("在上傳開立折讓({0})時,傳送失敗!!原因如下:\r\n{1}", fileName, String.Join("\r\n", message.ToArray())));
 
-                Model.Schema.TurnKey.D0401.Allowance invoice = docInv.ConvertTo<Model.Schema.TurnKey.D0401.Allowance>();
-                Model.Schema.TurnKey.D0401.Allowance stored = docInv.ConvertTo<Model.Schema.TurnKey.D0401.Allowance>();
+                Model.Schema.TurnKey.D0401.Allowance invoice = docInv.TrimAll().ConvertTo<Model.Schema.TurnKey.D0401.Allowance>();
+                Model.Schema.TurnKey.D0401.Allowance stored = docInv.TrimAll().ConvertTo<Model.Schema.TurnKey.D0401.Allowance>();
                 
-                stored.ConvertToXml().Save(Path.Combine(_failedTxnPath, Path.GetFileName(fileName)));
+                stored.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(_failedTxnPath, Path.GetFileName(fileName)));
             }
+            return true;
         }
     }
 }

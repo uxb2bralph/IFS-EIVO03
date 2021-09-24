@@ -56,7 +56,7 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     var invoiceItem = item.CDS_Document.InvoiceItem;
                     try
                     {
-                        var fileName = Path.Combine(Settings.Default.C0401Outbound, $"C0401-{DateTime.Now:yyyyMMddHHmmssf}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
+                        var fileName = Path.Combine(Settings.Default.C0401Outbound, $"C0401-{invoiceItem.InvoiceID}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
                         invoiceItem.CreateC0401().ConvertToXml().Save(fileName);
 
                         item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
@@ -121,7 +121,11 @@ namespace Model.InvoiceManagement.InvoiceProcess
                 try
                 {
 
-                    EIVOPlatformFactory.NotifyIssuedInvoice(item.DocID, true);
+                    EIVOPlatformFactory.NotifyIssuedInvoice(new NotifyToProcessID
+                    {
+                        DocID = item.DocID,
+                        AppendAttachment = true,
+                    });
 
                     models.ExecuteCommand("delete [proc].C0401DispatchQueue where DocID={0} and StepID={1}",
                         item.DocID, item.StepID);

@@ -13,12 +13,13 @@ using Model.Schema.EIVO;
 using Model.DataEntity;
 using System.Threading;
 using Model.Helper;
-using eIVOGo.Module.Common;
+
 using Utility;
 using System.IO;
 using Model.Locale;
 using eIVOGo.Helper;
 using Model.InvoiceManagement.ErrorHandle;
+using eIVOGo.Module.Common;
 
 namespace eIVOGo.Published
 {
@@ -131,7 +132,7 @@ namespace eIVOGo.Published
                 }
 
                 EIVOPlatformFactory.Notify();
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -225,7 +226,7 @@ namespace eIVOGo.Published
                 {
                     result.Result.message = "Signature does not match the invoice data!!";
                 }
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -324,7 +325,7 @@ namespace eIVOGo.Published
                 {
                     result.Result.message = "發票資料簽章不符!!";
                 }
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -419,7 +420,7 @@ namespace eIVOGo.Published
                 {
                     result.Result.message = "Signature does not match the invoice data!!";
                 }
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {

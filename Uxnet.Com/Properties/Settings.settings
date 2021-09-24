@@ -62,5 +62,11 @@
     <Setting Name="IPdfUtilityImpl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Uxnet.Com.Helper.DefaultTools.PdfUtility,Uxnet.Com, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Value>
     </Setting>
+    <Setting Name="JobSchedulerFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">JobScheduler.xml</Value>
+    </Setting>
+    <Setting Name="SqlLogIgnoreSelect" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

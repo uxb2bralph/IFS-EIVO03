@@ -54,7 +54,6 @@ namespace eIVOGo
                 Logger.OutputWritter = Console.Out;
 
             Uxnet.Com.Helper.JobScheduler.StartUp();
-            eIVOGo.Module.SAM.SystemMonitorControl.StartUp();
             eIVOGo.Published.eInvoiceService.StartUp();
 
             Model.InvoiceManagement.EIVOPlatformFactory.Sign = eIVOGo.Helper.AppSigner.Sign;

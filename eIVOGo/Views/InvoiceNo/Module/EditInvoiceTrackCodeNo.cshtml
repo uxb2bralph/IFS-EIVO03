@@ -1,0 +1,49 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using Model.Helper
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+
+@{
+    UploadInvoiceTrackCodeModel _model;
+    _model = (UploadInvoiceTrackCodeModel)this.Model;
+}
+<tr>
+    <td>@(_model.ReceiptNo)</td>
+    <td>@(_model.Year)</td>
+    <td>@(String.Format("{0:00}-{1:00}月", _model.PeriodNo * 2 - 1, _model.PeriodNo * 2))</td>
+    <td>@(_model.TrackCode)</td>
+    <td>
+        @(String.Format("{0:00000000}",_model.StartNo))
+    </td>
+    <td>
+        @(String.Format("{0:00000000}",_model.EndNo))
+    </td>
+    <td>
+        @if (_model.Message == null)
+        {
+            <input type="hidden" name="KeyItems" value="@(JsonConvert.SerializeObject(_model).EncryptData())" />
+            <button class="btn" type="button" onclick="$(this).cloeset('tr').remove();">刪除</button>
+        }
+        else
+        {
+            <span>@(_model.Message)</span>
+        }
+    </td>
+</tr>
+
+
+
+

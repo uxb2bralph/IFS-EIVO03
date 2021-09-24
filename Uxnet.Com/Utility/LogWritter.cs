@@ -2,66 +2,60 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using Uxnet.Com.Helper;
+using Utility.CommonLogger;
 
 namespace Utility
 {
-    public class LogWritter : IDisposable
+    public class LogWritter : LoggerBase
     {
-        private bool _bDisposed = false;
-        private StringBuilder _sb;
-        private string _subject;
-        private StringWriter _sw;
+        private DateTime _daily = DateTime.Today;
+        private String _logFile;
 
-        public LogWritter(string subject)
-            : this()
+        private List<TextWriter> _appendantWriter;
+
+        public LogWritter(string subject) : this(Utility.Logger.LogPath, subject)
         {
-            _subject = subject;
+
         }
 
-        public LogWritter() 
+        public LogWritter(String path, string subject) : base()
         {
-            _sb = new StringBuilder();
-            _sw = new StringWriter(_sb);
+            _subject = subject.GetEfficientString() ?? "App.log";
+            _logFile = Path.Combine(ValueValidity.GetDateStylePath(path), _subject);
         }
 
-        public TextWriter Writter
+
+        public List<TextWriter> AppendantWriter
         {
             get
             {
-                return _sw;
-            }
-        }
-
-        #region IDisposable 成員
-
-        public void Dispose()
-        {
-            dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void dispose(bool disposing)
-        {
-            if (!_bDisposed)
-            {
-                if (disposing)
+                if (_appendantWriter == null)
                 {
-                    _sw.Flush();
-                    _sw.Close();
-                    Logger.Info(_sb.ToString());
-                    _sw.Dispose();
+                    _appendantWriter = new List<TextWriter>();
                 }
-
-                _bDisposed = true;
+                return _appendantWriter;
             }
         }
 
-        ~LogWritter()
+        protected override void DoFlushLog()
         {
-            dispose(false);
-        }
+            if (_daily < DateTime.Today)
+            {
+                _daily = DateTime.Today;
+                _logFile = Path.Combine(Utility.Logger.LogDailyPath, _subject);
+            }
 
-        #endregion
+            File.AppendAllText(_logFile, _standBy.ToString(), Encoding.UTF8);
+
+            if (_appendantWriter != null && _appendantWriter.Count > 0)
+            {
+                foreach (var w in _appendantWriter)
+                {
+                    w.Write(_standBy.ToString());
+                }
+            }
+        }
 
     }
 }

@@ -54,7 +54,7 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     var allowance = item.CDS_Document.InvoiceAllowance;
                     try
                     {
-                        var fileName = Path.Combine(Settings.Default.D0401Outbound, $"D0401-{DateTime.Now:yyyyMMddHHmmssf}-{allowance.AllowanceNumber}.xml");
+                        var fileName = Path.Combine(Settings.Default.D0401Outbound, $"D0401-{allowance.AllowanceID}-{allowance.AllowanceNumber}.xml");
                         allowance.CreateD0401().ConvertToXml().Save(fileName);
 
                         item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);

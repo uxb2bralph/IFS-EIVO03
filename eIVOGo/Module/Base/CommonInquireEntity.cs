@@ -18,8 +18,8 @@ namespace eIVOGo.Module.Base
         protected Control resultInfo;
         protected EntityItemList<EIVOEntityDataContext, TEntity> itemList;
         protected global::System.Web.UI.WebControls.PlaceHolder inquiryHolder;
-        protected eIVOGo.Module.UI.PageAction actionItem;
-        protected eIVOGo.Module.UI.FunctionTitleBar functionTitle;
+        protected global::System.Web.UI.UserControl actionItem;
+        protected global::System.Web.UI.UserControl functionTitle;
         protected UserProfileMember _userProfile;
         protected global::System.Web.UI.UserControl urlGo;
 
@@ -80,7 +80,7 @@ namespace eIVOGo.Module.Base
         public Action<Control> PrepareInquiryElement
         { get; set; }
 
-        public Action<eIVOGo.Module.UI.PageAction, eIVOGo.Module.UI.FunctionTitleBar> PrepareNaming
+        public Action<global::System.Web.UI.UserControl, global::System.Web.UI.UserControl> PrepareNaming
         { get; set; }
 
         public Action<UserControl> PrepareQueryDirective

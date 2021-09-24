@@ -138,7 +138,6 @@
       <Association Name="CDS_Document_DocumentAuthorization" Member="DocumentAuthorization" ThisKey="DocID" OtherKey="DocID" Type="DocumentAuthorization" Cardinality="One" />
       <Association Name="CDS_Document_DocumentPrintLog" Member="DocumentPrintLog" ThisKey="DocID" OtherKey="DocID" Type="DocumentPrintLog" />
       <Association Name="CDS_Document_IssuingNotice" Member="IssuingNotice" ThisKey="DocID" OtherKey="DocID" Type="IssuingNotice" Cardinality="One" />
-      <Association Name="CDS_Document_CustomerDefined" Member="CustomerDefined" ThisKey="DocID" OtherKey="DocID" Type="CustomerDefined" Cardinality="One" />
       <Association Name="CDS_Document_DataProcessLog" Member="DataProcessLogs" ThisKey="DocID" OtherKey="DocID" Type="DataProcessLog" />
       <Association Name="CDS_Document_A0401DispatchQueue" Member="A0401DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="A0401DispatchQueue" />
       <Association Name="CDS_Document_A0501DispatchQueue" Member="A0501DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="A0501DispatchQueue" />
@@ -160,6 +159,7 @@
       <Association Name="CDS_Document_B0202DispatchQueue" Member="B0202DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="B0202DispatchQueue" />
       <Association Name="CDS_Document_DocumentPrintQueue" Member="DocumentPrintQueue" ThisKey="DocID" OtherKey="DocID" Type="DocumentPrintQueue" Cardinality="One" />
       <Association Name="CDS_Document_ProcessRequestDocument" Member="ProcessRequestDocument" ThisKey="DocID" OtherKey="DocID" Type="ProcessRequestDocument" Cardinality="One" />
+      <Association Name="CDS_Document_CustomerDefined" Member="CustomerDefined" ThisKey="DocID" OtherKey="DocID" Type="CustomerDefined" Cardinality="One" />
       <Association Name="DocumentType_CDS_Document" Member="DocumentType" ThisKey="DocType" OtherKey="TypeID" Type="DocumentType" IsForeignKey="true" />
       <Association Name="LevelExpression_CDS_Document" Member="LevelExpression" ThisKey="CurrentStep" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
     </Type>
@@ -237,8 +237,11 @@
       <Column Name="CurrencyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="CurrencyName" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Column Name="AbbrevName" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+      <Column Name="FormatPattern" Type="System.String" DbType="NVarChar(24)" CanBeNull="true" />
+      <Column Name="Decimals" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
       <Association Name="CurrencyType_InvoiceAllowance" Member="InvoiceAllowance" ThisKey="CurrencyID" OtherKey="CurrencyID" Type="InvoiceAllowance" />
       <Association Name="CurrencyType_InvoiceAmountType" Member="InvoiceAmountType" ThisKey="CurrencyID" OtherKey="CurrencyID" Type="InvoiceAmountType" />
+      <Association Name="CurrencyType_InvoicePeriodExchangeRate" Member="InvoicePeriodExchangeRate" ThisKey="CurrencyID" OtherKey="CurrencyID" Type="InvoicePeriodExchangeRate" />
     </Type>
   </Table>
   <Table Name="dbo.WelfareReplication" Member="WelfareReplications">
@@ -322,10 +325,10 @@
       <Association Name="InvoiceItem_InvoiceWinningNumber" Member="InvoiceWinningNumber" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceWinningNumber" Cardinality="One" />
       <Association Name="InvoiceItem_InvoiceMail" Member="InvoiceMail" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceMail" Cardinality="One" />
       <Association Name="InvoiceItem_AuthorizeToVoid" Member="AuthorizeToVoid" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="AuthorizeToVoid" Cardinality="One" />
-      <Association Name="InvoiceTrackCode_InvoiceItem" Member="InvoiceTrackCode" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceTrackCode" IsForeignKey="true" />
       <Association Name="CDS_Document_InvoiceItem" Member="CDS_Document" ThisKey="InvoiceID" OtherKey="DocID" Type="CDS_Document" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="Organization_InvoiceItem" Member="Organization" ThisKey="SellerID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
       <Association Name="Organization_InvoiceItem1" Member="Donatory" Storage="_Organization1" ThisKey="DonationID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
+      <Association Name="InvoiceTrackCode_InvoiceItem" Member="InvoiceTrackCode" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceTrackCode" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.DocumentType" Member="DocumentTypes">
@@ -418,7 +421,7 @@
   <Table Name="dbo.InvoiceAllowance" Member="InvoiceAllowances">
     <Type Name="InvoiceAllowance">
       <Column Name="AllowanceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="AllowanceNumber" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+      <Column Name="AllowanceNumber" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Column Name="AllowanceType" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
       <Column Name="AllowanceDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="TotalAmount" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
@@ -427,6 +430,7 @@
       <Column Name="SellerId" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
       <Column Name="BuyerId" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
       <Column Name="CurrencyID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IssueDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="InvoiceAllowance_InvoiceAllowanceDetail" Member="InvoiceAllowanceDetails" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceDetail" />
       <Association Name="InvoiceAllowance_InvoiceAllowanceBuyer" Member="InvoiceAllowanceBuyer" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceBuyer" Cardinality="One" />
       <Association Name="InvoiceAllowance_InvoiceAllowanceSeller" Member="InvoiceAllowanceSeller" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceSeller" Cardinality="One" />
@@ -458,18 +462,8 @@
       <Association Name="InvoiceNoInterval_BlankInvoiceNoSummary" Member="BlankInvoiceNoSummary" ThisKey="IntervalID" OtherKey="IntervalID" Type="BlankInvoiceNoSummary" />
       <Association Name="InvoiceNoInterval_InvoiceNoSegment" Member="InvoiceNoSegment" ThisKey="IntervalID" OtherKey="SegmentID" Type="InvoiceNoSegment" Cardinality="One" />
       <Association Name="InvoiceNoInterval_InvoiceNoAllocation" Member="InvoiceNoAllocation" ThisKey="IntervalID" OtherKey="IntervalID" Type="InvoiceNoAllocation" />
+      <Association Name="InvoiceNoInterval_VacantInvoiceNo" Member="VacantInvoiceNo" ThisKey="IntervalID" OtherKey="IntervalID" Type="VacantInvoiceNo" />
       <Association Name="InvoiceTrackCodeAssignment_InvoiceNoInterval" Member="InvoiceTrackCodeAssignment" ThisKey="TrackID,SellerID" OtherKey="TrackID,SellerID" Type="InvoiceTrackCodeAssignment" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.InvoiceTrackCode" Member="InvoiceTrackCodes">
-    <Type Name="InvoiceTrackCode">
-      <Column Name="TrackID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="TrackCode" Type="System.String" DbType="NVarChar(2) NOT NULL" CanBeNull="false" />
-      <Column Name="Year" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="PeriodNo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
-      <Column Name="InvoiceType" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
-      <Association Name="InvoiceTrackCode_InvoiceTrackCodeAssignment" Member="InvoiceTrackCodeAssignment" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceTrackCodeAssignment" />
-      <Association Name="InvoiceTrackCode_InvoiceNoMainAssignment" Member="InvoiceNoMainAssignment" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceNoMainAssignment" />
     </Type>
   </Table>
   <Table Name="dbo.DocumentOwner" Member="DocumentOwners">
@@ -628,6 +622,7 @@
       <Column Name="CurrencyID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="FreeTaxSalesAmount" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
       <Column Name="ZeroTaxSalesAmount" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="BondedAreaConfirm" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
       <Association Name="CurrencyType_InvoiceAmountType" Member="CurrencyType" ThisKey="CurrencyID" OtherKey="CurrencyID" Type="CurrencyType" IsForeignKey="true" />
       <Association Name="InvoiceItem_InvoiceAmountType" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
@@ -1151,6 +1146,7 @@
       <Column Name="NotificationFooterView" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
       <Column Name="IgnoreDuplicatedDataNumber" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="InvoiceClientDefaultProcessType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CustomNotificationView" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
       <Association Name="LevelExpression_OrganizationStatus" Member="LevelExpression" ThisKey="CurrentLevel" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="Organization_OrganizationStatus" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="UserToken_OrganizationStatus" Member="UserToken" ThisKey="TokenID" OtherKey="Token" Type="UserToken" IsForeignKey="true" />
@@ -1183,6 +1179,7 @@
     <Type Name="DocumentSubscriptionQueue">
       <Column Name="DocID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="WaitUntil" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="CDS_Document_DocumentSubscriptionQueue" Member="CDS_Document" ThisKey="DocID" OtherKey="DocID" Type="CDS_Document" IsForeignKey="true" />
     </Type>
   </Table>
@@ -1391,13 +1388,6 @@
       <Column Name="CreateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="AlwaysShow" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="UserProfile_Announcement_REC" Member="UserProfile" ThisKey="Creator" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.CustomerDefined" Member="CustomerDefined">
-    <Type Name="CustomerDefined">
-      <Column Name="DocID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="IsolationFolder" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
-      <Association Name="CDS_Document_CustomerDefined" Member="CDS_Document" ThisKey="DocID" OtherKey="DocID" Type="CDS_Document" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="center.DocumentFlowBranch" Member="DocumentFlowBranch">
@@ -1641,6 +1631,7 @@
       <Association Name="ProcessRequest_ProcessCompletionNotification" Member="ProcessCompletionNotification" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessCompletionNotification" Cardinality="One" />
       <Association Name="ProcessRequest_ProcessExceptionNotification" Member="ProcessExceptionNotification" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessExceptionNotification" />
       <Association Name="ProcessRequest_ProcessRequestDocument" Member="ProcessRequestDocument" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessRequestDocument" />
+      <Association Name="ProcessRequest_ProcessRequestCondition" Member="ProcessRequestCondition" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessRequestCondition" />
       <Association Name="ExceptionLog_ProcessRequest" Member="ExceptionLog" ThisKey="LogID" OtherKey="LogID" Type="ExceptionLog" IsForeignKey="true" />
       <Association Name="Organization_ProcessRequest" Member="Organization" ThisKey="AgentID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
       <Association Name="ProcessRequestType_ProcessRequest" Member="ProcessRequestType" ThisKey="ProcessType" OtherKey="ProcessType" Type="ProcessRequestType" IsForeignKey="true" />
@@ -1692,9 +1683,9 @@
       <Column Name="AssignmentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="InvoiceTrackCodeAssignment_InvoiceNoInterval" Member="InvoiceNoInterval" ThisKey="TrackID,SellerID" OtherKey="TrackID,SellerID" Type="InvoiceNoInterval" />
       <Association Name="InvoiceTrackCodeAssignment_UnassignedInvoiceNo" Member="UnassignedInvoiceNo" ThisKey="TrackID,SellerID" OtherKey="TrackID,SellerID" Type="UnassignedInvoiceNo" />
-      <Association Name="InvoiceTrackCode_InvoiceTrackCodeAssignment" Member="InvoiceTrackCode" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceTrackCode" IsForeignKey="true" />
       <Association Name="Organization_InvoiceTrackCodeAssignment" Member="Organization" ThisKey="SellerID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="InvoiceNoMainAssignment_InvoiceTrackCodeAssignment" Member="InvoiceNoMainAssignment" ThisKey="AssignmentID" OtherKey="AssignmentID" Type="InvoiceNoMainAssignment" IsForeignKey="true" />
+      <Association Name="InvoiceTrackCode_InvoiceTrackCodeAssignment" Member="InvoiceTrackCode" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceTrackCode" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.InvoiceNoMainAssignment" Member="InvoiceNoMainAssignment">
@@ -1705,8 +1696,67 @@
       <Column Name="StartNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="EndNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="InvoiceNoMainAssignment_InvoiceTrackCodeAssignment" Member="InvoiceTrackCodeAssignment" ThisKey="AssignmentID" OtherKey="AssignmentID" Type="InvoiceTrackCodeAssignment" />
-      <Association Name="InvoiceTrackCode_InvoiceNoMainAssignment" Member="InvoiceTrackCode" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceTrackCode" IsForeignKey="true" />
       <Association Name="Organization_InvoiceNoMainAssignment" Member="Organization" ThisKey="MasterID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
+      <Association Name="InvoiceTrackCode_InvoiceNoMainAssignment" Member="InvoiceTrackCode" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceTrackCode" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.VacantInvoiceNo" Member="VacantInvoiceNo">
+    <Type Name="VacantInvoiceNo">
+      <Column Name="VacancyID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IntervalID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PrevID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NextID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="VacantInvoiceNo_VacantInvoiceNo" Member="VacantInvoiceNo2" ThisKey="VacancyID" OtherKey="PrevID" Type="VacantInvoiceNo" />
+      <Association Name="VacantInvoiceNo_VacantInvoiceNo1" Member="VacantInvoiceNo4" ThisKey="VacancyID" OtherKey="NextID" Type="VacantInvoiceNo" />
+      <Association Name="InvoiceNoInterval_VacantInvoiceNo" Member="InvoiceNoInterval" ThisKey="IntervalID" OtherKey="IntervalID" Type="InvoiceNoInterval" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="VacantInvoiceNo_VacantInvoiceNo" Member="VacantInvoiceNo1" ThisKey="PrevID" OtherKey="VacancyID" Type="VacantInvoiceNo" IsForeignKey="true" />
+      <Association Name="VacantInvoiceNo_VacantInvoiceNo1" Member="VacantInvoiceNo3" ThisKey="NextID" OtherKey="VacancyID" Type="VacantInvoiceNo" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="[proc].ProcessRequestCondition" Member="ProcessRequestCondition">
+    <Type Name="ProcessRequestCondition">
+      <Column Name="TaskID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ConditionID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="ProcessRequest_ProcessRequestCondition" Member="ProcessRequest" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessRequest" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CustomerDefined" Member="CustomerDefined">
+    <Type Name="CustomerDefined">
+      <Column Name="DocID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="IsolationFolder" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="DataContent" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="CDS_Document_CustomerDefined" Member="CDS_Document" ThisKey="DocID" OtherKey="DocID" Type="CDS_Document" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoiceTrackCode" Member="InvoiceTrackCode">
+    <Type Name="InvoiceTrackCode">
+      <Column Name="TrackID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TrackCode" Type="System.String" DbType="NVarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="Year" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PeriodNo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="PeriodID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="InvoiceTrackCode_InvoiceItem" Member="InvoiceItem" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceItem" />
+      <Association Name="InvoiceTrackCode_InvoiceTrackCodeAssignment" Member="InvoiceTrackCodeAssignment" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceTrackCodeAssignment" />
+      <Association Name="InvoiceTrackCode_InvoiceNoMainAssignment" Member="InvoiceNoMainAssignment" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceNoMainAssignment" />
+      <Association Name="InvoicePeriod_InvoiceTrackCode" Member="InvoicePeriod" ThisKey="PeriodID" OtherKey="PeriodID" Type="InvoicePeriod" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoicePeriod" Member="InvoicePeriod">
+    <Type Name="InvoicePeriod">
+      <Column Name="PeriodID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="InvoicePeriod_InvoiceTrackCode" Member="InvoiceTrackCode" ThisKey="PeriodID" OtherKey="PeriodID" Type="InvoiceTrackCode" />
+      <Association Name="InvoicePeriod_InvoicePeriodExchangeRate" Member="InvoicePeriodExchangeRate" ThisKey="PeriodID" OtherKey="PeriodID" Type="InvoicePeriodExchangeRate" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoicePeriodExchangeRate" Member="InvoicePeriodExchangeRate">
+    <Type Name="InvoicePeriodExchangeRate">
+      <Column Name="PeriodID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CurrencyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ExchangeRate" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Association Name="CurrencyType_InvoicePeriodExchangeRate" Member="CurrencyType" ThisKey="CurrencyID" OtherKey="CurrencyID" Type="CurrencyType" IsForeignKey="true" />
+      <Association Name="InvoicePeriod_InvoicePeriodExchangeRate" Member="InvoicePeriod" ThisKey="PeriodID" OtherKey="PeriodID" Type="InvoicePeriod" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.MatchDocumentAttachment" Method="MatchDocumentAttachment">
@@ -1747,6 +1797,18 @@
       <Column Name="InvoiceType" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
     </ElementType>
   </Function>
+  <Function Name="[proc].ApplyProcessRequest" Method="ApplyProcessRequest">
+    <Parameter Name="ActorID" Parameter="actorID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProcessType" Parameter="processType" Type="System.Int32" DbType="Int" />
+    <Parameter Name="TaskID" Parameter="taskID" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.SettlementInvoiceNo" Method="SettlementInvoiceNo">
+    <Parameter Name="SellerID" Parameter="sellerID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Year" Parameter="year" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PeriodNo" Parameter="periodNo" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
   <Function Name="dbo.GetAllowanceReport" Method="GetAllowanceReport">
     <Parameter Name="SellerID" Parameter="sellerID" Type="System.Int32" DbType="Int" />
     <Parameter Name="StartDate" Parameter="startDate" Type="System.DateTime" DbType="DateTime" />
@@ -1762,6 +1824,10 @@
       <Column Name="TrackCode" Type="System.String" DbType="NVarChar(2)" CanBeNull="true" />
       <Column Name="StartNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="EndNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Year" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Month" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PeriodNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PeriodID" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </ElementType>
   </Function>
   <Function Name="dbo.GetInvoiceReport" Method="GetInvoiceReport">
@@ -1781,12 +1847,9 @@
       <Column Name="TotalAmount" Type="System.Decimal" DbType="Decimal(38,5)" CanBeNull="true" />
       <Column Name="TotalSalesAmount" Type="System.Decimal" DbType="Decimal(38,5)" CanBeNull="true" />
       <Column Name="TotalTaxAmount" Type="System.Decimal" DbType="Decimal(38,5)" CanBeNull="true" />
+      <Column Name="Year" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PeriodNo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PeriodID" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </ElementType>
-  </Function>
-  <Function Name="[proc].ApplyProcessRequest" Method="ApplyProcessRequest">
-    <Parameter Name="ActorID" Parameter="actorID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="ProcessType" Parameter="processType" Type="System.Int32" DbType="Int" />
-    <Parameter Name="TaskID" Parameter="taskID" Type="System.Int32" DbType="Int" Direction="InOut" />
-    <Return Type="System.Int32" />
   </Function>
 </Database>

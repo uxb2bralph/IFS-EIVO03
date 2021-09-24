@@ -8,11 +8,9 @@
 @section headContent { 
  
 }
-@section mainContent { 
 @{ Html.RenderPartial("~/Views/Module/HidePostData.ascx");
        Html.RenderPartial("~/Views/Module/InvoiceSummaryList.ascx", models);}
- 
-}
+
 <script runat="server">
 
     ModelSource<InvoiceItem> models;

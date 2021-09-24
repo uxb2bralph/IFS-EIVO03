@@ -40,8 +40,7 @@ namespace eIVOGo.Controllers.Merchandise
         public ActionResult QueryIndex(ProductCatalogQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            viewModel.QueryForm = "~/Views/ProductCatalog/Module/ProductCatalogQuery.cshtml";
-            return View("~/Views/Common/QueryIndex.cshtml");
+            return View("~/Views/ProductCatalog/Module/ProductCatalogQuery.cshtml");
         }
 
         public ActionResult InquireProduct(ProductCatalogQueryViewModel viewModel)

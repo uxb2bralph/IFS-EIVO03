@@ -16,7 +16,15 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@{
 
+    ModelSource<InvoiceItem> models;
+    Model.Schema.EIVO.AllowanceRoot _model;
+
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (Model.Schema.EIVO.AllowanceRoot)this.Model;
+}
 <!DOCTYPE html>
 <html>
 <head runat="server">
@@ -265,62 +273,51 @@
 <body style="font-family: KaiTi">
     <form>
         @foreach (var allowance in _model.Allowance)
-            {
-        <div style="page-break-after: always; width: 5.5cm; margin-left: 0cm; margin-right: 0cm">
-            <div class="container" style="border-top: 0px; border-bottom: 0px; font-size: small;">
-                @{ var seller = models.GetTable<Organization>().Where(c => c.ReceiptNo == allowance.SellerId).FirstOrDefault();}
+        {
+            <div style="page-break-after: always; width: 5.5cm; margin-left: 0cm; margin-right: 0cm">
+                <div class="container" style="border-top: 0px; border-bottom: 0px; font-size: small;">
+                    @{ var seller = models.GetTable<Organization>().Where(c => c.ReceiptNo == allowance.SellerId).FirstOrDefault();}
 
-                <p style="text-align: center; max-width: 5cm;">@(seller?.CompanyName)</p>
-                <p style="text-align: center">營業人銷貨退回、進貨退出<br />
-                    或折讓證明單證明聯</p>
-                <p style="text-align: center">@(allowance.AllowanceDate)</p>
-                <p>
-                    賣方統編：@(allowance.SellerId)<br />
-                    賣方名稱：@(seller?.CompanyName)<br />
-                    發票開立日期：<br />
-                    <br />
-                    買方統編：@(allowance.BuyerId)<br />
-                    買方名稱：@(allowance.BuyerName)<br />
-                </p>
-                <p></p>
-                <p>
-                    @foreach (var d in allowance.AllowanceItem)
+                    <p style="text-align: center; max-width: 5cm;">@(seller?.CompanyName)</p>
+                    <p style="text-align: center">
+                        營業人銷貨退回、進貨退出<br />
+                        或折讓證明單證明聯
+                    </p>
+                    <p style="text-align: center">@(allowance.AllowanceDate)</p>
+                    <p>
+                        賣方統編：@(allowance.SellerId)<br />
+                        賣方名稱：@(seller?.CompanyName)<br />
+                        發票開立日期：<br />
+                        <br />
+                        買方統編：@(allowance.BuyerId)<br />
+                        買方名稱：@(allowance.BuyerName)<br />
+                    </p>
+                    <p></p>
+                    <p>
+                        @foreach (var d in allowance.AllowanceItem)
                         {
-            品名：@(d.OriginalDescription)<br />
-                    數量：@(d.Quantity)<br />
-                    單價：@(d.UnitPrice)<br />
-                    金額(不含稅)：@(d.Amount)<br />
-                    課稅別：TX
-        }
-                </p>
-                <p>
-                    營業稅額合計：@(allowance.TaxAmount)<br />
-                    金額(含稅)合計：
-            @(allowance.TotalAmount)<br />
-                </p>
-                <p></p>
-                <p>
-                    簽收人：
-                </p>
+                            <text>
+                                品名：@(d.OriginalDescription)<br />
+                                數量：@(d.Quantity)<br />
+                                單價：@(d.UnitPrice)<br />
+                                金額(不含稅)：@(d.Amount)<br />
+                                課稅別：TX
+                            </text>
+                        }
+                    </p>
+                    <p>
+                        營業稅額合計：@(allowance.TaxAmount)<br />
+                        金額(含稅)合計：
+                        @(allowance.TotalAmount)<br />
+                    </p>
+                    <p></p>
+                    <p>
+                        簽收人：
+                    </p>
+                </div>
             </div>
-        </div>
         }
     </form>
 </body>
 </html>
 
-<script runat="server">
-
-    ModelSource<InvoiceItem> models;
-    Model.Schema.EIVO.AllowanceRoot _model;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (Model.Schema.EIVO.AllowanceRoot)this.Model;
-    }
-
-
-</script>

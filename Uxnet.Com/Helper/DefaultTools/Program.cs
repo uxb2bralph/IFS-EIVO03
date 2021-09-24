@@ -185,6 +185,32 @@ namespace Uxnet.Com.Helper.DefaultTools
 
         }
 
+        public void Print(String url,int wait = 1000)
+        {
+            //foreach (var ptr in PrinterSettings.InstalledPrinters)
+            //{
+            //    Logger.Info("發現印表機:"+ptr);
+            //}
+
+            WebBrowser wb = new WebBrowser();
+            wb.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(wb_DocumentCompleted);
+            wb.Navigating += new WebBrowserNavigatingEventHandler(wb_Navigating);
+            wb.Navigated += new WebBrowserNavigatedEventHandler(wb_Navigated);
+            _wb = wb;
+            _wb.Navigate(url);
+            _wb.Show();
+            System.Windows.Forms.Application.DoEvents();
+
+            DateTime timeOut = DateTime.Now.AddMilliseconds(wait);
+            Logger.Info(String.Format("Timeout:{0}ms", wait));
+
+            while (DateTime.Now < timeOut && _running)
+            {
+                System.Windows.Forms.Application.DoEvents();
+            }
+
+        }
+
         void wb_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
             Logger.Info(String.Format("Navigated:{0}", e.Url));

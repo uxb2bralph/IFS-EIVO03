@@ -15,7 +15,7 @@ using Business.Helper;
 using eIVOGo.Helper;
 using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
-using eIVOGo.Module.Common;
+
 using eIVOGo.Properties;
 using Model.DataEntity;
 using Model.DocumentManagement;
@@ -59,12 +59,12 @@ namespace eIVOGo.Controllers
                 if (viewModel.Sort != null && viewModel.Sort.Length > 0)
                     ViewBag.Sort = viewModel.Sort.Where(s => s.HasValue).Select(s => s.Value).ToArray();
                 ViewBag.PageIndex = viewModel.PageIndex - 1;
-                return View("~/Views/TrackCode/Module/ItemList.ascx", items);
+                return View("~/Views/TrackCode/Module/ItemList.cshtml", items);
             }
             else
             {
                 ViewBag.PageIndex = 0;
-                return View("~/Views/TrackCode/Module/QueryResult.ascx", items);
+                return View("~/Views/TrackCode/Module/QueryResult.cshtml", items);
             }
         }
 
@@ -76,10 +76,10 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "發票字軌資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "發票字軌資料錯誤!!");
             }
 
-            return View("~/Views/TrackCode/Module/EditItem.ascx", item);
+            return View("~/Views/TrackCode/Module/EditItem.cshtml", item);
 
         }
 
@@ -104,10 +104,10 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "發票字軌資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "發票字軌資料錯誤!!");
             }
             
-            return View("~/Views/TrackCode/Module/DataItem.ascx", item);
+            return View("~/Views/TrackCode/Module/DataItem.cshtml", item);
 
         }
 
@@ -172,7 +172,7 @@ namespace eIVOGo.Controllers
 
             models.SubmitChanges();
 
-            return View("~/Views/TrackCode/Module/DataItem.ascx", model);
+            return View("~/Views/TrackCode/Module/DataItem.cshtml", model);
 
         }
 

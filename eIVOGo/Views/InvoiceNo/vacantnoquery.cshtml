@@ -182,6 +182,7 @@
             },
 
             process: function () {
+                clearErrors();
                 $('#theForm').ajaxForm({
                     url: "@(Url.Action("ProcessVacantNo","InvoiceNo"))",
                     beforeSubmit: function () {

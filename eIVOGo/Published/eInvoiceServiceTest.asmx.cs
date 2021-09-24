@@ -62,7 +62,7 @@ namespace eIVOGo.Published
                     }
                 
 
-                //GovPlatformFactory.Notify();
+                //
 
             }
             catch (Exception ex)
@@ -104,7 +104,7 @@ namespace eIVOGo.Published
                 }
 
 
-                //GovPlatformFactory.Notify();
+                //
 
             }
             catch (Exception ex)

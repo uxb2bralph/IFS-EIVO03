@@ -23,6 +23,10 @@ using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
 using Model.InvoiceManagement;
 using Newtonsoft.Json;
+using System.Xml;
+using Model.Schema.EIVO;
+using System.Xml.Linq;
+using System.Web.Http;
 
 namespace eIVOGo.Controllers
 {
@@ -42,7 +46,7 @@ namespace eIVOGo.Controllers
             /**
                 Http Header
                 Seed: RANDOM[16]
-                Authorization: Base64(SHA256([Vendor 統編] + [Activation Key] + [Seed]))
+                Authorization: Base64(ToHexString(SHA256([Vendor 統編] + [Activation Key] + [Seed])))
 
                 {
 	                "SellerID": "[商家統編]",
@@ -61,10 +65,13 @@ namespace eIVOGo.Controllers
             viewModel.Authorization = Request.Headers["Authorization"].GetEfficientString();
 
             List<InvoiceNoAllocation> items = models.AllocateInvoiceNo(viewModel);
+            var item = items.FirstOrDefault();
 
             return Json(new
             {
                 viewModel.SellerID,
+                item?.InvoiceNoInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.Year,
+                item?.InvoiceNoInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo,
                 invoice_issue = items.Select(t => new
                 {
                     sn = t.InvoiceNoInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode + String.Format("{0:00000000}", t.InvoiceNo),
@@ -145,6 +152,21 @@ namespace eIVOGo.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult VerifyAllowance()
+        {
+            XmlDocument viewModel = new XmlDocument();
+            if (Request.ContentLength > 0)
+            {
+                viewModel.Load(Request.InputStream);
+            }
+            ViewBag.ViewModel = viewModel;
+            return View("~/Views/POSDevice/VerifyAllowance.cshtml");
+        }
 
+        public ActionResult UploadAttachment()
+        {
+
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

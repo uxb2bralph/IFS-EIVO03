@@ -13,7 +13,9 @@ using Model.Helper;
 using Model.InvoiceManagement;
 using Model.Locale;
 using Model.Models.ViewModel;
+using Model.Security;
 using Model.Security.MembershipManagement;
+using Utility;
 
 namespace eIVOGo.Helper
 {
@@ -155,48 +157,35 @@ namespace eIVOGo.Helper
             {
                 if (viewModel.Seed != null && viewModel.Authorization != null)
                 {
-                    OrganizationToken token = seller.OrganizationToken;
-                    if (token == null)
-                    {
-                        token = models.GetTable<InvoiceIssuerAgent>().Where(i => i.IssuerID == seller.CompanyID)
-                                    .Join(models.GetTable<Organization>(), i => i.AgentID, o => o.CompanyID, (i, o) => o)
-                                    .Join(models.GetTable<OrganizationToken>(), o => o.CompanyID, t => t.CompanyID, (o, t) => t)
-                                    .FirstOrDefault();
-                                
-                    }
-                    if (token == null)
-                    {
-                        auth = false;
-                    }
-                    else
-                    {
-                        SHA256 hash = SHA256.Create();
-                        String computedAuth = Convert.ToBase64String(
-                                hash.ComputeHash(
-                                    Encoding.Default.GetBytes($"{token.Organization.ReceiptNo}{token.KeyID}{viewModel.Seed}")
-                                )
-                            );
-
-                        auth = viewModel.Authorization == computedAuth;
-                    }
+                    auth = models.CheckAuthToken(seller, viewModel) != null;
                 }
 
                 if (auth)
                 {
-                    using (TrackNoManager mgr = new TrackNoManager(models, seller.CompanyID))
+                    try
                     {
-                        for (int i = 0; i < viewModel.quantity; i++)
+                        using (TrackNoManager mgr = new TrackNoManager(models, seller.CompanyID))
                         {
-                            var item = mgr.AllocateInvoiceNo();
-                            if (item == null)
-                                break;
+                            for (int i = 0; i < viewModel.quantity; i++)
+                            {
+                                var item = mgr.AllocateInvoiceNo();
+                                if (item == null)
+                                    break;
 
-                            item.RandomNo = String.Format("{0:0000}", (DateTime.Now.Ticks % 10000));
-                            item.EncryptedContent = (item.InvoiceNoInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode + String.Format("{0:00000000}", item.InvoiceNo).EncryptContent(item.RandomNo));
-                            models.SubmitChanges();
+                                item.RandomNo = String.Format("{0:0000}", (DateTime.Now.Ticks % 10000));
+                                item.EncryptedContent = String.Concat(item.InvoiceNoInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode,
+                                        String.Format("{0:00000000}", item.InvoiceNo),
+                                        item.RandomNo).EncryptContent();
+                                models.SubmitChanges();
 
-                            items.Add(item);
+                                items.Add(item);
+                            }
+                            mgr.Close();
                         }
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.Error(ex);
                     }
                 }
             }
@@ -204,6 +193,44 @@ namespace eIVOGo.Helper
             return items;
         }
 
+        public static bool CheckAvailableInterval(this GenericManager<EIVOEntityDataContext> models, POSDeviceViewModel viewModel,out String reason)
+        {
+            reason = null;
+            var seller = models.GetTable<Organization>().Where(c => c.ReceiptNo == viewModel.company_id).FirstOrDefault();
+            bool auth = true;
+            if (seller != null)
+            {
+                if (viewModel.Seed != null && viewModel.Authorization != null)
+                {
+                    auth = models.CheckAuthToken(seller, viewModel) != null;
+                }
+
+                if (auth)
+                {
+                    try
+                    {
+                        using (TrackNoManager mgr = new TrackNoManager(models, seller.CompanyID))
+                        {
+                            if(!mgr.PeekInvoiceNo().HasValue)
+                            {
+                                auth = false;
+                                reason = "inovice no not available!";
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex);
+                    }
+                }
+                else
+                {
+                    reason = "auth failed!";
+                }
+            }
+
+            return auth;
+        }
 
     }
 }

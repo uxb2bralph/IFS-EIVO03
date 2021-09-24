@@ -121,13 +121,13 @@ namespace InvoiceClient.Agent
                     if (_isPGP)
                     {
                         String responseName = String.Format("{0}{1}", Path.Combine(Logger.LogDailyPath, Path.GetFileNameWithoutExtension(contentPath.Replace("request", "response").Replace("_OUT_", "_IN_"))), ".xml");
-                        auto.ConvertToXml().Save(responseName);
+                        auto.ConvertToXml().SaveDocumentWithEncoding(responseName);
 
                         String gpgName = responseName.EncryptFileTo(_ResponsedPath);
                     }
                     else
                     {
-                        auto.ConvertToXml().Save(String.Format("{0}{1}", Path.Combine(_ResponsedPath, Path.GetFileNameWithoutExtension(fileName.Replace("request", "response").Replace("_OUT_", "_IN_"))), ".xml"));
+                        auto.ConvertToXml().SaveDocumentWithEncoding(String.Format("{0}{1}", Path.Combine(_ResponsedPath, Path.GetFileNameWithoutExtension(fileName.Replace("request", "response").Replace("_OUT_", "_IN_"))), ".xml"));
                     }
                 }
             }

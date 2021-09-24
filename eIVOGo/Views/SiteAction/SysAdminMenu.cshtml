@@ -34,6 +34,9 @@
                         <a href="@(VirtualPathUtility.ToAbsolute("~/TrackCode/Index"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>電子發票字軌維護</a>
                     </li>
                     <li>
+                        <a href="@(Url.Action("Index","PeriodicalExchangeRate"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>期別匯率維護</a>
+                    </li>
+                    <li>
                         <a href="@(VirtualPathUtility.ToAbsolute("~/WinningNumber/Index"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>電子發票中獎號碼維護</a>
                     </li>
                     @*<li>
@@ -127,8 +130,8 @@
                         <a href="@(VirtualPathUtility.ToAbsolute("~/BusinessRelationship/MaintainRelationship"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>相對營業人資料管理</a>
                     </li>
                     @*<li>
-            <a href="@(VirtualPathUtility.ToAbsolute("~/SAM/SocialWelfareAgenciesManger.aspx"))">社福機構資料管理</a>
-        </li>*@
+                    <a href="@(VirtualPathUtility.ToAbsolute("~/SAM/SocialWelfareAgenciesManger.aspx"))">社福機構資料管理</a>
+                </li>*@
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
@@ -141,9 +144,6 @@
                     <li>
                         <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceProcess/Index"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>資料查詢／列印／匯出</a>
                     </li>
-                    @*<li>
-                    <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceProcess/InquireToPrint"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>發票列印</a>
-                </li>*@
                     <li>
                         <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceBusiness/CreateInvoice"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>線上開立發票</a>
                     </li>
@@ -155,9 +155,6 @@
                     </li>
                     <li>
                         <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceNo/VacantNoIndex"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>上期發票空白號碼查詢／匯出</a>
-                    </li>
-                    <li>
-                        <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceProcess/IssuingNotice"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>重送開立發票通知</a>
                     </li>
                     <li>
                         <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceProcess/InquireToMIG"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>下載MIG檔案</a>
@@ -178,6 +175,17 @@
                                 <a href="@(VirtualPathUtility.ToAbsolute("~/DataExchange/Index"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>資料管理</a>
                             </li>
                         </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>發票通知<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="@(VirtualPathUtility.ToAbsolute("~/InvoiceProcess/IssuingNotice"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>重送開立發票通知</a>
+                    </li>
+                    <li>
+                        <a href="@Html.Raw(Url.Action("InquireToNotifyWinning", "InvoiceProcess"))"><i class="fa fa-hand-o-right" aria-hidden="true"></i>重送發票中獎通知</a>
                     </li>
                 </ul>
             </li>

@@ -2,6 +2,7 @@
 @using System.Linq.Expressions
 
 @using Business.Helper
+@using Model.Helper
 @using eIVOGo.Helper
 @using eIVOGo.Models
 @using eIVOGo.Controllers
@@ -19,7 +20,7 @@
 }
 <tr>
     <th>
-        買受人名稱
+        個人識別碼
     </th>
     <td class="tdleft">
         <input name="BuyerName" type="text" value="@(_viewModel?.BuyerName)" class="form-control"/>

@@ -331,7 +331,7 @@ namespace Model.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 發票日期、發票時間格式錯誤(yyyy/MM/dd HH:mm:ss)；上傳資料:{0} {1}.
+        ///   Looks up a localized string similar to 發票日期、發票時間錯誤(yyyy/MM/dd HH:mm:ss)；上傳資料:{0} {1}.
         /// </summary>
         public static string AlertInvoiceDateTime {
             get {
@@ -628,6 +628,15 @@ namespace Model.Resource {
         public static string InvalidPublicCarrierType {
             get {
                 return ResourceManager.GetString("InvalidPublicCarrierType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 數量錯誤，傳送資料：{0}，TAG:&lt; Quantity /&gt;.
+        /// </summary>
+        public static string InvalidQuantity {
+            get {
+                return ResourceManager.GetString("InvalidQuantity", resourceCulture);
             }
         }
         

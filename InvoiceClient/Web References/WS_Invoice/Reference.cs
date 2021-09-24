@@ -137,6 +137,8 @@ namespace InvoiceClient.WS_Invoice {
         
         private System.Threading.SendOrPostCallback UploadInvoiceAutoTrackNoByClientOperationCompleted;
         
+        private System.Threading.SendOrPostCallback UploadInvoiceByClientOperationCompleted;
+        
         private System.Threading.SendOrPostCallback UploadAllowanceByClientOperationCompleted;
         
         private System.Threading.SendOrPostCallback UploadInvoiceAutoTrackNoV2OperationCompleted;
@@ -370,6 +372,9 @@ namespace InvoiceClient.WS_Invoice {
         
         /// <remarks/>
         public event UploadInvoiceAutoTrackNoByClientCompletedEventHandler UploadInvoiceAutoTrackNoByClientCompleted;
+        
+        /// <remarks/>
+        public event UploadInvoiceByClientCompletedEventHandler UploadInvoiceByClientCompleted;
         
         /// <remarks/>
         public event UploadAllowanceByClientCompletedEventHandler UploadAllowanceByClientCompleted;
@@ -2001,6 +2006,43 @@ namespace InvoiceClient.WS_Invoice {
             if ((this.UploadInvoiceAutoTrackNoByClientCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.UploadInvoiceAutoTrackNoByClientCompleted(this, new UploadInvoiceAutoTrackNoByClientCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://www.uxb2b.com/UploadInvoiceByClient", RequestNamespace="http://www.uxb2b.com/", ResponseNamespace="http://www.uxb2b.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public System.Xml.XmlNode UploadInvoiceByClient(System.Xml.XmlNode uploadData, string clientID, int channelID, bool autoTrackNo, int processType) {
+            object[] results = this.Invoke("UploadInvoiceByClient", new object[] {
+                        uploadData,
+                        clientID,
+                        channelID,
+                        autoTrackNo,
+                        processType});
+            return ((System.Xml.XmlNode)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void UploadInvoiceByClientAsync(System.Xml.XmlNode uploadData, string clientID, int channelID, bool autoTrackNo, int processType) {
+            this.UploadInvoiceByClientAsync(uploadData, clientID, channelID, autoTrackNo, processType, null);
+        }
+        
+        /// <remarks/>
+        public void UploadInvoiceByClientAsync(System.Xml.XmlNode uploadData, string clientID, int channelID, bool autoTrackNo, int processType, object userState) {
+            if ((this.UploadInvoiceByClientOperationCompleted == null)) {
+                this.UploadInvoiceByClientOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUploadInvoiceByClientOperationCompleted);
+            }
+            this.InvokeAsync("UploadInvoiceByClient", new object[] {
+                        uploadData,
+                        clientID,
+                        channelID,
+                        autoTrackNo,
+                        processType}, this.UploadInvoiceByClientOperationCompleted, userState);
+        }
+        
+        private void OnUploadInvoiceByClientOperationCompleted(object arg) {
+            if ((this.UploadInvoiceByClientCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.UploadInvoiceByClientCompleted(this, new UploadInvoiceByClientCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -3825,6 +3867,32 @@ namespace InvoiceClient.WS_Invoice {
         private object[] results;
         
         internal UploadInvoiceAutoTrackNoByClientCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public System.Xml.XmlNode Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((System.Xml.XmlNode)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3190.0")]
+    public delegate void UploadInvoiceByClientCompletedEventHandler(object sender, UploadInvoiceByClientCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.3190.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class UploadInvoiceByClientCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal UploadInvoiceByClientCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }

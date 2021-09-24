@@ -46,7 +46,7 @@
             <table border="0" cellspacing="0" cellpadding="0" class="verifyno">
                 <tr>
                     <td>
-                        <%  Html.RenderPartial("~/Views/Shared/CaptchaImg.ascx"); %>
+                        <%  Html.RenderPartial("~/Views/Shared/CaptchaImg.cshtml"); %>
                     </td>
                 </tr>
             </table>
@@ -67,7 +67,7 @@
 </body>
 </html>
 <%  Html.RenderPartial("~/Views/Shared/ReportInputError.cshtml"); %>
-<%  Html.RenderPartial("~/Views/Shared/JsAlert.cshtml"); %>
+<%  Html.RenderPartial("~/Views/Shared/AlertMessage.cshtml"); %>
 <script>
     $(function () {
         $('input:text').addClass('form-control textfield');

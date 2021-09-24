@@ -1,0 +1,64 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@using Uxnet.Com.DataAccessLayer
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+
+    models = ViewContext.Controller.DataSource();
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    QueryViewModel _viewModel = (QueryViewModel)ViewBag.ViewModel;
+}
+@{
+    Naming.FieldDisplayType? displayType = (Naming.FieldDisplayType?)ViewBag.DisplayType;
+}
+@switch (displayType)
+{
+    case Naming.FieldDisplayType.Header:
+<a href="javascript:void(0);" onclick="$inquiryAgent.sort('Business',this);">類別</a>
+        break;
+    case Naming.FieldDisplayType.DataItem:
+        BusinessRelationship item = this.Model as BusinessRelationship;
+        <text>@(item?.BusinessType.Business)</text>
+        break;
+    case Naming.FieldDisplayType.SortBy:
+        QueryViewModel viewModel = (QueryViewModel)ViewBag.ViewModel;
+        if (viewModel.SortName != null)
+        {
+            int idx = System.Array.IndexOf(viewModel.SortName, "Business");
+            if (idx >= 0)
+            {
+                TempData["SortedItems"] = (TempData["SortedItems"] as IOrderedQueryable<BusinessRelationship> ?? (IQueryable<BusinessRelationship>)this.Model).OrderBy(p => p.BusinessID, viewModel.SortType[idx]);
+            }
+        }
+        break;
+
+    case Naming.FieldDisplayType.Edit:
+        item = this.Model as BusinessRelationship;
+        <text>
+            @(item?.BusinessType?.Business)
+        </text>
+        break;
+    default:
+        break;
+}
+
+
+

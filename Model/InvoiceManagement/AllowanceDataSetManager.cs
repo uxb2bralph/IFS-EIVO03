@@ -26,8 +26,9 @@ namespace Model.InvoiceManagement
             StatusCode,
             Description,
             InvoiceNo,
+            DataNo,
         }
-        public DataTable InitializeAllowanceResponseTable()
+        public virtual DataTable InitializeAllowanceResponseTable()
         {
             DataTable table = new DataTable();
             table.Columns.Add(new DataColumn("Allowance No", typeof(String)));
@@ -85,8 +86,16 @@ namespace Model.InvoiceManagement
                         InvoiceAllowance newItem = validator.Allowance;
 
                         table.InsertOnSubmit(newItem);
-                        D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
-                        D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                        if (newItem.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.D0401)
+                        {
+                            D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                            D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                        }
+                        else
+                        {
+                            B0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                            B0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                        }
 
                         this.SubmitChanges();
 
@@ -118,7 +127,7 @@ namespace Model.InvoiceManagement
         }
 
 
-        protected void ReportError(DataTable result, DataRow source, Exception ex, AllowanceDataSetValidator validator)
+        protected virtual void ReportError(DataTable result, DataRow source, Exception ex, AllowanceDataSetValidator validator)
         {
             DataRow row = result.NewRow();
             row[(int)ResultField.Description] = ex.Message;

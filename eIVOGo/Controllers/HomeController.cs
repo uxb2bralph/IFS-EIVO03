@@ -13,6 +13,7 @@ using Business.Helper;
 using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
 using Newtonsoft.Json;
+using Model.Helper;
 
 namespace eIVOGo.Controllers
 {
@@ -93,17 +94,7 @@ namespace eIVOGo.Controllers
         {
             var profile = HttpContext.GetUser();
 
-            IQueryable<Organization> items;
-
-            if (profile.IsSystemAdmin())
-            {
-                items = models.GetTable<Organization>();
-            }
-            else
-            {
-                items = models.GetTable<BusinessRelationship>().Where(b => b.MasterID == profile.CurrentUserRole.OrganizationCategory.CompanyID)
-                    .Join(models.GetTable<Organization>(), b => b.RelativeID, o => o.CompanyID, (b, o) => o);
-            }
+            IQueryable<Organization> items = models.GetTable<Organization>();
 
             if (!String.IsNullOrEmpty(term))
             {
@@ -117,22 +108,64 @@ namespace eIVOGo.Controllers
 
             ViewBag.DataItems = items;
 
-            var item = items.FirstOrDefault();
-
-            if (item != null)
+            if (profile.IsSystemAdmin())
             {
-                return Content(JsonConvert.SerializeObject(item), "application/json");
+                var item = items.FirstOrDefault();
+
+                if (item != null)
+                {
+                    return Content(JsonConvert.SerializeObject(item), "application/json");
+                }
+                else
+                {
+                    return new EmptyResult();
+                }
             }
             else
             {
-                return new EmptyResult();
+                var item = models.GetTable<BusinessRelationship>().Where(b => b.MasterID == profile.CurrentUserRole.OrganizationCategory.CompanyID)
+                    .Join(items, b => b.RelativeID, o => o.CompanyID, (b, o) => b).FirstOrDefault();
+
+                if (item != null)
+                {
+                    return Json(new { item.Counterpart.ReceiptNo, item.CompanyName, item.Addr, item.Phone, item.ContactEmail, item.CustomerNo }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return new EmptyResult();
+                }
             }
+
         }
 
         public ActionResult ReportError(ActionResultViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
             return View("~/Views/Home/Module/ReportError.cshtml");
+        }
+
+        [Authorize]
+        public ActionResult Download(QueryViewModel viewModel)
+        {
+            if (viewModel.KeyID != null)
+            {
+                String fileName = viewModel.KeyID.DecryptData();
+                if (System.IO.File.Exists(fileName))
+                {
+                    return File(fileName, "application/octet-stream");
+                }
+            }
+
+            ViewBag.CloseWindow = true;
+            return View("~/Views/Shared/AlertMessage.cshtml", model: "檔案錯誤!!");
+        }
+
+        public ActionResult SystemInfo()
+        {
+            return Json(new
+            {
+                Version = "2021-07-01",
+            }, JsonRequestBehavior.AllowGet);
         }
 
     }

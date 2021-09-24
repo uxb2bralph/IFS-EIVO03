@@ -11,11 +11,11 @@
 @using eIVOGo.Models.ViewModel
 @using Model.Models.ViewModel
 @using Model.DataEntity
-@using Model.Helper
 @using Model.Locale
 @using Model.Schema.EIVO
 @using Utility
 @using Business.Helper
+@using Model.Helper
 @using Uxnet.Web.WebUI
 @{
 
@@ -219,7 +219,7 @@
         }
         <div class="border_gray" style="width:100%">
             <!--表格 開始-->
-            @{ Html.RenderPartial("~/Views/Notification/Module/C0401MailView.ascx", _model);}
+            @{ Html.RenderPartial("~/Views/Notification/Module/C0401MailView.cshtml", _model);}
 
             <!--表格 結束-->
         </div>
@@ -272,7 +272,7 @@
         @if (_model.Organization.OrganizationStatus.SetToOutsourcingCS == true)
         {
             { 
-                Html.RenderPartial("~/Module/SYS/Info/ServiceNotation.ascx");
+                    Html.RenderPartial("~/Views/Notification/Shared/ServiceNotation.cshtml", _model.Organization);
             }
 
         }

@@ -1,0 +1,66 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using eIVOGo.Helper
+@using Model.Locale
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Security.MembershipManagement
+@using Business.Helper
+@using Model.Helper
+@using eIVOGo.Controllers
+@{
+    UserProfileMember _profile = Context.GetUser();
+}
+
+    <tr>
+        <th>
+            匯入匯率資料
+        </th>
+        <td class="tdleft">
+            <input type="button" name="btnDataSample" value="下載範本" />&nbsp;&nbsp;
+            <input type="button" name="btnUploadData" value="立即傳送" />
+            <script>
+                        $(function () {
+
+                            $('input[name="btnDataSample"]').on('click', function (event) {
+                                $('').launchDownload('@Html.Raw(Url.Action("GetExchangeRateSample", "PeriodicalExchangeRate"))', {});
+                            });
+
+                            var $btn = $('input[name="btnUploadData"]');
+                            var $file = $('<input name="excelFile" type="file" style="display: none;" />');
+                            $btn.before($file);
+
+                            $btn.click(function () {
+                                $file.val('');
+                                $file.click();
+                            });
+
+                            $file.on('change', function (event) {
+                                clearErrors();
+                                var $formData = $('form').find('input,select,textArea').serializeObject();
+                                uploadFile($file, $formData, '@(Url.Action("UploadExchangeRate","PeriodicalExchangeRate"))',
+                                    function (data) {
+                                        $btn.before($file);
+                                        if ($.isPlainObject(data)) {
+                                            if (data.result) {
+
+                                            } else {
+                                                reportError(data);
+                                            }
+                                        } else {
+                                            $(data).appendTo($('body'));
+                                        }
+                                    },
+                                    function () {
+                                        $btn.before($file);
+                                    });
+                            });
+                        });
+            </script>
+        </td>
+    </tr>
+

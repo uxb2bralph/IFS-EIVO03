@@ -1,26 +1,31 @@
+@using System.IO
+@using System.Linq.Expressions
 
-
-@{ Register Src="~/Views/InvoiceQuery/Module/InvoiceReport.ascx" TagPrefix="uc1" TagName="InvoiceReport" }
+@using eIVOGo.Controllers
 @using eIVOGo.Helper
-@section headContent { 
- 
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
+
+    ViewBag.ActionName = "首頁 > 資料管理";
 }
-<uc1:InvoiceReport runat="server" ID="InvoiceReport" />
-<script runat="server">
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        ViewBag.ActionName = "首頁 > 資料管理";
+@section headContent {
+
+}
+
+@section formContent {
+    @{
+        Html.RenderPartial("~/Views/InvoiceQuery/Module/InvoiceReport.cshtml");
     }
+}
 
-    //public override void Dispose()
-    //{
-    //    var models = TempData.GetGenericModelSource();
-    //    if (models != null)
-    //        models.Dispose();
 
-    //    base.Dispose();
-    //}
-
-</script>

@@ -2,6 +2,7 @@
 @using System.Linq.Expressions
 
 @using Business.Helper
+@using Model.Helper
 @using DataAccessLayer.basis
 @using eIVOGo.Helper
 @using eIVOGo.Models
@@ -62,6 +63,7 @@
                     next: '下頁',
                     last: '最後',
                     initiateStartPageClick: false,
+                    startPage: @((_viewModel.PageIndex ?? 0) + 1),
                     onPageClick: function (event, page) {
                         $inquiryAgent.inquire(page);
                     }

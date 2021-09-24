@@ -14,7 +14,22 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@{
 
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    InvoiceBuyer _model;
+    InvoiceBuyerViewModel _viewModel;
+    String _dialogID = "buyer" + DateTime.Now.Ticks;
+
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = this.Model as InvoiceBuyer;
+    _viewModel = (InvoiceBuyerViewModel)ViewBag.ViewModel;
+
+}
 <div id="@(_dialogID)">
 
     <div class="border_gray">
@@ -55,7 +70,7 @@
                     <td>
                         <input type="text" name="ContactName" value="@(_viewModel.ContactName)" />
                     </td>
-                </tr>               
+                </tr>
                 <tr>
                     <th>連絡人電話</th>
                     <td>
@@ -92,18 +107,18 @@
 
                         </script>
                     </td>
-                </tr> 
+                </tr>
                 <tr>
                     <th>郵遞區號</th>
                     <td>
                         <input type="text" name="PostCode" value="@(_viewModel.PostCode)" />
                     </td>
-                </tr>                 
+                </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan="2" style="text-align:center;">
-                        <input type="button" value="確定" class="btn"/>
+                        <input type="button" value="確定" class="btn" />
                     </td>
                 </tr>
             </tfoot>
@@ -161,23 +176,4 @@
 </div>
 
 
-<script runat="server">
 
-    ModelStateDictionary _modelState;
-    ModelSource<InvoiceItem> models;
-    InvoiceBuyer _model;
-    InvoiceBuyerViewModel _viewModel;
-    String _dialogID = "buyer" + DateTime.Now.Ticks;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = this.Model as InvoiceBuyer;
-        _viewModel = (InvoiceBuyerViewModel)ViewBag.ViewModel;
-
-    }
-
-</script>

@@ -74,7 +74,11 @@ namespace Model.InvoiceManagement
         public DataTable SaveUploadInvoiceAutoTrackNoForCBE(DataSet item, ProcessRequest request)
         {
             Organization owner = request.Organization;
-            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, Naming.InvoiceProcessType.C0401_Xlsx_CBE);
+            DateTime applyInvoiceDate = request.ProcessRequestCondition.Any(c => c.ConditionID == (int)ProcessRequestCondition.ConditionType.UseLastPeriodTrackCodeNo)
+                        ? new DateTime(DateTime.Today.Year, (DateTime.Today.Month + 1) / 2 * 2 - 1, 1).AddDays(-1)
+                        : DateTime.Today;
+
+            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, Naming.InvoiceProcessType.C0401_Xlsx_CBE, applyInvoiceDate);
 
             DataTable result = InitializeInvoiceResponseTable();
 
@@ -103,7 +107,7 @@ namespace Model.InvoiceManagement
                 List<InvoiceItem> eventItems = new List<InvoiceItem>();
 
                 int invSeq = 0;
-                processAutoTrackInvoiceNo(invoiceItems, details, Naming.InvoiceTypeDefinition.一般稅額計算之電子發票, validator, ref invSeq, eventItems, result);
+                processAutoTrackInvoiceNo(request, invoiceItems, details, Naming.InvoiceTypeDefinition.一般稅額計算之電子發票, validator, ref invSeq, eventItems, result);
 
                 if (eventItems.Count > 0)
                 {
@@ -125,12 +129,15 @@ namespace Model.InvoiceManagement
             return SaveUploadInvoiceAutoTrackNo(item, request, Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC);
         }
 
-        void processAutoTrackInvoiceNo(IEnumerable<DataRow> items, IEnumerable<DataRow> details, Naming.InvoiceTypeDefinition indication, InvoiceDataSetValidator validator,ref int invSeq, List<InvoiceItem> eventItems, DataTable result)
+        void processAutoTrackInvoiceNo(ProcessRequest request, IEnumerable<DataRow> items, IEnumerable<DataRow> details, Naming.InvoiceTypeDefinition indication, InvoiceDataSetValidator validator,ref int invSeq, List<InvoiceItem> eventItems, DataTable result)
         {
+            bool deferredNotice = request.ProcessRequestCondition.Any(c => c.ConditionID == (int)ProcessRequestCondition.ConditionType.DeferredIssueNotice);
             validator.InvoiceTypeIndication = indication;
             validator.StartAutoTrackNo();
             for (int idx = 0; idx < items.Count(); idx++, invSeq++)
             {
+                Console.WriteLine($"start {invSeq} => {DateTime.Now}");
+
                 try
                 {
                     var invItem = items.ElementAt(idx);
@@ -166,7 +173,8 @@ namespace Model.InvoiceManagement
                     InvoiceItem newItem = validator.InvoiceItem;
 
                     C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
-                    C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                    C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document,
+                        deferredNotice ? Naming.InvoiceStepDefinition.文件準備中 : Naming.InvoiceStepDefinition.已接收資料待通知);
 
                     this.EntityList.InsertOnSubmit(newItem);
                     this.SubmitChanges();
@@ -179,6 +187,9 @@ namespace Model.InvoiceManagement
                     Logger.Error(ex);
                     ReportError(result, null, ex, validator);
                 }
+
+                Console.WriteLine($"end {invSeq} => {DateTime.Now}");
+
             }
             validator.EndAutoTrackNo();
         }
@@ -186,7 +197,11 @@ namespace Model.InvoiceManagement
         public DataTable SaveUploadInvoiceAutoTrackNo(DataSet item, ProcessRequest request, Naming.InvoiceProcessType processType = Naming.InvoiceProcessType.C0401_Xlsx)
         {
             Organization owner = request.Organization;
-            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, processType);
+            DateTime applyInvoiceDate = request.ProcessRequestCondition.Any(c => c.ConditionID == (int)ProcessRequestCondition.ConditionType.UseLastPeriodTrackCodeNo)
+                        ? new DateTime(DateTime.Today.Year, (DateTime.Today.Month + 1) / 2 * 2 - 1, 1).AddDays(-1)
+                        : DateTime.Today;
+
+            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, processType, applyInvoiceDate);
 
             DataTable result = InitializeInvoiceResponseTable();
 
@@ -212,6 +227,8 @@ namespace Model.InvoiceManagement
 
             if (invoiceItems.Count() > 0)
             {
+                Console.WriteLine($"start total {invoiceItems.Count()} => {DateTime.Now}");
+
                 EventItems = null;
                 List<InvoiceItem> eventItems = new List<InvoiceItem>();
 
@@ -221,7 +238,7 @@ namespace Model.InvoiceManagement
                 if (invoiceData != null && invoiceData.Count() > 0)
                 {
 
-                    processAutoTrackInvoiceNo(invoiceData, details, Naming.InvoiceTypeDefinition.特種稅額計算之電子發票, validator, ref invSeq, eventItems, result);
+                    processAutoTrackInvoiceNo(request, invoiceData, details, Naming.InvoiceTypeDefinition.特種稅額計算之電子發票, validator, ref invSeq, eventItems, result);
                     var tmp = invoiceData;
                     invoiceData = invoiceItems.Except(tmp);
                 }
@@ -230,13 +247,15 @@ namespace Model.InvoiceManagement
                     invoiceData = invoiceItems;
                 }
 
-                processAutoTrackInvoiceNo(invoiceData, details, Naming.InvoiceTypeDefinition.一般稅額計算之電子發票, validator, ref invSeq, eventItems, result);
+                processAutoTrackInvoiceNo(request, invoiceData, details, Naming.InvoiceTypeDefinition.一般稅額計算之電子發票, validator, ref invSeq, eventItems, result);
 
                 if (eventItems.Count > 0)
                 {
                     HasItem = true;
                 }
                 EventItems = eventItems;
+
+                Console.WriteLine($"end total {invoiceItems.Count()} => {DateTime.Now}");
 
                 if (this.HasError == true)
                 {
@@ -247,11 +266,71 @@ namespace Model.InvoiceManagement
             return result;
         }
 
-        public DataTable SaveUploadInvoice(DataSet item, ProcessRequest request)
+        //void proc(IEnumerable<DataRow> items, IEnumerable<DataRow> details, Naming.InvoiceTypeDefinition indication, InvoiceDataSetValidator validator, ref int invSeq, List<InvoiceItem> eventItems, DataTable result, bool useA0401)
+        //{
+        //    validator.InvoiceTypeIndication = indication;
+        //    for (int idx = 0; idx < items.Count(); idx++, invSeq++)
+        //    {
+        //        Console.WriteLine($"start {invSeq} => {DateTime.Now}");
+
+        //        try
+        //        {
+        //            var invItem = items.ElementAt(idx);
+        //            String invoiceNo = invItem.GetString(validator.InvoiceField.Invoice_No);
+        //            IEnumerable<DataRow> productDetails = details.Where(d => d.GetString(validator.DetailsField.Invoice_No) == invoiceNo);
+
+        //            Exception ex;
+        //            if ((ex = validator.Validate(invItem, productDetails)) != null)
+        //            {
+        //                if (IgnoreDuplicateDataNumberException && (ex is DuplicateDataNumberException))
+        //                {
+        //                    var testItem = ((DuplicateDataNumberException)ex).CurrentPO.InvoiceItem;
+        //                    if (testItem != null)
+        //                    {
+        //                        eventItems.Add(testItem);
+        //                        continue;
+        //                    }
+        //                }
+
+        //                ReportError(result, invItem, ex, validator);
+        //                continue;
+        //            }
+
+        //            InvoiceItem newItem = validator.InvoiceItem;
+
+        //            if (useA0401)
+        //            {
+        //                A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+        //                A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+        //            }
+        //            else
+        //            {
+        //                C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+        //                C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+        //            }
+
+        //            this.EntityList.InsertOnSubmit(newItem);
+        //            this.SubmitChanges();
+
+        //            eventItems.Add(newItem);
+        //            ReportSuccess(result, newItem);
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Logger.Error(ex);
+        //            ReportError(result, null, ex, validator);
+        //        }
+
+        //        Console.WriteLine($"end {invSeq} => {DateTime.Now}");
+        //    }
+        //}
+
+        public DataTable SaveUploadInvoice(DataSet item, ProcessRequest request,bool useA0401 = false)
         {
             Organization owner = request.Organization;
 
-            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer);
+            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, useA0401 ? Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer : Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer, null);
 
             DataTable result = InitializeInvoiceResponseTable();
 
@@ -264,29 +343,34 @@ namespace Model.InvoiceManagement
             }
 
             String invoiceNo = "";
-            foreach (DataRow row in details)
-            {
-                if (row.IsNull(validator.DetailsField.Invoice_No) || String.IsNullOrEmpty((String)row[validator.DetailsField.Invoice_No]))
-                {
-                    row[validator.DetailsField.Invoice_No] = invoiceNo;
-                }
-                else
-                {
-                    invoiceNo = (String)row[validator.DetailsField.Invoice_No];
-                }
-            }
+            //foreach (DataRow row in details)
+            //{
+            //    if (row.IsNull(validator.DetailsField.Invoice_No) || String.IsNullOrEmpty((String)row[validator.DetailsField.Invoice_No]))
+            //    {
+            //        row[validator.DetailsField.Invoice_No] = invoiceNo;
+            //    }
+            //    else
+            //    {
+            //        invoiceNo = (String)row[validator.DetailsField.Invoice_No];
+            //    }
+            //}
 
             if (invoiceItems.Count() > 0)
             {
+                Console.WriteLine($"start total {invoiceItems.Count()} => {DateTime.Now}");
+
                 EventItems = null;
                 List<InvoiceItem> eventItems = new List<InvoiceItem>();
 
                 int invSeq = 0;
+                bool deferredNotice = request.ProcessRequestCondition.Any(c => c.ConditionID == (int)ProcessRequestCondition.ConditionType.DeferredIssueNotice);
                 void proc(IEnumerable<DataRow> items, Naming.InvoiceTypeDefinition indication)
                 {
                     validator.InvoiceTypeIndication = indication;
                     for (int idx = 0; idx < items.Count(); idx++, invSeq++)
                     {
+                        Console.WriteLine($"start {invSeq} => {DateTime.Now}");
+
                         try
                         {
                             var invItem = items.ElementAt(idx);
@@ -312,20 +396,33 @@ namespace Model.InvoiceManagement
 
                             InvoiceItem newItem = validator.InvoiceItem;
 
-                            C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
-                            C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                            if (useA0401)
+                            {
+                                A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                                A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document,
+                                    deferredNotice ? Naming.InvoiceStepDefinition.文件準備中 : Naming.InvoiceStepDefinition.已接收資料待通知);
+                            }
+                            else
+                            {
+                                C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                                C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document,
+                                    deferredNotice ? Naming.InvoiceStepDefinition.文件準備中 : Naming.InvoiceStepDefinition.已接收資料待通知);
+                            }
 
                             this.EntityList.InsertOnSubmit(newItem);
                             this.SubmitChanges();
 
                             eventItems.Add(newItem);
                             ReportSuccess(result, newItem);
+
                         }
                         catch (Exception ex)
                         {
                             Logger.Error(ex);
                             ReportError(result, null, ex, validator);
                         }
+
+                        Console.WriteLine($"end {invSeq} => {DateTime.Now}");
                     }
                 }
 
@@ -334,6 +431,7 @@ namespace Model.InvoiceManagement
                 {
 
                     proc(invoiceData, Naming.InvoiceTypeDefinition.特種稅額計算之電子發票);
+                    //proc(invoiceData, details, Naming.InvoiceTypeDefinition.特種稅額計算之電子發票, validator, ref invSeq, eventItems, result, useA0401);
                     var tmp = invoiceData;
                     invoiceData = invoiceItems.Except(tmp);
                 }
@@ -343,12 +441,15 @@ namespace Model.InvoiceManagement
                 }
 
                 proc(invoiceData, Naming.InvoiceTypeDefinition.一般稅額計算之電子發票);
+                //proc(invoiceData, details, Naming.InvoiceTypeDefinition.一般稅額計算之電子發票, validator, ref invSeq, eventItems, result, useA0401);
 
                 if (eventItems.Count > 0)
                 {
                     HasItem = true;
                 }
                 EventItems = eventItems;
+
+                Console.WriteLine($"end total {invoiceItems.Count()} => {DateTime.Now}");
 
                 if (this.HasError == true)
                 {

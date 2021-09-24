@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using TaskCenter.Helper.Jobs;
 
 namespace TaskCenter
 {
@@ -18,6 +19,9 @@ namespace TaskCenter
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            Uxnet.Com.Helper.JobScheduler.StartUp();
+            AllJobs.StartUp();
         }
     }
 }

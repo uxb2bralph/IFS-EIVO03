@@ -53,20 +53,20 @@
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element name="Description" type="xs:string"/>
-                    <xs:element name="Quantity" type="xs:decimal" minOccurs="0" nillable="true"/>
+                    <xs:element name="Quantity" type="xs:decimal"/>
                     <xs:element name="Unit" type="xs:string"/>
-                    <xs:element name="UnitPrice" type="xs:decimal" minOccurs="0" nillable="true"/>
-                    <xs:element name="Amount" type="xs:decimal" minOccurs="0" nillable="true"/>
+                    <xs:element name="UnitPrice" type="xs:decimal"/>
+                    <xs:element name="Amount" type="xs:decimal" />
                     <xs:element name="SequenceNumber" type="xs:short"/>                    
                     <xs:element name="Item" type="xs:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="Remark" type="xs:string" minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="TaxType" type="xs:unsignedByte" minOccurs="0" maxOccurs="1" />
+                    <xs:element name="TaxType" type="xs:unsignedByte" minOccurs="0" maxOccurs="1" nillable="true" />
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
               <xs:element name="SalesAmount" type="xs:decimal"/>
-              <xs:element name="FreeTaxSalesAmount" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
-              <xs:element name="ZeroTaxSalesAmount" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+              <xs:element name="FreeTaxSalesAmount" type="xs:decimal" minOccurs="0" maxOccurs="1" nillable="true"/>
+              <xs:element name="ZeroTaxSalesAmount" type="xs:decimal" minOccurs="0" maxOccurs="1" nillable="true"/>
               <xs:element name="TaxType" type="xs:unsignedByte"/>
               <xs:element name="TaxRate" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
               <xs:element name="TaxAmount" type="xs:decimal"/>
@@ -95,14 +95,24 @@
                   <xs:sequence>
                     <xs:element name="ProjectNo" type="xs:string" minOccurs="0"/>
                     <xs:element name="PurchaseNo" type="xs:string" minOccurs="0"/>
-                    <xs:element name="StampDutyFlag" type="xs:short" minOccurs="0"/>
+                    <xs:element name="StampDutyFlag" type="xs:short" minOccurs="0" nillable="true" />
+                    <xs:element maxOccurs="unbounded" name="Payment">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Method" type="xs:string" />
+                          <xs:element name="Amount" type="xs:decimal" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
               <xs:element name="LineNo" type="xs:int" minOccurs="0" nillable="true" />
+              <xs:element name="BondedAreaConfirm" type="xs:unsignedByte" nillable="1" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="Notification" type="xs:short" minOccurs="0" nillable="true" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

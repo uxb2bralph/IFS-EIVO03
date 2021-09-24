@@ -26,6 +26,7 @@ namespace Model.Models.ViewModel
         protected Organization _seller;
         protected Organization _buyer;
         protected List<InvoiceAllowanceItem> _productItems;
+        protected DateTime _allowanceDate;
 
 
         public AllowanceViewModelValidator(ModelSource<TEntity> mgr, Organization owner)
@@ -141,6 +142,8 @@ namespace Model.Models.ViewModel
                 _allowanceItem.AllowanceDate = DateTime.Now;
             }
 
+            _allowanceDate = _allowanceItem.AllowanceDate.Value;
+
             return null;
         }
 
@@ -149,9 +152,9 @@ namespace Model.Models.ViewModel
             _productItems = new List<InvoiceAllowanceItem>();
             var invTable = _mgr.GetTable<InvoiceItem>();
 
+            InvoiceItem originalInvoice = null;
             for(int i=0;i<_allowanceItem.InvoiceNo.Length;i++)
             {
-                InvoiceItem originalInvoice = null;
 
                 if (!String.IsNullOrEmpty(_allowanceItem.InvoiceNo[i]) && _allowanceItem.InvoiceNo[i].Length == 10)
                 {
@@ -198,6 +201,11 @@ namespace Model.Models.ViewModel
                     return new Exception(String.Format(MessageResources.AlertAllowance_Unit, _allowanceItem.PieceUnit[i]));
                 }
 
+                if (_allowanceDate.AddDays(1) < originalInvoice.InvoiceDate)
+                {
+                    _allowanceDate = originalInvoice.InvoiceDate.Value.AddDays(1);
+                }
+
                 var allowanceItem = new InvoiceAllowanceItem
                 {
                     Amount = _allowanceItem.Amount[i],
@@ -222,15 +230,20 @@ namespace Model.Models.ViewModel
                 CDS_Document = new CDS_Document
                 {
                     DocDate = DateTime.Now,
-                    DocType = (int)Naming.DocumentTypeDefinition.E_Allowance
+                    DocType = (int)Naming.DocumentTypeDefinition.E_Allowance,
+                    ProcessType = originalInvoice.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.A0401
+                                    ? (int)Naming.InvoiceProcessType.B0401
+                                    : (int)Naming.InvoiceProcessType.D0401,
                 },
-                AllowanceDate = _allowanceItem.AllowanceDate,
+                AllowanceDate = _allowanceDate,
+                IssueDate = _allowanceDate,
                 AllowanceNumber = _allowanceItem.AllowanceNumber,
                 AllowanceType = (byte)_allowanceItem.AllowanceType,
                 BuyerId = _allowanceItem.BuyerReceiptNo,
                 SellerId = _seller.ReceiptNo,
                 TaxAmount = _allowanceItem.TaxAmount,
                 TotalAmount = _allowanceItem.TotalAmount,
+                CurrencyID = originalInvoice.InvoiceAmountType.CurrencyID,
                 InvoiceAllowanceBuyer = new InvoiceAllowanceBuyer
                 {
                     BuyerID = _buyer?.CompanyID,

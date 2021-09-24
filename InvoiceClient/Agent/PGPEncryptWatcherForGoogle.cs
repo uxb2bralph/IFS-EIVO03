@@ -13,7 +13,7 @@ using Model.Schema.TXN;
 using System.Diagnostics;
 using System.Globalization;
 using Model.Locale;
-using DataContructor.Models;
+using DataConstructor.Models;
 
 namespace InvoiceClient.Agent
 {
@@ -48,7 +48,7 @@ namespace InvoiceClient.Agent
 
             String gpgName = fullPath.EncryptFileTo(_ResponsedPath);
             int status = 0;
-            if (File.Exists(gpgName))
+            if (gpgName.AssertFile())
             {
                 storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
                 if (AddedStore != null)
@@ -71,19 +71,19 @@ namespace InvoiceClient.Agent
                 storeFile(fullPath, Path.Combine(_requestPath, fileName));
             }
 
-            String filePath = Path.Combine(Logger.LogDailyPath, "PGPEncryptWatcherForGoogle.csv");
-            using (StreamWriter writer = new StreamWriter(filePath, true))
-            {
-                using (CsvHelper.CsvWriter csv = new CsvHelper.CsvWriter(writer, true))
-                {
-                    csv.WriteRecord<PGPEncryptWatcherModel>(new PGPEncryptWatcherModel
-                    {
-                        FileName = gpgName,
-                        Status = status,
-                    });
-                    writer.WriteLine();
-                }
-            }
+            //String filePath = Path.Combine(Logger.LogDailyPath, "PGPEncryptWatcherForGoogle.csv");
+            //using (StreamWriter writer = new StreamWriter(filePath, true))
+            //{
+            //    using (CsvHelper.CsvWriter csv = new CsvHelper.CsvWriter(writer, true))
+            //    {
+            //        csv.WriteRecord<PGPEncryptWatcherModel>(new PGPEncryptWatcherModel
+            //        {
+            //            FileName = gpgName,
+            //            Status = status,
+            //        });
+            //        csv.NextRecord();
+            //    }
+            //}
         }
 
     }

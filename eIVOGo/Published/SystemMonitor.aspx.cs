@@ -38,7 +38,7 @@ namespace eIVOGo.Published
 
         protected void btnGov_Click(object sender, EventArgs e)
         {
-            GovPlatformFactory.Notify();
+            
         }
     }
 }

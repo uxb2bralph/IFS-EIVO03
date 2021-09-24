@@ -26,6 +26,12 @@ using Model.Locale;
 using Model.Schema.TurnKey.E0402;
 using Model.Security.MembershipManagement;
 using Utility;
+using Model.InvoiceManagement;
+using Newtonsoft.Json;
+using ModelExtension.Helper;
+using CsvHelper;
+using Uxnet.Com.Helper;
+using Model.Helper;
 
 namespace eIVOGo.Controllers.TrackCodeNo
 {
@@ -106,13 +112,14 @@ namespace eIVOGo.Controllers.TrackCodeNo
                 orgItems = profile.InitializeOrganizationQuery(models);
             }
 
-            List<InquireVacantNoResult> items = new List<InquireVacantNoResult>();
-            foreach(var org in orgItems)
-            {
-                items.AddRange(((EIVOEntityDataContext)models.GetDataContext()).InquireVacantNo(org.CompanyID,viewModel.Year,viewModel.PeriodNo));
-            }
+            var items = models.GetTable<InvoiceTrackCode>()
+                .Where(t => t.Year == viewModel.Year)
+                .Where(t => t.PeriodNo == viewModel.PeriodNo)
+                .Join(models.GetTable<UnassignedInvoiceNo>()
+                        .Join(orgItems, n => n.SellerID, o => o.CompanyID, (n, o) => n),
+                    t => t.TrackID, n => n.TrackID, (t, n) => n);
 
-            return View("~/Views/InvoiceNo/VacantNo/QueryResult.ascx", items);
+            return View("~/Views/InvoiceNo/VacantNo/QueryResult.cshtml", items);
         }
 
         public ActionResult DownloadVacantNo(InquireNoIntervalViewModel viewModel)
@@ -123,9 +130,9 @@ namespace eIVOGo.Controllers.TrackCodeNo
                 return result;
             }
 
-            List<InquireVacantNoResult> items = (List<InquireVacantNoResult>)result.Model;
+            IQueryable<UnassignedInvoiceNo> items = (IQueryable<UnassignedInvoiceNo>)result.Model;
 
-            if(items.Count<=0)
+            if (items.Count() == 0)
             {
                 ViewBag.Message = "資料不存在!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
@@ -135,7 +142,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
 
         }
 
-        private ActionResult zipVacantNo(InquireNoIntervalViewModel viewModel,List<InquireVacantNoResult> vacantNoItems)
+        private ActionResult zipVacantNo(InquireNoIntervalViewModel viewModel, IQueryable<UnassignedInvoiceNo> vacantNoItems)
         {
             String temp = Server.MapPath("~/temp");
             if (!Directory.Exists(temp))
@@ -148,11 +155,12 @@ namespace eIVOGo.Controllers.TrackCodeNo
                 using (ZipArchive zip = new ZipArchive(zipOut, ZipArchiveMode.Create))
                 {
                     int count = 1;
-                    var items = vacantNoItems.GroupBy(r => new { r.SellerID, r.TrackCode, r.Year, r.PeriodNo, r.InvoiceType });
+                    var items = vacantNoItems.GroupBy(r => new { r.SellerID, r.TrackID });
 
                     foreach (var item in items)
                     {
                         var orgItem = models.GetTable<Organization>().Where(o => o.CompanyID == item.Key.SellerID).First();
+                        var trackCode = models.GetTable<InvoiceTrackCode>().Where(t => t.TrackID == item.Key.TrackID).First();
 
                         BranchTrackBlank blankItem = new BranchTrackBlank
                         {
@@ -160,38 +168,26 @@ namespace eIVOGo.Controllers.TrackCodeNo
                             {
                                 BranchBan = orgItem.ReceiptNo,
                                 HeadBan = viewModel.BranchRelation == true && orgItem.AsInvoiceInsurer.Count > 0 ? orgItem.AsInvoiceInsurer.First().InvoiceAgent.ReceiptNo : orgItem.ReceiptNo,
-                                YearMonth = String.Format("{0}{1:00}", item.Key.Year - 1911, item.Key.PeriodNo * 2),
-                                InvoiceType = item.Key.InvoiceType == (byte)InvoiceTypeEnum.Item08 ? InvoiceTypeEnum.Item08 : InvoiceTypeEnum.Item07,
-                                InvoiceTrack = item.Key.TrackCode
+                                YearMonth = String.Format("{0}{1:00}", trackCode.Year - 1911, trackCode.PeriodNo * 2),
+                                InvoiceType = trackCode.InvoiceType == (byte)InvoiceTypeEnum.Item08 ? InvoiceTypeEnum.Item08 : InvoiceTypeEnum.Item07,
+                                InvoiceTrack = trackCode.TrackCode
                             },
                         };
 
                         List<DetailsBranchTrackBlankItem> details = new List<DetailsBranchTrackBlankItem>();
-                        var detailItems = item.ToList();
-                        foreach(var blank in detailItems.Where(r => !r.CheckPrev.HasValue))
+                        var detailItems = item;
+                        foreach(var blank in detailItems)
                         {
-                            if(blank.CheckNext.HasValue)
+                            details.Add(new DetailsBranchTrackBlankItem
                             {
-                                var index = detailItems.IndexOf(blank);
-                                details.Add(new DetailsBranchTrackBlankItem
-                                {
-                                    InvoiceBeginNo = String.Format("{0:00000000}", blank.InvoiceNo),
-                                    InvoiceEndNo = String.Format("{0:00000000}", detailItems[index+1].InvoiceNo)
-                                });
-                            }
-                            else
-                            {
-                                details.Add(new DetailsBranchTrackBlankItem
-                                {
-                                    InvoiceBeginNo = String.Format("{0:00000000}", blank.InvoiceNo),
-                                    InvoiceEndNo = String.Format("{0:00000000}", blank.InvoiceNo)
-                                });
-                            }
+                                InvoiceBeginNo = String.Format("{0:00000000}", blank.InvoiceBeginNo),
+                                InvoiceEndNo = String.Format("{0:00000000}", blank.InvoiceEndNo)
+                            });
                         }
 
                         blankItem.Details = details.ToArray();
 
-                        ZipArchiveEntry entry = zip.CreateEntry(String.Format("{0}{1:00}({2})-{3}.xml", item.Key.Year, item.Key.PeriodNo, orgItem.ReceiptNo, count++));
+                        ZipArchiveEntry entry = zip.CreateEntry(String.Format("{0}{1:00}({2})-{3}.xml", trackCode.Year, trackCode.PeriodNo, orgItem.ReceiptNo, count++));
                         using (Stream outStream = entry.Open())
                         {
                             blankItem.ConvertToXml().Save(outStream);
@@ -201,7 +197,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
                 }
             }
 
-            var result = new FilePathResult(outFile, "message/rfc822");
+            var result = new FilePathResult(outFile, "application/octet-stream");
             result.FileDownloadName = "空白發票字軌.zip";
             return result;
         }
@@ -214,36 +210,32 @@ namespace eIVOGo.Controllers.TrackCodeNo
                 return result;
             }
 
-            List<InquireVacantNoResult> items = (List<InquireVacantNoResult>)result.Model;
+            IQueryable<UnassignedInvoiceNo> items = (IQueryable<UnassignedInvoiceNo>)result.Model;
 
-            if (items.Count <= 0)
+            if (items.Count() == 0)
             {
                 ViewBag.Message = "資料不存在!!";
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
-            return View("~/Views/InvoiceNo/VacantNo/DownloadCsv.ascx", items);
+            return View("~/Views/InvoiceNo/VacantNo/DownloadCsv.cshtml", items);
 
         }
 
-
-        public ActionResult CommitItem(InvoiceNoIntervalViewModel viewModel)
+        private void checkInput(InvoiceNoIntervalViewModel viewModel, InvoiceNoInterval model)
         {
-            ViewResult result = (ViewResult)EditNoInterval(viewModel);
-            InvoiceNoInterval model = result.Model as InvoiceNoInterval;
-
             var table = models.GetTable<InvoiceNoInterval>();
 
             if (model == null)
             {
                 if (!viewModel.TrackID.HasValue)
                 {
-                    ModelState.AddModelError("TrackID", "未設定字軌!!");
+                    ModelState.AddModelError("TrackID", "字軌未設定!!");
                 }
 
                 if (!viewModel.SellerID.HasValue)
                 {
-                    ModelState.AddModelError("SellerID", "請選擇開立人!!");
+                    ModelState.AddModelError("SellerID", "營業人錯誤!!");
                 }
 
             }
@@ -293,6 +285,30 @@ namespace eIVOGo.Controllers.TrackCodeNo
                     }
                 }
             }
+        }
+
+        public ActionResult LockInterval(InvoiceNoIntervalViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)EditNoInterval(viewModel);
+            InvoiceNoInterval model = result.Model as InvoiceNoInterval;
+            if (model == null)
+            {
+                return result;
+            }
+
+            model.LockID = viewModel.LockID;
+            models.SubmitChanges();
+
+            return View("~/Views/InvoiceNo/Module/DataItem.cshtml", model);
+
+        }
+
+        public ActionResult CommitItem(InvoiceNoIntervalViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)EditNoInterval(viewModel);
+            InvoiceNoInterval model = result.Model as InvoiceNoInterval;
+
+            checkInput(viewModel, model);
 
             if (!ModelState.IsValid)
             {
@@ -345,14 +361,15 @@ namespace eIVOGo.Controllers.TrackCodeNo
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "配號區間資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "配號區間資料錯誤!!");
             }
 
             var profile = HttpContext.GetUser();
-            if(!profile.IsSystemAdmin())
+            if (!profile.IsSystemAdmin())
             {
-                if(item.InvoiceTrackCodeAssignment.SellerID!=profile.CurrentUserRole.OrganizationCategory.CompanyID)
-                    return View("~/Views/Shared/JsAlert.cshtml", model: "配號區間資料錯誤!!");
+                if (item.InvoiceTrackCodeAssignment.SellerID != profile.CurrentUserRole.OrganizationCategory.CompanyID
+                        && !models.GetTable<InvoiceIssuerAgent>().Any(a => a.IssuerID == item.InvoiceTrackCodeAssignment.SellerID && a.AgentID == profile.CurrentUserRole.OrganizationCategory.CompanyID))
+                    return View("~/Views/Shared/AlertMessage.cshtml", model: "配號區間資料錯誤!!");
             }
 
             return View("~/Views/InvoiceNo/Module/EditItem.cshtml", item);
@@ -532,9 +549,12 @@ namespace eIVOGo.Controllers.TrackCodeNo
                 return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
-            models.GetDataContext().ProcessInvoiceNo(viewModel.SellerID, viewModel.Year, viewModel.PeriodNo);
+            viewModel.Push($"{viewModel.SellerID}-{viewModel.Year}{viewModel.PeriodNo:00}.json");
 
-            ViewBag.Message = "整理完成!!";
+            //TrackNoIntervalManager manager = new TrackNoIntervalManager(models);
+            //manager.SettleUnassignedInvoiceNOPeriodically(viewModel.Year.Value, viewModel.PeriodNo.Value, viewModel.SellerID);
+
+            ViewBag.Message = "重新整理進行中，請稍後再次查詢!!";
             return View("~/Views/Shared/AlertMessage.cshtml");
 
 
@@ -553,5 +573,303 @@ namespace eIVOGo.Controllers.TrackCodeNo
             return View("~/Views/InvoiceNo/Module/EditPOSBooklets.cshtml", item);
         }
 
+        public ActionResult UploadInvoiceTrackCode(InvoiceViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            return View("~/Views/InvoiceNo/UploadInvoiceTrackCode.cshtml");
+        }
+
+
+        public ActionResult UploadToPreview(IEnumerable<HttpPostedFileBase> excelFile)
+        {
+            if (excelFile == null || excelFile.Count() < 1)
+            {
+                return Json(new { result = false, message = "未選取檔案或檔案上傳失敗" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (excelFile.Count() != 1)
+            {
+                return Json(new { result = false, message = "請上傳單一檔案" }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                var file = excelFile.First();
+                String fileName = Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}_{Path.GetFileName(file.FileName)}");
+                file.SaveAs(fileName);
+
+                List<UploadInvoiceTrackCodeModel> items;
+                using (var ds = fileName.ImportExcelXLS())
+                {
+                    if (ds.Tables.Count == 0)
+                    {
+                        return Json(new { result = false, message = "Excel檔未包含工作表" }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    items = new List<UploadInvoiceTrackCodeModel>();
+                    foreach(DataRow r in ds.Tables[0].Rows)
+                    {
+                        UploadInvoiceTrackCodeModel item = new UploadInvoiceTrackCodeModel { };
+                        try
+                        {
+                            item.ReceiptNo = r.GetString((int)UploadInvoiceTrackField.營業人統編).GetEfficientString();
+                            item.TrackCode = r.GetString((int)UploadInvoiceTrackField.字軌).GetEfficientString();
+                            item.Year = r.GetData<short>((int)UploadInvoiceTrackField.年份);
+                            item.PeriodNo = r.GetData<int>((int)UploadInvoiceTrackField.發票期別);
+                            item.StartNo = r.GetData<int>((int)UploadInvoiceTrackField.發票起號);
+                            item.EndNo = r.GetData<int>((int)UploadInvoiceTrackField.發票迄號);
+                        }
+                        catch (Exception ex)
+                        {
+                            item.Message = ex.Message;
+                        }
+                        items.Add(item);
+                    }
+                }
+
+                var profile = HttpContext.GetUser();
+
+                foreach (var viewModel in items.Where(i => i.Message == null))
+                {
+                    ModelState.Clear();
+
+                    if (!profile.IsSystemAdmin())
+                    {
+                        viewModel.SellerID = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == profile.CurrentUserRole.OrganizationCategory.CompanyID
+                                        && a.InvoiceInsurer.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault()?.IssuerID;
+                    }
+                    else
+                    {
+                        viewModel.SellerID = models.GetTable<Organization>().Where(o => o.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault()?.CompanyID;
+                    }
+
+                    var year = viewModel.Year + 1911;
+                    viewModel.TrackID = models.GetTable<InvoiceTrackCode>().Where(t => t.Year == year && t.PeriodNo == viewModel.PeriodNo && t.TrackCode == viewModel.TrackCode)
+                            .FirstOrDefault()?.TrackID;
+
+                    checkInput(viewModel, null);
+
+                    if(!ModelState.IsValid)
+                    {
+                        viewModel.Message = ModelState.ErrorMessage();
+                    }
+                }
+
+                return View("~/Views/InvoiceNo/Module/PreviewInvoiceTrackCode.cshtml", items);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        static class MOF_InvoiceTrackNoField
+        {
+            public const int 營業人統編 = 0;
+            public const int 發票類別代號 = 1;
+            public const int 發票類別 = 2;
+            public const int 發票期別 = 3;
+            public const int 發票字軌名稱 = 4;
+            public const int 發票起號 = 5;
+            public const int 發票迄號 = 6;
+        }
+
+        public ActionResult UploadToPreviewMOF(HttpPostedFileBase theFile)
+        {
+            if (theFile == null)
+            {
+                return Json(new { result = false, message = "未選取檔案或檔案上傳失敗" }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                String fileName = Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}_{Path.GetFileName(theFile.FileName)}");
+                theFile.SaveAs(fileName);
+
+                List<UploadInvoiceTrackCodeModel> items = new List<UploadInvoiceTrackCodeModel>();
+
+                using (StreamReader sr = new StreamReader(fileName))
+                {
+                    var line = sr.ReadLine();
+                    String[] column;
+                    Regex checkYear = new Regex("([0-9]+)/([0-9]+)~([0-9]+)/([0-9]+)");
+                    while ((column = sr.ReadLine()?.ParseCsvLine()) != null)
+                    {
+                        if (column.Length > MOF_InvoiceTrackNoField.發票迄號)
+                        {
+                            UploadInvoiceTrackCodeModel item = new UploadInvoiceTrackCodeModel { };
+                            try
+                            {
+                                item.ReceiptNo = column[MOF_InvoiceTrackNoField.營業人統編].GetEfficientString();
+                                item.TrackCode = column[MOF_InvoiceTrackNoField.發票字軌名稱].GetEfficientString();
+                                var match = checkYear.Match(column[MOF_InvoiceTrackNoField.發票期別].GetEfficientString());
+                                short year;
+                                int monthStart;
+                                int monthEnd;
+                                if (match != null && match.Groups.Count == 5
+                                    && match.Groups[1].Value == match.Groups[3].Value
+                                    && short.TryParse(match.Groups[1].Value, out year)
+                                    && int.TryParse(match.Groups[2].Value, out monthStart)
+                                    && int.TryParse(match.Groups[4].Value, out monthEnd)
+                                    && monthStart + 1 == monthEnd
+                                    && (monthEnd % 2) == 0)
+                                {
+                                    item.Year = year;
+                                    item.PeriodNo = monthEnd / 2;
+                                }
+
+                                int startNo, endNo;
+                                if (int.TryParse(column[MOF_InvoiceTrackNoField.發票起號].GetEfficientString(), out startNo))
+                                {
+                                    item.StartNo = startNo;
+                                }
+
+                                if (int.TryParse(column[MOF_InvoiceTrackNoField.發票迄號].GetEfficientString(), out endNo))
+                                {
+                                    item.EndNo = endNo;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                item.Message = ex.Message;
+                            }
+                            items.Add(item);
+                        }
+                    }
+                }
+
+                var profile = HttpContext.GetUser();
+
+                foreach (var viewModel in items.Where(i => i.Message == null))
+                {
+                    ModelState.Clear();
+
+                    if (!profile.IsSystemAdmin())
+                    {
+                        viewModel.SellerID = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == profile.CurrentUserRole.OrganizationCategory.CompanyID
+                                        && a.InvoiceInsurer.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault()?.IssuerID;
+                    }
+                    else
+                    {
+                        viewModel.SellerID = models.GetTable<Organization>().Where(o => o.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault()?.CompanyID;
+                    }
+
+                    var year = viewModel.Year + 1911;
+                    viewModel.TrackID = models.GetTable<InvoiceTrackCode>().Where(t => t.Year == year && t.PeriodNo == viewModel.PeriodNo && t.TrackCode==viewModel.TrackCode)
+                            .FirstOrDefault()?.TrackID;
+
+                    checkInput(viewModel, null);
+
+                    if (!ModelState.IsValid)
+                    {
+                        viewModel.Message = ModelState.ErrorMessage();
+                    }
+                }
+
+                return View("~/Views/InvoiceNo/Module/PreviewInvoiceTrackCode.cshtml", items);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// 上傳發票字軌資料
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
+        public ActionResult CommitUpload(QueryViewModel viewModel)
+        {
+            // 取畫面資料
+            if (viewModel.KeyItems != null && viewModel.KeyItems.Length > 0)
+            {
+                List<UploadInvoiceTrackCodeModel> items = viewModel.KeyItems
+                    .Select(k => JsonConvert.DeserializeObject<UploadInvoiceTrackCodeModel>(k.DecryptData()))
+                    .ToList();
+
+                foreach(var item in items)
+                {
+                    ModelState.Clear();
+                    CommitItem(item);
+                    if(!ModelState.IsValid)
+                    {
+                        item.Message = ModelState.ErrorMessage();
+                    }
+                    else
+                    {
+                        item.Message = "已匯入成功";
+                    }
+                }
+
+                return View("~/Views/InvoiceNo/Module/PreviewInvoiceTrackCode.cshtml", items);
+
+            }
+
+            return Json(new { result = false, message = "資料錯誤!!" }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        /// <summary>
+        /// 取得上傳發票字軌資料的範例檔
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetUploadInvoiceTrackCodeSample()
+        {
+            //var items = models.GetTable<InvoiceItem>().Where(i => false).Take(100);
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/octet-stream";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("UploadInvoiceTrackCodeSample.xlsx")));
+
+            using (DataSet ds = new DataSet())
+            {
+                DataTable table = new DataTable("發票字軌號碼");
+                ds.Tables.Add(table);
+
+                table.Columns.Add(UploadInvoiceTrackField.營業人統編.ToString());
+                table.Columns.Add(UploadInvoiceTrackField.年份.ToString());
+                table.Columns.Add(UploadInvoiceTrackField.發票期別.ToString());
+                table.Columns.Add(UploadInvoiceTrackField.字軌.ToString());
+                table.Columns.Add(UploadInvoiceTrackField.發票起號.ToString());
+                table.Columns.Add(UploadInvoiceTrackField.發票迄號.ToString());
+
+                DataRow row = table.NewRow();
+                row[0] = "42523557";
+                row[1] = "109";
+                row[2] = "1";
+                row[3] = "CY";
+                row[4] = "00000001";
+                row[5] = "00000100";
+
+                table.Rows.Add(row);
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            Response.End();
+
+            return new EmptyResult();
+        }
+    }
+
+    public enum UploadInvoiceTrackField
+    {
+        營業人統編 = 0,
+        年份 = 1,
+        發票期別 = 2,
+        字軌 = 3,
+        發票起號 = 4,
+        發票迄號 = 5,
     }
 }

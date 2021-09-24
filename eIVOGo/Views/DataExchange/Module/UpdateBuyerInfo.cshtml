@@ -1,0 +1,32 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using Model.Helper
+@using Model.Locale
+@using Model.DataEntity
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using Model.Models.ViewModel
+@using eIVOGo.Models.ViewModel
+@using ModelExtension.DataExchange
+@using Utility
+@using Model.Helper
+@{
+    Layout = "~/Views/Shared/Module/MessageDialog.cshtml";
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    FilePathResult _model;
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (FilePathResult)this.Model;
+
+}
+
+<div class="border_gray">
+    <a href="#" onclick="$('').launchDownload('@(Url.Action("DownloadResource","DataExchange"))', { 'keyID': '@Html.Raw((new { _model.FileDownloadName,_model.FileName,_model.ContentType }).JsonStringify().EncryptData())' });">@(_model.FileDownloadName ?? "下載回應檔")</a>
+</div>
+
+
+

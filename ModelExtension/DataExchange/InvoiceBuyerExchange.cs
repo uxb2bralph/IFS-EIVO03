@@ -23,6 +23,12 @@ namespace ModelExtension.DataExchange
             處理狀態
         }
 
+        public List<InvoiceItem> EffectiveItems
+        {
+            get;
+            protected set;
+        } = new List<InvoiceItem>();
+
         public XLWorkbook GetSample()
         {
             XLWorkbook xls = new XLWorkbook();
@@ -40,6 +46,8 @@ namespace ModelExtension.DataExchange
 
         public void ExchangeData(XLWorkbook xlwb,Func<InvoiceItem,bool> checkItem = null)
         {
+            EffectiveItems.Clear();
+
             if (xlwb.Worksheets.Count < 1)
                 return;
             var ws = xlwb.Worksheet(1);
@@ -136,6 +144,7 @@ namespace ModelExtension.DataExchange
 
                         mgr.SubmitChanges();
                         dataRow.Cell((int)ColumnIndex.處理狀態).Value = "已更新";
+                        EffectiveItems.Add(item);
                     }
                     catch (Exception ex)
                     {

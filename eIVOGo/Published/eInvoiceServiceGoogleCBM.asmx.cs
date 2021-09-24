@@ -13,7 +13,7 @@ using Model.Schema.EIVO;
 using Model.DataEntity;
 using System.Threading;
 using Model.Helper;
-using eIVOGo.Module.Common;
+
 using Utility;
 using System.IO;
 using Model.Locale;
@@ -120,7 +120,7 @@ namespace eIVOGo.Published
                 {
                     result.Result.message = "發票資料簽章不符!!";
                 }
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {

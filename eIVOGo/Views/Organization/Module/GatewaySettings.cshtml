@@ -2,6 +2,7 @@
 @using System.Linq.Expressions
 
 @using Business.Helper
+@using Model.Helper
 @using DataAccessLayer.basis
 @using eIVOGo.Helper
 @using eIVOGo.Models
@@ -46,6 +47,7 @@
                     <option value="@((int)Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC)">Excel格式加值中心配號</option>
                     <option value="@((int)Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer)">Excel格式開立人配號</option>
                     <option value="@((int)Naming.InvoiceProcessType.C0401_Xlsx_CBE)">Excel格式境外電商專用</option>
+                    <option value="@((int)Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer)">Excel格式A0401開立人配號</option>
                 </select>
                     <script>
                         $(function () {

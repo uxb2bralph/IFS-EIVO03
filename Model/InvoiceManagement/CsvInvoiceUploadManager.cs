@@ -293,7 +293,7 @@ namespace Model.InvoiceManagement
             {
                 if (AutoTrackNo)
                 {
-                    if (!_trkMgr.CheckInvoiceNo(item.Entity))
+                    if (!_trkMgr.ApplyInvoiceDate(item.Entity.InvoiceDate.Value) || !_trkMgr.CheckInvoiceNo(item.Entity))
                     {
                         item.Status = String.Join("、", item.Status, "未設定發票字軌或發票號碼已用完");
                         _bResult = false;

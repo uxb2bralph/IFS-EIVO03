@@ -52,11 +52,11 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<InvoiceAllowance>().Where(a => a.AllowanceID == viewModel.id).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
 
 
-            return View("~/Views/DataView/Module/Allowance.ascx", item);
+            return View("~/Views/DataView/Module/Allowance.cshtml", item);
         }
 
         public ActionResult ShowAllowance(DocumentQueryViewModel viewModel)
@@ -76,16 +76,16 @@ namespace eIVOGo.Controllers
             useThermalPOSArgs = null;
             if (item.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.A0401)
             {
-                return "~/Views/DataView/A0401.aspx";
+                return "~/Views/DataView/A0401.cshtml";
             }
             else if (paperStyle == "POS")
             {
                 useThermalPOSArgs = ThermalPOSPaper;
-                return "~/Views/DataView/C0401_POS.aspx";
+                return "~/Views/DataView/C0401_POS.cshtml";
             }
             else
             {
-                return "~/Views/DataView/C0401_A4.aspx";
+                return "~/Views/DataView/C0401_A4.cshtml";
             }
         }
 
@@ -94,7 +94,7 @@ namespace eIVOGo.Controllers
             useThermalPOSArgs = null;
             if (item.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.B0401)
             {
-                return "~/Views/DataView/B0401.aspx";
+                return "~/Views/DataView/B0401.cshtml";
             }
             else
             {
@@ -262,6 +262,13 @@ namespace eIVOGo.Controllers
 
             if (item != null)
             {
+
+                models.ExecuteCommand(@"INSERT INTO [proc].DataProcessLog
+                                                            (DocID, LogDate, Status, StepID)
+                                                            VALUES          ({0},{1},{2},{3})",
+                        item.AllowanceID, DateTime.Now, (int)Naming.DataProcessStatus.Done,
+                        (int)Naming.InvoiceStepDefinition.PDF待傳輸);
+
                 if (html == true)
                 {
                     String[] useThermalPOSArgs;
@@ -321,10 +328,10 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<InvoiceItem>().Where(a => a.InvoiceID == viewModel.DocID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
 
-            return View(item);
+            return View("~/Views/DataView/ShowInvoicePageView.cshtml", item);
         }
 
         public ActionResult ShowInvoice(RenderStyleViewModel viewModel)
@@ -357,11 +364,10 @@ namespace eIVOGo.Controllers
             var items = models.GetTable<DocumentPrintQueue>()
                 .Where(i => i.UID == profile.UID)
                 .Join(models.GetTable<CDS_Document>()
-                        .Where(d => d.ProcessType == (int)Naming.InvoiceProcessType.A0401)
                         .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice), 
                     i => i.DocID, d => d.DocID, (i, d) => i);
 
-            return View(items);
+            return View("~/Views/DataView/PrintA0401.cshtml", items);
         }
 
         [Authorize]
@@ -372,18 +378,17 @@ namespace eIVOGo.Controllers
             var items = models.GetTable<DocumentPrintQueue>()
                 .Where(i => i.UID == profile.UID)
                 .Join(models.GetTable<CDS_Document>()
-                        .Where(d => d.ProcessType == (int)Naming.InvoiceProcessType.B0401)
                         .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Allowance),
                     i => i.DocID, d => d.DocID, (i, d) => i);
 
-            return View(items);
+            return View("~/Views/DataView/PrintB0401.cshtml", items);
         }
 
         public ActionResult PrintA0401AsPDF()
         {
             ViewResult result = (ViewResult)PrintA0401();
             IQueryable<DocumentPrintQueue> items = result.Model as IQueryable<DocumentPrintQueue>;
-            String pdfFile = this.CreateContentAsPDF("~/Views/DataView/PrintA0401.aspx", items, Session.Timeout);
+            String pdfFile = this.CreateContentAsPDF("~/Views/DataView/PrintA0401.cshtml", items, Session.Timeout);
 
             if (pdfFile != null)
             {
@@ -392,7 +397,7 @@ namespace eIVOGo.Controllers
             else
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
         }
 
@@ -400,7 +405,7 @@ namespace eIVOGo.Controllers
         {
             ViewResult result = (ViewResult)PrintB0401();
             IQueryable<DocumentPrintQueue> items = result.Model as IQueryable<DocumentPrintQueue>;
-            String pdfFile = this.CreateContentAsPDF("~/Views/DataView/PrintB0401.aspx", items, Session.Timeout);
+            String pdfFile = this.CreateContentAsPDF("~/Views/DataView/PrintB0401.cshtml", items, Session.Timeout);
 
             if (pdfFile != null)
             {
@@ -409,7 +414,7 @@ namespace eIVOGo.Controllers
             else
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
         }
 
@@ -428,9 +433,9 @@ namespace eIVOGo.Controllers
                     i => i.DocID, d => d.DocID, (i, d) => i);
 
             if (viewModel.PaperStyle == "A4")
-                return View("PrintC0401A4", items);
+                return View("~/Views/DataView/PrintC0401A4.cshtml", items);
             else
-                return View("PrintC0401POS", items);
+                return View("~/Views/DataView/PrintC0401POS.cshtml", items);
         }
 
         [Authorize]
@@ -458,8 +463,8 @@ namespace eIVOGo.Controllers
             ViewResult result = (ViewResult)PrintC0401(viewModel);
             IQueryable<DocumentPrintQueue> items = result.Model as IQueryable<DocumentPrintQueue>;
             String pdfFile = viewModel.PaperStyle == "A4"
-                    ? this.CreateContentAsPDF("~/Views/DataView/PrintC0401A4.aspx", items, Session.Timeout)
-                    : this.CreateContentAsPDF("~/Views/DataView/PrintC0401POS.aspx", items, Session.Timeout, ThermalPOSPaper);
+                    ? this.CreateContentAsPDF("~/Views/DataView/PrintC0401A4.cshtml", items, Session.Timeout)
+                    : this.CreateContentAsPDF("~/Views/DataView/PrintC0401POS.cshtml", items, Session.Timeout, ThermalPOSPaper);
 
             if (pdfFile != null)
             {
@@ -468,7 +473,7 @@ namespace eIVOGo.Controllers
             else
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
         }
 
@@ -485,7 +490,7 @@ namespace eIVOGo.Controllers
             else
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
         }
 
@@ -610,13 +615,39 @@ namespace eIVOGo.Controllers
             {
                 ViewBag.CloseWindow = true;
                 ViewBag.Message = "請選擇郵寄項目!!";
-                return View("~/Views/Shared/JsAlert.cshtml");
+                return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
             ViewBag.ViewModel = viewModel;
             Response.AppendCookie(new HttpCookie("FileDownloadToken", viewModel.FileDownloadToken));
 
-            String outFile = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".zip");
+            ProcessRequest processItem = new ProcessRequest
+            {
+                Sender = HttpContext.GetUser()?.UID,
+                SubmitDate = DateTime.Now,
+                ProcessStart = DateTime.Now,
+                ResponsePath = System.IO.Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".zip"),
+            };
+            models.GetTable<ProcessRequest>().InsertOnSubmit(processItem);
+            models.SubmitChanges();
+
+            String outFile = processItem.ResponsePath;
+            if (viewModel.ForMailingPackage == true)
+            {
+                ProcessInvoiceMailingPackage(viewModel, items, outFile);
+            }
+            else
+            {
+                ProcessInvoicePdfPackage(viewModel, items, outFile);
+            }
+
+            var result = new FilePathResult(outFile, "application/octet-stream");
+            result.FileDownloadName = "發票列印下載.zip";
+            return result;
+        }
+
+        private void ProcessInvoicePdfPackage(RenderStyleViewModel viewModel, MailTrackingCsvViewModel[] items, string outFile)
+        {
             using (var zipOut = System.IO.File.Create(outFile))
             {
                 using (ZipArchive zip = new ZipArchive(zipOut, ZipArchiveMode.Create))
@@ -631,6 +662,7 @@ namespace eIVOGo.Controllers
                             if (item == null)
                                 continue;
                             var pdfFile = GetInvoicePDF(item, viewModel);
+
                             zip.CreateEntryFromFile(pdfFile, $"{packageIdx:000000}-{idx++:000}-{Path.GetFileName(pdfFile)}");
 
                             foreach (var attach in item.CDS_Document.Attachment)
@@ -640,18 +672,160 @@ namespace eIVOGo.Controllers
                                     zip.CreateEntryFromFile(attach.StoredPath, $"{packageIdx:000000}-{idx++:000}-{Path.GetFileName(attach.StoredPath)}");
                                 }
                             }
+
                         }
                         packageIdx++;
                     }
                 }
             }
+        }
 
-            var result = new FilePathResult(outFile, "application/octet-stream");
-            result.FileDownloadName = "發票列印下載.zip";
-            return result;
+        private void ProcessInvoiceMailingPackage(RenderStyleViewModel viewModel, MailTrackingCsvViewModel[] items, string outFile)
+        {
+            using (var zipOut = System.IO.File.Create(outFile))
+            {
+                using (ZipArchive zip = new ZipArchive(zipOut, ZipArchiveMode.Create))
+                {
+                    int packageIdx = 1;
+                    List<String> pdfItems = new List<string>();
+                    List<String> attachmentItems = new List<string>();
+
+                    foreach (var g in items)
+                    {
+                        InvoiceItem item = null, idxItem = null;
+                        String pdfPackage = Path.Combine(Logger.LogDailyPath, $"{Guid.NewGuid()}.pdf");
+                        bool isTemp = false;
+                        pdfItems.Clear();
+                        attachmentItems.Clear();
+
+                        foreach (var v in g.InvoiceID)
+                        {
+                            item = models.GetTable<InvoiceItem>().Where(i => i.InvoiceID == v).FirstOrDefault();
+                            if (item == null)
+                                continue;
+
+                            if (idxItem == null)
+                            {
+                                idxItem = item;
+                            }
+
+                            var pdfFile = GetInvoicePDF(item, viewModel);
+                            pdfItems.Add(pdfFile);
+
+                            foreach (var attach in item.CDS_Document.Attachment)
+                            {
+                                if (System.IO.File.Exists(attach.StoredPath))
+                                {
+                                    attachmentItems.Add(attach.StoredPath);
+                                }
+                            }
+                        }
+
+                        pdfItems.AddRange(attachmentItems);
+
+                        if (pdfItems.Count > 0)
+                        {
+                            if (pdfItems.Count > 1)
+                            {
+                                pdfPackage.MergePDF(pdfItems);
+                                isTemp = true;
+                            }
+                            else
+                            {
+                                pdfPackage = pdfItems[0];
+                            }
+                            zip.CreateEntryFromFile(pdfPackage, $"{packageIdx:000000}-{idxItem.TrackCode}{idxItem.No}-{item.InvoiceBuyer.CustomerName}.pdf");
+                        }
+
+                        packageIdx++;
+
+                        if (isTemp)
+                        {
+                            try
+                            {
+                                System.IO.File.Delete(pdfPackage);
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.Error(ex);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 
+        //private void ProcessInvoiceMailingPackage(RenderStyleViewModel viewModel, MailTrackingCsvViewModel[] items, string outFile)
+        //{
+        //    using (var zipOut = System.IO.File.Create(outFile))
+        //    {
+        //        using (ZipArchive zip = new ZipArchive(zipOut, ZipArchiveMode.Create))
+        //        {
+        //            int packageIdx = 1;
+        //            List<String> pdfItems = new List<string>();
+
+        //            foreach (var g in items)
+        //            {
+        //                InvoiceItem item = null,idxItem = null;
+        //                String pdfPackage = Path.Combine(Logger.LogDailyPath, $"{Guid.NewGuid()}.pdf");
+        //                bool isTemp = false;
+        //                pdfItems.Clear();
+
+        //                foreach (var v in g.InvoiceID)
+        //                {
+        //                    item = models.GetTable<InvoiceItem>().Where(i => i.InvoiceID == v).FirstOrDefault();
+        //                    if (item == null)
+        //                        continue;
+
+        //                    if (idxItem == null)
+        //                    {
+        //                        idxItem = item;
+        //                    }
+
+        //                    var pdfFile = GetInvoicePDF(item, viewModel);
+        //                    pdfItems.Add(pdfFile);
+
+        //                    foreach (var attach in item.CDS_Document.Attachment)
+        //                    {
+        //                        if (System.IO.File.Exists(attach.StoredPath))
+        //                        {
+        //                            pdfItems.Add(attach.StoredPath);
+        //                        }
+        //                    }
+        //                }
+
+        //                if (pdfItems.Count > 0)
+        //                {
+        //                    if (pdfItems.Count > 1)
+        //                    {
+        //                        pdfPackage.MergePDF(pdfItems);
+        //                        isTemp = true;
+        //                    }
+        //                    else
+        //                    {
+        //                        pdfPackage = pdfItems[0];
+        //                    }
+        //                    zip.CreateEntryFromFile(pdfPackage, $"{packageIdx:000000}-{idxItem.TrackCode}{idxItem.No}-{item.InvoiceBuyer.CustomerName}.pdf");
+        //                }
+
+        //                packageIdx++;
+
+        //                if(isTemp)
+        //                {
+        //                    try
+        //                    {
+        //                        System.IO.File.Delete(pdfPackage);
+        //                    }
+        //                    catch(Exception ex)
+        //                    {
+        //                        Logger.Error(ex);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
     }
 }

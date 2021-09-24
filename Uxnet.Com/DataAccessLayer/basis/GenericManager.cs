@@ -11,7 +11,6 @@ using System.Linq.Expressions;
 using Uxnet.Com.Properties;
 using System.Collections;
 
-
 namespace DataAccessLayer.basis
 {
     /// <summary>
@@ -83,8 +82,6 @@ namespace DataAccessLayer.basis
         {
             return DeleteAllOnSubmit<TEntity>(predicate);
         }
-
-
     }
 
     public class GenericManager<T> : IDisposable
@@ -94,7 +91,7 @@ namespace DataAccessLayer.basis
         protected internal bool _isInstance = true;
 
         private bool _bDisposed = false;
-        private LogWritter _logWriter;
+        private SqlLogger _logWriter;
 
         public GenericManager(T db)
         {
@@ -146,19 +143,21 @@ namespace DataAccessLayer.basis
             _db = db;
             _db.Log = log;
 
-            if (_db.Log == null && Settings.Default.SqlLog)
+            if (_db.Log == null)
             {
-                _logWriter = new LogWritter();
-                _db.Log = _logWriter.Writter;
+                if (Settings.Default.SqlLog)
+                {
+                    _logWriter = new SqlLogger { IgnoreSelect = Settings.Default.SqlLogIgnoreSelect };
+                    _db.Log = _logWriter;
+                }
             }
-        }
 
+        }
 
         internal IDbConnection DbConnection
         {
             get { return _db.Connection; }
         }
-
 
 
         public T DataContext
@@ -289,7 +288,13 @@ namespace DataAccessLayer.basis
                     {
                         _db.Dispose();
                         if (_logWriter != null)
+                        {
+                            //if (_logWriter.Logger.Length > 0)
+                            //{
+                            //    Logger.Info(_logWriter.ToString());
+                            //}
                             _logWriter.Dispose();
+                        }
                     }
                 }
 

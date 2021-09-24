@@ -39,7 +39,7 @@ namespace Model.Models.ViewModel
                 viewModel.ContactTitle = item.ContactTitle;
                 if (item.OrganizationCategory.Count > 0)
                 {
-                    viewModel.CategoryID = item.OrganizationCategory.First().CategoryID;
+                    viewModel.CategoryID = (Naming.B2CCategoryID?)item.OrganizationCategory.First().CategoryID;
                 }
 
                 viewModel.CurrentLevel = item.OrganizationStatus.CurrentLevel;
@@ -59,7 +59,6 @@ namespace Model.Models.ViewModel
                 viewModel.SubscribeB2BInvoicePDF = item.OrganizationStatus.SubscribeB2BInvoicePDF;
                 viewModel.UseB2BStandalone = item.OrganizationStatus.UseB2BStandalone;
                 viewModel.DisableIssuingNotice = item.OrganizationStatus.DisableIssuingNotice;
-                viewModel.DisableWinningNotice = item.OrganizationStatus.DisableWinningNotice;
                 viewModel.NoticeSetting = (Naming.InvoiceNoticeStatus?)item.OrganizationStatus.InvoiceNoticeSetting;
                 viewModel.EntrustToPrint = item.OrganizationStatus.EntrustToPrint;
                 viewModel.EnableTrackCodeInvoiceNoValidation = item.OrganizationStatus.EnableTrackCodeInvoiceNoValidation;

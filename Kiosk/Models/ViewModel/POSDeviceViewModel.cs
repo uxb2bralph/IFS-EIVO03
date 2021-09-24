@@ -9,7 +9,18 @@ namespace Kiosk.Models.ViewModel
     {
         public String company_id { get; set; }
         public int? quantity { get; set; }
+        public String SellerID
+        {
+            get
+            {
+                return company_id;
+            }
 
+            set
+            {
+                company_id = value;
+            }
+        }
     }
 
     public class POSInvoiceViewModel

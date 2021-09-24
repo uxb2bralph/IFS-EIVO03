@@ -6,7 +6,7 @@ using Model.Locale;
 
 namespace Model.Models.ViewModel
 {
-    public class OrganizationViewModel : QueryViewModel
+    public class OrganizationViewModel : CommonQueryViewModel
     {
         public String ContactName { get; set; }
         public String Fax { get; set; }
@@ -31,7 +31,7 @@ namespace Model.Models.ViewModel
         public String InvoiceSignature { get; set; }
         public String UndertakerID { get; set; }
         public String ContactTitle { get; set; }
-        public int? CategoryID { get; set; }
+        public Naming.B2CCategoryID? CategoryID { get; set; } = Naming.B2CCategoryID.店家;
         public int? CurrentLevel { get; set; }
         public DateTime? LastTimeToAcknowledge { get; set; }
         public int? RequestPeriodicalinterval { get; set; }
@@ -52,14 +52,19 @@ namespace Model.Models.ViewModel
         public bool? SubscribeB2BInvoicePDF { get; set; }
         public bool? UseB2BStandalone { get; set; }
         public bool? DisableIssuingNotice { get; set; }
-        public bool? DisableWinningNotice { get; set; }
         public bool? EntrustToPrint { get; set; }
         public bool? EnableTrackCodeInvoiceNoValidation { get; set; }
         public Naming.InvoiceNoticeStatus? NoticeSetting { get; set; }
         public int[] NoticeStatus { get; set; }
         public bool? IgnoreDuplicatedDataNumber { get; set; }
         public Naming.InvoiceProcessType? DefaultProcessType { get; set; }
+        public String CustomerNo { get; set; }
 
     }
 
+    public class OrganizationCertificateViewModel : OrganizationViewModel
+    {
+        public String PIN { get; set; }
+        public HttpPostedFileBase PfxFile { get; set; }
+    }
 }

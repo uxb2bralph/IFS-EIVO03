@@ -48,17 +48,17 @@ namespace eIVOGo.Controllers
         {
             var orgItem = models.GetTable<Organization>().Where(o => o.CompanyID == id).FirstOrDefault();
             if (orgItem == null)
-                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "營業人資料錯誤!!");
 
             POSNo = POSNo.GetEfficientString();
             if (POSNo == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "POS機編號錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "POS機編號錯誤!!");
             }
 
             if (orgItem.POSDevice.Any(p => p.POSNo == POSNo && p.DeviceID != deviceID))
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "已存在相同的POS機編號!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "已存在相同的POS機編號!!");
             }
 
             var item = models.GetTable<POSDevice>().Where(p => p.CompanyID == id && p.DeviceID == deviceID).FirstOrDefault();
@@ -97,7 +97,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "POS機編號錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "POS機編號錯誤!!");
             }
 
             return View("~/Views/InvoiceBusiness/POSDevice/EditItem.ascx", item);
@@ -110,7 +110,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "POS機編號錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "POS機編號錯誤!!");
             }
 
             return View("~/Views/InvoiceBusiness/POSDevice/DataItem.ascx", item);
@@ -141,7 +141,7 @@ namespace eIVOGo.Controllers
             var seller = models.GetTable<Organization>().Where(o => o.CompanyID == viewModel.SellerID).FirstOrDefault();
             if (seller == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "發票開立人錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "發票開立人錯誤!!");
             }
 
             viewModel.SellerName = seller.CompanyName;
@@ -151,7 +151,7 @@ namespace eIVOGo.Controllers
             //{
             //    if (!mgr.ApplyInvoiceDate(viewModel.InvoiceDate.Value))
             //    {
-            //        return View("~/Views/Shared/JsAlert.cshtml", model: String.Format(MessageResources.AlertNullTrackNoInterval, seller.ReceiptNo));
+            //        return View("~/Views/Shared/AlertMessage.cshtml", model: String.Format(MessageResources.AlertNullTrackNoInterval, seller.ReceiptNo));
             //    }
 
             //    viewModel.TrackCode = mgr.InvoiceNoInterval.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode;
@@ -162,7 +162,7 @@ namespace eIVOGo.Controllers
             var exception = validator.Validate(viewModel);
             if (exception != null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: exception.Message);
+                return View("~/Views/Shared/AlertMessage.cshtml", model: exception.Message);
             }
 
             InvoiceItem newItem = validator.InvoiceItem;
@@ -182,7 +182,7 @@ namespace eIVOGo.Controllers
             var seller = models.GetTable<Organization>().Where(o => o.CompanyID == viewModel.SellerID).FirstOrDefault();
             if (seller == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "發票開立人錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "發票開立人錯誤!!");
             }
 
             return View(seller);
@@ -333,9 +333,9 @@ namespace eIVOGo.Controllers
             }
 
             InvoiceAllowance newItem = validator.Allowance;
-            newItem.CDS_Document.ProcessType = (int)viewModel.ProcessType;
+            //newItem.CDS_Document.ProcessType = (int)viewModel.ProcessType;
             models.GetTable<InvoiceAllowance>().InsertOnSubmit(newItem);
-            if (viewModel.ProcessType == Naming.InvoiceProcessType.D0401)
+            if (newItem.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.D0401)
             {
                 D0401Handler.PushStepQueueOnSubmit(models, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
                 D0401Handler.PushStepQueueOnSubmit(models, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
@@ -372,6 +372,7 @@ namespace eIVOGo.Controllers
             DataSet ds;
             switch(viewModel.ProcessType)
             {
+                case Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer:
                 case Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer:
                     ds = items.GetInvoiceDataForIssuer(models);
                     break;
@@ -498,6 +499,34 @@ namespace eIVOGo.Controllers
             return new EmptyResult();
         }
 
+        public ActionResult GetFullAllowanceRequestSample()
+        {
+
+            var items = models.GetTable<InvoiceItem>().Where(i => false).Take(100);
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/octet-stream";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("FullAllowanceRequestSample.xlsx")));
+
+            using (DataSet ds = items.GetInvoiceDataForFullAllowance(models))
+            {
+                using (var mgr = new AllowanceDataSetManager(models))
+                {
+                    ds.Tables.Add(mgr.InitializeAllowanceResponseTable());
+                }
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            Response.End();
+
+            return new EmptyResult();
+        }
 
     }
 

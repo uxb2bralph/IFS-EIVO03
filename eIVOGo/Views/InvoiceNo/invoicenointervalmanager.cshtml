@@ -28,7 +28,9 @@
     Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "新增/修改發票號碼區間");
 }
 
-
+<div class="border_gray">
+    【<a href="@(Url.Action("UploadInvoiceTrackCode","InvoiceNo"))">上傳發票字軌號碼</a>】
+</div>
 <div class="border_gray" id="queryArea">
     <!--表格 開始-->
     <table class="left_title" border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -179,6 +181,27 @@
                             $tr.remove();
                         } else {
                             alert(data.message);
+                        }
+                    });
+                }
+            },
+            lockItem: function (keyID,lock) {
+                if (confirm('確定'+(lock ? '鎖定' : '解除鎖定')+'此筆資料?')) {
+                    var event = event || window.event;
+                    var $tr = $(event.target).closest('tr');
+                    $.post('@(Url.Action("LockInterval", "InvoiceNo"))', { 'keyID': keyID, 'lockID': lock }, function (data) {
+                        if ($.isPlainObject(data)) {
+                            alert(data.message);
+                        } else {
+                            var $data = $(data);
+                            if ($data.is('tr')) {
+                                $tr.before($data);
+                                $tr.remove();
+                                alert('資料已更新!!');
+                            } else {
+                                $('body').append($data);
+                                $data.remove();
+                            }
                         }
                     });
                 }

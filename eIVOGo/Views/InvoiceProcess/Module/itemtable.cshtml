@@ -1,4 +1,3 @@
-
 @using System.Linq
 @using System.IO
 @using System.Linq.Expressions
@@ -14,12 +13,25 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@{
 
+    ModelSource<InvoiceItem> models;
+    IQueryable<InvoiceItem> _model;
+    String _listID = "itemList" + DateTime.Now.Ticks;
+    InquireInvoiceViewModel _viewModel;
+
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<InvoiceItem>)this.Model;
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+
+}
 <table id="@(_listID)" class="table01 itemList">
     <thead>
         <tr>
             <th aria-sort="other">
-                <input name="chkAll" type="checkbox" /></th>
+                <input name="chkAll" type="checkbox" />
+            </th>
             <th data-sort="1">日期</th>
             <th data-sort="2">客戶 ID</th>
             <th data-sort="3">序號</th>
@@ -29,6 +41,7 @@
             <th data-sort="7">未稅金額</th>
             <th data-sort="8">稅額</th>
             <th data-sort="9">含稅金額</th>
+            <th aria-sort="other">幣別</th>
             <th data-sort="10">是否中獎</th>
             <th data-sort="11">買受人統編</th>
             <th aria-sort="other">發票狀態</th>
@@ -40,18 +53,30 @@
             <th aria-sort="other">開立通知</th>
             <th aria-sort="other">載具資訊</th>
             <th aria-sort="other">列印註記</th>
+            <th aria-sort="other">捐贈愛心碼</th>
+            <th aria-sort="other">附件檔頁數</th>
             <th aria-sort="other" style="min-width: 140px;">管理</th>
         </tr>
     </thead>
     <tbody>
-        @{ Html.RenderPartial("~/Views/InvoiceProcess/Module/ItemList.ascx", _model);}
+        @{ Html.RenderPartial("~/Views/InvoiceProcess/Module/ItemList.cshtml", _model);}
 
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="22">含稅金額總計：&nbsp;@(String.Format("{0:##,###,###,##0}",_model.Sum(i=>i.InvoiceAmountType.TotalAmount)))，
-                未稅金額總計：&nbsp;@(String.Format("{0:##,###,###,##0}",_model.Sum(i=>i.InvoiceAmountType.SalesAmount)))，
-                稅額總計：&nbsp;@(String.Format("{0:##,###,###,##0}",_model.Sum(i=>i.InvoiceAmountType.TaxAmount)))
+            <td colspan="25">
+                @if (_viewModel?.CurrencySummary == true)
+                {
+                    foreach (var g in _model.GroupBy(i => i.InvoiceAmountType.CurrencyID))
+                    {
+                        var currency = g.Key.HasValue ? models.GetTable<CurrencyType>().Where(c => c.CurrencyID == g.Key).FirstOrDefault()?.AbbrevName : "TWD";
+                        <text>
+                            含稅金額總計(@(currency))：&nbsp;@(String.Format("{0:##,###,###,##0.##}",g.Sum(i=>i.InvoiceAmountType.TotalAmount)))，
+                            未稅金額總計(@(currency))：&nbsp;@(String.Format("{0:##,###,###,##0.##}",g.Sum(i=>i.InvoiceAmountType.SalesAmount)))，
+                            稅額總計(@(currency))：&nbsp;@(String.Format("{0:##,###,###,##0.##}",g.Sum(i=>i.InvoiceAmountType.TaxAmount)))<br />
+                        </text>
+                    }
+                }
 
                 <script>
                     debugger;
@@ -96,7 +121,7 @@
                                 $(".itemList input[name='chkAll']").prop('checked', false);
                             }
                         });
-                        
+
                     });
                 </script>
             </td>
@@ -104,22 +129,3 @@
     </tfoot>
 </table>
 
-<script runat="server">
-
-    ModelSource<InvoiceItem> models;
-    IQueryable<InvoiceItem> _model;
-    String _listID = "itemList" + DateTime.Now.Ticks;
-    InquireInvoiceViewModel _viewModel;
-
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<InvoiceItem>)this.Model;
-        _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-
-    }
-
-</script>

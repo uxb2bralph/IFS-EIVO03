@@ -43,7 +43,7 @@
                     SellerInvoiceRootInvoice b2bInvoice = null;
             <tr>
                 <td>
-                    <a href='@($"{eIVOGo.Properties.Settings.Default.mailLinkAddress}{VirtualPathUtility.ToAbsolute("~/Published/DumpExceptionLog.ashx")}?logID={item.LogID}")'
+                    <a href='@($"{eIVOGo.Properties.Settings.Default.WebApDomain}{VirtualPathUtility.ToAbsolute("~/Published/DumpExceptionLog.ashx")}?logID={item.LogID}")'
                     target="_blank">
                     @(item.IsCSV == true 
                             ? item.DataContent 

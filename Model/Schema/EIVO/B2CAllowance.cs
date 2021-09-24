@@ -104,6 +104,9 @@ namespace Model.Schema.EIVO {
         public string OriginalInvoiceNumber;
         
         /// <remarks/>
+        public string OriginalDataNumber;
+        
+        /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
         public System.Nullable<short> OriginalSequenceNumber;
         

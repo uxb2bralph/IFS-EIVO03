@@ -97,6 +97,15 @@ namespace ApplicationResource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Excel格式開立發票完全折讓請求檔.
+        /// </summary>
+        public static string P113 {
+            get {
+                return ResourceManager.GetString("P113", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Json格式作廢發票請求檔.
         /// </summary>
         public static string P202 {

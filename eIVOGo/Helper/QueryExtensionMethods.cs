@@ -12,6 +12,10 @@ using Model.Locale;
 using Model.Security.MembershipManagement;
 using System.IO;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Model.Models.ViewModel;
+using Utility;
+using Model.Helper;
 
 namespace eIVOGo.Helper
 {
@@ -75,5 +79,49 @@ namespace eIVOGo.Helper
             }
             return 0;
         }
+
+        public static IQueryable<BusinessRelationship> PromptBusinessRelationship(this BusinessRelationshipQueryViewModel viewModel, GenericManager<EIVOEntityDataContext> models,out IQueryable<BusinessRelationship> items,out IQueryable<Organization> masterItems, out IQueryable<Organization> relativeItems)
+        {
+            if (viewModel.KeyID != null)
+            {
+                viewModel = JsonConvert.DeserializeObject<BusinessRelationshipQueryViewModel>(viewModel.KeyID.DecryptData());
+            }
+
+            relativeItems = models.GetTable<Organization>();
+            masterItems = models.GetTable<Organization>();
+            items = models.GetTable<BusinessRelationship>();
+
+            if (viewModel.CompanyID.HasValue)
+            {
+                items = items.Where(r => r.MasterID == viewModel.CompanyID);
+            }
+
+            if (viewModel.RelativeID.HasValue)
+            {
+                items = items.Where(r => r.RelativeID == viewModel.RelativeID);
+            }
+
+            if (viewModel.BusinessID.HasValue)
+            {
+                items = items.Where(r => r.BusinessID == (int)viewModel.BusinessID);
+            }
+
+            viewModel.ReceiptNo = viewModel.ReceiptNo.GetEfficientString();
+            if (viewModel.ReceiptNo != null)
+            {
+                relativeItems = relativeItems.Where(i => i.ReceiptNo == viewModel.ReceiptNo);
+            }
+
+            viewModel.MasterNo = viewModel.MasterNo.GetEfficientString();
+            if (viewModel.MasterNo != null)
+            {
+                masterItems = masterItems.Where(i => i.ReceiptNo == viewModel.MasterNo);
+            }
+
+            return items = items
+                .Join(masterItems, m => m.MasterID, o => o.CompanyID, (m, o) => m)
+                .Join(relativeItems, m => m.RelativeID, o => o.CompanyID, (m, o) => m);
+        }
+
     }
 }

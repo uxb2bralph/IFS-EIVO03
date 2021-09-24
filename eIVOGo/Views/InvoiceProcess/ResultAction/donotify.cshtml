@@ -1,7 +1,3 @@
-
-@{ Register Src="~/Module/Common/PagingControl.ascx" TagName="PagingControl" TagPrefix="uc2" }
-@{ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" }
-@{ Register Src="~/Module/Common/ActionHandler.ascx" TagName="ActionHandler" TagPrefix="uc1" }
 @using System.IO
 @using System.Linq.Expressions
 
@@ -12,20 +8,15 @@
 
     <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td class="Bargain_btn">
+            <th style="width:10%;">寄送副本至：</th>
+            <td><input type="text" name="MailTo" value="" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td colspan="2" class="Bargain_btn">
                 <button type="button" class="btn" name="btnNotify" onclick="uiInvoiceQuery.notify();">重送開立通知</button>
             </td>
         </tr>
     </table>
 
 
-<script runat="server">
-
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-    }
-
-</script>
 

@@ -8,6 +8,7 @@
 @using Model.DataEntity
 @using Model.Security.MembershipManagement
 @using Business.Helper
+@using Model.Helper
 @using eIVOGo.Controllers
 
 @{
@@ -56,11 +57,31 @@
                 </td>
             </tr>
             <tr>
+                <th>
+                    發票開立通知
+                </th>
+                <td class="tdleft">
+                    <input type="radio" name="ConditionID" value="@((int)ProcessRequestCondition.ConditionType.ImmediateIssueNotice)" checked="checked" /> 立即寄送通知&nbsp;&nbsp;
+                    <input type="radio" name="ConditionID" value="@((int)ProcessRequestCondition.ConditionType.DeferredIssueNotice)" /> 等候附件合併通知
+                </td>
+            </tr>
+            @if ((DateTime.Today.Month % 2) == 1 && DateTime.Today.Day < 11)
+            {
+                <tr>
+                    <th>
+                        系統配號
+                    </th>
+                    <td class="tdleft">
+                        <input type="checkbox" name="ConditionID" value="@((int)ProcessRequestCondition.ConditionType.UseLastPeriodTrackCodeNo)" /> 開立上期發票&nbsp;&nbsp;
+                    </td>
+                </tr>
+            }
+            <tr>
                 <th colspan="2" class="Head_style_a">
                     各項資料
                 </th>
             </tr>
-            @{ 
+            @{
                 Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadInvoice.cshtml",
                     new InvoiceRequestViewModel
                     {
@@ -76,7 +97,9 @@
                             ProcessType = Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC,
                         });
                 }
-                if (_profile.IsSystemAdmin() || _orgItem?.OrganizationStatus?.InvoiceClientDefaultProcessType == (int)Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer)
+                if (_profile.IsSystemAdmin()
+                    || _orgItem?.OrganizationStatus?.InvoiceClientDefaultProcessType == (int)Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer
+                    || _orgItem?.OrganizationStatus?.InvoiceClientDefaultProcessType == (int)Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer)
                 {
                     Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadInvoice.cshtml",
                         new InvoiceRequestViewModel
@@ -84,7 +107,15 @@
                             Comment = "【開立人配號】",
                             ProcessType = Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer,
                         });
+
+                    Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadInvoice.cshtml",
+                        new InvoiceRequestViewModel
+                        {
+                            Comment = "【A0401開立人配號】",
+                            ProcessType = Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer,
+                        });
                 }
+
                 if (_profile.IsSystemAdmin() || _orgItem?.OrganizationStatus?.InvoiceClientDefaultProcessType == (int)Naming.InvoiceProcessType.C0401_Xlsx_CBE)
                 {
 
@@ -98,6 +129,7 @@
                 Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadVoidInvoice.cshtml");
                 Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadAllowance.cshtml");
                 Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadVoidAllowance.cshtml");
+                Html.RenderPartial("~/Views/InvoiceBusiness/Module/UploadFullAllowance.cshtml");
             }
         </table>
         <!--表格 結束-->

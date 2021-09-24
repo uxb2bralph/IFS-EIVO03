@@ -15,7 +15,7 @@
 @using Newtonsoft.Json
 @{
 
-    Layout = "~/Views/Template/MvcMainPage.cshtml";
+    Layout = "~/Views/Template/QueryActionTemplate.cshtml";
 
     ModelStateDictionary _modelState;
     ModelSource<InvoiceItem> models;
@@ -25,16 +25,13 @@
     _modelState = (ModelStateDictionary)ViewBag.ModelState;
     QueryViewModel _viewModel = (QueryViewModel)ViewBag.ViewModel;
 }
-@{
-    if (_viewModel.QueryForm != null)
-    {
-        Html.RenderPartial(_viewModel.QueryForm);
-    }
-}
+
+@RenderSection("QueryForm",false)
+
 <script>
     debugger;
     var $inquiryAgent = {
-        viewModel: @(Html.Raw(JsonConvert.SerializeObject(_viewModel))),
+        viewModel: @Html.Raw(_viewModel.JsonStringify()),
         initQuery: false,
         columns: null,
         $queryResult: null,
@@ -62,13 +59,15 @@
             } else if (sortType == -1) {
                 $target.append('<i class="fa fa-sort-desc" aria-hidden="true"></i>');
             }
-            $inquiryAgent.inquire(1);
+            $inquiryAgent.inquire(-1);
         },
         pageIndex: 0,
         doPage: function (data) {
         },
         onBodyLoad: function () {
         },
+        onQueryDone: null,
     };
 
 </script>
+@RenderBody()

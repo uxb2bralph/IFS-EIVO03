@@ -74,6 +74,37 @@
                             </marquee>
                             </li>
                     <%  }%>
+                    <%--<li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-language fa-fw"></i><i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>
+                                <a href="javascript:changeLanguage('zh-TW');">
+                                    繁體中文
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:changeLanguage('en-US');">
+                                    English
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- /.dropdown-messages -->
+                        <script>
+                            function changeLanguage(lang) {
+                                $.post('<%= Url.Action("ChangeLanguage", "Account") %>', { 'lang': lang }, function (data) {
+                                    if ($.isPlainObject(data)) {
+                                        if (data.result) {
+                                            window.location.reload();
+                                        }
+                                    } else {
+                                        $(data).appendTo($('body'));
+                                    }
+                                });
+                            }
+                        </script>
+                    </li>--%>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <i class="fa fa-envelope fa-fw"></i><i class="fa fa-caret-down"></i>
@@ -227,7 +258,7 @@
 </body>
 </html>
 <% Html.RenderPartial("~/Views/Shared/GlobalScript.cshtml"); %>
-<% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
+<% Html.RenderPartial("~/Views/Shared/AlertMessage.cshtml"); %>
 
 <cc1:SystemMessagesDataSource ID="dsEntity" runat="server">
 </cc1:SystemMessagesDataSource>

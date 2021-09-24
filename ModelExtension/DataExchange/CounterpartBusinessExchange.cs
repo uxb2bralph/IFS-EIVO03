@@ -10,6 +10,7 @@ using Model.InvoiceManagement;
 using Utility;
 using ModelExtension.Helper;
 using Model.Models.ViewModel;
+using System.Web.Mvc;
 
 namespace ModelExtension.DataExchange
 {
@@ -26,8 +27,6 @@ namespace ModelExtension.DataExchange
             主動列印,
             處理狀態
         }
-
-        public List<UserProfile> NewUsers { get; private set; }
 
         public bool HasError { get; private set; } = false;
 
@@ -78,8 +77,6 @@ namespace ModelExtension.DataExchange
             var row = firstRow.RowUsed();
             if (row == null)
                 return;
-
-            NewUsers = new List<UserProfile>();
 
             ///title row
             ///
@@ -162,13 +159,7 @@ namespace ModelExtension.DataExchange
             {
                 if (bResult)
                 {
-                    UserProfile userProfile;
-                    BusinessRelationship model = viewModel.ApplyCounterpartBusiness(models, out userProfile);
-                    Organization orgItem = model.BusinessMaster;
-                    if (userProfile != null)
-                    {
-                        NewUsers.Add(userProfile);
-                    }
+                    BusinessRelationship model = viewModel.CommitBusinessRelationshipViewModel(models, new ModelStateDictionary { });
                 }
             }
 

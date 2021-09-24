@@ -215,7 +215,7 @@ CarrierID2: {2}limit. </value>
     <value>[E0030]:InvoiceDate can not be blank, TAG: &lt; InvoiceDate /&gt;</value>
   </data>
   <data name="AlertInvoiceDateTime" xml:space="preserve">
-    <value>[E0031]:InvoiceDate or InvoiceTime format error(yyyy/MM/dd HH:mm:ss). Incorrect:{0} {1}</value>
+    <value>[E0031]:InvoiceDate or InvoiceTime error(yyyy/MM/dd HH:mm:ss). Incorrect:{0} {1}</value>
   </data>
   <data name="AlertInvoiceDelivery" xml:space="preserve">
     <value>[E0032]:Invoice is neither printed, nor identified by carrier, nor donated. Incorrect : {0}, TAG:&lt; InvoiceNumber /&gt;</value>
@@ -296,7 +296,7 @@ CarrierID2: {2}limit. </value>
     <value>[E0057]:Invoice Product items not exist, TAG:&lt; InvoiceItem /&gt;</value>
   </data>
   <data name="InvalidInvoiceType" xml:space="preserve">
-    <value>[E0058]:Format of Invoice Type error, please fill in correct code 01-06, Incorrect Invoice Type: {0}, Incorrect TAG:&lt; InvoiceType /&gt;</value>
+    <value>[E0058]:Format of Invoice Type error, please fill in correct code 07 or 08, Incorrect Invoice Type: {0}, Incorrect TAG:&lt; InvoiceType /&gt;</value>
   </data>
   <data name="InvalidPieceUnit" xml:space="preserve">
     <value>[E0059]:Format of Unit error, Incorrect Unit: {0}, Incorrect TAG:&lt; Unit /&gt;</value>
@@ -312,6 +312,9 @@ CarrierID2: {2}limit. </value>
   </data>
   <data name="InvalidPublicCarrierType" xml:space="preserve">
     <value>[E0062]:Carrier is not public type, Incorrect: {0}, TAG:&lt; CarrierType /&gt; ; {1}, TAG:&lt; CarrierId1 /&gt; ; {2}, TAG:&lt; CarrierId2 /&gt;</value>
+  </data>
+  <data name="InvalidQuantity" xml:space="preserve">
+    <value>[E0075]:Incorrect Quantity: {0}, Incorrect TAG:&lt; Quantity /&gt;</value>
   </data>
   <data name="InvalidRandomNumber" xml:space="preserve">
     <value>[E0063]:RandomNumber should be 4 arabic numbers, Incorrect Random Number: {0}, Incorrect TAG:&lt; RandomNumber /&gt;</value>

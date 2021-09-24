@@ -238,6 +238,7 @@ namespace eIVOGo.Module.EIVO
                        mgr.GetTable <CDS_Document >().InsertOnSubmit (doc);
                        InvoiceAllowance invoiceallowance = new InvoiceAllowance();
                        invoiceallowance.CDS_Document  = doc;
+                        invoiceallowance.IssueDate =
                        invoiceallowance.AllowanceDate = DateTime.Now;
                        invoiceallowance.AllowanceNumber = DateTime.Now.ToShortDateString ();
                        invoiceallowance.SellerId = _userProfile.CurrentUserRole.OrganizationCategory.CompanyID.ToString ();

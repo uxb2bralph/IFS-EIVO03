@@ -59,7 +59,9 @@ namespace InvoiceClient.Helper
                 {
                     actionName = actionName,
                     periodicalIntervalSpecified = true,
-                    periodicalInterval = Settings.Default.AutoInvServiceInterval > 0 ? Settings.Default.AutoInvServiceInterval * 60 : 1800
+                    periodicalInterval = Settings.Default.AutoInvServiceInterval > 0 ? Settings.Default.AutoInvServiceInterval * 60 : 1800,
+                    processIndexSpecified = Settings.Default.ProcessArrayIndex > 0,
+                    processIndex = Settings.Default.ProcessArrayIndex,
                 }
             };
         }
@@ -73,6 +75,28 @@ namespace InvoiceClient.Helper
                 UseShellExecute = false
             };
             return Process.Start(info);
+        }
+
+        public static bool AssertFile(this String fileName)
+        {
+            return File.Exists(fileName) && (new FileInfo(fileName)).Length > 0;
+        }
+
+        public static void SaveDocumentWithEncoding(this XmlDocument doc, String path)
+        {
+            Encoding encoding = Encoding.GetEncoding(Settings.Default.OutputEncoding);
+
+            if (encoding.CodePage == 65001)
+            {
+                doc.Save(path);
+            }
+            else
+            {
+                using (StreamWriter writer = new StreamWriter(path, false, encoding))
+                {
+                    doc.Save(writer);
+                }
+            }
         }
 
     }

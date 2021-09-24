@@ -10,22 +10,57 @@
 @using eIVOGo.Models.ViewModel
 @using Model.Models.ViewModel
 @using Model.DataEntity
-@using Model.Helper
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using Business.Helper
+@using Model.Helper
+@{
 
-@{ int idx = 0;}
- @foreach (var item in _items)
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<InvoiceAllowance>)this.Model;
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+
+    _dataItemView = ViewBag.DataItemView ?? "~/Views/AllowanceProcess/Module/DataItem.cshtml";
+
+    _sort = _viewModel.SortIndex();
+
+    if (ViewBag.SortExpression == null)
     {
-        idx++;
-<tr>
-    @{ Html.RenderPartial(_dataItemView, item);}
+        ViewBag.SortExpression = _sortExpr = new Dictionary<int, LambdaExpression>();
+    }
+    else
+    {
+        _sortExpr = (Dictionary<int, LambdaExpression>)ViewBag.SortExpression;
+    }
 
-</tr>
+    if (_sort != null && _sort.Length > 0)
+    {
+        sorting();
+        sortBy();
+    }
+    else
+    {
+        _model = _model.OrderByDescending(i => i.InvoiceID);
+    }
+
+    _items = _model
+        .Skip((int)_viewModel.PageIndex * (int)_viewModel.PageSize)
+        .Take((int)_viewModel.PageSize);
+
+}
+@{ int idx = 0;}
+@foreach (var item in _items)
+{
+    idx++;
+    <tr>
+        @{ Html.RenderPartial(_dataItemView, item);}
+
+    </tr>
 }
 
-<script runat="server">
+@functions
+{
 
     ModelSource<InvoiceItem> models;
     IQueryable<InvoiceAllowance> _items;
@@ -36,42 +71,6 @@
     InquireInvoiceViewModel _viewModel;
     Dictionary<int, LambdaExpression> _sortExpr;
 
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<InvoiceAllowance>)this.Model;
-        _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-
-        _dataItemView = ViewBag.DataItemView ?? "~/Views/AllowanceProcess/Module/DataItem.ascx";
-
-        _sort = _viewModel.SortIndex();
-
-        if (ViewBag.SortExpression == null)
-        {
-            ViewBag.SortExpression = _sortExpr = new Dictionary<int, LambdaExpression>();
-        }
-        else
-        {
-            _sortExpr = (Dictionary<int, LambdaExpression>)ViewBag.SortExpression;
-        }
-
-        if (_sort != null && _sort.Length > 0)
-        {
-            sorting();
-            sortBy();
-        }
-        else
-        {
-            _model = _model.OrderByDescending(i => i.InvoiceID);
-        }
-
-        _items = _model
-            .Skip((int)_viewModel.PageIndex * (int)_viewModel.PageSize)
-            .Take((int)_viewModel.PageSize);
-    }
 
     void sorting()
     {
@@ -114,5 +113,6 @@
             _model = _model.Provider.CreateQuery<InvoiceAllowance>(sort);
         }
     }
+}
 
-</script>
+

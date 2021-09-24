@@ -12,7 +12,13 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@{
 
+    ModelSource<InvoiceItem> models;
+    InquireInvoiceViewModel _viewModel;
+
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
 <script>
     $(function () {
         var $postForm;
@@ -47,15 +53,5 @@
         };
     });
 </script>
-<script runat="server">
 
-    ModelSource<InvoiceItem> models;
-    InquireInvoiceViewModel _viewModel;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-    }
-</script>
 

@@ -15,7 +15,7 @@ namespace eIVOGo.Module.Base
         where T : DataContext, new()
         where TEntity : class, new()
     {
-        protected global::AjaxControlToolkit.ModalPopupExtender ModalPopupExtender;
+        //protected global::AjaxControlToolkit.ModalPopupExtender ModalPopupExtender;
 
         public event EventHandler Done;
 
@@ -53,11 +53,11 @@ namespace eIVOGo.Module.Base
         {
             if (this.Visible)
             {
-                this.ModalPopupExtender.Show();
+                //this.ModalPopupExtender.Show();
             }
             else
             {
-                this.ModalPopupExtender.Hide();
+                //this.ModalPopupExtender.Hide();
             }
         }
 

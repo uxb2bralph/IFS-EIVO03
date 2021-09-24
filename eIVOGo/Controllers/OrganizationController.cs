@@ -25,6 +25,8 @@ using Model.DataEntity;
 using Model.Locale;
 using Model.Security.MembershipManagement;
 using Utility;
+using Model.Helper;
+using ModelExtension.Helper;
 
 namespace eIVOGo.Controllers
 {
@@ -66,9 +68,9 @@ namespace eIVOGo.Controllers
             Organization item = null;
             if (viewModel.KeyID != null)
             {
-                viewModel.CompanyID = BitConverter.ToInt32(viewModel.DecryptKey(), 0);
-                item = models.GetTable<Organization>().Where(u => u.CompanyID == viewModel.CompanyID).FirstOrDefault();
+                viewModel.CompanyID = viewModel.DecryptKeyValue();
             }
+            item = models.GetTable<Organization>().Where(u => u.CompanyID == viewModel.CompanyID).FirstOrDefault();
 
             viewModel.ApplyFromModel(item);
 
@@ -78,8 +80,8 @@ namespace eIVOGo.Controllers
 
         public ActionResult CommitItem(OrganizationViewModel viewModel)
         {
-
-            Organization item = viewModel.CommitViewModel(this);
+            ViewBag.ViewModel = viewModel;
+            Organization item = viewModel.CommitOrganizationViewModel(models, ModelState);
 
             if (item == null)
             {
@@ -102,7 +104,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "開立人資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "開立人資料錯誤!!");
             }
 
             return View("~/Views/Organization/Module/ApplyIssuerAgent.ascx", item);

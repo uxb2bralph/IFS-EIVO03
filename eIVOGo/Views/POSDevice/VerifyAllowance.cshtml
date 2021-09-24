@@ -1,0 +1,103 @@
+﻿@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+@using System.Xml
+@using System.Xml.Linq
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Schema.EIVO
+@using Utility
+@using Business.Helper
+@using Model.Helper
+@using Uxnet.Web.WebUI
+@functions {
+
+    ModelSource<InvoiceItem> models;
+
+    InvoiceItem MatchAllowanceItem(AllowanceRootAllowance allowance, AllowanceRootAllowanceAllowanceItem allowanceItem)
+    {
+        InvoiceItem invoice = null;
+        var invoiceNo = allowanceItem.OriginalInvoiceNumber.GetEfficientString();
+        if (invoiceNo != null && invoiceNo.Length == 10)
+        {
+            invoice = models.GetTable<InvoiceItem>()
+                    .Where(i => i.TrackCode == invoiceNo.Substring(0, 2))
+                    .Where(i => i.No == invoiceNo.Substring(2))
+                    .Join(models.GetTable<Organization>().Where(o => o.ReceiptNo == allowance.SellerId),
+                        i => i.SellerID, o => o.CompanyID, (i, o) => i)
+                    .OrderByDescending(i => i.InvoiceID)
+                    .FirstOrDefault();
+
+        }
+
+        if (invoice == null)
+        {
+            String orderNo = allowanceItem.OriginalDataNumber.GetEfficientString();
+            if (orderNo != null)
+            {
+                invoice = models.GetTable<InvoicePurchaseOrder>()
+                            .Where(d => d.OrderNo == orderNo)
+                                .Join(models.GetTable<InvoiceItem>()
+                                    .Join(models.GetTable<Organization>()
+                                        .Where(o => o.ReceiptNo == allowance.SellerId),
+                                        i => i.SellerID, o => o.CompanyID, (i, o) => i),
+                                    p => p.InvoiceID, i => i.InvoiceID, (p, i) => i)
+                                .FirstOrDefault();
+            }
+
+        }
+
+        return invoice;
+    }
+}
+@{
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    XmlDocument docInv = ViewBag.ViewModel as XmlDocument;
+
+    AllowanceRoot root = docInv.TrimAll().ConvertTo<AllowanceRoot>();
+
+    if (root.Allowance != null)
+    {
+        foreach (var allowance in root.Allowance)
+        {
+            if (allowance.AllowanceItem != null && allowance.AllowanceItem.Length > 0)
+            {
+
+                String orderNo = allowance.DataNumber.GetEfficientString();
+                var order = models.GetTable<InvoicePurchaseOrder>()
+                    .Where(d => d.OrderNo == orderNo)
+                        .Join(models.GetTable<InvoiceItem>()
+                            .Join(models.GetTable<Organization>()
+                                .Where(o => o.ReceiptNo == allowance.SellerId),
+                                i => i.SellerID, o => o.CompanyID, (i, o) => i),
+                            p => p.InvoiceID, i => i.InvoiceID, (p, i) => p)
+                        .FirstOrDefault();
+
+                for (int i = 0; i < allowance.AllowanceItem.Length; i++)
+                {
+                    var allowanceItem = allowance.AllowanceItem[i];
+                    var invoice = order?.InvoiceItem ?? MatchAllowanceItem(allowance, allowanceItem);
+
+                    if (invoice != null)
+                    {
+                        allowance.BuyerId = invoice.InvoiceBuyer?.ReceiptNo;
+                        allowance.BuyerName = invoice.InvoiceBuyer?.Name;
+                        allowanceItem.OriginalInvoiceNumber = $"{invoice.TrackCode}{invoice.No}";
+                        allowanceItem.OriginalInvoiceDate = $"{invoice.InvoiceDate:yyyy/MM/dd}";
+                    }
+                }
+            }
+        }
+    }
+
+    Response.ContentType = "text/xml";
+    Output.WriteLine(root.ConvertToXml().OuterXml);
+}

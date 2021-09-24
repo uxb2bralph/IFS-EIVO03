@@ -16,9 +16,11 @@ namespace InvoiceClient.TransferManagement
     public class XlsxInvoiceTransferManager : ITransferManager
     {
         private InvoiceWatcher _InvoiceWatcher;
+        private InvoiceWatcher _DelayedInvoiceWatcher;
         private InvoiceWatcher _CancellationWatcher;
         private InvoiceWatcher _AllowanceWatcher;
         private InvoiceWatcher _AllowanceCancellationWatcher;
+        private InvoiceWatcher _FullAllowanceWatcher;
 
         LocalSettings _Settings;
         class LocalSettings
@@ -27,6 +29,9 @@ namespace InvoiceClient.TransferManagement
             public String VoidInvoiceRequestPath { get; set; } = "CancelInvoice_Xlsx";
             public String AllowanceRequestPath { get; set; } = "Allowance_Xlsx";
             public String VoidAllowanceRequestPath { get; set; } = "CancelAllowance_Xlsx";
+            public String FullAllowanceRequestPath { get; set; } = "FullAllowance_Xlsx";
+            public String DelayedInvoiceRequestPath { get; set; } = "Delayed_Invoice_Xlsx";
+
         }
 
         public XlsxInvoiceTransferManager()
@@ -48,6 +53,9 @@ namespace InvoiceClient.TransferManagement
             _InvoiceWatcher = new XlsxInvoiceWatcher(Path.Combine(fullPath, _Settings.InvoiceRequestPath));
             _InvoiceWatcher.StartUp();
 
+            _DelayedInvoiceWatcher = new XlsxDelayedInvoiceWatcher(Path.Combine(fullPath, _Settings.DelayedInvoiceRequestPath));
+            _DelayedInvoiceWatcher.StartUp();
+
             _CancellationWatcher = new XlsxVoidInvoiceWatcher(Path.Combine(fullPath, _Settings.VoidInvoiceRequestPath));
             _CancellationWatcher.StartUp();
 
@@ -57,6 +65,9 @@ namespace InvoiceClient.TransferManagement
             _AllowanceCancellationWatcher = new XlsxVoidAllowanceWatcher(Path.Combine(fullPath, _Settings.VoidAllowanceRequestPath));
             _AllowanceCancellationWatcher.StartUp();
 
+            _FullAllowanceWatcher = new XlsxFullAllowanceWatcher(Path.Combine(fullPath, _Settings.FullAllowanceRequestPath));
+            _FullAllowanceWatcher.StartUp();
+
         }
 
         public void PauseAll()
@@ -64,6 +75,11 @@ namespace InvoiceClient.TransferManagement
             if (_InvoiceWatcher != null)
             {
                 _InvoiceWatcher.Dispose();
+            }
+
+            if (_DelayedInvoiceWatcher != null)
+            {
+                _DelayedInvoiceWatcher.Dispose();
             }
 
             if (_CancellationWatcher != null)
@@ -78,6 +94,11 @@ namespace InvoiceClient.TransferManagement
             {
                 _AllowanceCancellationWatcher.Dispose();
             }
+            if (_FullAllowanceWatcher != null)
+            {
+                _FullAllowanceWatcher.Dispose();
+            }
+
         }
 
         public String ReportError()
@@ -85,12 +106,16 @@ namespace InvoiceClient.TransferManagement
             StringBuilder sb = new StringBuilder();
             if (_InvoiceWatcher != null)
                 sb.Append(_InvoiceWatcher.ReportError());
+            if (_DelayedInvoiceWatcher != null)
+                sb.Append(_DelayedInvoiceWatcher.ReportError());
             if (_CancellationWatcher != null)
                 sb.Append(_CancellationWatcher.ReportError());
             if (_AllowanceWatcher != null)
                 sb.Append(_AllowanceWatcher.ReportError());
             if (_AllowanceCancellationWatcher != null)
                 sb.Append(_AllowanceCancellationWatcher.ReportError());
+            if (_FullAllowanceWatcher != null)
+                sb.Append(_FullAllowanceWatcher.ReportError());
 
             return sb.ToString();
 
@@ -99,9 +124,11 @@ namespace InvoiceClient.TransferManagement
         public void SetRetry()
         {
             _InvoiceWatcher.Retry();
+            _DelayedInvoiceWatcher.Retry();
             _CancellationWatcher.Retry();
             _AllowanceWatcher.Retry();
             _AllowanceCancellationWatcher.Retry();
+            _FullAllowanceWatcher.Retry();
         }
 
 

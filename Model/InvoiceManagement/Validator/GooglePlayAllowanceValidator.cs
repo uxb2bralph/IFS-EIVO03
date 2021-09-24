@@ -186,6 +186,11 @@ namespace Model.InvoiceManagement.Validator
                     return new Exception(String.Format(MessageResources.InvalidBuyerId, _allowanceItem.BuyerId));
                 }
 
+                if (_allowanceDate.AddDays(1) < originalInvoice.InvoiceDate)
+                {
+                    _allowanceDate = originalInvoice.InvoiceDate.Value.AddDays(1);
+                }
+
                 _allowanceItem.TotalAmount += i.Amount;
                 _allowanceItem.TaxAmount += i.Tax;
 
@@ -216,6 +221,7 @@ namespace Model.InvoiceManagement.Validator
                     DocType = (int)Naming.DocumentTypeDefinition.E_Allowance
                 },
                 AllowanceDate = _allowanceDate,
+                IssueDate = _allowanceDate,
                 AllowanceNumber = _allowanceItem.AllowanceNumber,
                 AllowanceType = _allowanceItem.AllowanceType,
                 BuyerId = _allowanceItem.BuyerId,

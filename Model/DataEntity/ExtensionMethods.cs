@@ -300,11 +300,16 @@ namespace Model.DataEntity
             return item;
         }
 
-        public static IQueryable<UserProfile> GetUserListByCompanyID(this GenericManager<EIVOEntityDataContext> mgr, int? companyID)
+        public static IQueryable<UserProfile> GetUserListByCompanyID(this GenericManager<EIVOEntityDataContext> mgr, int? companyID, Naming.CategoryID? category = null)
         {
-            return mgr.GetTable<OrganizationCategory>()
-                .Where(c => c.CompanyID == companyID
-                    && c.CategoryID == (int)Naming.CategoryID.COMP_ENTERPRISE_GROUP)
+            var items = mgr.GetTable<OrganizationCategory>()
+                    .Where(c => c.CompanyID == companyID);
+            if(category.HasValue)
+            {
+                items = items.Where(c => c.CategoryID == (int)category);
+
+            }
+            return items
                 .Join(mgr.GetTable<UserRole>(), c => c.OrgaCateID, r => r.OrgaCateID, (c, r) => r)
                 .Select(r => r.UserProfile);
         }

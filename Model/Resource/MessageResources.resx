@@ -208,7 +208,7 @@
     <value>發票日期，TAG：&lt; InvoiceDate /&gt;</value>
   </data>
   <data name="AlertInvoiceDateTime" xml:space="preserve">
-    <value>發票日期、發票時間格式錯誤(yyyy/MM/dd HH:mm:ss)；上傳資料:{0} {1}</value>
+    <value>發票日期、發票時間錯誤(yyyy/MM/dd HH:mm:ss)；上傳資料:{0} {1}</value>
   </data>
   <data name="AlertInvoiceDelivery" xml:space="preserve">
     <value>發票未標註列印、未捐贈，須提示載具；傳送資料:{0}，TAG:&lt; InvoiceNumber /&gt;</value>
@@ -309,6 +309,9 @@
 2.載具顯碼、隱碼開頭為'/'。
 3.含開頭'/'，長度為8碼。
 傳送資料：{0}，TAG:&lt; CarrierType /&gt;；{1}，TAG:&lt; CarrierId1 /&gt;；{2}，TAG:&lt; CarrierId2 /&gt;。</value>
+  </data>
+  <data name="InvalidQuantity" xml:space="preserve">
+    <value>數量錯誤，傳送資料：{0}，TAG:&lt; Quantity /&gt;</value>
   </data>
   <data name="InvalidRandomNumber" xml:space="preserve">
     <value>交易隨機碼應由4位數值構成，上傳資料：{0}，TAG:&lt; RandomNumber /&gt;</value>

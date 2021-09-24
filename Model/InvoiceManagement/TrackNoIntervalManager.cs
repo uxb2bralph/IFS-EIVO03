@@ -64,33 +64,67 @@ namespace Model.InvoiceManagement
 
         public void SettleUnassignedInvoiceNO(int sellerID, int trackID)
         {
-            var trackCodeItem = this.GetTable<InvoiceTrackCodeAssignment>().Where(t => t.SellerID == sellerID
-                && t.TrackID == trackID).FirstOrDefault().InvoiceTrackCode;
+            var assignment = this.GetTable<InvoiceTrackCodeAssignment>().Where(t => t.SellerID == sellerID
+                && t.TrackID == trackID).FirstOrDefault();
 
-            if (trackCodeItem == null)
+            SettleUnassignedInvoiceNO(assignment);
+        }
+
+        public void SettleUnassignedInvoiceNOPeriodically(int year, int periodNo, int? sellerID = null)
+        {
+            IQueryable<InvoiceTrackCodeAssignment> trackCodeAssignment = this.GetTable<InvoiceTrackCodeAssignment>();
+            if (sellerID.HasValue)
+            {
+                trackCodeAssignment = trackCodeAssignment.Where(t => t.SellerID == sellerID);
+            }
+
+            var items = this.GetTable<InvoiceTrackCode>()
+                .Where(t => t.Year == year)
+                .Where(t => t.PeriodNo == periodNo)
+                .Join(trackCodeAssignment,
+                    t => t.TrackID, a => a.TrackID, (t, a) => a);
+
+            foreach (var item in items)
+            {
+                SettleUnassignedInvoiceNO(item);
+            }
+        }
+
+
+        public void SettleUnassignedInvoiceNO(InvoiceTrackCodeAssignment assignment)
+        {
+            if (assignment == null)
                 return;
 
-            var noIntervals = this.EntityList.Where(i => i.TrackID == trackID && i.SellerID == sellerID);
+            var noIntervals = this.EntityList.Where(i => i.TrackID == assignment.TrackID && i.SellerID == assignment.SellerID);
+            this.DeleteAll<UnassignedInvoiceNo>(u => u.SellerID == assignment.SellerID && u.TrackID == assignment.TrackID);
 
-            this.DeleteAll<UnassignedInvoiceNo>(u => u.SellerID == sellerID && u.TrackID == trackID);
+            var trackCodeItem = assignment.InvoiceTrackCode;
 
             foreach (var interval in noIntervals)
             {
-                String startNo = String.Format("{0:00000000}",interval.StartNo),
-                    endNo = String.Format("{0:00000000}",interval.EndNo);
-                var items = this.GetTable<InvoiceItem>().Where(i => i.SellerID == sellerID && i.TrackCode == trackCodeItem.TrackCode
+                String startNo = String.Format("{0:00000000}", interval.StartNo),
+                    endNo = String.Format("{0:00000000}", interval.EndNo);
+                var items = this.GetTable<InvoiceItem>().Where(i => i.SellerID == assignment.SellerID && i.TrackCode == trackCodeItem.TrackCode
                     && String.Compare(i.No, startNo) >= 0 && String.Compare(i.No, endNo) <= 0);
 
                 int recordCount = interval.EndNo - interval.StartNo + 1;
 
-                if (items.Count() == recordCount)
+                if (items.Count() >= recordCount)
                     continue;
 
+                var table = this.GetTable<UnassignedInvoiceNo>();
+
                 List<int> allInvoiceNo = Enumerable.Range(interval.StartNo, recordCount).ToList();
-                foreach(var item in items)
+                foreach (var item in items)
                 {
-                    allInvoiceNo.Remove(int.Parse(item.No));
+                    if (int.TryParse(item.No, out int no))
+                    {
+                        allInvoiceNo.Remove(no);
+                    }
                 }
+
+                Console.WriteLine($"\r\ninterval({interval.IntervalID}) unassigned numbers count: {allInvoiceNo.Count}");
 
                 int startIndex = allInvoiceNo[0];
                 int count = 1;
@@ -103,34 +137,113 @@ namespace Model.InvoiceManagement
                     }
                     else
                     {
-                        this.GetTable<UnassignedInvoiceNo>().InsertOnSubmit(
+                        table.InsertOnSubmit(
                             new UnassignedInvoiceNo
                             {
                                 InvoiceBeginNo = startIndex,
                                 InvoiceEndNo = startIndex + count - 1,
-                                SellerID = sellerID,
-                                TrackID = trackID
+                                SellerID = assignment.SellerID,
+                                TrackID = assignment.TrackID
                             });
 
                         count = 1;
                         startIndex = allInvoiceNo[idx];
+
+                        Console.Write("+");
+                        this.SubmitChanges();
                     }
                 }
 
-                if(count>0)
+                if (count > 0)
                 {
-                    this.GetTable<UnassignedInvoiceNo>().InsertOnSubmit(
+                    table.InsertOnSubmit(
                         new UnassignedInvoiceNo
                         {
                             InvoiceBeginNo = startIndex,
                             InvoiceEndNo = startIndex + count - 1,
-                            SellerID = sellerID,
-                            TrackID = trackID
+                            SellerID = assignment.SellerID,
+                            TrackID = assignment.TrackID
                         });
+
+                    Console.Write("+");
+                    this.SubmitChanges();
                 }
 
+            }
+        }
+
+        public void SettleVacantInvoiceNo(int year, int periodNo, int? sellerID = null)
+        {
+            IQueryable<InvoiceTrackCodeAssignment> trackCodeAssignment = this.GetTable<InvoiceTrackCodeAssignment>();
+            if (sellerID.HasValue)
+            {
+                trackCodeAssignment = trackCodeAssignment.Where(t => t.SellerID == sellerID);
+            }
+
+            var items = this.GetTable<InvoiceTrackCode>()
+                .Where(t => t.Year == year)
+                .Where(t => t.PeriodNo == periodNo)
+                .Join(trackCodeAssignment,
+                    t => t.TrackID, a => a.TrackID, (t, a) => a)
+                .Join(this.GetTable<InvoiceNoInterval>(), a => new { a.TrackID, a.SellerID }, n => new { n.TrackID, n.SellerID }, (a, n) => n);
+
+            foreach (var item in items)
+            {
+                SettleVacantInvoiceNo(item);
+            }
+        }
+
+        public void SettleVacantInvoiceNo(InvoiceNoInterval interval)
+        {
+            String startNo = String.Format("{0:00000000}", interval.StartNo),
+                endNo = String.Format("{0:00000000}", interval.EndNo);
+
+            var trackCode = interval.InvoiceTrackCodeAssignment;
+            var items = this.GetTable<InvoiceItem>().Where(i => i.SellerID == trackCode.SellerID 
+                && i.TrackCode == trackCode.InvoiceTrackCode.TrackCode
+                && String.Compare(i.No, startNo) >= 0 && String.Compare(i.No, endNo) <= 0);
+
+            int recordCount = interval.EndNo - interval.StartNo + 1;
+
+            if (items.Count() == recordCount)
+                return;
+
+            List<int> allInvoiceNo = Enumerable.Range(interval.StartNo, recordCount).ToList();
+            List<int> issuedNo = items.Select(i => int.Parse(i.No)).ToList();
+
+            var vacancyNo = allInvoiceNo.Except(issuedNo);
+
+            this.ExecuteCommand("delete VacantInvoiceNo where IntervalID = {0}", interval.IntervalID);
+            var table = this.GetTable<VacantInvoiceNo>();
+
+            foreach (var no in vacancyNo)
+            {
+                table.InsertOnSubmit(new VacantInvoiceNo 
+                {
+                    InvoiceNo = no,
+                    IntervalID = interval.IntervalID
+                });
                 this.SubmitChanges();
             }
+
+            this.ExecuteCommand(@"
+                UPDATE          VacantInvoiceNo
+                SET                   NextID = v2.VacancyID
+                FROM              VacantInvoiceNo INNER JOIN
+                                            VacantInvoiceNo AS v2 ON VacantInvoiceNo.IntervalID = v2.IntervalID AND 
+                                            VacantInvoiceNo.InvoiceNo + 1 = v2.InvoiceNo
+                WHERE          (VacantInvoiceNo.IntervalID = {0})", interval.IntervalID);
+
+            this.ExecuteCommand(@"
+                UPDATE          VacantInvoiceNo
+                SET                   PrevID = v2.VacancyID
+                FROM              VacantInvoiceNo INNER JOIN
+                                            VacantInvoiceNo AS v2 ON VacantInvoiceNo.IntervalID = v2.IntervalID AND 
+                                            VacantInvoiceNo.InvoiceNo - 1 = v2.InvoiceNo
+                WHERE          (VacantInvoiceNo.IntervalID = {0})", interval.IntervalID);
+
+            Logger.Info($"Processed IntervalID: {interval.IntervalID}");
+
         }
     }
 }

@@ -20,23 +20,6 @@ namespace eIVOGo.Module.JsGrid {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder inquiryHolder;
-        
-        /// <summary>
-        /// btnQuery control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnQuery;
-        
-        /// <summary>
-        /// resultTitle control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::eIVOGo.Module.UI.FunctionTitleBar resultTitle;
+
     }
 }

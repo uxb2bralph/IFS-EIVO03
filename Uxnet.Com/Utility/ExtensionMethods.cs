@@ -22,7 +22,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Xml.XPath;
-
+using Newtonsoft.Json;
 using Uxnet.Com.Helper;
 using Uxnet.Com.Properties;
 using Uxnet.ToolAdapter.Common;
@@ -957,7 +957,20 @@ namespace Utility
             }
         }
 
-
+        public static void SaveWithEncoding(this XmlDocument doc, String path, Encoding encoding = null)
+        {
+            if (encoding == null)
+            {
+                doc.Save(path);
+            }
+            else
+            {
+                using (StreamWriter writer = new StreamWriter(path, false, encoding))
+                {
+                    doc.Save(writer);
+                }
+            }
+        }
 
 
         public static IEnumerable<int> GenerateArray(this int start, int size)
@@ -1144,6 +1157,78 @@ namespace Utility
                 node.ParentNode.RemoveChild(node);
             }
             return docMsg;
+        }
+
+        public static String[] ParseCsvLine(this String line, char delimiter = ',', char quotation = '"')
+        {
+            if (String.IsNullOrEmpty(line))
+            {
+                return null;
+            }
+
+            List<String> result = new List<string>();
+
+            int start = 0, length = 0;
+            bool quote = false;
+            for (int i = 0; i < line.Length; i++)
+            {
+                if (line[i] == quotation)
+                {
+                    quote = !quote;
+                    length++;
+                    continue;
+                }
+
+                if (line[i] == delimiter)
+                {
+                    if (quote)
+                    {
+                        length++;
+                        continue;
+                    }
+                    else
+                    {
+                        if (length > 0)
+                        {
+                            if (line[start] == quotation && line[start + length - 1] == quotation)
+                            {
+                                result.Add(line.Substring(start + 1, length - 2));
+                            }
+                            else
+                            {
+                                result.Add(line.Substring(start, length));
+                            }
+                        }
+                        else
+                        {
+                            result.Add(String.Empty);
+                        }
+                        start = i + 1;
+                        length = 0;
+                        continue;
+                    }
+                }
+
+                length++;
+            }
+
+            if (length > 0)
+            {
+                if (length > 1 && line[start] == quotation && line[start + length - 1] == quotation)
+                {
+                    result.Add(line.Substring(start + 1, length - 2));
+                }
+                else
+                {
+                    result.Add(line.Substring(start, length));
+                }
+            }
+            else
+            {
+                result.Add(String.Empty);
+            }
+
+            return result.ToArray();
         }
 
 
@@ -1534,19 +1619,122 @@ namespace Utility
             return output;
         }
 
+        public static Nullable<T> GetData<T>(this DataRow row, String columnName)
+            where T : struct
+        {
+            if (row.IsNull(columnName))
+            {
+                return new Nullable<T>();
+            }
+            else if (row[columnName] is T)
+            {
+                return (T)row[columnName];
+            }
+            else
+            {
+                try
+                {
+                    if(row[columnName] is String)
+                    {
+                        String val = (row[columnName] as String).GetEfficientString();
+                        if (val == null)
+                        {
+                            return new Nullable<T>();
+                        }
+                        else
+                        {
+                            return (T)Convert.ChangeType(val, typeof(T));
+                        }
+                    }
+                    return (T)Convert.ChangeType(row[columnName], typeof(T));
+                }
+                catch(Exception ex)
+                {
+                    Logger.Error(ex);
+                    return new Nullable<T>();
+                }
+            }
+        }
+
         public static Nullable<T> GetData<T>(this DataRow row, int index)
             where T : struct
         {
-            return row.IsNull(index)
-                ? new Nullable<T>()
-                : row[index] is T
-                    ? (T)row[index]
-                    : (T)Convert.ChangeType(row[index], typeof(T));
+            if (row.IsNull(index))
+            {
+                return new Nullable<T>();
+            }
+            else if (row[index] is T)
+            {
+                return (T)row[index];
+            }
+            else
+            {
+                try
+                {
+                    if (row[index] is String)
+                    {
+                        String val = (row[index] as String).GetEfficientString();
+                        if (val == null)
+                        {
+                            return new Nullable<T>();
+                        }
+                        else
+                        {
+                            return (T)Convert.ChangeType(val, typeof(T));
+                        }
+                    }
+                    return (T)Convert.ChangeType(row[index], typeof(T));
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                    return new Nullable<T>();
+                }
+            }
         }
 
         public static String GetString(this DataRow row, int index)
         {
             return (row[index] as String) ?? $"{row[index]}";
+        }
+
+        public static String GetString(this DataRow row, String columnName)
+        {
+            return (row[columnName] as String) ?? $"{row[columnName]}";
+        }
+
+        public static JsonSerializerSettings CommonJsonSettings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+        };
+
+        public static String JsonStringify(this Object model)
+        {
+            return JsonConvert.SerializeObject(model, CommonJsonSettings);
+        }
+
+        public static T DeserializeObjectFromFile<T>(this string jsonPath)
+        {
+            if(File.Exists(jsonPath))
+            {
+                return JsonConvert.DeserializeObject<T>(File.ReadAllText(jsonPath));
+            }
+            return default;
+        }
+
+        public static void SerializeObjectToJsonFile(this Object model,String jsonPath)
+        {
+            File.WriteAllText(jsonPath, model.JsonStringify());
+        }
+
+        public static String ToAmountString(this decimal? value)
+        {
+            return $"{(value ?? 0):##,###,###,###,##0}";
+        }
+
+        public static String ToAmountString(this decimal value)
+        {
+            return $"{value:##,###,###,###,##0}";
         }
 
     }

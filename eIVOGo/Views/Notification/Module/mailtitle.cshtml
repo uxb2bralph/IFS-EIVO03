@@ -16,34 +16,29 @@
 @using Model.Schema.EIVO
 @using Utility
 @using Uxnet.Web.WebUI
-
-<div>
-    @if (_model.LogoURL != null)
-        {
-    <img id="logo" style="max-width: 200px; height: auto;" src='@(eIVOGo.Properties.Settings.Default.mailLinkAddress + VirtualPathUtility.ToAbsolute("~/" +_model.LogoURL))' />
-    }
-        @if (_model.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.UseCustomStyle))
-        {
-    <span style="white-space: nowrap; color: #4E158A;font-size:xx-large;font-weight:bold;position:absolute;">@(ViewBag.MailTitle)</span>
-    }
-        else
-        {
-    <span style="white-space: nowrap;"><strong>@(_model.CompanyName)@(ViewBag.MailTitle)</strong></span>
-    }
-</div>
-
-<script runat="server">
+@{
 
     ModelSource<InvoiceItem> models;
     Organization _model;
 
-    protected override void OnInit(EventArgs e)
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (Organization)this.Model;
+
+}
+<div>
+    @if (_model.LogoURL != null)
     {
-        base.OnInit(e);
-
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (Organization)this.Model;
-
+        <img id="logo" style="max-width: 200px; height: auto;" src='@(eIVOGo.Properties.Settings.Default.WebApDomain + VirtualPathUtility.ToAbsolute("~/" +_model.LogoURL))' />
     }
+    @if (_model.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.UseCustomStyle))
+    {
+        <span style="white-space: nowrap; color: #4E158A;font-size:xx-large;font-weight:bold;position:absolute;">@(ViewBag.MailTitle)</span>
+    }
+    else
+    {
+        <span style="white-space: nowrap;"><strong>@(_model.CompanyName)@(ViewBag.MailTitle)</strong></span>
+    }
+</div>
 
-</script>
+
+

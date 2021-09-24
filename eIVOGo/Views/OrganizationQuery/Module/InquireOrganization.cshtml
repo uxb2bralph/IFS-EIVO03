@@ -2,6 +2,7 @@
 @using System.Linq.Expressions
 
 @using Business.Helper
+@using Model.Helper
 @using DataAccessLayer.basis
 @using eIVOGo.Helper
 @using eIVOGo.Models
@@ -140,7 +141,15 @@
     }
 
     function applyCertificate(value) {
-        window.open('@(VirtualPathUtility.ToAbsolute("~/SAM/CreateCertificateIdentity.aspx"))' + '?companyID=' + value, '', 'toolbar=no,scrollbars=1,width=640,height=200');
+        showLoading();
+        $.post('@(Url.Action("OrganizationCertificate", "CertificateIdentity"))', { 'companyID': value }, function (data) {
+            hideLoading();
+            if ($.isPlainObject(data)) {
+                alert(data.message);
+            } else {
+                $(data).appendTo($('body'));
+            }
+        });
     }
 
     function applyAgency(value) {

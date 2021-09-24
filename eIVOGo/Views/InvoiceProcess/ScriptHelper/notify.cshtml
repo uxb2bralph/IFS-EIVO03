@@ -24,6 +24,8 @@
             var $formData = $('input[name="chkItem"]:checked').serializeObject();
             $formData.cancellation = $('#queryArea select[name="Cancelled"]').val();
             $formData.processType = $('#queryArea select[name="ProcessType"]').val();
+            $formData.mailTo = $('input[name="MailTo"]').val();
+
 
             showLoading();
             $.post('@(Url.Action("IssueInvoiceNotice", "InvoiceProcess"))', $formData, function (data) {
@@ -112,15 +114,5 @@
         };
 
     });
-</script>
-<script runat="server">
-
-    ModelSource<InvoiceItem> models;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-    }
 </script>
 

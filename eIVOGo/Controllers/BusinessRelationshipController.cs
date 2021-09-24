@@ -18,7 +18,7 @@ using Business.Helper;
 using eIVOGo.Helper;
 using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
-using eIVOGo.Module.Common;
+
 using eIVOGo.Properties;
 using Model.DataEntity;
 using Model.DocumentManagement;
@@ -32,15 +32,18 @@ using ModelExtension.DataExchange;
 using ModelExtension.Helper;
 using Utility;
 using Uxnet.Com.Security.UseCrypto;
+using Newtonsoft.Json;
+using System.Data.SqlClient;
+using Uxnet.Com.DataAccessLayer;
 
 namespace eIVOGo.Controllers
 {
     public class BusinessRelationshipController : SampleController<InvoiceItem>
     {
-        public ActionResult MaintainRelationship(String message)
+        public ActionResult MaintainRelationship(BusinessRelationshipQueryViewModel viewModel)
         {
-            ViewBag.Message = message;
-            return View();
+            ViewBag.ViewModel = viewModel;
+            return View("~/Views/BusinessRelationship/MaintainRelationship.cshtml");
         }
 
         public ActionResult B2BIndex(BusinessRelationshipQueryViewModel viewModel)
@@ -52,7 +55,7 @@ namespace eIVOGo.Controllers
         public ActionResult ImportCounterpartBusinessXml(BusinessRelationshipQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            return View();
+            return View("~/Views/BusinessRelationship/ImportCounterpartBusinessXml.cshtml");
         }
 
         public ActionResult ImportCounterpartBusinessCsv(String message)
@@ -76,51 +79,156 @@ namespace eIVOGo.Controllers
             userProfile["UploadManager"] = null;
 
             ViewBag.Message = message;
-            return View();
+            return View("~/Views/BusinessRelationship/ImportCounterpartBusiness.cshtml");
         }
+
+        public ActionResult UploadCounterpartBusiness(BusinessRelationshipQueryViewModel viewModel,IEnumerable<HttpPostedFileBase> excelFile)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (excelFile == null || excelFile.Count() < 1)
+            {
+                return Json(new { result = false, message = "未選取檔案或檔案上傳失敗!!" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (excelFile.Count() != 1)
+            {
+                return Json(new { result = false, message = "請上傳單一檔案!!" }, JsonRequestBehavior.AllowGet);
+            }
+
+            //if (!viewModel.BusinessID.HasValue)
+            //{
+            //    return Json(new { result = false, message = "請選擇營業人類別!!" }, JsonRequestBehavior.AllowGet);
+            //}
+
+            var profile = HttpContext.GetUser();
+            List<String> available = null;
+
+            if(!profile.IsSystemAdmin())
+            {
+                available = models.GetQueryByAgent(profile.CurrentUserRole.OrganizationCategory.CompanyID)
+                        .Select(o => o.ReceiptNo).ToList();
+            }
+
+            try
+            {
+                var file = excelFile.First();
+                String fileName = Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}_{Path.GetFileName(file.FileName)}");
+                file.SaveAs(fileName);
+
+                using (var ds = fileName.ImportExcelXLS())
+                {
+                    DataTable table;
+                    if (ds.Tables.Count == 0
+                        || (table = ds.Tables.Cast<DataTable>()
+                            .Where(t => t.TableName.Contains("相對營業人")).FirstOrDefault()) == null)
+                    {
+                        return Json(new { result = false, message = "Excel檔未包含【相對營業人】資料表!!" }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    table.Columns.Add(new DataColumn("處理狀態", typeof(String)));
+                    int colStatus = table.Columns.Count - 1;
+
+                    foreach (DataRow r in table.Rows)
+                    {
+                        try
+                        {
+                            BusinessRelationshipViewModel item = new BusinessRelationshipViewModel
+                            {
+                                MasterName = r.GetString("營業人名稱"),
+                                MasterNo = r.GetString("統一編號"),
+                                CompanyName = r.GetString("相對營業人名稱"),
+                                ReceiptNo = r.GetString("相對營業人統一編號"),
+                                ContactEmail = r.GetString("聯絡人電子郵件"),
+                                Addr = r.GetString("地址"),
+                                Phone = r.GetString("電話"),
+                                BusinessID = viewModel.BusinessID,
+                                CustomerNo = r.GetString("客戶代碼"),
+                                SettingInvoiceType = Naming.InvoiceTypeDefinition.一般稅額計算之電子發票,
+                            };
+
+                            ModelState.Clear();
+
+                            if (available == null || available.Contains(item.MasterNo))
+                            {
+                                item.CommitBusinessRelationshipViewModel(models, ModelState);
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("統一編號", "營業人錯誤");
+                            }
+                            if (!ModelState.IsValid)
+                            {
+                                r[colStatus] = ModelState.ErrorMessage();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            r[colStatus] = ex.Message;
+                        }
+                    }
+
+                    using (var xls = ds.ConvertToExcel())
+                    {
+                        xls.SaveAs(fileName);
+                    }
+
+                }
+
+                return View("~/Views/Shared/Module/PromptFileDownload.cshtml",
+                    File(fileName, "application/octet-stream", "相對營業人(回應).xlsx"));
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         public ActionResult InquireBusinessRelationship(BusinessRelationshipQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
 
+            IQueryable<BusinessRelationship> items;
+            IQueryable<Organization> masterItems, orgItems;
+            viewModel.PromptBusinessRelationship(models, out items, out masterItems, out orgItems);
+
             var profile = HttpContext.GetUser();
             if (!profile.IsSystemAdmin())
             {
-                viewModel.CompanyID = profile.CurrentUserRole.OrganizationCategory.CompanyID;
+                items = items.Where(r => r.MasterID == profile.CurrentUserRole.OrganizationCategory.CompanyID);
             }
 
-            Expression<Func<Organization, bool>> queryExpr = i => true;
+            viewModel.CompanyName = viewModel.CompanyName.GetEfficientString();
+            if (viewModel.CompanyName!=null)
+            {
+                orgItems = orgItems.Where(i => i.CompanyName.Contains(viewModel.CompanyName) || i.OrganizationBranch.Any(b => b.BranchName.Contains(viewModel.CompanyName)));
+            }
 
-            if (!String.IsNullOrEmpty(viewModel.ReceiptNo))
-            {
-                queryExpr = queryExpr.And(i => i.ReceiptNo == viewModel.ReceiptNo);
-            }
-            if (!String.IsNullOrEmpty(viewModel.CompanyName))
-            {
-                queryExpr = queryExpr.And(i => i.CompanyName.Contains(viewModel.CompanyName) || i.OrganizationBranch.Any(b => b.BranchName.Contains(viewModel.CompanyName)));
-            }
             if (viewModel.CompanyStatus.HasValue)
             {
-                queryExpr = queryExpr.And(i => i.OrganizationStatus.CurrentLevel == viewModel.CompanyStatus);
-            }
-            if (!String.IsNullOrEmpty(viewModel.BranchNo))
-            {
-                viewModel.BranchNo = viewModel.BranchNo.GetEfficientString();
-                ViewBag.ByBranchNo = viewModel.BranchNo;
-                queryExpr = queryExpr.And(i => i.OrganizationBranch.Any(b => b.BranchNo == viewModel.BranchNo));
+                orgItems = orgItems.Where(i => i.OrganizationStatus.CurrentLevel == viewModel.CompanyStatus);
             }
 
+            viewModel.BranchNo = viewModel.BranchNo.GetEfficientString();
+            if (viewModel.BranchNo!=null)
+            {
+                ViewBag.ByBranchNo = viewModel.BranchNo;
+                orgItems = orgItems.Where(i => i.OrganizationBranch.Any(b => b.BranchNo == viewModel.BranchNo));
+            }
 
             //主動列印
             if (viewModel.EntrustToPrint.HasValue)
             {
                 if (viewModel.EntrustToPrint == true)
                 {
-                    queryExpr = queryExpr.And(i => i.OrganizationStatus.EntrustToPrint == true);
+                    orgItems = orgItems.Where(i => i.OrganizationStatus.EntrustToPrint == true);
                 }
                 else
                 {
-                    queryExpr = queryExpr.And(i => i.OrganizationStatus.EntrustToPrint == false || !i.OrganizationStatus.EntrustToPrint.HasValue);
+                    orgItems = orgItems.Where(i => i.OrganizationStatus.EntrustToPrint == false || !i.OrganizationStatus.EntrustToPrint.HasValue);
                 }
             }
             //自動接收
@@ -128,57 +236,78 @@ namespace eIVOGo.Controllers
             {
                 if (viewModel.Entrusting == true)
                 {
-                    queryExpr = queryExpr.And(i => i.OrganizationStatus.Entrusting == true);
+                    orgItems = orgItems.Where(i => i.OrganizationStatus.Entrusting == true);
                 }
                 else
                 {
-                    queryExpr = queryExpr.And(i => i.OrganizationStatus.Entrusting == false || !i.OrganizationStatus.Entrusting.HasValue);
+                    orgItems = orgItems.Where(i => i.OrganizationStatus.Entrusting == false || !i.OrganizationStatus.Entrusting.HasValue);
                 }
             }
 
-
-            var org = models.GetTable<Organization>();
-            IQueryable<BusinessRelationship> items;
-
             if (viewModel.BusinessType.HasValue)
             {
-                items = viewModel.CompanyID.HasValue
-                    ? models.GetTable<BusinessRelationship>().Where(b => b.MasterID == viewModel.CompanyID.Value && b.BusinessID == viewModel.BusinessType)
-                        .Join(org.Where(queryExpr), b => b.RelativeID, o => o.CompanyID, (b, o) => b)
-                    : models.GetTable<BusinessRelationship>().Where(b => b.BusinessID == viewModel.BusinessType)
-                        .Join(org.Where(queryExpr), b => b.RelativeID, o => o.CompanyID, (b, o) => b);
-            }
-            else
-            {
-                items = viewModel.CompanyID.HasValue
-                    ? models.GetTable<BusinessRelationship>().Where(b => b.MasterID == viewModel.CompanyID)
-                        .Join(org.Where(queryExpr), b => b.RelativeID, o => o.CompanyID, (b, o) => b)
-                    : models.GetTable<BusinessRelationship>()
-                        .Join(org.Where(queryExpr), b => b.RelativeID, o => o.CompanyID, (b, o) => b);
+                items = items.Where(r => r.BusinessID == viewModel.BusinessType);
             }
 
-            if (viewModel.PageIndex.HasValue)
-            {
-                viewModel.PageIndex--;
-                return View("~/Views/BusinessRelationship/Module/ItemList.ascx", items);
-            }
-            else
-            {
-                viewModel.PageIndex = 0;
-                return View("~/Views/BusinessRelationship/Module/QueryResult.ascx", items);
-            }
+            items = items
+                    .Join(masterItems, b => b.MasterID, o => o.CompanyID, (b, o) => b)
+                    .Join(orgItems, b => b.RelativeID, o => o.CompanyID, (b, o) => b);
+
+            //if (viewModel.PageIndex.HasValue)
+            //{
+            //    viewModel.PageIndex--;
+            //    return View("~/Views/BusinessRelationship/Module/ItemList.cshtml", items);
+            //}
+            //else
+            //{
+            //    viewModel.PageIndex = 0;
+            //    return View("~/Views/BusinessRelationship/Module/QueryResult.cshtml", items);
+            //}
+
+            viewModel.ResultView = "~/Views/BusinessRelationship/DataQuery/BusinessRelationshipList.cshtml";
+            viewModel.ResultAction = "~/Views/BusinessRelationship/DataAction/QueryResultAction.cshtml";
+            return PageResult(viewModel, items);
 
         }
 
-        public ActionResult DeleteItem(int businessID, int masterID, int relativeID)
+        public ActionResult ProcessDataItem(BusinessRelationshipQueryViewModel viewModel)
         {
-            var item = models.DeleteAny<BusinessRelationship>(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID);
-            if (item == null)
+
+            ViewResult result = (ViewResult)InquireBusinessRelationship(viewModel);
+            result.ViewName = "~/Views/BusinessRelationship/DataQuery/BusinessRelationshipList.cshtml";
+            if (viewModel.DisplayType == Naming.FieldDisplayType.DataItem)
             {
-                return Json(new { result = false, message = "營業人資料錯誤!!" });
+                IQueryable<BusinessRelationship> items = (IQueryable<BusinessRelationship>)result.Model;
+                if (items.Count() == 0)
+                {
+                    viewModel.DisplayType = Naming.FieldDisplayType.Create;
+                }
             }
 
-            return Json(new { result = true });
+            ViewBag.DisplayType = viewModel.DisplayType;
+
+            return result;
+        }
+
+        public ActionResult DeleteItem(BusinessRelationshipQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel = JsonConvert.DeserializeObject<BusinessRelationshipQueryViewModel>(viewModel.KeyID.DecryptData());
+            }
+
+            int count = models.ExecuteCommand("delete center.BusinessRelationship where MasterID = {0} and RelativeID = {1} and BusinessID = {2}",
+                    viewModel.MasterID, viewModel.RelativeID, (int?)viewModel.BusinessID);
+
+            if (count == 0)
+            {
+                return Json(new { result = false, message = "資料錯誤" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+
         }
 
         public ActionResult Deactivate(int businessID, int masterID, int relativeID)
@@ -186,13 +315,13 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<BusinessRelationship>().Where(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "營業人資料錯誤!!");
             }
 
             item.CurrentLevel = (int)Naming.MemberStatusDefinition.Mark_To_Delete;
             models.SubmitChanges();
 
-            return View("~/Views/BusinessRelationship/Module/DataItem.ascx", item);
+            return View("~/Views/BusinessRelationship/Module/DataItem.cshtml", item);
         }
 
         public ActionResult Activate(int businessID, int masterID, int relativeID)
@@ -200,13 +329,13 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<BusinessRelationship>().Where(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "營業人資料錯誤!!");
             }
 
             item.CurrentLevel = (int)Naming.MemberStatusDefinition.Checked;
             models.SubmitChanges();
 
-            return View("~/Views/BusinessRelationship/Module/DataItem.ascx", item);
+            return View("~/Views/BusinessRelationship/Module/DataItem.cshtml", item);
         }
 
         public ActionResult SetEntrusting(int businessID, int masterID, int relativeID, bool status)
@@ -214,13 +343,13 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<BusinessRelationship>().Where(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "營業人資料錯誤!!");
             }
 
             item.Counterpart.OrganizationStatus.Entrusting = status;
             models.SubmitChanges();
 
-            return View("~/Views/BusinessRelationship/Module/DataItem.ascx", item);
+            return View("~/Views/BusinessRelationship/Module/DataItem.cshtml", item);
         }
 
         public ActionResult SetEntrustToPrint(int businessID, int masterID, int relativeID, bool status)
@@ -228,26 +357,29 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<BusinessRelationship>().Where(m => m.MasterID == masterID && m.RelativeID == relativeID && m.BusinessID == businessID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "營業人資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "營業人資料錯誤!!");
             }
 
             item.Counterpart.OrganizationStatus.EntrustToPrint = status;
             models.SubmitChanges();
 
-            return View("~/Views/BusinessRelationship/Module/DataItem.ascx", item);
+            return View("~/Views/BusinessRelationship/Module/DataItem.cshtml", item);
         }
 
-        public ActionResult CommitItem(BusinessRelationshipViewModel viewModel)
+        public ActionResult CommitItem(BusinessRelationshipQueryViewModel viewModel)
         {
-            if (string.IsNullOrEmpty(viewModel.CompanyName))
+            ViewBag.ViewModel = viewModel;
+
+            viewModel.CompanyName = viewModel.CompanyName.GetEfficientString();
+            if (viewModel.CompanyName == null)
             {
                 ModelState.AddModelError("CompanyName", "營業人名稱格式錯誤");
             }
 
-            if (viewModel.ReceiptNo == null || !Regex.IsMatch(viewModel.ReceiptNo, "\\d{8}"))
-            {
-                ModelState.AddModelError("ReceiptNo", "統編格式錯誤");
-            }
+            //if (viewModel.ReceiptNo == null || !Regex.IsMatch(viewModel.ReceiptNo, "\\d{8}"))
+            //{
+            //    ModelState.AddModelError("ReceiptNo", "統編格式錯誤");
+            //}
 
             //if (string.IsNullOrEmpty(viewModel.ContactEmail) || !viewModel.ContactEmail.Contains('@'))
             //{
@@ -262,23 +394,29 @@ namespace eIVOGo.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/JsAlert.cshtml", model: null);
+                return View("~/Views/Shared/AlertMessage.cshtml", model: null);
             }
 
-            UserProfile userProfile;
-            BusinessRelationship model = viewModel.ApplyCounterpartBusiness(DataSource, out userProfile);
-            Organization item = model.BusinessMaster;
-            if (userProfile != null)
+            IQueryable<BusinessRelationship> sourceItems;
+            IQueryable<Organization> masterItems, relativeItems;
+            IQueryable<BusinessRelationship> items = viewModel.PromptBusinessRelationship(models, out sourceItems, out masterItems, out relativeItems);
+
+            BusinessRelationship item = items?.FirstOrDefault();
+            if (item != null)
             {
-                userProfile.SendActivationNotice();
-            }
+                item.CompanyName = viewModel.CompanyName;
+                item.ContactEmail = viewModel.ContactEmail.GetEfficientString();
+                item.Addr = viewModel.Addr.GetEfficientString();
+                item.Phone = viewModel.Phone.GetEfficientString();
+                item.CustomerNo = viewModel.CustomerNo.GetEfficientString();
 
-            if (item.ReceiptNo == "0000000000")
+                models.SubmitChanges();
+                return Json(new { result = true, viewModel.KeyID }, JsonRequestBehavior.AllowGet);
+            }
+            else
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "修改完成!!");
+                return Json(new { result = false, message = "資料錯誤!!" }, JsonRequestBehavior.AllowGet);
             }
-
-            return View("~/Views/BusinessRelationship/Module/DataItem.ascx", model);
 
         }
 
@@ -303,7 +441,7 @@ namespace eIVOGo.Controllers
             {
                 ViewBag.ModelState = ModelState;
                 ViewBag.Message = ModelState.ErrorMessage();
-                return View("~/Views/BusinessRelationship/ImportCounterpartBusiness.aspx");
+                return View("~/Views/BusinessRelationship/ImportCounterpartBusiness.cshtml");
             }
 
             var file = Request.Files[0];
@@ -317,7 +455,7 @@ namespace eIVOGo.Controllers
 
             userProfile["UploadManager"] = mgr;
 
-            return View("~/Views/BusinessRelationship/ImportCounterpartBusiness.aspx");
+            return View("~/Views/BusinessRelationship/ImportCounterpartBusiness.cshtml");
 
         }
 
@@ -350,19 +488,10 @@ namespace eIVOGo.Controllers
 
             CounterpartBusinessExchange exchange = new CounterpartBusinessExchange();
             exchange.ExchangeData(viewModel, fileName);
-            if(exchange.NewUsers.Count>0)
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    foreach (var profile in exchange.NewUsers)
-                    {
-                        profile.SendActivationNotice();
-                    }
-                });
-            }
+
             ViewBag.ImportFile = fileName;
 
-            return View("~/Views/BusinessRelationship/Module/CounterpartBusinessXmlResult.ascx", exchange);
+            return View("~/Views/BusinessRelationship/Module/CounterpartBusinessXmlResult.cshtml", exchange);
 
         }
 
@@ -387,7 +516,7 @@ namespace eIVOGo.Controllers
             {
                 ViewBag.ModelState = ModelState;
                 ViewBag.Message = ModelState.ErrorMessage();
-                return View("~/Views/BusinessRelationship/ImportCounterpartBusinessCsv.aspx");
+                return View("~/Views/BusinessRelationship/ImportCounterpartBusinessCsv.cshtml");
             }
 
             var file = Request.Files[0];
@@ -401,7 +530,7 @@ namespace eIVOGo.Controllers
 
             userProfile["UploadManager"] = mgr;
 
-            return View("~/Views/BusinessRelationship/ImportCounterpartBusinessCsv.aspx");
+            return View("~/Views/BusinessRelationship/ImportCounterpartBusinessCsv.cshtml");
 
         }
 
@@ -424,10 +553,10 @@ namespace eIVOGo.Controllers
 
             if (mgr == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "連線逾時，請重新匯入資料!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "連線逾時，請重新匯入資料!!");
             }
 
-            return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessList.ascx");
+            return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessList.cshtml");
 
         }
 
@@ -450,10 +579,10 @@ namespace eIVOGo.Controllers
 
             if (mgr == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "連線逾時，請重新匯入資料!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "連線逾時，請重新匯入資料!!");
             }
 
-            return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessCsvList.ascx");
+            return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessCsvList.cshtml");
 
         }
 
@@ -476,10 +605,10 @@ namespace eIVOGo.Controllers
 
             if (mgr == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "連線逾時，請重新匯入資料!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "連線逾時，請重新匯入資料!!");
             }
 
-            return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessXmlList.ascx");
+            return View("~/Views/BusinessRelationship/Module/ImportCounterpartBusinessXmlList.cshtml");
 
         }
 
@@ -589,6 +718,81 @@ namespace eIVOGo.Controllers
             }
 
             return new EmptyResult { };
+        }
+
+        //public ActionResult CreateXlsx(BusinessRelationshipQueryViewModel viewModel)
+        //{
+
+        //    ViewResult result = (ViewResult)InquireBusinessRelationship(viewModel);
+        //    IQueryable<BusinessRelationship> model = result.Model as IQueryable<BusinessRelationship>;
+
+        //    if (model == null)
+        //        return result;
+
+        //    var items = model.OrderBy(i => i.MasterID).ThenBy(i => i.RelativeID)
+        //        .Select(o => new
+        //        {
+        //            營業人名稱 = o.BusinessMaster.CompanyName,
+        //            統一編號 = o.BusinessMaster.ReceiptNo,
+        //            相對營業人名稱 = o.CompanyName,
+        //            相對營業人統一編號 = o.Counterpart.ReceiptNo,
+        //            聯絡人電子郵件 = o.ContactEmail,
+        //            地址 = o.Addr,
+        //            電話 = o.Phone,
+        //            客戶代碼 = o.CustomerNo,
+        //        });
+
+        //    DataTable table = new DataTable("相對營業人");
+        //    items.BuildDataColumns(table);
+
+        //    ProcessRequest processItem = new ProcessRequest
+        //    {
+        //        Sender = HttpContext.GetUser()?.UID,
+        //        SubmitDate = DateTime.Now,
+        //        ProcessStart = DateTime.Now,
+        //        ResponsePath = System.IO.Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".xlsx"),
+        //    };
+        //    models.GetTable<ProcessRequest>().InsertOnSubmit(processItem);
+        //    models.SubmitChanges();
+
+        //    SqlCommand sqlCmd = (SqlCommand)models.GetCommand(items);
+        //    sqlCmd.SaveAsExcel(table, processItem.ResponsePath, processItem.TaskID);
+
+        //    return View("~/Views/Shared/Module/PromptCheckDownload.cshtml",
+        //            new AttachmentViewModel
+        //            {
+        //                TaskID = processItem.TaskID,
+        //                FileName = processItem.ResponsePath,
+        //                FileDownloadName = "相對營業人.xlsx",
+        //            });
+
+        //}
+
+        public ActionResult CreateXlsx(BusinessRelationshipQueryViewModel viewModel)
+        {
+
+            ViewResult result = (ViewResult)InquireBusinessRelationship(viewModel);
+            IQueryable<BusinessRelationship> model = result.Model as IQueryable<BusinessRelationship>;
+
+            if (model == null)
+                return result;
+
+
+            var items = model.OrderBy(i => i.MasterID).ThenBy(i => i.RelativeID)
+                .Select(o => new
+                {
+                    營業人名稱 = o.BusinessMaster.CompanyName,
+                    統一編號 = o.BusinessMaster.ReceiptNo,
+                    相對營業人名稱 = o.CompanyName,
+                    相對營業人統一編號 = o.Counterpart.ReceiptNo,
+                    聯絡人電子郵件 = o.ContactEmail,
+                    地址 = o.Addr,
+                    電話 = o.Phone,
+                    客戶代碼 = o.CustomerNo,
+                });
+
+            return CreateExcelDownloadResult(items, "相對營業人", "相對營業人.xlsx");
+
         }
 
     }

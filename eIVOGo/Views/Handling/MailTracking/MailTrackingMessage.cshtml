@@ -12,21 +12,6 @@
 @{
     ModelSource<InvoiceItem> models;
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-
-    //if (ViewBag.HasQuery)
-    //{
-    //    ModelSource<InvoiceItem> models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-
-    //    if (((ASP.module_inquiry_inquiryitem_inquireinvoiceconsumption_ascx)inquireConsumption).QueryForB2C)
-    //    {
-    //        models.Items = models.Items.Where(i => i.DonateMark == "0"
-    //            && (i.PrintMark == "Y" || (i.PrintMark == "N" && i.InvoiceWinningNumber != null))
-    //            && !i.CDS_Document.DocumentPrintLog.Any(l => l.TypeID == (int)Naming.DocumentTypeDefinition.E_Invoice));
-    //    }
-
-    //    result.Visible = true;
-    //}
-
 }
 <!--交易畫面標題-->
 @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "登錄掛號郵件");}

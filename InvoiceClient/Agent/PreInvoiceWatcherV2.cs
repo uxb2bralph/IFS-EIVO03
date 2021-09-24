@@ -8,6 +8,7 @@ using System.Xml;
 
 using InvoiceClient.Helper;
 using InvoiceClient.Properties;
+using Model.Locale;
 using Model.Schema.EIVO.B2B;
 using Model.Schema.TXN;
 using Utility;
@@ -22,9 +23,20 @@ namespace InvoiceClient.Agent
 
         }
 
+        public Naming.InvoiceProcessType? PreferredProcessType { get; set; }
+
+
         protected override Root processUpload(WS_Invoice.eInvoiceService invSvc, XmlDocument docInv)
         {
-            var result = invSvc.UploadInvoiceAutoTrackNoV2(docInv).ConvertTo<Root>();
+            Root result;
+            if(PreferredProcessType.HasValue)
+            {
+                result = invSvc.UploadInvoiceByClient(docInv, Settings.Default.ClientID, (int)_channelID, true, (int)PreferredProcessType).ConvertTo<Root>();
+            }
+            else
+            {
+                result = invSvc.UploadInvoiceAutoTrackNoV2(docInv).ConvertTo<Root>();
+            }
             return result;
         }
 

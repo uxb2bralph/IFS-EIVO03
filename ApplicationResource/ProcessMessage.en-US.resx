@@ -129,6 +129,9 @@
   <data name="P104" xml:space="preserve">
     <value>Excel format for void allowance request</value>
   </data>
+  <data name="P113" xml:space="preserve">
+    <value>Excel format for whole invoice allowance request</value>
+  </data>
   <data name="P202" xml:space="preserve">
     <value>Json format for void invoice request</value>
   </data>

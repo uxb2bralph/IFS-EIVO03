@@ -232,13 +232,13 @@ namespace eIVOGo.Controllers
             if (items == null || items.Length == 0)
             {
                 ViewBag.Message = "請選擇郵寄項目!!";
-                return View("~/Views/Shared/JsAlert.cshtml");
+                return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
             if (!deliveryStatus.HasValue)
             {
                 ViewBag.Message = "請選擇郵寄過程!!";
-                return View("~/Views/Shared/JsAlert.cshtml");
+                return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
             bool result = true;
@@ -297,7 +297,7 @@ namespace eIVOGo.Controllers
             {
                 ViewBag.CloseWindow = true;
                 ViewBag.Message = "請選擇郵寄項目!!";
-                return View("~/Views/Shared/JsAlert.cshtml");
+                return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
             Response.Clear();
@@ -317,13 +317,14 @@ namespace eIVOGo.Controllers
                 table.Columns.Add("寄件地名或地址");
                 table.Columns.Add("備考");
                 table.Columns.Add("附件檔頁數");
-                table.Columns.Add("作業方式");
+                table.Columns.Add("合計");
+                //table.Columns.Add("作業方式");
                 table.Columns.Add("遞件日期");
                 table.Columns.Add("Google_id");
                 table.Columns.Add("發票號碼");
                 table.Columns.Add("發票日期");
 
-                foreach(var m in items)
+                foreach (var m in items)
                 {
                     var item = models.GetTable<InvoiceItem>().Where(i => i.InvoiceID == m.PackageID).FirstOrDefault();
                     if (item == null)
@@ -338,9 +339,12 @@ namespace eIVOGo.Controllers
                     row["遞件日期"] = $"{m.DeliveryDate:yyyy/MM/dd}";
                     row["姓名"] = item.InvoiceBuyer.ContactName;
                     row["寄件地名或地址"] = item.InvoiceBuyer.Address;
-                    row["備考"] = m.InvoiceID != null && m.InvoiceID.Length > 1 ? m.InvoiceID.Length.ToString() : "";
-                    row["附件檔頁數"] = m.InvoiceID != null && m.InvoiceID.Length > 0 ? m.InvoiceID.Sum(i => i.Value.GetAttachedPdfPageCount(models)).ToString() : "0";
-                    row["作業方式"] = ((Naming.ChannelIDType?)item.CDS_Document.ChannelID).ToString();
+                    int p1 = m.InvoiceID != null && m.InvoiceID.Length > 1 ? m.InvoiceID.Length : 0;
+                    row["備考"] = $"{p1:###}";
+                    int p2 = m.InvoiceID != null && m.InvoiceID.Length > 0 ? m.InvoiceID.Sum(i => i.Value.GetAttachedPdfPageCount(models)) : 0;
+                    row["附件檔頁數"] = $"{p2:###}";
+                    row["合計"] = $"{p1 + p2:###}";
+                    //row["作業方式"] = ((Naming.ChannelIDType?)item.CDS_Document.ChannelID).ToString();
                     row["Google_id"] = item.InvoiceBuyer.CustomerID;
                     row["發票號碼"] = $"{item.TrackCode}{item.No}";
                     row["發票日期"] = $"{item.InvoiceDate:yyyy/MM/dd}";

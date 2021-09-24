@@ -59,15 +59,15 @@ namespace Model.InvoiceManagement.Validator
             //}
 
             //yuki 儲存發票
-            _mgr.GetTable<InvoiceItem>().InsertOnSubmit(newItem);
+            _models.GetTable<InvoiceItem>().InsertOnSubmit(newItem);
 
             //yuki 加一筆到Queue、DataProcessLog
-            C0401Handler.PushStepQueueOnSubmit(_mgr, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+            C0401Handler.PushStepQueueOnSubmit(_models, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
 
             //yuki 加一筆到ProcessRequestDocument
             //C0401Handler.PushProcessRequestDocumentOnSubmit(_mgr, newItem.CDS_Document, taskID);
 
-            _mgr.SubmitChanges();
+            _models.SubmitChanges();
 
             if (forTerms)
             {
@@ -81,9 +81,9 @@ namespace Model.InvoiceManagement.Validator
                 }
                 else
                 {
-                    C0401Handler.PushStepQueueOnSubmit(_mgr, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
+                    C0401Handler.PushStepQueueOnSubmit(_models, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
                 }
-                _mgr.SubmitChanges();
+                _models.SubmitChanges();
             }
 
             return newItem;

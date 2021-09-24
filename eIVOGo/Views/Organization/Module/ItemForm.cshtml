@@ -85,11 +85,12 @@
                     <td>
                         <select name="CategoryID" class="form-control">
                             <option value="">請選擇</option>
-                            @{ Html.RenderPartial("~/Views/SystemInfo/OrganizationCategoryOptions.cshtml");}
-
+                            @{
+                                Html.RenderPartial("~/Views/SystemInfo/OrganizationCategoryOptions.cshtml");
+                            }
                         </select>
                         <script>
-                            $('select[name="CategoryID"]').val('@(_viewModel.CategoryID)');
+                            $('select[name="CategoryID"]').val('@((int?)_viewModel.CategoryID)');
                         </script>
                     </td>
                 </tr>

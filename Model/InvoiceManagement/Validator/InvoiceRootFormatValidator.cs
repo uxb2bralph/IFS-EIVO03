@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using DataAccessLayer.basis;
 using Model.DataEntity;
 using Model.Helper;
+using Model.InvoiceManagement.ErrorHandle;
 using Model.Locale;
 using Model.Models.ViewModel;
 using Model.Resource;
@@ -15,278 +16,207 @@ using Utility;
 
 namespace Model.InvoiceManagement.Validator
 {
-    public partial class InvoiceRootFormatValidator
+    public partial class InvoiceRootFormatValidator : InvoiceRootInvoiceValidator
     {
+        readonly List<Exception> exceptions = new List<Exception>();
 
-        protected InvoiceRootInvoice _invItem;
-
-        protected InvoiceItem _newItem;
-        protected InvoicePurchaseOrder _order;
-        protected InvoiceBuyer _buyer;
-        protected InvoiceCarrier _carrier;
-        protected InvoiceDonation _donation;
-        protected IEnumerable<InvoiceProductItem> _productItems;
-
-        protected Func<Exception>[, , ,] _deliveryCheck;
-
-
-        public InvoiceRootFormatValidator()
+        public InvoiceRootFormatValidator(GenericManager<EIVOEntityDataContext> mgr, Organization owner) : base(mgr,owner)
         {
-            initializeDeliveryCheck();
+
         }
 
         public bool IsAutoTrackNo
         {
-            get;
-            protected set;
+            get => _isAutoTrackNo;
+            protected set => _isAutoTrackNo = value;
         }
 
-        private void initializeDeliveryCheck()
+        public virtual List<Exception> ValidateAll(InvoiceRootInvoice dataItem)
         {
-            _deliveryCheck = new Func<Exception>[2, 2, 2, 2];
-
-            #region 列印Y
-
-            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.Yes, (int)DonationIntent.Yes] = () =>
-                {
-                    return new Exception(String.Format(MessageResources.AlertPrintedInvoiceCarrierType, _invItem.CarrierType));
-                };
-
-            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.Yes, (int)DonationIntent.No] = 
-                _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.Yes, (int)DonationIntent.Yes];
-
-            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.No, (int)DonationIntent.Yes] = () =>
-            {
-                return new Exception(String.Format(MessageResources.AlertDonationInvoiceCarryType, _invItem.CarrierType));
-            };
-
-            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.No, (int)DonationIntent.No] = checkPublicCarrier;
-
-            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.Yes, (int)DonationIntent.Yes] = () =>
-            {
-                return new Exception(String.Format(MessageResources.AlertPrintedInvoiceDonation, _invItem.PrintMark));
-            };
-
-            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.No, (int)DonationIntent.Yes] = () => 
-            {
-                return new Exception(String.Format(MessageResources.AlertDonationInvoiceCarryType, _invItem.CarrierType));
-            };
-
-            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.Yes, (int)DonationIntent.No] = 
-            
-            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.No, (int)DonationIntent.No] = () => { return null; };
-
-            #endregion 
-
-            #region 列印N
-
-            _deliveryCheck[(int)PrintedMark.No, (int)CarrierIntent.Yes, (int)IsB2C.Yes, (int)DonationIntent.Yes] = () =>
-                {
-                    Exception ex = checkCarrierDataIsComplete();
-                    if (ex != null)
-                        return ex;
-
-                    if (String.IsNullOrEmpty(_invItem.NPOBAN))
-                    {
-                        return new Exception(String.Format(MessageResources.InvalidDonationTaker, _invItem.NPOBAN));
-                    }
-
-                    _donation = new InvoiceDonation
-                    {
-                        AgencyCode = _invItem.NPOBAN
-                    };
-
-                    return null;
-                };
-
-            _deliveryCheck[(int)PrintedMark.No, (int)CarrierIntent.Yes, (int)IsB2C.Yes, (int)DonationIntent.No] = () =>
-                {
-                    Exception ex = checkCarrierDataIsComplete();
-                    if (ex != null)
-                        return ex;
-
-                    //if (_invItem.CarrierType == __CELLPHONE_BARCODE)
-                    //{
-                    //    ex = checkPublicCarrier();
-                    //    if (ex != null)
-                    //        return ex;
-                    //}
-
-                    //_carrier = new InvoiceCarrier
-                    //{
-                    //    CarrierType = _invItem.CarrierType,
-                    //    CarrierNo = String.IsNullOrEmpty(_invItem.CarrierId1) ? _invItem.CarrierId2 : _invItem.CarrierId1
-                    //};
-
-                    //if (String.IsNullOrEmpty(_invItem.CarrierId2))
-                    //{
-                    //    _carrier.CarrierNo2 = _carrier.CarrierNo;
-                    //}
-                    //else
-                    //{
-                    //    _carrier.CarrierNo2 = _invItem.CarrierId2;
-                    //}
-
-                    return null;
-                };
-
-            _deliveryCheck[(int)PrintedMark.No, (int)CarrierIntent.Yes, (int)IsB2C.No, (int)DonationIntent.Yes] = checkPublicCarrier;
-            _deliveryCheck[(int)PrintedMark.No, (int)CarrierIntent.Yes, (int)IsB2C.No, (int)DonationIntent.No] = checkPublicCarrier;
-
-            _deliveryCheck[(int)PrintedMark.No, (int)CarrierIntent.No, (int)IsB2C.Yes, (int)DonationIntent.Yes] = () =>
-                {
-                    if (String.IsNullOrEmpty(_invItem.NPOBAN))
-                    {
-                        return new Exception(String.Format(MessageResources.InvalidDonationTaker, _invItem.NPOBAN));
-                    }
-
-                    _donation = new InvoiceDonation
-                    {
-                        AgencyCode = _invItem.NPOBAN
-                    };
-
-                    return null;
-
-                };
-
-            _deliveryCheck[(int)PrintedMark.No, (int)CarrierIntent.No, (int)IsB2C.Yes, (int)DonationIntent.No] = checkPrintAll;
-
-            _deliveryCheck[(int)PrintedMark.No, (int)CarrierIntent.No, (int)IsB2C.No, (int)DonationIntent.Yes] =() => { return null; };
-            _deliveryCheck[(int)PrintedMark.No, (int)CarrierIntent.No, (int)IsB2C.No, (int)DonationIntent.No] = checkPrintAll;
-
-            #endregion
-
+            Validate(dataItem);
+            return exceptions;
         }
 
-        public InvoiceItem InvoiceItem
+        public override Exception Validate(InvoiceRootInvoice dataItem)
         {
-            get
-            {
-                return _newItem;
-            }
-        }
-
-
-        public virtual List<Exception> Validate(InvoiceRootInvoice dataItem)
-        {
+            exceptions.Clear();
             _invItem = dataItem;
 
-            List<Exception> ex = new List<Exception>();
-
             _newItem = null;
+            _container = new InvoiceItem { };
 
-            checkBusiness(ex);
+            checkBusiness();
 
             if (String.IsNullOrEmpty(_invItem.InvoiceNumber))
             {
                 IsAutoTrackNo = true;
 
-                checkDataNumber(ex);
+                checkDataNumber();
             }
             else
             {
                 IsAutoTrackNo = false;
             }
 
-            checkAmount(ex);
-            checkInvoiceDelivery(ex);
+            checkAmount();
+            checkInvoiceDelivery();
 
-            checkMandatoryFields(ex);
-            checkInvoiceProductItems(ex);
+            checkMandatoryFields();
+            checkInvoiceProductItems();
 
-            checkInvoice(ex);
+            checkInvoice();
 
-            return ex;
+            return exceptions.FirstOrDefault();
         }
 
 
-        protected virtual void checkInvoice(List<Exception> items)
+        protected override Exception checkInvoice()
         {
-            _newItem = new InvoiceItem
+            _container.CDS_Document = new CDS_Document
             {
-                CDS_Document = new CDS_Document
+                DocDate = DateTime.Now,
+                DocType = (int)Naming.DocumentTypeDefinition.E_Invoice,
+                DocumentOwner = new DocumentOwner
                 {
-                    DocDate = DateTime.Now,
-                    DocType = (int)Naming.DocumentTypeDefinition.E_Invoice,
-                    DocumentOwner = new DocumentOwner 
-                    {
-                    }
+                    OwnerID = _owner.CompanyID
                 },
-                DonateMark = _donation == null ? "0" : "1",
-                InvoiceType = byte.Parse(_invItem.InvoiceType),
-                CustomsClearanceMark = _invItem.CustomsClearanceMark,
-                InvoiceSeller = new InvoiceSeller
-                {
-
-                },
-                InvoiceBuyer = _buyer,
-                RandomNo = _invItem.RandomNumber,
-                InvoiceAmountType = new InvoiceAmountType
-                {
-                    DiscountAmount = _invItem.DiscountAmount,
-                    SalesAmount =  _invItem.SalesAmount,
-                    ZeroTaxSalesAmount =  _invItem.ZeroTaxSalesAmount,
-                    FreeTaxSalesAmount = _invItem.FreeTaxSalesAmount,
-                    TaxAmount = _invItem.TaxAmount,
-                    TaxRate = _invItem.TaxRate,
-                    TaxType = _invItem.TaxType,
-                    TotalAmount = _invItem.TotalAmount,
-                    TotalAmountInChinese = Utility.ValueValidity.MoneyShow(_invItem.TotalAmount),
-                },
-                InvoiceCarrier = _carrier,
-                InvoiceDonation = _donation,
-                PrintMark = _invItem.PrintMark,
+                ProcessType = (int)(processType ?? Naming.InvoiceProcessType.C0401),
             };
+            _container.DonateMark = _donation == null ? "0" : "1";
+            _container.SellerID = _seller.CompanyID;
+            _container.CustomsClearanceMark = _invItem.CustomsClearanceMark;
+            _container.InvoiceSeller = new InvoiceSeller
+            {
+                Name = _seller.CompanyName,
+                ReceiptNo = _seller.ReceiptNo,
+                Address = _seller.Addr,
+                ContactName = _seller.ContactName,
+                //CustomerID = String.IsNullOrEmpty(_invItem.GoogleId) ? "" : _invItem.GoogleId,
+                CustomerName = _seller.CompanyName,
+                EMail = _seller.ContactEmail,
+                Fax = _seller.Fax,
+                Phone = _seller.Phone,
+                PersonInCharge = _seller.UndertakerName,
+                SellerID = _seller.CompanyID,
+            };
+            _container.InvoiceBuyer = _buyer;
+            _container.RandomNo = _invItem.RandomNumber;
+            _container.InvoiceAmountType = new InvoiceAmountType
+            {
+                DiscountAmount = _invItem.DiscountAmount,
+                SalesAmount = _invItem.SalesAmount,
+                FreeTaxSalesAmount = _invItem.FreeTaxSalesAmount,
+                ZeroTaxSalesAmount = _invItem.ZeroTaxSalesAmount,
+                TaxAmount = _invItem.TaxAmount,
+                TaxRate = _invItem.TaxRate,
+                TaxType = _invItem.TaxType,
+                TotalAmount = _invItem.TotalAmount,
+                TotalAmountInChinese = Utility.ValueValidity.MoneyShow(_invItem.TotalAmount),
+                CurrencyID = _currency?.CurrencyID,
+                BondedAreaConfirm = _invItem.BondedAreaConfirm,
+            };
+            _container.InvoiceCarrier = _carrier;
+            _container.InvoiceDonation = _donation;
+            _container.PrintMark = _invItem.PrintMark;
+            _container.Remark = _invItem.MainRemark;
+
 
             if (_order != null)
             {
-                _newItem.InvoicePurchaseOrder = _order;
+                _container.InvoicePurchaseOrder = _order;
             }
 
-            _newItem.InvoiceDetails.AddRange(_productItems.Select(p => new InvoiceDetail
+            _container.InvoiceDetails.AddRange(_productItems.Select(p => new InvoiceDetail
             {
                 InvoiceProduct = p.InvoiceProduct,
             }));
 
             if (IsAutoTrackNo)
             {
-                _newItem.InvoiceDate = DateTime.Now;
+                _container.InvoiceDate = DateTime.Now;
 
             }
             else
             {
-                DateTime invoiceDate = DateTime.Now;
 
                 if (String.IsNullOrEmpty(_invItem.InvoiceDate))
                 {
-                    items.Add( new Exception(MessageResources.AlertInvoiceDate));
+                    exceptions.Add( new Exception(MessageResources.AlertInvoiceDate));
                 }
-
-                if (String.IsNullOrEmpty(_invItem.InvoiceTime))
+                else
                 {
-                    items.Add( new Exception(MessageResources.AlertInvoiceTime));
+                    DateTime invoiceDate = DateTime.Now;
+
+                    _invItem.InvoiceTime = _invItem.InvoiceTime.GetEfficientString();
+                    if (_invItem.InvoiceTime == null)
+                    {
+                        _invItem.InvoiceTime = "12:00:00";
+                    }
+
+                    if (!DateTime.TryParseExact(String.Format("{0} {1}", _invItem.InvoiceDate, _invItem.InvoiceTime), "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate)
+                            || invoiceDate >= DateTime.Today.AddDays(1))
+                    {
+                        exceptions.Add(new Exception(String.Format(MessageResources.AlertInvoiceDateTime, _invItem.InvoiceDate, _invItem.InvoiceTime)));
+                    }
+                    else
+                    {
+                        _container.InvoiceDate = invoiceDate;
+                    }
                 }
 
-                if (!DateTime.TryParseExact(String.Format("{0} {1}", _invItem.InvoiceDate, _invItem.InvoiceTime), "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate))
+                if(_container.InvoiceDate.HasValue)
                 {
-                    items.Add( new Exception(String.Format(MessageResources.AlertInvoiceDateTime, _invItem.InvoiceDate, _invItem.InvoiceTime)));
+                    DateTime invoiceDate = _container.InvoiceDate.Value;
+                    DateTime periodStart = new DateTime(invoiceDate.Year, (invoiceDate.Month - 1) / 2 * 2 + 1, 1);
+
+                    if (_invItem.InvoiceNumber == null || !Regex.IsMatch(_invItem.InvoiceNumber, "^[a-zA-Z]{2}[0-9]{8}$"))
+                    {
+                        exceptions.Add(new Exception(String.Format(MessageResources.AlertInvoiceNumber, _invItem.InvoiceNumber)));
+                    }
+
+                    _container.TrackCode = _invItem.InvoiceNumber.Substring(0, 2);
+                    _container.No = _invItem.InvoiceNumber.Substring(2);
+                    int periodNo = (invoiceDate.Month + 1) / 2;
+
+                    if (_seller.OrganizationStatus?.EnableTrackCodeInvoiceNoValidation == true)
+                    {
+                        if (!_models.GetTable<InvoiceTrackCode>().Any(t => t.Year == invoiceDate.Year && t.PeriodNo == periodNo && t.TrackCode == _container.TrackCode))
+                        {
+                            exceptions.Add(new Exception(String.Format(MessageResources.InvalidTrackCode, _invItem.InvoiceNumber)));
+                        }
+                    }
+
+                    var currentItem = _models.GetTable<InvoiceItem>().Where(i => i.TrackCode == _container.TrackCode && i.No == _container.No
+                                && i.InvoiceDate >= periodStart && i.InvoiceDate < periodStart.AddMonths(2)).FirstOrDefault();
+
+                    if (currentItem != null)
+                    {
+                        if (currentItem.SellerID == _seller.CompanyID && currentItem.RandomNo == _invItem.RandomNumber)
+                        {
+                            _newItem = currentItem;
+                        }
+                        else
+                        {
+                            exceptions.Add(new Exception(MessageResources.AlertInvoiceDuplicated));
+                        }
+                    }
+
+                    if (_seller.OrganizationStatus?.EnableTrackCodeInvoiceNoValidation == true)
+                    {
+                        TrackNoManager trackMgr = new TrackNoManager(_models, _seller.CompanyID);
+                        var item = trackMgr.GetAppliedInterval(invoiceDate, _container.TrackCode, int.Parse(_container.No));
+
+                        if (item == null)
+                        {
+                            exceptions.Add(new Exception(String.Format("發票號碼錯誤:{0}，TAG:< InvoicNumber />", _invItem.InvoiceNumber)));
+                        }
+                    }
                 }
-
-                _newItem.InvoiceDate = invoiceDate;
-
-                if (_invItem.InvoiceNumber == null || !Regex.IsMatch(_invItem.InvoiceNumber, "^[a-zA-Z]{2}[0-9]{8}$"))
-                {
-                    items.Add( new Exception(String.Format(MessageResources.AlertInvoiceNumber, _invItem.InvoiceNumber)));
-                }
-
-                _newItem.TrackCode = _invItem.InvoiceNumber.Substring(0, 2);
-                _newItem.No = _invItem.InvoiceNumber.Substring(2);
-
             }
 
             if (_invItem.CustomerDefined != null)
             {
-                _newItem.InvoiceItemExtension = new InvoiceItemExtension 
+                _container.InvoiceItemExtension = new InvoiceItemExtension 
                 {
                     ProjectNo = _invItem.CustomerDefined.ProjectNo,
                     PurchaseNo = _invItem.CustomerDefined.PurchaseNo
@@ -294,34 +224,47 @@ namespace Model.InvoiceManagement.Validator
 
                 if (_invItem.CustomerDefined.StampDutyFlagSpecified)
                 {
-                    _newItem.InvoiceItemExtension.StampDutyFlag = (byte)_invItem.CustomerDefined.StampDutyFlag;
+                    _container.InvoiceItemExtension.StampDutyFlag = (byte)_invItem.CustomerDefined.StampDutyFlag;
                 }
             }
+
+            _newItem = _container;
+
+            return null;
         }
 
-        protected virtual void checkDataNumber(List<Exception> ex)
+        protected override Exception checkDataNumber()
         {
             _order = null;
             if (String.IsNullOrEmpty(_invItem.DataNumber))
             {
-                ex.Add(new Exception(MessageResources.AlertDataNumber));
+                exceptions.Add(new Exception(MessageResources.AlertDataNumber));
             }
 
             if (_invItem.DataNumber.Length > 60)
             {
-                ex.Add(new Exception(String.Format(MessageResources.AlertDataNumberLimitedLength, _invItem.DataNumber)));
+                exceptions.Add(new Exception(String.Format(MessageResources.AlertDataNumberLimitedLength, _invItem.DataNumber)));
             }
 
+            var po = _models.GetTable<InvoicePurchaseOrder>().Where(d => d.OrderNo == _invItem.DataNumber
+                    && d.InvoiceItem.SellerID == _seller.CompanyID).FirstOrDefault();
+            if (po!=null)
+            {
+                exceptions.Add(new DuplicateDataNumberException(String.Format(MessageResources.AlertDataNumberDuplicated, _invItem.DataNumber))
+                {
+                    CurrentPO = po
+                });
+            }
 
             if (String.IsNullOrEmpty(_invItem.DataDate))
             {
-                ex.Add(new Exception(MessageResources.AlertDataDate));
+                exceptions.Add(new Exception(MessageResources.AlertDataDate));
             }
 
             DateTime dataDate;
             if (!DateTime.TryParseExact(_invItem.DataDate, "yyyy/MM/dd", CultureInfo.CurrentCulture, DateTimeStyles.None, out dataDate))
             {
-                ex.Add(new Exception(String.Format(MessageResources.AlertDataDateFormat, _invItem.DataDate)));
+                exceptions.Add(new Exception(String.Format(MessageResources.AlertDataDateFormat, _invItem.DataDate)));
             }
 
             _order = new InvoicePurchaseOrder
@@ -329,13 +272,38 @@ namespace Model.InvoiceManagement.Validator
                 OrderNo = _invItem.DataNumber,
                 PurchaseDate = dataDate
             };
+
+            return null;
         }
 
-
-
-        protected virtual void checkBusiness(List<Exception> ex)
+        protected override Exception checkBusiness()
         {
+            if (_seller == null || _seller.ReceiptNo != _invItem.SellerId)
+            {
 
+                _seller = _models.GetTable<Organization>().Where(o => o.ReceiptNo == _invItem.SellerId).FirstOrDefault();
+                if (_seller == null)
+                {
+                    exceptions.Add(new Exception(String.Format(MessageResources.AlertInvalidSeller, _invItem.SellerId)));
+                    _seller = new Organization { };
+                }
+
+                if (_seller.CompanyID != _owner.CompanyID && !_models.GetTable<InvoiceIssuerAgent>().Any(a => a.AgentID == _owner.CompanyID && a.IssuerID == _seller.CompanyID))
+                {
+                    //return new Exception(String.Format(MessageResources.AlertSellerSignature, _invItem.SellerId));
+                    exceptions.Add(new Exception(String.Format(MessageResources.InvalidSellerOrAgent, _invItem.SellerId, _owner.ReceiptNo)));
+                }
+
+                if (_seller?.OrganizationStatus?.CurrentLevel == (int)Naming.MemberStatusDefinition.Mark_To_Delete)
+                {
+                    exceptions.Add(new Exception(String.Format("開立人已註記停用,開立人統一編號:{0}，TAG:<SellerId />", _invItem.SellerId)));
+                }
+
+                _isCrossBorderMerchant = _models.GetTable<OrganizationCategory>().Any(c => c.CompanyID == _seller.CompanyID && c.CategoryID == (int)Naming.CategoryID.COMP_CROSS_BORDER_MURCHANT);
+
+            }
+
+            _invItem.BuyerId = _invItem.BuyerId.GetEfficientString();
             if (_invItem.BuyerId == "0000000000")
             {
                 //if (_invItem.BuyerName == null || Encoding.GetEncoding(950).GetBytes(_invItem.BuyerName).Length != 4)
@@ -343,13 +311,28 @@ namespace Model.InvoiceManagement.Validator
                 //    return new Exception(String.Format(MessageResources.InvalidBuyerName, _invItem.BuyerName));
                 //}
             }
-            else if (_invItem.BuyerId == null || !Regex.IsMatch(_invItem.BuyerId, "^[0-9]{8}$"))
+            else if (_invItem.BuyerId == null)
             {
-                ex.Add(new Exception(String.Format(MessageResources.InvalidBuyerId, _invItem.BuyerId)));
+                if (_isCrossBorderMerchant)
+                {
+                    _invItem.BuyerId = "0000000000";
+                }
+                else
+                {
+                    exceptions.Add(new Exception(String.Format(MessageResources.InvalidBuyerId, _invItem.BuyerId)));
+                }
+            }
+            else if (!Regex.IsMatch(_invItem.BuyerId, "^[0-9]{8}$"))
+            {
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidBuyerId, _invItem.BuyerId)));
+            }
+            else if (_seller?.OrganizationStatus?.EnableBuyerIDValidation != false && !_invItem.BuyerId.CheckRegno())
+            {
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidReceiptNo, _invItem.BuyerId)));
             }
             else if (_invItem.PrintMark != "Y" && (String.IsNullOrEmpty(_invItem.BuyerName) || _invItem.BuyerName.Length > 60))
             {
-                ex.Add(new Exception(String.Format(MessageResources.InvalidBuyerNameLengthLimit, _invItem.BuyerName)));
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidBuyerNameLengthLimit, _invItem.BuyerName)));
             }
 
             if (String.IsNullOrEmpty(_invItem.RandomNumber))
@@ -358,64 +341,16 @@ namespace Model.InvoiceManagement.Validator
             }
             else if (!Regex.IsMatch(_invItem.RandomNumber, "^[0-9]{4}$"))
             {
-                ex.Add(new Exception(String.Format(MessageResources.InvalidRandomNumber, _invItem.RandomNumber)));
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidRandomNumber, _invItem.RandomNumber)));
             }
 
-            checkBusinessDetails(ex);
-        }
-
-        protected bool checkPublicCarrierId(String carrierId)
-        {
-            return carrierId != null && carrierId.Length == 8 && carrierId.StartsWith("/");
-        }
-
-        protected virtual Exception checkPublicCarrier()
-        {
-            bool hasError = true;
-            if (_invItem.CarrierType == InvoiceRootInvoiceValidator.__CELLPHONE_BARCODE)
-            {
-                if(checkPublicCarrierId(_invItem.CarrierId1) || checkPublicCarrierId(_invItem.CarrierId2))
-                {
-                    hasError = false;
-                }
-            }
-            else if (_invItem.CarrierType == InvoiceRootInvoiceValidator.__自然人憑證)
-            {
-                if ((_invItem.CarrierId1 != null && Regex.IsMatch(_invItem.CarrierId1, "^[A-Z]{2}[0-9]{14}$"))
-                    || (_invItem.CarrierId2 != null && Regex.IsMatch(_invItem.CarrierId2, "^[A-Z]{2}[0-9]{14}$")))
-                {
-                    hasError = false;
-                }
-            }
-
-            return hasError 
-                ? new Exception(String.Format(MessageResources.InvalidPublicCarrierType, _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2))
-                : null;
-        }
-
-        protected virtual Exception checkPrintAll()
-        {
-
-            if (_invItem.PrintMark == "Y" || _invItem.PrintMark=="y")
-            {
-
-            }
-            else
-            {
-                _carrier = new InvoiceCarrier
-                {
-                    CarrierType = EIVOPlatformFactory.DefaultUserCarrierType,
-                    CarrierNo = Guid.NewGuid().ToString()
-                };
-
-                _carrier.CarrierNo2 = _carrier.CarrierNo;
-            }
+            checkBusinessDetails();
 
             return null;
 
         }
 
-        protected virtual void checkBusinessDetails(List<Exception> ex)
+        protected override Exception checkBusinessDetails()
         {
             _buyer = new InvoiceBuyer
             {
@@ -424,29 +359,36 @@ namespace Model.InvoiceManagement.Validator
                 ReceiptNo = _invItem.BuyerId,
                 CustomerID = String.IsNullOrEmpty(_invItem.GoogleId) ? "" : _invItem.GoogleId,
                 CustomerName = _invItem.BuyerName,
-            };           
+            };   
+            
+            if(_isCrossBorderMerchant)
+            {
+                _buyer.CustomerNumber = _buyer.ReceiptNo;
+                _buyer.ReceiptNo = "0000000000";
+                _buyer.EMail = _invItem.CarrierId1 ?? _invItem.CarrierId2;
+            }
 
             if (_invItem.Contact != null)
             {
 
                 if (!String.IsNullOrEmpty(_invItem.Contact.Name) && _invItem.Contact.Name.Length > 64)
                 {
-                    ex.Add(new Exception(String.Format(MessageResources.InvalidContactName, _invItem.Contact.Name)));
+                    exceptions.Add(new Exception(String.Format(MessageResources.InvalidContactName, _invItem.Contact.Name)));
                 }
 
                 if (!String.IsNullOrEmpty(_invItem.Contact.Address) && _invItem.Contact.Address.Length > 128)
                 {
-                    ex.Add(new Exception(String.Format(MessageResources.InvalidContactAddress, _invItem.Contact.Address)));
+                    exceptions.Add(new Exception(String.Format(MessageResources.InvalidContactAddress, _invItem.Contact.Address)));
                 }
 
                 if (!String.IsNullOrEmpty(_invItem.Contact.Email) && _invItem.Contact.Email.Length > 512)
                 {
-                    ex.Add(new Exception(String.Format(MessageResources.InvalidContactEMail, _invItem.Contact.Email)));
+                    exceptions.Add(new Exception(String.Format(MessageResources.InvalidContactEMail, _invItem.Contact.Email)));
                 }
 
                 if (!String.IsNullOrEmpty(_invItem.Contact.TEL) && _invItem.Contact.TEL.Length > 64)
                 {
-                    ex.Add(new Exception(String.Format(MessageResources.InvalidContactPhone, _invItem.Contact.TEL)));
+                    exceptions.Add(new Exception(String.Format(MessageResources.InvalidContactPhone, _invItem.Contact.TEL)));
                 }
 
                 _buyer.ContactName =  _invItem.Contact.Name;
@@ -454,93 +396,104 @@ namespace Model.InvoiceManagement.Validator
                 _buyer.Phone = _invItem.Contact.TEL;
                 _buyer.EMail = _invItem.Contact.Email != null ? _invItem.Contact.Email.Replace(';', ',').Replace('、', ',').Replace(' ', ',') : null;
             }
+
+            return null;
         }
 
-        protected virtual void checkInvoiceDelivery(List<Exception> items)
+        protected override Exception checkInvoiceDelivery()
         {
 
-            _carrier = null;
-            _donation = null;
+            var ex = base.checkInvoiceDelivery();
 
-            var checkFunc = _deliveryCheck[Convert.ToInt32(_invItem.PrintMark == "Y"),
-                Convert.ToInt32(!String.IsNullOrEmpty(_invItem.CarrierType) 
-                    && !(String.IsNullOrEmpty(_invItem.CarrierId1) && String.IsNullOrEmpty(_invItem.CarrierId2))),
-                Convert.ToInt32(_invItem.BuyerId == "0000000000"),
-                Convert.ToInt32(_invItem.DonateMark == "1")];
-
-            var ex = checkFunc();
             if (ex != null)
-                items.Add(ex);
+            {
+                exceptions.Add(ex);
+            }
+
+            return ex;
 
         }
 
 
-        protected virtual void checkAmount(List<Exception> ex)
+        protected override Exception checkAmount()
         {
             //應稅銷售額
-            if (_invItem.SalesAmount < 0 || decimal.Floor(_invItem.SalesAmount) != _invItem.SalesAmount)
+            if (_invItem.SalesAmount < 0 /*|| decimal.Floor(_invItem.SalesAmount) != _invItem.SalesAmount*/)
             {
-                ex.Add(new Exception(String.Format(MessageResources.InvalidSellingPrice, _invItem.SalesAmount)));
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidSellingPrice, _invItem.SalesAmount)));
             }
 
-            if (_invItem.FreeTaxSalesAmount < 0 || decimal.Floor(_invItem.FreeTaxSalesAmount) != _invItem.FreeTaxSalesAmount)
+            if (_invItem.FreeTaxSalesAmount < 0 )
             {
-                ex.Add(new Exception(String.Format(MessageResources.InvalidFreeTaxAmount, _invItem.FreeTaxSalesAmount)));
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidFreeTaxAmount, _invItem.FreeTaxSalesAmount)));
             }
 
-            if (_invItem.ZeroTaxSalesAmount < 0 || decimal.Floor(_invItem.ZeroTaxSalesAmount) != _invItem.ZeroTaxSalesAmount)
+            if (_invItem.ZeroTaxSalesAmount < 0 )
             {
-                ex.Add(new Exception(String.Format(MessageResources.InvalidZeroTaxAmount, _invItem.ZeroTaxSalesAmount)));
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidZeroTaxAmount, _invItem.ZeroTaxSalesAmount)));
             }
 
 
-            if (_invItem.TaxAmount < 0 || decimal.Floor(_invItem.TaxAmount) != _invItem.TaxAmount)
+            if (_invItem.TaxAmount < 0 /*|| decimal.Floor(_invItem.TaxAmount) != _invItem.TaxAmount*/)
             {
-                ex.Add(new Exception(String.Format(MessageResources.InvalidTaxAmount, _invItem.TaxAmount)));
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidTaxAmount, _invItem.TaxAmount)));
             }
 
-            if (_invItem.TotalAmount < 0 || decimal.Floor(_invItem.TotalAmount) != _invItem.TotalAmount)
+            if (_invItem.TotalAmount < 0 /*|| decimal.Floor(_invItem.TotalAmount) != _invItem.TotalAmount*/)
             {
-                ex.Add(new Exception(String.Format(MessageResources.InvalidTotalAmount, _invItem.TotalAmount)));
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidTotalAmount, _invItem.TotalAmount)));
             }
 
             //課稅別
             if (!Enum.IsDefined(typeof(Naming.TaxTypeDefinition), (int)_invItem.TaxType))
             {
-                ex.Add(new Exception(String.Format(MessageResources.InvalidTaxType, _invItem.TaxType)));
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidTaxType, _invItem.TaxType)));
             }
 
             if (_invItem.TaxRate < 0m)
             {
-                ex.Add(new Exception(String.Format(MessageResources.InvalidTaxRate, _invItem.TaxRate)));
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidTaxRate, _invItem.TaxRate)));
             }
 
             if (_invItem.TaxType == (byte)Naming.TaxTypeDefinition.零稅率)
             {
                 if (!_invItem.CustomsClearanceMark.HasValue)
                 {
-                    ex.Add(new Exception(String.Format(MessageResources.AlertClearanceMarkZeroTax, _invItem.CustomsClearanceMark)));
+                    exceptions.Add(new Exception(String.Format(MessageResources.AlertClearanceMarkZeroTax, _invItem.CustomsClearanceMark)));
                 }
                 else if (_invItem.CustomsClearanceMark != 1 && _invItem.CustomsClearanceMark != 2)
                 {
-                    ex.Add(new Exception(String.Format(MessageResources.AlertClearanceMarkExport, _invItem.CustomsClearanceMark)));
+                    exceptions.Add(new Exception(String.Format(MessageResources.AlertClearanceMarkExport, _invItem.CustomsClearanceMark)));
                 }
             }
             else if (_invItem.CustomsClearanceMark.HasValue)
             {
                 if (_invItem.CustomsClearanceMark != 1 && _invItem.CustomsClearanceMark != 2)
                 {
-                    ex.Add(new Exception(String.Format(MessageResources.AlertClearanceMarkExport, _invItem.CustomsClearanceMark)));
+                    exceptions.Add(new Exception(String.Format(MessageResources.AlertClearanceMarkExport, _invItem.CustomsClearanceMark)));
                 }
             }
+
+            _invItem.Currency = _invItem.Currency.GetEfficientString();
+            _currency = null;
+            if (!String.IsNullOrEmpty(_invItem.Currency))
+            {
+                _currency = _models.GetTable<CurrencyType>().Where(c => c.AbbrevName == _invItem.Currency).FirstOrDefault();
+                if (_currency == null)
+                {
+                    exceptions.Add(new Exception($"Invalid currency code：{_invItem.Currency}，TAG：<Currency/>"));
+                }
+            }
+
+            return null;
         }
 
 
-        protected virtual void checkInvoiceProductItems(List<Exception> items)
+        protected override Exception checkInvoiceProductItems()
         {
             if (_invItem.InvoiceItem == null || _invItem.InvoiceItem.Length == 0)
             {
-                items.Add(new Exception(MessageResources.InvalidInvoiceDetails));
+                exceptions.Add(new Exception(MessageResources.InvalidInvoiceDetails));
                 _productItems = new List<InvoiceProductItem>();
             }
             else
@@ -565,35 +518,41 @@ namespace Model.InvoiceManagement.Validator
             {
                 if (String.IsNullOrEmpty(product.InvoiceProduct.Brief) || product.InvoiceProduct.Brief.Length > 256)
                 {
-                    items.Add( new Exception(String.Format(MessageResources.InvalidProductDescription, product.InvoiceProduct.Brief)));
+                    exceptions.Add( new Exception(String.Format(MessageResources.InvalidProductDescription, product.InvoiceProduct.Brief)));
                 }
 
 
                 if (!String.IsNullOrEmpty(product.PieceUnit) && product.PieceUnit.Length > 6)
                 {
-                    items.Add( new Exception(String.Format(MessageResources.InvalidPieceUnit, product.PieceUnit)));
+                    exceptions.Add( new Exception(String.Format(MessageResources.InvalidPieceUnit, product.PieceUnit)));
                 }
 
 
-                //if (!Regex.IsMatch(product.UnitCost.ToString(), InvoiceRootInvoiceValidator.__DECIMAL_AMOUNT_PATTERN))
+                //if (!product.UnitCost.HasValue || product.UnitCost == 0)
                 //{
-                //    items.Add( new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost)));
+                //    items.Add(new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost)));
                 //}
 
-                //if (!Regex.IsMatch(product.CostAmount.ToString(), InvoiceRootInvoiceValidator.__DECIMAL_AMOUNT_PATTERN))
+                //if (!product.CostAmount.HasValue || product.CostAmount == 0)
                 //{
-                //    items.Add( new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount)));
+                //    items.Add(new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount)));
+                //}
+
+                //if (!product.Piece.HasValue || product.Piece == 0)
+                //{
+                //    items.Add(new Exception(String.Format(MessageResources.InvalidQuantity, product.Piece)));
                 //}
 
             }
+            return null;
         }
 
-        protected virtual void checkMandatoryFields(List<Exception> items)
+        protected override Exception checkMandatoryFields()
         {
 
             if (_invItem.BuyerId == "0000000000" && _invItem.DonateMark != "0" && _invItem.DonateMark != "1")
             {
-                items.Add( new Exception(String.Format(MessageResources.InvalidDonationMark, _invItem.DonateMark)));
+                exceptions.Add( new Exception(String.Format(MessageResources.InvalidDonationMark, _invItem.DonateMark)));
             }
 
             if (String.IsNullOrEmpty(_invItem.PrintMark))
@@ -606,69 +565,19 @@ namespace Model.InvoiceManagement.Validator
                 _invItem.PrintMark = _invItem.PrintMark.ToUpper();
                 if (_invItem.PrintMark != "Y" && _invItem.PrintMark != "N")
                 {
-                    items.Add( new Exception(MessageResources.InvalidPrintMark));
+                    exceptions.Add( new Exception(MessageResources.InvalidPrintMark));
                 }
             }
 
-            if(!_invItem.InvoiceType.IsValidInvoiceType())
+            if(!_invItem.InvoiceType.IsValidInvoiceType(out byte data))
             {
-                items.Add( new Exception(String.Format(MessageResources.InvalidInvoiceType, _invItem.InvoiceType)));
+                exceptions.Add( new Exception(String.Format(MessageResources.InvalidInvoiceType, _invItem.InvoiceType)));
             }
-        }
 
-        protected virtual Exception checkCarrierDataIsComplete()
-        {
-
-            if (String.IsNullOrEmpty(_invItem.CarrierType))
-            {
-                return new Exception(MessageResources.AlertInvoiceCarrierComplete);
-            }
-            else
-            {
-                if (_invItem.CarrierType.Length > 6 || (_invItem.CarrierId1 != null && _invItem.CarrierId1.Length > 64) || (_invItem.CarrierId2 != null && _invItem.CarrierId2.Length > 64))
-                    return new Exception(String.Format(MessageResources.AlertInvoiceCarrierLength, _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
-
-                _carrier = new InvoiceCarrier
-                {
-                    CarrierType = _invItem.CarrierType
-                };
-
-                if (!String.IsNullOrEmpty(_invItem.CarrierId1))
-                {
-                    if (_invItem.CarrierId1.Length > 64)
-                        return new Exception(String.Format(MessageResources.AlertInvoiceCarrierLength, _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
-
-                    _carrier.CarrierNo = _invItem.CarrierId1;
-                }
-
-                if (!String.IsNullOrEmpty(_invItem.CarrierId2))
-                {
-                    if (_invItem.CarrierId2.Length > 64)
-                        return new Exception(String.Format(MessageResources.AlertInvoiceCarrierLength, _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
-
-                    _carrier.CarrierNo2 = _invItem.CarrierId2;
-                }
-
-                if (_carrier.CarrierNo == null)
-                {
-                    if (_carrier.CarrierNo2 == null)
-                    {
-                        return new Exception(MessageResources.AlertInvoiceCarrierComplete);
-                    }
-                    else
-                    {
-                        _carrier.CarrierNo = _carrier.CarrierNo2;
-                    }
-                }
-                else
-                {
-                    if (_carrier.CarrierNo2 == null)
-                        _carrier.CarrierNo2 = _carrier.CarrierNo;
-                }
-            }
 
             return null;
         }
+
 
     }
 

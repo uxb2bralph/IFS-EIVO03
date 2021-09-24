@@ -10,6 +10,8 @@ using Uxnet.Com.DataAccessLayer;
 using Model.DataEntity;
 using Model.Locale;
 using Model.Security.MembershipManagement;
+using System.Threading.Tasks;
+using Utility;
 
 namespace ModelExtension.Helper
 {
@@ -42,27 +44,61 @@ namespace ModelExtension.Helper
             }
         }
 
-        public static DataSet GetDataSetResult<TEntity>(this ModelSource<TEntity> models, IQueryable items,DataTable table)
-            where TEntity : class, new()
+        //public static DataSet GetDataSetResult<TEntity>(this ModelSource<TEntity> models, IQueryable items,DataTable table)
+        //    where TEntity : class, new()
+        //{
+        //    using (SqlCommand sqlCmd = (SqlCommand)models.GetCommand(items))
+        //    {
+        //        return models.GetDataSetResult(sqlCmd, table);
+        //    }
+        //}
+
+        public static DataSet GetDataSetResult(this GenericManager<EIVOEntityDataContext> models, IQueryable items, DataTable table)
         {
             using (SqlCommand sqlCmd = (SqlCommand)models.GetCommand(items))
             {
-                sqlCmd.Connection = (SqlConnection)models.GetDataContext().Connection;
-                using (SqlDataAdapter adapter = new SqlDataAdapter(sqlCmd))
-                {
-                    int colCount = table.Columns.Count;
-                    adapter.Fill(table);
-                    if(colCount>0)
-                    {
-                        while (table.Columns.Count > colCount)
-                        {
-                            table.Columns.RemoveAt(table.Columns.Count - 1);
-                        }
-                    }
-                    return table.DataSet;
-                }
+                return models.GetDataSetResult(sqlCmd, table);
             }
         }
+
+        //public static DataSet GetDataSetResult<TEntity>(this ModelSource<TEntity> models, SqlCommand sqlCmd, DataTable table)
+        //    where TEntity : class, new()
+        //{
+        //    sqlCmd.Connection = (SqlConnection)models.GetDataContext().Connection;
+        //    using (SqlDataAdapter adapter = new SqlDataAdapter(sqlCmd))
+        //    {
+        //        int colCount = table.Columns.Count;
+        //        adapter.Fill(table);
+        //        if (colCount > 0)
+        //        {
+        //            while (table.Columns.Count > colCount)
+        //            {
+        //                table.Columns.RemoveAt(table.Columns.Count - 1);
+        //            }
+        //        }
+        //        return table.DataSet;
+        //    }
+        //}
+
+
+        public static DataSet GetDataSetResult(this GenericManager<EIVOEntityDataContext> models, SqlCommand sqlCmd, DataTable table)
+        {
+            sqlCmd.Connection = (SqlConnection)models.DataContext.Connection;
+            using (SqlDataAdapter adapter = new SqlDataAdapter(sqlCmd))
+            {
+                int colCount = table.Columns.Count;
+                adapter.Fill(table);
+                if (colCount > 0)
+                {
+                    while (table.Columns.Count > colCount)
+                    {
+                        table.Columns.RemoveAt(table.Columns.Count - 1);
+                    }
+                }
+                return table.DataSet;
+            }
+        }
+
 
         public static ClosedXML.Excel.XLWorkbook GetExcelResult<TEntity>(this ModelSource<TEntity> models,IQueryable items,String tableName = null)
             where TEntity : class, new()
@@ -80,6 +116,79 @@ namespace ModelExtension.Helper
             ClosedXML.Excel.XLWorkbook xls = new ClosedXML.Excel.XLWorkbook();
             xls.Worksheets.Add(ds);
             return xls;
+        }
+
+        public static void SaveAsExcel(this SqlCommand sqlCmd, DataTable table, String resultFile, int? taskID = null)
+        {
+            Task.Run(() =>
+            {
+                try
+                {
+                    using (DataSet ds = new DataSet())
+                    {
+                        ds.Tables.Add(table);
+                        using (ModelSource<InvoiceItem> db = new ModelSource<InvoiceItem>())
+                        {
+                            Exception exception = null;
+
+                            try
+                            {
+                                db.GetDataSetResult(sqlCmd, table);
+
+                                using (var xls = ds.ConvertToExcel())
+                                {
+                                    xls.SaveAs(resultFile);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.Error(ex);
+                                exception = ex;
+                            }
+
+                            ProcessRequest taskItem = db.GetTable<ProcessRequest>()
+                                            .Where(t => t.TaskID == taskID).FirstOrDefault();
+
+                            if (taskItem != null)
+                            {
+                                if (exception != null)
+                                {
+                                    taskItem.ExceptionLog = new ExceptionLog
+                                    {
+                                        DataContent = exception.Message
+                                    };
+                                }
+                                taskItem.ProcessComplete = DateTime.Now;
+                                db.SubmitChanges();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
+            });
+
+        }
+
+        public static void SaveAsExcel(this IQueryable<dynamic> items, GenericManager<EIVOEntityDataContext> models, String tableName, String resultFile)
+        {
+            DataTable table = new DataTable(tableName);
+            items.BuildDataColumns(table);
+
+            SqlCommand sqlCmd = (SqlCommand)models.GetCommand(items);
+
+            using (DataSet ds = new DataSet())
+            {
+                ds.Tables.Add(table);
+                models.GetDataSetResult(sqlCmd, table);
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(resultFile);
+                }
+            }
         }
 
     }

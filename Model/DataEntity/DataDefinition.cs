@@ -29,6 +29,8 @@ namespace Model.DataEntity
         public String itemNO { get; set; }
         public int? DocID { get; set; }
         public String Subject { get; set; }
+        public String MailTo { get; set; }
+        public bool? AppendAttachment { get; set; }
     }
 
     public class NotifyMailInfo

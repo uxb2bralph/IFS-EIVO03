@@ -2,6 +2,7 @@
 @using System.Linq.Expressions
 
 @using Business.Helper
+@using Model.Helper
 @using DataAccessLayer.basis
 @using eIVOGo.Helper
 @using eIVOGo.Models
@@ -62,9 +63,9 @@
                 this.removeTab(tabId);
 
                 var newTab = $('<li role="presentation"></li>')
-                        .append($('<a href="#masterHome" class="tab-link" role="tab" data-toggle="tab"></a>')
-                            .attr('href', '#' + tabId).attr('aria-controls', tabId).text(tabText)
-                            .append($('<button class="close closeTab"><i class="fa fa-times" aria-hidden="true"></i></button>')));
+                    .append($('<a href="#masterHome" class="tab-link" role="tab" data-toggle="tab"></a>')
+                        .attr('href', '#' + tabId).attr('aria-controls', tabId).text(tabText)
+                        .append($('<button class="close closeTab"><i class="fa fa-times" aria-hidden="true"></i></button>')));
                 newTab.appendTo($('#masterTab'));
                 $('<div role="tabpanel" class="tab-pane"></div>').attr('id', tabId)
                     .append(tabContent).appendTo($('#masterTabContent'));
@@ -72,6 +73,7 @@
                 if (show)
                     this.showTab(tabId);
             },
+            onReady: [],
         };
     })();
 

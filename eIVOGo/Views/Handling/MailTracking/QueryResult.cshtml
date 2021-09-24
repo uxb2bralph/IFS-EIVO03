@@ -32,9 +32,10 @@
         @if (_model.Count() > 0)
         {
             List<_PackItem> items = new List<_PackItem>();
-            foreach(var g in _model.GroupBy(i => i.InvoiceBuyer.Address))
+            foreach (var g in _model.GroupBy(i => i.InvoiceBuyer.Address)
+                                        .OrderBy(a => a.Key))
             {
-                foreach(var i in g)
+                foreach (var i in g)
                 {
                     items.Add(new _PackItem
                     {

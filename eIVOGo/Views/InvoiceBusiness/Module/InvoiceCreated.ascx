@@ -10,6 +10,7 @@
 <%@ Import Namespace="Model.DataEntity" %>
 <%@ Import Namespace="eIVOGo.Controllers" %>
 <%@ Import Namespace="Business.Helper" %>
+<%@ Import Namespace="Model.Helper" %>
 
 <%  if (_model != null)
     { %>

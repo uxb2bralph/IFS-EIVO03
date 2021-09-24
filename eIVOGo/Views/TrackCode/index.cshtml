@@ -10,27 +10,14 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using eIVOGo.Helper
-
-@section headContent { 
- 
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
+    ViewBag.ActionName = "首頁 > 系統管理維護";
 }
-@{ Html.RenderPartial("~/Views/TrackCode/TrackCodeQuery.ascx");}
+@section headContent {
 
-<script runat="server">
+}
+@{ Html.RenderPartial("~/Views/TrackCode/TrackCodeQuery.cshtml");}
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        ViewBag.ActionName = "首頁 > 系統管理維護";
-    }
 
-    //public override void Dispose()
-    //{
-    //    var models = TempData.GetGenericModelSource();
-    //    if (models != null)
-    //        models.Dispose();
 
-    //    base.Dispose();
-    //}
-
-</script>

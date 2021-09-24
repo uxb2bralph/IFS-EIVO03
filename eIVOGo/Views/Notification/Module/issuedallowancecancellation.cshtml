@@ -20,7 +20,7 @@
 @if (_model.InvoiceAllowanceSeller.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.UseCustomStyle))
     {
         ViewBag.MailTitle = "發票折讓證明作廢";
-        Html.RenderPartial("~/Views/Notification/Module/MailTitle.ascx", _model.InvoiceAllowanceSeller.Organization);
+        Html.RenderPartial("~/Views/Notification/Module/MailTitle.cshtml", _model.InvoiceAllowanceSeller.Organization);
     }
     else
     {
@@ -28,7 +28,7 @@
 @(_model.InvoiceAllowanceSeller.CustomerName)
 已作廢您下述電子發票折讓證明，請知悉。<br />
 }
-    @{ Html.RenderPartial("~/Views/Notification/Module/AllowanceMailView.ascx", _model);}
+    @{ Html.RenderPartial("~/Views/Notification/Module/AllowanceMailView.cshtml", _model);}
 
 信件寄送時間：@(DateTime.Now)
 <script runat="server">

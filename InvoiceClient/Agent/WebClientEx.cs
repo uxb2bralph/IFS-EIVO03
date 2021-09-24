@@ -11,6 +11,11 @@ namespace InvoiceClient.Agent
         public int Timeout { get; set; }
         protected WebRequest _request;
 
+        public WebClientEx() : base()
+        {
+            this.Encoding = Encoding.UTF8;
+        }
+
         protected override WebRequest GetWebRequest(Uri address)
         {
             _request = base.GetWebRequest(address);

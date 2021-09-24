@@ -2,6 +2,7 @@
 @using System.Linq.Expressions
 
 @using Business.Helper
+@using Model.Helper
 @using eIVOGo.Helper
 @using eIVOGo.Models
 @using eIVOGo.Controllers
@@ -19,16 +20,13 @@
 }
 <tr>
     <th>
-        發票類別
+        傳輸類型
     </th>
     <td class="tdleft">
         <select name="ProcessType" class="form-control">
-            @if (ViewBag.QueryAll == true)
-            {
-                <option value="">查詢全部</option>
-            }
-            <option value="@((int)Naming.InvoiceProcessType.C0401)">查詢QR Code證明聯類型</option>
-            <option value="@((int)Naming.InvoiceProcessType.A0401)">查詢營業人交易類型</option>
+            <option value="">全部</option>
+            <option value="@((int)Naming.InvoiceProcessType.C0401)">C0401</option>
+            <option value="@((int)Naming.InvoiceProcessType.A0401)">A0401</option>
         </select>
         @if (_viewModel!=null && _viewModel.ProcessType.HasValue)
         {

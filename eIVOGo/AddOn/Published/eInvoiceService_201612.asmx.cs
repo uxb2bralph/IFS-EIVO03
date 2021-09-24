@@ -10,7 +10,7 @@ using System.Web;
 using System.Web.Services;
 using System.Xml;
 
-using eIVOGo.Module.Common;
+
 using eIVOGo.Properties;
 using Model.DataEntity;
 using Model.Helper;
@@ -25,6 +25,7 @@ using System.IO;
 using System.Data;
 using eIVOGo.Helper;
 using Model.Security.MembershipManagement;
+using eIVOGo.Module.Common;
 
 namespace eIVOGo.Published
 {
@@ -103,7 +104,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -186,7 +187,7 @@ namespace eIVOGo.Published
                 {
                     result.Result.message = "發票資料簽章不符!!";
                 }
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {

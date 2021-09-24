@@ -14,6 +14,7 @@ namespace ProcessorUnit.Models
         public Guid InstanceID { get; set; } = Guid.NewGuid();
         public int ProcessorID { get; set; }
         public String ResponsePath { get; set; }
+        public String PersistenceModelPath { get; set; } = "Persistence";
     }
 
     public static class SettingsHelper

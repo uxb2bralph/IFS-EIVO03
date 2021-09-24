@@ -39,16 +39,14 @@ namespace eIVOGo.Controllers
         public ActionResult QueryIndex(ProcessRequestQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            viewModel.QueryForm = "~/Views/ProcessRequest/Module/ProcessRequestQuery.cshtml";
-            return View("~/Views/Common/QueryIndex.cshtml");
+            return View("~/Views/ProcessRequest/Module/ProcessRequestQuery.cshtml");
         }
 
         public ActionResult ShowData(ProcessRequestQueryViewModel viewModel)
         {
             ViewResult result = (ViewResult)InquireRequest(viewModel);
             viewModel.ResultView = "~/Views/ProcessRequest/Module/ProcessRequestTable.cshtml";
-            viewModel.QueryForm = "~/Views/Common/Module/QueryResult.cshtml";
-            result.ViewName = "~/Views/Common/QueryIndex.cshtml";
+            result.ViewName = "~/Views/ProcessRequest/ShowData.cshtml";
             return result;
         }
 

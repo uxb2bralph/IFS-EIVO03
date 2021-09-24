@@ -1,0 +1,59 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@using Uxnet.Com.DataAccessLayer
+
+@{
+    ModelStateDictionary _modelState;
+    GenericManager<EIVOEntityDataContext> models;
+
+    models = ViewContext.Controller.DataSource();
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    QueryViewModel _viewModel = (QueryViewModel)ViewBag.ViewModel;
+}
+@{
+    Naming.FieldDisplayType? displayType = (Naming.FieldDisplayType?)ViewBag.DisplayType;
+}
+@switch (displayType)
+{
+    case Naming.FieldDisplayType.Header:
+        <text>地址</text>
+        break;
+    case Naming.FieldDisplayType.DataItem:
+        BusinessRelationship item = this.Model as BusinessRelationship;
+        <text>@(item?.Addr)</text>
+        break;
+    case Naming.FieldDisplayType.SortBy:
+        break;
+
+    case Naming.FieldDisplayType.Edit:
+        item = this.Model as BusinessRelationship;
+        <text>
+            @editField(_viewModel as QueryViewModel, item)
+        </text>
+        break;
+    default:
+        break;
+}
+
+@helper editField(QueryViewModel _viewModel, BusinessRelationship item)
+{
+    <input name="Addr" class="form-control" type="text" value="@(item?.Addr)" />
+}
+
+

@@ -44,7 +44,7 @@ namespace Model.Helper
             return null;
         }
 
-        public static String EncryptContent(this String invoiceNo,String randomNo)
+        public static String EncryptContent(this String invoiceNo, String randomNo)
         {
             return EncryptContent(invoiceNo + randomNo);
         }

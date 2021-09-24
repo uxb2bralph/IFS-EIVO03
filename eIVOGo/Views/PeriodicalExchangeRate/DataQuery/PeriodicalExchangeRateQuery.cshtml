@@ -1,0 +1,86 @@
+
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+
+    ModelSource<InvoiceItem> models;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    TrackCodeQueryViewModel _viewModel = ViewBag.ViewModel as TrackCodeQueryViewModel;
+
+    _viewModel.UrlAction = Url.Action("Inquire");
+    _viewModel.DeleteAction = Url.Action("DeleteItem");
+    _viewModel.LoadAction = Url.Action("ProcessDataItem");
+    _viewModel.CommitAction = Url.Action("CommitItem");
+    _viewModel.EditAction = "default";
+    _viewModel.EmptyKeyID = (new { PeriodID = -1, CurrencyID = -1 }).JsonStringify().EncryptData();
+
+}
+
+<div class="border_gray" id="queryArea">
+    <!--表格 開始-->
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
+        <tr>
+            <th colspan="2" class="Head_style_a">
+                資料維護
+            </th>
+        </tr>
+        @{ 
+            Html.RenderPartial("~/Views/PeriodicalExchangeRate/DataAction/UploadExchangeRate.cshtml");
+        }
+    </table>
+    <!--表格 結束-->
+    <!--表格 開始-->
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
+        <tr>
+            <th colspan="2" class="Head_style_a">
+                查詢條件
+            </th>
+        </tr>
+        @{
+            Html.RenderPartial("~/Views/TrackCode/DataQuery/TrackCodePeriod.cshtml");
+        }
+    <tr>
+        <th>幣別</th>
+        <td class="tdleft">
+            <input name="Currency" type="text" value="" />
+        </td>
+    </tr>
+        <tr>
+            <th>
+                每頁資料筆數
+            </th>
+            <td class="tdleft" colspan="3">
+                <input name="pageSize" type="text" value="@(_viewModel?.PageSize)" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" style="text-align:center;">
+                <input name="btnQuery" class="btn" type="button" value="查詢" onclick="$inquiryAgent.initQuery = true; $inquiryAgent.inquire();" />
+            </td>
+        </tr>
+    </table>
+    <!--表格 結束-->
+</div>
+
+@if (_viewModel.StartQuery == true)
+{
+    <script>
+        $(function () {
+            $('input[name="btnQuery"]').click();
+        });
+    </script>
+}
+
+
+

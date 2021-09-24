@@ -29,7 +29,7 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
     <tbody>
         <tr>
-            <th>
+            <th style="white-space:nowrap;">
                 開立人名稱
             </th>
             <td class="tdleft" style="white-space:nowrap;">
@@ -43,13 +43,13 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th style="white-space:nowrap;">
                 客戶編號
             </th>
             <td class="tdleft">
                 @(_model.InvoiceBuyer.CustomerID.StringMask(4, 3, '*'))
             </td>
-            <th>
+            <th  style="white-space:nowrap;">
                 檢查號碼
             </th>
             <td class="tdleft">
@@ -57,13 +57,13 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th style="white-space:nowrap;">
                 發票號碼
             </th>
             <td class="tdleft">
                 @(_model.TrackCode + _model.No)
             </td>
-            <th>
+            <th  style="white-space:nowrap;">
                 發票日期
             </th>
             <td class="tdleft">
@@ -71,13 +71,13 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th style="white-space:nowrap;">
                 隨機碼
             </th>
             <td class="tdleft">
                 @(_model.RandomNo)
             </td>
-            <th>
+            <th  style="white-space:nowrap;">
                 含稅金額
             </th>
             <td class="tdleft">
@@ -85,13 +85,13 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th style="white-space:nowrap;">
                 未稅金額
             </th>
             <td class="tdleft">
                 @(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.SalesAmount))
             </td>
-            <th>
+            <th style="white-space:nowrap;">
                 稅 額
             </th>
             <td class="tdleft">
@@ -99,7 +99,7 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th style="white-space:nowrap;">
                 買方名稱
             </th>
             <td class="tdleft" style="white-space:nowrap;">
@@ -113,11 +113,19 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th style="white-space:nowrap;">
                 地 址
             </th>
             <td colspan="3" class="tdleft">
                 @(_model.InvoiceBuyer.IsB2C() ? "*" : _model.InvoiceBuyer.Address)
+            </td>
+        </tr>
+        <tr>
+            <th style="white-space:nowrap;">
+                總 備 註
+            </th>
+            <td colspan="3" class="tdleft">
+                @(_model.Remark)
             </td>
         </tr>
     </tbody>

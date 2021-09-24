@@ -14,7 +14,7 @@ using Business.Helper;
 using eIVOGo.Helper;
 using Model.Models.ViewModel;
 using eIVOGo.Models.ViewModel;
-using eIVOGo.Module.Common;
+
 using eIVOGo.Properties;
 using eIVOGo.Helper.Security.Authorization;
 using Model.DataEntity;
@@ -37,7 +37,7 @@ namespace eIVOGo.Controllers
         // GET: Account
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> CbsLogin(CbsLoginViewModel viewModel, string returnUrl)
+        public async Task<ActionResult> CbsLogin(CbsLoginViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
             ViewBag.ModelState = this.ModelState;
@@ -54,8 +54,8 @@ namespace eIVOGo.Controllers
                 ModelState.AddModelError("PID", msg);
                 return View("~/Views/Account/CbsLogin.cshtml");
             }
-            returnUrl = viewModel.ReturnUrl.GetEfficientString();
-            return Redirect(returnUrl ?? msg ?? "~/Account/CbsLogin");
+            viewModel.ReturnUrl = viewModel.ReturnUrl.GetEfficientString();
+            return Redirect(viewModel.ReturnUrl ?? msg ?? "~/Account/CbsLogin");
 
         }
 
@@ -76,12 +76,13 @@ namespace eIVOGo.Controllers
         // GET: Account
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> Login(LoginViewModel viewModel, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel viewModel)
         {
-            var result = await CbsLogin(viewModel, returnUrl);
+            ViewBag.ViewModel = viewModel;
+            var result = await CbsLogin(viewModel);
             if (!ModelState.IsValid)
             {
-                return View("~/Views/Account/Login.aspx");
+                return View("~/Views/Account/Login.cshtml");
             }
             else
             {
@@ -92,9 +93,10 @@ namespace eIVOGo.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
+            ViewBag.ViewModel = new LoginViewModel { };
             ViewResult result = (ViewResult)CbsLogin();
             if (Settings.Default.EIVO_Service != 0)
-                result.ViewName = "~/Views/Account/Login.aspx";
+                result.ViewName = "~/Views/Account/Login.cshtml";
             return result;
         }
 
@@ -206,10 +208,17 @@ namespace eIVOGo.Controllers
             ViewBag.ViewModel = viewModel;
             ViewBag.ShowTab = showTab;
 
-            if (!viewModel.SellerID.HasValue)
+            var profile = HttpContext.GetUser();
+            if(profile.IsSystemAdmin())
             {
-                var profile = HttpContext.GetUser();
-                viewModel.SellerID = profile.CurrentUserRole.OrganizationCategory.CompanyID;
+
+            }
+            else
+            {
+                if (!viewModel.SellerID.HasValue)
+                {
+                    viewModel.SellerID = profile.CurrentUserRole.OrganizationCategory.CompanyID;
+                }
             }
 
             return View("~/Views/Account/AccountIndex.cshtml");
@@ -256,7 +265,7 @@ namespace eIVOGo.Controllers
             }
             if (viewModel.RoleID.HasValue)
             {
-                items = (new UserProfileManager(models)).GetUserByUserRole(items, viewModel.RoleID.Value);
+                items = (new UserProfileManager(models)).GetUserByUserRole(items, (int)viewModel.RoleID);
             }
 
             if (viewModel.LevelID.HasValue)
@@ -296,7 +305,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "帳號資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "帳號資料錯誤!!");
             }
 
             return View("~/Views/Account/Module/DataItem.ascx", item);
@@ -312,7 +321,7 @@ namespace eIVOGo.Controllers
                 return View("~/Views/SiteAction/JsAlert.cshtml", model: "確認信已送出!!");
             }
 
-            return View("~/Views/Shared/JsAlert.cshtml", model: "帳號資料錯誤!!");
+            return View("~/Views/Shared/AlertMessage.cshtml", model: "帳號資料錯誤!!");
         }
 
         public ActionResult Deactivate(int? id)
@@ -391,8 +400,15 @@ namespace eIVOGo.Controllers
 
         public ActionResult CommitCBESignUp(OrganizationViewModel viewModel)
         {
+            ViewBag.ViewModel = viewModel;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.CompanyID = viewModel.DecryptKeyValue();
+            }
+
             viewModel.SettingInvoiceType = Naming.InvoiceTypeDefinition.一般稅額計算之電子發票;
-            Organization item = viewModel.CommitViewModel(this);
+            Organization item = viewModel.CommitOrganizationViewModel(models, ModelState);
 
             if (item == null)
             {
@@ -403,6 +419,17 @@ namespace eIVOGo.Controllers
 
         }
 
+        public ActionResult ChangeLanguage(String lang)
+        {
+            var cLang = lang.GetEfficientString() ?? Settings.Default.DefaultUILanguage;
+            Response.SetCookie(new HttpCookie("cLang", cLang));
+            return Json(new { result = true, message = System.Globalization.CultureInfo.CurrentCulture.Name }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Error()
+        {
+            return View("~/Views/Shared/Error.cshtml");
+        }
 
     }
 }

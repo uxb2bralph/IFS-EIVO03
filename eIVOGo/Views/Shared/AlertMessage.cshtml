@@ -1,7 +1,15 @@
+@{
+    String _message;
+    _message = (this.Model as String) ?? ViewBag.Message ?? ViewBag.AlertMessage ?? Request["Message"];
+}
 
-@if (ViewBag.Message != null)
-{ 
-<script>
-    alert('@Html.Raw(HttpUtility.JavaScriptStringEncode(ViewBag.Message))');
-</script>
+@if (_message != null)
+{
+    <script>
+        alert('@(HttpUtility.JavaScriptStringEncode(_message))');
+        @if (ViewBag.CloseWindow == true)
+        {
+            <text>window.close();</text>
+        }
+    </script>
 }

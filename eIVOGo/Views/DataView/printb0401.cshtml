@@ -1,4 +1,3 @@
-
 @using System.Linq
 @using System.IO
 @using System.Linq.Expressions
@@ -16,43 +15,35 @@
 @using Utility
 @using Business.Helper
 @using Uxnet.Web.WebUI
+@{
 
+    ModelSource<InvoiceItem> models;
+    IQueryable<DocumentPrintQueue> _model;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<DocumentPrintQueue>)this.Model;
+}
 <!DOCTYPE html>
 <html>
-<head runat="server">
+<head>
     <title>電子發票系統</title>
-    <link href="~/App_Themes/Ver2016/eivo.css" rel="stylesheet" type="text/css" />
+    <link href="../App_Themes/Ver2016/allowance.css?1.2" rel="stylesheet" type="text/css" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 </head>
-<body style="font-family:KaiTi">
-    <form id="theForm" runat="server">
-        @{ var profile = Context.GetUser();
-            DocumentPrintQueue item;}
- @while((item = _model.FirstOrDefault())!=null)
-            {
-                Html.RenderPartial("~/Views/DataView/Module/B0401.ascx", item.CDS_Document.InvoiceAllowance);
-                models.MarkPrintedLog(item.CDS_Document.InvoiceAllowance, profile);
-            }
-    </form>
+<body style="font-family:KaiTi;">
+    @{
+        var profile = Context.GetUser();
+        DocumentPrintQueue item;
+    }
+    @while ((item = _model.FirstOrDefault()) != null)
+    {
+        Html.RenderPartial("~/Views/DataView/Module/B0401.cshtml", item.CDS_Document.InvoiceAllowance);
+        models.MarkPrintedLog(item.CDS_Document.InvoiceAllowance, profile);
+    }
 </body>
 </html>
 <script>
     window.onload = function () {
         window.print();
     };
-</script>
-<script runat="server">
-
-    ModelSource<InvoiceItem> models;
-    IQueryable<DocumentPrintQueue> _model;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<DocumentPrintQueue>)this.Model;
-    }
-
-
 </script>

@@ -13,7 +13,7 @@ namespace eIVOGo.Module.Base
 
         protected global::System.Web.UI.WebControls.Button btnAdd;
         protected global::System.Web.UI.WebControls.Button btnQuery;
-        protected global::eIVOGo.Module.UI.FunctionTitleBar resultTitle;
+        protected global::System.Web.UI.UserControl resultTitle;
         protected global::Uxnet.Web.Module.DataModel.DataModelCache modelItem;
 
         protected TEntity _item;
@@ -108,7 +108,7 @@ namespace eIVOGo.Module.Base
 
         protected global::System.Web.UI.WebControls.Button btnAdd;
         protected global::System.Web.UI.WebControls.Button btnQuery;
-        protected global::eIVOGo.Module.UI.FunctionTitleBar resultTitle;
+        protected global::System.Web.UI.UserControl resultTitle;
 
         protected abstract UserControl _itemList
         {

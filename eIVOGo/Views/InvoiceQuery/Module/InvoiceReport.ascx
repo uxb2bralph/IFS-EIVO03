@@ -54,7 +54,7 @@
     function downloadMonthlyReport() {
         var event = event || window.event;
         var $form = $(event.target).closest('form');
-        $form.launchDownload('<%= Url.Action("CreateMonthlyReportXlsx","InvoiceQuery") %>');
+        $form.launchDownload('<%= Url.Action("CreateMonthlyReportXlsx","InvoiceQuery") %>', null, 'report');
     }
 
     $(function() {

@@ -217,14 +217,8 @@
         <p>
             此張發票已由營業人上傳作廢，敬請確認。
         </p>
-        <p>
-            若您尚有需要服務的地方，隨時歡迎來電或來信電子發票客服信箱。
-        </p>
-        <p>委外客服信箱：<span class="blue">ifs_service@uxb2b.com</span></p>
-        <p>委外客服電話：<span class="blue">0800-010-626</span></p>
-        <p class="red">
-            ※此信件為系統發出信件，請勿直接回覆。
-        </p>
+        @{ Html.RenderPartial("~/Views/Notification/Shared/ServiceNotation.cshtml",_model.Organization);}
+
         <!--按鈕-->
     </form>
 </body>

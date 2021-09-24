@@ -19,21 +19,21 @@ namespace eIVOGo.Module.Base
     {
 
         protected global::System.Web.UI.WebControls.DetailsView dvEntity;
-        protected global::AjaxControlToolkit.ModalPopupExtender ModalPopupExtender;
+        //protected global::AjaxControlToolkit.ModalPopupExtender ModalPopupExtender;
 
         public event EventHandler Done;
 
         public void Show()
         {
             dvEntity.ChangeMode(DetailsViewMode.Insert);
-            this.ModalPopupExtender.Show();
+            //this.ModalPopupExtender.Show();
         }
 
         public void BindData()
         {
             dvEntity.ChangeMode(DetailsViewMode.Edit);
             dvEntity.DataBind();
-            this.ModalPopupExtender.Show();
+            //this.ModalPopupExtender.Show();
 
         }
 
@@ -41,7 +41,7 @@ namespace eIVOGo.Module.Base
         {
             if (e.CommandName == "Cancel")
             {
-                this.ModalPopupExtender.Hide();
+                //this.ModalPopupExtender.Hide();
             }
         }
 

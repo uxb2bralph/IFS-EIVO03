@@ -47,7 +47,7 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<InvoiceAllowance>().Where(a => a.AllowanceID == viewModel.id).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
 
 
@@ -80,10 +80,10 @@ namespace eIVOGo.Controllers
             var item = models.GetTable<InvoiceItem>().Where(a => a.InvoiceID == viewModel.id).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
 
-            return View(item);
+            return View("~/Views/Notification/IssueA0401.cshtml", item);
         }
 
         public ActionResult CommissionedToReceiveA0401(DocumentQueryViewModel viewModel)
@@ -126,7 +126,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
 
             if (item.ResetUserPassword == null)
@@ -156,7 +156,18 @@ namespace eIVOGo.Controllers
             if (item == null)
                 return result;
 
-            return View("IssueC0401", item);
+            return View("~/Views/Notification/IssueC0401.cshtml", item);
+        }
+
+        public ActionResult IssueWinningInvoice(DocumentQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)IssueA0401(viewModel);
+            InvoiceItem item = result.Model as InvoiceItem;
+
+            if (item == null)
+                return result;
+
+            return View("~/Views/Notification/IssueWinningInvoice.cshtml", item);
         }
 
         public ActionResult IssueC0501(DocumentQueryViewModel viewModel)
@@ -173,7 +184,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
 
             return View(item);
@@ -193,7 +204,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlert.cshtml", model: "資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
 
             return View(item);
@@ -222,6 +233,46 @@ namespace eIVOGo.Controllers
             }
 
             return Content("Data not found!!");
+        }
+
+        public ActionResult SendDailyReport(InquireInvoiceViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            Organization item = models.GetTable<Organization>().Where(c => c.CompanyID == viewModel.SellerID)
+                .FirstOrDefault();
+
+            if (item == null)
+            {
+                viewModel.ReceiptNo = viewModel.ReceiptNo.GetEfficientString();
+                item = models.GetTable<Organization>().Where(c => c.ReceiptNo == viewModel.ReceiptNo)
+                        .FirstOrDefault();
+            }
+
+            if (item == null)
+            {
+                ModelState.AddModelError("SellerID", "未指定營業人!!");
+            }
+
+            viewModel.SellerID = item.CompanyID;
+
+            if (!ModelState.IsValid)
+            {
+                return Json(new { result = false, message = ModelState.ErrorMessage() }, JsonRequestBehavior.AllowGet);
+            }
+
+            if(!viewModel.DateFrom.HasValue)
+            {
+                viewModel.DateFrom = DateTime.Today.AddDays(-1);
+            }
+
+            if (!viewModel.DateTo.HasValue)
+            {
+                viewModel.DateTo = viewModel.DateFrom;
+            }
+
+            return View("~/Views/Notification/SendDailyReport.cshtml", item);
+
         }
 
 

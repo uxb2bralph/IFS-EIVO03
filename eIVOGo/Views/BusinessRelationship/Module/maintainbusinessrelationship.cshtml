@@ -1,68 +1,118 @@
-
 @using System.IO
 @using System.Linq.Expressions
 
-
-@using eIVOGo.Helper
-@using Model.Locale
-@using eIVOGo.Models.ViewModel
-@using Model.Models.ViewModel
-@using Model.DataEntity
 @using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@{
 
-@{ Register Src="~/Module/UI/PageAction.ascx" TagName="PageAction" TagPrefix="uc1" }
-@{ Register Src="~/Module/UI/FunctionTitleBar.ascx" TagName="FunctionTitleBar" TagPrefix="uc2" }
-@{ @ Register Src="~/Module/Common/CalendarInputDatePicker.ascx" TagName="CalendarInputDatePicker"
-    TagPrefix="uc3"}
+    ModelSource<InvoiceItem> models;
+    Model.Security.MembershipManagement.UserProfileMember _profile;
+    BusinessRelationshipQueryViewModel _viewModel;
 
-@{ Register Src="~/Module/jQuery/EnumSelector.ascx" TagName="EnumSelector" TagPrefix="uc6" }
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "相對營業人資料維護");}
 
-<table class="top_table" border="0" cellspacing="0" cellpadding="0" width="100%">
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _profile = Business.Helper.WebPageUtility.UserProfile;
+    _viewModel = (BusinessRelationshipQueryViewModel)ViewBag.ViewModel;
+
+    _viewModel.UrlAction = Url.Action("InquireBusinessRelationship");
+    _viewModel.DeleteAction = Url.Action("DeleteItem");
+    _viewModel.LoadAction = Url.Action("ProcessDataItem");
+    _viewModel.CommitAction = Url.Action("CommitItem");
+    _viewModel.DownloadAction = Url.Action("CreateXlsx");
+    _viewModel.EditAction = "default";
+    _viewModel.EmptyKeyID = (new { MasterID = -1, RelativeID = -1, BusinessID = -1 }).JsonStringify().EncryptData();
+
+}
+
+@*<table class="top_table" border="0" cellspacing="0" cellpadding="0" width="100%">
     <tbody>
         <tr>
             <td>
                 @if (_profile.IsSystemAdmin())
-                    {
-                <div class="btn-group dropdown" data-toggle="dropdown">
-                    <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">匯入相對營業人</button>
-                    <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
-                    <ul class="dropdown-menu" style="min-width:auto;">
-                        <li><button type="button" class="btn" onclick="window.location.href='@(Url.Action("ImportCounterpartBusiness", "BusinessRelationship"))';">匯入分店相對營業人</button></li>
-                        <li><button class="btn" onclick="window.location.href='@(Url.Action("ImportCounterpartBusinessXml", "BusinessRelationship"))';">匯入商務關係相對營業人</button></li>
-                    </ul>
-                </div>
+                {
+                    <div class="btn-group dropdown" data-toggle="dropdown">
+                        <button class="btn bg-color-blueLight" data-toggle="dropdown" aria-expanded="false">匯入相對營業人</button>
+                        <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
+                        <ul class="dropdown-menu" style="min-width:auto;">
+                            <li><button type="button" class="btn" onclick="window.location.href='@(Url.Action("ImportCounterpartBusiness", "BusinessRelationship"))';">匯入分店相對營業人</button></li>
+                            <li><button type="button" class="btn" onclick="window.location.href='@(Url.Action("ImportCounterpartBusinessXml", "BusinessRelationship"))';">匯入商務關係相對營業人</button></li>
+                        </ul>
+                    </div>
                 }
-                    else
-                    {
-                <button type="button" class="btn" onclick="window.location.href='@(Url.Action("ImportCounterpartBusiness", "BusinessRelationship"))';">匯入分店相對營業人</button>
+                else
+                {
+                    <button type="button" class="btn" onclick="window.location.href='@(Url.Action("ImportCounterpartBusinessXml", "BusinessRelationship"))';">匯入相對營業人</button>
                 }
             </td>
         </tr>
     </tbody>
-</table>
-<div class="border_gray">
+</table>*@
+<div class="border_gray" id="queryArea">
+    <!--表格 開始-->
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="left_title">
+        <tr>
+            <th colspan="2" class="Head_style_a">
+                資料維護
+            </th>
+        </tr>
+        <tr>
+            <th>
+                匯入相對營業人
+            </th>
+            <td class="tdleft">
+                <input type="button" name="btnDataSample" value="下載範本" onclick="$inquiryAgent.downloadQuery({'KeyID':'@((new {MasterID = -1}).JsonStringify().EncryptData())'});" />&nbsp;&nbsp;
+                @{
+                    Html.RenderPartial("~/Views/Shared/Module/FileUpload.cshtml",
+                        new AttachmentViewModel
+                        {
+                            FileName = "ExcelFile",
+                            ButtonField = "立即傳送",
+                            GetFormData = "getFormData()",
+                            UrlAction = Url.Action("UploadCounterpartBusiness", "BusinessRelationship"),
+                        });
+                }
+                <script>
+                    function getFormData() {
+                        var $placement = $('#queryArea');
+                        var $formData = $placement.find('input,select,textarea').serializeObject();
+                        return $formData;
+                    }
+                </script>
+            </td>
+        </tr>
+    </table>
+    <!--表格 結束-->
     <!--表格 開始-->
     <table class="left_title" border="0" cellspacing="0" cellpadding="0" width="100%">
         <tbody>
             <tr>
-                <th class="Head_style_a" colspan="2">查詢條件
+                <th class="Head_style_a" colspan="2">
+                    查詢條件
                 </th>
             </tr>
             @if (_profile.IsSystemAdmin())
-                {
-            <tr>
-                <th>集團成員
-                </th>
-                <td class="tdleft">
-                    @{ ViewBag.SelectAll = true;
-                        Html.RenderPartial("~/Views/BusinessRelationship/Module/GroupMemberSelector.ascx");}
+            {
+                <tr>
+                    <th>
+                        集團成員
+                    </th>
+                    <td class="tdleft">
+                        @{ ViewBag.SelectAll = true;
+                            Html.RenderPartial("~/Views/BusinessRelationship/Module/GroupMemberSelector.cshtml");}
 
-                </td>
-            </tr>
+                    </td>
+                </tr>
             }
             <tr>
-                <th width="120">營業人統編
+                <th width="120">
+                    營業人統編
                 </th>
                 <td class="tdleft">
                     <input name="ReceiptNo" type="text" />
@@ -78,68 +128,78 @@
                     &nbsp;
                 </td>
             </tr>
+            @*<tr>
+                    <th width="120">
+                        <span class="tdleft">店號</span>
+                    </th>
+                    <td class="tdleft">
+                        <input name="branchNo" type="text" />
+                        &nbsp;
+                    </td>
+                </tr>*@
+            @*<tr>
+                    <th width="120">
+                        營業人狀態
+                    </th>
+                    <td class="tdleft">
+                        <select name="CompanyStatus">
+                            <option value="">全部</option>
+                            <option value="1103">已啟用</option>
+                            <option value="1101">已停用</option>
+                        </select>
+                    </td>
+                </tr>*@
             <tr>
                 <th width="120">
-                    <span class="tdleft">店號</span>
+                    營業人類別
                 </th>
                 <td class="tdleft">
-                    <input name="branchNo" type="text" />
-                    &nbsp;
+                    @{
+                        ViewBag.FieldName = "BusinessType";
+                        ViewBag.SelectorIndication = "全部";
+                        ViewBag.SelectorIndicationValue = "";
+                        Html.RenderPartial("~/Views/Common/Module/EnumSelector.cshtml", typeof(Naming.InvoiceCenterBusinessType));
+                    }
                 </td>
             </tr>
+            @*<tr>
+                    <th width="120">
+                        自動接收
+                    </th>
+                    <td class="tdleft">
+                        <select name="Entrusting">
+                            <option value="">全部</option>
+                            <option value="True">已啟用</option>
+                            <option value="False">已停用</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="120">
+                        主動列印
+                    </th>
+                    <td class="tdleft">
+                        <select name="EntrustToPrint">
+                            <option value="">全部</option>
+                            <option value="True">已啟用</option>
+                            <option value="False">已停用</option>
+                        </select>
+                    </td>
+                </tr>*@
+        </tbody>
+    </table>
+    <!--表格 結束-->
+    <table border="0" cellspacing="0" cellpadding="0" width="100%" class="queryAction">
+        <tbody>
             <tr>
-                <th width="120">營業人狀態
-                </th>
-                <td class="tdleft">
-                    <select name="CompanyStatus">
-                        <option value="">全部</option>
-                        <option value="1103">已啟用</option>
-                        <option value="1101">已停用</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <th width="120">營業人類別
-                </th>
-                <td class="tdleft">
-                    <uc6:EnumSelector ID="BusinessType" FieldName="BusinessType" runat="server" SelectorIndication="全部" TypeName="Model.Locale.Naming+InvoiceCenterBusinessQueryType, Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-                </td>
-            </tr>
-            <tr>
-                <th width="120">自動接收
-                </th>
-                <td class="tdleft">
-                    <select name="Entrusting">
-                        <option value="">全部</option>
-                        <option value="True">已啟用</option>
-                        <option value="False">已停用</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <th width="120">主動列印
-                </th>
-                <td class="tdleft">
-                    <select name="">
-                        <option value="EntrustToPrint">全部</option>
-                        <option value="True">已啟用</option>
-                        <option value="False">已停用</option>
-                    </select>
+                <td class="Bargain_btn">
+                    <button type="button" onclick="$inquiryAgent.initQuery = true; $inquiryAgent.inquire();">查詢</button>
                 </td>
             </tr>
         </tbody>
     </table>
-    <!--表格 結束-->
 </div>
-<table border="0" cellspacing="0" cellpadding="0" width="100%" class="queryAction">
-    <tbody>
-        <tr>
-            <td class="Bargain_btn">
-                <button type="button" onclick="uiInquireBusiness.inquireBusiness();">查詢</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+
 <script>
     var uiInquireBusiness;
     $(function () {
@@ -298,17 +358,4 @@
         };
     });
 </script>
-<script runat="server">
 
-    ModelSource<InvoiceItem> models;
-    Model.Security.MembershipManagement.UserProfileMember _profile;
-    BusinessRelationshipQueryViewModel _viewModel;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _profile = Business.Helper.WebPageUtility.UserProfile;
-        _viewModel = (BusinessRelationshipQueryViewModel)ViewBag.ViewModel;
-    }
-</script>

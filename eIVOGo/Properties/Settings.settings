@@ -8,9 +8,6 @@
     <Setting Name="GovPlatformAutoTransferInterval" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">300000</Value>
     </Setting>
-    <Setting Name="GovPlatformNotificationUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">~/Published/GovPlatformNotificationPage.aspx</Value>
-    </Setting>
     <Setting Name="ExceptionNotificationUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">~/Notification/DataUploadExceptionList</Value>
     </Setting>
@@ -19,9 +16,6 @@
     </Setting>
     <Setting Name="DefaultUserCarrierType" Type="System.String" Scope="Application">
       <Value Profile="(Default)">3J0001</Value>
-    </Setting>
-    <Setting Name="ClientResponseTimeoutAlertInterval" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">14400000</Value>
     </Setting>
     <Setting Name="PurchaseOrderPrefix" Type="System.String" Scope="Application">
       <Value Profile="(Default)">10</Value>
@@ -97,6 +91,9 @@
     </Setting>
     <Setting Name="EIVO_Service" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="DefaultUILanguage" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">zh-TW</Value>
     </Setting>
   </Settings>
 </SettingsFile>

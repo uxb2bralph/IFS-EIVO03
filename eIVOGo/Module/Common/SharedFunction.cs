@@ -37,97 +37,12 @@ namespace eIVOGo.Module.Common
         }
 
         /// <summary>
-        /// 外部呼叫執行Mail通知
-        /// </summary>
-        /// <param name="mailState"></param>
-        public static void doSendMaild(_MailQueryState mailState)
-        {
-            ThreadPool.QueueUserWorkItem(mailWorkItem, mailState);
-        }
-
-        /// <summary>
         /// 外部呼叫執行簡訊通知
         /// </summary>
         /// <param name="mailState"></param>
         public static void doSendSMSMessage(_MailQueryState mailState)
         {
             ThreadPool.QueueUserWorkItem(doSendSMSMessage, mailState);
-        }
-
-        /// <summary>
-        /// Mail內容的建立
-        /// </summary>
-        /// <param name="stateInfo"></param>
-        private static void mailWorkItem(object stateInfo)
-        {
-            _MailQueryState state = (_MailQueryState)stateInfo;
-            if (string.IsNullOrEmpty(state.allInvoiceID))
-            {
-                int year = state.setYear;
-                int period = state.setPeriod;
-                try
-                {
-                    using (InvoiceManager models = new InvoiceManager())
-                    {
-                        var items = models.GetTable<InvoiceItem>()
-                            .Where(i => i.InvoiceCancellation == null)
-                            .Where(i => i.InvoiceDonation == null)
-                            .Where(i => i.PrintMark == "N")
-                            .Join(models.GetTable<Organization>()
-                                .Join(models.GetTable<OrganizationStatus>().Where(s => !s.DisableWinningNotice.HasValue || s.DisableWinningNotice == false),
-                                    o => o.CompanyID, s => s.CompanyID, (o, s) => o),
-                                i => i.SellerID, o => o.CompanyID, (i, o) => i)
-                            .Join(models.GetTable<InvoiceWinningNumber>()
-                                .Join(models.GetTable<UniformInvoiceWinningNumber>()
-                                    .Where(u => u.Year == year && u.Period == period),
-                                    w => w.WinningID, u => u.WinningID, (w, u) => w),
-                                i => i.InvoiceID, w => w.InvoiceID, (i, w) => i);
-
-                        foreach (var d in items)
-                        {
-                            //if (mgr.GetTable<OrganizationCategory>().Where(og => og.CategoryID == (int)Naming.CategoryID.COMP_VIRTUAL_CHANNEL && og.CompanyID == d.InvoiceItem.SellerID).Count() > 0)
-                            //{
-                            var email = d.InvoiceBuyer.EMail.GetEfficientString();
-                            if (email == null)
-                                continue;
-                            string url = String.Format("{0}{1}?{2}", Settings.Default.WebApDomain, VirtualPathUtility.ToAbsolute("~/Published/WinningInvoiceMailPageForVIRTUAL.aspx"), (new CipherDecipherSrv(16)).cipher(d.InvoiceID.ToString()));
-                            sendInvoiceNotifyMail(email, url, "中獎電子發票郵件通知");
-                            //}
-                            //else
-                            //{
-                            //    string url = String.Format("{0}{1}?{2}", Settings.Default.WebApDomain, VirtualPathUtility.ToAbsolute("~/Published/WinningInvoiceMailPage.aspx"), (new CipherDecipherSrv(16)).cipher(d.InvoiceID.ToString()));
-                            //    sendInvoiceNotifyMail(d.InvoiceItem.InvoiceBuyer.EMail, url, "Google中獎電子發票郵件通知");
-                            //    //sendInvoiceNotifyMail("howard@uxb2b.com", url, "Google中獎電子發票郵件通知");
-                            //}
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex);
-                }
-            }
-            else
-            {
-                string[] allID = state.allInvoiceID.Split(',');
-                try
-                {
-                    using (InvoiceManager im = new InvoiceManager())
-                    {
-                        foreach (var d in allID)
-                        {
-                            string mailTo = im.EntityList.Where(i => i.InvoiceID == int.Parse(d)).FirstOrDefault().InvoiceBuyer.EMail;
-                            string url = String.Format("{0}{1}?{2}", Settings.Default.WebApDomain, VirtualPathUtility.ToAbsolute("~/Published/InvoiceCancelMailPage.aspx"), (new CipherDecipherSrv(16)).cipher(d.Trim()));
-                            sendInvoiceNotifyMail(mailTo, url, "Google作廢電子發票郵件通知");
-                            //sendInvoiceNotifyMail("howard@uxb2b.com", url, "Google作廢電子發票郵件通知");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex);
-                }
-            }
         }
 
         private static void doSendSMSMessage(object stateInfo)

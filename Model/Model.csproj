@@ -41,8 +41,8 @@
     <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.12.1.2\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="QREncrypter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -64,12 +64,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddOn%28201311%29\Helper\B2CExtensionMethods.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\enUS\AllowanceRootValidator.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\enUS\CancelAllowanceRootValidator.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\enUS\CancelInvoiceRootValidator.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\enUS\Check_CarrierType_PrintMark_DonateMark.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\GoogleInvoiceManager.cs" />
+    <Compile Include="Helper\AppResource.cs" />
+    <Compile Include="Helper\B2CExtensionMethods.cs" />
+    <Compile Include="Helper\ExtensionMethods.cs" />
+    <Compile Include="Helper\AuthExtensions.cs" />
+    <Compile Include="InvoiceManagement\FullAllowanceDataSetManager.cs" />
+    <Compile Include="InvoiceManagement\AttachmentManager.cs" />
+    <Compile Include="InvoiceManagement\enUS\AllowanceRootValidator.cs" />
+    <Compile Include="InvoiceManagement\enUS\CancelAllowanceRootValidator.cs" />
+    <Compile Include="InvoiceManagement\enUS\CancelInvoiceRootValidator.cs" />
+    <Compile Include="InvoiceManagement\enUS\Check_CarrierType_PrintMark_DonateMark.cs" />
+    <Compile Include="InvoiceManagement\GoogleInvoiceManager.cs" />
     <Compile Include="Helper\InvoiceItemEncryption.cs" />
     <Compile Include="Helper\StorePathExtensions.cs" />
     <Compile Include="InvoiceManagement\GooglePlayInvoiceManager.cs" />
@@ -80,6 +85,7 @@
     <Compile Include="InvoiceManagement\AllowanceDataSetManager.cs" />
     <Compile Include="InvoiceManagement\InvoiceManagerForCBE.cs" />
     <Compile Include="InvoiceManagement\InvoiceManagerV2.cs" />
+    <Compile Include="InvoiceManagement\Validator\FullAllowanceDataSetValidator.cs" />
     <Compile Include="InvoiceManagement\Validator\AllowanceDataSetValidator.cs" />
     <Compile Include="InvoiceManagement\Validator\InvoiceRootInvoiceValidatorForCBE.cs" />
     <Compile Include="InvoiceManagement\VoidInvoiceDataSetManager.cs" />
@@ -96,15 +102,14 @@
     <Compile Include="InvoiceManagement\Validator\InvoiceRootFormatValidator.cs" />
     <Compile Include="InvoiceManagement\Validator\InvoiceDataSetValidator.cs" />
     <Compile Include="InvoiceManagement\Validator\InvoiceRootInvoiceValidator.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\zhTW\AllowanceRootValidator.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\zhTW\CancelAllowanceRootValidator.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\zhTW\CancelInvoiceRootValidator.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\EIVOPlatformFactory.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\enUS\InvoiceRootValidator.cs" />
+    <Compile Include="InvoiceManagement\zhTW\AllowanceRootValidator.cs" />
+    <Compile Include="InvoiceManagement\zhTW\CancelAllowanceRootValidator.cs" />
+    <Compile Include="InvoiceManagement\zhTW\CancelInvoiceRootValidator.cs" />
+    <Compile Include="InvoiceManagement\enUS\InvoiceRootValidator.cs" />
     <Compile Include="InvoiceManagement\Validator\C0501Validator.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\zhTW\Check_CarrierType_PrintMark_DonateMark.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\zhTW\InvoiceRootValidator.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\zhTW\InvoiceRootValidator_C0401.cs" />
+    <Compile Include="InvoiceManagement\zhTW\Check_CarrierType_PrintMark_DonateMark.cs" />
+    <Compile Include="InvoiceManagement\zhTW\InvoiceRootValidator.cs" />
+    <Compile Include="InvoiceManagement\zhTW\InvoiceRootValidator_C0401.cs" />
     <Compile Include="BaseManagement\IManager.cs" />
     <Compile Include="DataEntity\EIVOEntity.cs">
       <DependentUpon>EIVOEntity.dbml</DependentUpon>
@@ -127,7 +132,7 @@
     <Compile Include="Helper\InvoiceNotification.cs" />
     <Compile Include="InvoiceManagement\B2BInvoiceManager.cs" />
     <Compile Include="InvoiceManagement\B2CInvoiceManager.cs" />
-    <Compile Include="AddOn%28201311%29\InvoiceManagement\CsvInvoiceUploadManagerV2.cs" />
+    <Compile Include="InvoiceManagement\CsvInvoiceUploadManagerV2.cs" />
     <Compile Include="InvoiceManagement\CsvAllowanceUploadManager.cs" />
     <Compile Include="InvoiceManagement\CsvAllowanceCancellationUploadManager.cs" />
     <Compile Include="InvoiceManagement\ErrorHandle\MarkToRetryException.cs" />
@@ -165,9 +170,12 @@
     <Compile Include="Models\ViewModel\InvoiceViewModel.cs" />
     <Compile Include="Models\ViewModel\InvoiceViewModelValidator.cs" />
     <Compile Include="Models\ViewModel\OrganizationViewModel.cs" />
+    <Compile Include="Models\ViewModel\AuthTokenViewModel.cs" />
     <Compile Include="Models\ViewModel\POSDeviceViewModel.cs" />
+    <Compile Include="Models\ViewModel\QueryExtensions.cs" />
     <Compile Include="Models\ViewModel\ValidatorExtensions.cs" />
     <Compile Include="ProcessorUnitHelper\ExtensionMethods.cs" />
+    <Compile Include="Properties\AppSettings.cs" />
     <Compile Include="Resource\MessageResources.en-US.Designer.cs">
       <DependentUpon>MessageResources.en-US.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -294,9 +302,11 @@
     <Compile Include="Schema\TurnKey\B0501.cs">
       <DependentUpon>B0501.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Schema\TurnKey\C0501\C0501Extensions.cs" />
     <Compile Include="Schema\TurnKey\C0401.cs">
       <DependentUpon>C0401.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Schema\TurnKey\C0401\C0401Extensions.cs" />
     <Compile Include="Schema\TurnKey\C0501.cs">
       <DependentUpon>C0501.xsd</DependentUpon>
     </Compile>
@@ -306,9 +316,11 @@
     <Compile Include="Schema\TurnKey\C0701.cs">
       <DependentUpon>C0701.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Schema\TurnKey\D0501\D0501Extensions.cs" />
     <Compile Include="Schema\TurnKey\D0401.cs">
       <DependentUpon>D0401.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Schema\TurnKey\D0401\D0401Extensions.cs" />
     <Compile Include="Schema\TurnKey\D0501.cs">
       <DependentUpon>D0501.xsd</DependentUpon>
     </Compile>
@@ -334,15 +346,9 @@
     </Compile>
     <Compile Include="DataEntity\ExtensionMethods.cs" />
     <Compile Include="Helper\ExceptionNotification.cs" />
-    <Compile Include="Helper\ExtensionMethods.cs" />
+    <Compile Include="Helper\InvoiceExtensions.cs" />
     <Compile Include="Helper\PKCS7Log.cs" />
     <Compile Include="InvoiceManagement\GoogleInvoiceUploadManager.cs" />
-    <Compile Include="InvoiceManagement\GovPlatformFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InvoiceManagement\GovPlatformManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="InvoiceManagement\InvoiceManager.cs" />
     <Compile Include="Locale\Naming.cs" />
     <Compile Include="ModelTemplate\EIVOEntityManager.cs" />
@@ -389,6 +395,7 @@
     <Compile Include="SCM\WarehouseManager.cs" />
     <Compile Include="SCM\WarehouseWarrantManager.cs" />
     <Compile Include="SCM\ReturnedGoodsManager.cs" />
+    <Compile Include="Security\AuthorityExtensions.cs" />
     <Compile Include="Security\MembershipManagement\ToDoManager.cs" />
     <Compile Include="Security\MembershipManagement\UserManager.cs" />
     <Compile Include="Security\MembershipManagement\UserProfile.cs" />
@@ -662,6 +669,10 @@
     <Content Include="bin\Debug\QREncrypter.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AddOn%28201311%29\Helper\" />
+    <Folder Include="AddOn%28201311%29\InvoiceManagement\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

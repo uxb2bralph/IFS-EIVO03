@@ -28,19 +28,20 @@ namespace InvoiceClient.Agent
             return result;
         }
 
-        protected override void processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
+        protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
             {
                 IEnumerable<String> message = rootInvoiceNo.Select(i => String.Format("收據號碼:{0}=>{1}", i.Value, i.Description));
                 Logger.Warn(String.Format("在上傳收據檔({0})時,傳送失敗!!原因如下:\r\n{1}", fileName, String.Join("\r\n", message.ToArray())));
 
-                ReceiptRoot invoice = docInv.ConvertTo<ReceiptRoot>();
+                ReceiptRoot invoice = docInv.TrimAll().ConvertTo<ReceiptRoot>();
                 ReceiptRoot stored = new ReceiptRoot();
                 stored.Receipt = rootInvoiceNo.Where(i => i.ItemIndexSpecified).Select(i => invoice.Receipt[i.ItemIndex]).ToArray();
 
-                stored.ConvertToXml().Save(Path.Combine(_failedTxnPath, String.Format("{0}-{1:yyyyMMddHHmmssfff}.xml", Path.GetFileName(fileName), DateTime.Now)));
+                stored.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(_failedTxnPath, String.Format("{0}-{1:yyyyMMddHHmmssfff}.xml", Path.GetFileNameWithoutExtension(fileName), DateTime.Now)));
             }
+            return true;
         }
 
 

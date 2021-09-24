@@ -1,0 +1,74 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    QueryViewModel _viewModel = (QueryViewModel)ViewBag.ViewModel;
+    IQueryable<BusinessRelationship> _model = (IQueryable<BusinessRelationship>)this.Model;
+
+}
+@{
+    String currentID = $"table{DateTime.Now.Ticks}";
+    ViewBag.TableColumns = new string[]
+    {
+                "~/Views/BusinessRelationship/DataField/Master.cshtml",
+                "~/Views/BusinessRelationship/DataField/CompanyName.cshtml",
+                "~/Views/BusinessRelationship/DataField/ReceiptNo.cshtml",
+                "~/Views/BusinessRelationship/DataField/BusinessType.cshtml",
+                "~/Views/BusinessRelationship/DataField/ContactEmail.cshtml",
+                "~/Views/BusinessRelationship/DataField/Addr.cshtml",
+                "~/Views/BusinessRelationship/DataField/Phone.cshtml",
+                "~/Views/BusinessRelationship/DataField/CustomerNo.cshtml",
+                "~/Views/BusinessRelationship/DataField/ProcessAction.cshtml",
+            };
+
+    ViewBag.ColumnPriority = new Dictionary<int, int>
+    {
+        { 2,2 },
+        { 3,2 },
+        { 6,2 },
+        { 7,2 },
+        { 8,2 },
+    };
+}
+@{
+    //ViewBag.CreateNew = new BusinessRelationship
+    //{
+
+    //};
+
+    if (_viewModel.DisplayType.HasValue)
+    {
+        var item = _model.FirstOrDefault();
+        if (item == null)
+        {
+            ViewBag.IsNew = true;
+            item = ViewBag.CreateNew as BusinessRelationship;
+        }
+        Html.RenderPartial("~/Views/Common/Module/TableRow.cshtml", item);
+    }
+    else
+    {
+        if (_viewModel.InitQuery!=true && _viewModel.PageIndex.HasValue)
+        {
+            Html.RenderPartial("~/Views/Common/Module/TableBody.cshtml", _model);
+        }
+        else
+        {
+            Html.RenderPartial("~/Views/Common/Module/TableSkeleton.cshtml", _model);
+        }
+    }
+}

@@ -45,6 +45,7 @@ namespace Model.InvoiceManagement.Validator
             public int Tax_Amount { get; set; } = 7;
             public int Total_Amount { get; set; } = 8;
             public int Currency { get; set; } = 9;
+            public int DataNo { get; set; } = 10;
         }
 
         internal DetailsFieldIndex DetailsField = new DetailsFieldIndex { };
@@ -107,52 +108,32 @@ namespace Model.InvoiceManagement.Validator
                 return new Exception(String.Format(MessageResources.AlertSellerSignature, _allowanceItem.GetString(AllowanceField.Seller_ID)));
             }
 
-            //if (_allowanceItem.SellerName == null || _allowanceItem.SellerName.Length > 60)
-            //{
-            //    return new Exception(String.Format(MessageResources.AlertSellerNameLength, _allowanceItem.SellerName));
-            //}
-
-            //if (_allowanceItem.GetString(AllowanceField.Buyer_ID) == "0000000000")
-            //{
-            //    //if (_allowanceItem.GetString(AllowanceField.Buyer_Name) == null || Encoding.GetEncoding(950).GetBytes(_allowanceItem.GetString(AllowanceField.Buyer_Name)).Length != 4)
-            //    //{
-            //    //    return new Exception(String.Format(MessageResources.InvalidBuyerName, _allowanceItem.GetString(AllowanceField.Buyer_Name)));
-            //    //}
-            //}
-            //else if (_allowanceItem.GetString(AllowanceField.Buyer_ID) == null || !Regex.IsMatch(_allowanceItem.GetString(AllowanceField.Buyer_ID), "^[0-9]{8}$"))
-            //{
-            //    return new Exception(String.Format(MessageResources.InvalidBuyerId, _allowanceItem.GetString(AllowanceField.Buyer_ID)));
-            //}
-            //else if (_allowanceItem.GetString(AllowanceField.Buyer_Name) != null && _allowanceItem.GetString(AllowanceField.Buyer_Name).Length > 60)
-            //{
-            //    return new Exception(String.Format(MessageResources.AlertBuyerNameLength, _allowanceItem.GetString(AllowanceField.Buyer_Name)));
-            //}
-
             return null;
         }
 
-        DateTime? allowanceDate;
+        protected DateTime? allowanceDate;
+        protected String _allowanceNo;
         protected override Exception CheckMandatoryFields()
         {
-            _allowanceDate = DateTime.Today;
 
-            if (String.IsNullOrEmpty(_allowanceItem.GetString(AllowanceField.Allowance_No)))
+            _allowanceNo = _allowanceItem.GetString(AllowanceField.Allowance_No).GetEfficientString();
+            if (_allowanceNo == null)
             {
                 return new Exception(MessageResources.InvalidAllowanceNo);
             }
 
             //折讓證明單號碼
-            if (_allowanceItem.GetString(AllowanceField.Allowance_No).Length > 16)
+            if (_allowanceNo.Length > 64)
             {
-                return new Exception(String.Format(MessageResources.AlertAllowanceNoLength, _allowanceItem.GetString(AllowanceField.Allowance_No)));
+                return new Exception(String.Format(MessageResources.AlertAllowanceNoLength, _allowanceNo));
             }
 
-            var currentItem = models.GetTable<InvoiceAllowance>().Where(a => a.AllowanceNumber == _allowanceItem.GetString(AllowanceField.Allowance_No))
+            var currentItem = models.GetTable<InvoiceAllowance>().Where(a => a.AllowanceNumber == _allowanceNo)
                         .Join(models.GetTable<InvoiceAllowanceSeller>().Where(s => s.SellerID == _seller.CompanyID),
                             a => a.AllowanceID, s => s.AllowanceID, (a, s) => a).FirstOrDefault();
             if (currentItem != null)
             {
-                return new DuplicateAllowanceNumberException(String.Format(MessageResources.AlertAllowanceDuplicated, _allowanceItem.GetString(AllowanceField.Allowance_No))) { CurrentAllowance = currentItem };
+                return new DuplicateAllowanceNumberException(String.Format(MessageResources.AlertAllowanceDuplicated, _allowanceNo)) { CurrentAllowance = currentItem };
             }
 
             allowanceDate = _allowanceItem.GetData<DateTime>(AllowanceField.Allowance_Date);
@@ -161,6 +142,7 @@ namespace Model.InvoiceManagement.Validator
             {
                 return new Exception(MessageResources.InvalidAllowanceDate);
             }
+            _allowanceDate = allowanceDate.Value;
 
             _currency = null;
             if (!String.IsNullOrEmpty(_allowanceItem.GetString(AllowanceField.Currency)))
@@ -175,9 +157,10 @@ namespace Model.InvoiceManagement.Validator
             return null;
         }
 
-        InvoiceAllowanceBuyer _allowanceBuyer = null;
         protected override Exception CheckAllowanceItem()
         {
+            InvoiceAllowanceBuyer allowanceBuyer = null;
+
             if (_details == null || _details.Count() == 0)
             {
                 return new Exception("Allowance details not found.");
@@ -191,18 +174,27 @@ namespace Model.InvoiceManagement.Validator
             byte allowanceType = (byte)Naming.AllowanceTypeDefinition.賣方開立;
 
             _productItems = new List<InvoiceAllowanceItem>();
-            var invTable = models.GetTable<InvoiceItem>();
+            var invTable = models.GetTable<InvoiceItem>().Where(i => i.SellerID == _seller.CompanyID);
 
+            InvoiceItem originalInvoice = null;
             foreach (var i in _details)
             {
-                InvoiceItem originalInvoice = null;
+                originalInvoice = null;
 
-                if (i.GetString(DetailsField.Original_Invoice_No) != null && i.GetString(DetailsField.Original_Invoice_No).Length == 10)
+                String invoiceNo = i.GetString(DetailsField.Original_Invoice_No).GetEfficientString();
+                if (invoiceNo != null && invoiceNo.Length == 10)
                 {
                     String invNo, trackCode;
                     trackCode = i.GetString(DetailsField.Original_Invoice_No).Substring(0, 2);
                     invNo = i.GetString(DetailsField.Original_Invoice_No).Substring(2);
                     originalInvoice = invTable.Where(n => n.TrackCode == trackCode && n.No == invNo).FirstOrDefault();
+                }
+
+                if (originalInvoice == null)
+                {
+                    originalInvoice = invTable.Join(models.GetTable<InvoicePurchaseOrder>().Where(p => p.OrderNo == invoiceNo),
+                            v=> v.InvoiceID, p => p.InvoiceID, (v, p) => v)
+                        .FirstOrDefault();
                 }
 
                 if (originalInvoice == null)
@@ -254,6 +246,11 @@ namespace Model.InvoiceManagement.Validator
                     return new Exception(String.Format(MessageResources.AlertAllowance_TaxType, taxType));
                 }
 
+                if (_allowanceDate.AddDays(1) < originalInvoice.InvoiceDate)
+                {
+                    _allowanceDate = originalInvoice.InvoiceDate.Value.AddDays(1);
+                }
+
                 var allowanceItem = new InvoiceAllowanceItem
                 {
                     Amount = i.GetData<decimal>(DetailsField.Amount),
@@ -268,24 +265,21 @@ namespace Model.InvoiceManagement.Validator
                     Tax = i.GetData<decimal>(DetailsField.Tax),
                 };
 
-                if (originalInvoice != null)
+                var invProductItem = models.GetTable<InvoiceItem>().Where(v => v.InvoiceID == originalInvoice.InvoiceID)
+                    .Join(models.GetTable<InvoiceDetail>(), v => v.InvoiceID, d => d.InvoiceID, (v, d) => d)
+                    .Join(models.GetTable<InvoiceProduct>(), d => d.ProductID, p => p.ProductID, (d, p) => p)
+                    .Join(models.GetTable<InvoiceProductItem>(), p => p.ProductID, t => t.ProductID, (p, t) => t)
+                    .Where(t => t.No == originalSeqNo).FirstOrDefault();
+                //var invProductItem = originalInvoice.InvoiceDetails.Join(_mgr.GetTable<InvoiceProductItem>(), d => d.ProductID, p => p.ProductID, (d, p) => p)
+                //    .Where(p => p.No == i.OriginalSequenceNumber).FirstOrDefault();
+                if (invProductItem != null)
                 {
-                    var invProductItem = models.GetTable<InvoiceItem>().Where(v => v.InvoiceID == originalInvoice.InvoiceID)
-                        .Join(models.GetTable<InvoiceDetail>(), v => v.InvoiceID, d => d.InvoiceID, (v, d) => d)
-                        .Join(models.GetTable<InvoiceProduct>(), d => d.ProductID, p => p.ProductID, (d, p) => p)
-                        .Join(models.GetTable<InvoiceProductItem>(), p => p.ProductID, t => t.ProductID, (p, t) => t)
-                        .Where(t => t.No == originalSeqNo).FirstOrDefault();
-                    //var invProductItem = originalInvoice.InvoiceDetails.Join(_mgr.GetTable<InvoiceProductItem>(), d => d.ProductID, p => p.ProductID, (d, p) => p)
-                    //    .Where(p => p.No == i.OriginalSequenceNumber).FirstOrDefault();
-                    if (invProductItem != null)
-                    {
-                        allowanceItem.ItemID = invProductItem.ItemID;
-                    }
+                    allowanceItem.ItemID = invProductItem.ItemID;
                 }
 
-                if(_allowanceBuyer==null)
+                if (allowanceBuyer == null)
                 {
-                    _allowanceBuyer = new InvoiceAllowanceBuyer
+                    allowanceBuyer = new InvoiceAllowanceBuyer
                     {
                         Name = originalInvoice.InvoiceBuyer.Name,
                         ReceiptNo = originalInvoice.InvoiceBuyer.ReceiptNo,
@@ -302,18 +296,22 @@ namespace Model.InvoiceManagement.Validator
                 CDS_Document = new CDS_Document
                 {
                     DocDate = DateTime.Now,
-                    DocType = (int)Naming.DocumentTypeDefinition.E_Allowance
+                    DocType = (int)Naming.DocumentTypeDefinition.E_Allowance,
+                    ProcessType = originalInvoice.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.A0401
+                                    ? (int)Naming.InvoiceProcessType.B0401
+                                    : (int)Naming.InvoiceProcessType.D0401,
                 },
                 AllowanceDate = _allowanceDate,
-                AllowanceNumber = _allowanceItem.GetString(AllowanceField.Allowance_No),
+                IssueDate = _allowanceDate,
+                AllowanceNumber = _allowanceNo,
                 AllowanceType = allowanceType,
-                BuyerId = _allowanceBuyer.ReceiptNo,
+                BuyerId = allowanceBuyer.ReceiptNo,
                 SellerId = _seller.ReceiptNo,
-                TaxAmount = _allowanceItem.GetData<decimal>(AllowanceField.Tax_Amount),
-                TotalAmount = _allowanceItem.GetData<decimal>(AllowanceField.Total_Amount),
-                CurrencyID = _currency?.CurrencyID,
+                TaxAmount = _allowanceItem.GetData<decimal>(AllowanceField.Tax_Amount) ?? _productItems.Sum(p => p.Tax),
+                TotalAmount = _allowanceItem.GetData<decimal>(AllowanceField.Total_Amount) ?? _productItems.Sum(p => p.Amount),
+                CurrencyID = _currency?.CurrencyID ?? originalInvoice.InvoiceAmountType.CurrencyID,
                 //InvoiceID =  invTable.Where(i=>i.TrackCode + i.No == item.AllowanceItem.Select(a=>a.GetString(DetailsField.Original_Invoice_No)).FirstOrDefault()).Select(i=>i.InvoiceID).FirstOrDefault(),
-                InvoiceAllowanceBuyer = _allowanceBuyer,
+                InvoiceAllowanceBuyer = allowanceBuyer,
                 InvoiceAllowanceSeller = new InvoiceAllowanceSeller
                 {
                     Name = _seller.CompanyName,

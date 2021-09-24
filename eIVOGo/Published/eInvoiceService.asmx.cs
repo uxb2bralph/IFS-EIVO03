@@ -16,7 +16,7 @@ using Business.Helper;
 using eIVOGo.Helper;
 using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
-using eIVOGo.Module.Common;
+
 using eIVOGo.Properties;
 
 using Model.DataEntity;
@@ -32,6 +32,8 @@ using Utility;
 using Uxnet.Com.Security.UseCrypto;
 using Model.InvoiceManagement.ErrorHandle;
 using Newtonsoft.Json;
+using ModelExtension.Notification;
+using eIVOGo.Module.Common;
 
 namespace eIVOGo.Published
 {
@@ -48,22 +50,6 @@ namespace eIVOGo.Published
 
         static eInvoiceService()
         {
-            EIVOPlatformFactory.SendNotification =
-                (o, e) =>
-                {
-                    try
-                    {
-
-                        (Uxnet.Web.Properties.Settings.Default.HostUrl + VirtualPathUtility.ToAbsolute(Settings.Default.GovPlatformNotificationUrl))
-                            .MailWebPage(Uxnet.Web.Properties.Settings.Default.WebMaster, "eIvo05電子發票服務平台集團加值中心 IFS-EIVO傳送異常通知");
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Error(ex);
-                    }
-                };
-
             //ExceptionNotification.SendExceptionNotification =
             //    (o, e) =>
             //    {
@@ -86,22 +72,42 @@ namespace eIVOGo.Published
             //    };
 
             EIVOPlatformFactory.NotifyIssuedInvoice =
-                (e, b) =>
+                p =>
                 {
                     using (WebClient client = new WebClient())
                     {
                         try
                         {
-                            client.DownloadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/IssueC0401")}?id={e}&appendAttachment={b}");
+                            client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                            client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/IssueC0401")}", p.JsonStringify());
                         }
                         catch (Exception ex)
                         {
-                            Logger.Warn(String.Format("電子發票開立郵件通知傳送失敗,ID:{0}", e));
+                            Logger.Warn(String.Format("電子發票開立郵件通知傳送失敗,ID:{0}", p.DocID));
                             Logger.Error(ex);
                         }
 
                     }
                 };
+
+            EIVOPlatformFactory.NotifyWinningInvoice =
+                p =>
+                {
+                    using (WebClient client = new WebClient())
+                    {
+                        try
+                        {
+                            client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                            client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/IssueWinningInvoice")}", p.JsonStringify());
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Warn(String.Format("電子發票中獎通知傳送失敗,ID:{0}", p.DocID));
+                            Logger.Error(ex);
+                        }
+                    }
+                };
+
 
             EIVOPlatformFactory.NotifyIssuedInvoiceCancellation =
                 e =>
@@ -129,7 +135,8 @@ namespace eIVOGo.Published
                     {
                         using (WebClient client = new WebClient())
                         {
-                            client.DownloadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/IssueA0401")}?id={e}");
+                            client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                            client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/IssueA0401")}", e.JsonStringify());
                         }
                     }
                     catch (Exception ex)
@@ -164,7 +171,7 @@ namespace eIVOGo.Published
                             .First().EnterpriseGroupMember.FirstOrDefault().EnterpriseGroup;
 
                         var mailto = String.Join(",",
-                            mgr.GetUserListByCompanyID(e.Argument.MailToID)
+                            mgr.GetUserListByCompanyID(e.Argument.MailToID, Naming.CategoryID.COMP_ENTERPRISE_GROUP)
                         .Select(u => u.EMail)
                         .Where(m => m != null));
 
@@ -219,7 +226,7 @@ namespace eIVOGo.Published
                                     attachment.Name = String.Format("{0}{1}.pdf", e.Argument.TrackCode, e.Argument.No);
 
                                     var mailTo = String.Join(",",
-                                        mgr.GetUserListByCompanyID(invItem.InvoiceBuyer.BuyerID)
+                                        mgr.GetUserListByCompanyID(invItem.InvoiceBuyer.BuyerID, Naming.CategoryID.COMP_ENTERPRISE_GROUP)
                                     .Select(u => u.EMail)
                                     .Where(m => m != null));
 
@@ -244,34 +251,6 @@ namespace eIVOGo.Published
                                 Logger.Error(ex);
                             }
                         };
-
-            //GovPlatformFactoryForB2C.SendNotification =
-            //    (o, e) =>
-            //    {
-            //        try
-            //        {
-            //            Settings.Default.GovPlatformNotificationUrl
-            //                .MailServerPage(Settings.Default.WebMaster, "網際優勢電子發票獨立第三方平台 大平台傳送異常通知");
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            Logger.Error(ex);
-            //        }
-            //    };
-
-            GovPlatformFactory.SendNotification =
-                (o, e) =>
-                {
-                    try
-                    {
-                        Settings.Default.GovPlatformNotificationUrl
-                            .MailServerPage(Settings.Default.WebMaster, "電子發票系統 大平台傳送異常通知");
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Error(ex);
-                    }
-                };
 
             ExceptionNotification.SendExceptionNotification =
                 (o, e) =>
@@ -412,6 +391,9 @@ namespace eIVOGo.Published
                     }
                 };
 
+            PortalNotification.NotifyToActivate = PortalExtensionMethods.NotifyToActivate;
+            PortalNotification.NotifyToResetPassword = PortalExtensionMethods.NotifyToResetPassword;
+
             AddOn();
 
         }
@@ -423,6 +405,15 @@ namespace eIVOGo.Published
         protected String _clientID;
         protected int _channelID;
         protected Naming.InvoiceDataScope _dataScope = Naming.InvoiceDataScope.ForAll;
+
+        public eInvoiceService() : base()
+        {
+            var cookie = Context.Request?.Cookies?["cLang"];
+            if (cookie?.Value != null && cookie.Value != Settings.Default.DefaultUILanguage)
+            {
+                Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo(cookie.Value);
+            }
+        }
 
         [WebMethod]
         public virtual XmlDocument UploadInvoice(XmlDocument uploadData)
@@ -489,7 +480,7 @@ namespace eIVOGo.Published
                 }
 
                 EIVOPlatformFactory.Notify();
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -557,7 +548,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -719,7 +710,7 @@ namespace eIVOGo.Published
                 //        result.Result.message = "發票資料簽章不符!!";
                 //    }
 
-                //    GovPlatformFactory.Notify();
+                //    
                 //}
                 //catch (Exception ex)
                 //{
@@ -803,7 +794,7 @@ namespace eIVOGo.Published
                 }
 
                 EIVOPlatformFactory.Notify();
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -880,7 +871,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -958,7 +949,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -1042,7 +1033,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -1110,7 +1101,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -1276,7 +1267,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                //GovPlatformFactory.Notify();
+                //
             }
             catch (Exception ex)
             {
@@ -1349,7 +1340,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                //GovPlatformFactory.Notify();
+                //
             }
             catch (Exception ex)
             {
@@ -1432,7 +1423,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                //GovPlatformFactory.Notify();
+                //
             }
             catch (Exception ex)
             {
@@ -1503,7 +1494,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                //GovPlatformFactory.Notify();
+                //
             }
             catch (Exception ex)
             {
@@ -1574,7 +1565,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                //GovPlatformFactory.Notify();
+                //
             }
             catch (Exception ex)
             {
@@ -2101,7 +2092,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -2170,7 +2161,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                GovPlatformFactory.Notify();
+                
             }
             catch (Exception ex)
             {
@@ -2236,6 +2227,12 @@ namespace eIVOGo.Published
                             {
                                 docItems = docItems.Join(mgr.GetTable<DocumentOwner>().Where(o => o.ClientID == clientID), d => d.DocID, o => o.DocID, (d, o) => d);
                             }
+
+                            if (root.Request.channelIDSpecified)
+                            {
+                                docItems = docItems.Where(d => d.ChannelID == root.Request.channelID);
+                            }
+
                             var items = mgr.GetTable<DocumentSubscriptionQueue>()
                                 .Join(docItems, s => s.DocID, d => d.DocID, (s, d) => d)
                                 //.Where(d => d.DocumentOwner.ClientID == clientID)
@@ -2342,38 +2339,49 @@ namespace eIVOGo.Published
                                 docItems = docItems.Join(mgr.GetTable<DocumentOwner>().Where(o => o.ClientID == clientID), d => d.DocID, o => o.DocID, (d, o) => d);
                             }
 
+                            DateTime executionTime = DateTime.Now;
+
                             var items = mgr.GetTable<DocumentSubscriptionQueue>()
+                                .Where(d => !d.WaitUntil.HasValue || d.WaitUntil <= executionTime)
                                 .Join(docItems, s => s.DocID, d => d.DocID, (s, d) => d)
                                 //.Where(d => d.DocumentOwner.ClientID == clientID)
                                 .Join(mgr.GetTable<InvoiceAllowance>(), d => d.DocID, i => i.AllowanceID, (d, i) => i);
                             var queryItems = mgr.DataContext.GetAllowanceByAgent(items, token.CompanyID);
-                            if (root.Request != null && root.Request.processIndexSpecified && root.Request.totalProcessCountSpecified
-                                && root.Request.processIndex >= 0 && root.Request.totalProcessCount > 0)
-                            {
-                                var mode = Math.Max(DateTime.Now.Ticks % 1048576, 1);
-                                queryItems = queryItems.Where(i => (i.AllowanceID % root.Request.totalProcessCount) == root.Request.processIndex)
-                                                .OrderBy(i => i.AllowanceID % mode);
-                            }
-                            foreach (var item in queryItems.Take(Settings.Default.MaxResponseCountPerBatch))
-                            {
-                                if (mgr.ExecuteCommand("delete DocumentSubscriptionQueue where DocID = {0}", item.AllowanceID) > 0)
-                                {
-                                    pdfFiles.Add(
-                                        String.Join("\t"
-                                            , $"{item.AllowanceNumber}"
-                                            , HttpUtility.UrlEncode(item.AllowanceID.EncryptKey())));
 
-                                    mgr.ExecuteCommand(@"INSERT INTO [proc].DataProcessLog
-                                                            (DocID, LogDate, Status, StepID)
-                                                            VALUES          ({0},{1},{2},{3})",
-                                            item.AllowanceID, DateTime.Now, (int)Naming.DataProcessStatus.Done,
-                                            (int)Naming.InvoiceStepDefinition.PDF待傳輸);
-                                }
-                                else
+                            //if (root.Request != null && root.Request.processIndexSpecified && root.Request.totalProcessCountSpecified
+                            //    && root.Request.processIndex >= 0 && root.Request.totalProcessCount > 0)
+                            //{
+                            //    var mode = Math.Max(DateTime.Now.Ticks % 1048576, 1);
+                            //    queryItems = queryItems.Where(i => (i.AllowanceID % root.Request.totalProcessCount) == root.Request.processIndex)
+                            //                    .OrderBy(i => i.AllowanceID % mode);
+                            //}
+
+                            executionTime = executionTime.AddMinutes(15);
+
+                            lock (typeof(eInvoiceService))
+                            {
+                                foreach (var item in queryItems.Take(Settings.Default.MaxResponseCountPerBatch))
                                 {
-                                    Logger.Warn($"DocumentSubscriptionQueue delete return 0 : {item.AllowanceID}");
+                                    if (mgr.ExecuteCommand("update DocumentSubscriptionQueue set WaitUntil = {1} where DocID = {0}", item.AllowanceID,executionTime) > 0)
+                                    {
+                                        pdfFiles.Add(
+                                            String.Join("\t"
+                                                , $"{item.AllowanceNumber}"
+                                                , HttpUtility.UrlEncode(item.AllowanceID.EncryptKey())));
+
+                                        //mgr.ExecuteCommand(@"INSERT INTO [proc].DataProcessLog
+                                        //                    (DocID, LogDate, Status, StepID)
+                                        //                    VALUES          ({0},{1},{2},{3})",
+                                        //        item.AllowanceID, DateTime.Now, (int)Naming.DataProcessStatus.Done,
+                                        //        (int)Naming.InvoiceStepDefinition.PDF待傳輸);
+                                    }
+                                    else
+                                    {
+                                        Logger.Warn($"DocumentSubscriptionQueue update return 0 : {item.AllowanceID}");
+                                    }
                                 }
                             }
+
                             return pdfFiles.ToArray();
 
                         }
@@ -2653,7 +2661,7 @@ namespace eIVOGo.Published
                     result.Result.message = "資料簽章不符!!";
                 }
 
-                //GovPlatformFactory.Notify();
+                //
                 //EIVOPlatformFactory.Notify();
             }
             catch (Exception ex)
@@ -2724,7 +2732,7 @@ namespace eIVOGo.Published
                     result.Result.message = "收據資料簽章不符!!";
                 }
 
-                //GovPlatformFactory.Notify();
+                //
                 //EIVOPlatformFactory.Notify();
             }
             catch (Exception ex)
@@ -2795,7 +2803,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                //GovPlatformFactory.Notify();
+                //
                 //EIVOPlatformFactory.Notify();
             }
             catch (Exception ex)
@@ -3006,7 +3014,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                //GovPlatformFactory.Notify();
+                //
                 //EIVOPlatformFactory.Notify();
             }
             catch (Exception ex)
@@ -3077,7 +3085,7 @@ namespace eIVOGo.Published
 
                 //EIVOPlatformFactory.Notify();
 
-                //GovPlatformFactory.Notify();
+                //
             }
             catch (Exception ex)
             {
@@ -3682,7 +3690,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                //GovPlatformFactory.Notify();
+                //
                 //EIVOPlatformFactory.Notify();
             }
             catch (Exception ex)
@@ -3702,6 +3710,8 @@ namespace eIVOGo.Published
                 sellerInfo.PreserveWhitespace = true;
                 if (crypto.VerifyXmlSignature(sellerInfo))
                 {
+                    Root root = sellerInfo.ConvertTo<Root>();
+
                     using (InvoiceManager models = new InvoiceManager())
                     {
                         ///憑證資料檢查
@@ -3709,7 +3719,12 @@ namespace eIVOGo.Published
                         var token = models.GetTable<OrganizationToken>().Where(t => t.Thumbprint == crypto.SignerCertificate.Thumbprint).FirstOrDefault();
                         if (token != null)
                         {
-                            var user = token.Organization.OrganizationCategory.SelectMany(c => c.UserRole).Where(r => r.RoleID == (int)Naming.EIVOMemberRoleID.會員).FirstOrDefault();
+                            var userItems = token.Organization.OrganizationCategory.SelectMany(c => c.UserRole).Where(r => r.RoleID == (int)Naming.EIVOMemberRoleID.會員);
+                            if (root.Request?.processIndexSpecified == true)
+                            {
+                                userItems = userItems.Skip(root.Request.processIndex);
+                            }
+                            var user = userItems.FirstOrDefault();
                             ServiceInfo info = new ServiceInfo
                             {
                                 AgentToken = token.CompanyID.EncryptKey(),

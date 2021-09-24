@@ -584,6 +584,26 @@ namespace Model.Helper
 
         }
 
+        public static DataSet GetInvoiceDataForFullAllowance(this IQueryable<InvoiceItem> items, GenericManager<EIVOEntityDataContext> models)
+        {
+            var dataItems = items.ToArray().Select(i => new
+            {
+                Data_No = $"{i.TrackCode}{i.No}",
+                Seller_ID = i.InvoiceSeller.ReceiptNo,
+                Allowance_No = "",
+                //Process_Type = ((Naming.InvoiceProcessType?)i.CDS_Document.ProcessType).ToString(),
+            });
+
+            DataSet ds = new DataSet();
+
+            DataTable table = dataItems.ToDataTable();
+            table.TableName = "Allowance";
+            ds.Tables.Add(table);
+
+            return ds;
+
+        }
+
         public static DataSet GetVoidAllowanceData(this IQueryable<InvoiceAllowanceCancellation> items, GenericManager<EIVOEntityDataContext> models)
         {
             var dataItems = items.ToArray().Select(i => new
@@ -693,6 +713,33 @@ namespace Model.Helper
             }
 
             return voidItem;
+        }
+
+        public static IQueryable<InvoiceProductItem> GetInvoiceProductItem(this InvoiceItem item, GenericManager<EIVOEntityDataContext> models)
+        {
+            return models.GetTable<InvoiceItem>().Where(v => v.InvoiceID == item.InvoiceID)
+                                    .Join(models.GetTable<InvoiceDetail>(), v => v.InvoiceID, d => d.InvoiceID, (v, d) => d)
+                                    .Join(models.GetTable<InvoiceProduct>(), d => d.ProductID, p => p.ProductID, (d, p) => p)
+                                    .Join(models.GetTable<InvoiceProductItem>(), p => p.ProductID, t => t.ProductID, (p, t) => t);
+        }
+
+        public static IQueryable<InvoiceItem> PromptWinningInvoiceForNotification(this GenericManager<EIVOEntityDataContext> models,int year,int period)
+        {
+            var items = models.GetTable<InvoiceItem>()
+                .Where(i => i.InvoiceCancellation == null)
+                .Where(i => i.InvoiceDonation == null)
+                .Where(i => i.PrintMark == "N")
+                .Join(models.GetTable<Organization>()
+                    .Join(models.GetTable<OrganizationStatus>().Where(s => (s.InvoiceNoticeSetting & (int)Naming.InvoiceNoticeStatus.Winning) > 0),
+                        o => o.CompanyID, s => s.CompanyID, (o, s) => o),
+                    i => i.SellerID, o => o.CompanyID, (i, o) => i)
+                .Join(models.GetTable<InvoiceWinningNumber>()
+                    .Join(models.GetTable<UniformInvoiceWinningNumber>()
+                        .Where(u => u.Year == year && u.Period == period),
+                        w => w.WinningID, u => u.WinningID, (w, u) => w),
+                    i => i.InvoiceID, w => w.InvoiceID, (i, w) => i);
+
+            return items;
         }
 
     }

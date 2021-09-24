@@ -1,0 +1,39 @@
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using System.Xml
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Schema.EIVO
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    ModelSource<InvoiceItem> models;
+    InvoiceItem _model;
+
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (InvoiceItem)this.Model;
+
+}
+<div>
+    @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "發票");}
+
+    <div class="border_gray">
+        @{ Html.RenderPartial("~/Views/DataView/Module/Invoice.cshtml", _model);}
+
+    </div>
+</div>
+
+
+
+

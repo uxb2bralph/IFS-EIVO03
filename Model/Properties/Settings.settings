@@ -81,9 +81,6 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=192.168.200.23\SQLEXPRESS;Initial Catalog=EINVTurnkey2;Persist Security Info=True;User ID=sa;Password=111111</Value>
     </Setting>
-    <Setting Name="StoreRoot" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">WebStore</Value>
-    </Setting>
     <Setting Name="DefaultUserCarrierType" Type="System.String" Scope="Application">
       <Value Profile="(Default)">3J0001</Value>
     </Setting>

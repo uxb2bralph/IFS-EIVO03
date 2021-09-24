@@ -10,7 +10,7 @@ using System.Web.UI;
 using eIVOGo.Helper;
 using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
-using eIVOGo.Module.Base;
+
 using Model.DataEntity;
 using Model.Locale;
 using Model.Security.MembershipManagement;

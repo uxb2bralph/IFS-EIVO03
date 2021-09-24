@@ -772,5 +772,14 @@ namespace InvoiceClient.Properties {
                 return ((string)(this["TransferManager"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int WatcherProcessDelayInSeconds {
+            get {
+                return ((int)(this["WatcherProcessDelayInSeconds"]));
+            }
+        }
     }
 }

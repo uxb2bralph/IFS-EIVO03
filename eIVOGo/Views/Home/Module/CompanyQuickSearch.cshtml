@@ -11,6 +11,7 @@
 @using Model.Security.MembershipManagement
 @using eIVOGo.Controllers
 @using Business.Helper
+@using Model.Helper
 @{
 
     ModelStateDictionary _modelState;
@@ -38,7 +39,7 @@
 }
 
 <input type="text" class="form-control" size="40" id="@(_contentID)" value="@(_item!=null ? $"{_item.ReceiptNo} {_item.CompanyName}" : null)" placeholder="請輸入檢索關鍵字" />
-<input type="hidden" id="@(_valueID)" name="@(_fieldName)" value="@(_viewModel.SellerID)" />
+<input type="hidden" id="@(_valueID)" name="@(_fieldName)" value="@(_viewModel.Encrypt==true && _viewModel.SellerID.HasValue ? _viewModel.SellerID.Value.EncryptKey() : _viewModel.SellerID.ToString())" />
 <script>
         $(function () {
             debugger;

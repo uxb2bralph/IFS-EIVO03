@@ -9,26 +9,26 @@
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
+@{
+    Layout = "~/Views/Common/QueryIndex.cshtml";
 
-@section headContent { 
- 
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    ViewBag.ActionName = "首頁 > 相對營業人管理";
 }
-@{ Html.RenderPartial("~/Views/BusinessRelationship/Module/MaintainBusinessRelationship.ascx");}
 
-<script runat="server">
+@section QueryForm 
+{
+    @{ 
+        Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "相對營業人資料維護");
+        Html.RenderPartial("~/Views/BusinessRelationship/Module/MaintainBusinessRelationship.cshtml");
+    }
+}
+
+@functions
+{
 
     ModelSource<InvoiceItem> models;
     ModelStateDictionary _modelState;
 
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        ViewBag.ActionName = "首頁 > 相對營業人管理";
-    }
-
-
-
-</script>
+}

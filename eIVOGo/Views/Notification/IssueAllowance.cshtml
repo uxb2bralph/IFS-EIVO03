@@ -1,5 +1,3 @@
-
-
 @using System.Linq
 @using System.IO
 @using System.Linq.Expressions
@@ -24,11 +22,14 @@
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _model = (InvoiceAllowance)this.Model;
     _viewModel = (DocumentQueryViewModel)ViewBag.ViewModel;
+
+    String notificationView = _model?.InvoiceAllowanceSeller?.Organization?.OrganizationStatus.CustomNotificationView;
+
 }
 
 @if (_viewModel.ForTest == true)
 {
-    Html.RenderPartial("~/Views/Notification/Module/IssuedAllowance.ascx", _model);
+    Html.RenderPartial(notificationView ?? "~/Views/Notification/Module/IssuedAllowance.cshtml", _model);
 }
 else if (_model.InvoiceAllowanceSeller.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.IssuingAllowance))
 {
@@ -44,15 +45,12 @@ else if (_model.InvoiceAllowanceSeller.Organization.OrganizationStatus.InvoiceNo
 
     mailing.Add(_model.InvoiceAllowanceBuyer.EMail);
     var mailTo = String.Join(",",
-        mailing.Where(m => m != null));
+        mailing.Where(m => m != null)).GetEfficientString() ?? eIVOGo.Properties.Settings.Default.WebMaster;
 
-    if (!String.IsNullOrEmpty(mailTo))
-    {
-        var enterprise = _model.InvoiceAllowanceSeller.Organization.EnterpriseGroupMember.FirstOrDefault();
+    var enterprise = _model.InvoiceAllowanceSeller.Organization.EnterpriseGroupMember.FirstOrDefault();
 
-        String Subject = $"{(enterprise?.EnterpriseGroup.EnterpriseName)} 折讓證明開立通知(折讓證明單號碼:{_model.AllowanceNumber})";
-        String body = Html.Partial("~/Views/Notification/Module/IssuedAllowance.ascx", _model).ToString();
+    String Subject = $"{(enterprise?.EnterpriseGroup.EnterpriseName)} 折讓證明開立通知(折讓證明單號碼:{_model.AllowanceNumber})";
+    String body = Html.Partial(notificationView ?? "~/Views/Notification/Module/IssuedAllowance.cshtml", _model).ToString();
 
-        body.SendMailMessage(mailTo, Subject, new System.Net.Mail.Attachment[] { attachment });
-    }
+    body.SendMailMessage(mailTo, Subject, new System.Net.Mail.Attachment[] { attachment });
 }

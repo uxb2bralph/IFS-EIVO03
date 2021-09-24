@@ -1,2 +1,3 @@
 start "eIVOGo" "C:\Program Files\IIS Express\iisexpress.exe" /site:eIVOGo /config:C:\Project\GitHub\IFS-EIVO03\.vs\config\applicationhost.config
 start "TaskCenter" "C:\Program Files\IIS Express\iisexpress.exe" /site:TaskCenter /config:C:\Project\GitHub\IFS-EIVO03\.vs\config\applicationhost.config
+start "Kiosk" "C:\Program Files\IIS Express\iisexpress.exe" /site:Kiosk /config:C:\Project\GitHub\IFS-EIVO03\.vs\config\applicationhost.config

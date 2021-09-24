@@ -1,21 +1,39 @@
+﻿@using System.IO
+@using System.Linq.Expressions
 
-
+@using Business.Helper
+@using Model.Helper
 @using eIVOGo.Helper
-@{ Register Src="~/Views/DataExchange/Module/DataIndex.ascx" TagPrefix="uc1" TagName="DataIndex" }
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
 
-@section headContent { 
- 
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    UserProfileMember _profile = Context.GetUser();
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    QueryViewModel _viewModel = (QueryViewModel)ViewBag.ViewModel;
+
+    ViewBag.ActionName = "首頁 > 上傳開立資料";
+
 }
-<uc1:DataIndex runat="server" ID="DataIndex" />
-<script runat="server">
+@section headContent {
 
-    public override void Dispose()
-    {
-        var models = TempData.GetGenericModelSource();
-        if (models != null)
-            models.Dispose();
-        
-        base.Dispose();
+}
+@section formContent
+{
+    @{
+        Html.RenderPartial("~/Views/DataExchange/Module/DataIndex.cshtml");
     }
-
-</script>
+}

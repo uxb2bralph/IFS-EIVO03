@@ -1,8 +1,6 @@
 
 @using System.IO
 @using System.Linq.Expressions
-
-
 @using eIVOGo.Helper
 @using Model.Locale
 @using eIVOGo.Models.ViewModel
@@ -10,25 +8,23 @@
 @using Model.DataEntity
 @using eIVOGo.Controllers
 @using Business.Helper
-
-@section headContent { 
- 
-}
-@section mainContent { 
-@if (_profile.IsSystemAdmin())
-        {
-            Html.RenderPartial("~/Views/Home/Module/TodoList.ascx");
-        } 
-}
-<script runat="server">
+@using Model.Helper
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
 
     Model.Security.MembershipManagement.UserProfileMember _profile;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        ViewBag.ActionName = "首頁";
-        _profile = Context.GetUser();
-    }
+    ViewBag.ActionName = "首頁";
+    _profile = Context.GetUser();
+}
 
-</script>
+@section headContent {
+
+}
+
+@if (_profile.IsSystemAdmin())
+{
+    Html.RenderPartial("~/Views/Home/Module/TodoList.cshtml");
+}
+
+

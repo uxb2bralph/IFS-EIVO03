@@ -42,6 +42,7 @@ namespace Model.InvoiceManagement
                     }
                 },
                 AllowanceDate = DateTime.Now,
+                IssueDate = DateTime.Now,
                 InvoiceAllowanceSeller = new InvoiceAllowanceSeller
                 {
                     SellerID = _userProfile.CurrentUserRole.OrganizationCategory.CompanyID,
@@ -258,7 +259,7 @@ namespace Model.InvoiceManagement
             }
 
             item.Allowance.AllowanceType = invItem.InvoiceBuyer.IsB2C() ? (byte)2 : (byte)1;
-            item.Allowance.InvoiceAllowanceDetails[0].InvoiceAllowanceItem.TaxType = invItem.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].TaxType;
+            item.Allowance.InvoiceAllowanceDetails[0].InvoiceAllowanceItem.TaxType = invItem.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].TaxType ?? invItem.InvoiceAmountType.TaxType;
             item.Allowance.InvoiceAllowanceDetails[0].InvoiceAllowanceItem.ProductItemID = invItem.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].ItemID;
             item.Allowance.InvoiceAllowanceDetails[0].InvoiceAllowanceItem.InvoiceNo = invItem.TrackCode + invItem.No;
             if (item.Allowance.InvoiceAllowanceDetails[0].InvoiceAllowanceItem.InvoiceDate.HasValue && invItem.InvoiceDate.Value.Date != item.Allowance.InvoiceAllowanceDetails[0].InvoiceAllowanceItem.InvoiceDate.Value.Date)

@@ -4,8 +4,12 @@
 
 @using Model.DataEntity
 @using Model.Locale
-@using Model.DataEntity
+@{
 
+    InvoiceTrackCode _model;
+
+    _model = (InvoiceTrackCode)this.Model;
+}
 <tr>
     <td>@(_model.Year-1911)</td>
     <td>@(String.Format("{0:00}",_model.PeriodNo*2-1))~@(String.Format("{0:00}",_model.PeriodNo*2))月</td>
@@ -24,13 +28,5 @@
 </tr>
 
 
-<script runat="server">
 
-    InvoiceTrackCode _model;
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _model = (InvoiceTrackCode)this.Model;
-    }
 
-</script>

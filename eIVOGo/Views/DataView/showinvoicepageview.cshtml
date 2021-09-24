@@ -5,28 +5,21 @@
 @using eIVOGo.Models
 @using eIVOGo.Controllers
 @using Model.DataEntity
-
-@section headContent { 
- 
-}
-@section dataContent { 
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "已開立發票內容檢視");}
-
-    @{ Html.RenderPartial("~/Views/DataView/Module/Invoice.ascx", _model);}
- 
-}
-<script runat="server">
+@{
 
     ModelSource<InvoiceItem> models;
     InvoiceItem _model;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (InvoiceItem)this.Model;
 
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (InvoiceItem)this.Model;
+}
+@section headContent {
 
-    }
+}
+@section dataContent {
+    @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "已開立發票內容檢視");}
 
-</script>
+    @{ Html.RenderPartial("~/Views/DataView/Module/Invoice.cshtml", _model);}
+
+}

@@ -22,7 +22,7 @@ using System.Data.Linq;
 using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
 using ModelExtension.Helper;
-
+using Model.Helper;
 
 namespace eIVOGo.Controllers
 {
@@ -150,7 +150,7 @@ namespace eIVOGo.Controllers
                 return View("InvoiceMediaReport");
             }
 
-            return View(items);
+            return View("~/Views/InvoiceQuery/InquireInvoiceMedia.cshtml", items);
         }
 
 
@@ -299,6 +299,35 @@ namespace eIVOGo.Controllers
             return View(models.Inquiry);
         }
 
+        public ActionResult DownloadInvoiceAttachment(DocumentQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.DocID = viewModel.DecryptKeyValue();
+            }
+
+            var items = models.GetTable<InvoiceItem>().Where(i => i.InvoiceID == viewModel.DocID);
+            if (items.Any())
+            {
+                return zipAttachment(items);
+            }
+            else
+            {
+                Response.Clear();
+                Response.ClearContent();
+                Response.ClearHeaders();
+                Response.AddHeader("Cache-control", "max-age=1");
+                Response.ContentType = "application/octet-stream";
+                Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("DataNotFound.txt")));
+
+                Response.Output.WriteLine("file not found!!");
+                Response.End();
+
+                return new EmptyResult();
+            }
+        }
+
         public ActionResult DownloadAttachment()
         {
             String jsonData = Request["data"];
@@ -359,7 +388,7 @@ namespace eIVOGo.Controllers
                     }
                 }
             }
-            var result = new FilePathResult(outFile, "message/rfc822");
+            var result = new FilePathResult(outFile, "application/octet-stream");
             result.FileDownloadName = "發票附件.zip";
             return result;
 
@@ -395,7 +424,7 @@ namespace eIVOGo.Controllers
             if(!viewModel.SellerID.HasValue)
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "請選擇開立人!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "請選擇開立人!!");
             }
 
             models.Inquiry = createModelInquiry();
@@ -405,7 +434,7 @@ namespace eIVOGo.Controllers
             if (items.Count() <= 0)
             {
                 ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/JsAlert.cshtml", model: "查無資料!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "查無資料!!");
             }
 
             using (DataSet ds = new DataSet())
@@ -420,7 +449,7 @@ namespace eIVOGo.Controllers
                         table.Columns.Add(new DataColumn("未作廢總金額", typeof(decimal)));
                         table.Columns.Add(new DataColumn("已作廢總筆數", typeof(int)));
                         table.Columns.Add(new DataColumn("已作廢總金額", typeof(decimal)));
-                        table.TableName = yy.Key + "-" + mm.Key;
+                        table.TableName = $"月報表({yy.Key}-{ mm.Key})";
 
                         ds.Tables.Add(table);
 
@@ -514,66 +543,33 @@ namespace eIVOGo.Controllers
             return View(models.Inquiry);
         }
 
+        public ActionResult DataQueryIndex(DataQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            return View("~/Views/InvoiceQuery/DataQueryIndex.cshtml");
+        }
+
+        public ActionResult InquireData(DataQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            viewModel.CommandText = viewModel.CommandText.GetEfficientString();
+            if (viewModel.CommandText == null)
+            {
+                ModelState.AddModelError("CommandText", "請輸入查詢指令!!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = ModelState;
+                return View("~/Views/Shared/ReportInputError.cshtml");
+            }
+
+            return View("~/Views/InvoiceQuery/DataAction/ExecuteDataQuery.cshtml");
+
+        }
 
 
-        // POST: InvoiceQuery/Create
-        //[HttpPost]
-        //public ActionResult Create(FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
 
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: InvoiceQuery/Edit/5
-        //public ActionResult Edit(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: InvoiceQuery/Edit/5
-        //[HttpPost]
-        //public ActionResult Edit(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add update logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: InvoiceQuery/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: InvoiceQuery/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add delete logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
     }
 }
