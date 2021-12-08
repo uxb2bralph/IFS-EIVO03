@@ -229,7 +229,7 @@
         @*一、採用*@銀行電匯款方式：
         <br />
         @*匯款人：  @(_model.InvoiceBuyer.CustomerName)
-            <br />*@
+        <br />*@
         受款人：  @(_model.InvoiceSeller.CustomerName)
         <br />
         受款銀行：台北富邦南門分行(012 - 5103)
@@ -244,6 +244,11 @@
         台北市中正區南海路20號6樓管理部收。
         <br />
         <br />*@
+        @if (_model.Organization.OrganizationExtension?.CustomNotification != null)
+        {
+            Write(new HtmlString(_model.Organization.OrganizationExtension?.CustomNotification));
+            <br />
+        }
         網際優勢－電子發票服務平台感謝您。
         <br />
         <br />

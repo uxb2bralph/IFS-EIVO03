@@ -49,7 +49,7 @@
             <td class="tdleft">
                 @(_model.InvoiceBuyer.CustomerID.StringMask(4, 3, '*'))
             </td>
-            <th  style="white-space:nowrap;">
+            <th style="white-space:nowrap;">
                 檢查號碼
             </th>
             <td class="tdleft">
@@ -63,7 +63,7 @@
             <td class="tdleft">
                 @(_model.TrackCode + _model.No)
             </td>
-            <th  style="white-space:nowrap;">
+            <th style="white-space:nowrap;">
                 發票日期
             </th>
             <td class="tdleft">
@@ -77,7 +77,7 @@
             <td class="tdleft">
                 @(_model.RandomNo)
             </td>
-            <th  style="white-space:nowrap;">
+            <th style="white-space:nowrap;">
                 含稅金額
             </th>
             <td class="tdleft">
@@ -98,28 +98,31 @@
                 @(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TaxAmount))
             </td>
         </tr>
-        <tr>
-            <th style="white-space:nowrap;">
-                買方名稱
-            </th>
-            <td class="tdleft" style="white-space:nowrap;">
-                @(_model.InvoiceBuyer.CustomerName)
-            </td>
-            <th style="white-space:nowrap;">
-                買方統一編號
-            </th>
-            <td class="tdleft">
-                @(_model.InvoiceBuyer.IsB2C() ? "*" : _model.InvoiceBuyer.ReceiptNo)
-            </td>
-        </tr>
-        <tr>
-            <th style="white-space:nowrap;">
-                地 址
-            </th>
-            <td colspan="3" class="tdleft">
-                @(_model.InvoiceBuyer.IsB2C() ? "*" : _model.InvoiceBuyer.Address)
-            </td>
-        </tr>
+        @if (!_model.InvoiceBuyer.IsB2C())
+        {
+            <tr>
+                <th style="white-space:nowrap;">
+                    買方名稱
+                </th>
+                <td class="tdleft" style="white-space:nowrap;">
+                    @(_model.InvoiceBuyer.CustomerName)
+                </td>
+                <th style="white-space:nowrap;">
+                    買方統一編號
+                </th>
+                <td class="tdleft">
+                    @(_model.InvoiceBuyer.IsB2C() ? "*" : _model.InvoiceBuyer.ReceiptNo)
+                </td>
+            </tr>
+            <tr>
+                <th style="white-space:nowrap;">
+                    地 址
+                </th>
+                <td colspan="3" class="tdleft">
+                    @(_model.InvoiceBuyer.IsB2C() ? "*" : _model.InvoiceBuyer.Address)
+                </td>
+            </tr>
+        }
         <tr>
             <th style="white-space:nowrap;">
                 總 備 註

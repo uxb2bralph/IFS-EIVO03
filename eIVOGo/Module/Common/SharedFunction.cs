@@ -70,254 +70,45 @@ namespace eIVOGo.Module.Common
 
         #endregion
 
-        public static Boolean sendInvoiceNotifyMail(string mailto, string Url, string Title)
-        {
-            Boolean isSuccess = true;
-            try
-            {
-                Url.Trim().MailWebPage(mailto, Title);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-                isSuccess = false;
-            }
-            return isSuccess;
-        }
-
-        public static Boolean sendWinningAlertMail(string mailto, string Url)
-        {
-            Boolean isSuccess = true;
-            try
-            {
-                Url.Trim().MailWebPage(mailto, "網際優勢電子發票獨立第三方平台 發票中獎通知");
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-                isSuccess = false;
-            }
-            return isSuccess;
-        }
-
         public static void MailWebPage(this String url, String mailTo, String subject,params string[] attachment)
         {
-            if (String.IsNullOrEmpty(mailTo))
-                return;
 
-            MailMessage message = new MailMessage();
-            message.ReplyToList.Add(Settings.Default.ReplyTo);
-            message.From = new MailAddress(Settings.Default.WebMaster);
+            System.Net.Mail.Attachment[] items = null;
 
-            String[] MailAdr = mailTo.Trim().Split(',', ';', '、');
-
-            foreach (var addr in MailAdr)
+            if (attachment != null && attachment.Length > 0)
             {
-                if (!String.IsNullOrEmpty(addr))
-                {
-                    message.To.Add(new MailAddress(addr));
-                }
+                items = attachment.Where(f => File.Exists(f))
+                    .Select(f => new System.Net.Mail.Attachment(f, MediaTypeNames.Application.Octet))
+                    .ToArray();
             }
-
-            message.Subject = subject;
-            message.IsBodyHtml = true;
 
             using (WebClient wc = new WebClient())
             {
                 wc.Encoding = Encoding.UTF8;
-                message.Body = wc.DownloadString(url);
+                wc.DownloadString(url)
+                    .SendSmtpMessage(mailTo, subject, Settings.Default.WebMaster, items, Settings.Default.ReplyTo);
+                
             }
-
-            if (attachment != null && attachment.Length > 0)
-            {
-                foreach (var item in attachment)
-                {
-                    if (File.Exists(item))
-                    {
-                        message.Attachments.Add(new System.Net.Mail.Attachment(item, MediaTypeNames.Application.Octet));
-                    }
-                }
-            }
-
-            SmtpClient smtpclient = new SmtpClient(Settings.Default.MailServer);
-            smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
-            smtpclient.Send(message);
         }
 
         public static void MailWebPage(this String url, NameValueCollection items, String mailTo, String subject)
         {
-            MailMessage message = new MailMessage();
-            message.ReplyToList.Add(Settings.Default.ReplyTo);
-            message.From = new MailAddress(Settings.Default.WebMaster);
-            message.To.Add(mailTo);
-            message.Subject = subject;
-            message.IsBodyHtml = true;
-
             using (WebClient wc = new WebClient())
             {
                 wc.Encoding = Encoding.UTF8;
-                message.Body = wc.Encoding.GetString(wc.UploadValues(url, items));
+                wc.Encoding.GetString(wc.UploadValues(url, items))
+                    .SendSmtpMessage(mailTo, subject, Settings.Default.WebMaster, null, Settings.Default.ReplyTo);
             }
-
-            SmtpClient smtpclient = new SmtpClient(Settings.Default.MailServer);
-            smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
-            smtpclient.Send(message);
         }
 
         public static void MailServerPage(this String relativeUrl, String mailTo, String subject)
         {
-            MailMessage message = new MailMessage();
-            message.ReplyToList.Add(Settings.Default.ReplyTo);
-            message.From = new MailAddress(Settings.Default.WebMaster);
-            message.To.Add(mailTo);
-            message.Subject = subject;
-            message.IsBodyHtml = true;
-
-            message.Body = relativeUrl.GetPageContent();
-
-            SmtpClient smtpclient = new SmtpClient(Settings.Default.MailServer)
-            {
-                Credentials = CredentialCache.DefaultNetworkCredentials
-            };
-            smtpclient.Send(message);
+            relativeUrl.GetPageContent().SendSmtpMessage(mailTo, subject, Settings.Default.WebMaster, null, Settings.Default.ReplyTo);
         }
 
         public static void SendMailMessage(this String body, String mailTo, String subject)
         {
-            MailMessage message = new MailMessage();
-            message.ReplyToList.Add(Settings.Default.ReplyTo);
-            message.From = new MailAddress(Settings.Default.WebMaster);
-            message.To.Add(mailTo);
-            message.Subject = subject;
-            message.IsBodyHtml = true;
-            message.Body = body;
-
-            SmtpClient smtpclient = new SmtpClient(Settings.Default.MailServer);
-            smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
-            smtpclient.Send(message);
-        }
-
-        public static void SendMailMessageWithInvoice(this String body, String malTo, String subject, params String[] attachment)
-        {
-            MailMessage message = new MailMessage();
-            message.ReplyToList.Add(Settings.Default.ReplyTo);
-            String[] MailAdr = malTo.Trim().Split(',', ';', '、');
-
-            foreach (var addr in MailAdr)
-            {
-                if (!String.IsNullOrEmpty(addr))
-                {
-                    message.To.Add(new MailAddress(addr));
-                }
-            }
-            message.From = new MailAddress(Settings.Default.WebMaster);
-            message.Subject = subject;
-            message.IsBodyHtml = true;
-
-            using (WebClient wc = new WebClient())
-            {
-                wc.Encoding = Encoding.UTF8;
-                message.Body = wc.DownloadString(body);
-            }
-
-            if (attachment != null && attachment.Length > 0)
-            {
-                foreach (var item in attachment)
-                {
-                    if (File.Exists(item))
-                    {
-                        //message.Attachments.Add(new System.Net.Mail.Attachment(item, MediaTypeNames.Application.Octet));
-                        message.Attachments.Add(new System.Net.Mail.Attachment(item, Path.GetFileName(item)));
-                    }
-                }
-            }
-
-            SmtpClient smtpclient = new SmtpClient(Settings.Default.MailServer);
-            smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
-            smtpclient.Send(message);
-        }
-
-        public static void SendInvoiceMail(this GoogleInvoiceUploadManager manager)
-        {
-            if (manager.IsValid)
-            {
-                manager.ItemList.Select(i => i.Invoice.InvoiceID).NotifyIssuedInvoice(false);
-
-
-                SendMailMessage("Google電子發票已匯入,請執行發票列印作業!!", Settings.Default.WebMaster, "Google電子發票開立郵件通知");
-
-                //ThreadPool.QueueUserWorkItem(stateInfo =>
-                //{
-                //    GoogleInvoiceUploadManager mgr = (GoogleInvoiceUploadManager)stateInfo;
-                //    var cipher = new CipherDecipherSrv(16);
-                //    String url = String.Format("{0}{1}", Settings.Default.WebApDomain, VirtualPathUtility.ToAbsolute(Settings.Default.InvoiceMailUrl));
-                //    foreach (var item in mgr.ItemList)
-                //    {
-                //        try
-                //        {
-                //            String.Format("{0}?{1}", url, cipher.cipher(item.Invoice.InvoiceID.ToString()))
-                //                .MailWebPage(String.Format("{0} <{1}>",
-                //                        item.Invoice.InvoiceBuyer.ContactName, item.Invoice.InvoiceBuyer.EMail),
-                //                    "Google電子發票郵件通知");
-
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //            Logger.Warn(String.Format("Google電子發票郵件通知客戶傳送失敗,發票號碼:{0}{1}", item.Invoice.TrackCode, item.Invoice.No));
-                //            Logger.Error(ex);
-                //        }
-                //    }
-                //}, manager);
-            }
-        }
-
-        public static void SendInvoiceMail(this CsvInvoiceUploadManager manager)
-        {
-            if (manager.IsValid)
-            {
-                String subject = String.Format("{0}電子發票開立郵件通知", manager.Seller.CompanyName);
-                manager.ItemList.Where(i => i.Entity != null).Select(i => i.Entity.InvoiceID)
-                    .NotifyIssuedInvoice(false);
-                SendMailMessage(String.Format("{0}電子發票已匯入,請執行發票列印作業!!", manager.Seller.CompanyName), Settings.Default.WebMaster, subject);
-            }
-        }
-
-        public static void SendGoogleInvoiceCancellationMail(this IEnumerable<int> invoiceID)
-        {
-            if (invoiceID != null && invoiceID.Count() > 0)
-            {
-                ThreadPool.QueueUserWorkItem(stateInfo =>
-                {
-                    using (InvoiceManager mgr = new InvoiceManager())
-                    {
-                        IEnumerable<int> items = (IEnumerable<int>)stateInfo;
-                        var cipher = new CipherDecipherSrv(16);
-                        String url = String.Format("{0}{1}", Settings.Default.WebApDomain, VirtualPathUtility.ToAbsolute(Settings.Default.InvoiceCancellationMailUrl));
-                        foreach (var id in items)
-                        {
-                            try
-                            {
-                                var item = mgr.EntityList.Where(i => i.InvoiceID == id).First();
-                                if (item.InvoiceCancellation != null)
-                                {
-                                    String.Format("{0}?{1}", url, cipher.cipher(id.ToString()))
-                                        .MailWebPage(item.InvoiceBuyer.EMail, "Google作廢電子發票開立郵件通知");
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Logger.Warn(String.Format("Google作廢電子發票郵件通知客戶傳送失敗,ID:{0}", id));
-                                Logger.Error(ex);
-                            }
-                        }
-                    }
-                }, invoiceID);
-            }
-        }
-
-        public static string StringMask(string OrgString, int StartReplaceNO, int ReplaceLength, char ReplaceSymbol)
-        {
-            return OrgString.StringMask(StartReplaceNO, ReplaceLength, ReplaceSymbol);
+            body.SendSmtpMessage(mailTo, subject, Settings.Default.WebMaster, null, Settings.Default.ReplyTo);
         }
 
         public static void AlertSMSError(int id, String reason, String content)
@@ -399,107 +190,65 @@ namespace eIVOGo.Module.Common
 
         public static void SendMailMessage(this String body, String mailTo, String subject, params String[] attachment)
         {
-            MailMessage message = new MailMessage();
-            message.From = new MailAddress(Uxnet.Web.Properties.Settings.Default.WebMaster);
-
-            mailTo = mailTo.Replace(';', ',').Replace('、', ',').GetEfficientString();
-            if (mailTo == null)
-                return;
-            if (mailTo.IndexOf('@') < 0)
-            {
-                mailTo = $"{mailTo}@uxb2b.com"; 
-            }
-            message.To.Add(mailTo);
-            message.Subject = subject;
-            message.IsBodyHtml = true;
-            message.Body = body;
+            System.Net.Mail.Attachment[] items = null;
 
             if (attachment != null && attachment.Length > 0)
             {
-                foreach (var item in attachment)
-                {
-                    if (File.Exists(item))
-                    {
-                        message.Attachments.Add(new System.Net.Mail.Attachment(item, MediaTypeNames.Application.Octet));
-                    }
-                }
+                items = attachment.Where(f => File.Exists(f))
+                    .Select(f => new System.Net.Mail.Attachment(f, MediaTypeNames.Application.Octet))
+                    .ToArray();
             }
 
-            using (SmtpClient smtpclient = new SmtpClient(Uxnet.Web.Properties.Settings.Default.MailServer)
-                {
-                    Credentials = CredentialCache.DefaultNetworkCredentials
-                })
-            {
-                smtpclient.Send(message);
-            }
+            body.SendSmtpMessage(mailTo, subject, Settings.Default.ServiceMailBox, items);
 
         }
 
 
         public static void SendMailMessage(this String body, String mailTo, String subject, System.Net.Mail.Attachment[] attachment)
         {
-            MailMessage message = new MailMessage();
-            message.From = new MailAddress(Uxnet.Web.Properties.Settings.Default.WebMaster);
-            mailTo = mailTo.Replace(';', ',').Replace('、', ',');
-            message.To.Add(mailTo);
-            message.Subject = subject;
-            message.IsBodyHtml = true;
-            message.Body = body;
-
-            if (attachment != null && attachment.Length > 0)
-            {
-                foreach (var item in attachment)
-                {
-                    message.Attachments.Add(item);
-                }
-            }
-
-            SmtpClient smtpclient = new SmtpClient(Uxnet.Web.Properties.Settings.Default.MailServer);
-            smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
-            smtpclient.Send(message);
-
+            body.SendSmtpMessage(mailTo, subject, Settings.Default.ServiceMailBox, attachment);
         }
 
-        public static void SendMailMessage(this String body, String mailTo, String subject, System.Net.Mail.Attachment[] attachment, System.Net.Mail.Attachment[] Ad)
-        {
-            MailMessage message = new MailMessage();
-            message.From = new MailAddress(Uxnet.Web.Properties.Settings.Default.WebMaster);
-            message.To.Add(mailTo);
-            message.Subject = subject;
-            message.IsBodyHtml = true;
-            //message.Body = string.Format("<img src=\"cid:attach.gif\" />{0}", body);
-            message.BodyEncoding = Encoding.GetEncoding("utf-8");
-            if (attachment != null && attachment.Length > 0)
-            {
-                foreach (var item in attachment)
-                {
-                    message.Attachments.Add(item);
-                }
-            }
-            if (Ad != null && Ad.Length > 0)
-            {
-                foreach (var item in Ad)
-                {
-                    if (item != null)
-                    {
-                        // message.Body += string.Format("<img src=\" {0}\"/>", item.Name);
-                        item.ContentDisposition.Inline = true;
-                        item.ContentDisposition.DispositionType =
-                           System.Net.Mime.DispositionTypeNames.Inline;
-                        string cid = item.ContentId;
-                        message.Attachments.Add(item);
-                        message.Body += String.Format("<img src=\" cid:{0}\"/ alt='三個月免費試用' name='三個月免費試用'><br>", cid);
-                        //message.Body += String.Format("<img src=\" {0}\"/ alt='三個月免費試用' name='三個月免費試用'><br>", item.ContentStream);  
+        //public static void SendMailMessage(this String body, String mailTo, String subject, System.Net.Mail.Attachment[] attachment, System.Net.Mail.Attachment[] Ad)
+        //{
+        //    MailMessage message = new MailMessage();
+        //    message.From = new MailAddress(Uxnet.Web.Properties.Settings.Default.WebMaster);
+        //    message.To.Add(mailTo);
+        //    message.Subject = subject;
+        //    message.IsBodyHtml = true;
+        //    //message.Body = string.Format("<img src=\"cid:attach.gif\" />{0}", body);
+        //    message.BodyEncoding = Encoding.GetEncoding("utf-8");
+        //    if (attachment != null && attachment.Length > 0)
+        //    {
+        //        foreach (var item in attachment)
+        //        {
+        //            message.Attachments.Add(item);
+        //        }
+        //    }
+        //    if (Ad != null && Ad.Length > 0)
+        //    {
+        //        foreach (var item in Ad)
+        //        {
+        //            if (item != null)
+        //            {
+        //                // message.Body += string.Format("<img src=\" {0}\"/>", item.Name);
+        //                item.ContentDisposition.Inline = true;
+        //                item.ContentDisposition.DispositionType =
+        //                   System.Net.Mime.DispositionTypeNames.Inline;
+        //                string cid = item.ContentId;
+        //                message.Attachments.Add(item);
+        //                message.Body += String.Format("<img src=\" cid:{0}\"/ alt='三個月免費試用' name='三個月免費試用'><br>", cid);
+        //                //message.Body += String.Format("<img src=\" {0}\"/ alt='三個月免費試用' name='三個月免費試用'><br>", item.ContentStream);  
 
-                    }
-                }
-            }
-            message.Body += body;
-            SmtpClient smtpclient = new SmtpClient(Uxnet.Web.Properties.Settings.Default.MailServer);
-            smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
-            smtpclient.Send(message);
+        //            }
+        //        }
+        //    }
+        //    message.Body += body;
+        //    SmtpClient smtpclient = new SmtpClient(Uxnet.Web.Properties.Settings.Default.MailServer);
+        //    smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
+        //    smtpclient.Send(message);
 
-        }
+        //}
 
     }
 }

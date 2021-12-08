@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -125,6 +126,46 @@ namespace eIVOGo.Helper
             });
         }
 
+        public static void SendSmtpMessage(this String body, String mailTo, String subject, String mailFrom = null, System.Net.Mail.Attachment[] attachment = null, String replyTo = null)
+        {
+            mailTo = mailTo?.Replace(';', ',').Replace('、', ',').GetEfficientString();
+            if (mailTo == null)
+                return;
 
+            if (mailTo.IndexOf('@') < 0)
+            {
+                mailTo = $"{mailTo}@uxb2b.com";
+            }
+
+            using (MailMessage message = new MailMessage())
+            {
+                message.From = new MailAddress(mailFrom ?? Uxnet.Web.Properties.Settings.Default.WebMaster);
+                message.To.Add(mailTo);
+                message.Subject = subject;
+                message.IsBodyHtml = true;
+                message.Body = body;
+
+                if (replyTo != null)
+                {
+                    message.ReplyToList.Add(replyTo);
+                }
+
+                if (attachment != null && attachment.Length > 0)
+                {
+                    foreach (var item in attachment)
+                    {
+                        message.Attachments.Add(item);
+                    }
+                }
+
+                using (SmtpClient smtpclient = new SmtpClient(Uxnet.Web.Properties.Settings.Default.MailServer)
+                {
+                    Credentials = CredentialCache.DefaultNetworkCredentials
+                })
+                {
+                    smtpclient.Send(message);
+                }
+            }
+        }
     }
 }

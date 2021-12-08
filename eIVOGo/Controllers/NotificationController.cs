@@ -65,7 +65,7 @@ namespace eIVOGo.Controllers
             if (viewModel.MaxLogID.HasValue)
                 items = items.Where(g => g.LogID <= viewModel.MaxLogID);
 
-            return View(items);
+            return View("~/Views/Notification/DataUploadExceptionList.cshtml", items);
         }
 
         public ActionResult IssueA0401(DocumentQueryViewModel viewModel)
@@ -94,7 +94,7 @@ namespace eIVOGo.Controllers
             if (item == null)
                 return result;
 
-            return View(item);
+            return View("~/Views/Notification/CommissionedToReceiveA0401.cshtml", item);
 
         }
 
@@ -106,7 +106,7 @@ namespace eIVOGo.Controllers
             if (item == null)
                 return result;
 
-            return View(item);
+            return View("~/Views/Notification/NotifyToReceiveA0401.cshtml", item);
 
         }
 
@@ -187,7 +187,7 @@ namespace eIVOGo.Controllers
                 return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
 
-            return View(item);
+            return View("~/Views/Notification/IssueC0501.cshtml", item);
         }
 
         public ActionResult IssueAllowanceCancellation(DocumentQueryViewModel viewModel)
@@ -207,7 +207,7 @@ namespace eIVOGo.Controllers
                 return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
 
-            return View(item);
+            return View("~/Views/Notification/IssueAllowanceCancellation.cshtml", item);
         }
 
         public ActionResult IssueCustomMessage(DocumentQueryViewModel viewModel)

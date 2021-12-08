@@ -116,7 +116,8 @@ namespace eIVOGo.Published
                     {
                         using (WebClient client = new WebClient())
                         {
-                            client.DownloadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/IssueC0501")}?id={e}");
+                            client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                            client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/IssueC0501")}", e.JsonStringify());
                         }
                     }
                     catch (Exception ex)

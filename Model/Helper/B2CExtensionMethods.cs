@@ -114,6 +114,31 @@ namespace Model.Helper
             {
                 result.Main.DataNumber = item.InvoicePurchaseOrder?.OrderNo;
                 result.TxnCode = Naming.GovTurnkeyTransaction.I.ToString();
+                if (item.CDS_Document.DataProcessLogs.Any(d => d.StepID == (int)Naming.InvoiceStepDefinition.已開立))
+                {
+                    result.TxnCode = Naming.GovTurnkeyTransaction.P.ToString();
+                }
+                try
+                {
+                    using (TurnKey2DataContext turnkeyDB = new TurnKey2DataContext())
+                    {
+                        var log = turnkeyDB.GetTable<V_Invoice>()
+                                .Where(i => i.InvoiceNo == result.Main.InvoiceNumber)
+                                .Where(i => i.DocType == "C0401" || i.DocType == "A0401")
+                                .ToList()
+                                .OrderByDescending(i => i.MESSAGE_DTS).FirstOrDefault();
+                        if (log != null)
+                        {
+                            result.TxnCode = log.STATUS == "C"
+                                    ? Naming.GovTurnkeyTransaction.C.ToString()
+                                    : Naming.GovTurnkeyTransaction.E.ToString();
+                        }
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Logger.Error(ex);
+                }
             }
             return result;
         }
@@ -144,28 +169,53 @@ namespace Model.Helper
 
         public static Model.Schema.TurnKey.C0501.CancelInvoice CreateC0501(this InvoiceItem item,bool withExtension = false)
         {
-            InvoiceCancellation InvCancel = item.InvoiceCancellation;
-            if (InvCancel == null)
+            InvoiceCancellation cancellation = item.InvoiceCancellation;
+            if (cancellation == null)
             {
                 return null;
             }
 
             var result = new Model.Schema.TurnKey.C0501.CancelInvoice
             {
-                CancelInvoiceNumber = InvCancel.CancellationNo,
+                CancelInvoiceNumber = cancellation.CancellationNo,
                 InvoiceDate = String.Format("{0:yyyyMMdd}", item.InvoiceDate.Value),
                 BuyerId = item.InvoiceBuyer.ReceiptNo,
                 SellerId = item.Organization.ReceiptNo,
-                CancelDate = String.Format("{0:yyyyMMdd}", InvCancel.CancelDate.Value),
-                CancelTime = InvCancel.CancelDate.Value,
-                CancelReason = InvCancel.CancelReason.GetEfficientStringMaxSize(0, 20),
-                ReturnTaxDocumentNumber = InvCancel.ReturnTaxDocumentNo,
-                Remark = InvCancel.Remark,
+                CancelDate = String.Format("{0:yyyyMMdd}", cancellation.CancelDate.Value),
+                CancelTime = cancellation.CancelDate.Value,
+                CancelReason = cancellation.CancelReason.GetEfficientStringMaxSize(0, 20),
+                ReturnTaxDocumentNumber = cancellation.ReturnTaxDocumentNo,
+                Remark = cancellation.Remark,
             };
 
             if(withExtension)
             {
                 result.TxnCode = Naming.GovTurnkeyTransaction.I.ToString();
+                if (item.CDS_Document.DerivedDocument?.ParentDocument?.DataProcessLogs.Any(d => d.StepID == (int)Naming.InvoiceStepDefinition.已開立) == true)
+                {
+                    result.TxnCode = Naming.GovTurnkeyTransaction.P.ToString();
+                }
+                try
+                {
+                    using (TurnKey2DataContext turnkeyDB = new TurnKey2DataContext())
+                    {
+                        var log = turnkeyDB.GetTable<V_Invoice>()
+                                .Where(i => i.InvoiceNo == result.CancelInvoiceNumber)
+                                .Where(i => i.DocType == "C0501" || i.DocType == "A0501")
+                                .ToList()
+                                .OrderByDescending(i => i.MESSAGE_DTS).FirstOrDefault();
+                        if (log != null)
+                        {
+                            result.TxnCode = log.STATUS == "C"
+                                    ? Naming.GovTurnkeyTransaction.C.ToString()
+                                    : Naming.GovTurnkeyTransaction.E.ToString();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
             }
 
             return result;
@@ -182,55 +232,55 @@ namespace Model.Helper
                     AllowanceType = (Schema.TurnKey.D0401.AllowanceTypeEnum)((int)item.AllowanceType),
                     Buyer = new Schema.TurnKey.D0401.MainBuyer
                     {
-                        Address = string.IsNullOrEmpty(item.InvoiceAllowanceBuyer.Address) ?
-                        "" :
-                         item.InvoiceAllowanceBuyer.Address.Length > 100 ?
-                          item.InvoiceAllowanceBuyer.Address.Substring(0, 100) :
-                           item.InvoiceAllowanceBuyer.Address,
-                        //CustomerNumber = item.InvoiceAllowanceBuyer.CustomerName,
-                        EmailAddress = "",//item.InvoiceAllowanceBuyer.EMail,
-                        FacsimileNumber = String.IsNullOrEmpty(item.InvoiceAllowanceBuyer.Fax) ?
-                        "" :
-                         item.InvoiceAllowanceBuyer.Fax.Length > 26 ?
-                          item.InvoiceAllowanceBuyer.Fax.Substring(0, 26) :
-                           item.InvoiceAllowanceBuyer.Fax,
+                        //Address = string.IsNullOrEmpty(item.InvoiceAllowanceBuyer.Address) ?
+                        //"" :
+                        // item.InvoiceAllowanceBuyer.Address.Length > 100 ?
+                        //  item.InvoiceAllowanceBuyer.Address.Substring(0, 100) :
+                        //   item.InvoiceAllowanceBuyer.Address,
+                        ////CustomerNumber = item.InvoiceAllowanceBuyer.CustomerName,
+                        //EmailAddress = "",//item.InvoiceAllowanceBuyer.EMail,
+                        //FacsimileNumber = String.IsNullOrEmpty(item.InvoiceAllowanceBuyer.Fax) ?
+                        //"" :
+                        // item.InvoiceAllowanceBuyer.Fax.Length > 26 ?
+                        //  item.InvoiceAllowanceBuyer.Fax.Substring(0, 26) :
+                        //   item.InvoiceAllowanceBuyer.Fax,
                         Identifier = item.InvoiceAllowanceBuyer.ReceiptNo,
                         Name = item.InvoiceAllowanceBuyer.IsB2C()
                             ? Encoding.GetEncoding(950).GetBytes(item.InvoiceAllowanceBuyer.Name.InsteadOfNullOrEmpty("")).Length == 4
                                 ? item.InvoiceAllowanceBuyer.Name : ValueValidity.GenerateRandomCode(4)
                             : String.IsNullOrEmpty(item.InvoiceAllowanceBuyer.Name)
                                 ? item.InvoiceAllowanceBuyer.ReceiptNo : item.InvoiceAllowanceBuyer.Name,
-                        PersonInCharge = String.IsNullOrEmpty(item.InvoiceAllowanceBuyer.PersonInCharge) ?
-                        "" :
-                        item.InvoiceAllowanceBuyer.PersonInCharge.Length > 30 ?
-                        item.InvoiceAllowanceBuyer.PersonInCharge.Substring(0, 30) :
-                        item.InvoiceAllowanceBuyer.PersonInCharge,
-                        RoleRemark = item.InvoiceAllowanceBuyer.RoleRemark,
-                        TelephoneNumber = "",//item.InvoiceAllowanceBuyer.Phone,
+                        //PersonInCharge = String.IsNullOrEmpty(item.InvoiceAllowanceBuyer.PersonInCharge) ?
+                        //"" :
+                        //item.InvoiceAllowanceBuyer.PersonInCharge.Length > 30 ?
+                        //item.InvoiceAllowanceBuyer.PersonInCharge.Substring(0, 30) :
+                        //item.InvoiceAllowanceBuyer.PersonInCharge,
+                        //RoleRemark = item.InvoiceAllowanceBuyer.RoleRemark,
+                        //TelephoneNumber = "",//item.InvoiceAllowanceBuyer.Phone,
                     },
                     Seller = new Schema.TurnKey.D0401.MainSeller
                     {
-                        Address = String.IsNullOrEmpty(item.InvoiceAllowanceSeller.Address) ?
-                        "" :
-                         item.InvoiceAllowanceSeller.Address.Length > 100 ?
-                          item.InvoiceAllowanceSeller.Address.Substring(0, 100) :
-                           item.InvoiceAllowanceSeller.Address,
-                        //CustomerNumber = item.InvoiceAllowanceSeller.CustomerName,
-                        EmailAddress = "",//item.InvoiceAllowanceSeller.EMail,
-                        FacsimileNumber = String.IsNullOrEmpty(item.InvoiceAllowanceSeller.Fax) ?
-                        "" :
-                        item.InvoiceAllowanceSeller.Fax.Length > 26 ?
-                        item.InvoiceAllowanceSeller.Fax.Substring(0, 26) :
-                        item.InvoiceAllowanceSeller.Fax,
+                        //Address = String.IsNullOrEmpty(item.InvoiceAllowanceSeller.Address) ?
+                        //"" :
+                        // item.InvoiceAllowanceSeller.Address.Length > 100 ?
+                        //  item.InvoiceAllowanceSeller.Address.Substring(0, 100) :
+                        //   item.InvoiceAllowanceSeller.Address,
+                        ////CustomerNumber = item.InvoiceAllowanceSeller.CustomerName,
+                        //EmailAddress = "",//item.InvoiceAllowanceSeller.EMail,
+                        //FacsimileNumber = String.IsNullOrEmpty(item.InvoiceAllowanceSeller.Fax) ?
+                        //"" :
+                        //item.InvoiceAllowanceSeller.Fax.Length > 26 ?
+                        //item.InvoiceAllowanceSeller.Fax.Substring(0, 26) :
+                        //item.InvoiceAllowanceSeller.Fax,
                         Identifier = item.InvoiceAllowanceSeller.ReceiptNo,
                         Name = item.InvoiceAllowanceSeller.Name,
-                        PersonInCharge = String.IsNullOrEmpty(item.InvoiceAllowanceSeller.PersonInCharge) ?
-                        "" :
-                         item.InvoiceAllowanceSeller.PersonInCharge.Length > 30 ?
-                          item.InvoiceAllowanceSeller.PersonInCharge.Substring(0, 30) :
-                           item.InvoiceAllowanceSeller.PersonInCharge,
-                        RoleRemark = item.InvoiceAllowanceSeller.RoleRemark,
-                        TelephoneNumber = "",//item.InvoiceAllowanceSeller.Phone,
+                        //PersonInCharge = String.IsNullOrEmpty(item.InvoiceAllowanceSeller.PersonInCharge) ?
+                        //"" :
+                        // item.InvoiceAllowanceSeller.PersonInCharge.Length > 30 ?
+                        //  item.InvoiceAllowanceSeller.PersonInCharge.Substring(0, 30) :
+                        //   item.InvoiceAllowanceSeller.PersonInCharge,
+                        //RoleRemark = item.InvoiceAllowanceSeller.RoleRemark,
+                        //TelephoneNumber = "",//item.InvoiceAllowanceSeller.Phone,
                     },
                 },
                 Amount = new Schema.TurnKey.D0401.Amount
@@ -272,7 +322,32 @@ namespace Model.Helper
                 }
 
                 result.TxnCode = Naming.GovTurnkeyTransaction.I.ToString();
+                if (item.CDS_Document.DataProcessLogs.Any(d => d.StepID == (int)Naming.InvoiceStepDefinition.已開立) == true)
+                {
+                    result.TxnCode = Naming.GovTurnkeyTransaction.P.ToString();
 
+                    try
+                    {
+                        using (TurnKey2DataContext turnkeyDB = new TurnKey2DataContext())
+                        {
+                            var log = turnkeyDB.GetTable<V_Allowance>()
+                                    .Where(i => i.AllowanceNo == result.Main.AllowanceNumber)
+                                    .Where(i => i.DocType == "D0401" || i.DocType == "B0401")
+                                    .ToList()
+                                    .OrderByDescending(i => i.MESSAGE_DTS).FirstOrDefault();
+                            if (log != null)
+                            {
+                                result.TxnCode = log.STATUS == "C"
+                                        ? Naming.GovTurnkeyTransaction.C.ToString()
+                                        : Naming.GovTurnkeyTransaction.E.ToString();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex);
+                    }
+                }
             }
 
             return result;
@@ -301,6 +376,32 @@ namespace Model.Helper
             if(withExtension)
             {
                 result.TxnCode = Naming.GovTurnkeyTransaction.I.ToString();
+                if (item.CDS_Document.DerivedDocument?.ParentDocument?.DataProcessLogs.Any(d => d.StepID == (int)Naming.InvoiceStepDefinition.已開立) == true)
+                {
+                    result.TxnCode = Naming.GovTurnkeyTransaction.P.ToString();
+
+                    try
+                    {
+                        using (TurnKey2DataContext turnkeyDB = new TurnKey2DataContext())
+                        {
+                            var log = turnkeyDB.GetTable<V_Allowance>()
+                                    .Where(i => i.AllowanceNo == result.CancelAllowanceNumber)
+                                    .Where(i => i.DocType == "D0501" || i.DocType == "B0501")
+                                    .ToList()
+                                    .OrderByDescending(i => i.MESSAGE_DTS).FirstOrDefault();
+                            if (log != null)
+                            {
+                                result.TxnCode = log.STATUS == "C"
+                                        ? Naming.GovTurnkeyTransaction.C.ToString()
+                                        : Naming.GovTurnkeyTransaction.E.ToString();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex);
+                    }
+                }
             }
 
             return result;

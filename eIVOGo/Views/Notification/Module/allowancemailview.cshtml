@@ -27,4 +27,13 @@
 }
 @{ Html.RenderPartial("~/Views/DataView/Module/Allowance.cshtml", _model);}
 
-@{ Html.RenderPartial("~/Views/Notification/Shared/ServiceNotation.cshtml", _model.InvoiceAllowanceSeller.Organization);}
+@if (_model.InvoiceAllowanceSeller.Organization.OrganizationExtension?.CustomNotification != null)
+{
+    <text>
+        @Html.Raw(_model.InvoiceAllowanceSeller.Organization.OrganizationExtension?.CustomNotification)
+    </text>
+}
+else
+{
+    Html.RenderPartial("~/Views/Notification/Shared/ServiceNotation.cshtml", _model.InvoiceAllowanceSeller.Organization);
+}

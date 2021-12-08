@@ -129,6 +129,14 @@ namespace ModelExtension.Helper
             item.OrganizationStatus.EntrustToPrint = viewModel.EntrustToPrint == true;
             item.OrganizationStatus.EnableTrackCodeInvoiceNoValidation = viewModel.EnableTrackCodeInvoiceNoValidation;
             item.OrganizationStatus.IgnoreDuplicatedDataNumber = viewModel.IgnoreDuplicatedDataNumber;
+            item.OrganizationStatus.DownloadDispatch = viewModel.DownloadDispatch;
+
+            var extension = item.OrganizationExtension;
+            if(extension==null)
+            {
+                extension = item.OrganizationExtension = new OrganizationExtension { };
+            }
+            extension.CustomNotification = HttpUtility.HtmlDecode(viewModel.CustomNotification.GetEfficientString());
 
             models.SubmitChanges();
 

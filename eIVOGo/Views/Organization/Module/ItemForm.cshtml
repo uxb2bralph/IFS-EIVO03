@@ -265,43 +265,51 @@
                         </td>
                     }
                 </tr>
+                <tr>
+                    <th>
+                        設定接收MIG
+                    </th>
+                    <td colspan="3">
+                        <input type="checkbox" value="@($"{true}")" name="DownloadDispatch" @(_viewModel.DownloadDispatch == true ? "checked" : null) />是
+                    </td>
+                </tr>
                 @*<tr>
-                        <th>上傳系統格式
-                        </th>
-                        <td >
-                            <select name="uploadType">
-                                <option>XML</option>
-                                <option>CSV</option>
-                                <option>MIG</option>
-                                <option>XML(含折讓單)</option>
-                            </select>
-                        </td>
-                        @if (_viewModel.LogoURL!= null)
-                            {
-                        <th>公司LOGO</th>
-                        <td>
-                            <img id="logo" style="width: 300px;" src="@(_viewModel.LogoURL != null ? VirtualPathUtility.ToAbsolute("~/" + _viewModel.LogoURL) : null)" />
-                            <input type="file" id="fileLogo" style="display: inline;" name="fileLogo" />
-                        </td>
-                        }
-                    </tr>
-                    <tr>
-                        <th>G/W發票存放資料夾
-                        </th>
-                        <td  colspan="3">
-                            <input type="text" size="68" name="txnPath" value="@(Request["txnPath"]!=null ? Request["txnPath"] : "C:\\UXB2B_EIVO")" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th >系統
-                        </th>
-                        <td colspan="3" >
-                            <select name="svcType">
-                                <option value="0">測試機</option>
-                                <option value="1">正式機</option>
-                            </select>
-                        </td>
-                    </tr>*@
+            <th>上傳系統格式
+            </th>
+            <td >
+                <select name="uploadType">
+                    <option>XML</option>
+                    <option>CSV</option>
+                    <option>MIG</option>
+                    <option>XML(含折讓單)</option>
+                </select>
+            </td>
+            @if (_viewModel.LogoURL!= null)
+                {
+            <th>公司LOGO</th>
+            <td>
+                <img id="logo" style="width: 300px;" src="@(_viewModel.LogoURL != null ? VirtualPathUtility.ToAbsolute("~/" + _viewModel.LogoURL) : null)" />
+                <input type="file" id="fileLogo" style="display: inline;" name="fileLogo" />
+            </td>
+            }
+        </tr>
+        <tr>
+            <th>G/W發票存放資料夾
+            </th>
+            <td  colspan="3">
+                <input type="text" size="68" name="txnPath" value="@(Request["txnPath"]!=null ? Request["txnPath"] : "C:\\UXB2B_EIVO")" />
+            </td>
+        </tr>
+        <tr>
+            <th >系統
+            </th>
+            <td colspan="3" >
+                <select name="svcType">
+                    <option value="0">測試機</option>
+                    <option value="1">正式機</option>
+                </select>
+            </td>
+        </tr>*@
                 <tr>
                     <td colspan="4" class="Head_style_a">
                         訊息通知
@@ -359,6 +367,14 @@
                     <th>B2B發票開立通知以鏈結取代附件</th>
                     <td>
                         <input type="checkbox" value="@($"{true}")" name="UseB2BStandalone" @(_viewModel.UseB2BStandalone == true ? "checked" : null) />是
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        郵件附言
+                    </th>
+                    <td colspan="3">
+                        <textarea name="CustomNotification" class="form-control" rows="5">@Html.Raw(_viewModel.CustomNotification)</textarea>
                     </td>
                 </tr>
             </table>

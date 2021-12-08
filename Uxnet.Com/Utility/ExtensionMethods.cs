@@ -1737,6 +1737,22 @@ namespace Utility
             return $"{value:##,###,###,###,##0}";
         }
 
+        public static String EscapeFileNameCharacter(this String forFileName,char replacement)
+        {
+            StringBuilder sb = new StringBuilder(forFileName);
+            foreach(var ch in Path.GetInvalidFileNameChars())
+            {
+                for (int i = 0; i < sb.Length; i++)
+                {
+                    if (sb[i] == ch)
+                    {
+                        sb[i] = replacement;
+                    }
+                }
+            }
+            return sb.ToString();
+        }
+
     }
 
     public class EventArgs<T> : EventArgs

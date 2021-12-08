@@ -99,4 +99,9 @@ else if (_model.Organization.EnterpriseGroupMember.Any(g => g.EnterpriseID == 1)
 配合財政部B2B電子發票證明聯新格式法規規定，系統將於2/4日上版，屆時各會員所列印的電子發票即為B2B電子發票證明聯新格式，特此公告。
 <br />
 <br />
+@if (_model.Organization.OrganizationExtension?.CustomNotification != null)
+{
+    Write(new HtmlString(_model.Organization.OrganizationExtension?.CustomNotification));
+    <br />
+}
 信件寄送時間：@(DateTime.Now)

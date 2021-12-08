@@ -59,6 +59,7 @@ namespace Model.Models.ViewModel
         public bool? IgnoreDuplicatedDataNumber { get; set; }
         public Naming.InvoiceProcessType? DefaultProcessType { get; set; }
         public String CustomerNo { get; set; }
+        public String CustomNotification { get; set; }
 
     }
 

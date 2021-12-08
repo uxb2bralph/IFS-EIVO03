@@ -87,7 +87,7 @@
                                 <td style="width:360px;"><p class="productname">品名</p></td>
                                 <td style="width:80px;"><p class="quantity">數量</p></td>
                                 <td style="width:180px;"><p class="price">單價</p></td>
-                                <td style="width:180px;"><p class="totalPrice">小計</p></td>
+                                <td style="width:180px;"><p class="totalPrice">金額</p></td>
                             </tr>
                             @{ int _itemIdx;}
                             @for (_itemIdx = 0; _productItem != null && _itemIdx < _productItem.Length; _itemIdx++)
@@ -158,7 +158,7 @@
         <div style="font-size: 10pt;">
             <div>若您尚有需要服務的地方，隨時歡迎來電或來信電子發票客服信箱。</div>
             <div>委外客服信箱：<a href="mailto:ifs_service@uxb2b.com">ifs_service@uxb2b.com</a></div>
-            <div>委外客服電話：0800-010-626</div>
+            @*<div>委外客服電話：0800-010-626</div>*@
             <div style="color:red;">
                 @if (_model.InvoiceDonation == null)
                 {

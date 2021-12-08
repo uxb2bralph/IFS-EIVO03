@@ -63,6 +63,8 @@ namespace Model.Models.ViewModel
                 viewModel.EntrustToPrint = item.OrganizationStatus.EntrustToPrint;
                 viewModel.EnableTrackCodeInvoiceNoValidation = item.OrganizationStatus.EnableTrackCodeInvoiceNoValidation;
                 viewModel.IgnoreDuplicatedDataNumber = item.OrganizationStatus.IgnoreDuplicatedDataNumber;
+                viewModel.CustomNotification = item.OrganizationExtension?.CustomNotification;
+
             }
             return viewModel;
         }

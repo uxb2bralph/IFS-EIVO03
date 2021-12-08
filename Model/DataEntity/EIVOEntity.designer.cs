@@ -33948,6 +33948,8 @@ namespace Model.DataEntity
 		
 		private string _TaxNo;
 		
+		private string _CustomNotification;
+		
 		private EntityRef<Organization> _Organization;
 		
     #region Extensibility Method Definitions
@@ -33960,6 +33962,8 @@ namespace Model.DataEntity
     partial void OnCustomerNoChanged();
     partial void OnTaxNoChanging(string value);
     partial void OnTaxNoChanged();
+    partial void OnCustomNotificationChanging(string value);
+    partial void OnCustomNotificationChanged();
     #endregion
 		
 		public OrganizationExtension()
@@ -34030,6 +34034,27 @@ namespace Model.DataEntity
 					this._TaxNo = value;
 					this.SendPropertyChanged("TaxNo");
 					this.OnTaxNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomNotification", DbType="NVarChar(MAX)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public string CustomNotification
+		{
+			get
+			{
+				return this._CustomNotification;
+			}
+			set
+			{
+				if ((this._CustomNotification != value))
+				{
+					this.OnCustomNotificationChanging(value);
+					this.SendPropertyChanging();
+					this._CustomNotification = value;
+					this.SendPropertyChanged("CustomNotification");
+					this.OnCustomNotificationChanged();
 				}
 			}
 		}

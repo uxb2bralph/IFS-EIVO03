@@ -13,6 +13,7 @@
 <!--交易畫面標題-->
 @{ 
     TaxMediaQueryViewModel _viewModel = (TaxMediaQueryViewModel)ViewBag.ViewModel;
+    AttachmentViewModel _downloadViewModel = this.Model as AttachmentViewModel;
 }
 @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "發票媒體申報檔查詢／匯出");}
 
@@ -85,7 +86,7 @@
                 發票年度
             </th>
             <td class="tdleft">
-                @{ Html.RenderPartial("~/Views/Shared/YearSelector.ascx");}
+                @{ Html.RenderPartial("~/Views/Shared/YearSelector.cshtml");}
 
             </td>
         </tr>
@@ -145,3 +146,7 @@
         };
     });
 </script>
+@if (_downloadViewModel != null)
+{
+    Html.RenderPartial("~/Views/Shared/Module/PromptCheckDownload.cshtml", _downloadViewModel);
+}

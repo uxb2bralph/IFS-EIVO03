@@ -68,6 +68,12 @@ namespace Model.InvoiceManagement.InvoiceProcess
                         item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
                         models.SubmitChanges();
 
+                        if (invoiceItem.Organization.OrganizationStatus.DownloadDispatch == true)
+                        {
+                            PushStepQueueOnSubmit(models, item.CDS_Document, Naming.InvoiceStepDefinition.回傳MIG);
+                            models.SubmitChanges();
+                        }
+
                         models.ExecuteCommand("delete [proc].C0501DispatchQueue where DocID={0} and StepID={1}",
                             item.DocID, item.StepID);
 

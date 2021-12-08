@@ -37,13 +37,14 @@ namespace InvoiceClient.Agent.POSHelper
                 _Settings = new LocalSettings { };
             }
 
-            File.WriteAllText(filePath, JsonConvert.SerializeObject(_Settings));
+            File.WriteAllText(filePath, _Settings.JsonStringify());
 
             _Settings.InvoiceNoPreload.CheckStoredPath();
             _Settings.PreparedInvoice.CheckStoredPath();
             _Settings.PreparedAllowance.CheckStoredPath();
             _Settings.SellerInvoice.CheckStoredPath();
             _Settings.PrintInvoice.CheckStoredPath();
+            _Settings.MIGResponse.CheckStoredPath();
         }
 
         public new class LocalSettings : InvoiceServerInspector.LocalSettings
@@ -58,6 +59,7 @@ namespace InvoiceClient.Agent.POSHelper
             public String PrintC0401 { get; set; } = "http://localhost:10800/FrontEnd/PrintC0401";
             public String VerifyAllowance { get; set; } = "/POSDevice/VerifyAllowance";
             public String PreparedAllowance { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "PreparedAllowance");
+            public String MIGResponse { get; set; } = Path.Combine(Logger.LogPath, "MIGResponse");
 
         }
 

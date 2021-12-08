@@ -1292,6 +1292,7 @@
       <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="CustomerNo" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
       <Column Name="TaxNo" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+      <Column Name="CustomNotification" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="Organization_OrganizationExtension" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
     </Type>
   </Table>

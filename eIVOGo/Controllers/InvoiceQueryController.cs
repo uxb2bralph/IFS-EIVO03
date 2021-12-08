@@ -23,6 +23,7 @@ using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
 using ModelExtension.Helper;
 using Model.Helper;
+using System.Threading.Tasks;
 
 namespace eIVOGo.Controllers
 {
@@ -109,7 +110,27 @@ namespace eIVOGo.Controllers
 
             if (viewModel.BusinessBorder == Naming.B2CCategoryID.境外電商)
             {
-                return View("~/Views/InvoiceQuery/InvoiceMediaReportCBM.cshtml");
+                ProcessRequest processItem = new ProcessRequest
+                {
+                    Sender = HttpContext.GetUser()?.UID,
+                    SubmitDate = DateTime.Now,
+                    ProcessStart = DateTime.Now,
+                    ResponsePath = System.IO.Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".csv"),
+                };
+                models.GetTable<ProcessRequest>().InsertOnSubmit(processItem);
+                models.SubmitChanges();
+
+                saveAsCsv(processItem.TaskID, processItem.ResponsePath, viewModel);
+
+                return View("~/Views/InvoiceQuery/InvoiceMediaReport.cshtml",
+                        new AttachmentViewModel
+                        {
+                            TaskID = processItem.TaskID,
+                            FileName = processItem.ResponsePath,
+                            FileDownloadName = $"{DateTime.Today:yyyy-MM-dd}.csv",
+                        });
+
+                //return View("~/Views/InvoiceQuery/InvoiceMediaReportCBM.cshtml");
             }
 
             DateTime startDate = new DateTime(viewModel.Year.Value, viewModel.PeriodNo.Value * 2 - 1, 1);
@@ -153,6 +174,118 @@ namespace eIVOGo.Controllers
             return View("~/Views/InvoiceQuery/InquireInvoiceMedia.cshtml", items);
         }
 
+        static void saveAsCsv(int taskID, String resultFile, TaxMediaQueryViewModel viewModel)
+        {
+            Task.Run(() =>
+            {
+                try
+                {
+                    String tmp = $"{resultFile}.tmp";
+                    Exception exception = null;
+                    using (StreamWriter writer = new StreamWriter(tmp,false,Encoding.UTF8))
+                    {
+                        using (ModelSource<InvoiceItem> db = new ModelSource<InvoiceItem>())
+                        {
+
+                            try
+                            {
+                                DateTime dateFrom = new DateTime(viewModel.Year.Value, viewModel.PeriodNo.Value * 2 - 1, 1);
+                                writer.WriteLine("格式代號,資料所屬期別(年月),幣別,銷售總計金額,匯率,換算後銷售總計金額,銷售額,銷項稅額,交易筆數,統一發票字軌,發票起號,發票迄號,發票開立年月");
+
+                                for (int idx = 0; idx < 2; idx++)
+                                {
+                                    var invoiceItems = db.DataContext.GetInvoiceReport(viewModel.SellerID, dateFrom, dateFrom.AddMonths(1));
+                                    var allowanceItems = db.DataContext.GetAllowanceReport(viewModel.SellerID, dateFrom, dateFrom.AddMonths(1));
+
+                                    foreach (var g in invoiceItems)
+                                    {
+                                        decimal? exchangeRate;
+                                        if (g.CurrencyID == 0)
+                                        {
+                                            exchangeRate = 1;
+                                        }
+                                        else
+                                        {
+                                            exchangeRate = db.GetTable<InvoicePeriodExchangeRate>()
+                                                .Where(v => v.PeriodID == g.PeriodID && v.CurrencyID == g.CurrencyID)
+                                                .FirstOrDefault()?.ExchangeRate;
+                                        }
+                                        decimal? twTotalAmt = g.TotalAmount * exchangeRate;
+                                        decimal? twAmtNoTax = null;
+                                        if (twTotalAmt.HasValue)
+                                        {
+                                            twTotalAmt = Math.Round(twTotalAmt.Value);
+                                            twAmtNoTax = Math.Round(twTotalAmt.Value / 1.05M);
+                                        }
+                                        writer.WriteLine($"35,{dateFrom.Year - 1911}{dateFrom.Month:00},{(g.CurrencyID == 0 ? "NTD" : g.AbbrevName)},{g.TotalAmount},{exchangeRate:.#####},{twTotalAmt},{twAmtNoTax},{twTotalAmt - twAmtNoTax},{g.RecordCount},{g.TrackCode},{g.StartNo:00000000},{g.EndNo:00000000},");
+                                    }
+
+                                    foreach (var g in allowanceItems)
+                                    {
+                                        decimal? exchangeRate;
+                                        if (g.CurrencyID == 0)
+                                        {
+                                            exchangeRate = 1;
+                                        }
+                                        else
+                                        {
+                                            exchangeRate = db.GetTable<InvoicePeriodExchangeRate>()
+                                                .Where(v => v.PeriodID == g.PeriodID && v.CurrencyID == g.CurrencyID)
+                                                .FirstOrDefault()?.ExchangeRate;
+                                        }
+                                        decimal? twTotalAmt = g.TotalAmount * exchangeRate;
+                                        decimal? twTaxAmt = g.TotalTaxAmount * exchangeRate;
+                                        if (twTotalAmt.HasValue)
+                                        {
+                                            twTotalAmt = Math.Round(twTotalAmt.Value);
+                                        }
+                                        if (twTaxAmt.HasValue)
+                                        {
+                                            twTaxAmt = Math.Round(twTaxAmt.Value);
+                                        }
+                                        writer.WriteLine($"33,{dateFrom.Year - 1911}{dateFrom.Month:00},{(g.CurrencyID == 0 ? "NTD" : g.AbbrevName)},{g.TotalAmount},{exchangeRate:.#####},,,,{g.RecordCount},{g.TrackCode},{g.StartNo:00000000},{g.EndNo:00000000},{g.Year - 1911:000}{g.Month:00}");
+                                    }
+
+                                    dateFrom = dateFrom.AddMonths(1);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.Error(ex);
+                                exception = ex;
+                            }
+
+                            ProcessRequest taskItem = db.GetTable<ProcessRequest>()
+                                            .Where(t => t.TaskID == taskID).FirstOrDefault();
+
+                            if (taskItem != null)
+                            {
+                                if (exception != null)
+                                {
+                                    taskItem.ExceptionLog = new ExceptionLog
+                                    {
+                                        DataContent = exception.Message
+                                    };
+                                }
+                                taskItem.ProcessComplete = DateTime.Now;
+                                db.SubmitChanges();
+                            }
+
+                        }
+                    }
+                    if (exception == null)
+                    {
+                        System.IO.File.Move(tmp, resultFile);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
+            });
+
+        }
 
 
         public ActionResult Inquire(InquireInvoiceViewModel viewModel)

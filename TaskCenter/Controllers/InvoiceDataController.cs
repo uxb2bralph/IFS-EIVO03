@@ -116,14 +116,10 @@ namespace TaskCenter.Controllers
 
         public ActionResult NotifyRequestCompletion(InvoiceRequestViewModel viewModel)
         {
-            ViewBag.ViewModel = viewModel;
-            if (viewModel.KeyID != null)
+            var result = CheckAuth(viewModel);
+            if (result != null)
             {
-                viewModel.AgentID = DecryptKeyValue(viewModel, out bool expired);
-                if (expired)
-                {
-                    return Json(new { result = false, message = ErrorMessage.E1001 },JsonRequestBehavior.AllowGet);
-                }
+                return result;
             }
 
             var items = models.GetTable<ProcessRequest>().Where(q => q.AgentID == viewModel.AgentID)
@@ -146,14 +142,10 @@ namespace TaskCenter.Controllers
 
         public ActionResult CommitProcessResponse(InvoiceRequestViewModel viewModel)
         {
-            ViewBag.ViewModel = viewModel;
-            if (viewModel.KeyID != null)
+            var authResult = CheckAuth(viewModel);
+            if (authResult != null)
             {
-                viewModel.AgentID = DecryptKeyValue(viewModel, out bool expired);
-                if (expired)
-                {
-                    return new EmptyResult { };
-                }
+                return authResult;
             }
 
             var result = models.ExecuteCommand(@"
@@ -175,5 +167,234 @@ namespace TaskCenter.Controllers
             return new EmptyResult { };
         }
 
+        private readonly static String[] _DeleteMIGQ = {
+            @"DELETE FROM [proc].C0401DispatchQueue
+            WHERE   (DocID = {0}) AND (StepID = {1})",
+            @"DELETE FROM [proc].C0501DispatchQueue
+            WHERE   (DocID = {0}) AND (StepID = {1})",
+            @"DELETE FROM [proc].D0401DispatchQueue
+            WHERE   (DocID = {0}) AND (StepID = {1})",
+            @"DELETE FROM [proc].D0501DispatchQueue
+            WHERE   (DocID = {0}) AND (StepID = {1})",
+            @"DELETE FROM [proc].A0401DispatchQueue
+            WHERE   (DocID = {0}) AND (StepID = {1})",
+            @"DELETE FROM [proc].A0501DispatchQueue
+            WHERE   (DocID = {0}) AND (StepID = {1})",
+            @"DELETE FROM [proc].B0401DispatchQueue
+            WHERE   (DocID = {0}) AND (StepID = {1})",
+            @"DELETE FROM [proc].B0501DispatchQueue
+            WHERE   (DocID = {0}) AND (StepID = {1})"
+             };
+
+        private const int MAX_ITEMS = 100;
+        public ActionResult RetrieveMIGResponse(MIGResponseViewModel viewModel)
+        {
+            Request.SaveAs(Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}.txt"), true);
+            var authResult = CheckAuth(viewModel);
+            if (authResult != null)
+            {
+                return authResult;
+            }
+
+            void deleteMIG(int docID)
+            {
+                foreach (var sqlCmd in _DeleteMIGQ)
+                {
+                    if (models.ExecuteCommand(sqlCmd, docID, (int)Naming.InvoiceStepDefinition.回傳MIG) > 0)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            if (viewModel.LastReceivedKey != null)
+            {
+                foreach (var docID in viewModel.LastReceivedKey)
+                {
+                    deleteMIG(docID);
+                }
+            }
+
+            IQueryable<InvoiceItem> invoiceItems;
+            IQueryable<InvoiceAllowance> allowanceItems;
+            viewModel = new MIGResponseViewModel
+            {
+                AgentID = viewModel.AgentID,
+                ProcessType = viewModel.ProcessType,
+            };
+
+            switch (viewModel.ProcessType)
+            {
+                case Naming.InvoiceProcessType.C0401:
+                    invoiceItems = models.DataContext.GetInvoiceByAgent(viewModel.AgentID ?? -1);
+                    var migC0401 = models.GetTable<C0401DispatchQueue>().Where(d => d.StepID == (int)Naming.InvoiceStepDefinition.回傳MIG)
+                                        .Where(d => invoiceItems.Any(i => i.InvoiceID == d.DocID))
+                                        .Take(MAX_ITEMS)
+                                        .ToList();
+                    viewModel.LastReceivedKey = migC0401.Select(d => d.DocID).ToArray();
+                    viewModel.Items = migC0401
+                        .Select(d => 
+                        new MIGContent 
+                        {
+                            DocID = d.DocID,
+                            DocDate = d.CDS_Document.DocDate,
+                            No = d.CDS_Document.InvoiceItem?.InvoiceNo(),
+                            ReceiptNo = d.CDS_Document.InvoiceItem?.Organization?.ReceiptNo,
+                            MIG = d.CDS_Document.InvoiceItem?.CreateC0401().GetXml()
+                        }).ToArray();
+                    break;
+
+                case Naming.InvoiceProcessType.C0501:
+                    invoiceItems = models.DataContext.GetInvoiceByAgent(viewModel.AgentID ?? -1);
+                    var migC0501 = models.GetTable<C0501DispatchQueue>().Where(d => d.StepID == (int)Naming.InvoiceStepDefinition.回傳MIG)
+                                        .Where(d => invoiceItems.Any(i => i.InvoiceID == d.CDS_Document.DerivedDocument.SourceID))
+                                        .Take(MAX_ITEMS)
+                                        .ToList();
+                    viewModel.LastReceivedKey = migC0501.Select(d => d.DocID).ToArray();
+                    viewModel.Items = migC0501
+                        .Select(d =>
+                        new MIGContent
+                        {
+                            DocID = d.DocID,
+                            DocDate = d.CDS_Document.DocDate,
+                            No = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.InvoiceNo(),
+                            ReceiptNo = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.Organization?.ReceiptNo,
+                            MIG = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.CreateC0501().GetXml()
+                        }).ToArray();
+                    break;
+
+                case Naming.InvoiceProcessType.A0401:
+                    invoiceItems = models.DataContext.GetInvoiceByAgent(viewModel.AgentID ?? -1);
+                    var migA0401 = models.GetTable<A0401DispatchQueue>().Where(d => d.StepID == (int)Naming.InvoiceStepDefinition.回傳MIG)
+                                        .Where(d => invoiceItems.Any(i => i.InvoiceID == d.DocID))
+                                        .Take(MAX_ITEMS)
+                                        .ToList();
+                    viewModel.LastReceivedKey = migA0401.Select(d => d.DocID).ToArray();
+                    viewModel.Items = migA0401
+                        .Select(d =>
+                        new MIGContent
+                        {
+                            DocID = d.DocID,
+                            DocDate = d.CDS_Document.DocDate,
+                            No = d.CDS_Document.InvoiceItem?.InvoiceNo(),
+                            ReceiptNo = d.CDS_Document.InvoiceItem?.Organization?.ReceiptNo,
+                            MIG = d.CDS_Document.InvoiceItem?.CreateA0401().GetXml()
+                        }).ToArray();
+                    break;
+
+                case Naming.InvoiceProcessType.A0501:
+                    invoiceItems = models.DataContext.GetInvoiceByAgent(viewModel.AgentID ?? -1);
+                    var migA0501 = models.GetTable<A0501DispatchQueue>().Where(d => d.StepID == (int)Naming.InvoiceStepDefinition.回傳MIG)
+                                        .Where(d => invoiceItems.Any(i => i.InvoiceID == d.CDS_Document.DerivedDocument.SourceID))
+                                        .Take(MAX_ITEMS)
+                                        .ToList();
+                    viewModel.LastReceivedKey = migA0501.Select(d => d.DocID).ToArray();
+                    viewModel.Items = migA0501
+                        .Select(d =>
+                        new MIGContent
+                        {
+                            DocID = d.DocID,
+                            DocDate = d.CDS_Document.DocDate,
+                            No = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.InvoiceNo(),
+                            ReceiptNo = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.Organization?.ReceiptNo,
+                            MIG = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.CreateA0501().GetXml()
+                        }).ToArray();
+                    break;
+
+                case Naming.InvoiceProcessType.D0401:
+                    allowanceItems = models.DataContext.GetAllowanceByAgent(viewModel.AgentID ?? -1);
+                    var migD0401 = models.GetTable<D0401DispatchQueue>().Where(d => d.StepID == (int)Naming.InvoiceStepDefinition.回傳MIG)
+                                        .Where(d => allowanceItems.Any(i => i.AllowanceID == d.DocID))
+                                        .Take(MAX_ITEMS)
+                                        .ToList();
+                    viewModel.LastReceivedKey = migD0401.Select(d => d.DocID).ToArray();
+                    viewModel.Items = migD0401
+                        .Select(d =>
+                        new MIGContent
+                        {
+                            DocID = d.DocID,
+                            DocDate = d.CDS_Document.DocDate,
+                            No = d.CDS_Document.InvoiceAllowance?.AllowanceNumber,
+                            ReceiptNo = d.CDS_Document.InvoiceAllowance?.InvoiceAllowanceSeller?.ReceiptNo,
+                            MIG = d.CDS_Document.InvoiceAllowance?.CreateD0401().GetXml()
+                        }).ToArray();
+                    break;
+
+                case Naming.InvoiceProcessType.D0501:
+                    allowanceItems = models.DataContext.GetAllowanceByAgent(viewModel.AgentID ?? -1);
+                    var migD0501 = models.GetTable<D0501DispatchQueue>().Where(d => d.StepID == (int)Naming.InvoiceStepDefinition.回傳MIG)
+                                        .Where(d => allowanceItems.Any(i => i.AllowanceID == d.CDS_Document.DerivedDocument.SourceID))
+                                        .Take(MAX_ITEMS)
+                                        .ToList();
+                    viewModel.LastReceivedKey = migD0501.Select(d => d.DocID).ToArray();
+                    viewModel.Items = migD0501
+                        .Select(d =>
+                        new MIGContent
+                        {
+                            DocID = d.DocID,
+                            DocDate = d.CDS_Document.DocDate,
+                            No = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.AllowanceNumber,
+                            ReceiptNo = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.InvoiceAllowanceSeller?.ReceiptNo,
+                            MIG = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.CreateD0501().GetXml()
+                        }).ToArray();
+                    break;
+
+                case Naming.InvoiceProcessType.B0401:
+                    allowanceItems = models.DataContext.GetAllowanceByAgent(viewModel.AgentID ?? -1);
+                    var migB0401 = models.GetTable<B0401DispatchQueue>().Where(d => d.StepID == (int)Naming.InvoiceStepDefinition.回傳MIG)
+                                        .Where(d => allowanceItems.Any(i => i.AllowanceID == d.DocID))
+                                        .Take(MAX_ITEMS)
+                                        .ToList();
+                    viewModel.LastReceivedKey = migB0401.Select(d => d.DocID).ToArray();
+                    viewModel.Items = migB0401
+                        .Select(d =>
+                        new MIGContent
+                        {
+                            DocID = d.DocID,
+                            DocDate = d.CDS_Document.DocDate,
+                            No = d.CDS_Document.InvoiceAllowance?.AllowanceNumber,
+                            ReceiptNo = d.CDS_Document.InvoiceAllowance?.InvoiceAllowanceSeller?.ReceiptNo,
+                            MIG = d.CDS_Document.InvoiceAllowance?.CreateB0401().GetXml()
+                        }).ToArray();
+                    break;
+
+                case Naming.InvoiceProcessType.B0501:
+                    allowanceItems = models.DataContext.GetAllowanceByAgent(viewModel.AgentID ?? -1);
+                    var migB0501 = models.GetTable<B0501DispatchQueue>().Where(d => d.StepID == (int)Naming.InvoiceStepDefinition.回傳MIG)
+                                        .Where(d => allowanceItems.Any(i => i.AllowanceID == d.CDS_Document.DerivedDocument.SourceID))
+                                        .Take(MAX_ITEMS)
+                                        .ToList();
+                    viewModel.LastReceivedKey = migB0501.Select(d => d.DocID).ToArray();
+                    viewModel.Items = migB0501
+                        .Select(d =>
+                        new MIGContent
+                        {
+                            DocID = d.DocID,
+                            DocDate = d.CDS_Document.DocDate,
+                            No = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.AllowanceNumber,
+                            ReceiptNo = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.InvoiceAllowanceSeller?.ReceiptNo,
+                            MIG = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.CreateB0501().GetXml()
+                        }).ToArray();
+                    break;
+
+            }
+
+            return Content(viewModel.JsonStringify(), "application/json");
+
+        }
+
+        private ActionResult CheckAuth(AuthQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.AgentID = DecryptKeyValue(viewModel, out bool expired);
+                if (expired)
+                {
+                    return Json(new { result = false, message = ErrorMessage.E1001 }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return null;
+        }
     }
 }

@@ -275,6 +275,12 @@
                 }
             </div>
         }
+        @if (_model.Organization.OrganizationExtension?.CustomNotification != null)
+        {
+            <text>
+                @Html.Raw(_model.Organization.OrganizationExtension?.CustomNotification)
+            </text>
+        }
         <p>&nbsp;</p>
         <p class="red">
             ※此信件為系統發出信件，請勿直接回覆。

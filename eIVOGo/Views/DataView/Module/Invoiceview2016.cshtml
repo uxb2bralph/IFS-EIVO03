@@ -43,7 +43,14 @@
                 ? (_products.Length + (__PAGE_ITEM_COUNT - __FIRST_PAGE_ITEM_COUNT) + __PAGE_ITEM_COUNT - 1) / __PAGE_ITEM_COUNT
                 : 1;
 
-        _totalAmtChar = ((int)_model.InvoiceAmountType.TotalAmount.Value).GetChineseNumberSeries(8);
+        if (_model.InvoiceAmountType.TotalAmount >= 100000000)
+        {
+            _totalAmtChar = ((int)_model.InvoiceAmountType.TotalAmount.Value).GetChineseNumberSeries(9);
+        }
+        else
+        {
+            _totalAmtChar = ((int)_model.InvoiceAmountType.TotalAmount.Value).GetChineseNumberSeries(8);
+        }
 
     }
 }
@@ -165,16 +172,26 @@
                     <td colspan="8">
                         總計新台幣
                         <br />
-                        (中文大寫) <span class="totalno">
-                            @(_totalAmtChar[7]) 仟
-                            @(_totalAmtChar[6]) 佰
-                            @(_totalAmtChar[5]) 拾
-                            @(_totalAmtChar[4]) 萬
-                            @(_totalAmtChar[3]) 仟
-                            @(_totalAmtChar[2]) 佰
-                            @(_totalAmtChar[1]) 拾
-                            @(_totalAmtChar[0]) 元 整
-                        </span>
+                        (中文大寫)
+                        @if (_totalAmtChar.Length > 8)
+                        {
+                            <span class="totalno">
+                                @(_totalAmtChar[8])億@(_totalAmtChar[7])仟@(_totalAmtChar[6])佰@(_totalAmtChar[5])拾@(_totalAmtChar[4])萬@(_totalAmtChar[3])仟@(_totalAmtChar[2])佰@(_totalAmtChar[1])拾@(_totalAmtChar[0]) 元 整
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="totalno">
+                                @(_totalAmtChar[7]) 仟
+                                @(_totalAmtChar[6]) 佰
+                                @(_totalAmtChar[5]) 拾
+                                @(_totalAmtChar[4]) 萬
+                                @(_totalAmtChar[3]) 仟
+                                @(_totalAmtChar[2]) 佰
+                                @(_totalAmtChar[1]) 拾
+                                @(_totalAmtChar[0]) 元 整
+                            </span>
+                        }
                     </td>
                 </tr>
             </table>

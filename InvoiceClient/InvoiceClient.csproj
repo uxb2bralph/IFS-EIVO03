@@ -141,6 +141,7 @@
     <Compile Include="Agent\POSHelper\POSReady.cs" />
     <Compile Include="Agent\POSHelper\InvoiceNoInspector.cs" />
     <Compile Include="Agent\POSHelper\POSInvoiceWatcher.cs" />
+    <Compile Include="Agent\MIGResponseInspector.cs" />
     <Compile Include="Agent\ProcessTaskResponseInspector.cs" />
     <Compile Include="Agent\ExcelResponseInspector.cs" />
     <Compile Include="Agent\AttachmentWatcher.cs" />

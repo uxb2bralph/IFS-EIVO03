@@ -396,6 +396,22 @@ namespace Model.Models.ViewModel
         public Schema.EIVO.CancelAllowanceRoot CancelAllowanceRoot { get; set; }
     }
 
+    public class MIGResponseViewModel : AuthQueryViewModel
+    {
+        public InvoiceProcessType? ProcessType { get; set; }
+        public int[] LastReceivedKey { get; set; }
+        public MIGContent[] Items { get; set; }
+    }
+
+    public class MIGContent
+    {
+        public int DocID { get; set; }
+        public DateTime? DocDate { get; set; }
+        public String No { get; set; }
+        public String ReceiptNo { get; set; }
+        public String MIG { get; set; }
+    }
+
     public class ActionResultViewModel
     {
         public bool? Result { get; set; }

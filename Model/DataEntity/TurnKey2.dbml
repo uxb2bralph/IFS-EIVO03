@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="EINVTurnkey2" Class="TurnKey2DataContext" Serialization="Unidirectional" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=172.16.2.23\SQLEXPRESS;Initial Catalog=EINVTurnkey2;Persist Security Info=True;User ID=sa" SettingsObjectName="Model.Properties.Settings" SettingsPropertyName="EINVTurnkey2ConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=192.168.200.23\SQLEXPRESS,1433;Initial Catalog=EINVTurnkey2;Integrated Security=True" SettingsObjectName="Model.Properties.Settings" SettingsPropertyName="EINVTurnkey2ConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.TURNKEY_USER_PROFILE" Member="TURNKEY_USER_PROFILE">
     <Type Name="TURNKEY_USER_PROFILE">
       <Column Name="USER_ID" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
@@ -128,6 +128,30 @@
       <Column Name="DocType" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Column Name="TrackCode" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
       <Column Name="No" Type="System.String" DbType="VarChar(16)" CanBeNull="true" />
+      <Column Name="InvoiceDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="MESSAGE_DTS" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_Allowance" Member="V_Allowance">
+    <Type Name="V_Allowance">
+      <Column Name="SEQNO" Type="System.String" DbType="VarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="SUBSEQNO" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="STATUS" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="DocType" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="AllowanceNo" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="AllowanceDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="MESSAGE_DTS" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_Invoice" Member="V_Invoice">
+    <Type Name="V_Invoice">
+      <Column Name="SEQNO" Type="System.String" DbType="VarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="SUBSEQNO" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="STATUS" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="DocType" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="TrackCode" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
+      <Column Name="No" Type="System.String" DbType="VarChar(16)" CanBeNull="true" />
+      <Column Name="InvoiceNo" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
       <Column Name="InvoiceDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="MESSAGE_DTS" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </Type>

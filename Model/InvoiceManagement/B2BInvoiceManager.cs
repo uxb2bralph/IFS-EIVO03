@@ -766,14 +766,14 @@ namespace Model.InvoiceManagement
                 {
                     SellerID = seller.CompanyID,
                     Address  = seller.Addr  ,
-                    ContactName = seller .ContactName ,
+                    ContactName = seller.ContactName ,
                     CustomerID = seller.ReceiptNo  ,
-                    CustomerName = seller .CompanyName ,
+                    CustomerName = seller.CompanyName ,
                     EMail = seller.ContactEmail,
                     Fax  = seller.Fax ,
                     Name = seller.CompanyName,
-                    PersonInCharge = seller .UndertakerName ,
-                    Phone  = seller .Phone ,
+                    PersonInCharge = seller.UndertakerName ,
+                    Phone  = seller.Phone ,
                     PostCode = "",
                     ReceiptNo = seller.ReceiptNo,
                     RoleRemark =""

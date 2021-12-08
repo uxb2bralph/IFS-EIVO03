@@ -14,31 +14,27 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-@*發票錯誤訊息*@
-<div align="center">
-        下列資料由商家上傳時,發生錯誤,請處理!!</div>
-@{ Html.RenderPartial("~/Views/Notification/Module/InvoiceException.ascx", _model.Where(g => g.TypeID == (int)Naming.DocumentTypeDefinition.E_Invoice));}
-
-@{ Html.RenderPartial("~/Views/Notification/Module/InvoiceCancellationException.ascx", _model.Where(g => g.TypeID == (int)Naming.DocumentTypeDefinition.E_InvoiceCancellation));}
-
-@{ Html.RenderPartial("~/Views/Notification/Module/AllowanceException.ascx", _model.Where(g => g.TypeID == (int)Naming.DocumentTypeDefinition.E_Allowance));}
-
-@{ Html.RenderPartial("~/Views/Notification/Module/AllowanceCancellationException.ascx", _model.Where(g => g.TypeID == (int)Naming.DocumentTypeDefinition.E_Allowance));}
-
-
-<script runat="server">
+@{
 
     ModelSource<InvoiceItem> models;
     IQueryable<ExceptionLog> _model;
 
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<ExceptionLog>)this.Model;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
+}
 
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<ExceptionLog>)this.Model;
+@*發票錯誤訊息*@
+<div align="center">
+    下列資料由商家上傳時,發生錯誤,請處理!!
+</div>
+@{ Html.RenderPartial("~/Views/Notification/Module/InvoiceException.cshtml", _model.Where(g => g.TypeID == (int)Naming.DocumentTypeDefinition.E_Invoice));}
 
-    }
+@{ Html.RenderPartial("~/Views/Notification/Module/InvoiceCancellationException.cshtml", _model.Where(g => g.TypeID == (int)Naming.DocumentTypeDefinition.E_InvoiceCancellation));}
 
-</script>
+@{ Html.RenderPartial("~/Views/Notification/Module/AllowanceException.cshtml", _model.Where(g => g.TypeID == (int)Naming.DocumentTypeDefinition.E_Allowance));}
+
+@{ Html.RenderPartial("~/Views/Notification/Module/AllowanceCancellationException.cshtml", _model.Where(g => g.TypeID == (int)Naming.DocumentTypeDefinition.E_Allowance));}
+
+
+

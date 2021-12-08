@@ -9,23 +9,20 @@
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
-<select name="year">
-    @for (int y = DateTime.Today.Year; y >= _startYear; y--)
-        {
-            <option value="@(y)">@(y)</option>
-    }
-</select>
-
-
-<script runat="server">
+@{
 
     ModelStateDictionary _modelState;
     int _startYear = 2012;
 
-    protected override void OnInit(EventArgs e)
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+}
+<select name="year">
+    @for (int y = DateTime.Today.Year; y >= _startYear; y--)
     {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        <option value="@(y)">@(y)</option>
     }
+</select>
 
-</script>
+
+
+

@@ -367,5 +367,16 @@ namespace eIVOGo.Properties
                 return ((string)(this["DefaultUILanguage"]));
             }
         }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("e-invoicevasc@uxb2b.com")]
+        public string ServiceMailBox
+        {
+            get
+            {
+                return ((string)(this["ServiceMailBox"]));
+            }
+        }
     }
 }

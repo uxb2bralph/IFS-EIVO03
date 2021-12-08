@@ -481,13 +481,6 @@
     <Content Include="images\崇光百貨-收款專用章-列印用.jpg" />
     <Content Include="InquireWinningInvoiceToPrint.ascx" />
     <Content Include="login.aspx" />
-    <Content Include="Views\Notification\IssueAllowanceCancellation.aspx" />
-    <Content Include="Views\Notification\IssueC0501.aspx" />
-    <Content Include="Views\Notification\Module\C0501MailView.ascx" />
-    <Content Include="Views\Notification\Module\IssuedAllowanceCancellation.ascx" />
-    <Content Include="Views\Notification\Module\IssuedC0501.ascx" />
-    <Content Include="Views\Notification\NotifyToReceiveA0401.aspx" />
-    <Content Include="Views\Notification\Module\CommissionedToReceiveA0401.ascx" />
     <Content Include="Published\IEXmlView.xslt" />
     <Content Include="Published\NotifyToIssueInvoice.aspx" />
     <Content Include="Published\PrintSingleInvoicePage2016.aspx" />
@@ -903,8 +896,6 @@
     <Content Include="Views\BusinessRelationship\ImportCounterpartBusiness.cshtml" />
     <Content Include="Views\BusinessRelationship\DataAction\QueryResultAction.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
-    <Content Include="Views\Notification\CommissionedToReceiveA0401.aspx" />
-    <Content Include="Views\Notification\Module\AllowanceCancellationException.ascx" />
     <Content Include="MvcHelper\CreateInvoiceSummaryReport.aspx" />
     <Content Include="Published\PrintSingleAllowance.aspx" />
     <Content Include="resource\SellerMenuForProxy.xml" />
@@ -964,10 +955,6 @@
     <Content Include="Views\Module\InvoicePOSPrintView.ascx" />
     <Content Include="Views\Module\OrganizationList.ascx" />
     <Content Include="Views\Module\QueryMessage.ascx" />
-    <Content Include="Views\Notification\Module\InvoiceCancellationException.ascx" />
-    <Content Include="Views\Notification\Module\AllowanceException.ascx" />
-    <Content Include="Views\Notification\Module\InvoiceException.ascx" />
-    <Content Include="Views\Notification\Module\A0401.ascx" />
     <Content Include="Views\Organization\LogoUpdated.ascx" />
     <Content Include="Views\Organization\Module\ApplyIssuerAgent.ascx" />
     <Content Include="Views\InvoiceBusiness\Module\UploadVoidInvoice.cshtml" />
@@ -979,7 +966,6 @@
     <Content Include="Views\Shared\JsGrid.ascx" />
     <Content Include="Views\Common\Module\Pagination.ascx" />
     <Content Include="Views\Shared\ShowMessage.aspx" />
-    <Content Include="Views\Shared\YearSelector.ascx" />
     <Content Include="Views\SignXml\Index.aspx" />
     <Content Include="Views\SignXml\Module\CertificateOptions.ascx" />
     <Content Include="Views\SiteAction\Alert.ascx" />
@@ -997,7 +983,6 @@
     <Content Include="Views\WinningInvoice\ReportResult.aspx" />
     <Content Include="Views\WinningInvoice\Module\InquireWinning.ascx" />
     <Content Include="Views\Module\DonatedInvoiceReport.ascx" />
-    <Content Include="Views\Notification\Module\UploadDataExceptionNotification.ascx" />
     <Content Include="Published\AlertAdmTurnKeyInfo.aspx" />
     <Content Include="Published\CAUsageNote.aspx" />
     <Content Include="Published\ContentPage.aspx" />
@@ -1072,7 +1057,6 @@
     <Content Include="Published\TestEditingMenuDoc.aspx" />
     <Content Include="Published\TestPage.aspx" />
     <Content Include="Published\eInvoiceServiceTest.asmx" />
-    <Content Include="Views\Notification\DataUploadExceptionList.aspx" />
     <Content Include="Published\PrintPage.aspx" />
     <Content Include="Published\RequestInvoicePaper.aspx" />
     <Content Include="Published\SystemMonitor.aspx" />
@@ -1444,6 +1428,22 @@
     <Content Include="Views\InvoiceQuery\Module\InvoiceReport.cshtml" />
     <Content Include="Views\Notification\SendDailyReport.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Notification\Module\A0401.cshtml" />
+    <Content Include="Views\Notification\NotifyToReceiveA0401.cshtml" />
+    <Content Include="Views\Notification\IssueC0501.cshtml" />
+    <Content Include="Views\Notification\Module\IssuedC0501.cshtml" />
+    <Content Include="Views\Notification\Module\AllowanceCancellationException.cshtml" />
+    <Content Include="Views\Notification\Module\UploadDataExceptionNotification.cshtml" />
+    <Content Include="Views\Notification\DataUploadExceptionList.cshtml" />
+    <Content Include="Views\Notification\IssueAllowanceCancellation.cshtml" />
+    <Content Include="Views\Notification\Module\IssuedAllowanceCancellation.cshtml" />
+    <Content Include="Views\Notification\CommissionedToReceiveA0401.cshtml" />
+    <Content Include="Views\Notification\Module\AllowanceException.cshtml" />
+    <Content Include="Views\Notification\Module\C0501MailView.cshtml" />
+    <Content Include="Views\Notification\Module\CommissionedToReceiveA0401.cshtml" />
+    <Content Include="Views\Notification\Module\InvoiceCancellationException.cshtml" />
+    <Content Include="Views\Notification\Module\InvoiceException.cshtml" />
+    <Content Include="Views\Shared\YearSelector.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">
