@@ -90,6 +90,19 @@ namespace Model.InvoiceManagement
             }
         }
 
+        public IQueryable<InvoiceTrackCodeAssignment> PromptTrackCodeAssignment(int year, int periodNo)
+        {
+            IQueryable<InvoiceTrackCodeAssignment> trackCodeAssignment = this.GetTable<InvoiceTrackCodeAssignment>();
+
+            var items = this.GetTable<InvoiceTrackCode>()
+                .Where(t => t.Year == year)
+                .Where(t => t.PeriodNo == periodNo)
+                .Join(trackCodeAssignment,
+                    t => t.TrackID, a => a.TrackID, (t, a) => a);
+
+            return items;
+        }
+
 
         public void SettleUnassignedInvoiceNO(InvoiceTrackCodeAssignment assignment)
         {

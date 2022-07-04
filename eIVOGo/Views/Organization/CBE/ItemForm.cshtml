@@ -126,8 +126,15 @@
                     <th>
                         <span style="color: red">*</span>Contact email
                     </th>
-                    <td colspan="3">
+                    <td>
                         <input type="text" class="form-control" name="ContactEmail" maxlength="512" value='@(_viewModel.ContactEmail)' />
+                    </td>
+                    <th>
+                        Business Contact Phone
+                    </th>
+                    <td>
+                        <input type="text" class="form-control" name="BusinessContactPhone" value='@(_viewModel.BusinessContactPhone)' />
+                        &nbsp;
                     </td>
                 </tr>
                 @*<tr>

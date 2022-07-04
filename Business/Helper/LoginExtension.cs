@@ -10,6 +10,7 @@ using Model.DataEntity;
 using Model.Locale;
 using Model.Security.MembershipManagement;
 using Uxnet.Web.WebUI;
+using Business.Properties;
 
 namespace Business.Helper
 {
@@ -23,10 +24,10 @@ namespace Business.Helper
             context.ClearCache();
             context.SetCacheValue("userProfile", profile);
 
-            HttpCookie cookie;
-            cookie = new HttpCookie("userID", profile.PID);
-            cookie.Expires = DateTime.Now.AddMinutes(context.Session.Timeout);
-            context.Response.SetCookie(cookie);
+            //HttpCookie cookie;
+            //cookie = new HttpCookie("userID", profile.PID);
+            //cookie.Expires = DateTime.Now.AddMinutes(context.Session.Timeout);
+            //context.Response.SetCookie(cookie);
         }
 
         public static void SignOn(this HttpContext context, UserProfileMember profile)
@@ -36,10 +37,10 @@ namespace Business.Helper
             context.ClearCache();
             context.SetCacheValue("userProfile", profile);
 
-            HttpCookie cookie;
-            cookie = new HttpCookie("userID", profile.PID);
-            cookie.Expires = DateTime.Now.AddMinutes(context.Session.Timeout);
-            context.Response.SetCookie(cookie);
+            //HttpCookie cookie;
+            //cookie = new HttpCookie("userID", profile.PID);
+            //cookie.Expires = DateTime.Now.AddMinutes(context.Session.Timeout);
+            //context.Response.SetCookie(cookie);
         }
 
         public static void ClearCache(this HttpContextBase context)
@@ -115,7 +116,7 @@ namespace Business.Helper
             UserProfileMember profile = (UserProfileMember)context.GetCacheValue("userProfile");
             if (profile == null)
             {
-                if (context.User.Identity.IsAuthenticated)
+                if (context.User.Identity.IsAuthenticated && Settings.Default.AutoLogin)
                 {
                     profile = UserProfileFactory.CreateInstance(context.User.Identity.Name);
                     context.SetCacheValue("userProfile", profile);

@@ -24,6 +24,7 @@ using Model.InvoiceManagement;
 using Model.Locale;
 using Model.Models.ViewModel;
 using Model.Security.MembershipManagement;
+using QRCoder;
 using Utility;
 
 namespace eIVOGo.Controllers
@@ -60,15 +61,34 @@ namespace eIVOGo.Controllers
 
         public ActionResult QRCode(String data, int? width, int? height, int? margin)
         {
-            if (!String.IsNullOrEmpty(data))
+            //if (!String.IsNullOrEmpty(data))
+            //{
+            //    using (Bitmap qrcode = data.CreateQRCode(width ?? 160, height ?? 160, margin ?? 0))
+            //    {
+            //        Response.Clear();
+            //        Response.ContentType = "image/jpeg";
+            //        qrcode.Save(Response.OutputStream, ImageFormat.Jpeg);
+            //    }
+            //}
+
+            if(!String.IsNullOrEmpty(data))
             {
-                using (Bitmap qrcode = data.CreateQRCode(width ?? 160, height ?? 160, margin ?? 0))
+                using(QRCodeData codeData = QRCodeGenerator.GenerateQrCode(data,QRCodeGenerator.ECCLevel.L))
                 {
-                    Response.Clear();
-                    Response.ContentType = "image/jpeg";
-                    qrcode.Save(Response.OutputStream, ImageFormat.Jpeg);
+                    using (QRCode qrCode = new QRCode(codeData))
+                    {
+                        using (Bitmap qrImg = qrCode.GetGraphic(width ?? 300))
+                        {
+                            Response.Clear();
+                            Response.ContentType = "image/jpeg";
+                            qrImg.Save(Response.OutputStream, ImageFormat.Jpeg);
+                        }
+                    }
                 }
+
             }
+            
+
             return new EmptyResult();
 
         }

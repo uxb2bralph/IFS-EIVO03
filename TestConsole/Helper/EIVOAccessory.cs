@@ -21,6 +21,11 @@ namespace TestConsole.Helper
             //}
 
             Console.WriteLine($"開始時間:{DateTime.Now}");
+            ProcessC0401();
+        }
+
+        private static void ProcessC0401()
+        {
             var range = Enumerable.Range(0, 100);
             var tasks = range.Select(i =>
                 new Task
@@ -30,7 +35,7 @@ namespace TestConsole.Helper
                             writeToTurnkey(i, 100);
                         }
                     )
-                    { }).ToArray();
+                { }).ToArray();
             foreach (var a in tasks)
             {
                 a.Start();

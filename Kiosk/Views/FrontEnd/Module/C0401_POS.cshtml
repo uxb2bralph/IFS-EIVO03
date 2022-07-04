@@ -160,7 +160,11 @@
                     <td colspan="3" style="font-size: 8pt;">
                         <p style="border-top: 1px dotted #808080;">
                             <span style="font-size: 8pt;">總計：@(_model.InvoiceItem.Length)項&nbsp;&nbsp;金額：@(String.Format("{0:##,###,###,##0.##}", _model.TotalAmount))</span><br />
-                            課稅別：@((_model.TaxType == (byte)2 || _model.TaxType == (byte)3) ? "TZ" : "TX")&nbsp;&nbsp;<br />
+                            課稅別：@(_model.TaxType == (byte)Naming.TaxTypeDefinition.免稅
+                                        ? ""
+                                        : _model.TaxType == (byte)Naming.TaxTypeDefinition.零稅率 
+                                            ? "TZ" 
+                                            : "TX")&nbsp;&nbsp;<br />
                             @if (!IsB2C())
                             {
                                 <text>應稅銷售額：@(String.Format("{0:##,###,###,##0.##}", _model.SalesAmount))</text><br />

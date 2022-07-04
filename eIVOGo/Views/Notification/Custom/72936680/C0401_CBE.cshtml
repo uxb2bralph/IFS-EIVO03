@@ -110,7 +110,7 @@
                                             金額：@(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TotalAmount))&nbsp;&nbsp;
                                             @(_model.InvoiceAmountType.CurrencyID.HasValue ? $"幣別：{_model.InvoiceAmountType.CurrencyType.AbbrevName}" : null)
                                         </span><br />
-                                        課稅別：@((_model.InvoiceAmountType.TaxType == (byte)2 || _model.InvoiceAmountType.TaxType == (byte)3) ? "TZ" : "TX")&nbsp;&nbsp;
+                                        課稅別：@(_model.InvoiceAmountType.TaxTypeString)&nbsp;&nbsp;
                                         @if (!_buyer.IsB2C())
                                         {
                                             <text>
@@ -159,7 +159,7 @@
                     <div class="content_box">
                         <p style="border-top: 1px dotted #808080;">
                             <span style="font-size: 12pt; font-weight: bold;">總計：@(_model.InvoiceDetails.Count)項&nbsp;&nbsp;金額：@(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TotalAmount))</span><br />
-                            課稅別：@((_model.InvoiceAmountType.TaxType == (byte)2 || _model.InvoiceAmountType.TaxType == (byte)3) ? "TZ" : "TX")&nbsp;&nbsp;
+                            課稅別：@(_model.InvoiceAmountType.TaxTypeString)&nbsp;&nbsp;
                             @if (!_buyer.IsB2C())
                             {
                                 <text>
@@ -198,7 +198,7 @@
                 <div class="content_box">
                     <p style="border-top: 1px dotted #808080;">
                         <span style="font-size: 12pt; font-weight: bold;">總計：@(_model.InvoiceDetails.Count)項&nbsp;&nbsp;金額：@(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TotalAmount))</span><br />
-                        課稅別：@((_model.InvoiceAmountType.TaxType == (byte)2 || _model.InvoiceAmountType.TaxType == (byte)3) ? "TZ" : "TX")&nbsp;&nbsp;
+                        課稅別：@(_model.InvoiceAmountType.TaxTypeString)&nbsp;&nbsp;
                         @if (!_buyer.IsB2C())
                         {
                             <text>

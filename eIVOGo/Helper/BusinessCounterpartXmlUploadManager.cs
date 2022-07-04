@@ -189,6 +189,8 @@ namespace eIVOGo.Helper
                                 CurrentLevel = (int)Naming.MemberStatusDefinition.Wait_For_Check
                             }
                         };
+                        userProfile.MailID = userProfile.EMail.GetEfficientString()?
+                            .Split(';', ',', ',')?[0];
 
                         _userList.Add(userProfile);
 

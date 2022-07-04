@@ -24,13 +24,32 @@
                 發票號碼(起號)
             </th>
             <td class="tdleft">
-                <input name="StartNo" type="text" />
+                <input name="StartNo" type="text" class="form-control" />
             </td>
             <th>
                 發票號碼(迄號)
             </th>
             <td class="tdleft">
-                <input name="EndNo" type="text" />
+                <input name="EndNo" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <th colspan="4">
+                查詢資料排除下列日期區間
+            </th>
+        </tr>
+        <tr>
+            <th>
+                日期區間(起日)
+            </th>
+            <td class="tdleft">
+                <input name="DateFrom" class="form_date form-control" type="text" size="10" readonly="readonly" value="" />
+            </td>
+            <th>
+                日期區間(迄日)
+            </th>
+            <td class="tdleft">
+                <input name="DateTo" class="form_date form-control" type="text" size="10" readonly="readonly" value="" />
             </td>
         </tr>
         <tr>
@@ -45,7 +64,7 @@
                 郵件張數
             </th>
             <td class="tdleft">
-                <input name="MailingCount" type="text" />
+                <input name="MailingCount" type="text" class="form-control" />
             </td>
         </tr>
         <tr>
@@ -53,13 +72,13 @@
                 郵件號碼1(流水號碼段)
             </th>
             <td class="tdleft">
-                <input name="MailNo1" type="text" />
+                <input name="MailNo1" type="text" class="form-control" />
             </td>
             <th>
                 郵件號碼2(固定號碼段)
             </th>
             <td class="tdleft">
-                <input name="MailNo2" type="text" />
+                <input name="MailNo2" type="text" class="form-control" />
             </td>
         </tr>
         <tr>
@@ -67,7 +86,7 @@
                 寄件日期
             </th>
             <td class="tdleft">
-                <input name="DeliveryDate" type="text" class="form_date" />
+                <input name="DeliveryDate" type="text" class="form_date form-control" />
             </td>
             <th>
                 附件檔

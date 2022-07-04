@@ -112,7 +112,7 @@
                                             @*@(_model.InvoiceAmountType.CurrencyID.HasValue ? $"幣別：{_model.InvoiceAmountType.CurrencyType.AbbrevName}" : null)*@
                                         </div>
                                         <div>
-                                            課稅別：@((_model.InvoiceAmountType.TaxType == (byte)2 || _model.InvoiceAmountType.TaxType == (byte)3) ? "TZ" : "TX")&nbsp;&nbsp;
+                                            課稅別：@(_model.InvoiceAmountType.TaxTypeString)&nbsp;&nbsp;
                                         </div>
                                         @if (!_buyer.IsB2C())
                                         {

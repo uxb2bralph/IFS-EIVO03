@@ -161,6 +161,9 @@ namespace Business.Helper.InvoiceProcessor
                             DataNumber = i.InvoicePurchaseOrder.OrderNo,
                             InvoiceDate = String.Format("{0:yyyy/MM/dd}", i.InvoiceDate),
                             InvoiceTime = String.Format("{0:HH:mm:ss}", i.InvoiceDate),
+                            CarrierType = i.InvoiceCarrier?.CarrierType,
+                            CarrierNo = i.InvoiceCarrier?.CarrierNo,
+                            CarrierNo2 = i.InvoiceCarrier?.CarrierNo2,
                         }
                     }));
                 }

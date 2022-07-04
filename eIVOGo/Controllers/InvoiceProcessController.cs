@@ -33,6 +33,7 @@ using Utility;
 using Uxnet.Com.DataAccessLayer;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using eIVOGo.Helper.Security.Authorization;
 
 namespace eIVOGo.Controllers
 {
@@ -62,6 +63,7 @@ namespace eIVOGo.Controllers
                 .Append(new InquireWinningInvoice { CurrentController = this });
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult Index(InquireInvoiceViewModel viewModel)
         {
             ViewBag.ResultAction = "Common";
@@ -99,6 +101,7 @@ namespace eIVOGo.Controllers
 
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult IssuingNotice(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);
@@ -110,6 +113,7 @@ namespace eIVOGo.Controllers
             return result;
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult InquireToCancel(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);
@@ -121,6 +125,7 @@ namespace eIVOGo.Controllers
             return result;
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult InquireToIssueAllowance(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);
@@ -133,6 +138,7 @@ namespace eIVOGo.Controllers
         }
 
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult InquireToMIG(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);
@@ -151,6 +157,7 @@ namespace eIVOGo.Controllers
             return result;
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult InquireToAuthorize(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);
@@ -162,6 +169,7 @@ namespace eIVOGo.Controllers
             return result;
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult InquireToVoid(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);
@@ -173,6 +181,7 @@ namespace eIVOGo.Controllers
             return result;
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS })]
         public ActionResult AllowToVoid(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);
@@ -402,7 +411,7 @@ namespace eIVOGo.Controllers
                     連絡人地址 = i.InvoiceBuyer.Address,
                     買受人EMail = i.InvoiceBuyer.EMail,
                     愛心碼 = i.InvoiceDonation.AgencyCode,
-                    是否中獎 = i.InvoiceWinningNumber.UniformInvoiceWinningNumber.PrizeType,
+                    是否中獎 = i.InvoiceWinningNumber.PrizeType,
                     載具類別 = i.InvoiceCarrier.CarrierType,
                     載具號碼 = i.InvoiceCarrier.CarrierNo,
                     備註 = i.InvoiceDetails.First().InvoiceProduct.InvoiceProductItem.First().Remark
@@ -632,7 +641,7 @@ namespace eIVOGo.Controllers
                     連絡人地址 = i.InvoiceBuyer.Address,
                     買受人EMail = i.InvoiceBuyer.EMail,
                     愛心碼 = i.InvoiceDonation.AgencyCode,
-                    是否中獎 = i.InvoiceWinningNumber.UniformInvoiceWinningNumber.PrizeType,
+                    是否中獎 = i.InvoiceWinningNumber.PrizeType,
                     載具類別 = i.InvoiceCarrier.CarrierType,
                     載具號碼 = i.InvoiceCarrier.CarrierNo,
                     備註 = i.InvoiceDetails.First().InvoiceProduct.InvoiceProductItem.First().Remark
@@ -1180,6 +1189,7 @@ namespace eIVOGo.Controllers
             return result;
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult InvoiceSummary()
         {
             //ViewBag.HasQuery = false;
@@ -1187,18 +1197,6 @@ namespace eIVOGo.Controllers
             models.Inquiry = createModelInquiry();
 
             return View("InvoiceReport", models.Inquiry);
-        }
-
-        public ActionResult InquireSummary(InquireInvoiceViewModel viewModel)
-        {
-            //ViewBag.HasQuery = true;
-            ViewBag.PrintAction = "PrintInvoiceSummary";
-            ViewBag.ViewModel = viewModel;
-
-            models.Inquiry = createModelInquiry();
-            models.BuildQuery();
-
-            return View("InvoiceSummaryResult", models.Inquiry);
         }
 
         public ActionResult InvoiceSummaryGridPage(int index, int size)
@@ -1332,6 +1330,7 @@ namespace eIVOGo.Controllers
             return result;
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS })]
         public ActionResult InquireToNotifyWinning(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);

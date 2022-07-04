@@ -13,19 +13,19 @@
 @using Uxnet.Web.WebUI
 
 @{
-    Layout = "~/Views/Template/MvcMainPage.cshtml";
+    Layout = "~/Views/Template/QueryIndex.cshtml";
+    ViewBag.ActionName = "首頁 > 統計報表";
+    InquireInvoiceViewModel _viewModel = ViewBag.ViewModel as InquireInvoiceViewModel;
 
-    ViewBag.ActionName = "首頁 > 資料管理";
+    _viewModel.UrlAction = Url.Action("InquireSummary", "InvoiceQuery");
 }
 
-@section headContent {
-
-}
-
-@section formContent {
+@section QueryForm
+{
     @{
         Html.RenderPartial("~/Views/InvoiceQuery/Module/InvoiceReport.cshtml");
     }
 }
+
 
 

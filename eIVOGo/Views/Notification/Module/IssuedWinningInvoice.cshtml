@@ -267,14 +267,6 @@
                 儲存，若您要至該網站查詢發票開立狀況，請輸入「發票號碼」及「發票日期」，即可查詢此張發票內容。
             </li>
         </ol>
-        @if (_model.Organization.OrganizationStatus.SetToOutsourcingCS == true)
-        {
-            <div>
-                @{
-                    Html.RenderPartial("~/Views/Notification/Shared/ServiceNotation.cshtml", _model.Organization);
-                }
-            </div>
-        }
         @if (_model.Organization.OrganizationExtension?.CustomNotification != null)
         {
             <text>
@@ -282,10 +274,9 @@
             </text>
         }
         <p>&nbsp;</p>
-        <p class="red">
-            ※此信件為系統發出信件，請勿直接回覆。
-        </p>
-        <!--按鈕-->
+        @{
+            Html.RenderPartial("~/Views/Notification/Shared/ServiceNotation.cshtml", _model.Organization);
+        }        
     </form>
 </body>
 </html>

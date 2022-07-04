@@ -46,4 +46,22 @@ namespace Model.DataEntity
         public Naming.UploadStatusDefinition? Status { get; set; }
         public String Reason { get; set; }
     }
+
+    public partial class InvoiceAmountType
+    {
+        public String TaxTypeString => TaxType == (byte)Naming.TaxTypeDefinition.免稅
+                ? ""
+                : TaxType == (byte)Naming.TaxTypeDefinition.零稅率
+                    ? "TZ"
+                    : "TX";
+    }
+
+    public partial class InvoiceAllowanceItem
+    {
+        public String TaxTypeString => TaxType == (byte)Naming.TaxTypeDefinition.免稅
+                ? ""
+                : TaxType == (byte)Naming.TaxTypeDefinition.零稅率
+                    ? "TZ"
+                    : "TX";
+    }
 }

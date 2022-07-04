@@ -298,7 +298,7 @@ namespace Model.Helper
 
             CryptoUtility crypto = new CryptoUtility();
             byte[] dataToSign;
-            PKCS7Log log = crypto.CA_Log.Table.DataSet as PKCS7Log;
+            PKCS7Log log = crypto.PKCS7Log as PKCS7Log;
             if (log != null)
             {
                 log.Crypto = crypto;

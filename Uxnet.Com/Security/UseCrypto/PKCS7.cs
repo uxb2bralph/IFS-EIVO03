@@ -27,19 +27,24 @@ namespace Uxnet.Com.Security.UseCrypto
         static uint MY_ENCODING_TYPE = Win32.Win32.PKCS_7_ASN_ENCODING | Win32.Win32.X509_ASN_ENCODING;
 		private X509Certificate _cert ;
 		private dsPKCS7 _ds;
-		private dsPKCS7.pkcs7EnvelopRow _log;
+		private dsPKCS7Pkcs7Envelop _log;
 
 		private static X509Certificate IssuerCert;
 
 
 
-		public PKCS7()
-		{
-			//
-			// TODO: 在此加入建構函式的程式碼
-			//
-			_ds = new dsPKCS7();
-		}
+        public PKCS7()
+        {
+            //
+            // TODO: 在此加入建構函式的程式碼
+            //
+            _ds = new dsPKCS7
+            {
+                pkcs7Envelop = new dsPKCS7Pkcs7Envelop { },
+            };
+
+            _log = _ds.pkcs7Envelop;
+        }
 
         private DateTime FileTimeToDateTime(Win32.FILETIME ft)
 		{
@@ -49,8 +54,6 @@ namespace Uxnet.Com.Security.UseCrypto
         private bool verify(byte[] dataToSign, byte[] dataSignature)
         {
             #region 建立驗簽記錄檔
-            _log = _ds.pkcs7Envelop.Newpkcs7EnvelopRow();
-            _ds.pkcs7Envelop.Addpkcs7EnvelopRow(_log);
 
             _log.DataToSign = System.Text.Encoding.Default.GetString(dataToSign);
             _log.DataSignature = Convert.ToBase64String(dataSignature);
@@ -256,7 +259,7 @@ namespace Uxnet.Com.Security.UseCrypto
 			return bResult;
 		}
 
-		public dsPKCS7.pkcs7EnvelopRow CA_Log
+		public dsPKCS7Pkcs7Envelop CA_Log
 		{
 			get
 			{

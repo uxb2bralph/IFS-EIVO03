@@ -12,6 +12,7 @@ using Model.ModelTemplate;
 using Model.DataEntity;
 using Model.Locale;
 using System.Xml.Linq;
+using Model.Helper;
 
 namespace Model.Security.MembershipManagement
 {
@@ -89,6 +90,20 @@ namespace Model.Security.MembershipManagement
                 }
             }
             return null;
+        }
+
+        public static Model.DataEntity.UserProfile PrepareTwoFactorKey(this Model.DataEntity.UserProfile item,GenericManager<EIVOEntityDataContext> models)
+        {
+            if (item.UserProfileExtension == null)
+            {
+                item.UserProfileExtension = new UserProfileExtension { };
+            }
+            if (item.UserProfileExtension.TwoFactorKey == null)
+            {
+                item.UserProfileExtension.TwoFactorKey = item.UID.EncryptKey();
+                models.SubmitChanges();
+            }
+            return item;
         }
 
     }

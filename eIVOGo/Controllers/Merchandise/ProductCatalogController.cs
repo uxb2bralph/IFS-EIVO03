@@ -30,6 +30,7 @@ using Model.InvoiceManagement.InvoiceProcess;
 using Uxnet.Com.DataAccessLayer;
 using ModelExtension.Helper;
 using Newtonsoft.Json;
+using eIVOGo.Helper.Security.Authorization;
 
 namespace eIVOGo.Controllers.Merchandise
 {
@@ -37,6 +38,7 @@ namespace eIVOGo.Controllers.Merchandise
     public class ProductCatalogController : SampleController<InvoiceItem>
     {
         // GET: ProductCatalog
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult QueryIndex(ProductCatalogQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;

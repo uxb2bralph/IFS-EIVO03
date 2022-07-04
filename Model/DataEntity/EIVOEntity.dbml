@@ -57,6 +57,7 @@
       <Association Name="Organization_ProductSupplier" Member="ProductSupplier" ThisKey="CompanyID" OtherKey="SupplierID" Type="ProductSupplier" />
       <Association Name="Organization_InvoiceTrackCodeAssignment" Member="InvoiceTrackCodeAssignment" ThisKey="CompanyID" OtherKey="SellerID" Type="InvoiceTrackCodeAssignment" />
       <Association Name="Organization_InvoiceNoMainAssignment" Member="InvoiceNoMainAssignment" ThisKey="CompanyID" OtherKey="MasterID" Type="InvoiceNoMainAssignment" />
+      <Association Name="Organization_OrganizationSettings" Member="OrganizationSettings" ThisKey="CompanyID" OtherKey="CompanyID" Type="OrganizationSettings" />
     </Type>
   </Table>
   <Table Name="dbo.UserRole" Member="UserRole">
@@ -367,6 +368,7 @@
       <Column Name="Sex" Type="System.String" DbType="NVarChar(1)" CanBeNull="true" />
       <Column Name="Birthday" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="NightPhone" Type="System.String" DbType="NVarChar(24)" CanBeNull="true" />
+      <Column Name="TwoFactorKey" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Association Name="UserProfile_UserProfileExtension" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
@@ -891,6 +893,7 @@
       <Column Name="LevelID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ThemeName" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
       <Column Name="Password2" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="MailID" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Association Name="UserProfile_UserRole" Member="UserRole" ThisKey="UID" OtherKey="UID" Type="UserRole" />
       <Association Name="UserProfile_UserAuth" Member="UserAuth" ThisKey="UID" OtherKey="UID" Type="UserAuth" />
       <Association Name="UserProfile_UserProfileExtension" Member="UserProfileExtension" ThisKey="UID" OtherKey="UID" Type="UserProfileExtension" Cardinality="One" />
@@ -1287,21 +1290,28 @@
       <Association Name="POSDevice_POSInvoiceNoSegment" Member="POSDevice" ThisKey="DeviceID" OtherKey="DeviceID" Type="POSDevice" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.OrganizationExtension" Member="OrganizationExtension">
-    <Type Name="OrganizationExtension">
-      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="CustomerNo" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
-      <Column Name="TaxNo" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
-      <Column Name="CustomNotification" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Association Name="Organization_OrganizationExtension" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
-    </Type>
-  </Table>
+	<Table Name="dbo.OrganizationExtension" Member="OrganizationExtension">
+		<Type Name="OrganizationExtension">
+			<Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+			<Column Name="CustomerNo" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+			<Column Name="TaxNo" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+			<Column Name="CustomNotification" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+			<Column Name="BusinessContactPhone" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+			<Column Name="ExpirationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+			<Column Name="GoLiveDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+			<Column Name="AutoBlankTrack" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="AutoBlankTrackEmittance" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Association Name="Organization_OrganizationExtension" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
+		</Type>
+	</Table>
   <Table Name="dbo.InvoiceWinningNumber" Member="InvoiceWinningNumber">
     <Type Name="InvoiceWinningNumber">
       <Column Name="InvoiceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="WinningID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="DownloadDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="InvoiceItem_InvoiceWinningNumber" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+		<Column Name="PrizeType" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+		<Column Name="Bonus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+		<Association Name="InvoiceItem_InvoiceWinningNumber" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="UniformInvoiceWinningNumber_InvoiceWinningNumber" Member="UniformInvoiceWinningNumber" ThisKey="WinningID" OtherKey="WinningID" Type="UniformInvoiceWinningNumber" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
@@ -1628,6 +1638,7 @@
       <Column Name="ProcessType" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="AgentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="LogID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ViewModel" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="ProcessRequest_ProcessRequestQueue" Member="ProcessRequestQueue" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessRequestQueue" Cardinality="One" />
       <Association Name="ProcessRequest_ProcessCompletionNotification" Member="ProcessCompletionNotification" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessCompletionNotification" Cardinality="One" />
       <Association Name="ProcessRequest_ProcessExceptionNotification" Member="ProcessExceptionNotification" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessExceptionNotification" />
@@ -1758,6 +1769,13 @@
       <Column Name="ExchangeRate" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
       <Association Name="CurrencyType_InvoicePeriodExchangeRate" Member="CurrencyType" ThisKey="CurrencyID" OtherKey="CurrencyID" Type="CurrencyType" IsForeignKey="true" />
       <Association Name="InvoicePeriod_InvoicePeriodExchangeRate" Member="InvoicePeriod" ThisKey="PeriodID" OtherKey="PeriodID" Type="InvoicePeriod" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrganizationSettings" Member="OrganizationSettings">
+    <Type Name="OrganizationSettings">
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Settings" Type="System.String" DbType="NVarChar(256) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Organization_OrganizationSettings" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.MatchDocumentAttachment" Method="MatchDocumentAttachment">

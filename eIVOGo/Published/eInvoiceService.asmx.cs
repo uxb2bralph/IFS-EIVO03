@@ -3320,7 +3320,7 @@ namespace eIVOGo.Published
             try
             {
                 CryptoUtility crypto = new CryptoUtility();
-                PKCS7Log log = crypto.CA_Log.Table.DataSet as PKCS7Log;
+                PKCS7Log log = crypto.PKCS7Log as PKCS7Log;
                 if (log != null)
                 {
                     log.Crypto = crypto;
@@ -3730,6 +3730,7 @@ namespace eIVOGo.Published
                             {
                                 AgentToken = token.CompanyID.EncryptKey(),
                                 TaskCenterUrl = $"{Settings.Default.WebApDomain}/{Settings.Default.TaskCenter}",
+                                ServiceHost = $"{Settings.Default.WebApDomain}{VirtualPathUtility.ToAbsolute("~")}",
                                 AgentUID = user?.UID,
                                 DefaultProcessType = (Naming.InvoiceProcessType?)token.Organization.OrganizationStatus.InvoiceClientDefaultProcessType,
                             };

@@ -85,6 +85,7 @@
     <Compile Include="InvoiceManagement\AllowanceDataSetManager.cs" />
     <Compile Include="InvoiceManagement\InvoiceManagerForCBE.cs" />
     <Compile Include="InvoiceManagement\InvoiceManagerV2.cs" />
+    <Compile Include="InvoiceManagement\InvoiceProcess\InvoiceProcessExtensions.cs" />
     <Compile Include="InvoiceManagement\Validator\FullAllowanceDataSetValidator.cs" />
     <Compile Include="InvoiceManagement\Validator\AllowanceDataSetValidator.cs" />
     <Compile Include="InvoiceManagement\Validator\InvoiceRootInvoiceValidatorForCBE.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="InvoiceManagement\CsvInvoiceCancellationUploadManager.cs" />
     <Compile Include="InvoiceManagement\Validator\ExtensionMethods.cs" />
     <Compile Include="InvoiceManagement\Validator\TrackNoIntervalValidator.cs" />
+    <Compile Include="InvoiceManagement\VacantInvoiceNoProcessor.cs" />
     <Compile Include="Models\ViewModel\A0101ViewModelValidator.cs" />
     <Compile Include="Models\ViewModel\A0401ViewModelValidator.cs" />
     <Compile Include="Models\ViewModel\AllowanceViewModelValidator.cs" />

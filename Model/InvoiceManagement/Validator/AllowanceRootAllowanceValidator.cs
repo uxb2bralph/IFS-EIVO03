@@ -43,6 +43,14 @@ namespace Model.InvoiceManagement.Validator
             }
         }
 
+        public Organization Seller
+        {
+            get
+            {
+                return _seller;
+            }
+        }
+
         InvoiceItem _originalInvoice;
         public virtual Exception Validate(AllowanceRootAllowance dataItem)
         {

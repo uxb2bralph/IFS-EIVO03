@@ -25,6 +25,7 @@ namespace Model.InvoiceManagement
         public InvoiceManagerV3() : base() { }
         public InvoiceManagerV3(GenericManager<EIVOEntityDataContext> mgr) : base(mgr) { }
         public bool HasError { get; set; }
+        public DateTime? ApplyInvoiceDate { get; set; }
         public override Dictionary<int, Exception> SaveUploadInvoice(InvoiceRoot item, OrganizationToken owner)
         {
             Dictionary<int, Exception> result = new Dictionary<int, Exception>();
@@ -153,7 +154,7 @@ namespace Model.InvoiceManagement
                 void proc(InvoiceRootInvoice[] items,Naming.InvoiceTypeDefinition indication)
                 {
                     validator.InvoiceTypeIndication = indication;
-                    validator.StartAutoTrackNo();
+                    validator.StartAutoTrackNo(ApplyInvoiceDate);
                     for (int idx = 0; idx < items.Length; idx++,invSeq++)
                     {
                         try
@@ -287,12 +288,12 @@ namespace Model.InvoiceManagement
                         table.InsertOnSubmit(newItem);
                         if (newItem.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.B0401)
                         {
-                            B0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                            B0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, validator.Seller.StepReadyToAllowanceMIG());
                             B0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
                         }
                         else
                         {
-                            D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                            D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, validator.Seller.StepReadyToAllowanceMIG());
                             D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
                         }
 

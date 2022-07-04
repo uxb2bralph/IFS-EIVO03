@@ -17,6 +17,9 @@
                     <xs:element name="InvoiceDate" type="xs:string"/>
                     <xs:element name="InvoiceTime" type="xs:string"/>
                     <xs:element name="EncData" type="xs:string"/>
+                    <xs:element name="CarrierType" type="xs:string"/>
+                    <xs:element name="CarrierNo" type="xs:string"/>
+                    <xs:element name="CarrierNo2" type="xs:string"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>

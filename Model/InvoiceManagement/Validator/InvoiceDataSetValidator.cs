@@ -23,11 +23,6 @@ namespace Model.InvoiceManagement.Validator
         protected IEnumerable<DataRow> _details;
 
         public Organization ExpectedSeller { get; set; }
-        public DateTime ApplyInvoiceDate
-        {
-            get;
-            private set;
-        }
 
         internal InvoiceFieldIndex InvoiceField = new InvoiceFieldIndex { };
         internal class InvoiceFieldIndex
@@ -81,12 +76,11 @@ namespace Model.InvoiceManagement.Validator
 
         }
 
-        public InvoiceDataSetValidator(GenericManager<EIVOEntityDataContext> mgr, Organization owner, Naming.InvoiceProcessType processType,DateTime? applyInvoiceDate) : base(mgr, owner)
+        public InvoiceDataSetValidator(GenericManager<EIVOEntityDataContext> mgr, Organization owner, Naming.InvoiceProcessType processType) : base(mgr, owner)
         {
             this.processType = processType;
             resetFieldIndex();
             initializeDeliveryCheck();
-            ApplyInvoiceDate = applyInvoiceDate ?? DateTime.Now;
         }
 
         void resetFieldIndex()
@@ -239,7 +233,7 @@ namespace Model.InvoiceManagement.Validator
         decimal? FreeTaxSalesAmount() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? null : GetData<decimal>(InvoiceField.Free_Tax_Sales_Amount); }
         decimal? ZeroTaxSalesAmount() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? null : GetData<decimal>(InvoiceField.Zero_Tax_Sales_Amount); }
         decimal? TaxRate() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? 0.05m : GetData<decimal>(InvoiceField.Tax_Rate); }
-        string PrintMark() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? "N" : GetString(InvoiceField.Print_Mark); }
+        string PrintMark() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? "N" : GetString(InvoiceField.Print_Mark)?.ToUpper(); }
         string MainRemark() { return GetString(InvoiceField.Main_Remark); }
         DateTime? InvoiceDate() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? null : GetData<DateTime>(InvoiceField.Invoice_Date); }
         String InvoiceNo()
@@ -485,8 +479,10 @@ namespace Model.InvoiceManagement.Validator
                     else
                     {
                         trackNoMgr = new TrackNoManager(_models, _seller.CompanyID);
-                        trackNoMgr.ApplyInvoiceDate(ApplyInvoiceDate);
-
+                        if (_autoTrackNoInvoiceDate.HasValue)
+                        {
+                            trackNoMgr.ApplyInvoiceDate(_autoTrackNoInvoiceDate.Value);
+                        }
                         if (InvoiceTypeIndication != Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
                         {
                             trackNoMgr.ApplyInvoiceTypeIndication(InvoiceTypeIndication);
@@ -500,7 +496,14 @@ namespace Model.InvoiceManagement.Validator
                     }
                     else
                     {
-                        _newItem.InvoiceDate = ApplyInvoiceDate;
+                        if (_autoTrackNoInvoiceDate.HasValue)
+                        {
+                            _newItem.InvoiceDate = _autoTrackNoInvoiceDate.Value.Add(DateTime.Now.TimeOfDay);
+                        }
+                        else
+                        {
+                            _newItem.InvoiceDate = DateTime.Now;
+                        }
                     }
 
                 }

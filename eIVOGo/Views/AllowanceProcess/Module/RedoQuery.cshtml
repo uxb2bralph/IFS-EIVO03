@@ -1,0 +1,26 @@
+﻿
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+
+<script>
+    $(function () {
+        uiAllowanceQuery.initQuery = true;
+        uiAllowanceQuery.inquire();
+    });
+</script>
+@{ 
+    Html.RenderPartial("~/Views/Shared/AlertMessage.cshtml");
+}

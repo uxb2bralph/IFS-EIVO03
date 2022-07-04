@@ -46,7 +46,10 @@ namespace InvoiceClient.TransferManagement
             _InvoiceWatcher = new InvoiceWatcherV2(Path.Combine(fullPath, Settings.Default.UploadSellerInvoiceFolder));
             _InvoiceWatcher.StartUp();
 
-            _PreInvoiceWatcher = new PreInvoiceWatcherV2(Path.Combine(fullPath, Settings.Default.UploadPreInvoiceFolder));
+            _PreInvoiceWatcher = new PreInvoiceWatcherV2(Path.Combine(fullPath, Settings.Default.UploadPreInvoiceFolder))
+            {
+                PreferredProcessType = _Settings.PreferredProcessType,
+            };
             _PreInvoiceWatcher.StartUp();
 
             _CancellationWatcher = new InvoiceCancellationWatcherV2(Path.Combine(fullPath, Settings.Default.UploadInvoiceCancellationFolder));

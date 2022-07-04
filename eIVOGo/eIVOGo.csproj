@@ -88,6 +88,9 @@
     <Reference Include="ExcelNumberFormat, Version=1.0.10.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelNumberFormat.1.0.10\lib\net20\ExcelNumberFormat.dll</HintPath>
     </Reference>
+    <Reference Include="Google.Authenticator, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GoogleAuthenticator.2.4.0\lib\net45\Google.Authenticator.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -132,6 +135,11 @@
     </Reference>
     <Reference Include="PdfSharp.Charting, Version=1.50.5147.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
       <HintPath>..\packages\PDFsharp.1.50.5147\lib\net20\PdfSharp.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="QRCoder, Version=1.4.3.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCoder.1.4.3\lib\net40\QRCoder.dll</HintPath>
     </Reference>
     <Reference Include="QREncrypter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -358,7 +366,6 @@
     <Content Include="Published\eInvoiceServiceGoogleCBM.asmx" />
     <Content Include="Scripts\FileSaver.min.js" />
     <Content Include="Scripts\jquery.cookie.js" />
-    <Content Include="Views\Account\ForgetPassword.aspx" />
     <Content Include="Helper\ApplyProxyForIssuer.aspx" />
     <Content Include="Helper\EditCompany.aspx" />
     <Content Include="Helper\invoice-common-js.aspx" />
@@ -895,6 +902,13 @@
     <Content Include="Views\BusinessRelationship\DataField\ProcessAction.cshtml" />
     <Content Include="Views\BusinessRelationship\ImportCounterpartBusiness.cshtml" />
     <Content Include="Views\BusinessRelationship\DataAction\QueryResultAction.cshtml" />
+    <Content Include="Views\AllowanceProcess\Module\DoDeleteAllowance.cshtml" />
+    <Content Include="Views\AllowanceProcess\Module\RedoQuery.cshtml" />
+    <Content Include="Views\AllowanceProcess\Module\DoTransferAllowance.cshtml" />
+    <Content Include="Views\Account\TwoFactorLogin.cshtml" />
+    <Content Include="Views\Account\ForgetPassword.cshtml" />
+    <Content Include="Views\Account\Module\TwoFactorSettings.cshtml" />
+    <Content Include="Views\Common\Module\SortableHeader.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="MvcHelper\CreateInvoiceSummaryReport.aspx" />
     <Content Include="Published\PrintSingleAllowance.aspx" />
@@ -919,7 +933,6 @@
     <Content Include="Views\DonatedInvoice\ReportResult.aspx" />
     <Content Include="Views\Handling\Index.aspx" />
     <Content Include="Views\InquireInvoice\ByCategory.ascx" />
-    <Content Include="Views\InquireInvoice\ByAgent.ascx" />
     <Content Include="Views\InquireInvoice\ByAttachment.ascx" />
     <Content Include="Views\InquireInvoice\ByDonation.ascx" />
     <Content Include="Views\InvoiceBusiness\InvoiceProduct\DataItem.ascx" />
@@ -939,7 +952,6 @@
     <Content Include="Views\InvoiceProcess\ResultAction\VoidDone.ascx" />
     <Content Include="Views\InvoiceProcess\ResultAction\DoVoid.ascx" />
     <Content Include="Views\InvoiceProcess\ResultAction\DownloadMIG.ascx" />
-    <Content Include="Views\InvoiceQuery\InvoiceSummaryResult.aspx" />
     <Content Include="Views\InvoiceQuery\InvoiceSummaryGridPage.aspx" />
     <Content Include="Views\InvoiceQuery\AttachmentResult.aspx" />
     <Content Include="Views\InvoiceQuery\AttachmentGridPage.aspx" />
@@ -970,11 +982,8 @@
     <Content Include="Views\SignXml\Module\CertificateOptions.ascx" />
     <Content Include="Views\SiteAction\Alert.ascx" />
     <Content Include="Views\SiteAction\FunctionTitleBar.ascx" />
-    <Content Include="Views\SiteAction\PageMenuBar.ascx" />
     <Content Include="Views\SystemInfo\OrganizationCategoryOptions.ascx" />
     <Content Include="Views\TestAll\Index.aspx" />
-    <Content Include="Views\UserProfile\EditMySelf.aspx" />
-    <Content Include="Views\UserProfile\AccountChecked.ascx" />
     <Content Include="Views\WinningInvoice\DownloadCSV.aspx" />
     <Content Include="Views\WinningInvoice\PrintResult.aspx" />
     <Content Include="Views\WinningInvoice\ReportGridPage.aspx" />
@@ -1027,8 +1036,6 @@
     <Content Include="Views\InvoiceQuery\GridPage.aspx" />
     <Content Include="Views\InvoiceQuery\Module\InvoiceItemList.ascx" />
     <Content Include="Views\InvoiceQuery\Module\ReportResult.ascx" />
-    <Content Include="Views\InvoiceQuery\InvoiceReport.aspx" />
-    <Content Include="Views\InvoiceQuery\Module\InvoiceReport.ascx" />
     <Content Include="Views\Module\HidePostData.ascx" />
     <Content Include="Views\Module\PrintData.ascx" />
     <Content Include="Views\Module\InvoiceItemList.ascx" />
@@ -1041,9 +1048,6 @@
     <Content Include="Views\WinningNumber\Module\ItemList.ascx" />
     <Content Include="Views\WinningNumber\Module\QueryResult.ascx" />
     <Content Include="Views\WinningNumber\ResultAction\DoMatch.ascx" />
-    <Content Include="Views\WinningNumber\ScriptHelper\MatchWinning.ascx" />
-    <Content Include="Views\WinningNumber\ScriptHelper\Common.ascx" />
-    <Content Include="Views\WinningNumber\WinningNoQuery.ascx" />
     <Content Include="_TestOnly\ResetDB.aspx" />
     <Content Include="Helper\LoadZipCode.ashx" />
     <Content Include="Helper\Web.config" />
@@ -1119,7 +1123,6 @@
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery-1.4.1.min.js" />
-    <Content Include="Views\WinningInvoice\ReportIndex.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1309,6 +1312,7 @@
     <Content Include="_test\testrouteconfig.cshtml" />
     <Content Include="_test\testtask.cshtml" />
     <Content Include="_test\updatedata.cshtml" />
+    <Content Include="_test\UploadTo.html" />
     <Content Include="_test\Web.config" />
     <Content Include="_test\WebDump.ashx" />
     <Content Include="Views\InvoiceNo\Module\QueryResult.cshtml" />
@@ -1444,6 +1448,27 @@
     <Content Include="Views\Notification\Module\InvoiceCancellationException.cshtml" />
     <Content Include="Views\Notification\Module\InvoiceException.cshtml" />
     <Content Include="Views\Shared\YearSelector.cshtml" />
+    <Content Include="Views\Notification\Custom\16446274\IssueNotification.cshtml" />
+    <Content Include="Views\Notification\Custom\16446274\IssuedC0401.cshtml" />
+    <Content Include="Views\Notification\Custom\16446274\Invoice.cshtml" />
+    <Content Include="Views\Notification\Module\IssuedNotice.cshtml" />
+    <Content Include="Views\UserProfile\AccountChecked.cshtml" />
+    <Content Include="Views\Notification\NotifyTwoFactorSettings.cshtml" />
+    <Content Include="Views\InquireInvoice\ByAgent.cshtml" />
+    <Content Include="Views\UserProfile\EditMySelf.cshtml" />
+    <Content Include="Views\WinningInvoice\ReportIndex.cshtml" />
+    <Content Include="Views\WinningInvoice\Module\InquireWinning.cshtml" />
+    <Content Include="Views\WinningNumber\WinningNoQuery.cshtml" />
+    <Content Include="Views\WinningNumber\ScriptHelper\Common.cshtml" />
+    <Content Include="Views\WinningNumber\ScriptHelper\MatchWinning.cshtml" />
+    <Content Include="Views\InvoiceQuery\InquireSummary.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\InvoiceSummaryResult.cshtml" />
+    <Content Include="Views\Template\QueryFormTemplate.cshtml" />
+    <Content Include="Views\Template\QueryIndex.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\TableBody.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\DataItem.cshtml" />
+    <Content Include="Views\Notification\NotifySystemAnnouncement.cshtml" />
+    <Content Include="Views\Notification\Module\Announcement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

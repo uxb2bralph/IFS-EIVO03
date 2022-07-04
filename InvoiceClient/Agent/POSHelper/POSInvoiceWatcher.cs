@@ -141,7 +141,18 @@ namespace InvoiceClient.Agent.POSHelper
 
                         if (issue != null)
                         {
-                            invItem.RandomNumber = issue.random;
+                            if (invItem.PrintMark == "N" || invItem.PrintMark == "n")
+                            {
+                                invItem.RandomNumber = invItem.RandomNumber.GetEfficientString();
+                                if (invItem.RandomNumber == null)
+                                {
+                                    invItem.RandomNumber = issue.random;
+                                }
+                            }
+                            else
+                            {
+                                invItem.RandomNumber = issue.random;
+                            }
                             invItem.InvoiceNumber = issue.sn;
                             if (invItem.CustomerDefined == null)
                             {

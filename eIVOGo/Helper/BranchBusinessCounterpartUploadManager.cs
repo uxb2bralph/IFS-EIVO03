@@ -283,6 +283,9 @@ namespace eIVOGo.Helper
                     }
                 };
 
+                userProfile.MailID = userProfile.EMail.GetEfficientString()?
+                    .Split(';', ',', ',')?[0];
+
                 _userList.Add(userProfile);
 
             }

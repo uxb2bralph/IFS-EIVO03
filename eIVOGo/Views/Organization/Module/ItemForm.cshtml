@@ -137,6 +137,24 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>
+                        註記停用日期
+                    </th>
+                    <td>
+                        <input type="text" class="form_date form-control" name="ExpirationDate" value='@($"{_viewModel.ExpirationDate:yyyy/MM/dd}")' />
+                        <script>
+                            $(function () {
+                                $('input[name="ExpirationDate"]').datepicker({ showButtonPanel: true, changeYear: true, changeMonth: true, yearRange: '2012:+1' });
+                            });
+                        </script>
+                    </td>
+                    <th>
+
+                    </th>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="4" class="Head_style_a">
                         設定項目
                     </td>
@@ -177,14 +195,22 @@
                     <th>
                         設定傳送發票對應資料
                     </th>
-                    <td>
+                    <td colspan="3">
                         <input type="checkbox" value="@($"{true}")" name="DownloadDataNumber" @(_viewModel.DownloadDataNumber == true ? "checked" : null) />使用傳送企業發票對應資料
                     </td>
+                </tr>
+                <tr>
                     <th>
                         上期發票空白號碼
                     </th>
                     <td>
                         <input type="checkbox" value="@($"{true}")" name="UploadBranchTrackBlank" @(_viewModel.UploadBranchTrackBlank == true ? "checked" : null) />用戶端自動下載
+                    </td>
+                    <td>
+                        <input type="checkbox" value="@($"{true}")" name="AutoBlankTrack" checked="@(_viewModel.AutoBlankTrack == true)" />由系統自動結算
+                    </td>
+                    <td>
+                        <input type="checkbox" value="@($"{true}")" name="AutoBlankTrackEmittance" checked="@(_viewModel.AutoBlankTrackEmittance == true)" />由系統自動輸出E0402
                     </td>
                 </tr>
                 <tr>
@@ -269,8 +295,11 @@
                     <th>
                         設定接收MIG
                     </th>
-                    <td colspan="3">
+                    <td>
                         <input type="checkbox" value="@($"{true}")" name="DownloadDispatch" @(_viewModel.DownloadDispatch == true ? "checked" : null) />是
+                    </td>
+                    <td colspan="2">
+                        <input type="checkbox" value="SendAllowanceMIGManually" name="Settings" checked="@(_viewModel.SendAllowanceMIGManually)" />手動傳送折讓單MIG
                     </td>
                 </tr>
                 @*<tr>
@@ -351,10 +380,22 @@
                         <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.CancellingAllowance)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.CancellingAllowance) > 0) ? "checked" : null) />寄送作廢折讓通知
                     </td>
                     <th>
+                        營業人連絡電話
+                    </th>
+                    <td>
+                        <input type="text" class="form-control" name="BusinessContactPhone" value='@(_viewModel.BusinessContactPhone)' />
+                    </td>
+                </tr>
+                <tr>
+                    <th>
                         客訂樣式
                     </th>
                     <td>
                         <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.UseCustomStyle)" name="NoticeStatus" @(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.UseCustomStyle) > 0) ? "checked" : null) />使用客訂郵件樣式
+                    </td>
+                    <td colspan="2">
+                        <input type="text" class="form-control" name="CustomNotificationView" value='@(_viewModel.CustomNotificationView)'
+                               maxlength="160" />
                     </td>
                 </tr>
                 <tr>

@@ -102,6 +102,7 @@
         _model = _model.OrderByDescending(i => i.InvoiceID);
     }
 
+    _viewModel.PageIndex = _viewModel.PageIndex ?? 0;
     _items = _model
         .Skip((int)_viewModel.PageIndex * (int)_viewModel.PageSize)
         .Take((int)_viewModel.PageSize);

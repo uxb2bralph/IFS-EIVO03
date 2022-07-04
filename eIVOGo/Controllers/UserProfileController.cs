@@ -61,7 +61,7 @@ namespace eIVOGo.Controllers
             }
 
             ViewBag.ViewModel = viewModel;
-            return View(viewModel);
+            return View("~/Views/UserProfile/EditMySelf.cshtml", viewModel);
         }
 
         [Authorize]
@@ -104,8 +104,9 @@ namespace eIVOGo.Controllers
             {
                 return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
             }
-               
-            if((new LoginHandler()).ProcessLogin(item.PID))
+
+            String msg;
+            if((new LoginHandler()).ProcessLogin(item.PID, out msg))
             {
                 viewModel.WaitForCheck = true;
                 return View("EditMySelf", item);
@@ -116,7 +117,8 @@ namespace eIVOGo.Controllers
             }
         }
 
-        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
+        //[RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
+        [Authorize]
         public ActionResult Commit(UserProfileViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -129,16 +131,24 @@ namespace eIVOGo.Controllers
             var profile = HttpContext.GetUser();
             UserProfile item = viewModel.CommitUserProfileViewModel(models, ModelState, profile);
 
-            item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
-            if (item == null)
+            if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = this.ModelState;
                 return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
-            if (viewModel.WaitForCheck == true)
+            if (item == null)
             {
-                return View("~/Views/UserProfile/AccountChecked.ascx");
+                item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+            }
+
+            if (item == null)
+            {
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
+            }
+            else if (viewModel.WaitForCheck == true)
+            {
+                return View("~/Views/UserProfile/AccountChecked.cshtml");
             }
             else
             {

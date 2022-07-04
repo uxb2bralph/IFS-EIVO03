@@ -47,7 +47,7 @@
                 連絡人地址 = i.InvoiceBuyer.Address,
                 買受人EMail = i.InvoiceBuyer.EMail,
                 愛心碼 =  i.InvoiceDonation.AgencyCode,
-                是否中獎 = i.InvoiceWinningNumber.UniformInvoiceWinningNumber.PrizeType,
+                是否中獎 = i.InvoiceWinningNumber.PrizeType,
                 載具類別 = i.InvoiceCarrier.CarrierType,
                 載具號碼 = i.InvoiceCarrier.CarrierNo,
                 //備註 = String.Join("", i.InvoiceDetails.Select(t => t.InvoiceProduct.InvoiceProductItem.FirstOrDefault())
@@ -108,7 +108,7 @@
                 連絡人地址 = i.InvoiceBuyer.Address,
                 買受人EMail = i.InvoiceBuyer.EMail,
                 愛心碼 = i.InvoiceDonation != null ? i.InvoiceDonation.AgencyCode : "",
-                是否中獎 = i.InvoiceWinningNumber != null ? i.InvoiceWinningNumber.UniformInvoiceWinningNumber.PrizeType : "N/A",
+                是否中獎 = i.InvoiceWinningNumber != null ? i.InvoiceWinningNumber.PrizeType : "N/A",
                 載具類別 = i.InvoiceCarrier != null ? i.InvoiceCarrier.CarrierType : "",
                 載具號碼 = i.InvoiceCarrier != null ? i.InvoiceCarrier.CarrierNo : "",
                 備註 = String.Join("", i.InvoiceDetails.Select(t => t.InvoiceProduct.InvoiceProductItem.FirstOrDefault())
@@ -194,7 +194,7 @@
                 row.Cell(colIdx++).Value = item.InvoiceBuyer.Address;
                 row.Cell(colIdx++).Value = item.InvoiceBuyer.EMail;
                 row.Cell(colIdx++).Value = item.InvoiceDonation != null ? item.InvoiceDonation.AgencyCode : "";
-                row.Cell(colIdx++).Value = item.InvoiceWinningNumber != null ? item.InvoiceWinningNumber.UniformInvoiceWinningNumber.PrizeType : "N/A";
+                row.Cell(colIdx++).Value = item.InvoiceWinningNumber != null ? item.InvoiceWinningNumber.PrizeType : "N/A";
                 row.Cell(colIdx++).Value = item.InvoiceCarrier != null ? item.InvoiceCarrier.CarrierType : "";
                 row.Cell(colIdx++).Value = item.InvoiceCarrier != null ? item.InvoiceCarrier.CarrierNo : "";
                 row.Cell(colIdx++).Value =  String.Join("", item.InvoiceDetails.Select(t => t.InvoiceProduct.InvoiceProductItem.FirstOrDefault().Remark));

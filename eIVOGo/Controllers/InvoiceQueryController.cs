@@ -24,6 +24,7 @@ using Model.Models.ViewModel;
 using ModelExtension.Helper;
 using Model.Helper;
 using System.Threading.Tasks;
+using eIVOGo.Helper.Security.Authorization;
 
 namespace eIVOGo.Controllers
 {
@@ -33,7 +34,7 @@ namespace eIVOGo.Controllers
 
         protected ModelSourceInquiry<InvoiceItem> createModelInquiry()
         {
-            _userProfile = WebPageUtility.UserProfile;
+            _userProfile = HttpContext.GetUser();
 
             var inquireConsumption = new InquireInvoiceConsumption { ControllerName = "InquireInvoice", ActionName = "ByConsumption", CurrentController = this };
             //inquireConsumption.Append(new InquireInvoiceConsumptionExtensionToPrint { CurrentController = this });
@@ -51,6 +52,7 @@ namespace eIVOGo.Controllers
                 .Append(new InquireWinningInvoice { CurrentController = this });
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS })]
         public ActionResult InvoiceReport(InquireInvoiceViewModel viewModel)
         {
             //ViewBag.HasQuery = false;
@@ -62,6 +64,7 @@ namespace eIVOGo.Controllers
             return View(models.Inquiry);
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult InvoiceMediaReport(TaxMediaQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -300,6 +303,7 @@ namespace eIVOGo.Controllers
             return View("InquiryResult",models.Inquiry);
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS })]
         public ActionResult InvoiceAttachment(InquireInvoiceViewModel viewModel)
         {
             //ViewBag.HasQuery = false;
@@ -535,103 +539,210 @@ namespace eIVOGo.Controllers
 
             models.Inquiry = createModelInquiry();
 
-            return View("InvoiceReport", models.Inquiry);
+            return View("~/Views/InvoiceQuery/InvoiceReport.cshtml", models.Inquiry);
         }
+
+        public static readonly int[] AvailableMemberCategory = new int[]
+        {
+            (int)Naming.MemberCategoryID.發票開立人,
+            (int)Naming.MemberCategoryID.GOOGLE_Taiwan,
+            (int)Naming.MemberCategoryID.店家發票自動配號,
+            (int)Naming.MemberCategoryID.開立發票店家代理,
+            (int)Naming.MemberCategoryID.境外電商,
+        };
 
         public ActionResult InquireSummary(InquireInvoiceViewModel viewModel)
         {
-            //ViewBag.HasQuery = true;
-            ViewBag.PrintAction = "PrintInvoiceSummary";
             ViewBag.ViewModel = viewModel;
+
+            if (!viewModel.InvoiceDateFrom.HasValue)
+            {
+                ModelState.AddModelError("InvoiceDateFrom", "請輸入查詢起日");
+            }
+
+            if (!viewModel.InvoiceDateTo.HasValue)
+            {
+                ModelState.AddModelError("InvoiceDateTo", "請輸入查詢迄日");
+            }
+
+            if(!ModelState.IsValid)
+            {
+                return View("~/Views/Shared/ReportInputError.cshtml");
+            }
+
+            var profile = HttpContext.GetUser();
 
             models.Inquiry = createModelInquiry();
             models.BuildQuery();
 
-            return View("InvoiceSummaryResult", models.Inquiry);
+            var orgaCate = models.GetTable<OrganizationCategory>().Where(c => AvailableMemberCategory.Contains(c.CategoryID));
+            IQueryable<Organization> sellerItems = models.GetTable<Organization>()
+                    .Where(o => orgaCate.Any(c => c.CompanyID == o.CompanyID));
+
+            sellerItems = models.GetDataContext().FilterOrganizationByRole(profile, sellerItems);
+
+            if (viewModel.SellerID.HasValue)
+            {
+                sellerItems = sellerItems.Where(o => o.CompanyID == viewModel.SellerID);
+            }
+
+            if (viewModel.AgentID.HasValue)
+            {
+                sellerItems = sellerItems
+                    .Join(models.GetTable<InvoiceIssuerAgent>()
+                            .Where(a => a.AgentID == viewModel.AgentID),
+                        o => o.CompanyID, a => a.IssuerID, (o, a) => o);
+            }
+
+            viewModel.ResultView = "~/Views/InvoiceQuery/Module/InvoiceSummaryResult.cshtml";
+
+            return PageResult(viewModel, sellerItems);
+
         }
 
         public ActionResult CreateMonthlyReportXlsx(InquireInvoiceViewModel viewModel)
         {
-            ViewBag.ViewModel = viewModel;
+            ViewResult result = (ViewResult)InquireSummary(viewModel);
+            IQueryable<Organization> items = result.Model as IQueryable<Organization>;
 
-            if(!viewModel.SellerID.HasValue)
+            if (items == null)
             {
-                ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/AlertMessage.cshtml", model: "請選擇開立人!!");
+                return result;
             }
 
-            models.Inquiry = createModelInquiry();
-            models.BuildQuery();
-            var items = models.Items;
-
-            if (items.Count() <= 0)
+            ProcessRequest processItem = new ProcessRequest
             {
-                ViewBag.CloseWindow = true;
-                return View("~/Views/Shared/AlertMessage.cshtml", model: "查無資料!!");
-            }
+                Sender = HttpContext.GetUser()?.UID,
+                SubmitDate = DateTime.Now,
+                ProcessStart = DateTime.Now,
+                ResponsePath = System.IO.Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".xlsx"),
+            };
+            models.GetTable<ProcessRequest>().InsertOnSubmit(processItem);
+            models.SubmitChanges();
 
-            using (DataSet ds = new DataSet())
-            {
-                foreach (var yy in items.GroupBy(i => i.InvoiceDate.Value.Year))
-                {
-                    foreach (var mm in yy.GroupBy(i => i.InvoiceDate.Value.Month))
+            _dbInstance = false;
+
+            SqlCommand sqlCmd = (SqlCommand)models.GetCommand(items);
+            SaveAsExcel(processItem, viewModel, items);
+
+            return View("~/Views/Shared/Module/PromptCheckDownload.cshtml",
+                    new AttachmentViewModel
                     {
+                        TaskID = processItem.TaskID,
+                        FileName = processItem.ResponsePath,
+                        FileDownloadName = "開立發票月報表.xlsx",
+                    });
+
+        }
+
+        private void SaveAsExcel(ProcessRequest taskItem, InquireInvoiceViewModel viewModel, IQueryable<Organization> items)
+        {
+            Task.Run(() =>
+            {
+                Exception exception = null;
+                try
+                {
+                    using (DataSet ds = new DataSet())
+                    {
+                        IQueryable<InvoiceItem> dataItems = models.Items;
+
                         DataTable table = new DataTable();
-                        table.Columns.Add(new DataColumn("日期", typeof(String)));
-                        table.Columns.Add(new DataColumn("未作廢總筆數", typeof(int)));
-                        table.Columns.Add(new DataColumn("未作廢總金額", typeof(decimal)));
-                        table.Columns.Add(new DataColumn("已作廢總筆數", typeof(int)));
-                        table.Columns.Add(new DataColumn("已作廢總金額", typeof(decimal)));
-                        table.TableName = $"月報表({yy.Key}-{ mm.Key})";
+                        table.Columns.Add(new DataColumn("開立發票營業人", typeof(String)));
+                        table.Columns.Add(new DataColumn("統編", typeof(String)));
+                        table.Columns.Add(new DataColumn("上線日期", typeof(String)));
+                        table.Columns.Add(new DataColumn("發票筆數", typeof(int)));
+                        table.Columns.Add(new DataColumn("註記停用日期", typeof(String)));
+                        table.TableName = $"發票資料統計({viewModel.InvoiceDateFrom:yyyy-MM-dd}~{viewModel.InvoiceDateTo:yyyy-MM-dd})";
 
                         ds.Tables.Add(table);
 
-                        IEnumerable<InvoiceItem> v0, v1;
-                        DataRow r;
+                        //var invoiceItems = items.GroupJoin(models.Items,
+                        //        o => o.CompanyID, i => i.SellerID, (o, i) => new { Seller = o, Items = i });
 
-                        foreach (var item in mm.GroupBy(i => i.InvoiceDate.Value.Day).OrderBy(g => g.Key))
+                        foreach (var item in items.OrderBy(o => o.ReceiptNo))
                         {
-                            r = table.NewRow();
-                            r[0] = item.Key.ToString();
-                            v0 = item.Where(i => i.InvoiceCancellation == null);
-                            v1 = item.Where(i => i.InvoiceCancellation != null);
-                            r[1] = v0.Count();
-                            r[2] = v0.Sum(i => i.InvoiceAmountType.TotalAmount);
-                            r[3] = v1.Count();
-                            r[4] = v1.Sum(i => i.InvoiceAmountType.TotalAmount);
+                            DataRow r = table.NewRow();
+
+                            r[0] = item.CompanyName;
+                            r[1] = item.ReceiptNo;
+                            r[2] = $"{item.OrganizationExtension?.GoLiveDate:yyyy/MM/dd}";
+                            r[3] = dataItems.Count(i => i.SellerID == item.CompanyID);
+                            r[4] = $"{item.OrganizationExtension?.ExpirationDate:yyyy/MM/dd}";
+
                             table.Rows.Add(r);
                         }
 
-                        v0 = mm.Where(i => i.InvoiceCancellation == null);
-                        v1 = mm.Where(i => i.InvoiceCancellation != null);
-                        r = table.NewRow();
-                        r[0] = "總計";
-                        r[1] = v0.Count();
-                        r[2] = v0.Sum(i => i.InvoiceAmountType.TotalAmount);
-                        r[3] = v1.Count();
-                        r[4] = v1.Sum(i => i.InvoiceAmountType.TotalAmount);
-                        table.Rows.Add(r);
+                        foreach (var yy in dataItems.GroupBy(i => i.InvoiceDate.Value.Year))
+                        {
+                            foreach (var mm in yy.GroupBy(i => i.InvoiceDate.Value.Month))
+                            {
+                                table = new DataTable();
+                                table.Columns.Add(new DataColumn("日期", typeof(String)));
+                                table.Columns.Add(new DataColumn("未作廢總筆數", typeof(int)));
+                                table.Columns.Add(new DataColumn("未作廢總金額", typeof(decimal)));
+                                table.Columns.Add(new DataColumn("已作廢總筆數", typeof(int)));
+                                table.Columns.Add(new DataColumn("已作廢總金額", typeof(decimal)));
+                                table.TableName = $"月報表({yy.Key}-{ mm.Key})";
 
+                                ds.Tables.Add(table);
+
+                                IEnumerable<InvoiceItem> v0, v1;
+                                DataRow r;
+
+                                foreach (var item in mm.GroupBy(i => i.InvoiceDate.Value.Day).OrderBy(g => g.Key))
+                                {
+                                    r = table.NewRow();
+                                    r[0] = item.Key.ToString();
+                                    v0 = item.Where(i => i.InvoiceCancellation == null);
+                                    v1 = item.Where(i => i.InvoiceCancellation != null);
+                                    r[1] = v0.Count();
+                                    r[2] = v0.Sum(i => i.InvoiceAmountType.TotalAmount);
+                                    r[3] = v1.Count();
+                                    r[4] = v1.Sum(i => i.InvoiceAmountType.TotalAmount);
+                                    table.Rows.Add(r);
+                                }
+
+                                v0 = mm.Where(i => i.InvoiceCancellation == null);
+                                v1 = mm.Where(i => i.InvoiceCancellation != null);
+                                r = table.NewRow();
+                                r[0] = "總計";
+                                r[1] = v0.Count();
+                                r[2] = v0.Sum(i => i.InvoiceAmountType.TotalAmount);
+                                r[3] = v1.Count();
+                                r[4] = v1.Sum(i => i.InvoiceAmountType.TotalAmount);
+                                table.Rows.Add(r);
+
+                            }
+                        }
+
+                        using (var xls = ds.ConvertToExcel())
+                        {
+                            xls.SaveAs(taskItem.ResponsePath);
+                        }
                     }
+
                 }
-
-                Response.Clear();
-                Response.ClearContent();
-                Response.ClearHeaders();
-                Response.AddHeader("Cache-control", "max-age=1");
-                Response.ContentType = "application/vnd.ms-excel";
-                Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({0}){1}.xlsx", items.First().Organization.ReceiptNo, HttpUtility.UrlEncode("開立發票月報表")));
-
-                using (var xls = ds.ConvertToExcel())
+                catch (Exception ex)
                 {
-                    xls.SaveAs(Response.OutputStream);
+                    exception = ex;
+                    Logger.Error(ex);
                 }
 
-            }
+                if (exception != null)
+                {
+                    taskItem.ExceptionLog = new ExceptionLog
+                    {
+                        DataContent = exception.Message
+                    };
+                }
 
-            return new EmptyResult();
+                taskItem.ProcessComplete = DateTime.Now;
+                models.SubmitChanges();
+
+                models.Dispose();
+
+            });
         }
-
 
         public ActionResult InvoiceSummaryGridPage(int index, int size, InquireInvoiceViewModel viewModel)
         {

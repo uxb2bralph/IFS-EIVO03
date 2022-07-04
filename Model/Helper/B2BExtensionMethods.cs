@@ -168,8 +168,9 @@ namespace Model.Helper
                     DiscountAmountSpecified = item.InvoiceAmountType.DiscountAmount.HasValue,
                     ExchangeRateSpecified = false,
                     OriginalCurrencyAmountSpecified = false,
-                    SalesAmount = item.InvoiceAmountType.SalesAmount.ToFix(item.InvoiceAmountType.CurrencyType?.Decimals ?? 0),
-                    TaxAmount = item.InvoiceBuyer.IsB2C() ? 0 : item.InvoiceAmountType.TaxAmount.ToFix(item.InvoiceAmountType.CurrencyType?.Decimals ?? 0),
+                    SalesAmount = (item.InvoiceAmountType.SalesAmount ?? item.InvoiceAmountType.FreeTaxSalesAmount ?? item.InvoiceAmountType.ZeroTaxSalesAmount ?? (item.InvoiceAmountType.TotalAmount-item.InvoiceAmountType.TaxAmount))
+                                    .ToFix(item.InvoiceAmountType.CurrencyType?.Decimals ?? 0),
+                    TaxAmount = item.InvoiceAmountType.TaxAmount.ToFix(item.InvoiceAmountType.CurrencyType?.Decimals ?? 0),
                     TaxRate = item.InvoiceAmountType.TaxRate.HasValue ? item.InvoiceAmountType.TaxRate.ToFix(2) : 0.05m,
                     TaxType = (Schema.TurnKey.A0401.TaxTypeEnum)((int)item.InvoiceAmountType.TaxType.Value),
                     TotalAmount = item.InvoiceAmountType.TotalAmount.ToFix(item.InvoiceAmountType.CurrencyType?.Decimals ?? 0)

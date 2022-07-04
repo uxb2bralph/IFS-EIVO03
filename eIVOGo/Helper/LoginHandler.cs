@@ -39,9 +39,8 @@ namespace eIVOGo.Helper
             return auth;
         }
 
-        public bool ProcessLogin(string pid)
+        public bool ProcessLogin(string pid, out String msg)
         {
-            string msg;
             UserProfileMember up = UserProfileFactory.CreateInstance(pid);
             return processLoginUsingRole(out msg, up);
         }

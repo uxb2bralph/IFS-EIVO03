@@ -77,7 +77,7 @@ namespace Model.Models.ViewModel
         [JsonIgnore]
         public bool? CurrencySummary { get; set; }
         public String ReceiptNo { get; set; }
-
+        public String Status { get; set; }
     }
 
     public enum DataQueryType
@@ -237,13 +237,12 @@ namespace Model.Models.ViewModel
         public String WinningNo { get; set; }
     }
 
-    public partial class MailTrackingViewModel
+    public partial class MailTrackingViewModel : InquireInvoiceViewModel
     {
         public String StartNo { get; set; }
         public String EndNo { get; set; }
         public int? DeliveryStatus { get; set; }
         public Naming.ChannelIDType? ChannelID { get; set; }
-        public int? Attachment { get; set; }
 
     }
 
@@ -394,6 +393,8 @@ namespace Model.Models.ViewModel
         public Schema.EIVO.CancelInvoiceRoot CancelInvoiceRoot { get; set; }
         public Schema.EIVO.AllowanceRoot AllowanceRoot { get; set; }
         public Schema.EIVO.CancelAllowanceRoot CancelAllowanceRoot { get; set; }
+        public String StoragePath { get; set; }
+        public DateTime? ApplyInvoiceDate { get; set; }
     }
 
     public class MIGResponseViewModel : AuthQueryViewModel

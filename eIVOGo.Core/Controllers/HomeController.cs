@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using eIVOGo.Core.Models;
+using WebHome.Models;
 
-namespace eIVOGo.Core.Controllers
+namespace WebHome.Controllers
 {
     public class HomeController : Controller
     {

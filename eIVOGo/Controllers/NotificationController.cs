@@ -275,6 +275,35 @@ namespace eIVOGo.Controllers
 
         }
 
+        public ActionResult NotifyTwoFactorSettings(UserProfileViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+            if (item == null)
+            {
+                item = models.GetTable<UserProfile>().Where(u => u.PID == viewModel.PID).FirstOrDefault();
+            }
+
+            if (item == null)
+            {
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
+            }
+
+            item = item.LoadInstance(models).PrepareTwoFactorKey(models);
+
+            return View("~/Views/Notification/NotifyTwoFactorSettings.cshtml", item);
+
+        }
+
+        public ActionResult NotifySystemAnnouncement(String[] mailTo)
+        {
+            return View("~/Views/Notification/NotifySystemAnnouncement.cshtml", mailTo);
+        }
 
     }
 }

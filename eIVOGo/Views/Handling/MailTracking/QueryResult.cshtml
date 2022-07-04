@@ -1,13 +1,23 @@
 ﻿@using System.IO
 @using System.Linq.Expressions
 
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Controllers
 @using Model.DataEntity
+@using Model.Helper
 @using Model.Locale
+@using Uxnet.Web.WebUI
 @using Utility
 @using Newtonsoft.Json
 
 @{
+    ModelSource<InvoiceItem> models;
     IQueryable<InvoiceItem> _model;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _model = (IQueryable<InvoiceItem>)this.Model;
 }
 
@@ -32,6 +42,9 @@
         @if (_model.Count() > 0)
         {
             List<_PackItem> items = new List<_PackItem>();
+            //var grouping = _model.GroupBy(i => i.InvoiceBuyer.Address)
+            //                            .OrderBy(a => a.Key);
+            //Logger.Debug(models.GetDataContext().GetCommand(grouping).CommandText);
             foreach (var g in _model.GroupBy(i => i.InvoiceBuyer.Address)
                                         .OrderBy(a => a.Key))
             {

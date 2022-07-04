@@ -1,0 +1,51 @@
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using System.Xml
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Locale
+@using Model.Schema.EIVO
+@using Utility
+@using Business.Helper
+@using Model.Helper
+@using Uxnet.Web.WebUI
+@{
+
+    ModelSource<InvoiceItem> models;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>網際優勢加值服務中心 暫停營運服務公告</title>
+</head>
+<body>
+    <form>
+        <p>
+            親愛的營業人,
+        </p>
+        <p>&nbsp;</p>
+        <p>
+            本平台預計於111年6月11日13:00至16:00進行服務升級，作業期間將暫停營運服務。
+        </p>
+        <p>&nbsp;</p>
+        <p>
+            For updating services, we will suspend services of the UXB2B e-invoice Platform from June 11th, 2022, 01:00 p.m. ~ 04:00 p.m. by the Taiwan Standard Time. During this period, the Seller entities can upload the invoices since June 11th, 2022, 04:00 p.m. by the Taiwan Standard Time.
+        </p>
+        <p>&nbsp;</p>
+        <p>
+            網際優勢加值服務中心
+        </p>
+    </form>
+</body>
+</html>
+

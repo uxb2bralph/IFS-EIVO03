@@ -35,6 +35,14 @@ namespace Model.Models.ViewModel
             _owner = owner;
         }
 
+        public Organization Seller
+        {
+            get
+            {
+                return _seller;
+            }
+        }
+
         public InvoiceAllowance Allowance
         {
             get 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 
 using Business.Helper.Validation;
+using Model.Models.ViewModel;
 
 namespace eIVOGo.Models.ViewModel
 {
@@ -35,5 +36,11 @@ namespace eIVOGo.Models.ViewModel
         [Display(Name = "EncryptedCode")]
         public string EncryptedCode { get; set; }
 
+    }
+
+    public class TwoFactorViewModel : QueryViewModel
+    {
+        public int? UID { get; set; }
+        public String CodeDigit { get; set; }
     }
 }

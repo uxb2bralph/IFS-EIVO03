@@ -11,6 +11,7 @@ using Business.Helper;
 using System.Text;
 using Model.Locale;
 using Model.Models.ViewModel;
+using eIVOGo.Helper.Security.Authorization;
 
 namespace eIVOGo.Controllers
 {
@@ -28,6 +29,7 @@ namespace eIVOGo.Controllers
                 .Append(new InquireDonatory { ControllerName = "InquireInvoice", ActionName = "ByDonatory", CurrentController = this });
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS })]
         public ActionResult ReportIndex(InquireInvoiceViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;

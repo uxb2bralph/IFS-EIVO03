@@ -42,6 +42,15 @@ namespace TestConsole
             Logger.OutputWritter = Console.Out;
             Logger.Info($"Process start at {DateTime.Now}");
 
+            String test = "CN=amylee, OU=70762419-RA-UXRA, OU=Universal Exchange Inc., OU=Public Certification Authority, O=\"Chunghwa Telecom Co., Ltd.\", C=TW";
+            String input = "CN = amylee, OU=70762419-RA-UXRA, OU=Universal Exchange Inc., OU=Public Certification Authority, O=\"Chunghwa Telecom Co., Ltd.\", C=TW";
+            String pattern = @"[^=,\s]*[\s]*?=((\""[^""]*\"")|[^,]*)";
+
+            var all = Regex.Matches(input, pattern);
+            var items = all.Cast<Match>().Select(m=>m.Value.Split('='))
+                  .Select(pair => new KeyValuePair<String, String>(pair[0].Trim().ToUpper(), pair[1].Trim()))
+                  .ToList();
+
             //test01();
             //test02();
             //test03();
@@ -121,8 +130,8 @@ namespace TestConsole
 
             //test31();
 
-            String json = File.ReadAllText("G:\\temp\\test.json");
-            InvoiceRoot invoice = JsonConvert.DeserializeObject<InvoiceRoot>(json);
+            //String json = File.ReadAllText("G:\\temp\\test.json");
+            //InvoiceRoot invoice = JsonConvert.DeserializeObject<InvoiceRoot>(json);
 
             Console.ReadKey();
         }

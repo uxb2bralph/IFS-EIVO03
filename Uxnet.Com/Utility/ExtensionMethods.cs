@@ -1695,12 +1695,12 @@ namespace Utility
 
         public static String GetString(this DataRow row, int index)
         {
-            return (row[index] as String) ?? $"{row[index]}";
+            return (row[index] as String)?.GetEfficientString() ?? $"{row[index]}";
         }
 
         public static String GetString(this DataRow row, String columnName)
         {
-            return (row[columnName] as String) ?? $"{row[columnName]}";
+            return (row[columnName] as String)?.GetEfficientString() ?? $"{row[columnName]}";
         }
 
         public static JsonSerializerSettings CommonJsonSettings = new JsonSerializerSettings

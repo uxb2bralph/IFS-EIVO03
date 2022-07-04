@@ -29,6 +29,7 @@ using Utility;
 using Model.InvoiceManagement.InvoiceProcess;
 using Uxnet.Com.DataAccessLayer;
 using ModelExtension.Helper;
+using eIVOGo.Helper.Security.Authorization;
 
 namespace eIVOGo.Controllers
 {
@@ -121,6 +122,7 @@ namespace eIVOGo.Controllers
             return Content(Guid.NewGuid().ToString());
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult CreateInvoice(InvoiceViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -338,12 +340,12 @@ namespace eIVOGo.Controllers
             if (newItem.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.D0401)
             {
                 D0401Handler.PushStepQueueOnSubmit(models, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
-                D0401Handler.PushStepQueueOnSubmit(models, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                D0401Handler.PushStepQueueOnSubmit(models, newItem.CDS_Document, validator.Seller.StepReadyToAllowanceMIG());
             }
             else
             {
                 B0401Handler.PushStepQueueOnSubmit(models, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
-                B0401Handler.PushStepQueueOnSubmit(models, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                B0401Handler.PushStepQueueOnSubmit(models, newItem.CDS_Document, validator.Seller.StepReadyToAllowanceMIG());
             }
             models.SubmitChanges();
 

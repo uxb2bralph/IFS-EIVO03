@@ -151,7 +151,7 @@
 
                             <p style="border-top: 1px dotted #808080;">
                                 <span style="font-size: 8pt;">總計：@(_model.InvoiceDetails.Count)項&nbsp;&nbsp;金額：@(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TotalAmount))</span><br />
-                                課稅別：@((_model.InvoiceAmountType.TaxType == (byte)2 || _model.InvoiceAmountType.TaxType == (byte)3) ? "TZ" : "TX")&nbsp;&nbsp;<br />
+                                課稅別：@(_model.InvoiceAmountType.TaxTypeString)&nbsp;&nbsp;<br />
                                 @if (!_buyer.IsB2C())
                                 {
                                     <text>應稅銷售額：@(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TaxType == 1 || _model.InvoiceAmountType.TaxType == 9

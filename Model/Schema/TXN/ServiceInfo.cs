@@ -12,6 +12,7 @@ namespace Model.Schema.TXN
     {
         public String AgentToken { get; set; }
         public String TaskCenterUrl { get; set; }
+        public String ServiceHost { get; set; }
         public int? AgentUID { get; set; }
         public Naming.InvoiceProcessType? DefaultProcessType { get; set; }
     }

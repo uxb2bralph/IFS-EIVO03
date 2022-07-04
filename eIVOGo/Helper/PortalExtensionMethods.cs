@@ -53,6 +53,25 @@ namespace eIVOGo.Helper
 
         }
 
+        public static void NotifyTwoFactorSettings(this UserProfile profile)
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                try
+                {
+                    using (WebClient client = new WebClient())
+                    {
+                        client.DownloadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/ActivateUser")}?uid={profile.UID}&resetPass={true}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
+            });
+
+        }
+
         public static void NotifyToActivate(this UserProfile profile)
         {
             Task.Run(() =>

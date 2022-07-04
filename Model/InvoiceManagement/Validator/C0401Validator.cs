@@ -30,7 +30,7 @@ namespace Model.InvoiceManagement.Validator
             return new Exception(String.Format("不支援此格式的資料驗證:{0}", typeof(InvoiceRootInvoice).ToString()));
         }
 
-        public override void StartAutoTrackNo()
+        public override void StartAutoTrackNo(DateTime? autoTrackNoInvoiceDate = null)
         {
 
         }

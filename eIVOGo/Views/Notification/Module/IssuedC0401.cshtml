@@ -238,44 +238,19 @@
                 </p>
             }
         }
-        <p>
-            @if (eIVOGo.Properties.Settings.Default.ShowAuthorizationNoInMail)
-            {
-                <text>本公司奉財政部核准文號：</text>
-                <span class="blue">@(String.IsNullOrEmpty(_model.Organization.OrganizationStatus.AuthorizationNo) ? "臺北市國稅局信義分局100年7月22日財北國稅信義營業字第1000213452號" : _model.Organization.OrganizationStatus.AuthorizationNo)</span>
-                <text>，使用電子發票。</text>
-            }
-            @if (_model.Organization.OrganizationStatus.SetToNotifyCounterpartBySMS == true)
-            {
-                @(_model.InvoiceBuyer.IsB2C()
-                    ? "本公司會以電子郵件將發票開立與中獎訊息通知客戶，如需索取紙本電子發票請回覆欲索取之電子發票號碼至：" + _model.Organization.ContactEmail + "，" + _model.Organization.CompanyName + "將於收到回覆後十個工作天內寄出該電子發票紙本證明聯。"
-                    : "對於企業端電子發票用戶，如需列印，請點選上方「>請點此連結列印發票」即可使用企業所屬之帳號登入列印發票。" /*"，如需列印，請直接開啟附件之發票列印檔另行列印即可"*/)
-            }
-            else
-            {
-                <text>本公司會以電子郵件將發票開立與中獎訊息通知客戶，對於企業端電子發票用戶，如需列印，請直接開啟附件之發票列印檔另行列印即可。</text>
-            }
-        </p>
+    <p>
+        @*@if (eIVOGo.Properties.Settings.Default.ShowAuthorizationNoInMail)
+        {
+            <text>本公司奉財政部核准文號：</text>
+            <span class="blue">@(String.IsNullOrEmpty(_model.Organization.OrganizationStatus.AuthorizationNo) ? "臺北市國稅局信義分局100年7月22日財北國稅信義營業字第1000213452號" : _model.Organization.OrganizationStatus.AuthorizationNo)</span>
+            <text>，使用電子發票。</text>
+        }*@
+        本公司依據財政部「電子發票實施作業要點」使用雲端發票，您的發票明細資料將上傳至財政部<a href="https://www.einvoice.nat.gov.tw/APCONSUMER/BTC601W/">電子發票整合服務平台</a>，無論是個人載具發票或是會員載具託管發票，將不再另行寄送紙本發票。若會員載具託管發票中獎，本公司將依法於開獎日翌日起10日內以電子郵件通知發票中獎訊息，並提供電子發票證明聯紙本作為兌獎憑證。您可於發票開立48小時後，至財政部<a href="https://www.einvoice.nat.gov.tw/APCONSUMER/BTC601W/">電子發票整合服務平台</a>進行發票資料查詢。
+        公司用電子發票證明聯亦請自行於財政部<a href="https://www.einvoice.nat.gov.tw/APCONSUMER/BTC601W/">電子發票整合服務平台</a>下載列印。
+    </p>
         <p class="red">
             &nbsp;
         </p>
-        <p class="red">
-            注意事項：
-        </p>
-        <p>
-            根據財政部「電子發票實施作業要點」規範，營業人將您的發票明細資料上傳到政府
-            @{ Html.RenderPartial("~/Module/SYS/Info/GovInvoiceLink.ascx");}
-
-            儲存，若您要至該網站查詢發票開立狀況，請輸入「發票號碼」及「發票日期」，即可查詢此張發票內容。
-        </p>
-        <p>&nbsp;</p>
-        @if (_model.Organization.OrganizationStatus.SetToOutsourcingCS == true)
-        {
-            {
-                Html.RenderPartial("~/Views/Notification/Shared/ServiceNotation.cshtml", _model.Organization);
-            }
-
-        }
         @if (_model.Organization.OrganizationExtension?.CustomNotification != null)
         {
             <text>
@@ -283,9 +258,9 @@
             </text>
         }
         <p>&nbsp;</p>
-        <p class="red">
-            ※此信件為系統發出信件，請勿直接回覆。
-        </p>
+        @{ 
+            Html.RenderPartial("~/Views/Notification/Module/IssuedNotice.cshtml",_model);
+        }
         <!--按鈕-->
     </form>
 </body>

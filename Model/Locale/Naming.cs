@@ -320,8 +320,6 @@ namespace Model.Locale
             已接收 = 1305,
             已開立 = 1306,
             註記作廢 = 1307,
-            回傳MIG = 1308,
-            已註銷 = 1307,
             待批次傳送 = 1308,
             申請退回 = 1309,
             已作廢 = 1310,
@@ -333,6 +331,8 @@ namespace Model.Locale
             退回申請待開立 = 1316,
             已接收資料待通知 = 1317,
             文件準備中 = 1318,
+            回傳MIG = 1319,
+            已註銷 = 1320,
         }
 
         public enum NotificationIndication

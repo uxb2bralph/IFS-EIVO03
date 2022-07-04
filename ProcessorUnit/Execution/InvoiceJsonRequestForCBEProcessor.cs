@@ -18,6 +18,7 @@ using Business.Helper.InvoiceProcessor;
 using ProcessorUnit.Helper;
 using Newtonsoft.Json;
 using Model.Schema.EIVO;
+using Model.Models.ViewModel;
 
 namespace ProcessorUnit.Execution
 {
@@ -39,9 +40,15 @@ namespace ProcessorUnit.Execution
                 InvoiceRoot invoice = new InvoiceRoot 
                 {
                     Invoice = JsonConvert.DeserializeObject<InvoiceRootInvoice[]>(s)
-                }; 
+                };
                 using (InvoiceManagerForCBE manager = new InvoiceManagerForCBE())
                 {
+                    if (requestItem.ViewModel != null)
+                    {
+                        InvoiceRequestViewModel viewModel = JsonConvert.DeserializeObject<InvoiceRequestViewModel>(requestItem.ViewModel);
+                        manager.ApplyInvoiceDate = viewModel.ApplyInvoiceDate;
+                    }
+
                     var token = manager.GetTable<OrganizationToken>().Where(t => t.CompanyID == requestItem.AgentID).FirstOrDefault();
                     if(token!=null)
                     {

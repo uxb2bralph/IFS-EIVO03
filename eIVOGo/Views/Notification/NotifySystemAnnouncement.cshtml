@@ -1,0 +1,68 @@
+
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+
+    ModelSource<InvoiceItem> models;
+    String[] _model;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = this.Model as String[];
+}
+@{
+    if (_model == null)
+    {
+        _model = models.GetTable<Organization>().Where(
+                        o => o.OrganizationCategory.Any(
+                            c => c.CategoryID == (int)Naming.CategoryID.COMP_E_INVOICE_B2C_SELLER
+                                || c.CategoryID == (int)Naming.CategoryID.COMP_VIRTUAL_CHANNEL
+                                || c.CategoryID == (int)Naming.CategoryID.COMP_E_INVOICE_GOOGLE_TW
+                                || c.CategoryID == (int)Naming.CategoryID.COMP_INVOICE_AGENT))
+            .Where(o => o.ContactEmail != null)
+            .Select(o => o.ContactEmail)
+            .ToList()
+            .Select(m => m.GetEfficientString())
+            .Where(m => m != null)
+            .ToArray();
+
+    }
+}
+@if (_model!=null)
+{
+    String Subject = $"網際優勢電子發票加值中心 系統公告";
+    String body = Html.Partial("~/Views/Notification/Module/Announcement.cshtml").ToString();
+    foreach(var mailTo in _model)
+    {
+        try
+        {
+            body.SendMailMessage(mailTo, Subject);
+        }
+        catch(Exception ex)
+        {
+            Logger.Warn($"error mailTo: {mailTo}");
+            Logger.Error(ex);
+        }
+    }
+}
+ @{ 
+     Html.RenderPartial("~/Views/Shared/AlertMessage.cshtml", model: "公告訊息已送出!!");
+ }
+
+
+
+

@@ -13,7 +13,13 @@
     _items = (IQueryable<UnassignedInvoiceNo>)ViewBag.DataItems;
 }
 <tr>
-    <td>@(_model.InvoiceTrackCodeAssignment.Organization.ReceiptNo)</td>
+    <td>
+        @(_model.InvoiceTrackCodeAssignment.Organization.ReceiptNo)
+        @if (_model.InvoiceTrackCodeAssignment.Organization.OrganizationExtension.ExpirationDate.HasValue)
+        {
+            <text>(註記停用：@($"{_model.InvoiceTrackCodeAssignment.Organization.OrganizationExtension.ExpirationDate:yyyy/MM/dd}"))</text>
+        }
+    </td>
     <td>@(_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.Year)</td>
     <td>@(String.Format("{0:00}-{1:00}月",_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo*2-1,_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo*2))</td>
     <td>@(_model.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode)</td>

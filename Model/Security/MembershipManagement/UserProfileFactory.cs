@@ -16,19 +16,13 @@ namespace Model.Security.MembershipManagement
     using UserProfileImpl = UserProfileMember;
     using Model.DataEntity;
     using Utility;
+    using System.Linq;
 
     /// <summary>
     /// Summary description for UserProfile.
     /// </summary>
-    public class UserProfileFactory
+    public static class UserProfileFactory
 	{
-
-		private UserProfileFactory()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
 
 		public static UserProfileMember CreateInstance(int uid)
 		{
@@ -122,6 +116,11 @@ namespace Model.Security.MembershipManagement
                 }
             }
             return null;
+        }
+
+        public static UserProfile LoadInstance(this UserProfile profile, GenericManager<EIVOEntityDataContext> models)
+        {
+            return models.GetTable<UserProfile>().Where(u => u.UID == profile.UID).First();
         }
     }
 }

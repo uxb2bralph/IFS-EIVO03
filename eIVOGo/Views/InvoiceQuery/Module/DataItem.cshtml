@@ -1,0 +1,38 @@
+@using System.IO
+@using System.Linq.Expressions
+@using eIVOGo.Helper
+@using eIVOGo.Module.Base
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Uxnet.Com.DataAccessLayer
+@using Newtonsoft.Json
+@{
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    InquireInvoiceViewModel _viewModel = ViewBag.ViewModel as InquireInvoiceViewModel;
+
+    Organization _model = (Organization)this.Model;
+    Organization item = _model;
+}
+
+@functions
+{
+    ModelSource<InvoiceItem> models;
+
+    int checkCompany(Organization orgItem)
+    {
+        return models.Items.Count(i => i.SellerID == orgItem.CompanyID);
+    }
+}
+<tr>
+    <td>@(item.CompanyName)</td>
+    <td>@(item.ReceiptNo)</td>
+    <td>@(checkCompany(item))</td>
+    <td>@($"{item.OrganizationExtension?.ExpirationDate:yyyy/MM/dd}")</td>
+</tr>
+
+

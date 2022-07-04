@@ -35,9 +35,9 @@ namespace eIVOGo.Helper
                                 || c.CategoryID == (int)Naming.CategoryID.COMP_INVOICE_AGENT));
 
                 case Naming.CategoryID.COMP_INVOICE_AGENT:
-                case Naming.CategoryID.COMP_E_INVOICE_GOOGLE_TW:
                     return mgr.GetQueryByAgent(userProfile.CurrentUserRole.OrganizationCategory.CompanyID);
 
+                case Naming.CategoryID.COMP_E_INVOICE_GOOGLE_TW:
                 case Naming.CategoryID.COMP_E_INVOICE_B2C_SELLER:
                 case Naming.CategoryID.COMP_VIRTUAL_CHANNEL:
                 case Naming.CategoryID.COMP_CROSS_BORDER_MURCHANT:

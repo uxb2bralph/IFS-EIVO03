@@ -26,6 +26,7 @@ using Model.Locale;
 using Model.Schema.TurnKey.E0402;
 using Model.Security.MembershipManagement;
 using Utility;
+using eIVOGo.Helper.Security.Authorization;
 
 namespace eIVOGo.Controllers
 {
@@ -42,13 +43,14 @@ namespace eIVOGo.Controllers
                 .Append(new InquireInvoicePeriod { ControllerName = "InquireInvoice", ActionName = "ByPeriod", CurrentController = this, QueryRequired = true, AlertMessage = "請選擇期別!!" });
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS })]
         public ActionResult ReportIndex()
         {
             //ViewBag.HasQuery = false;
             //ViewBag.RequiredError = false;
             models.Inquiry = createModelInquiry();
 
-            return View(models.Inquiry);
+            return View("~/Views/WinningInvoice/ReportIndex.cshtml", models.Inquiry);
         }
 
         public ActionResult InquireReport(InquireInvoiceViewModel viewModel)

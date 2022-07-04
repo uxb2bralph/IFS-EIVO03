@@ -94,7 +94,8 @@
                         var chkBox = $(".itemList input[name='chkAll']");
                         var chkItem = $(".itemList input[name='chkItem']");
                         chkBox.click(function () {
-                            chkItem.prop('checked', chkBox.is(':checked'));
+                            $(".itemList input[name='chkItem']")
+                                .prop('checked', chkBox.is(':checked'));
                         });
 
                         chkItem.click(function (e) {

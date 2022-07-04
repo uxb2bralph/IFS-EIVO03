@@ -1,4 +1,4 @@
-
+ï»¿
 @using System.Linq
 @using System.IO
 @using System.Linq.Expressions
@@ -21,8 +21,9 @@
 <script>
     $(function () {
 
+        hideLoading();
         if (!$('input[name="chkItem"]').is(':checked')) {
-            alert('@Html.Raw($"½Ğ¿ï¾Ü«İ{_viewModel.ActionTitle}¸ê®Æ!!")');
+            alert('@Html.Raw($"è«‹é¸æ“‡å¾…{_viewModel.ActionTitle}è³‡æ–™!!")');
             return false;
         }
 

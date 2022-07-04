@@ -123,6 +123,34 @@
                 </td>
             </tr>
         }
+        @if (_model.InvoiceCarrier != null)
+        {
+            <tr>
+                <th style="white-space:nowrap;">
+                    載具類別
+                </th>
+                <td class="tdleft" style="white-space:nowrap;">
+                    @(_model.InvoiceCarrier.CarrierType)
+                </td>
+                <th style="white-space:nowrap;">
+                    載具號碼
+                </th>
+                <td class="tdleft">
+                    @(_model.InvoiceCarrier.CarrierNo)
+                </td>
+            </tr>
+        }
+        else if (_model.InvoiceDonation != null)
+        {
+            <tr>
+                <th style="white-space:nowrap;">
+                    捐贈愛心碼
+                </th>
+                <td class="tdleft" colspan="3" style="white-space:nowrap;">
+                    @(_model.InvoiceDonation.AgencyCode)
+                </td>
+            </tr>
+        }
         <tr>
             <th style="white-space:nowrap;">
                 總 備 註

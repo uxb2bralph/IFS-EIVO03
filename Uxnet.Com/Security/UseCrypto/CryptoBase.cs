@@ -30,7 +30,7 @@ namespace Uxnet.Com.Security.UseCrypto
 
 		protected X509Certificate2 _cert ;
         protected dsPKCS7 _ds;
-        protected dsPKCS7.pkcs7EnvelopRow _log;
+        protected dsPKCS7Pkcs7Envelop _log;
 
         public Func<X509Certificate2, bool> CheckCertificateTrusted
         {
@@ -60,8 +60,12 @@ namespace Uxnet.Com.Security.UseCrypto
                 {
                     _ds = new dsPKCS7();
                 }
-                _log = _ds.pkcs7Envelop.Newpkcs7EnvelopRow();
-                _ds.pkcs7Envelop.Addpkcs7EnvelopRow(_log);
+
+                if(_ds.pkcs7Envelop==null)
+                {
+                    _ds.pkcs7Envelop = new dsPKCS7Pkcs7Envelop { };
+                }
+                _log = _ds.pkcs7Envelop;
             }
 
 		}
@@ -163,13 +167,21 @@ namespace Uxnet.Com.Security.UseCrypto
 			return bResult;
 		}
 
-		public dsPKCS7.pkcs7EnvelopRow CA_Log
+		public dsPKCS7Pkcs7Envelop CA_Log
 		{
 			get
 			{
 				return _log;
 			}
 		}
+
+        public dsPKCS7 PKCS7Log
+        {
+            get
+            {
+                return _ds;
+            }
+        }
 
         protected void beforeVerify(string dataToSign, string dataSignature, X509Certificate2 cert2)
         {

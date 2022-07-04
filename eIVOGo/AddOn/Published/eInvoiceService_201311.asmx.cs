@@ -64,6 +64,9 @@ namespace eIVOGo.Published
                             }
                         };
 
+                        userProfile.MailID = userProfile.EMail.GetEfficientString()?
+                            .Split(';', ',', ',')?[0];
+
                         mgr.GetTable<UserRole>().InsertOnSubmit(new UserRole
                         {
                             RoleID = (int)Naming.RoleID.ROLE_SELLER,

@@ -14,43 +14,44 @@
 @using Model.Security.MembershipManagement
 @using Utility
 @using Uxnet.Web.WebUI
-@if(_profile.CurrentUserRole.OrganizationCategory.CategoryID==(int)Naming.CategoryID.COMP_SYS)
-    {
-<tr>
-    <th>代理業者統編
-    </th>
-    <td class="tdleft">
-        <select name="agentID">
-            <option value="">全部</option>
-            @foreach(var a in _model)
-                {
-            <option value="@(a.CompanyID)">@($"({a.ReceiptNo}) {a.CompanyName}")</option>
-            }
-        </select>
-        @if(Request["agentID"]!=null) {
-        <script>
-            $(function () {
-                $('select[name="agentID"]').val('@(Request["agentID"])');
-            });
-        </script>
-        }
-    </td>
-</tr>
-}
-<script runat="server">
+@{
 
     ModelSource<InvoiceItem> models;
     IQueryable<Organization> _model;
     UserProfileMember _profile;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<Organization>)this.Model;
-        _profile = Context.GetUser();
-    }
 
-</script>
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<Organization>)this.Model;
+    _profile = Context.GetUser();
+}
+@if (_profile.CurrentUserRole.OrganizationCategory.CategoryID == (int)Naming.CategoryID.COMP_SYS)
+{
+    <tr>
+        <th>
+            代理業者統編
+        </th>
+        <td class="tdleft">
+            <select name="agentID">
+                <option value="">全部</option>
+                @foreach (var a in _model)
+                {
+                    <option value="@(a.CompanyID)">@($"({a.ReceiptNo}) {a.CompanyName}")</option>
+                }
+            </select>
+            @if (Request["agentID"] != null)
+            {
+                <script>
+                    $(function () {
+                        $('select[name="agentID"]').val('@(Request["agentID"])');
+                    });
+                </script>
+            }
+        </td>
+    </tr>
+}
+
+
+
 
 

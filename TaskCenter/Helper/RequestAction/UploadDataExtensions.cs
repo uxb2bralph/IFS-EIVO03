@@ -105,7 +105,8 @@ namespace TaskCenter.Helper.RequestAction
                 ProcessRequestQueue = new ProcessRequestQueue
                 {
 
-                }
+                },
+                ViewModel = viewModel.JsonStringify(),
             };
             models.GetTable<ProcessRequest>().InsertOnSubmit(processItem);
 

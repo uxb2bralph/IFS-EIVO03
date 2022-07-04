@@ -74,11 +74,11 @@ namespace Model.InvoiceManagement
         public DataTable SaveUploadInvoiceAutoTrackNoForCBE(DataSet item, ProcessRequest request)
         {
             Organization owner = request.Organization;
-            DateTime applyInvoiceDate = request.ProcessRequestCondition.Any(c => c.ConditionID == (int)ProcessRequestCondition.ConditionType.UseLastPeriodTrackCodeNo)
+            this.ApplyInvoiceDate = request.ProcessRequestCondition.Any(c => c.ConditionID == (int)ProcessRequestCondition.ConditionType.UseLastPeriodTrackCodeNo)
                         ? new DateTime(DateTime.Today.Year, (DateTime.Today.Month + 1) / 2 * 2 - 1, 1).AddDays(-1)
                         : DateTime.Today;
 
-            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, Naming.InvoiceProcessType.C0401_Xlsx_CBE, applyInvoiceDate);
+            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, Naming.InvoiceProcessType.C0401_Xlsx_CBE);
 
             DataTable result = InitializeInvoiceResponseTable();
 
@@ -129,11 +129,12 @@ namespace Model.InvoiceManagement
             return SaveUploadInvoiceAutoTrackNo(item, request, Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC);
         }
 
-        void processAutoTrackInvoiceNo(ProcessRequest request, IEnumerable<DataRow> items, IEnumerable<DataRow> details, Naming.InvoiceTypeDefinition indication, InvoiceDataSetValidator validator,ref int invSeq, List<InvoiceItem> eventItems, DataTable result)
+        void processAutoTrackInvoiceNo(ProcessRequest request, IEnumerable<DataRow> items, IEnumerable<DataRow> itemDetails, Naming.InvoiceTypeDefinition indication, InvoiceDataSetValidator validator,ref int invSeq, List<InvoiceItem> eventItems, DataTable result)
         {
+            List<DataRow> details = itemDetails.ToList();
             bool deferredNotice = request.ProcessRequestCondition.Any(c => c.ConditionID == (int)ProcessRequestCondition.ConditionType.DeferredIssueNotice);
             validator.InvoiceTypeIndication = indication;
-            validator.StartAutoTrackNo();
+            validator.StartAutoTrackNo(ApplyInvoiceDate);
             for (int idx = 0; idx < items.Count(); idx++, invSeq++)
             {
                 Console.WriteLine($"start {invSeq} => {DateTime.Now}");
@@ -145,12 +146,19 @@ namespace Model.InvoiceManagement
                     IEnumerable<DataRow> productDetails;
                     if (dataID != null)
                     {
-                        productDetails = details.Where(d => d.GetString(validator.DetailsField.Data_ID) == dataID);
+                        productDetails = details.Where(d => d.GetString(validator.DetailsField.Data_ID) == dataID)
+                            .ToList();
                     }
                     else
                     {
                         dataID = invItem.GetString(validator.InvoiceField.Invoice_No).GetEfficientString();
-                        productDetails = details.Where(d => d.GetString(validator.DetailsField.Invoice_No) == dataID);
+                        productDetails = details.Where(d => d.GetString(validator.DetailsField.Invoice_No) == dataID)
+                            .ToList();
+                    }
+
+                    foreach(var r in productDetails)
+                    {
+                        details.Remove(r);
                     }
 
                     Exception ex;
@@ -197,11 +205,11 @@ namespace Model.InvoiceManagement
         public DataTable SaveUploadInvoiceAutoTrackNo(DataSet item, ProcessRequest request, Naming.InvoiceProcessType processType = Naming.InvoiceProcessType.C0401_Xlsx)
         {
             Organization owner = request.Organization;
-            DateTime applyInvoiceDate = request.ProcessRequestCondition.Any(c => c.ConditionID == (int)ProcessRequestCondition.ConditionType.UseLastPeriodTrackCodeNo)
+            this.ApplyInvoiceDate = request.ProcessRequestCondition.Any(c => c.ConditionID == (int)ProcessRequestCondition.ConditionType.UseLastPeriodTrackCodeNo)
                         ? new DateTime(DateTime.Today.Year, (DateTime.Today.Month + 1) / 2 * 2 - 1, 1).AddDays(-1)
                         : DateTime.Today;
 
-            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, processType, applyInvoiceDate);
+            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, processType);
 
             DataTable result = InitializeInvoiceResponseTable();
 
@@ -330,7 +338,7 @@ namespace Model.InvoiceManagement
         {
             Organization owner = request.Organization;
 
-            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, useA0401 ? Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer : Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer, null);
+            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, useA0401 ? Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer : Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer);
 
             DataTable result = InitializeInvoiceResponseTable();
 

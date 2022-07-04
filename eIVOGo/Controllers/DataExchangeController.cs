@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using eIVOGo.Helper;
 using Model.Models.ViewModel;
+using eIVOGo.Helper.Security.Authorization;
 
 namespace eIVOGo.Controllers
 {
@@ -24,6 +25,7 @@ namespace eIVOGo.Controllers
     public class DataExchangeController : SampleController<InvoiceItem>
     {
         // GET: DataExchange
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS })]
         public ActionResult Index()
         {
             return View("~/Views/DataExchange/Index.cshtml");

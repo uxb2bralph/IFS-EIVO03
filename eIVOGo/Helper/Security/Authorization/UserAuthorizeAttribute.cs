@@ -73,7 +73,7 @@ namespace eIVOGo.Helper.Security.Authorization
                 return false;
             }
 
-            return httpContext.GetUser().IsSystemAdmin();
+            return httpContext.GetUser()?.IsSystemAdmin() == true;
 
         }
     }
@@ -88,7 +88,7 @@ namespace eIVOGo.Helper.Security.Authorization
                 return false;
             }
 
-            return httpContext.GetUser().IsAuthorized(RoleID);
+            return httpContext.GetUser()?.IsAuthorized(RoleID) == true;
 
         }
     }

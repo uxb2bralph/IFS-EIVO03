@@ -35,11 +35,13 @@ using Uxnet.Com.Security.UseCrypto;
 using Newtonsoft.Json;
 using System.Data.SqlClient;
 using Uxnet.Com.DataAccessLayer;
+using eIVOGo.Helper.Security.Authorization;
 
 namespace eIVOGo.Controllers
 {
     public class BusinessRelationshipController : SampleController<InvoiceItem>
     {
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult MaintainRelationship(BusinessRelationshipQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;

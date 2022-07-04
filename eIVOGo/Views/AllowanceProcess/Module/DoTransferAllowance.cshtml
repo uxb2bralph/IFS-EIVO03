@@ -1,0 +1,49 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    ModelSource<InvoiceItem> models;
+    InquireInvoiceViewModel _viewModel;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _viewModel = ViewBag.ViewModel as InquireInvoiceViewModel;
+    _viewModel.ActionTitle = "傳送至大平台";
+    _viewModel.CommitAction = "TransferToMIG";
+    String _viewID = $"btnTransfer{DateTime.Now.Ticks}";
+}
+
+@if (_viewModel != null)
+{
+    <button type="button" class="btn" id="@(_viewID)" name="btnVoid">@(_viewModel.ActionTitle)</button>
+    <script>
+        $(function () {
+            $('#@(_viewID)').on('click', function (data) {
+                if (!confirm('將資料排定送出至財政部雲端？')) {
+                    return;
+                }
+                showLoading();
+                $.post('@Html.Raw(Url.Action("InvokeCommitAction","AllowanceProcess",new { _viewModel.CommitAction,_viewModel.ActionTitle }))', {}, function (data) {
+                    if ($.isPlainObject(data)) {
+                        hideLoading();
+                        alert(data.message);
+                    } else {
+                        $(data).appendTo($('body'));
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+

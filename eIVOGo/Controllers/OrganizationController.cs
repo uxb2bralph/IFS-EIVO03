@@ -85,6 +85,7 @@ namespace eIVOGo.Controllers
 
             if (item == null)
             {
+                ViewBag.ModelState = ModelState;
                 return View("~/Views/Shared/ReportInputError.cshtml");
             }
 

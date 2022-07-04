@@ -300,7 +300,7 @@ namespace Model.Helper
                 OriginalInvoiceNumber = d.InvoiceAllowanceItem.InvoiceNo,
                 OriginalSequenceNumber = d.InvoiceAllowanceItem.OriginalSequenceNo.HasValue ? d.InvoiceAllowanceItem.OriginalSequenceNo.Value.ToString() : "",
                 Quantity = d.InvoiceAllowanceItem.Piece ?? 0.00000M,
-                Tax = (long)d.InvoiceAllowanceItem.Tax.Value,
+                Tax = d.InvoiceAllowanceItem.Tax ?? 0,
                 TaxType = (Schema.TurnKey.D0401.TaxTypeEnum?)d.InvoiceAllowanceItem.TaxType ?? Schema.TurnKey.D0401.TaxTypeEnum.Item1,
                 Unit = d.InvoiceAllowanceItem.PieceUnit,
                 UnitPrice = d.InvoiceAllowanceItem.UnitCost ?? 0,

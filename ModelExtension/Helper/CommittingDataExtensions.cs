@@ -115,6 +115,8 @@ namespace ModelExtension.Helper
             item.OrganizationStatus.SetToOutsourcingCS = viewModel.SetToOutsourcingCS;
             item.OrganizationStatus.InvoicePrintView = viewModel.SetToPrintInvoice == true ? viewModel.InvoicePrintView.GetEfficientString() : null;
             item.OrganizationStatus.AllowancePrintView = viewModel.SetToPrintInvoice == true ? viewModel.AllowancePrintView.GetEfficientString() : null;
+            item.OrganizationStatus.CustomNotificationView = viewModel.CustomNotificationView.GetEfficientString();
+
             item.OrganizationStatus.AuthorizationNo = viewModel.AuthorizationNo.GetEfficientString();
             item.OrganizationStatus.SetToNotifyCounterpartBySMS = viewModel.SetToNotifyCounterpartBySMS;
             item.OrganizationStatus.DownloadDataNumber = viewModel.DownloadDataNumber;
@@ -137,8 +139,31 @@ namespace ModelExtension.Helper
                 extension = item.OrganizationExtension = new OrganizationExtension { };
             }
             extension.CustomNotification = HttpUtility.HtmlDecode(viewModel.CustomNotification.GetEfficientString());
+            extension.BusinessContactPhone = viewModel.BusinessContactPhone;
+            extension.ExpirationDate = viewModel.ExpirationDate;
+            extension.AutoBlankTrack = viewModel.AutoBlankTrack;
+            extension.AutoBlankTrackEmittance = viewModel.AutoBlankTrackEmittance;
 
             models.SubmitChanges();
+
+            models.ExecuteCommand("delete OrganizationSettings where CompanyID = {0}", item.CompanyID);
+            if (viewModel.Settings != null && viewModel.Settings.Length > 0)
+            {
+                foreach (var setting in viewModel.Settings.Distinct().Select(s => s.GetEfficientString()))
+                {
+                    if (setting == null)
+                    {
+                        continue;
+                    }
+
+                    item.OrganizationSettings.Add(new OrganizationSettings
+                    {
+                        Settings = setting
+                    });
+                }
+
+                models.SubmitChanges();
+            }
 
             //if (isNewItem)
             //{
@@ -188,13 +213,14 @@ namespace ModelExtension.Helper
 
             if (item == null)
             {
-                ///新增帳號
-                ///
                 if (viewModel.Password == null)
                 {
-                    modelState.AddModelError("PassWord", "密碼不可為空白!!");
+                    ///新增帳號
+                    ///
+                    modelState.AddModelError("Password", "密碼不可為空白!!");
                 }
             }
+
 
             if (!modelState.IsValid)
             {
@@ -226,6 +252,9 @@ namespace ModelExtension.Helper
                     item.UserProfileStatus.CurrentLevel = (int)Naming.MemberStatusDefinition.Checked;
             }
             item.EMail = viewModel.EMail;
+            item.MailID = item.EMail.GetEfficientString()?
+                .Split(';', ',', ',')?[0];
+
             item.Address = viewModel.Address;
             item.Phone = viewModel.Phone;
             item.MobilePhone = viewModel.MobilePhone;
@@ -302,7 +331,8 @@ namespace ModelExtension.Helper
                     CurrentLevel = (int)Naming.MemberStatusDefinition.Wait_For_Check
                 }
             };
-
+            userProfile.MailID = userProfile.EMail.GetEfficientString()?
+                .Split(';', ',', ',')?[0];
             models.GetTable<UserRole>().InsertOnSubmit(new UserRole
             {
                 RoleID = (int)Naming.RoleID.ROLE_SELLER,

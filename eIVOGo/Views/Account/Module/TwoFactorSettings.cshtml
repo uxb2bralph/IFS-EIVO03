@@ -1,0 +1,61 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@using Google.Authenticator
+@using System.Text
+
+@{
+    ModelSource<InvoiceItem> models;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    UserProfile _model = (UserProfile)this.Model;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>電子發票系統</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="panel-default">
+                    <div class="panel-body">
+                        <form id="form1" accept-charset="UTF-8" role="form" method="post">
+                            <fieldset>
+                                <div>Dear @(_model.UserName),please add your two factor authentication.</div>
+                                <div class="form-group prompt">
+                                    <label for="user_login">Google Authenticator QRCode</label>
+                                    @{
+                                        TwoFactorAuthenticator TwoFacAuth = new TwoFactorAuthenticator();
+                                        var setupInfo = TwoFacAuth.GenerateSetupCode("egui.uxifs.com", _model.PID, Encoding.Default.GetBytes(_model.UserProfileExtension.TwoFactorKey));
+                                        ViewBag.BarcodeImageUrl = setupInfo.QrCodeSetupImageUrl;
+                                        ViewBag.SetupCode = setupInfo.ManualEntryKey; }
+                                    <img src="@Html.Raw(setupInfo.QrCodeSetupImageUrl)" />
+                                </div>
+                                <div class="form-group prompt">
+                                    <label>Manual Setup Code :</label>
+                                    <div>@(setupInfo.ManualEntryKey)</div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

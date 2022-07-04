@@ -98,5 +98,8 @@
     <Setting Name="ServiceMailBox" Type="System.String" Scope="Application">
       <Value Profile="(Default)">e-invoicevasc@uxb2b.com</Value>
     </Setting>
+    <Setting Name="UseGoogleAuthenticator" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

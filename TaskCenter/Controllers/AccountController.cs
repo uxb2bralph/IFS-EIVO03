@@ -69,7 +69,11 @@ namespace TaskCenter.Controllers
 
             if (token != null)
             {
-                viewModel.Seed = $"{DateTime.Now.Ticks % 100000000:00000000}";
+                viewModel.Seed = viewModel.Seed.GetEfficientString();
+                if (viewModel.Seed == null)
+                {
+                    viewModel.Seed = $"{DateTime.Now.Ticks % 100000000:00000000}";
+                }
 
                 using (SHA256 hash = SHA256.Create())
                 {

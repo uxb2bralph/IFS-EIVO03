@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Model.Locale;
+using Newtonsoft.Json;
 
 namespace Model.Models.ViewModel
 {
@@ -17,7 +18,10 @@ namespace Model.Models.ViewModel
         public String Phone { get; set; }
         public String ContactFax { get; set; }
         public String ContactPhone { get; set; }
+        public DateTime? ExpirationDate { get; set; }
         public String ContactMobilePhone { get; set; }
+        public String BusinessContactPhone { get; set; }
+
         public String RegAddr { get; set; }
         public String UndertakerName { get; set; }
         public String Addr { get; set; }
@@ -36,6 +40,9 @@ namespace Model.Models.ViewModel
         public DateTime? LastTimeToAcknowledge { get; set; }
         public int? RequestPeriodicalinterval { get; set; }
         public bool? SetToPrintInvoice { get; set; }
+        public bool? AutoBlankTrack { get; set; }
+        public bool? AutoBlankTrackEmittance { get; set; }
+
         public string InvoicePrintView { get; set; }
         public bool? IronSteelIndustry { get; set; }
         public bool? Entrusting { get; set; }
@@ -60,7 +67,11 @@ namespace Model.Models.ViewModel
         public Naming.InvoiceProcessType? DefaultProcessType { get; set; }
         public String CustomerNo { get; set; }
         public String CustomNotification { get; set; }
+        public String CustomNotificationView { get; set; }
+        public String[] Settings { get; set; }
 
+        [JsonIgnore]
+        public bool SendAllowanceMIGManually => Settings != null && Settings.Contains("SendAllowanceMIGManually");
     }
 
     public class OrganizationCertificateViewModel : OrganizationViewModel

@@ -99,8 +99,9 @@ namespace eIVOGo.Controllers
             return View("Index");
         }
 
-        public ActionResult MailTracking()
+        public ActionResult MailTracking(MailTrackingViewModel viewModel)
         {
+            ViewBag.ViewModel = viewModel;
             return View("~/Views/Handling/InvoiceMailTracking.cshtml");
         }
 
@@ -134,7 +135,26 @@ namespace eIVOGo.Controllers
             String trackCode = viewModel.StartNo.Substring(0, 2);
 
             IQueryable<InvoiceItem> items = models.GetTable<InvoiceItem>();
-            if(viewModel.ChannelID.HasValue)
+            IQueryable<InvoiceItem> exclusive = models.GetTable<InvoiceItem>();
+            bool hasExclusive = false;
+            if (viewModel.DateFrom.HasValue)
+            {
+                hasExclusive = true;
+                exclusive = exclusive.Where(i => i.InvoiceDate >= viewModel.DateFrom);
+            }
+
+            if (viewModel.DateTo.HasValue)
+            {
+                hasExclusive = true;
+                exclusive = exclusive.Where(i => i.InvoiceDate < viewModel.DateTo.Value.AddDays(1));
+            }
+
+            if(hasExclusive)
+            {
+                items = items.Where(i => !exclusive.Any(x => x.InvoiceID == i.InvoiceID));
+            }
+
+            if (viewModel.ChannelID.HasValue)
             {
                 items = items.Join(models.GetTable<CDS_Document>().Where(d => d.ChannelID == (int?)viewModel.ChannelID), 
                     i => i.InvoiceID, d => d.DocID, (i, d) => i);

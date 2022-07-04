@@ -31,6 +31,7 @@ using System.Threading.Tasks;
 
 namespace eIVOGo.Controllers
 {
+    [Authorize]
     public class AllowanceProcessController : SampleController<InvoiceItem>
     {
         protected UserProfileMember _userProfile;
@@ -63,6 +64,17 @@ namespace eIVOGo.Controllers
 
             ViewBag.ViewModel = viewModel;
 
+            viewModel.Status = viewModel.Status.GetEfficientString();
+            switch(viewModel.Status)
+            {
+                case "Normal":
+                    viewModel.Cancelled = false;
+                    break;
+                case "Voided":
+                    viewModel.Cancelled = true;
+                    break;
+            }
+
             DataLoadOptions ops = new DataLoadOptions();
             ops.LoadWith<InvoiceAllowance>(i => i.InvoiceAllowanceBuyer);
             ops.LoadWith<InvoiceAllowance>(i => i.InvoiceAllowanceSeller);
@@ -72,6 +84,14 @@ namespace eIVOGo.Controllers
 
             modelSource.Inquiry = createModelInquiry();
             modelSource.BuildQuery();
+
+            if(viewModel.Status == "ReadyToMIG")
+            {
+                var d0401Ready = models.GetTable<D0401DispatchQueue>().Where(s => s.StepID == (int)Naming.InvoiceStepDefinition.待批次傳送);
+                var b0401Ready = models.GetTable<B0401DispatchQueue>().Where(s => s.StepID == (int)Naming.InvoiceStepDefinition.待批次傳送);
+                modelSource.Items = modelSource.Items.Where(a => d0401Ready.Any(d => d.DocID == a.AllowanceID)
+                    || b0401Ready.Any(d => d.DocID == a.AllowanceID));
+            }
 
             if (viewModel.PageIndex.HasValue)
             {
@@ -186,24 +206,15 @@ namespace eIVOGo.Controllers
 
         public ActionResult CreateXlsx2021(InquireInvoiceViewModel viewModel)
         {
-            ViewBag.ViewModel = viewModel;
-
-            DataLoadOptions ops = new DataLoadOptions();
-            ops.LoadWith<InvoiceAllowance>(i => i.InvoiceAllowanceBuyer);
-            ops.LoadWith<InvoiceAllowance>(i => i.InvoiceAllowanceSeller);
-            models.GetDataContext().LoadOptions = ops;
-
-            ModelSource<InvoiceAllowance> modelSource = new ModelSource<InvoiceAllowance>(models);
-
-            modelSource.Inquiry = createModelInquiry();
-            modelSource.BuildQuery();
+            ViewResult result = (ViewResult)Inquire(viewModel);
+            IQueryable<InvoiceAllowance> allowanceItems = result.Model as IQueryable<InvoiceAllowance>;
 
             var prodItems = models.GetTable<InvoiceAllowanceDetail>()
                                 .Join(models.GetTable<InvoiceAllowanceItem>(), d => d.ItemID, p => p.ItemID, (d, p) => new { d.AllowanceID, p.InvoiceNo, p.Amount, p.Tax, p.Remark })
                                 .GroupBy(a => new { a.AllowanceID, a.InvoiceNo, a.Remark })
                                 .Select(g => new { g.Key, TotalAmt = g.Sum(v => v.Amount), TotalTax = g.Sum(v => v.Tax) });
 
-            var items = modelSource.Items
+            var items = allowanceItems
                 .OrderBy(i => i.AllowanceID)
                 .Join(prodItems, i => i.AllowanceID, g => g.Key.AllowanceID, (i, g) => new
                 {
@@ -215,7 +226,7 @@ namespace eIVOGo.Controllers
                     開立人統編 = i.InvoiceAllowanceSeller.ReceiptNo,
                     未稅金額 = g.TotalAmt,
                     稅額 = g.TotalTax,
-                    含稅金額 = i.TotalAmount + i.TaxAmount,
+                    含稅金額 = g.TotalAmt + g.TotalTax, //i.TotalAmount + i.TaxAmount,
                     幣別 = i.CurrencyID.HasValue ? i.CurrencyType.AbbrevName : null,
                     買受人名稱 = i.InvoiceAllowanceBuyer.CustomerName,
                     買受人統編 = i.InvoiceAllowanceBuyer.ReceiptNo,
@@ -388,6 +399,60 @@ namespace eIVOGo.Controllers
 
         }
 
+        public ActionResult TransferToMIG(int?[] chkItem)
+        {
+            if (chkItem != null && chkItem.Count() > 0)
+            {
+                foreach(var id in chkItem)
+                {
+                    if(models.ExecuteCommand(@"UPDATE [proc].D0401DispatchQueue
+                        SET        StepID = {0}
+                        WHERE   (DocID = {1}) AND (StepID = {2})",
+                            (int)Naming.InvoiceStepDefinition.已開立,
+                            id,
+                            (int)Naming.InvoiceStepDefinition.待批次傳送) == 0)
+                    {
+                        models.ExecuteCommand(@"UPDATE [proc].B0401DispatchQueue
+                        SET        StepID = {0}
+                        WHERE   (DocID = {1}) AND (StepID = {2})",
+                            (int)Naming.InvoiceStepDefinition.已開立,
+                            id,
+                            (int)Naming.InvoiceStepDefinition.待批次傳送);
+                    }
+                }
 
+                ViewBag.Message = "折讓資料已排定送出至財政部雲端。";
+                return View("~/Views/AllowanceProcess/Module/RedoQuery.cshtml");
+            }
+            else
+            {
+                ViewBag.Message = "請選擇折讓資料!!";
+                return View("~/Views/Shared/AlertMessage.cshtml");
+            }
+
+        }
+
+        public ActionResult DeleteAllowance(int?[] chkItem)
+        {
+            if (chkItem != null && chkItem.Count() > 0)
+            {
+                foreach (var id in chkItem)
+                {
+                    models.ExecuteCommand(@"DELETE FROM CDS_Document
+                        FROM     CDS_Document INNER JOIN
+                                        InvoiceAllowance ON CDS_Document.DocID = InvoiceAllowance.AllowanceID
+                        WHERE   (CDS_Document.DocID = {0})", id);
+                }
+
+                ViewBag.Message = "折讓資料已刪除。";
+                return View("~/Views/AllowanceProcess/Module/RedoQuery.cshtml");
+            }
+            else
+            {
+                ViewBag.Message = "請選擇折讓資料!!";
+                return View("~/Views/Shared/AlertMessage.cshtml");
+            }
+
+        }
     }
 }

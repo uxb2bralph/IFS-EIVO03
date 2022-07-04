@@ -100,6 +100,7 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     }
                     catch (Exception ex)
                     {
+                        Logger.Warn($"fail to write to turnkey: {item.DocID}");
                         Logger.Error(ex);
                     }
 
@@ -184,10 +185,8 @@ namespace Model.InvoiceManagement.InvoiceProcess
             {
                 var t = Task.Run(() =>
                 {
-                    Logger.Debug($"{DateTime.Now}: Create C0401 WriteToTurnkey...");
                     Parallel.For(0, Settings.Default.CommonParallelProcessCount, idx =>
                     {
-                        Logger.Debug($"C0401 WriteToTurnkey:{idx}");
                         using (InvoiceManager models = new InvoiceManager())
                         {
                             C0401Handler c0401 = new C0401Handler(models);

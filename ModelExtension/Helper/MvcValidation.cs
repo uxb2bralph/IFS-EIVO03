@@ -42,19 +42,19 @@ namespace ModelExtension.Helper
                 
             }
             viewModel.Addr = viewModel.Addr.GetEfficientString();
-            if (String.IsNullOrEmpty(viewModel.Addr))
-            {
-                //檢查名稱
-                modelState.AddModelError("Addr", "請輸入公司地址!!");
+            //if (String.IsNullOrEmpty(viewModel.Addr))
+            //{
+            //    //檢查名稱
+            //    modelState.AddModelError("Addr", "請輸入公司地址!!");
                 
-            }
+            //}
             viewModel.Phone = viewModel.Phone.GetEfficientString();
-            if (String.IsNullOrEmpty(viewModel.Phone))
-            {
-                //檢查名稱
-                modelState.AddModelError("Phone", "請輸入公司電話!!");
+            //if (String.IsNullOrEmpty(viewModel.Phone))
+            //{
+            //    //檢查名稱
+            //    modelState.AddModelError("Phone", "請輸入公司電話!!");
                 
-            }
+            //}
 
             viewModel.ContactEmail = viewModel.ContactEmail.GetEfficientString();
             if (viewModel.ContactEmail != null)

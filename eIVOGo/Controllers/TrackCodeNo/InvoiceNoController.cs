@@ -32,6 +32,7 @@ using ModelExtension.Helper;
 using CsvHelper;
 using Uxnet.Com.Helper;
 using Model.Helper;
+using eIVOGo.Helper.Security.Authorization;
 
 namespace eIVOGo.Controllers.TrackCodeNo
 {
@@ -39,6 +40,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
     public class InvoiceNoController : SampleController<InvoiceItem>
     {
         // GET: InvoiceNo
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult MaintainInvoiceNoInterval()
         {
             return View("~/Views/InvoiceNo/MaintainInvoiceNoInterval.cshtml");
@@ -166,7 +168,9 @@ namespace eIVOGo.Controllers.TrackCodeNo
                         {
                             Main = new Main
                             {
-                                BranchBan = orgItem.ReceiptNo,
+                                BranchBan = orgItem.OrganizationExtension.ExpirationDate.HasValue
+                                    ? $"{orgItem.ReceiptNo}(註記停用:{orgItem.OrganizationExtension.ExpirationDate:yyyy/MM/dd})"
+                                    : orgItem.ReceiptNo,
                                 HeadBan = viewModel.BranchRelation == true && orgItem.AsInvoiceInsurer.Count > 0 ? orgItem.AsInvoiceInsurer.First().InvoiceAgent.ReceiptNo : orgItem.ReceiptNo,
                                 YearMonth = String.Format("{0}{1:00}", trackCode.Year - 1911, trackCode.PeriodNo * 2),
                                 InvoiceType = trackCode.InvoiceType == (byte)InvoiceTypeEnum.Item08 ? InvoiceTypeEnum.Item08 : InvoiceTypeEnum.Item07,
@@ -517,6 +521,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
             return View("~/Views/InvoiceNo/Module/TrackCodeSelector.cshtml");
         }
 
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult VacantNoIndex()
         {
             return View("~/Views/InvoiceNo/VacantNoIndex.cshtml");
@@ -567,7 +572,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
 
             if (item == null)
             {
-                return View("~/Views/Shared/JsAlertMessage.ascx",model:"配號區間資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml",model:"配號區間資料錯誤!!");
             }
 
             return View("~/Views/InvoiceNo/Module/EditPOSBooklets.cshtml", item);

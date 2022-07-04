@@ -1,14 +1,26 @@
-
 @using System.IO
 @using System.Linq.Expressions
+@using System.Web
 
 @using eIVOGo.Helper
-@using eIVOGo.Models
-@using Model.DataEntity
-@using Model.Helper
 @using Model.Locale
-@using Utility
-@using Uxnet.Web.WebUI
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using eIVOGo.Controllers
+@functions
+{
+
+    ModelSource<InvoiceItem> models;
+    ModelStateDictionary _modelState;
+
+}
+@{
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+}
+
 <script>
     var uiWinningNo;
     $(function () {
@@ -110,17 +122,20 @@
                     }
                 });
             },
+            downloadQuery: function (queryData) {
+
+                var $formData;
+                if ($.isPlainObject(queryData)) {
+                    $formData = queryData;
+                } else {
+                    $formData = $('input,select,textarea').serializeObject();
+                }
+
+                clearErrors();
+                $('').launchDownload('@Html.Raw(VirtualPathUtility.ToAbsolute("~/Helper/GetSample.ashx?data=WinningNo"))', $formData);
+            },
         };
     });
 </script>
-<script runat="server">
 
-    ModelSource<InvoiceItem> models;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-
-    }
-</script>
 

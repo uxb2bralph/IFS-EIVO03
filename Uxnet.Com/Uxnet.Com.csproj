@@ -146,10 +146,8 @@
     <Compile Include="Providers\UxnetSiteMapProvider.cs" />
     <Compile Include="Security\UseCrypto\CryptoLog.cs" />
     <Compile Include="Security\UseCrypto\CryptoUtility.cs" />
-    <Compile Include="Security\UseCrypto\dsPKCS7.Designer.cs">
+    <Compile Include="Security\UseCrypto\dsPKCS7.cs">
       <DependentUpon>dsPKCS7.xsd</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Security\UseCrypto\PKCS7.cs" />
     <Compile Include="Security\UseCrypto\RSAPublicKey.cs" />
@@ -234,15 +232,6 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Security\UseCrypto\dsPKCS7.xsc">
-      <DependentUpon>dsPKCS7.xsd</DependentUpon>
-    </None>
-    <None Include="Security\UseCrypto\dsPKCS7.xss">
-      <DependentUpon>dsPKCS7.xsd</DependentUpon>
-    </None>
-    <None Include="Security\UseCrypto\dsPKCS7.xsx">
-      <DependentUpon>dsPKCS7.xsd</DependentUpon>
     </None>
     <None Include="Web References\WS_DocumentService\DocumentCreator.wsdl" />
     <Content Include="Security\UseCrypto\dsPKCS7.xsd">

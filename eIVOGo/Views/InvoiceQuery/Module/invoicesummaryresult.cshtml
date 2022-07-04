@@ -1,8 +1,3 @@
-
-@{ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" }
-@{ Register Src="~/Module/JsGrid/InquireInvoiceTemplate.ascx" TagPrefix="uc4" TagName="InquireInvoiceTemplate" }
-@{ Register Src="~/Module/UI/FunctionTitleBar.ascx" TagName="FunctionTitleBar" TagPrefix="uc6" }
-
 @using System.IO
 
 @using System.Linq.Expressions
@@ -12,39 +7,56 @@
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
+@using Model.Models.ViewModel
 @using Utility
 @using Uxnet.Web.WebUI
-
-@{ Html.RenderPartial("Module/InvoiceReport", Model);}
-
-@if(!models.InquiryHasError) {
-<uc6:functiontitlebar id="resultTitle" runat="server" itemname="查詢結果" />
-<div class="border_gray">
-    @{ Html.RenderPartial("~/Views/Module/InvoiceSummaryList.ascx", models);}
-
-    <!--按鈕-->
-</div>
-@if(models.Items.Count() > 0) {
-<table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td class="Bargain_btn">
-            @{ Html.RenderPartial("~/Views/Module/PrintData.ascx");}
-
-            <input type="button" value="Excel下載" name="btnExcel" class="btn" onclick="$('form').prop('action', '@(Url.Action("CreateInvoiceSummaryXlsx"))    ').submit();" />
-        </td>
-    </tr>
-</table>
-}
-}
-
-<script runat="server">
+@{
     ModelSource<InvoiceItem> models;
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        models.DataSourcePath = VirtualPathUtility.ToAbsolute("~/InvoiceQuery/InvoiceSummaryGridPage");
-        
-    }
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    InquireInvoiceViewModel _viewModel = ViewBag.ViewModel as InquireInvoiceViewModel;
+    IQueryable<Organization> _model = (IQueryable<Organization>)this.Model;
+}
 
-</script>
+@{
+    if (_viewModel.InitQuery != true && _viewModel.PageIndex.HasValue)
+    {
+        Html.RenderPartial("~/Views/InvoiceQuery/Module/TableBody.cshtml", _model);
+    }
+    else
+    {
+        <table class="table01 itemList">
+            <thead>
+                <tr>
+                    <th>
+                        @{
+                            Html.RenderPartial("~/Views/Common/Module/SortableHeader.cshtml", new String[] { "營業人名稱", "營業人名稱" });
+                        }
+                    </th>
+                    <th>
+                        @{
+                            Html.RenderPartial("~/Views/Common/Module/SortableHeader.cshtml", new String[] { "統一編號", "統一編號" });
+                        }
+                    </th>
+                    <th>資料筆數</th>
+                    <th>註記停用</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    Html.RenderPartial("~/Views/InvoiceQuery/Module/TableBody.cshtml", _model);
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        @*@{ Html.RenderPartial("~/Views/Module/PrintData.ascx");}
+                        <input type="button" value="Excel下載" name="btnExcel" class="btn" onclick="$('form').prop('action', '@(Url.Action("CreateInvoiceSummaryXlsx"))    ').submit();" />*@
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    }
+}
+
+
+

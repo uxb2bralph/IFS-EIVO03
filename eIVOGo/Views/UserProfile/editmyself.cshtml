@@ -2,7 +2,6 @@
 @using System.IO
 @using System.Linq.Expressions
 
-@using eIVOGo.Helper
 @using eIVOGo.Models
 @using Model.DataEntity
 @using Model.Helper
@@ -10,18 +9,16 @@
 @using Utility
 @using Uxnet.Web.WebUI
 @using eIVOGo.Helper
-
-@section headContent { 
- 
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
+    ViewBag.ActionName = "首頁 > 會員管理";
 }
-@{ Html.RenderPartial("~/Views/UserProfile/EditUserProfile.ascx");}
+@section headContent {
 
-<script runat="server">
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        ViewBag.ActionName = "首頁 > 會員管理";
+}
+@section formContent
+{
+    @{
+        Html.RenderPartial("~/Views/UserProfile/EditUserProfile.cshtml");
     }
-
-</script>
+}

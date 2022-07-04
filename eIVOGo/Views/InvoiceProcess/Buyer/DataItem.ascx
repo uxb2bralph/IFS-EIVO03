@@ -26,7 +26,7 @@
     <td align="right"><%= String.Format("{0:##,###,###,##0.##}",_model.InvoiceAmountType.SalesAmount) %></td>
     <td align="right"><%= String.Format("{0:##,###,###,##0.##}",_model.InvoiceAmountType.TaxAmount) %></td>
     <td align="right"><%= String.Format("{0:##,###,###,##0.##}",_model.InvoiceAmountType.TotalAmount) %></td>
-    <td><%= _model.InvoiceWinningNumber!=null ? _model.InvoiceWinningNumber.UniformInvoiceWinningNumber.PrizeType : "N/A" %></td>
+    <td><%= _model.InvoiceWinningNumber!=null ? _model.InvoiceWinningNumber.PrizeType : "N/A" %></td>
     <td><%= _model.InvoiceBuyer.IsB2C() ? "" : _model.InvoiceBuyer.ReceiptNo %></td>
     <td><%= _model.InvoiceBuyer.CustomerName %></td>
     <td><%= _model.InvoiceBuyer.ContactName %></td>

@@ -9,22 +9,16 @@
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
-
-<script>
-    alert('您的帳號確認完成，請重新登入系統！！');
-    window.location.href = '@(VirtualPathUtility.ToAbsolute("~/Logout.aspx"))';
-</script>
-
-<script runat="server">
-
+@{
     ModelStateDictionary _modelState;
     ModelSource<InvoiceItem> models;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-    }
-
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+}
+<script>
+    alert('您的帳號確認完成，請重新登入系統！！');
+    window.location.href = '@(Url.Action("Login","Account"))';
 </script>
+
+

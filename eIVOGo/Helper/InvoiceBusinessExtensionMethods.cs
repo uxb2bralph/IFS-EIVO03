@@ -71,8 +71,10 @@ namespace eIVOGo.Helper
                     return items;
 
                 case Naming.CategoryID.COMP_INVOICE_AGENT:
-                case Naming.CategoryID.COMP_E_INVOICE_GOOGLE_TW:
                     return models.GetInvoiceByAgent(items, profile.CurrentUserRole.OrganizationCategory.CompanyID);
+
+                case Naming.CategoryID.COMP_E_INVOICE_GOOGLE_TW:
+                    return items.Where(i => i.SellerID == profile.CurrentUserRole.OrganizationCategory.CompanyID);
 
                 case Naming.CategoryID.COMP_E_INVOICE_B2C_BUYER:
                     return items.Where(i => i.InvoiceBuyer.BuyerID == profile.CurrentUserRole.OrganizationCategory.CompanyID);
@@ -81,6 +83,32 @@ namespace eIVOGo.Helper
                     return items.Where(i => i.SellerID == profile.CurrentUserRole.OrganizationCategory.CompanyID
                         || i.InvoiceBuyer.BuyerID == profile.CurrentUserRole.OrganizationCategory.CompanyID);
 
+            }
+
+        }
+
+        public static IQueryable<Organization> FilterOrganizationByRole(this EIVOEntityDataContext models, UserProfileMember profile, IQueryable<Organization> items = null)
+        {
+            if(items == null)
+            {
+                items = models.GetTable<Organization>();
+            }
+
+            switch ((Naming.CategoryID)profile.CurrentUserRole.OrganizationCategory.CategoryID)
+            {
+                case Naming.CategoryID.COMP_SYS:
+                    return items;
+
+                case Naming.CategoryID.COMP_INVOICE_AGENT:
+                    var issuers = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == profile.CurrentUserRole.OrganizationCategory.CompanyID);
+                    return  items.Where(i => i.CompanyID == profile.CurrentUserRole.OrganizationCategory.CompanyID
+                        || issuers.Any(a => a.IssuerID == i.CompanyID));
+
+                case Naming.CategoryID.COMP_E_INVOICE_GOOGLE_TW:
+                case Naming.CategoryID.COMP_E_INVOICE_B2C_BUYER:
+                case Naming.CategoryID.COMP_WELFARE:
+                default:
+                    return items.Where(i => i.CompanyID == profile.CurrentUserRole.OrganizationCategory.CompanyID);
             }
 
         }

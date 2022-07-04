@@ -18,7 +18,7 @@
     String _dataRole;
 
 
-    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState ?? this.ViewData.ModelState;
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _dataRole = (String)ViewBag.DataRole;
 }

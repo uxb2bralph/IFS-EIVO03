@@ -6,9 +6,11 @@ using Uxnet.Com.Security.UseCrypto;
 using Model.InvoiceManagement;
 using Model.DataEntity;
 using Model.Locale;
+using System.Xml.Serialization;
 
 namespace Model.Helper
 {
+    [XmlInclude(typeof(Model.Helper.PKCS7Log))]
     public class PKCS7Log : dsPKCS7
     {
         public Naming.CACatalogDefinition Catalog { get; set; }

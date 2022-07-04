@@ -33,6 +33,7 @@ namespace TaskCenter.Controllers
             using (InvoiceManagerV3 manager = new InvoiceManagerV3 { InvoiceClientID = viewModel.ClientID, ProcessType = viewModel.ProcessType })
             {
                 OrganizationToken token = viewModel.CheckRequestToken(this);
+                manager.ApplyInvoiceDate = viewModel.ApplyInvoiceDate;
                 manager.UploadInvoiceAutoTrackNo(invoice, result, token);
             }
             return Content(result.JsonStringify(), "application/json");
@@ -85,6 +86,25 @@ namespace TaskCenter.Controllers
                 manager.UploadAllowanceCancellation(result, item, token);
             }
             return Content(result.JsonStringify(), "application/json");
+        }
+
+        public ActionResult GetStorageToken(InvoiceRequestViewModel viewModel)
+        {
+            String storageToken = null;
+            viewModel.StoragePath = viewModel.StoragePath.GetEfficientString();
+            if(viewModel.StoragePath!=null)
+            {
+                using (InvoiceManagerV3 manager = new InvoiceManagerV3 { InvoiceClientID = viewModel.ClientID, ProcessType = viewModel.ProcessType })
+                {
+                    OrganizationToken token = viewModel.CheckRequestToken(this);
+                    if (token != null)
+                    {
+                        storageToken = Path.Combine($"{token.CompanyID:00000000}", viewModel.StoragePath).EncryptData();
+                    }
+                }
+            }
+
+            return Json(new { StorageToken = storageToken }, JsonRequestBehavior.AllowGet);
         }
 
         protected Root createMessageToken()

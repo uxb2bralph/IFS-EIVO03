@@ -1,0 +1,46 @@
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using System.Xml
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Locale
+@using Model.Schema.EIVO
+@using Utility
+@using Business.Helper
+@using Model.Helper
+@using Uxnet.Web.WebUI
+@{
+
+    ModelSource<InvoiceItem> models;
+    InvoiceItem _model;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (InvoiceItem)this.Model;
+
+}
+<p>
+    若您對此發票內容或消費有任何疑問，請連絡@(_model.Organization.CompanyName)
+    @if (!String.IsNullOrEmpty(_model.Organization.OrganizationExtension.BusinessContactPhone))
+    {
+        <text>(@(_model.Organization.OrganizationExtension.BusinessContactPhone))</text>
+    }
+    else if (!String.IsNullOrEmpty(_model.Organization.ContactEmail))
+    {
+        <text>(@(_model.Organization.ContactEmail))</text>
+    }
+    。
+</p>
+<p class="red">
+    ※本信件為電子發票開立通知無法進行兌領獎。
+</p>
+<p class="red">
+    ※本電子信箱為加值中心系統代原消費公司發送通知使用亦請勿直接回覆
+</p>

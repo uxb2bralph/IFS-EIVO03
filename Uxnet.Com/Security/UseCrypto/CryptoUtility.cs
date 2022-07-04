@@ -30,6 +30,8 @@ namespace Uxnet.Com.Security.UseCrypto
 
         public bool VerifySignatureOnly { get; set; }
 
+        public SignedCms SignedCms { get; set; }
+
         public bool VerifyPKCS7File(string dataPath, string signaturePath)
         {
             if (!File.Exists(dataPath))
@@ -58,7 +60,7 @@ namespace Uxnet.Com.Security.UseCrypto
 
         public bool VerifyEnvelopedPKCS7(byte[] p7bData,out byte[] dataToSign)
         {
-            SignedCms signedCms = new SignedCms();
+            SignedCms signedCms = this.SignedCms = new SignedCms();
             //解密文
             signedCms.Decode(p7bData);
             // 驗證資料完整性
@@ -76,7 +78,7 @@ namespace Uxnet.Com.Security.UseCrypto
 
             // Create a new, detached SignedCms message.
 
-            SignedCms signedCms = new SignedCms(contentInfo, true);
+            SignedCms signedCms = this.SignedCms = new SignedCms(contentInfo, true);
             //解密文
             signedCms.Decode(dataSignature);
             // 驗證資料完整性
@@ -225,9 +227,13 @@ namespace Uxnet.Com.Security.UseCrypto
             #endregion
 
             if (result)
+            {
                 Logger.Info(_ds);
+            }
             else
+            {
                 Logger.Warn(_ds);
+            }
 
             return result;
         }

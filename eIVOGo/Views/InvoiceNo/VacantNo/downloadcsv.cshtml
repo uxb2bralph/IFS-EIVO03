@@ -42,6 +42,6 @@
     {
         var orgItem = item.InvoiceTrackCodeAssignment.Organization;
         var trackCode = item.InvoiceTrackCodeAssignment.InvoiceTrackCode;
-<text>@(String.Format("{0:00000}", idx++)),@(orgItem.ReceiptNo),@(String.Format("{0}{1:00}", trackCode.Year - 1911, trackCode.PeriodNo * 2)),@(trackCode.TrackCode),@(String.Format("{0:00000000}", item.InvoiceBeginNo)),@(String.Format("{0:00000000}", item.InvoiceEndNo)),@($"{trackCode.InvoiceType:00}")</text>
+<text>@(String.Format("{0:00000}", idx++)),@(orgItem.ReceiptNo),@(String.Format("{0}{1:00}", trackCode.Year - 1911, trackCode.PeriodNo * 2)),@(trackCode.TrackCode),@(String.Format("{0:00000000}", item.InvoiceBeginNo)),@(String.Format("{0:00000000}", item.InvoiceEndNo)),@($"{trackCode.InvoiceType:00}")@(orgItem.OrganizationExtension.ExpirationDate.HasValue ? $",註記停用:{orgItem.OrganizationExtension.ExpirationDate:yyyy/MM/dd}" : null)</text>
     }
 }

@@ -55,5 +55,11 @@ namespace Model.Helper
         {
             return Path.Combine(Model.Properties.AppSettings.AppRoot, storePath);
         }
+
+        public static String WebStoreTargetPath(this String storePath)
+        {
+            return Path.Combine(WebStore, storePath);
+        }
+
     }
 }

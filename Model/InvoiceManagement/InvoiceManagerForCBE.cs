@@ -5,7 +5,9 @@ using Model.InvoiceManagement.ErrorHandle;
 using Model.InvoiceManagement.InvoiceProcess;
 using Model.InvoiceManagement.Validator;
 using Model.Locale;
+using Model.Models.ViewModel;
 using Model.Schema.EIVO;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -88,7 +90,7 @@ namespace Model.InvoiceManagement
                 int count = 0, dbCheckCount = 180;
                 InvoiceManager workingMgr = new InvoiceManager();
                 InvoiceRootInvoiceValidatorForCBE validator = new InvoiceRootInvoiceValidatorForCBE(workingMgr, owner.Organization);
-                validator.StartAutoTrackNo();
+                validator.StartAutoTrackNo(ApplyInvoiceDate);
                 for (int idx = 0; idx < item.Invoice.Length; idx++, count++)
                 {
                     if (count == dbCheckCount)
@@ -98,7 +100,7 @@ namespace Model.InvoiceManagement
                         workingMgr.Dispose();
                         workingMgr = new InvoiceManager();
                         validator = new InvoiceRootInvoiceValidatorForCBE(workingMgr, owner.Organization);
-                        validator.StartAutoTrackNo();
+                        validator.StartAutoTrackNo(ApplyInvoiceDate);
                     }
 
                     try
@@ -128,7 +130,9 @@ namespace Model.InvoiceManagement
                                 continue;
                             }
                         }
-
+                        var p = newItem.InvoicePurchaseOrder;
+                        var c = newItem.InvoiceCarrier;
+                        var s = newItem.InvoiceSeller;
                         eventItems.Add(newItem);
                     }
                     catch (Exception ex)
@@ -152,5 +156,19 @@ namespace Model.InvoiceManagement
 
         }
 
+        protected ProcessRequest _fromRequest;
+        public ProcessRequest FromRequest 
+        { 
+            get => _fromRequest; 
+            set
+            {
+                _fromRequest = value;
+                if (value?.ViewModel != null)
+                {
+                    InvoiceRequestViewModel viewModel = JsonConvert.DeserializeObject<InvoiceRequestViewModel>(value.ViewModel);
+                    ApplyInvoiceDate = viewModel.ApplyInvoiceDate;
+                }
+            }
+        }
     }
 }

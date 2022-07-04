@@ -44,7 +44,7 @@
             SalesAmount = d.InvoiceAmountType.SalesAmount,
             TaxAmount = d.InvoiceAmountType.TaxAmount,
             TotalAmount = d.InvoiceAmountType.TotalAmount,
-            Winning = d.InvoiceWinningNumber != null ? d.InvoiceWinningNumber.UniformInvoiceWinningNumber.PrizeType : "N/A",
+            Winning = d.InvoiceWinningNumber != null ? d.InvoiceWinningNumber.PrizeType : "N/A",
             BuyerReceiptNo = d.InvoiceBuyer.IsB2C() ? "" : d.InvoiceBuyer.ReceiptNo,
             d.InvoiceBuyer.CustomerName,
             d.InvoiceBuyer.ContactName,

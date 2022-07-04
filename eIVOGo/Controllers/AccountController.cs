@@ -29,6 +29,7 @@ using Model.Security.MembershipManagement;
 using ModelExtension.Helper;
 using Utility;
 using Uxnet.Com.Security.UseCrypto;
+using Google.Authenticator;
 
 namespace eIVOGo.Controllers
 {
@@ -47,6 +48,21 @@ namespace eIVOGo.Controllers
                 return View("~/Views/Account/CbsLogin.cshtml");
             }
 
+            if(Settings.Default.UseGoogleAuthenticator)
+            {
+                var item = UserProfileFactory.CreateInstance(viewModel.PID, viewModel.Password)?.Profile;
+                if (item == null)
+                {
+                    ModelState.AddModelError("PID", "login failed !!");
+                    return View("~/Views/Account/CbsLogin.cshtml");
+                }
+
+                item = item.LoadInstance(models).PrepareTwoFactorKey(models);
+
+                return View("~/Views/Account/TwoFactorLogin.cshtml", item);
+
+            }
+
             LoginHandler login = new LoginHandler();
             String msg;
             if (!login.ProcessLogin(viewModel.PID, viewModel.Password, out msg))
@@ -54,6 +70,7 @@ namespace eIVOGo.Controllers
                 ModelState.AddModelError("PID", msg);
                 return View("~/Views/Account/CbsLogin.cshtml");
             }
+
             viewModel.ReturnUrl = viewModel.ReturnUrl.GetEfficientString();
             return Redirect(viewModel.ReturnUrl ?? msg ?? "~/Account/CbsLogin");
 
@@ -72,6 +89,44 @@ namespace eIVOGo.Controllers
 
             return View("~/Views/Account/CbsLogin.cshtml");
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> TwoFactorAuth(TwoFactorViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+            if (item == null)
+            {
+                ModelState.AddModelError("CodeDigit", "login failed !!");
+                return View("~/Views/Shared/ReportInputError.cshtml");
+            }
+
+            viewModel.CodeDigit = viewModel.CodeDigit.GetEfficientString()?.Replace(" ", "");
+            TwoFactorAuthenticator TwoFacAuth = new TwoFactorAuthenticator();
+            if (!TwoFacAuth.ValidateTwoFactorPIN(Encoding.Default.GetBytes(item.UserProfileExtension.TwoFactorKey), viewModel.CodeDigit))
+            {
+                ModelState.AddModelError("CodeDigit", "login failed !!");
+                return View("~/Views/Shared/ReportInputError.cshtml");
+            }
+
+            LoginHandler login = new LoginHandler();
+            String msg;
+            if (!login.ProcessLogin(item.PID, out msg))
+            {
+                ModelState.AddModelError("CodeDigit", "login failed !!");
+                return View("~/Views/Shared/ReportInputError.cshtml");
+            }
+
+            return JavaScript($"window.location.href = '{VirtualPathUtility.ToAbsolute(msg ?? "~/Account/CbsLogin")}';");
+
+        }
+
 
         // GET: Account
         [HttpPost]
@@ -102,7 +157,7 @@ namespace eIVOGo.Controllers
 
         public ActionResult ForgetPassword()
         {
-            return View();
+            return View("~/Views/Account/ForgetPassword.cshtml");
         }
 
         public ActionResult CommitToResetPass(LoginViewModel viewModel)
@@ -127,7 +182,7 @@ namespace eIVOGo.Controllers
             }
 
             item.NotifyToResetPassword();
-            return View("ForgetPassword",model: "重設密碼信件已送出至您的信箱!!");
+            return View("ForgetPassword", model: "重設密碼信件已送出至您的信箱!!");
 
         }
 
@@ -318,7 +373,7 @@ namespace eIVOGo.Controllers
             if (item != null)
             {
                 item.NotifyToActivate();
-                return View("~/Views/SiteAction/JsAlert.cshtml", model: "確認信已送出!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "確認信已送出!!");
             }
 
             return View("~/Views/Shared/AlertMessage.cshtml", model: "帳號資料錯誤!!");

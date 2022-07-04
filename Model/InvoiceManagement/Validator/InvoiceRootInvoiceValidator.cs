@@ -23,6 +23,11 @@ namespace Model.InvoiceManagement.Validator
         public static String __自然人憑證 = "CQ0001";
         public static String __CROSS_BORDER_MURCHANT = "5G0001";
         public static readonly Regex __MatchCellPhoneBarcode = new Regex("^/((?<!,)[A-Z0-9+-\\.](?!,)){7}$");
+        public static readonly String[] __InvoiceDateTimeFormat = 
+            {
+                "yyyy/MM/dd HH:mm:ss",
+                "yyyy-MM-dd HH:mm:ss",
+            };
 
         protected GenericManager<EIVOEntityDataContext> _models;
         protected Organization _owner;
@@ -41,6 +46,7 @@ namespace Model.InvoiceManagement.Validator
         protected IEnumerable<InvoiceProductItem> _productItems;
 
         protected bool _isAutoTrackNo;
+        protected DateTime? _autoTrackNoInvoiceDate;
         protected Dictionary<int, TrackNoManager> _trackNoManagerList;
         protected Func<Exception>[, , ,] _deliveryCheck;
         protected Naming.InvoiceProcessType? processType;
@@ -214,15 +220,17 @@ namespace Model.InvoiceManagement.Validator
             protected set;
         }
 
-        public virtual void StartAutoTrackNo()
+        public virtual void StartAutoTrackNo(DateTime? autoTrackNoInvoiceDate = null)
         {
             _trackNoManagerList = new Dictionary<int, TrackNoManager>();
             _isAutoTrackNo = true;
+            _autoTrackNoInvoiceDate = autoTrackNoInvoiceDate;
         }
 
         public virtual void EndAutoTrackNo()
         {
             _isAutoTrackNo = false;
+            _autoTrackNoInvoiceDate = null;
             if (_trackNoManagerList != null)
             {
                 foreach (var item in _trackNoManagerList)
@@ -410,7 +418,11 @@ namespace Model.InvoiceManagement.Validator
                     else
                     {
                         trackNoMgr = new TrackNoManager(_models, _seller.CompanyID);
-                        if(InvoiceTypeIndication!=Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+                        if(_autoTrackNoInvoiceDate.HasValue)
+                        {
+                            trackNoMgr.ApplyInvoiceDate(_autoTrackNoInvoiceDate.Value);
+                        }
+                        if (InvoiceTypeIndication != Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
                         {
                             trackNoMgr.ApplyInvoiceTypeIndication(InvoiceTypeIndication);
                         }
@@ -423,7 +435,14 @@ namespace Model.InvoiceManagement.Validator
                     }
                     else
                     {
-                        _container.InvoiceDate = DateTime.Now;
+                        if (_autoTrackNoInvoiceDate.HasValue)
+                        {
+                            _container.InvoiceDate = _autoTrackNoInvoiceDate.Value.Add(DateTime.Now.TimeOfDay);
+                        }
+                        else
+                        {
+                            _container.InvoiceDate = DateTime.Now;
+                        }
                     }
 
                 }
@@ -451,7 +470,7 @@ namespace Model.InvoiceManagement.Validator
                 //    return new Exception(MessageResources.AlertInvoiceTime);
                 //}
 
-                if (!DateTime.TryParseExact(String.Format("{0} {1}", _invItem.InvoiceDate, _invItem.InvoiceTime), "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate)
+                if (!DateTime.TryParseExact($"{_invItem.InvoiceDate} {_invItem.InvoiceTime}", __InvoiceDateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate)
                         || invoiceDate >= DateTime.Today.AddDays(1))
                 {
                     return new Exception(String.Format(MessageResources.AlertInvoiceDateTime, _invItem.InvoiceDate, _invItem.InvoiceTime));

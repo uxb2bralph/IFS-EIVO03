@@ -1,6 +1,6 @@
 using System;
 
-namespace eIVOGo.Core.Models
+namespace WebHome.Models
 {
     public class ErrorViewModel
     {

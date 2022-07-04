@@ -1,0 +1,31 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using Model.Models.ViewModel
+
+@{
+
+    ModelSource<InvoiceItem> models;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    QueryViewModel _viewModel = ViewBag.ViewModel as QueryViewModel;
+
+}
+
+@RenderBody()
+
+<div class="border_gray" id="queryArea">
+    @RenderSection("QueryFormContent")
+</div>
+
+
+
+
+

@@ -24,6 +24,7 @@ namespace Model.Models.ViewModel
                 viewModel.ContactFax = item.ContactFax;
                 viewModel.ContactPhone = item.ContactPhone;
                 viewModel.ContactMobilePhone = item.ContactMobilePhone;
+                viewModel.BusinessContactPhone = item.OrganizationExtension?.BusinessContactPhone;
                 viewModel.RegAddr = item.RegAddr;
                 viewModel.UndertakerName = item.UndertakerName;
                 viewModel.Addr = item.Addr;
@@ -45,6 +46,7 @@ namespace Model.Models.ViewModel
                 viewModel.CurrentLevel = item.OrganizationStatus.CurrentLevel;
                 viewModel.SetToPrintInvoice = item.OrganizationStatus.SetToPrintInvoice;
                 viewModel.InvoicePrintView = item.OrganizationStatus.InvoicePrintView;
+                viewModel.CustomNotificationView = item.OrganizationStatus.CustomNotificationView;
                 viewModel.IronSteelIndustry = item.OrganizationStatus.IronSteelIndustry;
                 viewModel.Entrusting = item.OrganizationStatus.Entrusting;
                 viewModel.AuthorizationNo = item.OrganizationStatus.AuthorizationNo;
@@ -64,7 +66,10 @@ namespace Model.Models.ViewModel
                 viewModel.EnableTrackCodeInvoiceNoValidation = item.OrganizationStatus.EnableTrackCodeInvoiceNoValidation;
                 viewModel.IgnoreDuplicatedDataNumber = item.OrganizationStatus.IgnoreDuplicatedDataNumber;
                 viewModel.CustomNotification = item.OrganizationExtension?.CustomNotification;
-
+                viewModel.Settings = item.OrganizationSettings.Select(s => s.Settings).ToArray();
+                viewModel.ExpirationDate = item.OrganizationExtension?.ExpirationDate;
+                viewModel.AutoBlankTrack = item.OrganizationExtension?.AutoBlankTrack;
+                viewModel.AutoBlankTrackEmittance = item.OrganizationExtension?.AutoBlankTrackEmittance;
             }
             return viewModel;
         }

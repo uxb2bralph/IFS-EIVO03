@@ -95,7 +95,7 @@ namespace Model.InvoiceManagement
                     InvoiceAllowance newItem = validator.Allowance;
                     this.GetTable<InvoiceAllowance>().InsertOnSubmit(newItem);
 
-                    D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                    D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, validator.Seller.StepReadyToAllowanceMIG());
                     D0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已接收資料待通知);
 
                     this.SubmitChanges();

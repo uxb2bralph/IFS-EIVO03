@@ -478,6 +478,9 @@ namespace Model.DataEntity
     partial void InsertInvoicePeriodExchangeRate(InvoicePeriodExchangeRate instance);
     partial void UpdateInvoicePeriodExchangeRate(InvoicePeriodExchangeRate instance);
     partial void DeleteInvoicePeriodExchangeRate(InvoicePeriodExchangeRate instance);
+    partial void InsertOrganizationSettings(OrganizationSettings instance);
+    partial void UpdateOrganizationSettings(OrganizationSettings instance);
+    partial void DeleteOrganizationSettings(OrganizationSettings instance);
     #endregion
 		
 		public EIVOEntityDataContext() : 
@@ -1710,6 +1713,14 @@ namespace Model.DataEntity
 			}
 		}
 		
+		public System.Data.Linq.Table<OrganizationSettings> OrganizationSettings
+		{
+			get
+			{
+				return this.GetTable<OrganizationSettings>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.MatchDocumentAttachment")]
 		public int MatchDocumentAttachment()
 		{
@@ -1891,6 +1902,8 @@ namespace Model.DataEntity
 		private EntitySet<InvoiceTrackCodeAssignment> _InvoiceTrackCodeAssignment;
 		
 		private EntitySet<InvoiceNoMainAssignment> _InvoiceNoMainAssignment;
+		
+		private EntitySet<OrganizationSettings> _OrganizationSettings;
 		
 		private bool serializing;
 		
@@ -3106,6 +3119,25 @@ namespace Model.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationSettings", Storage="_OrganizationSettings", ThisKey="CompanyID", OtherKey="CompanyID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=56, EmitDefaultValue=false)]
+		public EntitySet<OrganizationSettings> OrganizationSettings
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._OrganizationSettings.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._OrganizationSettings;
+			}
+			set
+			{
+				this._OrganizationSettings.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -3462,6 +3494,18 @@ namespace Model.DataEntity
 			entity.Organization = null;
 		}
 		
+		private void attach_OrganizationSettings(OrganizationSettings entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_OrganizationSettings(OrganizationSettings entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
 		private void Initialize()
 		{
 			this._OrganizationCategory = new EntitySet<OrganizationCategory>(new Action<OrganizationCategory>(this.attach_OrganizationCategory), new Action<OrganizationCategory>(this.detach_OrganizationCategory));
@@ -3496,6 +3540,7 @@ namespace Model.DataEntity
 			this._ProductSupplier = new EntitySet<ProductSupplier>(new Action<ProductSupplier>(this.attach_ProductSupplier), new Action<ProductSupplier>(this.detach_ProductSupplier));
 			this._InvoiceTrackCodeAssignment = new EntitySet<InvoiceTrackCodeAssignment>(new Action<InvoiceTrackCodeAssignment>(this.attach_InvoiceTrackCodeAssignment), new Action<InvoiceTrackCodeAssignment>(this.detach_InvoiceTrackCodeAssignment));
 			this._InvoiceNoMainAssignment = new EntitySet<InvoiceNoMainAssignment>(new Action<InvoiceNoMainAssignment>(this.attach_InvoiceNoMainAssignment), new Action<InvoiceNoMainAssignment>(this.detach_InvoiceNoMainAssignment));
+			this._OrganizationSettings = new EntitySet<OrganizationSettings>(new Action<OrganizationSettings>(this.attach_OrganizationSettings), new Action<OrganizationSettings>(this.detach_OrganizationSettings));
 			OnCreated();
 		}
 		
@@ -11476,6 +11521,8 @@ namespace Model.DataEntity
 		
 		private string _NightPhone;
 		
+		private string _TwoFactorKey;
+		
 		private EntityRef<UserProfile> _UserProfile;
 		
     #region Extensibility Method Definitions
@@ -11492,6 +11539,8 @@ namespace Model.DataEntity
     partial void OnBirthdayChanged();
     partial void OnNightPhoneChanging(string value);
     partial void OnNightPhoneChanged();
+    partial void OnTwoFactorKeyChanging(string value);
+    partial void OnTwoFactorKeyChanged();
     #endregion
 		
 		public UserProfileExtension()
@@ -11604,6 +11653,27 @@ namespace Model.DataEntity
 					this._NightPhone = value;
 					this.SendPropertyChanged("NightPhone");
 					this.OnNightPhoneChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TwoFactorKey", DbType="NVarChar(64)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6)]
+		public string TwoFactorKey
+		{
+			get
+			{
+				return this._TwoFactorKey;
+			}
+			set
+			{
+				if ((this._TwoFactorKey != value))
+				{
+					this.OnTwoFactorKeyChanging(value);
+					this.SendPropertyChanging();
+					this._TwoFactorKey = value;
+					this.SendPropertyChanged("TwoFactorKey");
+					this.OnTwoFactorKeyChanged();
 				}
 			}
 		}
@@ -24037,6 +24107,8 @@ namespace Model.DataEntity
 		
 		private string _Password2;
 		
+		private string _MailID;
+		
 		private EntitySet<UserRole> _UserRole;
 		
 		private EntitySet<UserAuth> _UserAuth;
@@ -24129,6 +24201,8 @@ namespace Model.DataEntity
     partial void OnThemeNameChanged();
     partial void OnPassword2Changing(string value);
     partial void OnPassword2Changed();
+    partial void OnMailIDChanging(string value);
+    partial void OnMailIDChanged();
     #endregion
 		
 		public UserProfile()
@@ -24589,8 +24663,29 @@ namespace Model.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MailID", DbType="NVarChar(64)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=22)]
+		public string MailID
+		{
+			get
+			{
+				return this._MailID;
+			}
+			set
+			{
+				if ((this._MailID != value))
+				{
+					this.OnMailIDChanging(value);
+					this.SendPropertyChanging();
+					this._MailID = value;
+					this.SendPropertyChanged("MailID");
+					this.OnMailIDChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserRole", Storage="_UserRole", ThisKey="UID", OtherKey="UID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=22, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=23, EmitDefaultValue=false)]
 		public EntitySet<UserRole> UserRole
 		{
 			get
@@ -24609,7 +24704,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserAuth", Storage="_UserAuth", ThisKey="UID", OtherKey="UID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=23, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=24, EmitDefaultValue=false)]
 		public EntitySet<UserAuth> UserAuth
 		{
 			get
@@ -24628,7 +24723,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfileExtension", Storage="_UserProfileExtension", ThisKey="UID", OtherKey="UID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=24, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=25, EmitDefaultValue=false)]
 		public UserProfileExtension UserProfileExtension
 		{
 			get
@@ -24663,7 +24758,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfileStatus", Storage="_UserProfileStatus", ThisKey="UID", OtherKey="UID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=25, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=26, EmitDefaultValue=false)]
 		public UserProfileStatus UserProfileStatus
 		{
 			get
@@ -24698,7 +24793,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_InvoiceUserCarrier", Storage="_InvoiceUserCarrier", ThisKey="UID", OtherKey="UID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=26, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=27, EmitDefaultValue=false)]
 		public EntitySet<InvoiceUserCarrier> InvoiceUserCarrier
 		{
 			get
@@ -24717,7 +24812,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_DocumentDownloadLog", Storage="_DocumentDownloadLog", ThisKey="UID", OtherKey="UID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=27, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=28, EmitDefaultValue=false)]
 		public EntitySet<DocumentDownloadLog> DocumentDownloadLog
 		{
 			get
@@ -24736,7 +24831,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_InvoicePurchaseOrderUpload", Storage="_InvoicePurchaseOrderUpload", ThisKey="UID", OtherKey="UID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=28, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=29, EmitDefaultValue=false)]
 		public EntitySet<InvoicePurchaseOrderUpload> InvoicePurchaseOrderUpload
 		{
 			get
@@ -24755,7 +24850,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_InvoiceCancellationUpload", Storage="_InvoiceCancellationUpload", ThisKey="UID", OtherKey="UID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=29, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=30, EmitDefaultValue=false)]
 		public EntitySet<InvoiceCancellationUpload> InvoiceCancellationUpload
 		{
 			get
@@ -24774,7 +24869,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_InvoicePrintQueue", Storage="_InvoicePrintQueue", ThisKey="UID", OtherKey="UID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=30, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=31, EmitDefaultValue=false)]
 		public EntitySet<InvoicePrintQueue> InvoicePrintQueue
 		{
 			get
@@ -24793,7 +24888,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_DocumentProcessLog", Storage="_DocumentProcessLog", ThisKey="UID", OtherKey="UID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=31, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=32, EmitDefaultValue=false)]
 		public EntitySet<DocumentProcessLog> DocumentProcessLog
 		{
 			get
@@ -24812,7 +24907,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile", Storage="_UserProfile2", ThisKey="UID", OtherKey="Creator")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=32, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=33, EmitDefaultValue=false)]
 		public EntitySet<UserProfile> UserProfile2
 		{
 			get
@@ -24831,7 +24926,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile1", Storage="_UserProfile4", ThisKey="UID", OtherKey="AuthID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=33, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=34, EmitDefaultValue=false)]
 		public EntitySet<UserProfile> UserProfile4
 		{
 			get
@@ -24850,7 +24945,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserToken", Storage="_UserToken", ThisKey="UID", OtherKey="UID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=34, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=35, EmitDefaultValue=false)]
 		public EntitySet<UserToken> UserToken
 		{
 			get
@@ -24869,7 +24964,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_InvoiceNoSegmentDisposition", Storage="_InvoiceNoSegmentDisposition", ThisKey="UID", OtherKey="UID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=35, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=36, EmitDefaultValue=false)]
 		public EntitySet<InvoiceNoSegmentDisposition> InvoiceNoSegmentDisposition
 		{
 			get
@@ -24888,7 +24983,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_DocumentPrintLog", Storage="_DocumentPrintLog", ThisKey="UID", OtherKey="UID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=36, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=37, EmitDefaultValue=false)]
 		public EntitySet<DocumentPrintLog> DocumentPrintLog
 		{
 			get
@@ -24907,7 +25002,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_Announcement_REC", Storage="_Announcement_REC", ThisKey="UID", OtherKey="Creator")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=37, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=38, EmitDefaultValue=false)]
 		public EntitySet<Announcement_REC> Announcement_REC
 		{
 			get
@@ -24926,7 +25021,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_ResetUserPassword", Storage="_ResetUserPassword", ThisKey="UID", OtherKey="UID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=38, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=39, EmitDefaultValue=false)]
 		public ResetUserPassword ResetUserPassword
 		{
 			get
@@ -24961,7 +25056,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_DocumentPrintQueue", Storage="_DocumentPrintQueues", ThisKey="UID", OtherKey="UID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=39, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=40, EmitDefaultValue=false)]
 		public EntitySet<DocumentPrintQueue> DocumentPrintQueues
 		{
 			get
@@ -24980,7 +25075,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_ProcessRequest", Storage="_ProcessRequest", ThisKey="UID", OtherKey="Sender")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=40, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=41, EmitDefaultValue=false)]
 		public EntitySet<ProcessRequest> ProcessRequest
 		{
 			get
@@ -33950,6 +34045,16 @@ namespace Model.DataEntity
 		
 		private string _CustomNotification;
 		
+		private string _BusinessContactPhone;
+		
+		private System.Nullable<System.DateTime> _ExpirationDate;
+		
+		private System.Nullable<System.DateTime> _GoLiveDate;
+		
+		private System.Nullable<bool> _AutoBlankTrack;
+		
+		private System.Nullable<bool> _AutoBlankTrackEmittance;
+		
 		private EntityRef<Organization> _Organization;
 		
     #region Extensibility Method Definitions
@@ -33964,6 +34069,16 @@ namespace Model.DataEntity
     partial void OnTaxNoChanged();
     partial void OnCustomNotificationChanging(string value);
     partial void OnCustomNotificationChanged();
+    partial void OnBusinessContactPhoneChanging(string value);
+    partial void OnBusinessContactPhoneChanged();
+    partial void OnExpirationDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnExpirationDateChanged();
+    partial void OnGoLiveDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnGoLiveDateChanged();
+    partial void OnAutoBlankTrackChanging(System.Nullable<bool> value);
+    partial void OnAutoBlankTrackChanged();
+    partial void OnAutoBlankTrackEmittanceChanging(System.Nullable<bool> value);
+    partial void OnAutoBlankTrackEmittanceChanged();
     #endregion
 		
 		public OrganizationExtension()
@@ -34059,6 +34174,111 @@ namespace Model.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BusinessContactPhone", DbType="NVarChar(64)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public string BusinessContactPhone
+		{
+			get
+			{
+				return this._BusinessContactPhone;
+			}
+			set
+			{
+				if ((this._BusinessContactPhone != value))
+				{
+					this.OnBusinessContactPhoneChanging(value);
+					this.SendPropertyChanging();
+					this._BusinessContactPhone = value;
+					this.SendPropertyChanged("BusinessContactPhone");
+					this.OnBusinessContactPhoneChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExpirationDate", DbType="DateTime")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6)]
+		public System.Nullable<System.DateTime> ExpirationDate
+		{
+			get
+			{
+				return this._ExpirationDate;
+			}
+			set
+			{
+				if ((this._ExpirationDate != value))
+				{
+					this.OnExpirationDateChanging(value);
+					this.SendPropertyChanging();
+					this._ExpirationDate = value;
+					this.SendPropertyChanged("ExpirationDate");
+					this.OnExpirationDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GoLiveDate", DbType="DateTime")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=7)]
+		public System.Nullable<System.DateTime> GoLiveDate
+		{
+			get
+			{
+				return this._GoLiveDate;
+			}
+			set
+			{
+				if ((this._GoLiveDate != value))
+				{
+					this.OnGoLiveDateChanging(value);
+					this.SendPropertyChanging();
+					this._GoLiveDate = value;
+					this.SendPropertyChanged("GoLiveDate");
+					this.OnGoLiveDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AutoBlankTrack", DbType="Bit")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=8)]
+		public System.Nullable<bool> AutoBlankTrack
+		{
+			get
+			{
+				return this._AutoBlankTrack;
+			}
+			set
+			{
+				if ((this._AutoBlankTrack != value))
+				{
+					this.OnAutoBlankTrackChanging(value);
+					this.SendPropertyChanging();
+					this._AutoBlankTrack = value;
+					this.SendPropertyChanged("AutoBlankTrack");
+					this.OnAutoBlankTrackChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AutoBlankTrackEmittance", DbType="Bit")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=9)]
+		public System.Nullable<bool> AutoBlankTrackEmittance
+		{
+			get
+			{
+				return this._AutoBlankTrackEmittance;
+			}
+			set
+			{
+				if ((this._AutoBlankTrackEmittance != value))
+				{
+					this.OnAutoBlankTrackEmittanceChanging(value);
+					this.SendPropertyChanging();
+					this._AutoBlankTrackEmittance = value;
+					this.SendPropertyChanged("AutoBlankTrackEmittance");
+					this.OnAutoBlankTrackEmittanceChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationExtension", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true)]
 		public Organization Organization
 		{
@@ -34140,6 +34360,10 @@ namespace Model.DataEntity
 		
 		private System.Nullable<System.DateTime> _DownloadDate;
 		
+		private string _PrizeType;
+		
+		private System.Nullable<int> _Bonus;
+		
 		private EntityRef<InvoiceItem> _InvoiceItem;
 		
 		private EntityRef<UniformInvoiceWinningNumber> _UniformInvoiceWinningNumber;
@@ -34154,6 +34378,10 @@ namespace Model.DataEntity
     partial void OnWinningIDChanged();
     partial void OnDownloadDateChanging(System.Nullable<System.DateTime> value);
     partial void OnDownloadDateChanged();
+    partial void OnPrizeTypeChanging(string value);
+    partial void OnPrizeTypeChanged();
+    partial void OnBonusChanging(System.Nullable<int> value);
+    partial void OnBonusChanged();
     #endregion
 		
 		public InvoiceWinningNumber()
@@ -34228,6 +34456,48 @@ namespace Model.DataEntity
 					this._DownloadDate = value;
 					this.SendPropertyChanged("DownloadDate");
 					this.OnDownloadDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrizeType", DbType="NVarChar(16)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public string PrizeType
+		{
+			get
+			{
+				return this._PrizeType;
+			}
+			set
+			{
+				if ((this._PrizeType != value))
+				{
+					this.OnPrizeTypeChanging(value);
+					this.SendPropertyChanging();
+					this._PrizeType = value;
+					this.SendPropertyChanged("PrizeType");
+					this.OnPrizeTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Bonus", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public System.Nullable<int> Bonus
+		{
+			get
+			{
+				return this._Bonus;
+			}
+			set
+			{
+				if ((this._Bonus != value))
+				{
+					this.OnBonusChanging(value);
+					this.SendPropertyChanging();
+					this._Bonus = value;
+					this.SendPropertyChanged("Bonus");
+					this.OnBonusChanged();
 				}
 			}
 		}
@@ -41113,6 +41383,8 @@ namespace Model.DataEntity
 		
 		private System.Nullable<int> _LogID;
 		
+		private string _ViewModel;
+		
 		private EntityRef<ProcessRequestQueue> _ProcessRequestQueue;
 		
 		private EntityRef<ProcessCompletionNotification> _ProcessCompletionNotification;
@@ -41157,6 +41429,8 @@ namespace Model.DataEntity
     partial void OnAgentIDChanged();
     partial void OnLogIDChanging(System.Nullable<int> value);
     partial void OnLogIDChanged();
+    partial void OnViewModelChanging(string value);
+    partial void OnViewModelChanged();
     #endregion
 		
 		public ProcessRequest()
@@ -41390,8 +41664,29 @@ namespace Model.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ViewModel", DbType="NVarChar(MAX)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=11)]
+		public string ViewModel
+		{
+			get
+			{
+				return this._ViewModel;
+			}
+			set
+			{
+				if ((this._ViewModel != value))
+				{
+					this.OnViewModelChanging(value);
+					this.SendPropertyChanging();
+					this._ViewModel = value;
+					this.SendPropertyChanged("ViewModel");
+					this.OnViewModelChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProcessRequest_ProcessRequestQueue", Storage="_ProcessRequestQueue", ThisKey="TaskID", OtherKey="TaskID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=11, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=12, EmitDefaultValue=false)]
 		public ProcessRequestQueue ProcessRequestQueue
 		{
 			get
@@ -41426,7 +41721,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProcessRequest_ProcessCompletionNotification", Storage="_ProcessCompletionNotification", ThisKey="TaskID", OtherKey="TaskID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=12, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=13, EmitDefaultValue=false)]
 		public ProcessCompletionNotification ProcessCompletionNotification
 		{
 			get
@@ -41461,7 +41756,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProcessRequest_ProcessExceptionNotification", Storage="_ProcessExceptionNotification", ThisKey="TaskID", OtherKey="TaskID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=13, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=14, EmitDefaultValue=false)]
 		public EntitySet<ProcessExceptionNotification> ProcessExceptionNotification
 		{
 			get
@@ -41480,7 +41775,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProcessRequest_ProcessRequestDocument", Storage="_ProcessRequestDocument", ThisKey="TaskID", OtherKey="TaskID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=14, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=15, EmitDefaultValue=false)]
 		public EntitySet<ProcessRequestDocument> ProcessRequestDocument
 		{
 			get
@@ -41499,7 +41794,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProcessRequest_ProcessRequestCondition", Storage="_ProcessRequestCondition", ThisKey="TaskID", OtherKey="TaskID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=15, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=16, EmitDefaultValue=false)]
 		public EntitySet<ProcessRequestCondition> ProcessRequestCondition
 		{
 			get
@@ -44670,6 +44965,148 @@ namespace Model.DataEntity
 		{
 			this._CurrencyType = default(EntityRef<CurrencyType>);
 			this._InvoicePeriod = default(EntityRef<InvoicePeriod>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.OrganizationSettings")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class OrganizationSettings : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _CompanyID;
+		
+		private string _Settings;
+		
+		private EntityRef<Organization> _Organization;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCompanyIDChanging(int value);
+    partial void OnCompanyIDChanged();
+    partial void OnSettingsChanging(string value);
+    partial void OnSettingsChanged();
+    #endregion
+		
+		public OrganizationSettings()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int CompanyID
+		{
+			get
+			{
+				return this._CompanyID;
+			}
+			set
+			{
+				if ((this._CompanyID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyID = value;
+					this.SendPropertyChanged("CompanyID");
+					this.OnCompanyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Settings", DbType="NVarChar(256) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public string Settings
+		{
+			get
+			{
+				return this._Settings;
+			}
+			set
+			{
+				if ((this._Settings != value))
+				{
+					this.OnSettingsChanging(value);
+					this.SendPropertyChanging();
+					this._Settings = value;
+					this.SendPropertyChanged("Settings");
+					this.OnSettingsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationSettings", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.OrganizationSettings.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.OrganizationSettings.Add(this);
+						this._CompanyID = value.CompanyID;
+					}
+					else
+					{
+						this._CompanyID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._Organization = default(EntityRef<Organization>);
 			OnCreated();
 		}
 		

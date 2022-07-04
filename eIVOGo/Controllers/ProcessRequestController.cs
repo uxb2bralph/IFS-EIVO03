@@ -29,6 +29,7 @@ using Utility;
 using Model.InvoiceManagement.InvoiceProcess;
 using Uxnet.Com.DataAccessLayer;
 using ModelExtension.Helper;
+using eIVOGo.Helper.Security.Authorization;
 
 namespace eIVOGo.Controllers
 {
@@ -36,6 +37,7 @@ namespace eIVOGo.Controllers
     public class ProcessRequestController : SampleController<InvoiceItem>
     {
         // GET: ProcessRequest
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult QueryIndex(ProcessRequestQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;

@@ -73,7 +73,7 @@
 
                     }
                     @(String.Format("{0:##,###,###,##0.##}", d.Amount))<br />
-                    <text>課稅別：@((d.TaxType == (byte)Naming.TaxTypeDefinition.零稅率 || d.TaxType == (byte)Naming.TaxTypeDefinition.零稅率) ? "TZ" : "TX")</text>
+                    <text>課稅別：@(d.TaxTypeString)</text>
                     <br />
                     <br />
                 }
