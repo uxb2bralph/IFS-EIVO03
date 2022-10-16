@@ -305,5 +305,26 @@ namespace eIVOGo.Controllers
             return View("~/Views/Notification/NotifySystemAnnouncement.cshtml", mailTo);
         }
 
+        public ActionResult NotifyLowerInvoiceNoStock(OrganizationViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.CompanyID = viewModel.DecryptKeyValue();
+            }
+
+            Organization item = models.GetTable<Organization>()
+                    .Where(o => o.CompanyID == viewModel.CompanyID).FirstOrDefault();
+
+            if (item == null)
+            {
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
+            }
+
+            return View("~/Views/Notification/NotifyLowerInvoiceNoStock.cshtml", item);
+        }
+
+
     }
 }

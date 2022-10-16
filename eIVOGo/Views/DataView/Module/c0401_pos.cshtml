@@ -60,7 +60,9 @@
                         <div class="cutfield" style="/*width:5cm;*/border-top:0px;border:0px;/*font-weight:bold;*/">
                             @if (_model.Organization.LogoURL != null)
                             {
-                                <img id="logo" style="max-width:5.2cm;max-height:1.7cm;" src='@(eIVOGo.Properties.Settings.Default.WebApDomain + VirtualPathUtility.ToAbsolute("~/" +_model.Organization.LogoURL))' />
+                                <div style="text-align:center;">
+                                    <img id="logo" style="max-width:5.2cm;max-height:1.7cm;" src='@(eIVOGo.Properties.Settings.Default.WebApDomain + VirtualPathUtility.ToAbsolute("~/" +_model.Organization.LogoURL))' />
+                                </div>
                             }
                             else
                             {

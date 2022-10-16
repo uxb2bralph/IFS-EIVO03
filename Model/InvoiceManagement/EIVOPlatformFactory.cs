@@ -17,6 +17,7 @@ using Model.Locale;
 using Uxnet.Com.Helper;
 using Model.InvoiceManagement.InvoiceProcess;
 using System.Threading.Tasks;
+using Model.Models.ViewModel;
 
 namespace Model.InvoiceManagement
 {
@@ -61,6 +62,13 @@ namespace Model.InvoiceManagement
             get;
             set;
         }
+
+        public static Action<OrganizationViewModel> NotifyLowerInvoiceNoStock
+        {
+            get;
+            set;
+        }
+
 
         public static Action<int> NotifyIssuedAllowance
         {

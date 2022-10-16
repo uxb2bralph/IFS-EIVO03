@@ -10,7 +10,7 @@
 <html>
 <head runat="server">
     <title></title>
-    <script src="<%= VirtualPathUtility.ToAbsolute("~/Scripts/jquery-1.11.3.js") %>"></script>
+    <script src="<%= VirtualPathUtility.ToAbsolute("~/Scripts/jquery-3.6.0.js") %>"></script>
     <script src="<%= VirtualPathUtility.ToAbsolute("~/Scripts/jquery.form.js") %>"></script>
     <script src="<%= VirtualPathUtility.ToAbsolute("~/Scripts/FileSaver.min.js") %>"></script>
 </head>

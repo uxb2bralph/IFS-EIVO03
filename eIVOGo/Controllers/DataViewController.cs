@@ -71,10 +71,11 @@ namespace eIVOGo.Controllers
             return View(getAllowanceViewPath(item, out useThermalPOSArgs), item);
         }
 
-        protected String getInvoiceViewPath(InvoiceItem item, out String[] useThermalPOSArgs,String paperStyle = null)
+        protected String getInvoiceViewPath(InvoiceItem item, out String[] useThermalPOSArgs, String paperStyle = null, Naming.InvoiceProcessType? processType = null)
         {
             useThermalPOSArgs = null;
-            if (item.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.A0401)
+            if ((item.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.A0401 || processType == Naming.InvoiceProcessType.A0401)
+                    && !item.InvoiceBuyer.IsB2C())
             {
                 return "~/Views/DataView/A0401.cshtml";
             }
@@ -186,7 +187,7 @@ namespace eIVOGo.Controllers
             {
                 String[] useThermalPOSArgs;
                 this.TempData["viewModel"] = viewModel;
-                String pdfFile = this.CreateContentAsPDF(getInvoiceViewPath(item, out useThermalPOSArgs, viewModel.PaperStyle), item, Session.Timeout, useThermalPOSArgs);
+                String pdfFile = this.CreateContentAsPDF(getInvoiceViewPath(item, out useThermalPOSArgs, viewModel.PaperStyle, viewModel.ProcessType), item, Session.Timeout, useThermalPOSArgs);
                 if (pdfFile != null)
                 {
                     if (System.IO.File.Exists(outputFile))

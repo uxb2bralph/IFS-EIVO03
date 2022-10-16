@@ -17,16 +17,29 @@ namespace SimpleInvoiceClient
             if(args==null || args.Length<1)
             {
                 Console.WriteLine("Usage:");
-                Console.WriteLine("SimpleInvoiceClient <working path>");
+                Console.WriteLine("SimpleInvoiceClient <working path> [<apply invoice date, yyyy/MM/dd>]");
                 return;
             }
 
             String fullPath = args[0];
+            DateTime? applyInviceDate = null;
+            DateTime d;
+            if(args.Length>1 && DateTime.TryParse(args[1],out d))
+            {
+                applyInviceDate = d;
+            }
 
             Logger.OutputWritter = Console.Out;
             Logger.Info($"Process start at {DateTime.Now}");
+            if(applyInviceDate.HasValue)
+            {
+                Logger.Info($"Apply InvoiceDate at {applyInviceDate}");
+            }
 
-            var _PreInvoiceWatcher = new InvoicePGPWatcherForGoogleExpress(Path.Combine(fullPath, Settings.Default.UploadPreInvoiceFolder));
+            var _PreInvoiceWatcher = new InvoicePGPWatcherForGoogleExpress(Path.Combine(fullPath, Settings.Default.UploadPreInvoiceFolder))
+            {
+                ApplyInvoiceDate = applyInviceDate,
+            };
             _PreInvoiceWatcher.StartUp();
 
             ConsoleKeyInfo keyInfo;

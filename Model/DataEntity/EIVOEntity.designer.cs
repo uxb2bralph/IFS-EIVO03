@@ -481,6 +481,9 @@ namespace Model.DataEntity
     partial void InsertOrganizationSettings(OrganizationSettings instance);
     partial void UpdateOrganizationSettings(OrganizationSettings instance);
     partial void DeleteOrganizationSettings(OrganizationSettings instance);
+    partial void InsertOrganizationRelation(OrganizationRelation instance);
+    partial void UpdateOrganizationRelation(OrganizationRelation instance);
+    partial void DeleteOrganizationRelation(OrganizationRelation instance);
     #endregion
 		
 		public EIVOEntityDataContext() : 
@@ -1721,6 +1724,14 @@ namespace Model.DataEntity
 			}
 		}
 		
+		public System.Data.Linq.Table<OrganizationRelation> OrganizationRelation
+		{
+			get
+			{
+				return this.GetTable<OrganizationRelation>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.MatchDocumentAttachment")]
 		public int MatchDocumentAttachment()
 		{
@@ -1904,6 +1915,10 @@ namespace Model.DataEntity
 		private EntitySet<InvoiceNoMainAssignment> _InvoiceNoMainAssignment;
 		
 		private EntitySet<OrganizationSettings> _OrganizationSettings;
+		
+		private EntityRef<OrganizationRelation> _OrganizationRelation;
+		
+		private EntitySet<OrganizationRelation> _BranchRelation;
 		
 		private bool serializing;
 		
@@ -3138,6 +3153,60 @@ namespace Model.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationRelation", Storage="_OrganizationRelation", ThisKey="CompanyID", OtherKey="CompanyID", IsUnique=true, IsForeignKey=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=57, EmitDefaultValue=false)]
+		public OrganizationRelation OrganizationRelation
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._OrganizationRelation.HasLoadedOrAssignedValue == false)))
+				{
+					return null;
+				}
+				return this._OrganizationRelation.Entity;
+			}
+			set
+			{
+				OrganizationRelation previousValue = this._OrganizationRelation.Entity;
+				if (((previousValue != value) 
+							|| (this._OrganizationRelation.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._OrganizationRelation.Entity = null;
+						previousValue.Organization = null;
+					}
+					this._OrganizationRelation.Entity = value;
+					if ((value != null))
+					{
+						value.Organization = this;
+					}
+					this.SendPropertyChanged("OrganizationRelation");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationRelation1", Storage="_BranchRelation", ThisKey="CompanyID", OtherKey="Headquarters")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=58, EmitDefaultValue=false)]
+		public EntitySet<OrganizationRelation> BranchRelation
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._BranchRelation.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._BranchRelation;
+			}
+			set
+			{
+				this._BranchRelation.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -3506,6 +3575,18 @@ namespace Model.DataEntity
 			entity.Organization = null;
 		}
 		
+		private void attach_BranchRelation(OrganizationRelation entity)
+		{
+			this.SendPropertyChanging();
+			entity.HeaderquarterItem = this;
+		}
+		
+		private void detach_BranchRelation(OrganizationRelation entity)
+		{
+			this.SendPropertyChanging();
+			entity.HeaderquarterItem = null;
+		}
+		
 		private void Initialize()
 		{
 			this._OrganizationCategory = new EntitySet<OrganizationCategory>(new Action<OrganizationCategory>(this.attach_OrganizationCategory), new Action<OrganizationCategory>(this.detach_OrganizationCategory));
@@ -3541,6 +3622,8 @@ namespace Model.DataEntity
 			this._InvoiceTrackCodeAssignment = new EntitySet<InvoiceTrackCodeAssignment>(new Action<InvoiceTrackCodeAssignment>(this.attach_InvoiceTrackCodeAssignment), new Action<InvoiceTrackCodeAssignment>(this.detach_InvoiceTrackCodeAssignment));
 			this._InvoiceNoMainAssignment = new EntitySet<InvoiceNoMainAssignment>(new Action<InvoiceNoMainAssignment>(this.attach_InvoiceNoMainAssignment), new Action<InvoiceNoMainAssignment>(this.detach_InvoiceNoMainAssignment));
 			this._OrganizationSettings = new EntitySet<OrganizationSettings>(new Action<OrganizationSettings>(this.attach_OrganizationSettings), new Action<OrganizationSettings>(this.detach_OrganizationSettings));
+			this._OrganizationRelation = default(EntityRef<OrganizationRelation>);
+			this._BranchRelation = new EntitySet<OrganizationRelation>(new Action<OrganizationRelation>(this.attach_BranchRelation), new Action<OrganizationRelation>(this.detach_BranchRelation));
 			OnCreated();
 		}
 		
@@ -34055,6 +34138,10 @@ namespace Model.DataEntity
 		
 		private System.Nullable<bool> _AutoBlankTrackEmittance;
 		
+		private System.Nullable<System.DateTime> _CreationDate;
+		
+		private System.Nullable<int> _InvoiceNoSafetyStock;
+		
 		private EntityRef<Organization> _Organization;
 		
     #region Extensibility Method Definitions
@@ -34079,6 +34166,10 @@ namespace Model.DataEntity
     partial void OnAutoBlankTrackChanged();
     partial void OnAutoBlankTrackEmittanceChanging(System.Nullable<bool> value);
     partial void OnAutoBlankTrackEmittanceChanged();
+    partial void OnCreationDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreationDateChanged();
+    partial void OnInvoiceNoSafetyStockChanging(System.Nullable<int> value);
+    partial void OnInvoiceNoSafetyStockChanged();
     #endregion
 		
 		public OrganizationExtension()
@@ -34275,6 +34366,48 @@ namespace Model.DataEntity
 					this._AutoBlankTrackEmittance = value;
 					this.SendPropertyChanged("AutoBlankTrackEmittance");
 					this.OnAutoBlankTrackEmittanceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreationDate", DbType="DateTime")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=10)]
+		public System.Nullable<System.DateTime> CreationDate
+		{
+			get
+			{
+				return this._CreationDate;
+			}
+			set
+			{
+				if ((this._CreationDate != value))
+				{
+					this.OnCreationDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreationDate = value;
+					this.SendPropertyChanged("CreationDate");
+					this.OnCreationDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvoiceNoSafetyStock", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=11)]
+		public System.Nullable<int> InvoiceNoSafetyStock
+		{
+			get
+			{
+				return this._InvoiceNoSafetyStock;
+			}
+			set
+			{
+				if ((this._InvoiceNoSafetyStock != value))
+				{
+					this.OnInvoiceNoSafetyStockChanging(value);
+					this.SendPropertyChanging();
+					this._InvoiceNoSafetyStock = value;
+					this.SendPropertyChanged("InvoiceNoSafetyStock");
+					this.OnInvoiceNoSafetyStockChanged();
 				}
 			}
 		}
@@ -45107,6 +45240,189 @@ namespace Model.DataEntity
 		private void Initialize()
 		{
 			this._Organization = default(EntityRef<Organization>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.OrganizationRelation")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class OrganizationRelation : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _CompanyID;
+		
+		private int _Headquarters;
+		
+		private EntityRef<Organization> _Organization;
+		
+		private EntityRef<Organization> _HeaderquarterItem;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCompanyIDChanging(int value);
+    partial void OnCompanyIDChanged();
+    partial void OnHeadquartersChanging(int value);
+    partial void OnHeadquartersChanged();
+    #endregion
+		
+		public OrganizationRelation()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int CompanyID
+		{
+			get
+			{
+				return this._CompanyID;
+			}
+			set
+			{
+				if ((this._CompanyID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyID = value;
+					this.SendPropertyChanged("CompanyID");
+					this.OnCompanyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Headquarters", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int Headquarters
+		{
+			get
+			{
+				return this._Headquarters;
+			}
+			set
+			{
+				if ((this._Headquarters != value))
+				{
+					if (this._HeaderquarterItem.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnHeadquartersChanging(value);
+					this.SendPropertyChanging();
+					this._Headquarters = value;
+					this.SendPropertyChanged("Headquarters");
+					this.OnHeadquartersChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationRelation", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.OrganizationRelation = null;
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.OrganizationRelation = this;
+						this._CompanyID = value.CompanyID;
+					}
+					else
+					{
+						this._CompanyID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationRelation1", Storage="_HeaderquarterItem", ThisKey="Headquarters", OtherKey="CompanyID", IsForeignKey=true)]
+		public Organization HeaderquarterItem
+		{
+			get
+			{
+				return this._HeaderquarterItem.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._HeaderquarterItem.Entity;
+				if (((previousValue != value) 
+							|| (this._HeaderquarterItem.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._HeaderquarterItem.Entity = null;
+						previousValue.BranchRelation.Remove(this);
+					}
+					this._HeaderquarterItem.Entity = value;
+					if ((value != null))
+					{
+						value.BranchRelation.Add(this);
+						this._Headquarters = value.CompanyID;
+					}
+					else
+					{
+						this._Headquarters = default(int);
+					}
+					this.SendPropertyChanged("HeaderquarterItem");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._Organization = default(EntityRef<Organization>);
+			this._HeaderquarterItem = default(EntityRef<Organization>);
 			OnCreated();
 		}
 		

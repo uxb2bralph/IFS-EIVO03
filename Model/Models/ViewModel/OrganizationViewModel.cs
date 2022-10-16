@@ -19,6 +19,7 @@ namespace Model.Models.ViewModel
         public String ContactFax { get; set; }
         public String ContactPhone { get; set; }
         public DateTime? ExpirationDate { get; set; }
+        public DateTime? CreationDate { get; set; }
         public String ContactMobilePhone { get; set; }
         public String BusinessContactPhone { get; set; }
 
@@ -72,6 +73,7 @@ namespace Model.Models.ViewModel
 
         [JsonIgnore]
         public bool SendAllowanceMIGManually => Settings != null && Settings.Contains("SendAllowanceMIGManually");
+        public int? InvoiceNoSafetyStock { get; set; }
     }
 
     public class OrganizationCertificateViewModel : OrganizationViewModel

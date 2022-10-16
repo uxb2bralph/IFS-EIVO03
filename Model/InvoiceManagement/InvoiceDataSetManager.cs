@@ -78,7 +78,10 @@ namespace Model.InvoiceManagement
                         ? new DateTime(DateTime.Today.Year, (DateTime.Today.Month + 1) / 2 * 2 - 1, 1).AddDays(-1)
                         : DateTime.Today;
 
-            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, Naming.InvoiceProcessType.C0401_Xlsx_CBE);
+            InvoiceDataSetValidator validator = new InvoiceDataSetValidator(this, owner, Naming.InvoiceProcessType.C0401_Xlsx_CBE)
+            {
+                UseDefaultCrossBorderMerchantCarrier = true,
+            };
 
             DataTable result = InitializeInvoiceResponseTable();
 

@@ -25,7 +25,6 @@ namespace Model.InvoiceManagement
         public InvoiceManagerV3() : base() { }
         public InvoiceManagerV3(GenericManager<EIVOEntityDataContext> mgr) : base(mgr) { }
         public bool HasError { get; set; }
-        public DateTime? ApplyInvoiceDate { get; set; }
         public override Dictionary<int, Exception> SaveUploadInvoice(InvoiceRoot item, OrganizationToken owner)
         {
             Dictionary<int, Exception> result = new Dictionary<int, Exception>();

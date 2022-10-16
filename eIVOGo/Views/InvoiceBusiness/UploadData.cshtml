@@ -65,7 +65,7 @@
                     <input type="radio" name="ConditionID" value="@((int)ProcessRequestCondition.ConditionType.DeferredIssueNotice)" /> 等候附件合併通知
                 </td>
             </tr>
-            @if ((DateTime.Today.Month % 2) == 1 && DateTime.Today.Day < 11)
+            @if (((DateTime.Today.Month % 2) == 1 && DateTime.Today.Day < 11) || _profile.IsSystemAdmin())
             {
                 <tr>
                     <th>

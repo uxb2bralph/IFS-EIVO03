@@ -141,6 +141,7 @@ namespace ModelExtension.Helper
             extension.CustomNotification = HttpUtility.HtmlDecode(viewModel.CustomNotification.GetEfficientString());
             extension.BusinessContactPhone = viewModel.BusinessContactPhone;
             extension.ExpirationDate = viewModel.ExpirationDate;
+            extension.CreationDate = viewModel.CreationDate;
             extension.AutoBlankTrack = viewModel.AutoBlankTrack;
             extension.AutoBlankTrackEmittance = viewModel.AutoBlankTrackEmittance;
 

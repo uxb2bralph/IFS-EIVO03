@@ -78,6 +78,11 @@ namespace Model.Models.ViewModel
         public bool? CurrencySummary { get; set; }
         public String ReceiptNo { get; set; }
         public String Status { get; set; }
+        [JsonIgnore]
+        public bool? Printed { get; set; }
+        [JsonIgnore]
+        public bool? HasAddr { get; set; }
+
     }
 
     public enum DataQueryType
@@ -106,6 +111,7 @@ namespace Model.Models.ViewModel
         public int? SellerID { get; set; }
         public String SelectIndication { get; set; }
         public bool? BranchRelation { get; set; }
+        public bool? WriteToMIG { get; set; }
     }
 
     public partial class BusinessRelationshipViewModel : OrganizationViewModel
@@ -330,6 +336,7 @@ namespace Model.Models.ViewModel
 
         public String EmptyKeyID { get; set; }
         public int[] ChkItem { get; set; }
+        public bool? ForceTodo { get; set; }
 
     }
 
@@ -395,6 +402,7 @@ namespace Model.Models.ViewModel
         public Schema.EIVO.CancelAllowanceRoot CancelAllowanceRoot { get; set; }
         public String StoragePath { get; set; }
         public DateTime? ApplyInvoiceDate { get; set; }
+        public String[] DataNo { get; set; }
     }
 
     public class MIGResponseViewModel : AuthQueryViewModel

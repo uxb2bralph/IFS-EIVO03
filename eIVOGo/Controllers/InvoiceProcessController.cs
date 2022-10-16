@@ -246,6 +246,24 @@ namespace eIVOGo.Controllers
                 models.Items = models.Items.Where(i => i.PrintMark == viewModel.PrintMark);
             }
 
+            if (viewModel.Printed.HasValue)
+            {
+                var logs = models.GetTable<DocumentPrintLog>();
+                if (viewModel.Printed == true)
+                {
+                    models.Items = models.Items.Where(i => logs.Any(l => l.DocID == i.InvoiceID));
+                }
+                else
+                {
+                    models.Items = models.Items.Where(i => !logs.Any(l => l.DocID == i.InvoiceID));
+                }
+            }
+
+            if (viewModel.HasAddr == true)
+            {
+                models.Items = models.Items.Where(i => i.InvoiceBuyer.Address != null);
+            }
+
             ViewBag.DataItemView = "~/Views/InvoiceProcess/Module/DataItem.cshtml";
 
             if (viewModel.PageIndex.HasValue)
@@ -273,7 +291,7 @@ namespace eIVOGo.Controllers
                 case "CancelInvoice":
                     return "~/Views/InvoiceProcess/ResultAction/DoAction.ascx";
                 case "CreateMIG":
-                    return "~/Views/InvoiceProcess/ResultAction/DownloadMIG.ascx";
+                    return "~/Views/InvoiceProcess/ResultAction/DownloadMIG.cshtml";
                 case "Authorize":
                     ViewBag.DataItemView = "~/Views/InvoiceProcess/Module/AuthorizeDataItemToPrint.ascx";
                     return "~/Views/InvoiceProcess/ResultAction/DoAuthorize.ascx";

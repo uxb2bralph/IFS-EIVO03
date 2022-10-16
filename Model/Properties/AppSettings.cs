@@ -28,6 +28,6 @@ namespace Model.Properties
 
         public String StoreRoot { get; set; } = "WebStore";
         public String AttachmentTempStore { get; set; } = "TempAttachment";
-
+        public String EINVTurnkeyRoot { get; set; } = "C:\\EINVTurnkey";
     }
 }

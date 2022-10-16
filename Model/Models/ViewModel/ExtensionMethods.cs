@@ -68,6 +68,7 @@ namespace Model.Models.ViewModel
                 viewModel.CustomNotification = item.OrganizationExtension?.CustomNotification;
                 viewModel.Settings = item.OrganizationSettings.Select(s => s.Settings).ToArray();
                 viewModel.ExpirationDate = item.OrganizationExtension?.ExpirationDate;
+                viewModel.CreationDate = item.OrganizationExtension?.CreationDate;
                 viewModel.AutoBlankTrack = item.OrganizationExtension?.AutoBlankTrack;
                 viewModel.AutoBlankTrackEmittance = item.OrganizationExtension?.AutoBlankTrackEmittance;
             }

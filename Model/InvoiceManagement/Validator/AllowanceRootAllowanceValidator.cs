@@ -106,9 +106,10 @@ namespace Model.InvoiceManagement.Validator
                             v => v.InvoiceID, p => p.InvoiceID, (v, p) => v).FirstOrDefault();
             }
 
+            String dataNo = null;
             if(_originalInvoice == null)
             {
-                String dataNo = _allowanceItem.AllowanceItem?.Select(a => a.OriginalDataNumber.GetEfficientString())
+                dataNo = _allowanceItem.AllowanceItem?.Select(a => a.OriginalDataNumber.GetEfficientString())
                                     .Where(d => d != null)
                                     .FirstOrDefault();
                 if(dataNo!=null)
@@ -136,9 +137,10 @@ namespace Model.InvoiceManagement.Validator
             }
             else if (_allowanceItem.BuyerId == null)
             {
+                _allowanceItem.BuyerId = "0000000000";
                 if (_originalInvoice == null)
                 {
-                    return new Exception(String.Format(MessageResources.InvalidBuyerId, _allowanceItem.BuyerId));
+                    //return new Exception(String.Format(MessageResources.InvalidAllowance_NoInvoiceData, _allowanceItem.DataNumber ?? dataNo));
                 }
                 else
                 {

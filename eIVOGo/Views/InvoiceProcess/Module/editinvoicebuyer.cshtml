@@ -41,30 +41,33 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th>買受人名稱</th>
-                    <td>
-                        <input type="text" name="CustomerName" value="@(_viewModel.CustomerName)" />
-                    </td>
-                </tr>
-                <tr>
-                    <th>買受人統編</th>
-                    <td>
-                        <input type="text" name="ReceiptNo" value="@(_viewModel.ReceiptNo)" />
-                    </td>
-                </tr>
-                <tr>
-                    <th>顧客ID</th>
-                    <td>
-                        <input type="text" name="CustomerID" value="@(_viewModel.CustomerID)" />
-                    </td>
-                </tr>
-                <tr>
-                    <th>EMail</th>
-                    <td>
-                        <input type="text" name="EMail" value="@(_viewModel.EMail)" />
-                    </td>
-                </tr>
+                @if (ViewBag.SimpleForm != true)
+                {
+                    <tr>
+                        <th>買受人名稱</th>
+                        <td>
+                            <input type="text" name="CustomerName" value="@(_viewModel.CustomerName)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>買受人統編</th>
+                        <td>
+                            <input type="text" name="ReceiptNo" value="@(_viewModel.ReceiptNo)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>顧客ID</th>
+                        <td>
+                            <input type="text" name="CustomerID" value="@(_viewModel.CustomerID)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>EMail</th>
+                        <td>
+                            <input type="text" name="EMail" value="@(_viewModel.EMail)" />
+                        </td>
+                    </tr>
+                }
                 <tr>
                     <th>連絡人名稱</th>
                     <td>
@@ -138,16 +141,16 @@
                 $('#@(_dialogID)').remove();
             }
         });
-        debugger;
-            $(function () {
-                $('#@(_dialogID) input:button[value="確定"]').on('click', function () {
+        $(function () {
+            $('#@(_dialogID) input:button[value="確定"]').on('click', function () {
 
                 var event = event || window.event;
-                var $formData = $('#@(_dialogID)').find('input,select,textarea').serializeObject();
+                var viewModel = @Html.Raw(_viewModel.JsonStringify());
+                var $formData = $.extend(viewModel, $('#@(_dialogID)').find('input,select,textarea').serializeObject());
                 clearErrors();
 
                 showLoading();
-                $.post('@(Url.Action("CommitInvoiceBuyer", "InvoiceProcess", new { _viewModel.KeyID, DialogID = _dialogID }))', $formData, function (data) {
+                $.post('@(Url.Action("CommitInvoiceBuyer", ViewBag.SimpleForm == true ? "IndividualProcess" : "InvoiceProcess", new { DialogID = _dialogID }))', $formData, function (data) {
                     hideLoading();
                     if ($.isPlainObject(data)) {
                         if (data.result) {

@@ -118,5 +118,73 @@ namespace eIVOGo.Controllers
             return View("~/Views/IndividualProcess/DataQuery/InvoiceQueryResult.cshtml", item);
         }
 
+        public ActionResult EditInvoiceBuyer(InvoiceBuyerViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            InvoiceBuyer item = null;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.InvoiceID = viewModel.DecryptKeyValue();
+                item = models.GetTable<InvoiceBuyer>().Where(u => u.InvoiceID == viewModel.InvoiceID).FirstOrDefault();
+            }
+
+            if (item == null)
+            {
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "買受人資料錯誤!!");
+            }
+            else
+            {
+                viewModel.InvoiceID = item.InvoiceID;
+                viewModel.ReceiptNo = item.ReceiptNo;
+                viewModel.PostCode = item.PostCode;
+                viewModel.Address = item.Address;
+                viewModel.Name = item.Name;
+                viewModel.BuyerID = item.BuyerID;
+                viewModel.CustomerID = item.CustomerID;
+                viewModel.ContactName = item.ContactName;
+                viewModel.Phone = item.Phone;
+                viewModel.EMail = item.EMail;
+                viewModel.CustomerName = item.CustomerName;
+                viewModel.Fax = item.Fax;
+                viewModel.PersonInCharge = item.PersonInCharge;
+                viewModel.RoleRemark = item.RoleRemark;
+                viewModel.CustomerNumber = item.CustomerNumber;
+                viewModel.BuyerMark = item.BuyerMark;
+            }
+
+            return View("~/Views/IndividualProcess/EditInvoiceBuyer.cshtml", item);
+
+        }
+
+        public ActionResult CommitInvoiceBuyer(InvoiceBuyerViewModel viewModel)
+        {
+
+            InvoiceBuyer item = null;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.InvoiceID = viewModel.DecryptKeyValue();
+                item = models.GetTable<InvoiceBuyer>().Where(u => u.InvoiceID == viewModel.InvoiceID).FirstOrDefault();
+            }
+
+            if (item == null)
+            {
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "買受人資料錯誤!!");
+            }
+
+            item.PostCode = viewModel.PostCode;
+            item.Address = viewModel.Address;
+            item.ContactName = viewModel.ContactName;
+            item.Phone = viewModel.Phone;
+
+            models.SubmitChanges();
+
+            return Json(new { result = true });
+        }
+
+
+
     }
 }

@@ -33,7 +33,7 @@ namespace InvoiceClient.Agent
 
         private void ReceiveProcessResponse()
         {
-            String url = $"{ServerInspector.ServiceInfo.TaskCenterUrl}/InvoiceData/NotifyRequestCompletion?keyID={HttpUtility.UrlEncode(ServerInspector.ServiceInfo.AgentToken)}";
+            String url = $"{ServerInspector.ServiceInfo.TaskCenterUrl}/InvoiceData/NotifyRequestCompletion?keyID={HttpUtility.UrlEncode(ServerInspector.ServiceInfo.AgentToken)}&sender={ServerInspector.ServiceInfo.AgentUID}";
             using (WebClientEx client = new WebClientEx())
             {
                 client.Timeout = 43200000;

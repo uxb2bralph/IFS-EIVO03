@@ -156,4 +156,12 @@
       <Column Name="MESSAGE_DTS" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.DocumentDispatchQueue" Member="DocumentDispatchQueue">
+    <Type Name="DocumentDispatchQueue">
+      <Column Name="DocType" Type="System.String" DbType="NVarChar(16) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DocNo" Type="System.String" DbType="NVarChar(32) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Status" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+      <Column Name="FileName" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
 </Database>

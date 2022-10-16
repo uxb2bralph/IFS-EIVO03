@@ -289,6 +289,39 @@ namespace Model.InvoiceManagement.Validator
 
         private void initializeDeliveryCheck()
         {
+            #region 列印Y
+
+            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.Yes, (int)DonationIntent.Yes] = () =>
+            {
+                return new Exception(String.Format(MessageResources.AlertPrintedInvoiceCarrierType, CarrierType()));
+            };
+
+            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.Yes, (int)DonationIntent.No] =
+                _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.Yes, (int)DonationIntent.Yes];
+
+            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.No, (int)DonationIntent.Yes] = () =>
+            {
+                return new Exception(String.Format(MessageResources.AlertDonationInvoiceCarryType, CarrierType()));
+            };
+
+            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.No, (int)DonationIntent.No] = checkPublicCarrier;
+
+            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.Yes, (int)DonationIntent.Yes] = () =>
+            {
+                return new Exception(String.Format(MessageResources.AlertPrintedInvoiceDonation, PrintMark()));
+            };
+
+            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.No, (int)DonationIntent.Yes] = () =>
+            {
+                return new Exception(String.Format(MessageResources.AlertDonationInvoiceCarryType, CarrierType()));
+            };
+
+            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.Yes, (int)DonationIntent.No] =
+
+            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.No, (int)DonationIntent.No] = () => { return null; };
+
+            #endregion 
+
 
             #region 列印N
 

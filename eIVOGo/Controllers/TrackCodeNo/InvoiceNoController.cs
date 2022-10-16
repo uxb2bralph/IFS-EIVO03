@@ -33,6 +33,7 @@ using CsvHelper;
 using Uxnet.Com.Helper;
 using Model.Helper;
 using eIVOGo.Helper.Security.Authorization;
+using eIVOGo.Helper.DataQuery;
 
 namespace eIVOGo.Controllers.TrackCodeNo
 {
@@ -52,27 +53,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
 
             ViewBag.ViewModel = viewModel;
 
-            IQueryable<InvoiceNoInterval> items = models.GetTable<InvoiceNoInterval>();
-            if (profile.IsSystemAdmin())
-            {
-                if(viewModel.SellerID.HasValue)
-                {
-                    items = items.Where(t => t.InvoiceTrackCodeAssignment.SellerID == viewModel.SellerID);
-                }
-            }
-            else
-            {
-                items = items.Join(profile.InitializeOrganizationQuery(models).Where(o => o.CompanyID == viewModel.SellerID),
-                    n => n.SellerID, o => o.CompanyID, (n, o) => n);
-            }
-
-            if (viewModel.Year.HasValue)
-            {
-                items = items.Where(i => i.InvoiceTrackCodeAssignment.InvoiceTrackCode.Year == viewModel.Year);
-            }
-
-            if (viewModel.PeriodNo.HasValue)
-                items = items.Where(i => i.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo == viewModel.PeriodNo);
+            IQueryable<InvoiceNoInterval> items = viewModel.InquireInvoiceNoInterval(models, profile);
 
             return View("~/Views/InvoiceNo/Module/QueryResult.cshtml", items);
         }
@@ -171,7 +152,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
                                 BranchBan = orgItem.OrganizationExtension.ExpirationDate.HasValue
                                     ? $"{orgItem.ReceiptNo}(註記停用:{orgItem.OrganizationExtension.ExpirationDate:yyyy/MM/dd})"
                                     : orgItem.ReceiptNo,
-                                HeadBan = viewModel.BranchRelation == true && orgItem.AsInvoiceInsurer.Count > 0 ? orgItem.AsInvoiceInsurer.First().InvoiceAgent.ReceiptNo : orgItem.ReceiptNo,
+                                HeadBan = viewModel.BranchRelation == true ? orgItem.OrganizationRelation?.Organization.ReceiptNo ?? orgItem.ReceiptNo : orgItem.ReceiptNo,
                                 YearMonth = String.Format("{0}{1:00}", trackCode.Year - 1911, trackCode.PeriodNo * 2),
                                 InvoiceType = trackCode.InvoiceType == (byte)InvoiceTypeEnum.Item08 ? InvoiceTypeEnum.Item08 : InvoiceTypeEnum.Item07,
                                 InvoiceTrack = trackCode.TrackCode

@@ -402,7 +402,37 @@ namespace InvoiceClient.Agent
         protected virtual XmlDocument prepareInvoiceDocument(String invoiceFile)
         {
             XmlDocument docInv = new XmlDocument();
-            docInv.Load(invoiceFile);
+            int retryCount = 0;
+
+            void loadInvoiceDocument()
+            {
+                try
+                {
+                    docInv.Load(invoiceFile);
+                    retryCount = 100;
+                }
+                catch(Exception ex)
+                {
+                    if (retryCount < 10)
+                    {
+                        Logger.Warn($"fail to load xml: {invoiceFile}");
+                        Logger.Warn(ex);
+                        retryCount++;
+                        Thread.Sleep(1000);
+                    }
+                    else
+                    {
+                        throw ex;
+                    }
+                }
+            }
+
+            do
+            {
+                loadInvoiceDocument();
+            }
+            while (retryCount < 10);
+
             ///去除"N/A"資料
             ///
             var nodes = docInv.SelectNodes("//*[text()='N/A']");

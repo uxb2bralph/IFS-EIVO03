@@ -26,7 +26,9 @@
     _model = (InvoiceItem)this.Model;
     _viewModel = (DocumentQueryViewModel)ViewBag.ViewModel;
 
-    String notificationView = "~/Views/Notification/Module/IssuedWinningInvoice.cshtml";
+    String notificationView = _model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.UseCBEStyle)
+        ? "~/Views/Notification/Module/IssuedWinningInvoiceCBE.cshtml"
+        : "~/Views/Notification/Module/IssuedWinningInvoice.cshtml";
     //Request.SaveAs(Path.Combine(Logger.LogDailyPath, String.Format("IssueC0401_{0}.txt", DateTime.Now.Ticks)), true);
 }
 
@@ -34,7 +36,7 @@
 {
     Html.RenderPartial(notificationView, _model);
 }
-else if (_model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.Winning))
+else if (_viewModel.ForceTodo == true || _model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.Winning))
 {
     var mailing = models.GetUserListByCompanyID(_model.InvoiceBuyer.BuyerID)
             .Select(u => u.EMail).ToList();

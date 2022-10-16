@@ -108,6 +108,24 @@ namespace eIVOGo.Published
                     }
                 };
 
+            EIVOPlatformFactory.NotifyLowerInvoiceNoStock =
+                p =>
+                {
+                    using (WebClient client = new WebClient())
+                    {
+                        try
+                        {
+                            client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                            client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/NotifyLowerInvoiceNoStock")}", p.JsonStringify());
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Warn(String.Format("電子發票可用號碼存量不足通知傳送失敗,ID:{0}", p.CompanyID));
+                            Logger.Error(ex);
+                        }
+                    }
+                };
+
 
             EIVOPlatformFactory.NotifyIssuedInvoiceCancellation =
                 e =>

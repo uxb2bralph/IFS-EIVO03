@@ -55,6 +55,7 @@ namespace eIVOGo
 
             Uxnet.Com.Helper.JobScheduler.StartUp();
             eIVOGo.Published.eInvoiceService.StartUp();
+            eIVOGo.Services.ServiceWorkItem.StartUp();
 
             Model.InvoiceManagement.EIVOPlatformFactory.Sign = eIVOGo.Helper.AppSigner.Sign;
             Model.InvoiceManagement.EIVOPlatformFactory.SignCms = eIVOGo.Helper.AppSigner.SignCms;

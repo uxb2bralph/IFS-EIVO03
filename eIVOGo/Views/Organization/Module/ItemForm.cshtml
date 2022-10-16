@@ -138,6 +138,17 @@
                 </tr>
                 <tr>
                     <th>
+                        建檔日期
+                    </th>
+                    <td>
+                        <input type="text" class="form_date form-control" name="CreationDate" value='@($"{_viewModel.CreationDate:yyyy/MM/dd}")' />
+                        <script>
+                            $(function () {
+                                $('input[name="CreationDate"]').datepicker({ showButtonPanel: true, changeYear: true, changeMonth: true, yearRange: '2012:+1' });
+                            });
+                        </script>
+                    </td>
+                    <th>
                         註記停用日期
                     </th>
                     <td>
@@ -147,11 +158,6 @@
                                 $('input[name="ExpirationDate"]').datepicker({ showButtonPanel: true, changeYear: true, changeMonth: true, yearRange: '2012:+1' });
                             });
                         </script>
-                    </td>
-                    <th>
-
-                    </th>
-                    <td>
                     </td>
                 </tr>
                 <tr>

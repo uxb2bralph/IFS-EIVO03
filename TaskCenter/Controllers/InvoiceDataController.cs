@@ -125,6 +125,11 @@ namespace TaskCenter.Controllers
             var items = models.GetTable<ProcessRequest>().Where(q => q.AgentID == viewModel.AgentID)
                                 .Where(q => q.ProcessCompletionNotification != null);
 
+            if(viewModel.Sender.HasValue)
+            {
+                items = items.Where(p => p.Sender == viewModel.Sender);
+            }
+
             return Json(new
             {
                 result = items.Count() > 0,
@@ -396,5 +401,30 @@ namespace TaskCenter.Controllers
             }
             return null;
         }
+
+        public ActionResult UploadMIG(InvoiceRequestViewModel viewModel)
+        {
+            viewModel.StoreMIG(this);
+
+            if (!ModelState.IsValid)
+            {
+                return Json(new { result = false, errorCode = ModelState.AllErrorKey() }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CheckMIG(InvoiceRequestViewModel viewModel)
+        {
+            viewModel.StoreMIG(this);
+
+            if (!ModelState.IsValid)
+            {
+                return Json(new { result = false, errorCode = ModelState.AllErrorKey() }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

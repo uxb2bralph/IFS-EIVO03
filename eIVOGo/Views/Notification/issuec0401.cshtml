@@ -42,7 +42,7 @@
         Html.RenderPartial(notificationView ?? "~/Views/Notification/Module/IssuedC0401.cshtml", _model);
     }
 }
-else if (_model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.Issuing))
+else if (_viewModel.ForceTodo == true || _model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.Issuing))
 {
     var mailing = models.GetUserListByCompanyID(_model.InvoiceBuyer.BuyerID)
             .Select(u => u.EMail).ToList();

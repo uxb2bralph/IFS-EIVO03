@@ -258,3 +258,13 @@
         };
     });
 </script>
+<script>
+    function commitSafetyStock(keyID) {
+        commitAction('@Html.Raw(Url.Action("CommitInvoiceNoSafetyStock", "Organization"))', { 'keyID': keyID, 'InvoiceNoSafetyStock': $('input[name="InvoiceNoSafetyStock"]').val() },
+            function (result) {
+                if (result.result) {
+                    alert('資料已更新!');
+                }
+            });
+    }
+</script>

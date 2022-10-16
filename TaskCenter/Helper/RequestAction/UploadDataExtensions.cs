@@ -125,6 +125,79 @@ namespace TaskCenter.Helper.RequestAction
 
         }
 
+        public static void StoreMIG(this InvoiceRequestViewModel viewModel, SampleController controller)
+        {
+            var ModelState = controller.ModelState;
+            var ViewBag = controller.ViewBag;
+            var HttpContext = controller.HttpContext;
+            var Request = controller.Request;
+            var models = controller.DataSource;
+
+            Organization item = viewModel.CheckRequest(controller);
+
+            if (!viewModel.ProcessType.HasValue)
+            {
+                ModelState.AddModelError("E1004", ErrorMessage.E1004);
+            }
+
+            String requestPath = null;
+            if (Request.Files.Count == 0)
+            {
+                ModelState.AddModelError("E1002", ErrorMessage.E1002);
+            }
+            else
+            {
+                var file = Request.Files[0];
+                switch(viewModel.ProcessType)
+                {
+                    case Naming.InvoiceProcessType.C0401:
+                    case Naming.InvoiceProcessType.C0501:
+                    case Naming.InvoiceProcessType.D0401:
+                    case Naming.InvoiceProcessType.D0501:
+                    case Naming.InvoiceProcessType.C0701:
+                        requestPath = Path.Combine(Model.Properties.AppSettings.Default.EINVTurnkeyRoot, "UpCast", "B2CSTORAGE", viewModel.ProcessType.ToString(), "SRC");
+                        break;
+
+                    case Naming.InvoiceProcessType.A0401:
+                    case Naming.InvoiceProcessType.A0501:
+                    case Naming.InvoiceProcessType.B0401:
+                    case Naming.InvoiceProcessType.B0501:
+                    case Naming.InvoiceProcessType.A0101:
+                        requestPath = Path.Combine(Model.Properties.AppSettings.Default.EINVTurnkeyRoot, "UpCast", "B2BSTORAGE", viewModel.ProcessType.ToString(), "SRC");
+                        break;
+
+                }
+
+                if(requestPath!=null)
+                {
+                    file.SaveAs(requestPath);
+                }
+            }
+
+        }
+
+        public static void CheckMIG(this InvoiceRequestViewModel viewModel, SampleController controller)
+        {
+            var ModelState = controller.ModelState;
+            var ViewBag = controller.ViewBag;
+            var HttpContext = controller.HttpContext;
+            var Request = controller.Request;
+            var models = controller.DataSource;
+
+            Organization item = viewModel.CheckRequest(controller);
+
+            if (!viewModel.ProcessType.HasValue)
+            {
+                ModelState.AddModelError("E1004", ErrorMessage.E1004);
+            }
+
+            if (viewModel.DataNo != null && viewModel.DataNo.Length > 0)
+            {
+
+            }
+
+        }
+
         public static void SaveAttachment(this InvoiceRequestViewModel viewModel, SampleController controller)
         {
             var ModelState = controller.ModelState;

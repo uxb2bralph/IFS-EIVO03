@@ -71,7 +71,9 @@
             <div class="cutfield">
                 @if (_model.Organization.LogoURL != null)
                 {
-                    <img id="logo" style="width: 200px; height: auto;" src='@(eIVOGo.Properties.Settings.Default.WebApDomain + VirtualPathUtility.ToAbsolute("~/" +_model.Organization.LogoURL))' />
+                    <div style="text-align:center;">
+                        <img id="logo" style="max-width:5.2cm;max-height:1.7cm;" src='@(eIVOGo.Properties.Settings.Default.WebApDomain + VirtualPathUtility.ToAbsolute("~/" +_model.Organization.LogoURL))' />
+                    </div>
                 }
                 else
                 {
@@ -106,7 +108,7 @@
                     <img id="qrcode1" alt="" width="80" height="80" src="@(_model.GetLeftQRCodeImageSrc())" />
                     <img id="qrcode2" alt="" width="80" height="80" src="@("**".CreateQRCodeImageSrc(width:180,height:180,qrVersion:10))" />
                     @*<img id="qrcode1" alt="" width="80" height="80" src="@(String.Format("{0}{1}?invoiceID={2}", Uxnet.Web.Properties.Settings.Default.HostUrl, VirtualPathUtility.ToAbsolute("~/DataView/GetLeftQRCode"), _model.InvoiceID))" />
-                        <img id="qrcode2" alt="" width="80" height="80" src="@(String.Format("{0}{1}?invoiceID={2}", Uxnet.Web.Properties.Settings.Default.HostUrl, VirtualPathUtility.ToAbsolute("~/DataView/GetRightQRCode"), _model.InvoiceID))" />*@
+            <img id="qrcode2" alt="" width="80" height="80" src="@(String.Format("{0}{1}?invoiceID={2}", Uxnet.Web.Properties.Settings.Default.HostUrl, VirtualPathUtility.ToAbsolute("~/DataView/GetRightQRCode"), _model.InvoiceID))" />*@
                 </div>
             </div>
         </div>

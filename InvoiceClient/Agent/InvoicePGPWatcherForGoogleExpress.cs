@@ -22,7 +22,7 @@ namespace InvoiceClient.Agent
 {
     public class InvoicePGPWatcherForGoogleExpress : InvoicePGPWatcherForGoogle
     {
-
+        public DateTime? ApplyInvoiceDate { get; set; }
         public InvoicePGPWatcherForGoogleExpress(String fullPath) : base(fullPath)
         {
 
@@ -118,7 +118,7 @@ namespace InvoiceClient.Agent
                 }
             };
 
-            using (GoogleInvoiceManagerV2 models = new GoogleInvoiceManagerV2 { InvoiceClientID = Settings.Default.ClientID, ChannelID = (int)determineChannelID(invoiceRequest), IgnoreDuplicateDataNumberException = true })
+            using (GoogleInvoiceManagerV2 models = new GoogleInvoiceManagerV2 { InvoiceClientID = Settings.Default.ClientID, ChannelID = (int)determineChannelID(invoiceRequest), IgnoreDuplicateDataNumberException = true, ApplyInvoiceDate = this.ApplyInvoiceDate })
             {
                 ///憑證資料檢查
                 ///

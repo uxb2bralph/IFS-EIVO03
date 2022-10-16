@@ -98,7 +98,7 @@ namespace eIVOGo.Controllers
 
             if (viewModel.KeyID != null)
             {
-                viewModel.CompanyID = BitConverter.ToInt32(viewModel.DecryptKey(), 0);
+                viewModel.CompanyID = viewModel.DecryptKeyValue();
             }
             Organization item = null;
             item = models.GetTable<Organization>().Where(u => u.CompanyID == viewModel.CompanyID).FirstOrDefault();
@@ -156,6 +156,18 @@ namespace eIVOGo.Controllers
             return Json(new { result = true });
         }
 
+        public ActionResult CommitInvoiceNoSafetyStock(OrganizationViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)ApplyIssuerAgent(viewModel);
+            Organization item = result.Model as Organization;
+            if (item == null)
+                return result;
+
+            item.OrganizationExtension.InvoiceNoSafetyStock = (int?)viewModel.InvoiceNoSafetyStock;
+            models.SubmitChanges();
+
+            return Json(new { result = true });
+        }
 
     }
 }

@@ -36,7 +36,7 @@ body{
     line-height:1.4;
     text-align:center;
     padding:0;
-    padding-top:1cm;
+    /*padding-top:1cm;*/
     padding-bottom:0.2cm;
     margin:0 auto;
 }

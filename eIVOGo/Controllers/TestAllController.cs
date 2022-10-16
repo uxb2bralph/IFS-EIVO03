@@ -40,6 +40,7 @@ namespace eIVOGo.Controllers
         public ActionResult Test()
         {
             Logger.Info("test...");
+            Services.DailyJobs.Notify();
             return new EmptyResult();
         }
 

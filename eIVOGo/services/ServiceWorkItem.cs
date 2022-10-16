@@ -16,17 +16,12 @@ using Model.Locale;
 using Uxnet.Com.Helper;
 using System.Threading.Tasks;
 using eIVOGo.Module.Common;
+using Model.Helper;
 
-namespace eIVOGo.services
+namespace eIVOGo.Services
 {
     public static class ServiceWorkItem
     {
-        private static DateTime __DailyCheck = DateTime.Today;
-
-        static int _AssertionDay = 10;
-        static TimeSpan _AssertionTime = new TimeSpan(5, 0, 0);
-        static TimeSpan _CheckTime = new TimeSpan(9, 0, 0);
-
         static ServiceWorkItem()
         {
             var jobList = JobScheduler.JobList;
@@ -36,11 +31,13 @@ namespace eIVOGo.services
 
                 if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(UnassignNOCheckSchedule).AssemblyQualifiedName))
                 {
+                    DateTime initDate = DateTime.Today.AddMonths(2);
+
                     JobScheduler.AddJob(new JobItem
                     {
                         AssemblyQualifiedName = typeof(UnassignNOCheckSchedule).AssemblyQualifiedName,
                         Description = "計算上期空白發票",
-                        Schedule = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).Add(_AssertionTime)
+                        Schedule = new DateTime(initDate.Year, (initDate.Month - 1) / 2 * 2 + 1, 1)
                     });
                 }
                 if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(DailyCheckSchedule).AssemblyQualifiedName))
@@ -48,8 +45,8 @@ namespace eIVOGo.services
                     JobScheduler.AddJob(new JobItem
                     {
                         AssemblyQualifiedName = typeof(DailyCheckSchedule).AssemblyQualifiedName,
-                        Description = "簡訊儲值通知",
-                        Schedule = new DateTime(DateTime.Today.Year, DateTime.Today.Month, _AssertionDay).Add(_AssertionTime)
+                        Description = "每日自動檢查",
+                        Schedule = DateTime.Today.Date
                     });
                 }
                 //if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(TurnKeyCheckSchedule).AssemblyQualifiedName))
@@ -67,90 +64,69 @@ namespace eIVOGo.services
 
         private static void doDailyCheck()
         {
-            if (__DailyCheck < DateTime.Now)
-            {
-                __DailyCheck = DateTime.Today.AddDays(1);
-                try
-                {
-                    double credit;
-                    if (ModelExtension.MessageManagement.SMSManager.AlertToLowerCredit(out credit))
-                    {
-                        String.Format("簡訊儲值點數即將用盡!!剩餘點數:{0}", credit).SendMailMessage(Settings.Default.WebMaster, "簡訊儲值點數不足");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex);
-                }
-            }
+            //try
+            //{
+            //    double credit;
+            //    if (ModelExtension.MessageManagement.SMSManager.AlertToLowerCredit(out credit))
+            //    {
+            //        String.Format("簡訊儲值點數即將用盡!!剩餘點數:{0}", credit).SendMailMessage(Settings.Default.WebMaster, "簡訊儲值點數不足");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logger.Error(ex);
+            //}
+
+            InvoiceNoSafetyStockNotification.Notify();
+            DailyJobs.Notify();
         }
 
-        public static void doUnassignNOCheck(int sellerID, int trackID)
+
+        //private static void doDailyTurnKeyCheck()
+        //{
+        //    try
+        //    {
+        //        eIVOGo.Published.AlertAdmTurnKeyInfo Info = new eIVOGo.Published.AlertAdmTurnKeyInfo();
+
+        //        if (Info.totalRecordCount() > 0)
+        //        {
+        //            try
+        //            {
+        //                MailMessage message = new MailMessage();
+        //                message.ReplyToList.Add(Settings.Default.ReplyTo);
+        //                message.From = new MailAddress(Settings.Default.WebMaster);
+
+        //                message.To.Add(Settings.Default.WebMaster);
+        //                message.Subject = "電子發票系統 未上傳至TurnKey通知";
+        //                message.IsBodyHtml = true;
+        //                using (WebClient wc = new WebClient())
+        //                {
+        //                    wc.Encoding = Encoding.UTF8;
+        //                    message.Body = wc.DownloadString(String.Format("{0}{1}",
+        //                        Uxnet.Web.Properties.Settings.Default.HostUrl,
+        //                        VirtualPathUtility.ToAbsolute("~/Published/AlertAdmTurnKeyInfo.aspx")));
+        //                }
+
+        //                SmtpClient smtpclient = new SmtpClient(Settings.Default.MailServer);
+        //                smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
+        //                smtpclient.Send(message);
+
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                Logger.Error(ex);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex);
+        //    }
+        //}
+
+        public static void StartUp()
         {
-            using(TrackNoIntervalManager models = new TrackNoIntervalManager())
-            {
-                models.SettleUnassignedInvoiceNO(sellerID, trackID);
-            }
-        }
 
-        private static void doDailyTurnKeyCheck()
-        {
-            if (__DailyCheck < DateTime.Now)
-            {
-                __DailyCheck = DateTime.Today.AddDays(1);
-                try
-                {
-                    eIVOGo.Published.AlertAdmTurnKeyInfo Info= new eIVOGo.Published.AlertAdmTurnKeyInfo();
-                    
-                    if (Info.totalRecordCount() > 0)
-                    {
-                        try
-                        {
-                            MailMessage message = new MailMessage();
-                            message.ReplyToList.Add(Settings.Default.ReplyTo);
-                            message.From = new MailAddress(Settings.Default.WebMaster);
-
-                            message.To.Add(Settings.Default.WebMaster);
-                            message.Subject = "電子發票系統 未上傳至TurnKey通知";
-                            message.IsBodyHtml = true;
-                            using (WebClient wc = new WebClient())
-                            {
-                                wc.Encoding = Encoding.UTF8;
-                                message.Body = wc.DownloadString(String.Format("{0}{1}",
-                                    Uxnet.Web.Properties.Settings.Default.HostUrl,
-                                    VirtualPathUtility.ToAbsolute("~/Published/AlertAdmTurnKeyInfo.aspx")));
-                            }
-
-                            SmtpClient smtpclient = new SmtpClient(Settings.Default.MailServer);
-                            smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
-                            smtpclient.Send(message);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Error(ex);
-                        }    
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex);
-                }
-            }
-        }
-
-        public static bool ThreadSafeCheckEnable(ref bool token)
-        {
-            var bRun = false;
-            lock (typeof(ServiceWorkItem))
-            {
-                if (!token)
-                {
-                    bRun = true;
-                    token = true;
-                }
-            }
-            return bRun;
         }
 
         public class UnassignNOCheckSchedule : IJob
@@ -158,7 +134,22 @@ namespace eIVOGo.services
 
             public DateTime GetScheduleToNextTurn(DateTime current)
             {
-                return current.AddMonths(2 - ((current.Month / 2 + 1) % 2));
+                DateTime nextPeriod = new DateTime(current.Year, (current.Month - 1) / 2 * 2 + 1, 1).AddMonths(2);
+                if (current.Day >= 10)
+                {
+                    return nextPeriod;
+                }
+                else
+                {
+                    if (current.Month % 2 == 1)
+                    {
+                        return current.AddDays(1);
+                    }
+                    else
+                    {
+                        return nextPeriod;
+                    }
+                }
             }
 
             public void DoJob()
@@ -171,7 +162,13 @@ namespace eIVOGo.services
 
                     using (TrackNoIntervalManager models = new TrackNoIntervalManager())
                     {
-                        models.SettleUnassignedInvoiceNO(year, periodNo);
+                        foreach (var item in models.PromptTrackCodeAssignment(year, periodNo).ToList())
+                        {
+                            if (item.Organization.OrganizationExtension?.AutoBlankTrack == true)
+                            {
+                                models.SettleUnassignedInvoiceNO(item);
+                            }
+                        }
                     }
                 });
             }
@@ -186,7 +183,7 @@ namespace eIVOGo.services
 
             public DateTime GetScheduleToNextTurn(DateTime current)
             {
-                return current.AddMonths(1);
+                return current.AddDays(1);
             }
 
             public void DoJob()
@@ -199,24 +196,24 @@ namespace eIVOGo.services
 
             }
         }
-        public class TurnKeyCheckSchedule : IJob
-        {
+        //public class TurnKeyCheckSchedule : IJob
+        //{
 
-            public DateTime GetScheduleToNextTurn(DateTime current)
-            {
-                return current.AddDays(1);
-            }
+        //    public DateTime GetScheduleToNextTurn(DateTime current)
+        //    {
+        //        return current.AddDays(1);
+        //    }
 
-            public void DoJob()
-            {
-                doDailyTurnKeyCheck();
-            }
+        //    public void DoJob()
+        //    {
+        //        doDailyTurnKeyCheck();
+        //    }
 
-            public void Dispose()
-            {
+        //    public void Dispose()
+        //    {
 
-            }
-        }
+        //    }
+        //}
         
         
     }

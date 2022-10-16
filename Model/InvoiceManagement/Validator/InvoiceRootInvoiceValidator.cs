@@ -314,7 +314,7 @@ namespace Model.InvoiceManagement.Validator
 
                 if (trackCode == null)
                 {
-                    return new Exception(String.Format(MessageResources.InvalidTrackCode, _invItem.InvoiceNumber));
+                    return new Exception(String.Format(MessageResources.InvalidTrackCode, invoiceNo));
                 }
 
                 item.TrackID = trackCode.TrackID;

@@ -25,6 +25,7 @@ namespace Model.InvoiceManagement
 
         protected Func<Exception> _checkUploadInvoice;
         protected Func<Exception> _checkUploadAllowance;
+        public DateTime? ApplyInvoiceDate { get; set; }
 
         public bool IgnoreDuplicateDataNumberException { get; set; } = false;
 

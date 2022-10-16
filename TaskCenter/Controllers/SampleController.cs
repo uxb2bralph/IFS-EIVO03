@@ -35,7 +35,7 @@ namespace TaskCenter.Controllers
         {
             base.OnException(filterContext);
 
-            System.Diagnostics.Debugger.Launch();
+            //System.Diagnostics.Debugger.Launch();
             if (filterContext.Exception != null)
             {
                 Logger.Error(filterContext.Exception);

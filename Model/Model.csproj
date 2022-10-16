@@ -68,6 +68,7 @@
     <Compile Include="Helper\B2CExtensionMethods.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Helper\AuthExtensions.cs" />
+    <Compile Include="Helper\InvoiceNoSafetyStockNotification.cs" />
     <Compile Include="InvoiceManagement\FullAllowanceDataSetManager.cs" />
     <Compile Include="InvoiceManagement\AttachmentManager.cs" />
     <Compile Include="InvoiceManagement\enUS\AllowanceRootValidator.cs" />

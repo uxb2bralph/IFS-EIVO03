@@ -105,6 +105,12 @@ namespace Model.Models.ViewModel
                 }
             }
 
+            _invItem.BuyerName = _invItem.BuyerName.GetEfficientString();
+            if (_invItem.BuyerName == null)
+            {
+                return new Exception(String.Format(MessageResources.InvalidBuyerNameLengthLimit, _invItem.BuyerName));
+            }
+
             return checkBusinessDetails();
         }
 

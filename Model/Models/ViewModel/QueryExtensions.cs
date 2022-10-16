@@ -11,6 +11,7 @@ using Model.InvoiceManagement;
 using Model.Locale;
 using DataAccessLayer.basis;
 using Utility;
+using Model.Security.MembershipManagement;
 
 namespace Model.Models.ViewModel
 {
@@ -418,7 +419,61 @@ namespace Model.Models.ViewModel
         }
 
 
+        public static IQueryable<InvoiceNoInterval> InquireInvoiceNoInterval(this InquireNoIntervalViewModel viewModel, GenericManager<EIVOEntityDataContext> models, UserProfileMember profile = null)
+        {
+            IQueryable<InvoiceNoInterval> items = models.GetTable<InvoiceNoInterval>();
+            if (profile == null || profile.IsSystemAdmin())
+            {
+                if (viewModel.SellerID.HasValue)
+                {
+                    items = items.Where(t => t.InvoiceTrackCodeAssignment.SellerID == viewModel.SellerID);
+                }
+            }
+            else
+            {
+                items = items.Join(profile.InitializeOrganizationQuery(models).Where(o => o.CompanyID == viewModel.SellerID),
+                    n => n.SellerID, o => o.CompanyID, (n, o) => n);
+            }
 
+            if (viewModel.Year.HasValue)
+            {
+                items = items.Where(i => i.InvoiceTrackCodeAssignment.InvoiceTrackCode.Year == viewModel.Year);
+            }
+
+            if (viewModel.PeriodNo.HasValue)
+                items = items.Where(i => i.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo == viewModel.PeriodNo);
+
+            return items;
+
+        }
+
+        public static IQueryable<Organization> InitializeOrganizationQuery(this UserProfileMember userProfile, GenericManager<EIVOEntityDataContext> mgr)
+        {
+            switch ((Naming.CategoryID)userProfile.CurrentUserRole.OrganizationCategory.CategoryID)
+            {
+                case Naming.CategoryID.COMP_SYS:
+                    return mgr.GetTable<Organization>().Where(
+                        o => o.OrganizationCategory.Any(
+                            c => c.CategoryID == (int)Naming.CategoryID.COMP_E_INVOICE_B2C_SELLER
+                                || c.CategoryID == (int)Naming.CategoryID.COMP_VIRTUAL_CHANNEL
+                                || c.CategoryID == (int)Naming.CategoryID.COMP_E_INVOICE_GOOGLE_TW
+                                || c.CategoryID == (int)Naming.CategoryID.COMP_INVOICE_AGENT));
+
+                case Naming.CategoryID.COMP_INVOICE_AGENT:
+                    return mgr.GetQueryByAgent(userProfile.CurrentUserRole.OrganizationCategory.CompanyID);
+
+                case Naming.CategoryID.COMP_E_INVOICE_GOOGLE_TW:
+                case Naming.CategoryID.COMP_E_INVOICE_B2C_SELLER:
+                case Naming.CategoryID.COMP_VIRTUAL_CHANNEL:
+                case Naming.CategoryID.COMP_CROSS_BORDER_MURCHANT:
+                    return mgr.GetTable<Organization>().Where(
+                        o => o.CompanyID == userProfile.CurrentUserRole.OrganizationCategory.CompanyID);
+                default:
+                    break;
+            }
+
+            return mgr.GetTable<Organization>().Where(o => false);
+        }
 
     }
 }

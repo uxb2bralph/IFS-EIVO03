@@ -58,7 +58,7 @@ namespace Model.InvoiceManagement
                 {
                     UseDefaultCrossBorderMerchantCarrier = true,
                 };
-                validator.StartAutoTrackNo();
+                validator.StartAutoTrackNo(ApplyInvoiceDate);
                 for (int idx = 0; idx < item.Invoice.Length; idx++, count++)
                 {
                     if (count == dbCheckCount)
@@ -71,7 +71,7 @@ namespace Model.InvoiceManagement
                         {
                             UseDefaultCrossBorderMerchantCarrier = true,
                         };
-                        validator.StartAutoTrackNo();
+                        validator.StartAutoTrackNo(ApplyInvoiceDate);
                     }
 
                     try
