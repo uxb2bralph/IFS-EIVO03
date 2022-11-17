@@ -174,10 +174,13 @@
                     </td>
                     <th>
                         發票列印樣式<br />
+                        熱感紙發票列印樣式<br />
                         折讓單列印樣式
                     </th>
                     <td>
                         <input type="text" class="form-control" name="InvoicePrintView" value='@(_viewModel.InvoicePrintView)'
+                               maxlength="160" /><br />
+                        <input type="text" class="form-control" name="C0401POSView" value='@(_viewModel.C0401POSView)'
                                maxlength="160" /><br />
                         <input type="text" class="form-control" name="AllowancePrintView" value='@(_viewModel.AllowancePrintView)'
                                maxlength="160" />

@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataConstructor", "DataCons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHelper", "JobHelper\JobHelper.csproj", "{2CC83F27-2955-4744-B22C-AADC2DF7E1FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalPdfWrapper", "ExternalPdfWrapper\ExternalPdfWrapper.csproj", "{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -269,6 +271,18 @@ Global
 		{2CC83F27-2955-4744-B22C-AADC2DF7E1FC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2CC83F27-2955-4744-B22C-AADC2DF7E1FC}.Release|x86.ActiveCfg = Release|Any CPU
 		{2CC83F27-2955-4744-B22C-AADC2DF7E1FC}.Release|x86.Build.0 = Release|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Debug|x86.Build.0 = Debug|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Release|x86.ActiveCfg = Release|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

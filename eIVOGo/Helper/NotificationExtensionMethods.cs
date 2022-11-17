@@ -126,7 +126,7 @@ namespace eIVOGo.Helper
             });
         }
 
-        public static void SendSmtpMessage(this String body, String mailTo, String subject, String mailFrom = null, System.Net.Mail.Attachment[] attachment = null, String replyTo = null)
+        public static void SendSmtpMessage(this String body, String mailTo, String subject, String mailFrom = null, System.Net.Mail.Attachment[] attachment = null, String replyTo = null,CustomSmtpHost smtpSettings = null)
         {
             mailTo = mailTo?.Replace(';', ',').Replace('、', ',').GetEfficientString();
             if (mailTo == null)
@@ -158,12 +158,32 @@ namespace eIVOGo.Helper
                     }
                 }
 
-                using (SmtpClient smtpclient = new SmtpClient(Uxnet.Web.Properties.Settings.Default.MailServer)
+                if (smtpSettings == null)
                 {
-                    Credentials = CredentialCache.DefaultNetworkCredentials
-                })
+                    using (SmtpClient smtpclient = new SmtpClient(Uxnet.Web.Properties.Settings.Default.MailServer)
+                    {
+                        Credentials = CredentialCache.DefaultNetworkCredentials
+                    })
+                    {
+                        smtpclient.Send(message);
+                    }
+                }
+                else
                 {
-                    smtpclient.Send(message);
+                    using (SmtpClient smtpclient = new SmtpClient(smtpSettings.Host, smtpSettings.Port ?? 25))
+                    {
+                        smtpclient.EnableSsl = smtpSettings.EnableSsl == true;
+                        //smtpclient.UseDefaultCredentials = false;
+                        if (smtpSettings.UserName != null)
+                        {
+                            smtpclient.Credentials = new NetworkCredential(smtpSettings.UserName, smtpSettings.Password);
+                        }
+                        if (!String.IsNullOrEmpty(smtpSettings.MailFrom))
+                        {
+                            message.From = new MailAddress(smtpSettings.MailFrom);
+                        }
+                        smtpclient.Send(message);
+                    }
                 }
             }
         }

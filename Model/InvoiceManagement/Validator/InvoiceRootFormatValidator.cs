@@ -153,7 +153,7 @@ namespace Model.InvoiceManagement.Validator
                         _invItem.InvoiceTime = "12:00:00";
                     }
 
-                    if (!DateTime.TryParseExact(String.Format("{0} {1}", _invItem.InvoiceDate, _invItem.InvoiceTime), "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate)
+                    if (!DateTime.TryParseExact(String.Format("{0} {1}", _invItem.InvoiceDate, _invItem.InvoiceTime), InvoiceRootInvoiceValidator.__InvoiceDateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate)
                             || invoiceDate >= DateTime.Today.AddDays(1))
                     {
                         exceptions.Add(new Exception(String.Format(MessageResources.AlertInvoiceDateTime, _invItem.InvoiceDate, _invItem.InvoiceTime)));

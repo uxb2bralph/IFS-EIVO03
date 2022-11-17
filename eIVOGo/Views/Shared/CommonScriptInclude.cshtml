@@ -59,7 +59,7 @@
                 $('#masterTab a[href="#' + tabId + '"]').tab('show');
             },
             createTab: function (tabId, tabText, tabContent, show) {
-
+                showLoading();
                 this.removeTab(tabId);
 
                 var newTab = $('<li role="presentation"></li>')
@@ -72,6 +72,7 @@
                 this.registerCloseEvent(newTab);
                 if (show)
                     this.showTab(tabId);
+                hideLoading();
             },
             onReady: [],
         };
@@ -335,6 +336,11 @@
                     errorback();
                 }
             }).submit();
+    }
+
+    function alertModal(alertMessage) {
+        $('<div>' + alertMessage + '</div>')
+            .dialog({ "title": "<div class='modal-title'><h4><i class='fa fa-clock-o'></i>訊息</h4></div>" });
     }
 
 </script>

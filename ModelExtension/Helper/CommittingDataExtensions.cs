@@ -87,6 +87,11 @@ namespace ModelExtension.Helper
                 item.OrganizationExtension = new OrganizationExtension { };
             }
 
+            if (item.OrganizationCustomSetting == null)
+            {
+                item.OrganizationCustomSetting = new OrganizationCustomSetting { };
+            }
+
             orgaCate = item.OrganizationCategory.FirstOrDefault();
             if (orgaCate == null)
             {
@@ -114,6 +119,8 @@ namespace ModelExtension.Helper
             item.OrganizationStatus.SetToPrintInvoice = viewModel.SetToPrintInvoice;
             item.OrganizationStatus.SetToOutsourcingCS = viewModel.SetToOutsourcingCS;
             item.OrganizationStatus.InvoicePrintView = viewModel.SetToPrintInvoice == true ? viewModel.InvoicePrintView.GetEfficientString() : null;
+            item.OrganizationCustomSetting.Settings.C0401POSView = viewModel.SetToPrintInvoice == true ? viewModel.C0401POSView.GetEfficientString() : null;
+            item.OrganizationCustomSetting.Accept();
             item.OrganizationStatus.AllowancePrintView = viewModel.SetToPrintInvoice == true ? viewModel.AllowancePrintView.GetEfficientString() : null;
             item.OrganizationStatus.CustomNotificationView = viewModel.CustomNotificationView.GetEfficientString();
 
@@ -405,5 +412,61 @@ namespace ModelExtension.Helper
             return item;
         }
 
+        public static CustomSmtpHost CommitCustomSmtpHost(this CustomSmtpHost viewModel, GenericManager<EIVOEntityDataContext> models, ModelStateDictionary modelState)
+        {
+            viewModel.CustomSmtpHostValueCheck(modelState);
+
+            Organization orgItem = LoadCustomSmtpHostFor(viewModel, models);
+
+            if (orgItem == null)
+            {
+                modelState.AddModelError("Message", "營業人資料錯誤!!");
+            }
+
+            if (!modelState.IsValid)
+            {
+                return null;
+            }
+
+            CustomSmtpHost item = models.GetTable<CustomSmtpHost>()
+                .Where(u => u.CompanyID == viewModel.CompanyID)
+                .OrderByDescending(u => u.HostID)
+                .FirstOrDefault();
+
+            if (item == null)
+            {
+                item = new CustomSmtpHost
+                {
+                    CompanyID = orgItem.CompanyID,
+                };
+
+                models.GetTable<CustomSmtpHost>().InsertOnSubmit(item);
+            }
+
+            item.Host = viewModel.Host;
+            item.Port = viewModel.Port ?? 25;
+            item.EnableSsl = viewModel.EnableSsl ?? false;
+            item.UserName = viewModel.UserName;
+            item.Password = viewModel.Password;
+            item.MailFrom = viewModel.MailFrom;
+            item.Status = (int)CustomSmtpHost.StatusType.Enabled;
+
+            models.SubmitChanges();
+
+            return item;
+        }
+
+        public static Organization LoadCustomSmtpHostFor(this CustomSmtpHost viewModel, GenericManager<EIVOEntityDataContext> models)
+        {
+            if (viewModel.KeyID != null)
+            {
+                viewModel.CompanyID = viewModel.DecryptKeyValue();
+            }
+
+            Organization orgItem = models.GetTable<Organization>()
+                                    .Where(o => o.CompanyID == viewModel.CompanyID)
+                                    .FirstOrDefault();
+            return orgItem;
+        }
     }
 }

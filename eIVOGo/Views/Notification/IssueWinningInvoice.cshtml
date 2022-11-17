@@ -49,10 +49,10 @@ else if (_viewModel.ForceTodo == true || _model.Organization.OrganizationStatus.
 
     if (!String.IsNullOrEmpty(mailTo))
     {
-
+        var smtpSettings = _model.InvoiceSeller.Organization.CustomSmtpHost.Where(s => s.Status == (int)CustomSmtpHost.StatusType.Enabled).FirstOrDefault();
         String subject = $"{_model.Organization.CompanyName} 電子發票中獎通知(發票號碼:{_model.TrackCode}{_model.No})";
         String body = Html.Partial(notificationView, _model).ToString();
-        body.SendMailMessage(mailTo, subject);
+        body.SendMailMessage(mailTo, subject, smtpSettings);
     }
 
 }

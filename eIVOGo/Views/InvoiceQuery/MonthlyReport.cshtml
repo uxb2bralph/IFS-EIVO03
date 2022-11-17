@@ -1,0 +1,31 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+
+@{
+    Layout = "~/Views/Template/QueryIndex.cshtml";
+    ViewBag.ActionName = "首頁 > 每月統計報表";
+    MonthlyReportQueryViewModel _viewModel = ViewBag.ViewModel as MonthlyReportQueryViewModel;
+
+    _viewModel.UrlAction = Url.Action("InquireMonthlyReport", "InvoiceQuery");
+}
+
+@section QueryForm
+{
+    @{
+        Html.RenderPartial("~/Views/InvoiceQuery/Module/MonthlyReport.cshtml");
+    }
+}
+
+
+

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uxnet.Com", "Uxnet.Com\Uxne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelExtension", "ModelExtension\ModelExtension.csproj", "{772BDEAA-BFA0-4BF8-BC1E-A841C3D7DAFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalPdfWrapper", "ExternalPdfWrapper\ExternalPdfWrapper.csproj", "{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{772BDEAA-BFA0-4BF8-BC1E-A841C3D7DAFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{772BDEAA-BFA0-4BF8-BC1E-A841C3D7DAFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{772BDEAA-BFA0-4BF8-BC1E-A841C3D7DAFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF2BE02A-32A8-44F2-A6EB-5D04B69F611C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

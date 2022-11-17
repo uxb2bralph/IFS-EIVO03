@@ -272,6 +272,8 @@
     <Content Include="App_Themes\Visitor\table.css" />
     <Content Include="App_Themes\Visitor\Visitor.skin" />
     <Content Include="App_Themes\Web.config" />
+    <Content Include="bin\ExternalPdfWrapper.dll" />
+    <Content Include="bin\ExternalPdfWrapper.pdb" />
     <Content Include="bin\Ionic.Zip.dll" />
     <Content Include="bin\Ionic_Utils_Zip_license.txt" />
     <Content Include="bin\MessagingToolkit.QRCode.dll" />
@@ -1033,6 +1035,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\DataView\POS\C0401\03761209.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="MvcHelper\CreateInvoiceSummaryReport.aspx" />
     <Content Include="Published\PrintSingleAllowance.aspx" />
@@ -1590,6 +1593,11 @@
     <Content Include="Views\Notification\Module\AlertInvoiceNoSafetyStock.cshtml" />
     <Content Include="Views\Notification\NotifyLowerInvoiceNoStock.cshtml" />
     <Content Include="Views\_Test\TestSmtp.cshtml" />
+    <Content Include="Views\InvoiceQuery\MonthlyReport.cshtml" />
+    <Content Include="Views\InvoiceQuery\Module\MonthlyReport.cshtml" />
+    <Content Include="Views\Organization\Module\CustomSettings.cshtml" />
+    <Content Include="Views\Organization\Module\CustomSmtp.cshtml" />
+    <Content Include="Views\Shared\AlertMessageDialog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">

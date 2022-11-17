@@ -38,10 +38,11 @@
 @if (!String.IsNullOrEmpty(mailTo))
 {
     var enterprise = _model.InvoiceSeller.Organization.EnterpriseGroupMember.FirstOrDefault();
+    var smtpSettings = _model.InvoiceSeller.Organization.CustomSmtpHost.Where(s => s.Status == (int)CustomSmtpHost.StatusType.Enabled).FirstOrDefault();
 
     String Subject = $"{(enterprise?.EnterpriseGroup.EnterpriseName)} 發票接收通知(發票號碼:{_model.TrackCode}{_model.No})";
     String body = Html.Partial("~/Views/Notification/Module/A0401.cshtml", _model).ToString();
 
-    body.SendMailMessage(mailTo, Subject, new System.Net.Mail.Attachment[] { attachment });
+    body.SendMailMessage(mailTo, Subject, new System.Net.Mail.Attachment[] { attachment }, smtpSettings);
 }
 

@@ -66,6 +66,10 @@
   <ItemGroup>
     <Compile Include="Helper\AppResource.cs" />
     <Compile Include="Helper\B2CExtensionMethods.cs" />
+    <Compile Include="Helper\ERPAllowanceCancellationParser.cs" />
+    <Compile Include="Helper\ERPInvoiceCancellationParser.cs" />
+    <Compile Include="Helper\ERPAllowanceParser.cs" />
+    <Compile Include="Helper\ERPInvoiceParser.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Helper\AuthExtensions.cs" />
     <Compile Include="Helper\InvoiceNoSafetyStockNotification.cs" />

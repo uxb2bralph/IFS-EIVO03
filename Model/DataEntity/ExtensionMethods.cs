@@ -332,6 +332,14 @@ namespace Model.DataEntity
                     .Select(a => a.IssuerID).Contains(o.CompanyID));
         }
 
+        public static IQueryable<Organization> GetQueryByBranchRelation(this GenericManager<EIVOEntityDataContext> mgr, int headquarter)
+        {
+            return mgr.GetTable<Organization>().Where(o => o.CompanyID == headquarter
+                || mgr.GetTable<OrganizationRelation>()
+                    .Where(a => a.Headquarters == headquarter)
+                    .Any(a => a.CompanyID == o.CompanyID));
+        }
+
         public static IQueryable<InvoiceItem> GetInvoiceByAgent(this EIVOEntityDataContext mgr, int agentID)
         {
             return mgr.GetInvoiceByAgent(mgr.GetTable<InvoiceItem>(),agentID);

@@ -82,6 +82,7 @@
                                     <li><a class="btn" onclick="applyRelationship(@(item.CompanyID));">設定為B2B營業人</a></li>
                                 }
                                 <li><a class="btn" onclick="inquireUser(@(item.CompanyID));">管理使用者</a></li>
+                                <li><a class="btn" onclick="customSettings('@Html.Raw(item.CompanyID.EncryptKey())');">客製化服務設訂</a></li>
                                 String clientTool = "~/resource/Cooperation/" + item.ReceiptNo + ".zip";
                                 if (File.Exists(Server.MapPath(clientTool)))
                                 {

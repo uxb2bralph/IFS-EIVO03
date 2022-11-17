@@ -984,10 +984,19 @@ namespace Model.InvoiceManagement.Validator
                 _buyer.ReceiptNo = "0000000000";
             }
 
-            _buyer.ContactName = ContactName().GetEfficientString() ?? buyer?.ContactName ?? null;
-            _buyer.Address = Address().GetEfficientString() ?? relationship?.Addr ?? buyer?.Addr ?? null;
-            _buyer.Phone = Phone().GetEfficientString() ?? relationship?.Phone ?? buyer?.Phone ?? null;
-            _buyer.EMail = EMail().GetEfficientString()?.Replace(';', ',').Replace('、', ',').Replace(' ', ',') ?? relationship?.ContactEmail ?? buyer?.ContactEmail ?? null;
+            _buyer.ContactName = ContactName().GetEfficientString() ?? buyer?.ContactName;
+            if (relationship == null)
+            {
+                _buyer.Address = Address().GetEfficientString() ?? buyer?.Addr ;
+                _buyer.Phone = Phone().GetEfficientString() ?? buyer?.Phone;
+                _buyer.EMail = EMail().GetEfficientString()?.Replace(';', ',').Replace('、', ',').Replace(' ', ',') ?? buyer?.ContactEmail;
+            }
+            else
+            {
+                _buyer.Address = Address().GetEfficientString() ?? relationship.Addr;
+                _buyer.Phone = Phone().GetEfficientString() ?? relationship.Phone;
+                _buyer.EMail = EMail().GetEfficientString()?.Replace(';', ',').Replace('、', ',').Replace(' ', ',') ?? relationship.ContactEmail ;
+            }
 
             return null;
         }

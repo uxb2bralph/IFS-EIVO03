@@ -148,6 +148,9 @@ namespace ProcessorUnit
             chainedProcessor.ChainedExecutor = new UnassignedInvoiceNOSettlementProcessor { };
             chainedProcessor = chainedProcessor.ChainedExecutor;
 
+            chainedProcessor.ChainedExecutor = new DataReportProcessor { };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
             processorStart.ReadyToGo();
 
             //(new InvoiceExcelRequestForIssuerProcessor

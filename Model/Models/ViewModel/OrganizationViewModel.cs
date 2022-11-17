@@ -45,6 +45,7 @@ namespace Model.Models.ViewModel
         public bool? AutoBlankTrackEmittance { get; set; }
 
         public string InvoicePrintView { get; set; }
+        public string C0401POSView { get; set; }
         public bool? IronSteelIndustry { get; set; }
         public bool? Entrusting { get; set; }
         public string AuthorizationNo { get; set; }
@@ -80,5 +81,13 @@ namespace Model.Models.ViewModel
     {
         public String PIN { get; set; }
         public HttpPostedFileBase PfxFile { get; set; }
+    }
+}
+
+namespace Model.DataEntity
+{
+    public partial class CustomSmtpHost : Model.Models.ViewModel.QueryViewModel
+    {
+
     }
 }

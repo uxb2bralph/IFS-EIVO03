@@ -88,7 +88,17 @@ namespace eIVOGo.Controllers.TrackCodeNo
             IQueryable<Organization> orgItems;
             if (viewModel.SellerID.HasValue)
             {
-                orgItems = models.GetTable<Organization>().Where(o => o.CompanyID == viewModel.SellerID);
+                if (viewModel.BranchRelation == true)
+                {
+                    var branchRelation = models.GetTable<OrganizationRelation>().Where(r => r.Headquarters == viewModel.SellerID);
+                    orgItems = models.GetTable<Organization>()
+                                    .Where(o => o.CompanyID == viewModel.SellerID
+                                        || branchRelation.Any(r => r.CompanyID == o.CompanyID));
+                }
+                else
+                {
+                    orgItems = models.GetTable<Organization>().Where(o => o.CompanyID == viewModel.SellerID);
+                }
             }
             else
             {
@@ -152,7 +162,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
                                 BranchBan = orgItem.OrganizationExtension.ExpirationDate.HasValue
                                     ? $"{orgItem.ReceiptNo}(註記停用:{orgItem.OrganizationExtension.ExpirationDate:yyyy/MM/dd})"
                                     : orgItem.ReceiptNo,
-                                HeadBan = viewModel.BranchRelation == true ? orgItem.OrganizationRelation?.Organization.ReceiptNo ?? orgItem.ReceiptNo : orgItem.ReceiptNo,
+                                HeadBan = viewModel.BranchRelation == true ? orgItem.OrganizationRelation?.HeaderquarterItem.ReceiptNo ?? orgItem.ReceiptNo : orgItem.ReceiptNo,
                                 YearMonth = String.Format("{0}{1:00}", trackCode.Year - 1911, trackCode.PeriodNo * 2),
                                 InvoiceType = trackCode.InvoiceType == (byte)InvoiceTypeEnum.Item08 ? InvoiceTypeEnum.Item08 : InvoiceTypeEnum.Item07,
                                 InvoiceTrack = trackCode.TrackCode

@@ -27,6 +27,7 @@ namespace Model.InvoiceManagement.Validator
             {
                 "yyyy/MM/dd HH:mm:ss",
                 "yyyy-MM-dd HH:mm:ss",
+                "yyyyMMdd HH:mm:ss",
             };
 
         protected GenericManager<EIVOEntityDataContext> _models;

@@ -42,7 +42,16 @@ namespace Uxnet.Com.Helper
                     if(File.Exists(objectPath))
                     {
                         content = File.ReadAllText(objectPath);
-                        File.Delete(objectPath);
+                        String backup = Path.Combine(Logger.LogDailyPath, Path.GetFileName(objectPath));
+                        if(File.Exists(backup))
+                        {
+                            File.Move(objectPath, Path.Combine(Logger.LogDailyPath, $"{Guid.NewGuid()}.json"));
+                        }
+                        else
+                        {
+                            File.Move(objectPath, backup);
+                        }
+                        //File.Delete(objectPath);
                     }
                     return content;
                 }
@@ -61,9 +70,13 @@ namespace Uxnet.Com.Helper
             if (!popupIfAny)
                 return default;
 
-            foreach(var fileName in Directory.EnumerateFiles(stored))
+            foreach (var fileName in Directory.EnumerateFiles(stored))
             {
                 objectContent = popupContent(fileName);
+                if (objectContent != null)
+                {
+                    break;
+                }
             }
 
             if (objectContent != null)

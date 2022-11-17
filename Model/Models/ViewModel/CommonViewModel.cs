@@ -388,12 +388,16 @@ namespace Model.Models.ViewModel
         public bool? ForMailingPackage { get; set; }
     }
 
-    public class InvoiceRequestViewModel : AuthQueryViewModel
+    public class ProcessRequestViewModel : AuthQueryViewModel
     {
         public int? Sender { get; set; }
         public int? TaskID { get; set; }
-        public String Comment { get; set; }
         public InvoiceProcessType? ProcessType { get; set; }
+        public String Comment { get; set; }
+
+    }
+    public class InvoiceRequestViewModel : ProcessRequestViewModel
+    {
         public ProcessRequestCondition.ConditionType?[] ConditionID { get; set; }
         public String ClientID { get; set; }
         public Schema.EIVO.InvoiceRoot InvoiceRoot { get; set; }
@@ -465,5 +469,24 @@ namespace Model.Models.ViewModel
         public bool? IsAsync { get; set; }
     }
 
+    public partial class MonthlyReportQueryViewModel : ProcessRequestViewModel
+    {
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
+        public int? SellerID { get; set; }
+        [JsonIgnore]
+        public DateTime? InvoiceDateFrom
+        {
+            get => DateFrom;
+            set => DateFrom = value;
+        }
+
+        [JsonIgnore]
+        public DateTime? InvoiceDateTo
+        {
+            get => DateTo;
+            set => DateTo = value;
+        }
+    }
 
 }

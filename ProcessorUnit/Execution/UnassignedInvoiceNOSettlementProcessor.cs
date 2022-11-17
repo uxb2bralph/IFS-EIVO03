@@ -33,14 +33,23 @@ namespace ProcessorUnit.Execution
             {
                 using (TrackNoIntervalManager manager = new TrackNoIntervalManager(models))
                 {
+                    var items = manager.GetTable<InvoiceTrackCode>()
+                        .Where(t => t.Year == viewModel.Year && t.PeriodNo == viewModel.PeriodNo)
+                        .Join(manager.GetTable<InvoiceTrackCodeAssignment>(), t => t.TrackID, a => a.TrackID, (t, a) => a)
+                        .Select(a => a.SellerID);
+
                     if (viewModel.SellerID.HasValue)
                     {
                         manager.SettleUnassignedInvoiceNOPeriodically(viewModel.Year.Value, viewModel.PeriodNo.Value, viewModel.SellerID);
                         manager.Context.SettlementInvoiceNo(viewModel.SellerID, viewModel.Year.Value, viewModel.PeriodNo.Value);
-                        if (viewModel.BranchRelation == true && viewModel.SellerID.HasValue)
+
+                        if (viewModel.BranchRelation == true)
                         {
-                            foreach (var orgItem in manager.GetQueryByAgent(viewModel.SellerID.Value)
-                                                    .Select(o => o.CompanyID))
+                            var branches = models.GetTable<OrganizationRelation>().Where(r => r.Headquarters == viewModel.SellerID);
+                            var agency = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == viewModel.SellerID);
+                            items = items.Where(c => branches.Any(b => b.CompanyID == c) || agency.Any(a => a.IssuerID == c));
+
+                            foreach (var orgItem in items)
                             {
                                 manager.SettleUnassignedInvoiceNOPeriodically(viewModel.Year.Value, viewModel.PeriodNo.Value, orgItem);
                                 manager.Context.SettlementInvoiceNo(orgItem, viewModel.Year.Value, viewModel.PeriodNo.Value);
@@ -49,10 +58,6 @@ namespace ProcessorUnit.Execution
                     }
                     else 
                     {
-                        var items = manager.GetTable<InvoiceTrackCode>()
-                            .Where(t => t.Year == viewModel.Year && t.PeriodNo == viewModel.PeriodNo)
-                            .Join(manager.GetTable<InvoiceTrackCodeAssignment>(), t => t.TrackID, a => a.TrackID, (t, a) => a)
-                            .Select(a => a.SellerID);
                         foreach (var orgItem in items)
                         {
                             manager.SettleUnassignedInvoiceNOPeriodically(viewModel.Year.Value, viewModel.PeriodNo.Value, orgItem);

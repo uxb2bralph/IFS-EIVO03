@@ -47,8 +47,15 @@
 }
 @if (_model != null)
 {
+    <style>
+        @@page {
+            size: portrait; /* 直向 */
+            size: A4 portrait; /* 混合使用 */
+            margin: -0.5cm; /* 邊界與內容的距離 */
+        }
+    </style>
     <div style="text-align:center; position:absolute;margin-left:0.3cm;height:7cm;margin-top:2cm;font-size:small">請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
-    <div style="text-align:center; position:absolute;margin-left:19.4cm;height:7cm;margin-top:2cm;font-size:small">請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
+    <div style="text-align: center; position: absolute; margin-left: 20.1cm; height: 7cm; margin-top: 2cm; font-size: small">請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
     <div style="page-break-after: always;margin-left:0.5cm;margin-right:0.5cm;margin-bottom:0cm;margin-top:0.5cm;">
         <div class="fspace">
             <div class="company" style="padding-top: 0.5cm;padding-left: 1.0cm;">

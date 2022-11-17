@@ -70,7 +70,7 @@ namespace eIVOGo.Module.Common
 
         #endregion
 
-        public static void MailWebPage(this String url, String mailTo, String subject,params string[] attachment)
+        public static void MailWebPage(this String url, String mailTo, String subject, CustomSmtpHost smtpSettings = null, params string[] attachment)
         {
 
             System.Net.Mail.Attachment[] items = null;
@@ -86,29 +86,29 @@ namespace eIVOGo.Module.Common
             {
                 wc.Encoding = Encoding.UTF8;
                 wc.DownloadString(url)
-                    .SendSmtpMessage(mailTo, subject, Settings.Default.WebMaster, items, Settings.Default.ReplyTo);
-                
+                    .SendSmtpMessage(mailTo, subject, Settings.Default.WebMaster, items, Settings.Default.ReplyTo, smtpSettings);
+
             }
         }
 
-        public static void MailWebPage(this String url, NameValueCollection items, String mailTo, String subject)
+        public static void MailWebPage(this String url, NameValueCollection items, String mailTo, String subject, CustomSmtpHost smtpSettings = null)
         {
             using (WebClient wc = new WebClient())
             {
                 wc.Encoding = Encoding.UTF8;
                 wc.Encoding.GetString(wc.UploadValues(url, items))
-                    .SendSmtpMessage(mailTo, subject, Settings.Default.WebMaster, null, Settings.Default.ReplyTo);
+                    .SendSmtpMessage(mailTo, subject, Settings.Default.WebMaster, null, Settings.Default.ReplyTo, smtpSettings);
             }
         }
 
-        public static void MailServerPage(this String relativeUrl, String mailTo, String subject)
+        public static void MailServerPage(this String relativeUrl, String mailTo, String subject, CustomSmtpHost smtpSettings = null)
         {
-            relativeUrl.GetPageContent().SendSmtpMessage(mailTo, subject, Settings.Default.WebMaster, null, Settings.Default.ReplyTo);
+            relativeUrl.GetPageContent().SendSmtpMessage(mailTo, subject, Settings.Default.WebMaster, null, Settings.Default.ReplyTo, smtpSettings);
         }
 
-        public static void SendMailMessage(this String body, String mailTo, String subject)
+        public static void SendMailMessage(this String body, String mailTo, String subject, CustomSmtpHost smtpSettings = null)
         {
-            body.SendSmtpMessage(mailTo, subject, Settings.Default.WebMaster, null, Settings.Default.ReplyTo);
+            body.SendSmtpMessage(mailTo, subject, Settings.Default.WebMaster, null, Settings.Default.ReplyTo, smtpSettings);
         }
 
         public static void AlertSMSError(int id, String reason, String content)
@@ -188,7 +188,7 @@ namespace eIVOGo.Module.Common
             oResponse.End();
         }
 
-        public static void SendMailMessage(this String body, String mailTo, String subject, params String[] attachment)
+        public static void SendMailMessage(this String body, String mailTo, String subject, CustomSmtpHost smtpSettings = null, params String[] attachment)
         {
             System.Net.Mail.Attachment[] items = null;
 
@@ -199,56 +199,14 @@ namespace eIVOGo.Module.Common
                     .ToArray();
             }
 
-            body.SendSmtpMessage(mailTo, subject, Settings.Default.ServiceMailBox, items);
+            body.SendSmtpMessage(mailTo, subject, Settings.Default.ServiceMailBox, items, smtpSettings: smtpSettings);
 
         }
 
 
-        public static void SendMailMessage(this String body, String mailTo, String subject, System.Net.Mail.Attachment[] attachment)
+        public static void SendMailMessage(this String body, String mailTo, String subject, System.Net.Mail.Attachment[] attachment, CustomSmtpHost smtpSettings = null)
         {
-            body.SendSmtpMessage(mailTo, subject, Settings.Default.ServiceMailBox, attachment);
+            body.SendSmtpMessage(mailTo, subject, Settings.Default.ServiceMailBox, attachment, smtpSettings: smtpSettings);
         }
-
-        //public static void SendMailMessage(this String body, String mailTo, String subject, System.Net.Mail.Attachment[] attachment, System.Net.Mail.Attachment[] Ad)
-        //{
-        //    MailMessage message = new MailMessage();
-        //    message.From = new MailAddress(Uxnet.Web.Properties.Settings.Default.WebMaster);
-        //    message.To.Add(mailTo);
-        //    message.Subject = subject;
-        //    message.IsBodyHtml = true;
-        //    //message.Body = string.Format("<img src=\"cid:attach.gif\" />{0}", body);
-        //    message.BodyEncoding = Encoding.GetEncoding("utf-8");
-        //    if (attachment != null && attachment.Length > 0)
-        //    {
-        //        foreach (var item in attachment)
-        //        {
-        //            message.Attachments.Add(item);
-        //        }
-        //    }
-        //    if (Ad != null && Ad.Length > 0)
-        //    {
-        //        foreach (var item in Ad)
-        //        {
-        //            if (item != null)
-        //            {
-        //                // message.Body += string.Format("<img src=\" {0}\"/>", item.Name);
-        //                item.ContentDisposition.Inline = true;
-        //                item.ContentDisposition.DispositionType =
-        //                   System.Net.Mime.DispositionTypeNames.Inline;
-        //                string cid = item.ContentId;
-        //                message.Attachments.Add(item);
-        //                message.Body += String.Format("<img src=\" cid:{0}\"/ alt='三個月免費試用' name='三個月免費試用'><br>", cid);
-        //                //message.Body += String.Format("<img src=\" {0}\"/ alt='三個月免費試用' name='三個月免費試用'><br>", item.ContentStream);  
-
-        //            }
-        //        }
-        //    }
-        //    message.Body += body;
-        //    SmtpClient smtpclient = new SmtpClient(Uxnet.Web.Properties.Settings.Default.MailServer);
-        //    smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
-        //    smtpclient.Send(message);
-
-        //}
-
     }
 }

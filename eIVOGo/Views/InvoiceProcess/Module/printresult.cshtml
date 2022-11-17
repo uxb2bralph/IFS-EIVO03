@@ -25,6 +25,7 @@
     _viewModel = (RenderStyleViewModel)ViewBag.ViewModel;
     _viewModel.PrintCuttingLine = true;
     _viewModel.CreateNew = true;
+    _viewModel.UseCustomView = true;
 }
 <div>
     <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401

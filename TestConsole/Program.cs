@@ -42,7 +42,11 @@ namespace TestConsole
             Logger.OutputWritter = Console.Out;
             Logger.Info($"Process start at {DateTime.Now}");
 
-            test32();
+            //(new ExternalPdfWrapper.PdfUtility()).ConvertHtmlToPDF("https://www.google.com", "G:\\temp\\doc.pdf", 5);
+            //SaveToExcel();
+            //var data = ERPInvoiceParser.ConvertToXml(@"G:\temp\SelfDelivery_Sample\SAMPLE_存證開立發票_UTF8格式.csv");
+
+            //test32();
 
             //test01();
             //test02();
@@ -104,7 +108,7 @@ namespace TestConsole
             //test18();
             //test19();
 
-            //test20(args);
+            test20(args);
             //test24();
             //test21(args);
             //test22(args);
@@ -126,9 +130,57 @@ namespace TestConsole
             //String json = File.ReadAllText("G:\\temp\\test.json");
             //InvoiceRoot invoice = JsonConvert.DeserializeObject<InvoiceRoot>(json);
 
-            Console.ReadKey();
+            //Console.ReadKey();
         }
 
+        static void SaveToExcel()
+        {
+            String[] seller = { "70762419", "30414175" };
+            String[] sellerName = { "UXB2B", "CSC" };
+
+            Random rand = new Random((int)(DateTime.Now.Ticks % 10000));
+
+            using (DataSet ds = new DataSet())
+            {
+                for(int i=0;i<seller.Length;i++)
+                {
+                DataTable table = new DataTable();
+                    table.TableName = $"{sellerName[i]}";
+                ds.Tables.Add(table);
+                table.Columns.Add("營業人名稱");
+                table.Columns.Add("統一編號");
+                table.Columns.Add("發票", typeof(int));
+                table.Columns.Add("作廢發票", typeof(int));
+                table.Columns.Add("折讓", typeof(int));
+                table.Columns.Add("作廢折讓", typeof(int));
+                table.Columns.Add("月份");
+
+                    for (DateTime idx = new DateTime(2022,1,1); idx < DateTime.Today;)
+                    {
+                        var end = idx.AddMonths(1);
+                        var r = table.NewRow();
+
+                        r[0] = sellerName[i];
+                        r[1] = seller[i];
+                        r[2] = rand.Next(5000);
+                        r[3] = rand.Next(5000);
+                        r[4] = rand.Next(5000);
+                        r[5] = rand.Next(5000);
+                        r[6] = $"{idx:yyyyMM}";
+
+                        table.Rows.Add(r);
+                        idx = end;
+                    }
+                }
+
+                using (XLWorkbook xls = new ClosedXML.Excel.XLWorkbook())
+                {
+                    xls.Worksheets.Add(ds);
+                    xls.SaveAs("G:\\temp\\test.xlsx");
+                }
+            }
+
+        }
         private static void test32()
         {
             String test = "CN=amylee, OU=70762419-RA-UXRA, OU=Universal Exchange Inc., OU=Public Certification Authority, O=\"Chunghwa Telecom Co., Ltd.\", C=TW";
@@ -528,6 +580,13 @@ namespace TestConsole
             {
                 //models.SettleVacantInvoiceNo(year, period);
                 models.SettleUnassignedInvoiceNOPeriodically(year, period, sellerID);
+                if(sellerID.HasValue)
+                {
+                    foreach(var item in models.GetTable<OrganizationRelation>().Where(r=>r.Headquarters==sellerID))
+                    {
+                        models.SettleUnassignedInvoiceNOPeriodically(year, period, item.CompanyID);
+                    }
+                }
             }
         }
 

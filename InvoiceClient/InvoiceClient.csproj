@@ -145,6 +145,11 @@
     <Compile Include="Agent\ProcessTaskResponseInspector.cs" />
     <Compile Include="Agent\ExcelResponseInspector.cs" />
     <Compile Include="Agent\AttachmentWatcher.cs" />
+    <Compile Include="Agent\TurnkeyCSVHelper\ERPAllowanceWatcher.cs" />
+    <Compile Include="Agent\TurnkeyCSVHelper\ERPAllowanceCancellationWatcher.cs" />
+    <Compile Include="Agent\TurnkeyCSVHelper\ERPInvoiceCancellationWatcher.cs" />
+    <Compile Include="Agent\TurnkeyCSVHelper\ERPInvoiceWatcher.cs" />
+    <Compile Include="Agent\TurnkeyCSVHelper\TurnkeyCSVTransferManager.cs" />
     <Compile Include="Agent\XlsxFullAllowanceWatcher.cs" />
     <Compile Include="Agent\XlsxDelayedInvoiceWatcher.cs" />
     <Compile Include="Agent\XmlProcessRequestWatcher.cs" />

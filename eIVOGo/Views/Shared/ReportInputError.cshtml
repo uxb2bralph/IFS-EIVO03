@@ -45,10 +45,16 @@
                         <text>
             $scope.find('[name="@(key)"][data-role="@(_dataRole)"]').addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
                         </text>
-                        }
                     }
+                }
         });
     </script>
+
+    if (_modelState.ContainsKey("Message"))
+    {
+        var message = String.Join("、", _modelState["Message"].Errors.Select(r => r.ErrorMessage));
+        Html.RenderPartial("~/Views/Shared/AlertMessageDialog.cshtml", message);
+    }
 }
 
 

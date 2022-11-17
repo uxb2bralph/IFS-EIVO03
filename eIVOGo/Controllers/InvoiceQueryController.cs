@@ -25,6 +25,7 @@ using ModelExtension.Helper;
 using Model.Helper;
 using System.Threading.Tasks;
 using eIVOGo.Helper.Security.Authorization;
+using Uxnet.Com.Helper;
 
 namespace eIVOGo.Controllers
 {
@@ -63,6 +64,69 @@ namespace eIVOGo.Controllers
 
             return View(models.Inquiry);
         }
+
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS })]
+        public ActionResult MonthlyReport(MonthlyReportQueryViewModel viewModel)
+        {
+            //ViewBag.HasQuery = false;
+            ViewBag.QueryAction = "Inquire";
+            ViewBag.ViewModel = viewModel;
+
+            return View(models.Inquiry);
+        }
+
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS })]
+        public ActionResult InquireMonthlyReport(MonthlyReportQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (!viewModel.DateFrom.HasValue)
+            {
+                ModelState.AddModelError("InvoiceDateFrom", "請輸入查詢起日");
+            }
+
+            if (!viewModel.DateTo.HasValue)
+            {
+                ModelState.AddModelError("InvoiceDateFrom", "請輸入查詢迄日");
+            }
+
+            if(!viewModel.AgentID.HasValue && !viewModel.SellerID.HasValue)
+            {
+                ModelState.AddModelError("AgentID", "請選擇代理人");
+                ModelState.AddModelError("SellerID", "請輸入開立人統編");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Shared/ReportInputError.cshtml");
+            }
+
+            viewModel.Message = "發票月報表";
+
+            ProcessRequest processItem = new ProcessRequest
+            {
+                Sender = HttpContext.GetUser()?.UID,
+                SubmitDate = DateTime.Now,
+                ProcessStart = DateTime.Now,
+                ResponsePath = System.IO.Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".xlsx"),
+                ViewModel = viewModel.JsonStringify(),
+            };
+            models.GetTable<ProcessRequest>().InsertOnSubmit(processItem);
+            models.SubmitChanges();
+
+            viewModel.TaskID = processItem.TaskID;
+            viewModel.Push($"{DateTime.Now.Ticks}.json");
+
+            return View("~/Views/Shared/Module/PromptCheckDownload.cshtml",
+                    new AttachmentViewModel
+                    {
+                        TaskID = processItem.TaskID,
+                        FileName = processItem.ResponsePath,
+                        FileDownloadName = "月報表資料明細.xlsx",
+                    });
+
+        }
+
 
         [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult InvoiceMediaReport(TaxMediaQueryViewModel viewModel)

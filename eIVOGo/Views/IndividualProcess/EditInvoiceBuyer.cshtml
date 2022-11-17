@@ -1,0 +1,28 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    Layout = "~/Views/Template/ContentPage.cshtml";
+    ViewBag.ActionName = "首頁 > 全民稽核";
+}
+
+@section headContent {
+
+}
+@section formContent {
+
+}
+@{
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "郵寄發票收件人資料確認");
+    ViewBag.SimpleForm = true;
+    Html.RenderPartial("~/Views/InvoiceProcess/Module/EditInvoiceBuyer.cshtml");
+}
+

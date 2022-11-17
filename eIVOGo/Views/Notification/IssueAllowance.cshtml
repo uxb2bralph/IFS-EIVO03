@@ -48,9 +48,10 @@ else if (_model.InvoiceAllowanceSeller.Organization.OrganizationStatus.InvoiceNo
         mailing.Where(m => m != null)).GetEfficientString() ?? eIVOGo.Properties.Settings.Default.WebMaster;
 
     var enterprise = _model.InvoiceAllowanceSeller.Organization.EnterpriseGroupMember.FirstOrDefault();
+    var smtpSettings = _model.InvoiceAllowanceSeller.Organization.CustomSmtpHost.Where(s => s.Status == (int)CustomSmtpHost.StatusType.Enabled).FirstOrDefault();
 
     String Subject = $"{(enterprise?.EnterpriseGroup.EnterpriseName)} 折讓證明開立通知(折讓證明單號碼:{_model.AllowanceNumber})";
     String body = Html.Partial(notificationView ?? "~/Views/Notification/Module/IssuedAllowance.cshtml", _model).ToString();
 
-    body.SendMailMessage(mailTo, Subject, new System.Net.Mail.Attachment[] { attachment });
+    body.SendMailMessage(mailTo, Subject, new System.Net.Mail.Attachment[] { attachment }, smtpSettings);
 }

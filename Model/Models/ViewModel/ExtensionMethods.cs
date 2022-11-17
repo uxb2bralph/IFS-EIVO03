@@ -46,6 +46,7 @@ namespace Model.Models.ViewModel
                 viewModel.CurrentLevel = item.OrganizationStatus.CurrentLevel;
                 viewModel.SetToPrintInvoice = item.OrganizationStatus.SetToPrintInvoice;
                 viewModel.InvoicePrintView = item.OrganizationStatus.InvoicePrintView;
+                viewModel.C0401POSView = item.OrganizationCustomSetting?.Settings?.C0401POSView;
                 viewModel.CustomNotificationView = item.OrganizationStatus.CustomNotificationView;
                 viewModel.IronSteelIndustry = item.OrganizationStatus.IronSteelIndustry;
                 viewModel.Entrusting = item.OrganizationStatus.Entrusting;

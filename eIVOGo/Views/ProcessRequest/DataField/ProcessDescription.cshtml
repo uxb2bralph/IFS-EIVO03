@@ -37,7 +37,15 @@
         break;
     case Naming.FieldDisplayType.DataItem:
         ProcessRequest item = this.Model as ProcessRequest;
-        <text>@(item.ProcessRequestType?.DescriptionID!=null ? ProcessMessage.ResourceManager.GetString(item.ProcessRequestType.DescriptionID) : null)</text>
+        if (item.ProcessType.HasValue)
+        {
+            <text>@(item.ProcessRequestType?.DescriptionID != null ? ProcessMessage.ResourceManager.GetString(item.ProcessRequestType.DescriptionID) : null)</text>
+        }
+        else if (item.ViewModel != null)
+        {
+            QueryViewModel viewModel = JsonConvert.DeserializeObject<QueryViewModel>(item.ViewModel);
+            <text>@(viewModel?.Message)</text>
+        }
         break;
 
     default:

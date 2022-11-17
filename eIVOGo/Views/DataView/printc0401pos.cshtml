@@ -65,7 +65,7 @@
             foreach (var item in _model.OrderBy(d => d.SubmitID).ToList())
             {
                 invoicePrintView = _viewModel.UseCustomView == true
-                    ? item.CDS_Document.InvoiceItem.Organization.OrganizationStatus.InvoicePrintView.GetEfficientString()
+                    ? item.CDS_Document.InvoiceItem.Organization.OrganizationCustomSetting?.Settings?.C0401POSView
                     : null;
                 Html.RenderPartial(invoicePrintView ?? "~/Views/DataView/Module/C0401_POS.cshtml", item.CDS_Document.InvoiceItem);
                 models.MarkPrintedLog(item.CDS_Document.InvoiceItem, profile);

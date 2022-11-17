@@ -60,6 +60,8 @@
       <Association Name="Organization_OrganizationSettings" Member="OrganizationSettings" ThisKey="CompanyID" OtherKey="CompanyID" Type="OrganizationSettings" />
       <Association Name="Organization_OrganizationRelation" Member="OrganizationRelation" ThisKey="CompanyID" OtherKey="CompanyID" Type="OrganizationRelation" Cardinality="One" />
       <Association Name="Organization_OrganizationRelation1" Member="BranchRelation" ThisKey="CompanyID" OtherKey="Headquarters" Type="OrganizationRelation" />
+      <Association Name="Organization_CustomSmtpHost" Member="CustomSmtpHost" ThisKey="CompanyID" OtherKey="CompanyID" Type="CustomSmtpHost" />
+      <Association Name="Organization_OrganizationCustomSetting" Member="OrganizationCustomSetting" ThisKey="CompanyID" OtherKey="CompanyID" Type="OrganizationCustomSetting" Cardinality="One" />
     </Type>
   </Table>
   <Table Name="dbo.UserRole" Member="UserRole">
@@ -1304,8 +1306,8 @@
       <Column Name="AutoBlankTrack" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="AutoBlankTrackEmittance" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-		<Column Name="InvoiceNoSafetyStock" Type="System.Int32" DbType="Int" CanBeNull="true" />
-		<Association Name="Organization_OrganizationExtension" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
+      <Column Name="InvoiceNoSafetyStock" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Organization_OrganizationExtension" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.InvoiceWinningNumber" Member="InvoiceWinningNumber">
@@ -1788,6 +1790,27 @@
       <Column Name="Headquarters" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="Organization_OrganizationRelation" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="Organization_OrganizationRelation1" Member="HeaderquarterItem" ThisKey="Headquarters" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CustomSmtpHost" Member="CustomSmtpHost">
+    <Type Name="CustomSmtpHost">
+      <Column Name="HostID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Host" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="Port" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EnableSsl" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="MailFrom" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Organization_CustomSmtpHost" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrganizationCustomSetting" Member="OrganizationCustomSetting">
+    <Type Name="OrganizationCustomSetting">
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SettingData" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="Organization_OrganizationCustomSetting" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.MatchDocumentAttachment" Method="MatchDocumentAttachment">

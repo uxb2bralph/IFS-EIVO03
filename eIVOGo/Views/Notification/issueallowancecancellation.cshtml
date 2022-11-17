@@ -52,11 +52,12 @@
     if (!String.IsNullOrEmpty(mailTo))
     {
         var enterprise = _model.InvoiceAllowanceSeller.Organization.EnterpriseGroupMember.FirstOrDefault();
+        var smtpSettings = _model.InvoiceAllowanceSeller.Organization.CustomSmtpHost.Where(s => s.Status == (int)CustomSmtpHost.StatusType.Enabled).FirstOrDefault();
 
         String Subject = $"{(enterprise?.EnterpriseGroup.EnterpriseName)} 折讓證明作廢通知(折讓證明單號碼:{_model.AllowanceNumber})";
         String body = Html.Partial("~/Views/Notification/Module/IssuedAllowanceCancellation.cshtml", _model).ToString();
 
-        body.SendMailMessage(mailTo, Subject);
+        body.SendMailMessage(mailTo, Subject, smtpSettings);
     }
 }
 

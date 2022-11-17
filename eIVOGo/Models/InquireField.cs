@@ -408,10 +408,10 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceItem> models)
         {
-            if (!String.IsNullOrEmpty(CurrentController.Request["agentID"]))
+            if (!String.IsNullOrEmpty(CurrentController.Request["AgentID"]))
             {
                 effective = true;
-                models.Items = models.GetDataContext().GetInvoiceByAgent(models.Items, int.Parse(CurrentController.Request["agentID"]));
+                models.Items = models.GetDataContext().GetInvoiceByAgent(models.Items, int.Parse(CurrentController.Request["AgentID"]));
             }
 
             base.BuildQueryExpression(models);

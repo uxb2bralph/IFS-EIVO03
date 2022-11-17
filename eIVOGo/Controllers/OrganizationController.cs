@@ -169,5 +169,64 @@ namespace eIVOGo.Controllers
             return Json(new { result = true });
         }
 
+        public ActionResult CustomSettings(CustomSmtpHost viewModel)
+        {
+            Organization item = null;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.CompanyID = viewModel.DecryptKeyValue();
+            }
+            item = models.GetTable<Organization>().Where(u => u.CompanyID == viewModel.CompanyID).FirstOrDefault();
+
+            ViewBag.ViewModel = viewModel;
+            return View("~/Views/Organization/Module/CustomSettings.cshtml", item);
+        }
+
+        public ActionResult CommitSmtpSettings(CustomSmtpHost viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            CustomSmtpHost item = viewModel.CommitCustomSmtpHost(models, ModelState);
+
+            if (item == null)
+            {
+                ViewBag.ModelState = ModelState;
+                return View("~/Views/Shared/ReportInputError.cshtml");
+            }
+
+            return Json(new { result = true });
+        }
+
+        public ActionResult DisableSmtpSettings(CustomSmtpHost viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.CompanyID = viewModel.DecryptKeyValue();
+            }
+
+            var recordCount = models.ExecuteCommand(@"UPDATE CustomSmtpHost
+                                SET        Status = {0}
+                                WHERE   (CompanyID = {1})",
+                                (int)CustomSmtpHost.StatusType.Disabled,
+                                viewModel.CompanyID);
+
+            return Json(new { result = true, recordCount });
+        }
+
+        public ActionResult LoadSmtpSettings(CustomSmtpHost viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var item = viewModel.LoadCustomSmtpHostFor(models);
+
+            if (item == null)
+            {
+                return View("~/Views/Shared/AlertMessageDialog.cshtml", "營業人資料錯誤!!");
+            }
+
+            return View("~/Views/Organization/Module/CustomSmtp.cshtml", item);
+        }
+
+
     }
 }

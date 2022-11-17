@@ -52,6 +52,7 @@ else if (_viewModel.ForceTodo == true || _model.Organization.OrganizationStatus.
             mailing.Where(m => m != null));
 
     Logger.Debug($"InvoiceNo:{_model.TrackCode}{_model.No},mail to:{mailTo}");
+    var smtpSettings = _model.InvoiceSeller.Organization.CustomSmtpHost.Where(s => s.Status == (int)CustomSmtpHost.StatusType.Enabled).FirstOrDefault();
 
     if (!String.IsNullOrEmpty(mailTo))
     {
@@ -60,17 +61,18 @@ else if (_viewModel.ForceTodo == true || _model.Organization.OrganizationStatus.
         if (_model.InvoiceBuyer.IsB2C()
             || _model.Organization.OrganizationStatus.UseB2BStandalone == true)
         {
+
             String body = _model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.UseCBEStyle)
                 ? Html.Partial(notificationView ?? "~/Views/Notification/Module/IssuedCBE.cshtml", _model).ToString()
                 : Html.Partial(notificationView ?? "~/Views/Notification/Module/IssuedC0401.cshtml", _model).ToString();
 
             if (_viewModel.AppendAttachment == true)
             {
-                body.SendMailMessage(mailTo, subject, _model.CDS_Document.Attachment.Select(a => a.StoredPath).ToArray());
+                body.SendMailMessage(mailTo, subject, smtpSettings, _model.CDS_Document.Attachment.Select(a => a.StoredPath).ToArray());
             }
             else
             {
-                body.SendMailMessage(mailTo, subject);
+                body.SendMailMessage(mailTo, subject, smtpSettings);
             }
         }
         else
@@ -86,14 +88,14 @@ else if (_viewModel.ForceTodo == true || _model.Organization.OrganizationStatus.
                 String body = _model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.UseCBEStyle)
                     ? Html.Partial(notificationView ?? "~/Views/Notification/Module/IssuedCBE.cshtml", _model).ToString()
                     : Html.Partial(notificationView ?? "~/Views/Notification/Module/IssuedC0401.cshtml", _model).ToString();
-                body.SendMailMessage(mailTo, subject, attached.ToArray());
+                body.SendMailMessage(mailTo, subject, smtpSettings, attached.ToArray());
             }
             else
             {
                 String body = _model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.UseCBEStyle)
                     ? Html.Partial(notificationView ?? "~/Views/Notification/Module/IssuedCBE.cshtml", _model).ToString()
                     : Html.Partial(notificationView ?? "~/Views/Notification/Module/IssuedC0401.cshtml", _model).ToString();
-                body.SendMailMessage(mailTo, subject, pdfFile);
+                body.SendMailMessage(mailTo, subject, smtpSettings, pdfFile);
             }
         }
 
@@ -101,14 +103,14 @@ else if (_viewModel.ForceTodo == true || _model.Organization.OrganizationStatus.
         {
             models.ExecuteCommand(
                 @"UPDATE IssuingNotice
-        SET IssueDate = {1}
-        WHERE (DocID = {0})", _model.InvoiceID, DateTime.Now);
+                    SET IssueDate = {1}
+                    WHERE (DocID = {0})", _model.InvoiceID, DateTime.Now);
         }
         else
         {
             models.ExecuteCommand(
                 @"Insert IssuingNotice (DocID,IssueDate)
-        values ({0},{1})", _model.InvoiceID, DateTime.Now);
+                    values ({0},{1})", _model.InvoiceID, DateTime.Now);
         }
 
     }

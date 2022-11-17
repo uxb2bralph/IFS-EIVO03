@@ -196,6 +196,6 @@
     {
         String subject = $"{_model.CompanyName} 電子發票開立每日結算通知({DateTime.Today:yyyy-MM-dd})";
         String body = "內容如附件。";
-        body.SendMailMessage(mailTo, subject, xlsxFile);
+        body.SendMailMessage(mailTo, subject, null, xlsxFile);
     }
 }

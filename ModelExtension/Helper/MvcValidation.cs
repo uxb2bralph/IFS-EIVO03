@@ -135,5 +135,24 @@ namespace ModelExtension.Helper
             }
         }
 
+        public static void CustomSmtpHostValueCheck(this CustomSmtpHost viewModel, ModelStateDictionary modelState)
+        {
+            viewModel.Host = viewModel.Host.GetEfficientString();
+            if (viewModel.Host == null)
+            {
+                //檢查名稱
+                modelState.AddModelError("Host", "請輸入郵件伺服器!!");
+
+            }
+
+            viewModel.MailFrom = viewModel.MailFrom.GetEfficientString();
+            if (String.IsNullOrEmpty(viewModel.MailFrom))
+            {
+                //檢查名稱
+                modelState.AddModelError("MailFrom", "請輸入寄件人email!!");
+            }
+
+        }
+
     }
 }

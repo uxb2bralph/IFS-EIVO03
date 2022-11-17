@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Model.Locale;
+using Newtonsoft.Json;
+using Utility;
 
 namespace Model.DataEntity
 {
@@ -63,5 +65,48 @@ namespace Model.DataEntity
                 : TaxType == (byte)Naming.TaxTypeDefinition.零稅率
                     ? "TZ"
                     : "TX";
+    }
+
+    public partial class CustomSmtpHost
+    {
+        public enum StatusType
+        {
+            Disabled = 0,
+            Enabled = 1,
+        }
+    }
+
+    public partial class OrganizationCustomSetting
+    {
+        private OrganizationCustomSettingsModel _settings;
+        public OrganizationCustomSettingsModel Settings
+        {
+            get
+            {
+                if (_settings == null)
+                {
+                    if (SettingData != null)
+                    {
+                        _settings = JsonConvert.DeserializeObject<OrganizationCustomSettingsModel>(SettingData);
+                    }
+                    else
+                    {
+                        _settings = new OrganizationCustomSettingsModel { };
+                        Accept();
+                    }
+                }
+                return _settings;
+            }
+        }
+
+        public void Accept()
+        {
+            SettingData = _settings?.JsonStringify();
+        }
+    }
+
+    public class OrganizationCustomSettingsModel
+    {
+        public String C0401POSView { get; set; }
     }
 }

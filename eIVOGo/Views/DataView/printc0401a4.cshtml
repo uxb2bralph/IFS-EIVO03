@@ -65,7 +65,13 @@
         }
         @while ((item = items.FirstOrDefault()) != null)
         {
-            if (_viewModel?.PrintCuttingLine == true)
+            String invoicePrintView;
+
+            if (_viewModel?.UseCustomView == true && (invoicePrintView = item.CDS_Document.InvoiceItem.Organization.OrganizationStatus.InvoicePrintView.GetEfficientString()) != null)
+            {
+                Html.RenderPartial(invoicePrintView, item.CDS_Document.InvoiceItem);
+            }
+            else if(_viewModel?.PrintCuttingLine == true)
             {
                 Html.RenderPartial("~/Views/DataView/Module/C0401_A4_Print.cshtml", item.CDS_Document.InvoiceItem);
             }

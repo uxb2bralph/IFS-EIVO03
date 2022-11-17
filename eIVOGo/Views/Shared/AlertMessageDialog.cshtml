@@ -1,0 +1,12 @@
+﻿@{
+    String _message;
+    _message = (this.Model as String) ?? ViewBag.Message ?? ViewBag.AlertMessage ?? Request["Message"];
+}
+
+@if (_message != null)
+{
+    <script>
+        $('@Html.Raw($"<div>{HttpUtility.JavaScriptStringEncode(_message)}</div>")')
+            .dialog({ "title": "<div class='modal-title'><h4><i class='fa fa-clock-o'></i>訊息</h4></div>" });
+    </script>
+}

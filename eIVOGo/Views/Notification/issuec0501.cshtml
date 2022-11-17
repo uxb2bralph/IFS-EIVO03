@@ -40,9 +40,11 @@ else if (_model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice
 
     if (!String.IsNullOrEmpty(mailTo))
     {
+        var smtpSettings = _model.InvoiceSeller.Organization.CustomSmtpHost.Where(s => s.Status == (int)CustomSmtpHost.StatusType.Enabled).FirstOrDefault();
+
         String subject = _model.Organization.CompanyName + "作廢電子發票郵件通知";
         String body = Html.Partial("~/Views/Notification/Module/IssuedC0501.cshtml", _model).ToString();
-        body.SendMailMessage(mailTo, subject);
+        body.SendMailMessage(mailTo, subject, smtpSettings);
     }
 
 }

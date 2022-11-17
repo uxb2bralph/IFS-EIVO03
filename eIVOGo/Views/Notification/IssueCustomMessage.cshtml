@@ -35,6 +35,7 @@ else
 {
     String subject = "中獎電子發票郵件通知（更正通知）";
     String body = Html.Partial("~/Views/Notification/Module/CustomMessage.cshtml").ToString();
+    var smtpSettings = _model.InvoiceSeller.Organization.CustomSmtpHost.Where(s => s.Status == (int)CustomSmtpHost.StatusType.Enabled).FirstOrDefault();
 
     var items = models.GetTable<InvoiceItem>()
             .Where(i => i.InvoiceCancellation == null)
@@ -62,7 +63,7 @@ else
         mailTo = mailTo.Replace(';', ',').Replace('、', ',');
         if (!String.IsNullOrEmpty(mailTo))
         {
-            body.SendMailMessage(mailTo, subject);
+            body.SendMailMessage(mailTo, subject, smtpSettings);
         };
     }
 }

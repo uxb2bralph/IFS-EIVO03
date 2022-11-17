@@ -55,13 +55,14 @@ else if (_model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice
 
     if (!String.IsNullOrEmpty(mailTo))
     {
+        var smtpSettings = _model.InvoiceSeller.Organization.CustomSmtpHost.Where(s => s.Status == (int)CustomSmtpHost.StatusType.Enabled).FirstOrDefault();
 
         var attached = _model.CDS_Document.Attachment.Select(a => a.StoredPath).ToList();
         attached.Insert(0, pdfFile);
 
         String subject = $"{_model.Organization.CompanyName} 電子發票開立通知(發票號碼:{_model.TrackCode}{_model.No})";
         String body = Html.Partial(notificationView ?? "~/Views/Notification/Module/IssuedA0401.cshtml", _model).ToString();
-        body.SendMailMessage(mailTo, subject, attached.ToArray());
+        body.SendMailMessage(mailTo, subject, smtpSettings, attached.ToArray());
 
         if (models.GetTable<IssuingNotice>().Any(d => d.DocID == _model.InvoiceID))
         {

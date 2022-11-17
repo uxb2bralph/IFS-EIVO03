@@ -32,18 +32,18 @@
             代理業者統編
         </th>
         <td class="tdleft">
-            <select name="agentID">
+            <select name="AgentID">
                 <option value="">全部</option>
                 @foreach (var a in _model)
                 {
                     <option value="@(a.CompanyID)">@($"({a.ReceiptNo}) {a.CompanyName}")</option>
                 }
             </select>
-            @if (Request["agentID"] != null)
+            @if (Request["AgentID"] != null)
             {
                 <script>
                     $(function () {
-                        $('select[name="agentID"]').val('@(Request["agentID"])');
+                        $('select[name="AgentID"]').val('@(Request["AgentID"])');
                     });
                 </script>
             }

@@ -484,6 +484,12 @@ namespace Model.DataEntity
     partial void InsertOrganizationRelation(OrganizationRelation instance);
     partial void UpdateOrganizationRelation(OrganizationRelation instance);
     partial void DeleteOrganizationRelation(OrganizationRelation instance);
+    partial void InsertCustomSmtpHost(CustomSmtpHost instance);
+    partial void UpdateCustomSmtpHost(CustomSmtpHost instance);
+    partial void DeleteCustomSmtpHost(CustomSmtpHost instance);
+    partial void InsertOrganizationCustomSetting(OrganizationCustomSetting instance);
+    partial void UpdateOrganizationCustomSetting(OrganizationCustomSetting instance);
+    partial void DeleteOrganizationCustomSetting(OrganizationCustomSetting instance);
     #endregion
 		
 		public EIVOEntityDataContext() : 
@@ -1732,6 +1738,22 @@ namespace Model.DataEntity
 			}
 		}
 		
+		public System.Data.Linq.Table<CustomSmtpHost> CustomSmtpHost
+		{
+			get
+			{
+				return this.GetTable<CustomSmtpHost>();
+			}
+		}
+		
+		public System.Data.Linq.Table<OrganizationCustomSetting> OrganizationCustomSetting
+		{
+			get
+			{
+				return this.GetTable<OrganizationCustomSetting>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.MatchDocumentAttachment")]
 		public int MatchDocumentAttachment()
 		{
@@ -1919,6 +1941,10 @@ namespace Model.DataEntity
 		private EntityRef<OrganizationRelation> _OrganizationRelation;
 		
 		private EntitySet<OrganizationRelation> _BranchRelation;
+		
+		private EntitySet<CustomSmtpHost> _CustomSmtpHost;
+		
+		private EntityRef<OrganizationCustomSetting> _OrganizationCustomSetting;
 		
 		private bool serializing;
 		
@@ -3207,6 +3233,60 @@ namespace Model.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_CustomSmtpHost", Storage="_CustomSmtpHost", ThisKey="CompanyID", OtherKey="CompanyID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=59, EmitDefaultValue=false)]
+		public EntitySet<CustomSmtpHost> CustomSmtpHost
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._CustomSmtpHost.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._CustomSmtpHost;
+			}
+			set
+			{
+				this._CustomSmtpHost.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationCustomSetting", Storage="_OrganizationCustomSetting", ThisKey="CompanyID", OtherKey="CompanyID", IsUnique=true, IsForeignKey=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=60, EmitDefaultValue=false)]
+		public OrganizationCustomSetting OrganizationCustomSetting
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._OrganizationCustomSetting.HasLoadedOrAssignedValue == false)))
+				{
+					return null;
+				}
+				return this._OrganizationCustomSetting.Entity;
+			}
+			set
+			{
+				OrganizationCustomSetting previousValue = this._OrganizationCustomSetting.Entity;
+				if (((previousValue != value) 
+							|| (this._OrganizationCustomSetting.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._OrganizationCustomSetting.Entity = null;
+						previousValue.Organization = null;
+					}
+					this._OrganizationCustomSetting.Entity = value;
+					if ((value != null))
+					{
+						value.Organization = this;
+					}
+					this.SendPropertyChanged("OrganizationCustomSetting");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -3587,6 +3667,18 @@ namespace Model.DataEntity
 			entity.HeaderquarterItem = null;
 		}
 		
+		private void attach_CustomSmtpHost(CustomSmtpHost entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_CustomSmtpHost(CustomSmtpHost entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
 		private void Initialize()
 		{
 			this._OrganizationCategory = new EntitySet<OrganizationCategory>(new Action<OrganizationCategory>(this.attach_OrganizationCategory), new Action<OrganizationCategory>(this.detach_OrganizationCategory));
@@ -3624,6 +3716,8 @@ namespace Model.DataEntity
 			this._OrganizationSettings = new EntitySet<OrganizationSettings>(new Action<OrganizationSettings>(this.attach_OrganizationSettings), new Action<OrganizationSettings>(this.detach_OrganizationSettings));
 			this._OrganizationRelation = default(EntityRef<OrganizationRelation>);
 			this._BranchRelation = new EntitySet<OrganizationRelation>(new Action<OrganizationRelation>(this.attach_BranchRelation), new Action<OrganizationRelation>(this.detach_BranchRelation));
+			this._CustomSmtpHost = new EntitySet<CustomSmtpHost>(new Action<CustomSmtpHost>(this.attach_CustomSmtpHost), new Action<CustomSmtpHost>(this.detach_CustomSmtpHost));
+			this._OrganizationCustomSetting = default(EntityRef<OrganizationCustomSetting>);
 			OnCreated();
 		}
 		
@@ -45423,6 +45517,465 @@ namespace Model.DataEntity
 		{
 			this._Organization = default(EntityRef<Organization>);
 			this._HeaderquarterItem = default(EntityRef<Organization>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CustomSmtpHost")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class CustomSmtpHost : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _HostID;
+		
+		private int _CompanyID;
+		
+		private string _Host;
+		
+		private System.Nullable<int> _Port;
+		
+		private System.Nullable<bool> _EnableSsl;
+		
+		private string _UserName;
+		
+		private string _Password;
+		
+		private string _MailFrom;
+		
+		private System.Nullable<int> _Status;
+		
+		private EntityRef<Organization> _Organization;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnHostIDChanging(int value);
+    partial void OnHostIDChanged();
+    partial void OnCompanyIDChanging(int value);
+    partial void OnCompanyIDChanged();
+    partial void OnHostChanging(string value);
+    partial void OnHostChanged();
+    partial void OnPortChanging(System.Nullable<int> value);
+    partial void OnPortChanged();
+    partial void OnEnableSslChanging(System.Nullable<bool> value);
+    partial void OnEnableSslChanged();
+    partial void OnUserNameChanging(string value);
+    partial void OnUserNameChanged();
+    partial void OnPasswordChanging(string value);
+    partial void OnPasswordChanged();
+    partial void OnMailFromChanging(string value);
+    partial void OnMailFromChanged();
+    partial void OnStatusChanging(System.Nullable<int> value);
+    partial void OnStatusChanged();
+    #endregion
+		
+		public CustomSmtpHost()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HostID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int HostID
+		{
+			get
+			{
+				return this._HostID;
+			}
+			set
+			{
+				if ((this._HostID != value))
+				{
+					this.OnHostIDChanging(value);
+					this.SendPropertyChanging();
+					this._HostID = value;
+					this.SendPropertyChanged("HostID");
+					this.OnHostIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int CompanyID
+		{
+			get
+			{
+				return this._CompanyID;
+			}
+			set
+			{
+				if ((this._CompanyID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyID = value;
+					this.SendPropertyChanged("CompanyID");
+					this.OnCompanyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Host", DbType="NVarChar(64) NOT NULL", CanBeNull=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public string Host
+		{
+			get
+			{
+				return this._Host;
+			}
+			set
+			{
+				if ((this._Host != value))
+				{
+					this.OnHostChanging(value);
+					this.SendPropertyChanging();
+					this._Host = value;
+					this.SendPropertyChanged("Host");
+					this.OnHostChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Port", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public System.Nullable<int> Port
+		{
+			get
+			{
+				return this._Port;
+			}
+			set
+			{
+				if ((this._Port != value))
+				{
+					this.OnPortChanging(value);
+					this.SendPropertyChanging();
+					this._Port = value;
+					this.SendPropertyChanged("Port");
+					this.OnPortChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EnableSsl", DbType="Bit")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public System.Nullable<bool> EnableSsl
+		{
+			get
+			{
+				return this._EnableSsl;
+			}
+			set
+			{
+				if ((this._EnableSsl != value))
+				{
+					this.OnEnableSslChanging(value);
+					this.SendPropertyChanging();
+					this._EnableSsl = value;
+					this.SendPropertyChanged("EnableSsl");
+					this.OnEnableSslChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(64)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6)]
+		public string UserName
+		{
+			get
+			{
+				return this._UserName;
+			}
+			set
+			{
+				if ((this._UserName != value))
+				{
+					this.OnUserNameChanging(value);
+					this.SendPropertyChanging();
+					this._UserName = value;
+					this.SendPropertyChanged("UserName");
+					this.OnUserNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Password", DbType="NVarChar(64)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=7)]
+		public string Password
+		{
+			get
+			{
+				return this._Password;
+			}
+			set
+			{
+				if ((this._Password != value))
+				{
+					this.OnPasswordChanging(value);
+					this.SendPropertyChanging();
+					this._Password = value;
+					this.SendPropertyChanged("Password");
+					this.OnPasswordChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MailFrom", DbType="NVarChar(64) NOT NULL", CanBeNull=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=8)]
+		public string MailFrom
+		{
+			get
+			{
+				return this._MailFrom;
+			}
+			set
+			{
+				if ((this._MailFrom != value))
+				{
+					this.OnMailFromChanging(value);
+					this.SendPropertyChanging();
+					this._MailFrom = value;
+					this.SendPropertyChanged("MailFrom");
+					this.OnMailFromChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=9)]
+		public System.Nullable<int> Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_CustomSmtpHost", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.CustomSmtpHost.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.CustomSmtpHost.Add(this);
+						this._CompanyID = value.CompanyID;
+					}
+					else
+					{
+						this._CompanyID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._Organization = default(EntityRef<Organization>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.OrganizationCustomSetting")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class OrganizationCustomSetting : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _CompanyID;
+		
+		private string _SettingData;
+		
+		private EntityRef<Organization> _Organization;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCompanyIDChanging(int value);
+    partial void OnCompanyIDChanged();
+    partial void OnSettingDataChanging(string value);
+    partial void OnSettingDataChanged();
+    #endregion
+		
+		public OrganizationCustomSetting()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int CompanyID
+		{
+			get
+			{
+				return this._CompanyID;
+			}
+			set
+			{
+				if ((this._CompanyID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyID = value;
+					this.SendPropertyChanged("CompanyID");
+					this.OnCompanyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettingData", DbType="NVarChar(MAX)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public string SettingData
+		{
+			get
+			{
+				return this._SettingData;
+			}
+			set
+			{
+				if ((this._SettingData != value))
+				{
+					this.OnSettingDataChanging(value);
+					this.SendPropertyChanging();
+					this._SettingData = value;
+					this.SendPropertyChanged("SettingData");
+					this.OnSettingDataChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationCustomSetting", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.OrganizationCustomSetting = null;
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.OrganizationCustomSetting = this;
+						this._CompanyID = value.CompanyID;
+					}
+					else
+					{
+						this._CompanyID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._Organization = default(EntityRef<Organization>);
 			OnCreated();
 		}
 		

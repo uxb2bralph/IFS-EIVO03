@@ -112,6 +112,12 @@
         });
     }
 
+    function customSettings(value) {
+        $.post('@(Url.Action("CustomSettings", "Organization"))', { 'keyID': value }, function (data) {
+            $global.createTab('customSettings', '營業人客製化服務設訂', data, true);
+        });
+    }
+
     function disableCompany(value) {
         if (confirm('確認停用此筆資料?')) {
             invokeAction('@(VirtualPathUtility.ToAbsolute("~/Handling/DisableCompany"))',

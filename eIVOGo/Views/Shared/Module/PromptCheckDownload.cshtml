@@ -24,7 +24,8 @@
 }
 
 <div class="border_gray" id="@(_viewID)">
-    <a href="#" onclick="$('').launchDownload('@(Url.Action("DownloadResource","DataExchange"))', { 'keyID': '@Html.Raw((new { _viewModel.FileDownloadName,_viewModel.FileName,_viewModel.ContentType }).JsonStringify().EncryptData())' },'_blank');">資料下載</a>
+    <label>下載資料準備中，您可以繼續等待，或稍後至工作清單查詢下載。</label>
+    <a href="#" style="display:none;" onclick="$('').launchDownload('@(Url.Action("DownloadResource","DataExchange"))', { 'keyID': '@Html.Raw((new { _viewModel.FileDownloadName,_viewModel.FileName,_viewModel.ContentType }).JsonStringify().EncryptData())' },'_blank');">資料下載</a>
     <script>
         debugger;
         $(function () {
@@ -35,6 +36,8 @@
                         console.log(data);
                         if (data.result) {
                             hideLoading();
+                            $('#@(_viewID) label').remove();
+                            $('#@(_viewID) a').css('display','block');
                             alert('下載資料準備完成...');
                         } else if (data.message != null) {
                             hideLoading();
@@ -56,7 +59,7 @@
                 });
             }
 
-            showLoading();
+            //showLoading();
             setTimeout(checkResource, 5000);
 
         });
