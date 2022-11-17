@@ -196,7 +196,6 @@
     <Compile Include="Win32\Winspool.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="_test\_testWebControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataAccessLayer\basis\dsQueryCondition.xsd">
