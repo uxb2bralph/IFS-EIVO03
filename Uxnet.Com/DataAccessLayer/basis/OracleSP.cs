@@ -14,173 +14,209 @@
 namespace Uxnet.Com.DataAccessLayer.basis
 {
     using System.Xml.Serialization;
-    
-    
+
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.3038")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
-    public partial class oracleDb {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+    public partial class oracleDb
+    {
+
         private oracleDbProcedure[] storedProceduresField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("procedure", IsNullable=false)]
-        public oracleDbProcedure[] storedProcedures {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("procedure", IsNullable = false)]
+        public oracleDbProcedure[] storedProcedures
+        {
+            get
+            {
                 return this.storedProceduresField;
             }
-            set {
+            set
+            {
                 this.storedProceduresField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.3038")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    public partial class oracleDbProcedure {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public partial class oracleDbProcedure
+    {
+
         private string commandTextField;
-        
+
         private oracleDbProcedureParameter[] commandParametersField;
-        
+
         private string nameField;
-        
+
         /// <remarks/>
-        public string commandText {
-            get {
+        public string commandText
+        {
+            get
+            {
                 return this.commandTextField;
             }
-            set {
+            set
+            {
                 this.commandTextField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("parameter", IsNullable=false)]
-        public oracleDbProcedureParameter[] commandParameters {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("parameter", IsNullable = false)]
+        public oracleDbProcedureParameter[] commandParameters
+        {
+            get
+            {
                 return this.commandParametersField;
             }
-            set {
+            set
+            {
                 this.commandParametersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string name {
-            get {
+        public string name
+        {
+            get
+            {
                 return this.nameField;
             }
-            set {
+            set
+            {
                 this.nameField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.3038")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    public partial class oracleDbProcedureParameter {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public partial class oracleDbProcedureParameter
+    {
+
         private string nameField;
-        
+
         private string typeField;
-        
+
         private int sizeField;
-        
+
         private bool sizeFieldSpecified;
-        
+
         private string defaultValueField;
-        
+
         private bool requiredField;
-        
+
         private bool requiredFieldSpecified;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string name {
-            get {
+        public string name
+        {
+            get
+            {
                 return this.nameField;
             }
-            set {
+            set
+            {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string type {
-            get {
+        public string type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public int size {
-            get {
+        public int size
+        {
+            get
+            {
                 return this.sizeField;
             }
-            set {
+            set
+            {
                 this.sizeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool sizeSpecified {
-            get {
+        public bool sizeSpecified
+        {
+            get
+            {
                 return this.sizeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.sizeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string defaultValue {
-            get {
+        public string defaultValue
+        {
+            get
+            {
                 return this.defaultValueField;
             }
-            set {
+            set
+            {
                 this.defaultValueField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool required {
-            get {
+        public bool required
+        {
+            get
+            {
                 return this.requiredField;
             }
-            set {
+            set
+            {
                 this.requiredField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool requiredSpecified {
-            get {
+        public bool requiredSpecified
+        {
+            get
+            {
                 return this.requiredFieldSpecified;
             }
-            set {
+            set
+            {
                 this.requiredFieldSpecified = value;
             }
         }
