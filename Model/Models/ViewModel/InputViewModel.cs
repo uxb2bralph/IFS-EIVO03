@@ -1,4 +1,5 @@
-﻿using Model.Locale;
+﻿using Model.DataEntity;
+using Model.Locale;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace Model.Models.ViewModel
 
     public partial class TaxMediaQueryViewModel : QueryViewModel
     {
-        public Naming.B2CCategoryID? BusinessBorder { get; set; } 
+        public CategoryDefinition.CategoryEnum? BusinessBorder { get; set; } 
         public int? SellerID { get; set; }
         public String TaxNo { get; set; }
         public int? Year { get; set; }

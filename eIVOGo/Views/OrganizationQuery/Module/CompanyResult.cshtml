@@ -25,41 +25,29 @@
     _profile = Business.Helper.WebPageUtility.UserProfile;
     models.DataSourcePath = VirtualPathUtility.ToAbsolute("~/OrganizationQuery/GridPage");
     IQueryable<Organization> _model = (IQueryable<Organization>)this.Model;
+    OrganizationQueryViewModel _viewModel = ViewBag.ViewModel as OrganizationQueryViewModel;
 }
 @if (!models.InquiryHasError)
 {
     Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");
 
-    <div class="container border_gray" style="overflow-x: auto;">
-        @{ var recordCount = _model.Count();}
+    <div class="container border_gray" style="overflow-x: auto; min-width: max-content;">
+        @{
+            var recordCount = _viewModel.RecordCount;
+        }
         @if (recordCount > 0)
         {
-            Html.RenderPartial("~/Views/OrganizationQuery/Module/CompanyList.cshtml", _model);
-
-            <nav aria-label="Page navigation">
-                <ul class="pagination" id="compPagination"></ul>
-            </nav>
-            <script>
-                var pageNum = 0;
-                $(function () {
-                    var obj = $('#compPagination').twbsPagination({
-                        totalPages: @((recordCount + Uxnet.Web.Properties.Settings.Default.PageSize - 1) / Uxnet.Web.Properties.Settings.Default.PageSize),
-                        visiblePages: 10,
-                        initiateStartPageClick: false,
-                        first: '最前',
-                        prev: '上頁',
-                        next: '下頁',
-                        last: '最後',
-                        onPageClick: function (event, page) {
-                            pageNum = page;
-                            inquireCompany(page, function (data) {
-                                $('.companyList').html(data);
-                            });
-                        }
-                    });
-                });
-
-            </script>
+            if (_viewModel.CategoryID == CategoryDefinition.CategoryEnum.發票開立營業人
+                || _viewModel.CategoryID == CategoryDefinition.CategoryEnum.境外電商
+                || _viewModel.CategoryID == CategoryDefinition.CategoryEnum.經銷商)
+            {
+                Html.RenderPartial("~/Views/OrganizationQuery/Module/SellerList.cshtml", _model);
+            }
+            else
+            {
+                Html.RenderPartial("~/Views/OrganizationQuery/Module/CompanyList.cshtml", _model);
+            }
+            Html.RenderPartial("~/Views/Common/Module/QueryPagingControl.cshtml", _model);
         }
         else
         {

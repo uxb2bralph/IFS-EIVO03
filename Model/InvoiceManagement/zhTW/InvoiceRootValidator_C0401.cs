@@ -261,7 +261,7 @@ namespace Model.InvoiceManagement.zhTW
 
             if (seller == null)
             {
-                return new Exception(String.Format("賣方為非註冊店家,開立人統一編號:{0}，TAG:< SellerId />", invItem.Main.Seller.Identifier));
+                return new Exception(String.Format("賣方為非註冊營業人,開立人統一編號:{0}，TAG:< SellerId />", invItem.Main.Seller.Identifier));
             }
 
             if (seller.CompanyID != owner.CompanyID)

@@ -90,10 +90,12 @@ namespace eIVOGo.Controllers.TrackCodeNo
             {
                 if (viewModel.BranchRelation == true)
                 {
-                    var branchRelation = models.GetTable<OrganizationRelation>().Where(r => r.Headquarters == viewModel.SellerID);
+                    var branchRelation = models.GetTable<InvoiceIssuerAgent>()
+                                .Where(a => a.RelationType == (int)InvoiceIssuerAgent.Relationship.MasterBranch)
+                                .Where(r => r.AgentID == viewModel.SellerID);
                     orgItems = models.GetTable<Organization>()
                                     .Where(o => o.CompanyID == viewModel.SellerID
-                                        || branchRelation.Any(r => r.CompanyID == o.CompanyID));
+                                        || branchRelation.Any(r => r.IssuerID == o.CompanyID));
                 }
                 else
                 {
@@ -162,7 +164,9 @@ namespace eIVOGo.Controllers.TrackCodeNo
                                 BranchBan = orgItem.OrganizationExtension.ExpirationDate.HasValue
                                     ? $"{orgItem.ReceiptNo}(註記停用:{orgItem.OrganizationExtension.ExpirationDate:yyyy/MM/dd})"
                                     : orgItem.ReceiptNo,
-                                HeadBan = viewModel.BranchRelation == true ? orgItem.OrganizationRelation?.HeaderquarterItem.ReceiptNo ?? orgItem.ReceiptNo : orgItem.ReceiptNo,
+                                HeadBan = viewModel.BranchRelation == true
+                                    ? orgItem.AsInvoiceIssuer.Where(a => a.RelationType == (int)InvoiceIssuerAgent.Relationship.MasterBranch).FirstOrDefault()?.InvoiceAgent.ReceiptNo ?? orgItem.ReceiptNo
+                                    : orgItem.ReceiptNo,
                                 YearMonth = String.Format("{0}{1:00}", trackCode.Year - 1911, trackCode.PeriodNo * 2),
                                 InvoiceType = trackCode.InvoiceType == (byte)InvoiceTypeEnum.Item08 ? InvoiceTypeEnum.Item08 : InvoiceTypeEnum.Item07,
                                 InvoiceTrack = trackCode.TrackCode
@@ -632,7 +636,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
                     if (!profile.IsSystemAdmin())
                     {
                         viewModel.SellerID = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == profile.CurrentUserRole.OrganizationCategory.CompanyID
-                                        && a.InvoiceInsurer.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault()?.IssuerID;
+                                        && a.InvoiceIssuer.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault()?.IssuerID;
                     }
                     else
                     {
@@ -745,7 +749,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
                     if (!profile.IsSystemAdmin())
                     {
                         viewModel.SellerID = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == profile.CurrentUserRole.OrganizationCategory.CompanyID
-                                        && a.InvoiceInsurer.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault()?.IssuerID;
+                                        && a.InvoiceIssuer.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault()?.IssuerID;
                     }
                     else
                     {

@@ -317,7 +317,7 @@ namespace eIVOGo.Published
                         }
                         else
                         {
-                            result.Result.message = "店家憑證資料驗證不符!!";
+                            result.Result.message = "營業人憑證資料驗證不符!!";
                         }
                     }
                 }

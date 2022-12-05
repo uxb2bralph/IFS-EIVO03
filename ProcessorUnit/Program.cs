@@ -10,10 +10,11 @@ using System.Threading.Tasks;
 using Utility;
 using Model.ProcessorUnitHelper;
 using System.Threading;
+using System.IO;
 
 namespace ProcessorUnit
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
@@ -31,6 +32,11 @@ namespace ProcessorUnit
                 key = Console.ReadKey();
             } while (key.Key != ConsoleKey.Q);
             Logger.Info("Process terminated..");
+        }
+
+        internal static void Terminate()
+        {
+            Process.GetCurrentProcess().Kill();
         }
     }
 
@@ -149,6 +155,9 @@ namespace ProcessorUnit
             chainedProcessor = chainedProcessor.ChainedExecutor;
 
             chainedProcessor.ChainedExecutor = new DataReportProcessor { };
+            chainedProcessor = chainedProcessor.ChainedExecutor;
+
+            chainedProcessor.ChainedExecutor = new AutoUpdater { };
             chainedProcessor = chainedProcessor.ChainedExecutor;
 
             processorStart.ReadyToGo();

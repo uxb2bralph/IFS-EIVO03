@@ -178,7 +178,7 @@ namespace ModelExtension.Helper
             //    models.CreateDefaultUser(item, orgaCate);
             //}
 
-            if (orgaCate.CategoryID == (int)Naming.B2CCategoryID.開立發票店家代理)
+            if (orgaCate.CategoryID == (int)CategoryDefinition.CategoryEnum.經銷商)
             {
                 if (!models.GetTable<InvoiceIssuerAgent>().Any(a => a.IssuerID == item.CompanyID && a.AgentID == item.CompanyID))
                 {

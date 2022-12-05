@@ -10,9 +10,9 @@
 <%@ Import Namespace="Model.DataEntity" %>
 <%@ Import Namespace="eIVOGo.Controllers" %>
 
-<%  foreach (var item in Enum.GetValues(typeof(Naming.MemberCategoryID)))
+<%  foreach (var item in Enum.GetValues(typeof(CategoryDefinition.CategoryEnum)))
     {
-        var t = (Naming.MemberCategoryID)item;  %>
+        var t = (CategoryDefinition.CategoryEnum)item;  %>
 <option value="<%= (int)t %>"><%= t %></option>
 <%  } %>
 

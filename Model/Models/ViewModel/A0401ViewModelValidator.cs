@@ -241,7 +241,7 @@ namespace Model.Models.ViewModel
 
                 buyer.OrganizationCategory.Add(new OrganizationCategory
                 {
-                    CategoryID = (int)Naming.MemberCategoryID.相對營業人
+                    CategoryID = (int)CategoryDefinition.CategoryEnum.相對營業人
                 });
 
                 _buyer.Organization = buyer;

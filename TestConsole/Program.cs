@@ -582,9 +582,9 @@ namespace TestConsole
                 models.SettleUnassignedInvoiceNOPeriodically(year, period, sellerID);
                 if(sellerID.HasValue)
                 {
-                    foreach(var item in models.GetTable<OrganizationRelation>().Where(r=>r.Headquarters==sellerID))
+                    foreach(var item in models.GetTable<InvoiceIssuerAgent>().Where(r=>r.AgentID==sellerID))
                     {
-                        models.SettleUnassignedInvoiceNOPeriodically(year, period, item.CompanyID);
+                        models.SettleUnassignedInvoiceNOPeriodically(year, period, item.IssuerID);
                     }
                 }
             }

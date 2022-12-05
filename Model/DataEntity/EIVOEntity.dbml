@@ -47,8 +47,8 @@
       <Association Name="Organization_SMSNotificationLog" Member="SMSNotificationLogs" ThisKey="CompanyID" OtherKey="OwnerID" Type="SMSNotificationLog" />
       <Association Name="Organization_OrganizationStatus" Member="OrganizationStatus" ThisKey="CompanyID" OtherKey="CompanyID" Type="OrganizationStatus" Cardinality="One" />
       <Association Name="Organization_InvoiceBuyer" Member="InvoiceBuyer" ThisKey="CompanyID" OtherKey="BuyerID" Type="InvoiceBuyer" />
-      <Association Name="Organization_InvoiceIssuerAgent" Member="InvoiceInsurerAgent" ThisKey="CompanyID" OtherKey="AgentID" Type="InvoiceIssuerAgent" />
-      <Association Name="Organization_InvoiceIssuerAgent1" Member="AsInvoiceInsurer" ThisKey="CompanyID" OtherKey="IssuerID" Type="InvoiceIssuerAgent" />
+      <Association Name="Organization_InvoiceIssuerAgent" Member="InvoiceIssuerAgent" Storage="_InvoiceInssuerAgent" ThisKey="CompanyID" OtherKey="AgentID" Type="InvoiceIssuerAgent" />
+      <Association Name="Organization_InvoiceIssuerAgent1" Member="AsInvoiceIssuer" ThisKey="CompanyID" OtherKey="IssuerID" Type="InvoiceIssuerAgent" />
       <Association Name="Organization_POSDevice" Member="POSDevice" ThisKey="CompanyID" OtherKey="CompanyID" Type="POSDevice" />
       <Association Name="Organization_OrganizationExtension" Member="OrganizationExtension" ThisKey="CompanyID" OtherKey="CompanyID" Type="OrganizationExtension" Cardinality="One" />
       <Association Name="Organization_OrganizationBranch" Member="OrganizationBranch" ThisKey="CompanyID" OtherKey="CompanyID" Type="OrganizationBranch" />
@@ -58,10 +58,14 @@
       <Association Name="Organization_InvoiceTrackCodeAssignment" Member="InvoiceTrackCodeAssignment" ThisKey="CompanyID" OtherKey="SellerID" Type="InvoiceTrackCodeAssignment" />
       <Association Name="Organization_InvoiceNoMainAssignment" Member="InvoiceNoMainAssignment" ThisKey="CompanyID" OtherKey="MasterID" Type="InvoiceNoMainAssignment" />
       <Association Name="Organization_OrganizationSettings" Member="OrganizationSettings" ThisKey="CompanyID" OtherKey="CompanyID" Type="OrganizationSettings" />
-      <Association Name="Organization_OrganizationRelation" Member="OrganizationRelation" ThisKey="CompanyID" OtherKey="CompanyID" Type="OrganizationRelation" Cardinality="One" />
-      <Association Name="Organization_OrganizationRelation1" Member="BranchRelation" ThisKey="CompanyID" OtherKey="Headquarters" Type="OrganizationRelation" />
       <Association Name="Organization_CustomSmtpHost" Member="CustomSmtpHost" ThisKey="CompanyID" OtherKey="CompanyID" Type="CustomSmtpHost" />
       <Association Name="Organization_OrganizationCustomSetting" Member="OrganizationCustomSetting" ThisKey="CompanyID" OtherKey="CompanyID" Type="OrganizationCustomSetting" Cardinality="One" />
+      <Association Name="Organization_BillingCalculation" Member="BillingCalculation" ThisKey="CompanyID" OtherKey="CompanyID" Type="BillingCalculation" />
+      <Association Name="Organization_BillingGrade" Member="BillingGrade" ThisKey="CompanyID" OtherKey="CompanyID" Type="BillingGrade" />
+      <Association Name="Organization_ExtraBillingItem" Member="ExtraBillingItem" ThisKey="CompanyID" OtherKey="CompanyID" Type="ExtraBillingItem" />
+      <Association Name="Organization_BillingIncrement" Member="BillingIncrement" ThisKey="CompanyID" OtherKey="CompanyID" Type="BillingIncrement" />
+      <Association Name="Organization_MonthlyBilling" Member="MonthlyBilling" ThisKey="CompanyID" OtherKey="CompanyID" Type="MonthlyBilling" />
+      <Association Name="Organization_BillingExtension" Member="BillingExtension" ThisKey="CompanyID" OtherKey="CompanyID" Type="BillingExtension" Cardinality="One" />
     </Type>
   </Table>
   <Table Name="dbo.UserRole" Member="UserRole">
@@ -350,6 +354,7 @@
       <Association Name="DocumentType_DocumentReady" Member="DocumentReady" ThisKey="TypeID" OtherKey="TypeID" Type="DocumentReady" />
       <Association Name="DocumentType_CALog" Member="CALog" ThisKey="TypeID" OtherKey="TypeID" Type="CALog" />
       <Association Name="DocumentType_DocumentPrintLog" Member="DocumentPrintLog" ThisKey="TypeID" OtherKey="TypeID" Type="DocumentPrintLog" />
+      <Association Name="DocumentType_BillingCalculation" Member="BillingCalculation" ThisKey="TypeID" OtherKey="TypeID" Type="BillingCalculation" />
     </Type>
   </Table>
   <Table Name="dbo.viewDomationListCountGroup" Member="viewDomationListCountGroups">
@@ -1216,8 +1221,9 @@
     <Type Name="InvoiceIssuerAgent">
       <Column Name="AgentID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="IssuerID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RelationType" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Organization_InvoiceIssuerAgent" Member="InvoiceAgent" ThisKey="AgentID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
-      <Association Name="Organization_InvoiceIssuerAgent1" Member="InvoiceInsurer" ThisKey="IssuerID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
+      <Association Name="Organization_InvoiceIssuerAgent1" Member="InvoiceIssuer" ThisKey="IssuerID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.InvoicePurchaseOrder" Member="InvoicePurchaseOrder">
@@ -1784,14 +1790,6 @@
       <Association Name="Organization_OrganizationSettings" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.OrganizationRelation" Member="OrganizationRelation">
-    <Type Name="OrganizationRelation">
-      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="Headquarters" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Organization_OrganizationRelation" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-      <Association Name="Organization_OrganizationRelation1" Member="HeaderquarterItem" ThisKey="Headquarters" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.CustomSmtpHost" Member="CustomSmtpHost">
     <Type Name="CustomSmtpHost">
       <Column Name="HostID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -1811,6 +1809,89 @@
       <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="SettingData" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="Organization_OrganizationCustomSetting" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="billing.BillingCalculation" Member="BillingCalculation">
+    <Type Name="BillingCalculation">
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TypeID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="DocumentType_BillingCalculation" Member="DocumentType" ThisKey="TypeID" OtherKey="TypeID" Type="DocumentType" IsForeignKey="true" />
+      <Association Name="Organization_BillingCalculation" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="billing.BillingGrade" Member="BillingGrade">
+    <Type Name="BillingGrade">
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="GradeCount" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BasicFee" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Organization_BillingGrade" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="billing.ExtraBillingItem" Member="ExtraBillingItem">
+    <Type Name="ExtraBillingItem">
+      <Column Name="ItemID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ItemName" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="Fee" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BillingDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="BillingType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Organization_ExtraBillingItem" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="billing.BillingIncrement" Member="BillingIncrement">
+    <Type Name="BillingIncrement">
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UpperBound" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UnitFee" Type="System.Decimal" DbType="Decimal(12,4)" CanBeNull="true" />
+      <Association Name="Organization_BillingIncrement" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="billing.MonthlyExtraBilling" Member="MonthlyExtraBilling">
+    <Type Name="MonthlyExtraBilling">
+      <Column Name="SettlementID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ItemID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ItemName" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="Fee" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="MonthlyBilling_MonthlyExtraBilling" Member="MonthlyBilling" ThisKey="SettlementID,CompanyID" OtherKey="SettlementID,CompanyID" Type="MonthlyBilling" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="billing.Settlement" Member="Settlement">
+    <Type Name="Settlement">
+      <Column Name="SettlementID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SettlementDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EndExclusiveDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Year" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Month" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Settlement_MonthlyBilling" Member="MonthlyBilling" ThisKey="SettlementID" OtherKey="SettlementID" Type="MonthlyBilling" />
+    </Type>
+  </Table>
+  <Table Name="billing.MonthlyBilling" Member="MonthlyBilling">
+    <Type Name="MonthlyBilling">
+      <Column Name="SettlementID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TotalIssueCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IssueChargeAmount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BillID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="MonthlyBilling_MonthlyExtraBilling" Member="MonthlyExtraBilling" ThisKey="SettlementID,CompanyID" OtherKey="SettlementID,CompanyID" Type="MonthlyExtraBilling" />
+      <Association Name="Organization_MonthlyBilling" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
+      <Association Name="Settlement_MonthlyBilling" Member="Settlement" ThisKey="SettlementID" OtherKey="SettlementID" Type="Settlement" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="BillSubmission_MonthlyBilling" Member="BillSubmission" ThisKey="BillID" OtherKey="BillID" Type="BillSubmission" IsForeignKey="true" DeleteRule="SET NULL" />
+    </Type>
+  </Table>
+  <Table Name="billing.BillingExtension" Member="BillingExtension">
+    <Type Name="BillingExtension">
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BillingCycleInMonth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Organization_BillingExtension" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="billing.BillSubmission" Member="BillSubmission">
+    <Type Name="BillSubmission">
+      <Column Name="BillID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BillDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="BillSubmission_MonthlyBilling" Member="MonthlyBilling" ThisKey="BillID" OtherKey="BillID" Type="MonthlyBilling" />
     </Type>
   </Table>
   <Function Name="dbo.MatchDocumentAttachment" Method="MatchDocumentAttachment">

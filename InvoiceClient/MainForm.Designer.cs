@@ -97,7 +97,7 @@
             this.ClientSize = new System.Drawing.Size(1041, 522);
             this.Controls.Add(this.tabControl1);
             this.Name = "MainForm";
-            this.Text = "電子發票－店家用戶端";
+            this.Text = "電子發票－營業人用戶端";
             this.Deactivate += new System.EventHandler(this.MainForm_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);

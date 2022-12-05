@@ -108,7 +108,7 @@ namespace Model.InvoiceManagement.zhTW
 
             if (seller == null)
             {
-                return new Exception(String.Format("賣方為非註冊店家,開立人統一編號:{0}，TAG:< SellerId />", invItem.SellerId));
+                return new Exception(String.Format("賣方為非註冊營業人,開立人統一編號:{0}，TAG:< SellerId />", invItem.SellerId));
             }
 
             if (seller.CompanyID != owner.CompanyID)
@@ -170,18 +170,18 @@ namespace Model.InvoiceManagement.zhTW
 
             if (seller == null)
             {
-                return new Exception(String.Format("賣方為非註冊店家,開立人統一編號:{0}，TAG:< SellerId />", invItem.SellerId));
+                return new Exception(String.Format("賣方為非註冊營業人,開立人統一編號:{0}，TAG:< SellerId />", invItem.SellerId));
             }
 
-            //上傳店家
+            //上傳營業人
             var Org = seller;
-            //代理店家
+            //代理營業人
             var proxyOrg = mgr.GetTable<Organization>().Where(o => o.CompanyID == owner.CompanyID).FirstOrDefault();
-            //上傳店家是否有註冊在代理店家底下
+            //上傳營業人是否有註冊在代理營業人底下
             var Inv_Org = mgr.GetTable<InvoiceIssuerAgent>().Where(i => i.AgentID == proxyOrg.CompanyID && i.IssuerID == Org.CompanyID).FirstOrDefault();
             if (Inv_Org == null && proxyOrg.ReceiptNo != Org.ReceiptNo)
             {
-                return new Exception(String.Format("上傳店家並無登記在此發票開立代理店家底下:{0}，TAG:< SellerId />；代理發票開立店家:{1}", invItem.SellerId, proxyOrg.ReceiptNo));
+                return new Exception(String.Format("上傳營業人並無登記在此發票開立代理營業人底下:{0}，TAG:< SellerId />；代理發票開立營業人:{1}", invItem.SellerId, proxyOrg.ReceiptNo));
             }
 
             if (invItem.BuyerId == "0000000000")

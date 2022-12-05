@@ -40,7 +40,7 @@ namespace Model.Models.ViewModel
                 viewModel.ContactTitle = item.ContactTitle;
                 if (item.OrganizationCategory.Count > 0)
                 {
-                    viewModel.CategoryID = (Naming.B2CCategoryID?)item.OrganizationCategory.First().CategoryID;
+                    viewModel.CategoryID = (CategoryDefinition.CategoryEnum?)item.OrganizationCategory.First().CategoryID;
                 }
 
                 viewModel.CurrentLevel = item.OrganizationStatus.CurrentLevel;

@@ -203,7 +203,7 @@ namespace Model.InvoiceManagement.Validator
 
             if (_seller == null)
             {
-                return new Exception(String.Format("賣方為非註冊店家,開立人統一編號:{0}，TAG:< Identifier />", _c0401Item.Main.Seller.Identifier));
+                return new Exception(String.Format("賣方為非註冊營業人,開立人統一編號:{0}，TAG:< Identifier />", _c0401Item.Main.Seller.Identifier));
             }
 
             if (_seller.CompanyID != _owner.CompanyID && !_models.GetTable<InvoiceIssuerAgent>().Any(a => a.AgentID == _owner.CompanyID && a.IssuerID == _seller.CompanyID))

@@ -40,7 +40,7 @@
                     .append(data);
             };
         </script>
-        <div id="@(_listID)" style="overflow-x:auto;">
+        <div id="@(_listID)" style="overflow-x: auto; min-width: max-content;">
             @{
                 Html.RenderPartial(_viewModel.ResultView, _model);
             }

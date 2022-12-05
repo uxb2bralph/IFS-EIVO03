@@ -30,8 +30,8 @@
                 發票開立人性質
             </th>
             <td class="tdleft">
-                <input type="radio" name="BusinessBorder" value="@((int)Naming.B2CCategoryID.店家)" />一般營業人
-                <input type="radio" name="BusinessBorder" value="@((int)Naming.B2CCategoryID.境外電商)" />境外電商
+                <input type="radio" name="BusinessBorder" value="@((int)CategoryDefinition.CategoryEnum.發票開立營業人)" />一般營業人
+                <input type="radio" name="BusinessBorder" value="@((int)CategoryDefinition.CategoryEnum.境外電商)" />境外電商
                 <script>
                     $(function () {
                         $('input[name="BusinessBorder"][value="@((int?)_viewModel.BusinessBorder)"]').prop('checked', true);
@@ -70,7 +70,7 @@
                 </script>
             </td>
         </tr>
-        @if (_viewModel.BusinessBorder == Naming.B2CCategoryID.店家)
+        @if (_viewModel.BusinessBorder == CategoryDefinition.CategoryEnum.發票開立營業人)
         {
             <tr>
                 <th>

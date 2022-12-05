@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Model.DataEntity;
+using Model.Models.ViewModel;
 using Utility;
 using Uxnet.Com.DataAccessLayer.Models;
 
@@ -12,9 +13,11 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, Organization> models)
         {
-            if (!String.IsNullOrEmpty(CurrentController.Request["receiptNo"]))
+            OrganizationQueryViewModel viewModel = CurrentController.ViewBag.ViewModel as OrganizationQueryViewModel;
+            var receiptNo = viewModel?.ReceiptNo.GetEfficientString();
+            if (receiptNo!=null)
             {
-                models.Items = models.Items.Where(i => i.ReceiptNo.StartsWith(CurrentController.Request["receiptNo"].Trim()));
+                models.Items = models.Items.Where(i => i.ReceiptNo.StartsWith(receiptNo));
                 this.HasSet = true;
             }
 
@@ -27,9 +30,11 @@ namespace eIVOGo.Models
 
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, Organization> models)
         {
-            if (!String.IsNullOrEmpty(CurrentController.Request["companyName"]))
+            OrganizationQueryViewModel viewModel = CurrentController.ViewBag.ViewModel as OrganizationQueryViewModel;
+            var companyName = viewModel?.CompanyName.GetEfficientString();
+            if (companyName!=null)
             {
-                models.Items = models.Items.Where(i => i.CompanyName.Contains(CurrentController.Request["companyName"].Trim()));
+                models.Items = models.Items.Where(i => i.CompanyName.Contains(companyName));
                 this.HasSet = true;
             }
 
@@ -41,10 +46,10 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, Organization> models)
         {
-            int orgStatus;
-            if (!String.IsNullOrEmpty(CurrentController.Request["organizationStatus"]) && int.TryParse(CurrentController.Request["organizationStatus"],out orgStatus))
+            OrganizationQueryViewModel viewModel = CurrentController.ViewBag.ViewModel as OrganizationQueryViewModel;
+            if (viewModel?.OrganizationStatus.HasValue == true)
             {
-                models.Items = models.Items.Where(i => i.OrganizationStatus.CurrentLevel == orgStatus);
+                models.Items = models.Items.Where(i => i.OrganizationStatus.CurrentLevel == (int)viewModel.OrganizationStatus);
                 this.HasSet = true;
             }
 

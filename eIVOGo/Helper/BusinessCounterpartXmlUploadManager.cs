@@ -169,7 +169,7 @@ namespace eIVOGo.Helper
                         var orgaCate = new OrganizationCategory
                         {
                             Organization = item.Entity,
-                            CategoryID = (int)Naming.MemberCategoryID.相對營業人,
+                            CategoryID = (int)CategoryDefinition.CategoryEnum.相對營業人,
                         };
 
                         this.EntityList.InsertOnSubmit(item.Entity);

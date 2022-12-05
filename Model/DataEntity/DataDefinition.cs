@@ -109,4 +109,44 @@ namespace Model.DataEntity
     {
         public String C0401POSView { get; set; }
     }
+
+    public partial class CategoryDefinition
+    {
+        public enum CategoryEnum
+        {
+            發票開立營業人 = 15,	                                //	2	賣方	     sketch_seller.gif
+            相對營業人 = 16,	            //	3	買方	     sketch_buyer.gif
+            GoogleTaiwan = 17,                            //  4  
+            集團成員 = 18,
+            營業人發票自動配號 = 19,
+            經銷商 = 20,
+            境外電商 = 23,
+            主機構 = 24,
+        }
+    }
+
+    public partial class ExtraBillingItem 
+    {
+        public enum BillingTypeEnum
+        {
+            PayOnce = 1,
+            PayContinuous = 2,
+        }
+    }
+
+    public partial class InvoiceIssuerAgent
+    {
+        public enum Relationship
+        {
+            MasterBranch = 1,
+        }
+    }
+
+    public partial class Organization
+    {
+        public IEnumerable<InvoiceIssuerAgent> BranchRelation 
+        {
+            get => this.InvoiceIssuerAgent.Where(a => a.RelationType == (int)Model.DataEntity.InvoiceIssuerAgent.Relationship.MasterBranch);
+        } 
+    }
 }

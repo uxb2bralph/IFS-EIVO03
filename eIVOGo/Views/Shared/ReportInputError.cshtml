@@ -36,15 +36,35 @@
                 {
                     if (String.IsNullOrEmpty(_dataRole))
                     {
+                        if (key.IndexOf(',') >= 0)
+                        {
+                            var keys = key.Split(',');
                         <text>
-            $scope.find('[name="@(key)"]').addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
+            $scope.find('[name="@(keys[0])"]:enabled').eq(@(keys[1])).addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
                         </text>
+                        }
+                        else
+                        {
+                        <text>
+            $scope.find('[name="@(key)"]:enabled').addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
+                        </text>
+                        }
                     }
                     else
                     {
+                        if (key.IndexOf(',') >= 0)
+                        {
+                            var keys = key.Split(',');
                         <text>
-            $scope.find('[name="@(key)"][data-role="@(_dataRole)"]').addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
+            $scope.find('[name="@(keys[0])"][data-role="@(_dataRole)"]:enabled').eq(@(keys[1]))).addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
                         </text>
+                        }
+                        else
+                        {
+                        <text>
+            $scope.find('[name="@(key)"][data-role="@(_dataRole)"]:enabled').addClass('error').after($('<label id="@(key)-error" class="error" for="@(key)">@(HttpUtility.JavaScriptStringEncode(String.Join("、", _modelState[key].Errors.Select(r => r.ErrorMessage))))</label>'));
+                        </text>
+                        }
                     }
                 }
         });

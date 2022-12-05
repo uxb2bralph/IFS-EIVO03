@@ -481,15 +481,39 @@ namespace Model.DataEntity
     partial void InsertOrganizationSettings(OrganizationSettings instance);
     partial void UpdateOrganizationSettings(OrganizationSettings instance);
     partial void DeleteOrganizationSettings(OrganizationSettings instance);
-    partial void InsertOrganizationRelation(OrganizationRelation instance);
-    partial void UpdateOrganizationRelation(OrganizationRelation instance);
-    partial void DeleteOrganizationRelation(OrganizationRelation instance);
     partial void InsertCustomSmtpHost(CustomSmtpHost instance);
     partial void UpdateCustomSmtpHost(CustomSmtpHost instance);
     partial void DeleteCustomSmtpHost(CustomSmtpHost instance);
     partial void InsertOrganizationCustomSetting(OrganizationCustomSetting instance);
     partial void UpdateOrganizationCustomSetting(OrganizationCustomSetting instance);
     partial void DeleteOrganizationCustomSetting(OrganizationCustomSetting instance);
+    partial void InsertBillingCalculation(BillingCalculation instance);
+    partial void UpdateBillingCalculation(BillingCalculation instance);
+    partial void DeleteBillingCalculation(BillingCalculation instance);
+    partial void InsertBillingGrade(BillingGrade instance);
+    partial void UpdateBillingGrade(BillingGrade instance);
+    partial void DeleteBillingGrade(BillingGrade instance);
+    partial void InsertExtraBillingItem(ExtraBillingItem instance);
+    partial void UpdateExtraBillingItem(ExtraBillingItem instance);
+    partial void DeleteExtraBillingItem(ExtraBillingItem instance);
+    partial void InsertBillingIncrement(BillingIncrement instance);
+    partial void UpdateBillingIncrement(BillingIncrement instance);
+    partial void DeleteBillingIncrement(BillingIncrement instance);
+    partial void InsertMonthlyExtraBilling(MonthlyExtraBilling instance);
+    partial void UpdateMonthlyExtraBilling(MonthlyExtraBilling instance);
+    partial void DeleteMonthlyExtraBilling(MonthlyExtraBilling instance);
+    partial void InsertSettlement(Settlement instance);
+    partial void UpdateSettlement(Settlement instance);
+    partial void DeleteSettlement(Settlement instance);
+    partial void InsertMonthlyBilling(MonthlyBilling instance);
+    partial void UpdateMonthlyBilling(MonthlyBilling instance);
+    partial void DeleteMonthlyBilling(MonthlyBilling instance);
+    partial void InsertBillingExtension(BillingExtension instance);
+    partial void UpdateBillingExtension(BillingExtension instance);
+    partial void DeleteBillingExtension(BillingExtension instance);
+    partial void InsertBillSubmission(BillSubmission instance);
+    partial void UpdateBillSubmission(BillSubmission instance);
+    partial void DeleteBillSubmission(BillSubmission instance);
     #endregion
 		
 		public EIVOEntityDataContext() : 
@@ -1730,14 +1754,6 @@ namespace Model.DataEntity
 			}
 		}
 		
-		public System.Data.Linq.Table<OrganizationRelation> OrganizationRelation
-		{
-			get
-			{
-				return this.GetTable<OrganizationRelation>();
-			}
-		}
-		
 		public System.Data.Linq.Table<CustomSmtpHost> CustomSmtpHost
 		{
 			get
@@ -1751,6 +1767,78 @@ namespace Model.DataEntity
 			get
 			{
 				return this.GetTable<OrganizationCustomSetting>();
+			}
+		}
+		
+		public System.Data.Linq.Table<BillingCalculation> BillingCalculation
+		{
+			get
+			{
+				return this.GetTable<BillingCalculation>();
+			}
+		}
+		
+		public System.Data.Linq.Table<BillingGrade> BillingGrade
+		{
+			get
+			{
+				return this.GetTable<BillingGrade>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ExtraBillingItem> ExtraBillingItem
+		{
+			get
+			{
+				return this.GetTable<ExtraBillingItem>();
+			}
+		}
+		
+		public System.Data.Linq.Table<BillingIncrement> BillingIncrement
+		{
+			get
+			{
+				return this.GetTable<BillingIncrement>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MonthlyExtraBilling> MonthlyExtraBilling
+		{
+			get
+			{
+				return this.GetTable<MonthlyExtraBilling>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Settlement> Settlement
+		{
+			get
+			{
+				return this.GetTable<Settlement>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MonthlyBilling> MonthlyBilling
+		{
+			get
+			{
+				return this.GetTable<MonthlyBilling>();
+			}
+		}
+		
+		public System.Data.Linq.Table<BillingExtension> BillingExtension
+		{
+			get
+			{
+				return this.GetTable<BillingExtension>();
+			}
+		}
+		
+		public System.Data.Linq.Table<BillSubmission> BillSubmission
+		{
+			get
+			{
+				return this.GetTable<BillSubmission>();
 			}
 		}
 		
@@ -1916,9 +2004,9 @@ namespace Model.DataEntity
 		
 		private EntitySet<InvoiceBuyer> _InvoiceBuyer;
 		
-		private EntitySet<InvoiceIssuerAgent> _InvoiceInsurerAgent;
+		private EntitySet<InvoiceIssuerAgent> _InvoiceInssuerAgent;
 		
-		private EntitySet<InvoiceIssuerAgent> _AsInvoiceInsurer;
+		private EntitySet<InvoiceIssuerAgent> _AsInvoiceIssuer;
 		
 		private EntitySet<POSDevice> _POSDevice;
 		
@@ -1938,13 +2026,21 @@ namespace Model.DataEntity
 		
 		private EntitySet<OrganizationSettings> _OrganizationSettings;
 		
-		private EntityRef<OrganizationRelation> _OrganizationRelation;
-		
-		private EntitySet<OrganizationRelation> _BranchRelation;
-		
 		private EntitySet<CustomSmtpHost> _CustomSmtpHost;
 		
 		private EntityRef<OrganizationCustomSetting> _OrganizationCustomSetting;
+		
+		private EntitySet<BillingCalculation> _BillingCalculation;
+		
+		private EntitySet<BillingGrade> _BillingGrade;
+		
+		private EntitySet<ExtraBillingItem> _ExtraBillingItem;
+		
+		private EntitySet<BillingIncrement> _BillingIncrement;
+		
+		private EntitySet<MonthlyBilling> _MonthlyBilling;
+		
+		private EntityRef<BillingExtension> _BillingExtension;
 		
 		private bool serializing;
 		
@@ -2954,41 +3050,41 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceIssuerAgent", Storage="_InvoiceInsurerAgent", ThisKey="CompanyID", OtherKey="AgentID")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceIssuerAgent", Storage="_InvoiceInssuerAgent", ThisKey="CompanyID", OtherKey="AgentID")]
 		[global::System.Runtime.Serialization.DataMemberAttribute(Order=46, EmitDefaultValue=false)]
-		public EntitySet<InvoiceIssuerAgent> InvoiceInsurerAgent
+		public EntitySet<InvoiceIssuerAgent> InvoiceIssuerAgent
 		{
 			get
 			{
 				if ((this.serializing 
-							&& (this._InvoiceInsurerAgent.HasLoadedOrAssignedValues == false)))
+							&& (this._InvoiceInssuerAgent.HasLoadedOrAssignedValues == false)))
 				{
 					return null;
 				}
-				return this._InvoiceInsurerAgent;
+				return this._InvoiceInssuerAgent;
 			}
 			set
 			{
-				this._InvoiceInsurerAgent.Assign(value);
+				this._InvoiceInssuerAgent.Assign(value);
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceIssuerAgent1", Storage="_AsInvoiceInsurer", ThisKey="CompanyID", OtherKey="IssuerID")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceIssuerAgent1", Storage="_AsInvoiceIssuer", ThisKey="CompanyID", OtherKey="IssuerID")]
 		[global::System.Runtime.Serialization.DataMemberAttribute(Order=47, EmitDefaultValue=false)]
-		public EntitySet<InvoiceIssuerAgent> AsInvoiceInsurer
+		public EntitySet<InvoiceIssuerAgent> AsInvoiceIssuer
 		{
 			get
 			{
 				if ((this.serializing 
-							&& (this._AsInvoiceInsurer.HasLoadedOrAssignedValues == false)))
+							&& (this._AsInvoiceIssuer.HasLoadedOrAssignedValues == false)))
 				{
 					return null;
 				}
-				return this._AsInvoiceInsurer;
+				return this._AsInvoiceIssuer;
 			}
 			set
 			{
-				this._AsInvoiceInsurer.Assign(value);
+				this._AsInvoiceIssuer.Assign(value);
 			}
 		}
 		
@@ -3179,62 +3275,8 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationRelation", Storage="_OrganizationRelation", ThisKey="CompanyID", OtherKey="CompanyID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=57, EmitDefaultValue=false)]
-		public OrganizationRelation OrganizationRelation
-		{
-			get
-			{
-				if ((this.serializing 
-							&& (this._OrganizationRelation.HasLoadedOrAssignedValue == false)))
-				{
-					return null;
-				}
-				return this._OrganizationRelation.Entity;
-			}
-			set
-			{
-				OrganizationRelation previousValue = this._OrganizationRelation.Entity;
-				if (((previousValue != value) 
-							|| (this._OrganizationRelation.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._OrganizationRelation.Entity = null;
-						previousValue.Organization = null;
-					}
-					this._OrganizationRelation.Entity = value;
-					if ((value != null))
-					{
-						value.Organization = this;
-					}
-					this.SendPropertyChanged("OrganizationRelation");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationRelation1", Storage="_BranchRelation", ThisKey="CompanyID", OtherKey="Headquarters")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=58, EmitDefaultValue=false)]
-		public EntitySet<OrganizationRelation> BranchRelation
-		{
-			get
-			{
-				if ((this.serializing 
-							&& (this._BranchRelation.HasLoadedOrAssignedValues == false)))
-				{
-					return null;
-				}
-				return this._BranchRelation;
-			}
-			set
-			{
-				this._BranchRelation.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_CustomSmtpHost", Storage="_CustomSmtpHost", ThisKey="CompanyID", OtherKey="CompanyID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=59, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=57, EmitDefaultValue=false)]
 		public EntitySet<CustomSmtpHost> CustomSmtpHost
 		{
 			get
@@ -3253,7 +3295,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationCustomSetting", Storage="_OrganizationCustomSetting", ThisKey="CompanyID", OtherKey="CompanyID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=60, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=58, EmitDefaultValue=false)]
 		public OrganizationCustomSetting OrganizationCustomSetting
 		{
 			get
@@ -3283,6 +3325,136 @@ namespace Model.DataEntity
 						value.Organization = this;
 					}
 					this.SendPropertyChanged("OrganizationCustomSetting");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_BillingCalculation", Storage="_BillingCalculation", ThisKey="CompanyID", OtherKey="CompanyID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=59, EmitDefaultValue=false)]
+		public EntitySet<BillingCalculation> BillingCalculation
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._BillingCalculation.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._BillingCalculation;
+			}
+			set
+			{
+				this._BillingCalculation.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_BillingGrade", Storage="_BillingGrade", ThisKey="CompanyID", OtherKey="CompanyID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=60, EmitDefaultValue=false)]
+		public EntitySet<BillingGrade> BillingGrade
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._BillingGrade.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._BillingGrade;
+			}
+			set
+			{
+				this._BillingGrade.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ExtraBillingItem", Storage="_ExtraBillingItem", ThisKey="CompanyID", OtherKey="CompanyID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=61, EmitDefaultValue=false)]
+		public EntitySet<ExtraBillingItem> ExtraBillingItem
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._ExtraBillingItem.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._ExtraBillingItem;
+			}
+			set
+			{
+				this._ExtraBillingItem.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_BillingIncrement", Storage="_BillingIncrement", ThisKey="CompanyID", OtherKey="CompanyID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=62, EmitDefaultValue=false)]
+		public EntitySet<BillingIncrement> BillingIncrement
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._BillingIncrement.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._BillingIncrement;
+			}
+			set
+			{
+				this._BillingIncrement.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_MonthlyBilling", Storage="_MonthlyBilling", ThisKey="CompanyID", OtherKey="CompanyID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=63, EmitDefaultValue=false)]
+		public EntitySet<MonthlyBilling> MonthlyBilling
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._MonthlyBilling.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._MonthlyBilling;
+			}
+			set
+			{
+				this._MonthlyBilling.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_BillingExtension", Storage="_BillingExtension", ThisKey="CompanyID", OtherKey="CompanyID", IsUnique=true, IsForeignKey=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=64, EmitDefaultValue=false)]
+		public BillingExtension BillingExtension
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._BillingExtension.HasLoadedOrAssignedValue == false)))
+				{
+					return null;
+				}
+				return this._BillingExtension.Entity;
+			}
+			set
+			{
+				BillingExtension previousValue = this._BillingExtension.Entity;
+				if (((previousValue != value) 
+							|| (this._BillingExtension.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BillingExtension.Entity = null;
+						previousValue.Organization = null;
+					}
+					this._BillingExtension.Entity = value;
+					if ((value != null))
+					{
+						value.Organization = this;
+					}
+					this.SendPropertyChanged("BillingExtension");
 				}
 			}
 		}
@@ -3535,28 +3707,28 @@ namespace Model.DataEntity
 			entity.Organization = null;
 		}
 		
-		private void attach_InvoiceInsurerAgent(InvoiceIssuerAgent entity)
+		private void attach_InvoiceInssuerAgent(InvoiceIssuerAgent entity)
 		{
 			this.SendPropertyChanging();
 			entity.InvoiceAgent = this;
 		}
 		
-		private void detach_InvoiceInsurerAgent(InvoiceIssuerAgent entity)
+		private void detach_InvoiceInssuerAgent(InvoiceIssuerAgent entity)
 		{
 			this.SendPropertyChanging();
 			entity.InvoiceAgent = null;
 		}
 		
-		private void attach_AsInvoiceInsurer(InvoiceIssuerAgent entity)
+		private void attach_AsInvoiceIssuer(InvoiceIssuerAgent entity)
 		{
 			this.SendPropertyChanging();
-			entity.InvoiceInsurer = this;
+			entity.InvoiceIssuer = this;
 		}
 		
-		private void detach_AsInvoiceInsurer(InvoiceIssuerAgent entity)
+		private void detach_AsInvoiceIssuer(InvoiceIssuerAgent entity)
 		{
 			this.SendPropertyChanging();
-			entity.InvoiceInsurer = null;
+			entity.InvoiceIssuer = null;
 		}
 		
 		private void attach_POSDevice(POSDevice entity)
@@ -3655,18 +3827,6 @@ namespace Model.DataEntity
 			entity.Organization = null;
 		}
 		
-		private void attach_BranchRelation(OrganizationRelation entity)
-		{
-			this.SendPropertyChanging();
-			entity.HeaderquarterItem = this;
-		}
-		
-		private void detach_BranchRelation(OrganizationRelation entity)
-		{
-			this.SendPropertyChanging();
-			entity.HeaderquarterItem = null;
-		}
-		
 		private void attach_CustomSmtpHost(CustomSmtpHost entity)
 		{
 			this.SendPropertyChanging();
@@ -3674,6 +3834,66 @@ namespace Model.DataEntity
 		}
 		
 		private void detach_CustomSmtpHost(CustomSmtpHost entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
+		private void attach_BillingCalculation(BillingCalculation entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_BillingCalculation(BillingCalculation entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
+		private void attach_BillingGrade(BillingGrade entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_BillingGrade(BillingGrade entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
+		private void attach_ExtraBillingItem(ExtraBillingItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_ExtraBillingItem(ExtraBillingItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
+		private void attach_BillingIncrement(BillingIncrement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_BillingIncrement(BillingIncrement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
+		private void attach_MonthlyBilling(MonthlyBilling entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_MonthlyBilling(MonthlyBilling entity)
 		{
 			this.SendPropertyChanging();
 			entity.Organization = null;
@@ -3703,8 +3923,8 @@ namespace Model.DataEntity
 			this._SMSNotificationLogs = new EntitySet<SMSNotificationLog>(new Action<SMSNotificationLog>(this.attach_SMSNotificationLogs), new Action<SMSNotificationLog>(this.detach_SMSNotificationLogs));
 			this._OrganizationStatus = default(EntityRef<OrganizationStatus>);
 			this._InvoiceBuyer = new EntitySet<InvoiceBuyer>(new Action<InvoiceBuyer>(this.attach_InvoiceBuyer), new Action<InvoiceBuyer>(this.detach_InvoiceBuyer));
-			this._InvoiceInsurerAgent = new EntitySet<InvoiceIssuerAgent>(new Action<InvoiceIssuerAgent>(this.attach_InvoiceInsurerAgent), new Action<InvoiceIssuerAgent>(this.detach_InvoiceInsurerAgent));
-			this._AsInvoiceInsurer = new EntitySet<InvoiceIssuerAgent>(new Action<InvoiceIssuerAgent>(this.attach_AsInvoiceInsurer), new Action<InvoiceIssuerAgent>(this.detach_AsInvoiceInsurer));
+			this._InvoiceInssuerAgent = new EntitySet<InvoiceIssuerAgent>(new Action<InvoiceIssuerAgent>(this.attach_InvoiceInssuerAgent), new Action<InvoiceIssuerAgent>(this.detach_InvoiceInssuerAgent));
+			this._AsInvoiceIssuer = new EntitySet<InvoiceIssuerAgent>(new Action<InvoiceIssuerAgent>(this.attach_AsInvoiceIssuer), new Action<InvoiceIssuerAgent>(this.detach_AsInvoiceIssuer));
 			this._POSDevice = new EntitySet<POSDevice>(new Action<POSDevice>(this.attach_POSDevice), new Action<POSDevice>(this.detach_POSDevice));
 			this._OrganizationExtension = default(EntityRef<OrganizationExtension>);
 			this._OrganizationBranch = new EntitySet<OrganizationBranch>(new Action<OrganizationBranch>(this.attach_OrganizationBranch), new Action<OrganizationBranch>(this.detach_OrganizationBranch));
@@ -3714,10 +3934,14 @@ namespace Model.DataEntity
 			this._InvoiceTrackCodeAssignment = new EntitySet<InvoiceTrackCodeAssignment>(new Action<InvoiceTrackCodeAssignment>(this.attach_InvoiceTrackCodeAssignment), new Action<InvoiceTrackCodeAssignment>(this.detach_InvoiceTrackCodeAssignment));
 			this._InvoiceNoMainAssignment = new EntitySet<InvoiceNoMainAssignment>(new Action<InvoiceNoMainAssignment>(this.attach_InvoiceNoMainAssignment), new Action<InvoiceNoMainAssignment>(this.detach_InvoiceNoMainAssignment));
 			this._OrganizationSettings = new EntitySet<OrganizationSettings>(new Action<OrganizationSettings>(this.attach_OrganizationSettings), new Action<OrganizationSettings>(this.detach_OrganizationSettings));
-			this._OrganizationRelation = default(EntityRef<OrganizationRelation>);
-			this._BranchRelation = new EntitySet<OrganizationRelation>(new Action<OrganizationRelation>(this.attach_BranchRelation), new Action<OrganizationRelation>(this.detach_BranchRelation));
 			this._CustomSmtpHost = new EntitySet<CustomSmtpHost>(new Action<CustomSmtpHost>(this.attach_CustomSmtpHost), new Action<CustomSmtpHost>(this.detach_CustomSmtpHost));
 			this._OrganizationCustomSetting = default(EntityRef<OrganizationCustomSetting>);
+			this._BillingCalculation = new EntitySet<BillingCalculation>(new Action<BillingCalculation>(this.attach_BillingCalculation), new Action<BillingCalculation>(this.detach_BillingCalculation));
+			this._BillingGrade = new EntitySet<BillingGrade>(new Action<BillingGrade>(this.attach_BillingGrade), new Action<BillingGrade>(this.detach_BillingGrade));
+			this._ExtraBillingItem = new EntitySet<ExtraBillingItem>(new Action<ExtraBillingItem>(this.attach_ExtraBillingItem), new Action<ExtraBillingItem>(this.detach_ExtraBillingItem));
+			this._BillingIncrement = new EntitySet<BillingIncrement>(new Action<BillingIncrement>(this.attach_BillingIncrement), new Action<BillingIncrement>(this.detach_BillingIncrement));
+			this._MonthlyBilling = new EntitySet<MonthlyBilling>(new Action<MonthlyBilling>(this.attach_MonthlyBilling), new Action<MonthlyBilling>(this.detach_MonthlyBilling));
+			this._BillingExtension = default(EntityRef<BillingExtension>);
 			OnCreated();
 		}
 		
@@ -11074,6 +11298,8 @@ namespace Model.DataEntity
 		
 		private EntitySet<DocumentPrintLog> _DocumentPrintLog;
 		
+		private EntitySet<BillingCalculation> _BillingCalculation;
+		
 		private bool serializing;
 		
     #region Extensibility Method Definitions
@@ -11323,6 +11549,25 @@ namespace Model.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="DocumentType_BillingCalculation", Storage="_BillingCalculation", ThisKey="TypeID", OtherKey="TypeID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=13, EmitDefaultValue=false)]
+		public EntitySet<BillingCalculation> BillingCalculation
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._BillingCalculation.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._BillingCalculation;
+			}
+			set
+			{
+				this._BillingCalculation.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -11463,6 +11708,18 @@ namespace Model.DataEntity
 			entity.DocumentType = null;
 		}
 		
+		private void attach_BillingCalculation(BillingCalculation entity)
+		{
+			this.SendPropertyChanging();
+			entity.DocumentType = this;
+		}
+		
+		private void detach_BillingCalculation(BillingCalculation entity)
+		{
+			this.SendPropertyChanging();
+			entity.DocumentType = null;
+		}
+		
 		private void Initialize()
 		{
 			this._CDS_Documents = new EntitySet<CDS_Document>(new Action<CDS_Document>(this.attach_CDS_Documents), new Action<CDS_Document>(this.detach_CDS_Documents));
@@ -11475,6 +11732,7 @@ namespace Model.DataEntity
 			this._DocumentReady = new EntitySet<DocumentReady>(new Action<DocumentReady>(this.attach_DocumentReady), new Action<DocumentReady>(this.detach_DocumentReady));
 			this._CALog = new EntitySet<CALog>(new Action<CALog>(this.attach_CALog), new Action<CALog>(this.detach_CALog));
 			this._DocumentPrintLog = new EntitySet<DocumentPrintLog>(new Action<DocumentPrintLog>(this.attach_DocumentPrintLog), new Action<DocumentPrintLog>(this.detach_DocumentPrintLog));
+			this._BillingCalculation = new EntitySet<BillingCalculation>(new Action<BillingCalculation>(this.attach_BillingCalculation), new Action<BillingCalculation>(this.detach_BillingCalculation));
 			OnCreated();
 		}
 		
@@ -32350,9 +32608,11 @@ namespace Model.DataEntity
 		
 		private int _IssuerID;
 		
+		private System.Nullable<int> _RelationType;
+		
 		private EntityRef<Organization> _InvoiceAgent;
 		
-		private EntityRef<Organization> _InvoiceInsurer;
+		private EntityRef<Organization> _InvoiceIssuer;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -32362,6 +32622,8 @@ namespace Model.DataEntity
     partial void OnAgentIDChanged();
     partial void OnIssuerIDChanging(int value);
     partial void OnIssuerIDChanged();
+    partial void OnRelationTypeChanging(System.Nullable<int> value);
+    partial void OnRelationTypeChanged();
     #endregion
 		
 		public InvoiceIssuerAgent()
@@ -32406,7 +32668,7 @@ namespace Model.DataEntity
 			{
 				if ((this._IssuerID != value))
 				{
-					if (this._InvoiceInsurer.HasLoadedOrAssignedValue)
+					if (this._InvoiceIssuer.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -32415,6 +32677,27 @@ namespace Model.DataEntity
 					this._IssuerID = value;
 					this.SendPropertyChanged("IssuerID");
 					this.OnIssuerIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RelationType", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public System.Nullable<int> RelationType
+		{
+			get
+			{
+				return this._RelationType;
+			}
+			set
+			{
+				if ((this._RelationType != value))
+				{
+					this.OnRelationTypeChanging(value);
+					this.SendPropertyChanging();
+					this._RelationType = value;
+					this.SendPropertyChanged("RelationType");
+					this.OnRelationTypeChanged();
 				}
 			}
 		}
@@ -32436,12 +32719,12 @@ namespace Model.DataEntity
 					if ((previousValue != null))
 					{
 						this._InvoiceAgent.Entity = null;
-						previousValue.InvoiceInsurerAgent.Remove(this);
+						previousValue.InvoiceIssuerAgent.Remove(this);
 					}
 					this._InvoiceAgent.Entity = value;
 					if ((value != null))
 					{
-						value.InvoiceInsurerAgent.Add(this);
+						value.InvoiceIssuerAgent.Add(this);
 						this._AgentID = value.CompanyID;
 					}
 					else
@@ -32453,36 +32736,36 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceIssuerAgent1", Storage="_InvoiceInsurer", ThisKey="IssuerID", OtherKey="CompanyID", IsForeignKey=true)]
-		public Organization InvoiceInsurer
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceIssuerAgent1", Storage="_InvoiceIssuer", ThisKey="IssuerID", OtherKey="CompanyID", IsForeignKey=true)]
+		public Organization InvoiceIssuer
 		{
 			get
 			{
-				return this._InvoiceInsurer.Entity;
+				return this._InvoiceIssuer.Entity;
 			}
 			set
 			{
-				Organization previousValue = this._InvoiceInsurer.Entity;
+				Organization previousValue = this._InvoiceIssuer.Entity;
 				if (((previousValue != value) 
-							|| (this._InvoiceInsurer.HasLoadedOrAssignedValue == false)))
+							|| (this._InvoiceIssuer.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._InvoiceInsurer.Entity = null;
-						previousValue.AsInvoiceInsurer.Remove(this);
+						this._InvoiceIssuer.Entity = null;
+						previousValue.AsInvoiceIssuer.Remove(this);
 					}
-					this._InvoiceInsurer.Entity = value;
+					this._InvoiceIssuer.Entity = value;
 					if ((value != null))
 					{
-						value.AsInvoiceInsurer.Add(this);
+						value.AsInvoiceIssuer.Add(this);
 						this._IssuerID = value.CompanyID;
 					}
 					else
 					{
 						this._IssuerID = default(int);
 					}
-					this.SendPropertyChanged("InvoiceInsurer");
+					this.SendPropertyChanged("InvoiceIssuer");
 				}
 			}
 		}
@@ -32510,7 +32793,7 @@ namespace Model.DataEntity
 		private void Initialize()
 		{
 			this._InvoiceAgent = default(EntityRef<Organization>);
-			this._InvoiceInsurer = default(EntityRef<Organization>);
+			this._InvoiceIssuer = default(EntityRef<Organization>);
 			OnCreated();
 		}
 		
@@ -45345,189 +45628,6 @@ namespace Model.DataEntity
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.OrganizationRelation")]
-	[global::System.Runtime.Serialization.DataContractAttribute()]
-	public partial class OrganizationRelation : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _CompanyID;
-		
-		private int _Headquarters;
-		
-		private EntityRef<Organization> _Organization;
-		
-		private EntityRef<Organization> _HeaderquarterItem;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnCompanyIDChanging(int value);
-    partial void OnCompanyIDChanged();
-    partial void OnHeadquartersChanging(int value);
-    partial void OnHeadquartersChanged();
-    #endregion
-		
-		public OrganizationRelation()
-		{
-			this.Initialize();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
-		public int CompanyID
-		{
-			get
-			{
-				return this._CompanyID;
-			}
-			set
-			{
-				if ((this._CompanyID != value))
-				{
-					if (this._Organization.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCompanyIDChanging(value);
-					this.SendPropertyChanging();
-					this._CompanyID = value;
-					this.SendPropertyChanged("CompanyID");
-					this.OnCompanyIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Headquarters", DbType="Int NOT NULL")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
-		public int Headquarters
-		{
-			get
-			{
-				return this._Headquarters;
-			}
-			set
-			{
-				if ((this._Headquarters != value))
-				{
-					if (this._HeaderquarterItem.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnHeadquartersChanging(value);
-					this.SendPropertyChanging();
-					this._Headquarters = value;
-					this.SendPropertyChanged("Headquarters");
-					this.OnHeadquartersChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationRelation", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public Organization Organization
-		{
-			get
-			{
-				return this._Organization.Entity;
-			}
-			set
-			{
-				Organization previousValue = this._Organization.Entity;
-				if (((previousValue != value) 
-							|| (this._Organization.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Organization.Entity = null;
-						previousValue.OrganizationRelation = null;
-					}
-					this._Organization.Entity = value;
-					if ((value != null))
-					{
-						value.OrganizationRelation = this;
-						this._CompanyID = value.CompanyID;
-					}
-					else
-					{
-						this._CompanyID = default(int);
-					}
-					this.SendPropertyChanged("Organization");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_OrganizationRelation1", Storage="_HeaderquarterItem", ThisKey="Headquarters", OtherKey="CompanyID", IsForeignKey=true)]
-		public Organization HeaderquarterItem
-		{
-			get
-			{
-				return this._HeaderquarterItem.Entity;
-			}
-			set
-			{
-				Organization previousValue = this._HeaderquarterItem.Entity;
-				if (((previousValue != value) 
-							|| (this._HeaderquarterItem.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._HeaderquarterItem.Entity = null;
-						previousValue.BranchRelation.Remove(this);
-					}
-					this._HeaderquarterItem.Entity = value;
-					if ((value != null))
-					{
-						value.BranchRelation.Add(this);
-						this._Headquarters = value.CompanyID;
-					}
-					else
-					{
-						this._Headquarters = default(int);
-					}
-					this.SendPropertyChanged("HeaderquarterItem");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void Initialize()
-		{
-			this._Organization = default(EntityRef<Organization>);
-			this._HeaderquarterItem = default(EntityRef<Organization>);
-			OnCreated();
-		}
-		
-		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
-		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public void OnDeserializing(StreamingContext context)
-		{
-			this.Initialize();
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CustomSmtpHost")]
 	[global::System.Runtime.Serialization.DataContractAttribute()]
 	public partial class CustomSmtpHost : INotifyPropertyChanging, INotifyPropertyChanged
@@ -45984,6 +46084,1881 @@ namespace Model.DataEntity
 		public void OnDeserializing(StreamingContext context)
 		{
 			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="billing.BillingCalculation")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class BillingCalculation : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _CompanyID;
+		
+		private int _TypeID;
+		
+		private EntityRef<DocumentType> _DocumentType;
+		
+		private EntityRef<Organization> _Organization;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCompanyIDChanging(int value);
+    partial void OnCompanyIDChanged();
+    partial void OnTypeIDChanging(int value);
+    partial void OnTypeIDChanged();
+    #endregion
+		
+		public BillingCalculation()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int CompanyID
+		{
+			get
+			{
+				return this._CompanyID;
+			}
+			set
+			{
+				if ((this._CompanyID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyID = value;
+					this.SendPropertyChanged("CompanyID");
+					this.OnCompanyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int TypeID
+		{
+			get
+			{
+				return this._TypeID;
+			}
+			set
+			{
+				if ((this._TypeID != value))
+				{
+					if (this._DocumentType.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._TypeID = value;
+					this.SendPropertyChanged("TypeID");
+					this.OnTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="DocumentType_BillingCalculation", Storage="_DocumentType", ThisKey="TypeID", OtherKey="TypeID", IsForeignKey=true)]
+		public DocumentType DocumentType
+		{
+			get
+			{
+				return this._DocumentType.Entity;
+			}
+			set
+			{
+				DocumentType previousValue = this._DocumentType.Entity;
+				if (((previousValue != value) 
+							|| (this._DocumentType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._DocumentType.Entity = null;
+						previousValue.BillingCalculation.Remove(this);
+					}
+					this._DocumentType.Entity = value;
+					if ((value != null))
+					{
+						value.BillingCalculation.Add(this);
+						this._TypeID = value.TypeID;
+					}
+					else
+					{
+						this._TypeID = default(int);
+					}
+					this.SendPropertyChanged("DocumentType");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_BillingCalculation", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.BillingCalculation.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.BillingCalculation.Add(this);
+						this._CompanyID = value.CompanyID;
+					}
+					else
+					{
+						this._CompanyID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._DocumentType = default(EntityRef<DocumentType>);
+			this._Organization = default(EntityRef<Organization>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="billing.BillingGrade")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class BillingGrade : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _CompanyID;
+		
+		private int _GradeCount;
+		
+		private int _BasicFee;
+		
+		private EntityRef<Organization> _Organization;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCompanyIDChanging(int value);
+    partial void OnCompanyIDChanged();
+    partial void OnGradeCountChanging(int value);
+    partial void OnGradeCountChanged();
+    partial void OnBasicFeeChanging(int value);
+    partial void OnBasicFeeChanged();
+    #endregion
+		
+		public BillingGrade()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int CompanyID
+		{
+			get
+			{
+				return this._CompanyID;
+			}
+			set
+			{
+				if ((this._CompanyID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyID = value;
+					this.SendPropertyChanged("CompanyID");
+					this.OnCompanyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GradeCount", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int GradeCount
+		{
+			get
+			{
+				return this._GradeCount;
+			}
+			set
+			{
+				if ((this._GradeCount != value))
+				{
+					this.OnGradeCountChanging(value);
+					this.SendPropertyChanging();
+					this._GradeCount = value;
+					this.SendPropertyChanged("GradeCount");
+					this.OnGradeCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BasicFee", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public int BasicFee
+		{
+			get
+			{
+				return this._BasicFee;
+			}
+			set
+			{
+				if ((this._BasicFee != value))
+				{
+					this.OnBasicFeeChanging(value);
+					this.SendPropertyChanging();
+					this._BasicFee = value;
+					this.SendPropertyChanged("BasicFee");
+					this.OnBasicFeeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_BillingGrade", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.BillingGrade.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.BillingGrade.Add(this);
+						this._CompanyID = value.CompanyID;
+					}
+					else
+					{
+						this._CompanyID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._Organization = default(EntityRef<Organization>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="billing.ExtraBillingItem")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class ExtraBillingItem : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ItemID;
+		
+		private int _CompanyID;
+		
+		private string _ItemName;
+		
+		private int _Fee;
+		
+		private System.Nullable<System.DateTime> _BillingDate;
+		
+		private System.Nullable<int> _BillingType;
+		
+		private EntityRef<Organization> _Organization;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnItemIDChanging(int value);
+    partial void OnItemIDChanged();
+    partial void OnCompanyIDChanging(int value);
+    partial void OnCompanyIDChanged();
+    partial void OnItemNameChanging(string value);
+    partial void OnItemNameChanged();
+    partial void OnFeeChanging(int value);
+    partial void OnFeeChanged();
+    partial void OnBillingDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnBillingDateChanged();
+    partial void OnBillingTypeChanging(System.Nullable<int> value);
+    partial void OnBillingTypeChanged();
+    #endregion
+		
+		public ExtraBillingItem()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ItemID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int ItemID
+		{
+			get
+			{
+				return this._ItemID;
+			}
+			set
+			{
+				if ((this._ItemID != value))
+				{
+					this.OnItemIDChanging(value);
+					this.SendPropertyChanging();
+					this._ItemID = value;
+					this.SendPropertyChanged("ItemID");
+					this.OnItemIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int CompanyID
+		{
+			get
+			{
+				return this._CompanyID;
+			}
+			set
+			{
+				if ((this._CompanyID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyID = value;
+					this.SendPropertyChanged("CompanyID");
+					this.OnCompanyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ItemName", DbType="NVarChar(64)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public string ItemName
+		{
+			get
+			{
+				return this._ItemName;
+			}
+			set
+			{
+				if ((this._ItemName != value))
+				{
+					this.OnItemNameChanging(value);
+					this.SendPropertyChanging();
+					this._ItemName = value;
+					this.SendPropertyChanged("ItemName");
+					this.OnItemNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Fee", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public int Fee
+		{
+			get
+			{
+				return this._Fee;
+			}
+			set
+			{
+				if ((this._Fee != value))
+				{
+					this.OnFeeChanging(value);
+					this.SendPropertyChanging();
+					this._Fee = value;
+					this.SendPropertyChanged("Fee");
+					this.OnFeeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BillingDate", DbType="DateTime")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public System.Nullable<System.DateTime> BillingDate
+		{
+			get
+			{
+				return this._BillingDate;
+			}
+			set
+			{
+				if ((this._BillingDate != value))
+				{
+					this.OnBillingDateChanging(value);
+					this.SendPropertyChanging();
+					this._BillingDate = value;
+					this.SendPropertyChanged("BillingDate");
+					this.OnBillingDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BillingType", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6)]
+		public System.Nullable<int> BillingType
+		{
+			get
+			{
+				return this._BillingType;
+			}
+			set
+			{
+				if ((this._BillingType != value))
+				{
+					this.OnBillingTypeChanging(value);
+					this.SendPropertyChanging();
+					this._BillingType = value;
+					this.SendPropertyChanged("BillingType");
+					this.OnBillingTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_ExtraBillingItem", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.ExtraBillingItem.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.ExtraBillingItem.Add(this);
+						this._CompanyID = value.CompanyID;
+					}
+					else
+					{
+						this._CompanyID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._Organization = default(EntityRef<Organization>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="billing.BillingIncrement")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class BillingIncrement : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _CompanyID;
+		
+		private int _UpperBound;
+		
+		private System.Nullable<decimal> _UnitFee;
+		
+		private EntityRef<Organization> _Organization;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCompanyIDChanging(int value);
+    partial void OnCompanyIDChanged();
+    partial void OnUpperBoundChanging(int value);
+    partial void OnUpperBoundChanged();
+    partial void OnUnitFeeChanging(System.Nullable<decimal> value);
+    partial void OnUnitFeeChanged();
+    #endregion
+		
+		public BillingIncrement()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int CompanyID
+		{
+			get
+			{
+				return this._CompanyID;
+			}
+			set
+			{
+				if ((this._CompanyID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyID = value;
+					this.SendPropertyChanged("CompanyID");
+					this.OnCompanyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpperBound", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int UpperBound
+		{
+			get
+			{
+				return this._UpperBound;
+			}
+			set
+			{
+				if ((this._UpperBound != value))
+				{
+					this.OnUpperBoundChanging(value);
+					this.SendPropertyChanging();
+					this._UpperBound = value;
+					this.SendPropertyChanged("UpperBound");
+					this.OnUpperBoundChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UnitFee", DbType="Decimal(12,4)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public System.Nullable<decimal> UnitFee
+		{
+			get
+			{
+				return this._UnitFee;
+			}
+			set
+			{
+				if ((this._UnitFee != value))
+				{
+					this.OnUnitFeeChanging(value);
+					this.SendPropertyChanging();
+					this._UnitFee = value;
+					this.SendPropertyChanged("UnitFee");
+					this.OnUnitFeeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_BillingIncrement", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.BillingIncrement.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.BillingIncrement.Add(this);
+						this._CompanyID = value.CompanyID;
+					}
+					else
+					{
+						this._CompanyID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._Organization = default(EntityRef<Organization>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="billing.MonthlyExtraBilling")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class MonthlyExtraBilling : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _SettlementID;
+		
+		private int _ItemID;
+		
+		private int _CompanyID;
+		
+		private string _ItemName;
+		
+		private int _Fee;
+		
+		private EntityRef<MonthlyBilling> _MonthlyBilling;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnSettlementIDChanging(int value);
+    partial void OnSettlementIDChanged();
+    partial void OnItemIDChanging(int value);
+    partial void OnItemIDChanged();
+    partial void OnCompanyIDChanging(int value);
+    partial void OnCompanyIDChanged();
+    partial void OnItemNameChanging(string value);
+    partial void OnItemNameChanged();
+    partial void OnFeeChanging(int value);
+    partial void OnFeeChanged();
+    #endregion
+		
+		public MonthlyExtraBilling()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettlementID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int SettlementID
+		{
+			get
+			{
+				return this._SettlementID;
+			}
+			set
+			{
+				if ((this._SettlementID != value))
+				{
+					if (this._MonthlyBilling.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSettlementIDChanging(value);
+					this.SendPropertyChanging();
+					this._SettlementID = value;
+					this.SendPropertyChanged("SettlementID");
+					this.OnSettlementIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ItemID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int ItemID
+		{
+			get
+			{
+				return this._ItemID;
+			}
+			set
+			{
+				if ((this._ItemID != value))
+				{
+					this.OnItemIDChanging(value);
+					this.SendPropertyChanging();
+					this._ItemID = value;
+					this.SendPropertyChanged("ItemID");
+					this.OnItemIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public int CompanyID
+		{
+			get
+			{
+				return this._CompanyID;
+			}
+			set
+			{
+				if ((this._CompanyID != value))
+				{
+					if (this._MonthlyBilling.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyID = value;
+					this.SendPropertyChanged("CompanyID");
+					this.OnCompanyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ItemName", DbType="NVarChar(64)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public string ItemName
+		{
+			get
+			{
+				return this._ItemName;
+			}
+			set
+			{
+				if ((this._ItemName != value))
+				{
+					this.OnItemNameChanging(value);
+					this.SendPropertyChanging();
+					this._ItemName = value;
+					this.SendPropertyChanged("ItemName");
+					this.OnItemNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Fee", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public int Fee
+		{
+			get
+			{
+				return this._Fee;
+			}
+			set
+			{
+				if ((this._Fee != value))
+				{
+					this.OnFeeChanging(value);
+					this.SendPropertyChanging();
+					this._Fee = value;
+					this.SendPropertyChanged("Fee");
+					this.OnFeeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MonthlyBilling_MonthlyExtraBilling", Storage="_MonthlyBilling", ThisKey="SettlementID,CompanyID", OtherKey="SettlementID,CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public MonthlyBilling MonthlyBilling
+		{
+			get
+			{
+				return this._MonthlyBilling.Entity;
+			}
+			set
+			{
+				MonthlyBilling previousValue = this._MonthlyBilling.Entity;
+				if (((previousValue != value) 
+							|| (this._MonthlyBilling.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MonthlyBilling.Entity = null;
+						previousValue.MonthlyExtraBilling.Remove(this);
+					}
+					this._MonthlyBilling.Entity = value;
+					if ((value != null))
+					{
+						value.MonthlyExtraBilling.Add(this);
+						this._SettlementID = value.SettlementID;
+						this._CompanyID = value.CompanyID;
+					}
+					else
+					{
+						this._SettlementID = default(int);
+						this._CompanyID = default(int);
+					}
+					this.SendPropertyChanged("MonthlyBilling");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._MonthlyBilling = default(EntityRef<MonthlyBilling>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="billing.Settlement")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class Settlement : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _SettlementID;
+		
+		private System.DateTime _SettlementDate;
+		
+		private System.DateTime _StartDate;
+		
+		private System.DateTime _EndExclusiveDate;
+		
+		private int _Year;
+		
+		private int _Month;
+		
+		private EntitySet<MonthlyBilling> _MonthlyBilling;
+		
+		private bool serializing;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnSettlementIDChanging(int value);
+    partial void OnSettlementIDChanged();
+    partial void OnSettlementDateChanging(System.DateTime value);
+    partial void OnSettlementDateChanged();
+    partial void OnStartDateChanging(System.DateTime value);
+    partial void OnStartDateChanged();
+    partial void OnEndExclusiveDateChanging(System.DateTime value);
+    partial void OnEndExclusiveDateChanged();
+    partial void OnYearChanging(int value);
+    partial void OnYearChanged();
+    partial void OnMonthChanging(int value);
+    partial void OnMonthChanged();
+    #endregion
+		
+		public Settlement()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettlementID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int SettlementID
+		{
+			get
+			{
+				return this._SettlementID;
+			}
+			set
+			{
+				if ((this._SettlementID != value))
+				{
+					this.OnSettlementIDChanging(value);
+					this.SendPropertyChanging();
+					this._SettlementID = value;
+					this.SendPropertyChanged("SettlementID");
+					this.OnSettlementIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettlementDate", DbType="DateTime NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public System.DateTime SettlementDate
+		{
+			get
+			{
+				return this._SettlementDate;
+			}
+			set
+			{
+				if ((this._SettlementDate != value))
+				{
+					this.OnSettlementDateChanging(value);
+					this.SendPropertyChanging();
+					this._SettlementDate = value;
+					this.SendPropertyChanged("SettlementDate");
+					this.OnSettlementDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public System.DateTime StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndExclusiveDate", DbType="DateTime NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public System.DateTime EndExclusiveDate
+		{
+			get
+			{
+				return this._EndExclusiveDate;
+			}
+			set
+			{
+				if ((this._EndExclusiveDate != value))
+				{
+					this.OnEndExclusiveDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndExclusiveDate = value;
+					this.SendPropertyChanged("EndExclusiveDate");
+					this.OnEndExclusiveDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Year", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public int Year
+		{
+			get
+			{
+				return this._Year;
+			}
+			set
+			{
+				if ((this._Year != value))
+				{
+					this.OnYearChanging(value);
+					this.SendPropertyChanging();
+					this._Year = value;
+					this.SendPropertyChanged("Year");
+					this.OnYearChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Month", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6)]
+		public int Month
+		{
+			get
+			{
+				return this._Month;
+			}
+			set
+			{
+				if ((this._Month != value))
+				{
+					this.OnMonthChanging(value);
+					this.SendPropertyChanging();
+					this._Month = value;
+					this.SendPropertyChanged("Month");
+					this.OnMonthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Settlement_MonthlyBilling", Storage="_MonthlyBilling", ThisKey="SettlementID", OtherKey="SettlementID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=7, EmitDefaultValue=false)]
+		public EntitySet<MonthlyBilling> MonthlyBilling
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._MonthlyBilling.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._MonthlyBilling;
+			}
+			set
+			{
+				this._MonthlyBilling.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_MonthlyBilling(MonthlyBilling entity)
+		{
+			this.SendPropertyChanging();
+			entity.Settlement = this;
+		}
+		
+		private void detach_MonthlyBilling(MonthlyBilling entity)
+		{
+			this.SendPropertyChanging();
+			entity.Settlement = null;
+		}
+		
+		private void Initialize()
+		{
+			this._MonthlyBilling = new EntitySet<MonthlyBilling>(new Action<MonthlyBilling>(this.attach_MonthlyBilling), new Action<MonthlyBilling>(this.detach_MonthlyBilling));
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Runtime.Serialization.OnSerializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnSerializing(StreamingContext context)
+		{
+			this.serializing = true;
+		}
+		
+		[global::System.Runtime.Serialization.OnSerializedAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnSerialized(StreamingContext context)
+		{
+			this.serializing = false;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="billing.MonthlyBilling")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class MonthlyBilling : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _SettlementID;
+		
+		private int _CompanyID;
+		
+		private int _TotalIssueCount;
+		
+		private int _IssueChargeAmount;
+		
+		private System.Nullable<int> _BillID;
+		
+		private EntitySet<MonthlyExtraBilling> _MonthlyExtraBilling;
+		
+		private EntityRef<Organization> _Organization;
+		
+		private EntityRef<Settlement> _Settlement;
+		
+		private EntityRef<BillSubmission> _BillSubmission;
+		
+		private bool serializing;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnSettlementIDChanging(int value);
+    partial void OnSettlementIDChanged();
+    partial void OnCompanyIDChanging(int value);
+    partial void OnCompanyIDChanged();
+    partial void OnTotalIssueCountChanging(int value);
+    partial void OnTotalIssueCountChanged();
+    partial void OnIssueChargeAmountChanging(int value);
+    partial void OnIssueChargeAmountChanged();
+    partial void OnBillIDChanging(System.Nullable<int> value);
+    partial void OnBillIDChanged();
+    #endregion
+		
+		public MonthlyBilling()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettlementID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int SettlementID
+		{
+			get
+			{
+				return this._SettlementID;
+			}
+			set
+			{
+				if ((this._SettlementID != value))
+				{
+					if (this._Settlement.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSettlementIDChanging(value);
+					this.SendPropertyChanging();
+					this._SettlementID = value;
+					this.SendPropertyChanged("SettlementID");
+					this.OnSettlementIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int CompanyID
+		{
+			get
+			{
+				return this._CompanyID;
+			}
+			set
+			{
+				if ((this._CompanyID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyID = value;
+					this.SendPropertyChanged("CompanyID");
+					this.OnCompanyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalIssueCount", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public int TotalIssueCount
+		{
+			get
+			{
+				return this._TotalIssueCount;
+			}
+			set
+			{
+				if ((this._TotalIssueCount != value))
+				{
+					this.OnTotalIssueCountChanging(value);
+					this.SendPropertyChanging();
+					this._TotalIssueCount = value;
+					this.SendPropertyChanged("TotalIssueCount");
+					this.OnTotalIssueCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IssueChargeAmount", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public int IssueChargeAmount
+		{
+			get
+			{
+				return this._IssueChargeAmount;
+			}
+			set
+			{
+				if ((this._IssueChargeAmount != value))
+				{
+					this.OnIssueChargeAmountChanging(value);
+					this.SendPropertyChanging();
+					this._IssueChargeAmount = value;
+					this.SendPropertyChanged("IssueChargeAmount");
+					this.OnIssueChargeAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BillID", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public System.Nullable<int> BillID
+		{
+			get
+			{
+				return this._BillID;
+			}
+			set
+			{
+				if ((this._BillID != value))
+				{
+					if (this._BillSubmission.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBillIDChanging(value);
+					this.SendPropertyChanging();
+					this._BillID = value;
+					this.SendPropertyChanged("BillID");
+					this.OnBillIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MonthlyBilling_MonthlyExtraBilling", Storage="_MonthlyExtraBilling", ThisKey="SettlementID,CompanyID", OtherKey="SettlementID,CompanyID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6, EmitDefaultValue=false)]
+		public EntitySet<MonthlyExtraBilling> MonthlyExtraBilling
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._MonthlyExtraBilling.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._MonthlyExtraBilling;
+			}
+			set
+			{
+				this._MonthlyExtraBilling.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_MonthlyBilling", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true)]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.MonthlyBilling.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.MonthlyBilling.Add(this);
+						this._CompanyID = value.CompanyID;
+					}
+					else
+					{
+						this._CompanyID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Settlement_MonthlyBilling", Storage="_Settlement", ThisKey="SettlementID", OtherKey="SettlementID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Settlement Settlement
+		{
+			get
+			{
+				return this._Settlement.Entity;
+			}
+			set
+			{
+				Settlement previousValue = this._Settlement.Entity;
+				if (((previousValue != value) 
+							|| (this._Settlement.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Settlement.Entity = null;
+						previousValue.MonthlyBilling.Remove(this);
+					}
+					this._Settlement.Entity = value;
+					if ((value != null))
+					{
+						value.MonthlyBilling.Add(this);
+						this._SettlementID = value.SettlementID;
+					}
+					else
+					{
+						this._SettlementID = default(int);
+					}
+					this.SendPropertyChanged("Settlement");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BillSubmission_MonthlyBilling", Storage="_BillSubmission", ThisKey="BillID", OtherKey="BillID", IsForeignKey=true, DeleteRule="SET NULL")]
+		public BillSubmission BillSubmission
+		{
+			get
+			{
+				return this._BillSubmission.Entity;
+			}
+			set
+			{
+				BillSubmission previousValue = this._BillSubmission.Entity;
+				if (((previousValue != value) 
+							|| (this._BillSubmission.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BillSubmission.Entity = null;
+						previousValue.MonthlyBilling.Remove(this);
+					}
+					this._BillSubmission.Entity = value;
+					if ((value != null))
+					{
+						value.MonthlyBilling.Add(this);
+						this._BillID = value.BillID;
+					}
+					else
+					{
+						this._BillID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("BillSubmission");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_MonthlyExtraBilling(MonthlyExtraBilling entity)
+		{
+			this.SendPropertyChanging();
+			entity.MonthlyBilling = this;
+		}
+		
+		private void detach_MonthlyExtraBilling(MonthlyExtraBilling entity)
+		{
+			this.SendPropertyChanging();
+			entity.MonthlyBilling = null;
+		}
+		
+		private void Initialize()
+		{
+			this._MonthlyExtraBilling = new EntitySet<MonthlyExtraBilling>(new Action<MonthlyExtraBilling>(this.attach_MonthlyExtraBilling), new Action<MonthlyExtraBilling>(this.detach_MonthlyExtraBilling));
+			this._Organization = default(EntityRef<Organization>);
+			this._Settlement = default(EntityRef<Settlement>);
+			this._BillSubmission = default(EntityRef<BillSubmission>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Runtime.Serialization.OnSerializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnSerializing(StreamingContext context)
+		{
+			this.serializing = true;
+		}
+		
+		[global::System.Runtime.Serialization.OnSerializedAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnSerialized(StreamingContext context)
+		{
+			this.serializing = false;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="billing.BillingExtension")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class BillingExtension : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _CompanyID;
+		
+		private int _BillingCycleInMonth;
+		
+		private EntityRef<Organization> _Organization;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCompanyIDChanging(int value);
+    partial void OnCompanyIDChanged();
+    partial void OnBillingCycleInMonthChanging(int value);
+    partial void OnBillingCycleInMonthChanged();
+    #endregion
+		
+		public BillingExtension()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int CompanyID
+		{
+			get
+			{
+				return this._CompanyID;
+			}
+			set
+			{
+				if ((this._CompanyID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyID = value;
+					this.SendPropertyChanged("CompanyID");
+					this.OnCompanyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BillingCycleInMonth", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int BillingCycleInMonth
+		{
+			get
+			{
+				return this._BillingCycleInMonth;
+			}
+			set
+			{
+				if ((this._BillingCycleInMonth != value))
+				{
+					this.OnBillingCycleInMonthChanging(value);
+					this.SendPropertyChanging();
+					this._BillingCycleInMonth = value;
+					this.SendPropertyChanged("BillingCycleInMonth");
+					this.OnBillingCycleInMonthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_BillingExtension", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.BillingExtension = null;
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.BillingExtension = this;
+						this._CompanyID = value.CompanyID;
+					}
+					else
+					{
+						this._CompanyID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._Organization = default(EntityRef<Organization>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="billing.BillSubmission")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class BillSubmission : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _BillID;
+		
+		private System.DateTime _BillDate;
+		
+		private EntitySet<MonthlyBilling> _MonthlyBilling;
+		
+		private bool serializing;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnBillIDChanging(int value);
+    partial void OnBillIDChanged();
+    partial void OnBillDateChanging(System.DateTime value);
+    partial void OnBillDateChanged();
+    #endregion
+		
+		public BillSubmission()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BillID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int BillID
+		{
+			get
+			{
+				return this._BillID;
+			}
+			set
+			{
+				if ((this._BillID != value))
+				{
+					this.OnBillIDChanging(value);
+					this.SendPropertyChanging();
+					this._BillID = value;
+					this.SendPropertyChanged("BillID");
+					this.OnBillIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BillDate", DbType="DateTime NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public System.DateTime BillDate
+		{
+			get
+			{
+				return this._BillDate;
+			}
+			set
+			{
+				if ((this._BillDate != value))
+				{
+					this.OnBillDateChanging(value);
+					this.SendPropertyChanging();
+					this._BillDate = value;
+					this.SendPropertyChanged("BillDate");
+					this.OnBillDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BillSubmission_MonthlyBilling", Storage="_MonthlyBilling", ThisKey="BillID", OtherKey="BillID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3, EmitDefaultValue=false)]
+		public EntitySet<MonthlyBilling> MonthlyBilling
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._MonthlyBilling.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._MonthlyBilling;
+			}
+			set
+			{
+				this._MonthlyBilling.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_MonthlyBilling(MonthlyBilling entity)
+		{
+			this.SendPropertyChanging();
+			entity.BillSubmission = this;
+		}
+		
+		private void detach_MonthlyBilling(MonthlyBilling entity)
+		{
+			this.SendPropertyChanging();
+			entity.BillSubmission = null;
+		}
+		
+		private void Initialize()
+		{
+			this._MonthlyBilling = new EntitySet<MonthlyBilling>(new Action<MonthlyBilling>(this.attach_MonthlyBilling), new Action<MonthlyBilling>(this.detach_MonthlyBilling));
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Runtime.Serialization.OnSerializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnSerializing(StreamingContext context)
+		{
+			this.serializing = true;
+		}
+		
+		[global::System.Runtime.Serialization.OnSerializedAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnSerialized(StreamingContext context)
+		{
+			this.serializing = false;
 		}
 	}
 	

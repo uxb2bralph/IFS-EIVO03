@@ -21,7 +21,7 @@
         {
             "name": "CompanyName",
             "type": "text",
-            "title": "店家名稱",
+            "title": "營業人名稱",
             "width": "160",
             "align": "left"
         },
@@ -103,7 +103,7 @@
                 
                 if(item.ApplyProxy) {
 
-                    var $button = $('<input type="button" class="btn" value="設定發票代理店家" name="btnProxy">');
+                    var $button = $('<input type="button" class="btn" value="設定發票代理營業人" name="btnProxy">');
                     $button.on('click',function(evt) {
                         actionHandler('<%= VirtualPathUtility.ToAbsolute("~/Helper/ApplyProxyForIssuer.aspx") %>',
                             { 'companyID': value }, null, 700, 360);

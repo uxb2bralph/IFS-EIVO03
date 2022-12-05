@@ -14,41 +14,19 @@ namespace Model.Locale
             //
         }
 
-        public const int INSURER = 5;
-
         public enum CategoryID
         {
             COMP_SYS = 1,	                            //	1	系統公司	 sketch_admin.gif
             COMP_WELFARE = 14,
             COMP_E_INVOICE_B2C_SELLER = 15,	            //	2	賣方	     sketch_seller.gif
             COMP_E_INVOICE_B2C_BUYER = 16,	            //	3	買方	     sketch_buyer.gif
-            COMP_E_INVOICE_GOOGLE_TW = 17,              //  4   Google台灣
+            COMP_E_INVOICE_GOOGLE_TW = 17,              //  4   GoogleTaiwan
             COMP_ENTERPRISE_GROUP   =   18,
             COMP_VIRTUAL_CHANNEL = 19,
             COMP_INVOICE_AGENT = 20,                    //  5   發票開立代理
             COMP_E_INVOICE_B2B_SELLER = 21,	        //	B2B 賣　　　方
             COMP_E_INVOICE_B2B_BUYER = 22,	        //	B2B 買　　　方
             COMP_CROSS_BORDER_MURCHANT = 23,
-        }
-
-        public enum B2CCategoryID
-        {
-            店家 = 15,	                                //	2	賣方	     sketch_seller.gif
-            Google台灣 = 17,                            //  4  
-            店家發票自動配號 = 19,
-            開立發票店家代理 = 20,
-            境外電商 = 23,
-        }
-
-        public enum MemberCategoryID
-        {
-            發票開立人 = 15,	            //	2	賣方	     sketch_seller.gif
-            相對營業人 = 16,	            //	3	買方	     sketch_buyer.gif
-            GOOGLE_Taiwan = 17,              //  4   Google台灣
-            集團成員 = 18,
-            店家發票自動配號 = 19,
-            開立發票店家代理 = 20,                    //  5   發票開立代理
-            境外電商 = 23,
         }
 
         public enum RoleID
@@ -58,7 +36,7 @@ namespace Model.Locale
             ROLE_BUYER = 52,	                        //	3	買方	     sketch_buyer.gif
             ROLE_GUEST = 53,
             ROLE_NETWORKSELLER = 54,                    //  4   網購業者
-            ROLE_GOOGLETW = 55,                         //  5   GOOGLE台灣
+            ROLE_GOOGLETW = 55,                         //  5   GoogleTaiwan
             集團成員 = 61,
             相對營業人 = 62,
             分店相對營業人 = 63,
@@ -72,7 +50,7 @@ namespace Model.Locale
             買受人 = 52,	                        //	3	買方	     sketch_buyer.gif
             訪客 = 53,
             //ROLE_NETWORKSELLER = 54,                    //  4   網購業者
-            GOOGLE台灣 = 55,                         //  5   GOOGLE台灣
+            GoogleTaiwan = 55,                         //  5   GoogleTaiwan
             //集團成員 = 61,
             //相對營業人 = 62,
             分店相對營業人 = 63,
@@ -93,7 +71,7 @@ namespace Model.Locale
             買方 = 52,	                                //	3	買方	     sketch_buyer.gif
             訪客 = 53,
             網購業者 = 54,                              //  4   網購業者
-            Google台灣 = 55,                            //  5   GOOGLE台灣
+            GoogleTaiwan = 55,                            //  5   GoogleTaiwan
             集團成員 = 61,
             相對營業人 = 62,
             分店相對營業人 = 63

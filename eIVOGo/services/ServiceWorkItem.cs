@@ -49,6 +49,16 @@ namespace eIVOGo.Services
                         Schedule = DateTime.Today.Date
                     });
                 }
+                if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(MonthlyBillingJob).AssemblyQualifiedName))
+                {
+                    JobScheduler.AddJob(new JobItem
+                    {
+                        AssemblyQualifiedName = typeof(MonthlyBillingJob).AssemblyQualifiedName,
+                        Description = "每月應收帳款",
+                        Schedule = new DateTime(DateTime.Today.Year, DateTime.Today.Month, AppSettings.Default.Billing.BillingDay),
+                    });
+                }
+
                 //if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(TurnKeyCheckSchedule).AssemblyQualifiedName))
                 //{
                 //    JobScheduler.AddJob(new JobItem

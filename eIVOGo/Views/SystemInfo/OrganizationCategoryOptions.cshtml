@@ -1,4 +1,4 @@
-
+﻿
 @using System.IO
 @using System.Linq.Expressions
 
@@ -16,10 +16,15 @@
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
 }
 
-@foreach (var item in Enum.GetValues(typeof(Naming.MemberCategoryID)))
-{
-    var t = (Naming.MemberCategoryID)item;
-    <option value="@((int)t)">@(t)</option>
-}
+@*@foreach (var item in Enum.GetValues(typeof(CategoryDefinition.CategoryEnum)))
+    {
+        var t = (CategoryDefinition.CategoryEnum)item;
+        <option value="@((int)t)">@(t)</option>
+    }*@
+<option value="15">發票開立營業人</option>
+@*<option value="16">相對營業人</option>
+<option value="17">GoogleTaiwan</option>*@
+<option value="20">經銷商</option>
+<option value="23">境外電商</option>
 
 

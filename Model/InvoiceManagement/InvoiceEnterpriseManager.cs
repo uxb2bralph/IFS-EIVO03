@@ -52,7 +52,7 @@ namespace Model.InvoiceManagement
 
                             _entity.OrganizationCategory.Add(new OrganizationCategory
                             {
-                                CategoryID = (int)Naming.B2CCategoryID.店家發票自動配號
+                                CategoryID = (int)CategoryDefinition.CategoryEnum.發票開立營業人
                             });
                             isNewItem = true;
                         }

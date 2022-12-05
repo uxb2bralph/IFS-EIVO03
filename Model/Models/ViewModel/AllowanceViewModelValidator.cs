@@ -60,7 +60,7 @@ namespace Model.Models.ViewModel
             _seller = null;
             _newItem = null;
 
-            //bool IsProxy = _owner.Organization.OrganizationCategory.Any(c => c.CategoryID == (int)Naming.B2CCategoryID.開立發票店家代理);
+            //bool IsProxy = _owner.Organization.OrganizationCategory.Any(c => c.CategoryID == (int)CategoryDefinition.CategoryEnum.開立發票營業人代理);
             
             if((ex = CheckBusiness()) != null/* && !IsProxy*/)
             {

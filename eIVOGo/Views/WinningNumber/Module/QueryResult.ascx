@@ -12,7 +12,7 @@
 
 <%  Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果"); %>
 
-<div class="border_gray" style="overflow-x: auto; max-width: 1024px;">
+<div class="border_gray" style="overflow-x: auto; min-width: max-content; ">
     <%  var recordCount = _model.Count();
         if(recordCount>0)
         { %>

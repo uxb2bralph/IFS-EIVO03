@@ -5,9 +5,11 @@ using System.Web;
 using System.Web.Mvc;
 
 using Business.Helper;
+using DocumentFormat.OpenXml.Spreadsheet;
 using eIVOGo.Helper;
 using eIVOGo.Models;
 using Model.DataEntity;
+using Model.Models.ViewModel;
 using Model.Security.MembershipManagement;
 
 namespace eIVOGo.Controllers
@@ -24,8 +26,9 @@ namespace eIVOGo.Controllers
 
         }
         // GET: OrganizationQuery
-        public ActionResult Index()
+        public ActionResult Index(OrganizationQueryViewModel viewModel)
         {
+            ViewBag.ViewModel = viewModel;
             return View("~/Views/OrganizationQuery/Index.cshtml");
         }
 
@@ -42,8 +45,9 @@ namespace eIVOGo.Controllers
         //    return View("~/Views/OrganizationQuery/InquiryResult.cshtml", models.Inquiry);
         //}
 
-        public ActionResult InquireCompany(int? pageIndex)
+        public ActionResult InquireCompany(OrganizationQueryViewModel viewModel)
         {
+            ViewBag.ViewModel = viewModel;
             //ViewBag.HasQuery = true;
             //ViewBag.PrintAction = "PrintResult";
             ModelSource<Organization> tmpModels = new ModelSource<Organization>(models);
@@ -51,14 +55,43 @@ namespace eIVOGo.Controllers
             tmpModels.Inquiry = createModelInquiry();
             tmpModels.BuildQuery();
             models.InquiryHasError = tmpModels.InquiryHasError;
-            if (pageIndex.HasValue)
+
+            if(viewModel.CategoryID.HasValue)
             {
-                ViewBag.PageIndex = pageIndex - 1;
-                return View("~/Views/OrganizationQuery/Module/CompanyList.cshtml", tmpModels.Items);
+                var categoryItems = models.GetTable<OrganizationCategory>().Where(c => c.CategoryID == (int)viewModel.CategoryID);
+                tmpModels.Items = tmpModels.Items.Where(o => categoryItems.Any(c => c.CompanyID == o.CompanyID));
+            }
+
+            if(viewModel.AgentID.HasValue)
+            {
+                var agentItems = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == viewModel.AgentID);
+                if (viewModel.BranchRelation == true)
+                {
+                    agentItems = agentItems.Where(a => a.RelationType == (int)InvoiceIssuerAgent.Relationship.MasterBranch);
+                }
+
+                tmpModels.Items = tmpModels.Items.Where(o => agentItems.Any(c => c.IssuerID == o.CompanyID));
+            }
+
+
+            viewModel.RecordCount = tmpModels.Items.Count();
+            if (viewModel.PageIndex.HasValue)
+            {
+                viewModel.PageIndex--;
+                if(viewModel.CategoryID == CategoryDefinition.CategoryEnum.發票開立營業人
+                    || viewModel.CategoryID == CategoryDefinition.CategoryEnum.境外電商
+                    || viewModel.CategoryID == CategoryDefinition.CategoryEnum.經銷商)
+                {
+                    return View("~/Views/OrganizationQuery/Module/SellerItemList.cshtml", tmpModels.Items);
+                }
+                else
+                {
+                    return View("~/Views/OrganizationQuery/Module/CompanyItemList.cshtml", tmpModels.Items);
+                }
             }
             else
             {
-                ViewBag.PageIndex = 0;
+                viewModel.PageIndex = 0;
                 return View("~/Views/OrganizationQuery/Module/CompanyResult.cshtml", tmpModels.Items);
             }
         }

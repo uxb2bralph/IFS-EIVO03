@@ -334,10 +334,11 @@ namespace Model.DataEntity
 
         public static IQueryable<Organization> GetQueryByBranchRelation(this GenericManager<EIVOEntityDataContext> mgr, int headquarter)
         {
+            var branchItems = mgr.GetTable<InvoiceIssuerAgent>()
+                    .Where(a => a.RelationType == (int)InvoiceIssuerAgent.Relationship.MasterBranch)
+                    .Where(a => a.AgentID == headquarter);
             return mgr.GetTable<Organization>().Where(o => o.CompanyID == headquarter
-                || mgr.GetTable<OrganizationRelation>()
-                    .Where(a => a.Headquarters == headquarter)
-                    .Any(a => a.CompanyID == o.CompanyID));
+                || branchItems.Any(a => a.IssuerID == o.CompanyID));
         }
 
         public static IQueryable<InvoiceItem> GetInvoiceByAgent(this EIVOEntityDataContext mgr, int agentID)

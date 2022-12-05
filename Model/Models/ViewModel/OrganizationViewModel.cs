@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Model.DataEntity;
 using Model.Locale;
 using Newtonsoft.Json;
 
@@ -36,7 +37,7 @@ namespace Model.Models.ViewModel
         public String InvoiceSignature { get; set; }
         public String UndertakerID { get; set; }
         public String ContactTitle { get; set; }
-        public Naming.B2CCategoryID? CategoryID { get; set; } = Naming.B2CCategoryID.店家;
+        public CategoryDefinition.CategoryEnum? CategoryID { get; set; } = CategoryDefinition.CategoryEnum.發票開立營業人;
         public int? CurrentLevel { get; set; }
         public DateTime? LastTimeToAcknowledge { get; set; }
         public int? RequestPeriodicalinterval { get; set; }
@@ -75,6 +76,17 @@ namespace Model.Models.ViewModel
         [JsonIgnore]
         public bool SendAllowanceMIGManually => Settings != null && Settings.Contains("SendAllowanceMIGManually");
         public int? InvoiceNoSafetyStock { get; set; }
+        public int?[] GradeCount { get; set; }
+        public int?[] BasicFee { get; set; }
+        public int?[] UpperBound { get; set; }
+        public decimal?[] UnitFee { get; set; }
+        public Naming.DocumentTypeDefinition?[] CalcType { get; set; }
+        public String[] ItemName { get; set; }
+        public int?[] Fee { get; set; }
+        public DateTime?[] BillingDate { get; set; }
+        public ExtraBillingItem.BillingTypeEnum?[] BillingType { get; set; }
+        public int? SellerID { get; set; }
+        public int? BillingCycle { get; set; }
     }
 
     public class OrganizationCertificateViewModel : OrganizationViewModel

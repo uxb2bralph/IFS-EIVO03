@@ -1,0 +1,51 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Com.DataAccessLayer
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@functions
+{
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    IQueryable<Organization> _model;
+    QueryViewModel _viewModel;
+}
+@{
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    _viewModel = (QueryViewModel)ViewBag.ViewModel;
+
+    _model = (IQueryable<Organization>)this.Model;
+
+    TempData["SortedItems"] = null;
+
+    if (_viewModel.SortName != null)
+    {
+        int idx = System.Array.IndexOf(_viewModel.SortName, "CompanyName");
+        if (idx >= 0 && _viewModel.SortType[idx] != 0)
+        {
+            TempData["SortedItems"] = ((TempData["SortedItems"] as IQueryable<Organization>) ?? (IQueryable<Organization>)this.Model).OrderBy(p => p.CompanyName, _viewModel.SortType[idx]);
+        }
+
+        idx = System.Array.IndexOf(_viewModel.SortName, "ReceiptNo");
+        if (idx >= 0 && _viewModel.SortType[idx] != 0)
+        {
+            TempData["SortedItems"] = ((TempData["SortedItems"] as IQueryable<Organization>) ?? (IQueryable<Organization>)this.Model).OrderBy(p => p.ReceiptNo, _viewModel.SortType[idx]);
+        }
+    }
+
+
+}

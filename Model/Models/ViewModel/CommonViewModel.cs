@@ -489,4 +489,13 @@ namespace Model.Models.ViewModel
         }
     }
 
+    public partial class OrganizationQueryViewModel : QueryViewModel
+    {
+        public String ReceiptNo { get; set; }
+        public Naming.MemberStatusDefinition? OrganizationStatus { get; set; }
+        public String CompanyName { get; set; }
+        public CategoryDefinition.CategoryEnum? CategoryID { get; set; }
+        public int? AgentID { get; set; }
+        public bool? BranchRelation { get; set; }
+    }
 }

@@ -68,6 +68,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Execution\AutoUpdater.cs" />
     <Compile Include="Execution\FullAllowanceExcelRequestProcessor.cs" />
     <Compile Include="Execution\ExecutorForeverBase.cs" />
     <Compile Include="Execution\ExecutorForever.cs" />

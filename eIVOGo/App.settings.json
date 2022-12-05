@@ -1,1 +1,1 @@
-{"ExternalPdfWrapper":{"Command":"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe","ConvertPattern":"--headless --disable-gpu --run-all-compositor-stages-before-draw --print-to-pdf-no-header  --print-to-pdf={0} {1}","Args":null}}
+{"ExternalPdfWrapper":{"Command":"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe","ConvertPattern":"--headless --disable-gpu --run-all-compositor-stages-before-draw --print-to-pdf-no-header  --print-to-pdf={0} {1}","Args":null},"Uxnet.Com.Properties":{},"eIVOGo.Properties":{"Billing":{"BillingDay":5}}}

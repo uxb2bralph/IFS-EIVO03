@@ -5,7 +5,7 @@
 <%@ Import Namespace="Model.DataEntity" %>
 <%@ Import Namespace="Model.Locale" %>
 
-<% Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "店家POS機維護");  %>
+<% Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "營業人POS機維護");  %>
 <div class="table-responsive" data-pattern="priority-columns" data-add-focus-btn="">
     <table class="table table-small-font table-bordered table-striped table01">
         <thead>

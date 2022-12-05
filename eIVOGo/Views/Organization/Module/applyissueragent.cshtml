@@ -9,25 +9,40 @@
 @using Model.Models.ViewModel
 @using Model.DataEntity
 @using eIVOGo.Controllers
+@{
 
-@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.ascx", "設定發票代傳營業人");}
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    OrganizationViewModel _viewModel;
+    Organization _model;
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _viewModel = (OrganizationViewModel)ViewBag.ViewModel;
+    _model = (Organization)this.Model;
+}
+@{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "設定發票經銷商");}
 
 <form>
     <div class="panel panel-default">
-    <div class="panel-heading">
-        發票代傳營業人
-    </div>
-    <div class="panel-body">
-        @{ var items = models.GetTable<Organization>().Where(o => o.OrganizationCategory.Any(c => c.CategoryID == (int)Naming.CategoryID.COMP_INVOICE_AGENT));}
- @foreach (var item in items)
+        <div class="panel-heading">
+            發票經銷商
+        </div>
+        <div class="panel-body col-md-12">
+            @{
+                var items = models.GetTable<Organization>()
+                    .Where(o => o.OrganizationCategory.Any(c => c.CategoryID == (int)Naming.CategoryID.COMP_INVOICE_AGENT))
+                    .OrderBy(o => o.ReceiptNo);
+            }
+            @foreach (var item in items)
             {
-                <label class="radio">
-                <input type="checkbox" name="agentID" value="@(item.CompanyID)" @(item.InvoiceInsurerAgent.Any(i=>i.IssuerID==_model.CompanyID) ? "checked" : null)  />
-                <i></i> @(String.Concat("(",item.ReceiptNo,")",item.CompanyName))
+                <label class="col-md-6">
+                    <input type="checkbox" name="agentID" value="@(item.CompanyID)" @(item.InvoiceIssuerAgent.Any(i => i.IssuerID == _model.CompanyID) ? "checked" : null) />
+                    <i></i> @(String.Concat("(",item.ReceiptNo,")",item.CompanyName))
                 </label>
-    }
+            }
+        </div>
     </div>
-</div>
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="table-responsive">
@@ -36,14 +51,14 @@
                     <tr>
                         <td class="Bargain_btn" align="center">
                             <button type="button" onclick="$global.commitIssuerAgent();" name="UpdateButton" class="btn">確定</button>
-                        &nbsp;
-            <input name="Reset" type="reset" class="btn" value="重填" />
+                            &nbsp;
+                            <input name="Reset" type="reset" class="btn" value="重填" />
                             @*<asp:Button ID="Config_btn" runat="server" CausesValidation="True" CssClass="btn"
-                Text="下載設定檔" OnClick="Config_btn_Click" />*@
+                                Text="下載設定檔" OnClick="Config_btn_Click" />*@
                             @*@if (_viewModel.CompanyID.HasValue)
-                                {
-                            <input type="button" class="btn" name="btnDownloadConfig" value="下載設定檔" />
-                            }*@
+                                    {
+                                <input type="button" class="btn" name="btnDownloadConfig" value="下載設定檔" />
+                                }*@
                         </td>
                     </tr>
                 </table>
@@ -74,20 +89,5 @@
         };
     });
 </script>
-<script runat="server">
 
-    ModelStateDictionary _modelState;
-    ModelSource<InvoiceItem> models;
-    OrganizationViewModel _viewModel;
-    Organization _model;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _viewModel = (OrganizationViewModel)ViewBag.ViewModel;
-        _model = (Organization)this.Model;
-    }
-
-</script>

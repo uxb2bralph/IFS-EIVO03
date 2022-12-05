@@ -23,7 +23,7 @@ namespace eIVOGo.Models
     public partial class CommonInquiry<TEntity> : ModelSourceInquiry<TEntity>
         where TEntity : class,new()
     {
-        protected InquireInvoiceViewModel _viewModel;
+        protected QueryViewModel _viewModel;
         protected Controller _currentController;
         public CommonInquiry() : base()
         {
@@ -41,7 +41,7 @@ namespace eIVOGo.Models
                 _viewModel = null;
                 if (_currentController != null)
                 {
-                    _viewModel = (InquireInvoiceViewModel)_currentController.ViewBag.ViewModel;
+                    _viewModel = (QueryViewModel)_currentController.ViewBag.ViewModel;
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace eIVOGo.Models
         
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceItem> models)
         {
-            models.Items = models.Items.QueryByCustomerID(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByCustomerID((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
     }
@@ -139,7 +139,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceAllowance> models)
         {
-            models.Items = models.Items.QueryBySeller(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryBySeller((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
     }
@@ -148,7 +148,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceItem> models)
         {
-            models.Items = models.Items.QueryByBuyerReceiptNo(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByBuyerReceiptNo((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
     }
@@ -157,7 +157,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceAllowance> models)
         {
-            models.Items = models.Items.QueryByBuyerReceiptNo(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByBuyerReceiptNo((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
     }
@@ -166,7 +166,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceItem> models)
         {
-            models.Items = models.Items.QueryByBuyerName(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByBuyerName((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
     }
@@ -175,7 +175,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceAllowance> models)
         {
-            models.Items = models.Items.QueryByBuyerName(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByBuyerName((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
     }
@@ -184,7 +184,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceItem> models)
         {
-            models.Items = models.Items.QueryByInvoiceDate(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByInvoiceDate((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
 
@@ -194,7 +194,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceAllowance> models)
         {
-            models.Items = models.Items.QueryByAllowanceDate(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByAllowanceDate((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
 
@@ -204,7 +204,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceItem> models)
         {
-            models.Items = models.Items.QueryByProcessType(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByProcessType((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
 
@@ -221,7 +221,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceAllowance> models)
         {
-            models.Items = models.Items.QueryByProcessType(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByProcessType((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
 
@@ -299,7 +299,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceItem> models)
         {
-            models.Items = models.Items.QueryEffective(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryEffective((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
     }
@@ -308,7 +308,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceAllowance> models)
         {
-            models.Items = models.Items.QueryEffective(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryEffective((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
 
@@ -318,7 +318,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceItem> models)
         {
-            models.Items = models.Items.QueryByWinning(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByWinning((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
     }
@@ -369,7 +369,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceItem> models)
         {
-            models.Items = models.Items.QueryByWelfare(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByWelfare((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
     }
@@ -378,7 +378,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceItem> models)
         {
-            models.Items = models.Items.QueryByAttachment(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByAttachment((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
     }
@@ -388,7 +388,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceItem> models)
         {
-            models.Items = models.Items.QueryByInvoiceNo(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByInvoiceNo((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
 
@@ -398,7 +398,7 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceAllowance> models)
         {
-            models.Items = models.Items.QueryByDataNo(_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByDataNo((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
 
@@ -422,10 +422,11 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceAllowance> models)
         {
-            if (_viewModel!=null && _viewModel.AgentID.HasValue)
+            var viewModel = (InquireInvoiceViewModel)_viewModel;
+            if (viewModel!=null && viewModel.AgentID.HasValue)
             {
                 effective = true;
-                models.Items = models.GetDataContext().GetAllowanceByAgent(models.Items, _viewModel.AgentID.Value);
+                models.Items = models.GetDataContext().GetAllowanceByAgent(models.Items, viewModel.AgentID.Value);
             }
 
             base.BuildQueryExpression(models);

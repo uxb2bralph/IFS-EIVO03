@@ -1,0 +1,52 @@
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    ModelSource<InvoiceItem> models;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    OrganizationViewModel _viewModel = ViewBag.ViewModel as OrganizationViewModel;
+    Organization _model = this.Model as Organization;
+    String _viewID = "hq" + DateTime.Now.Ticks;
+
+}
+<div id="@(_viewID)" class="border_gray">
+    <button type="button" class="btn btnRevoke">解除主機構</button><br />
+    <button type="button" class="btn btnOrgBranch">查詢分支機構</button><br />
+                                                                  <script>
+        $(function () {
+            $('#@(_viewID) button.btnRevoke').click(function (event) {
+                var viewModel = { 'SellerID' : @(_model.CompanyID) };
+                invokeAction('@(Url.Action("RevokeHeadquarter", "Organization"))',
+                    viewModel,
+                    function (data) {
+                        if ($.isPlainObject(data)) {
+                            if (data.result) {
+                                alertModal('已解除主機構!!');
+                            }
+                        }
+                    });
+            });
+
+            $('#@(_viewID) button.btnOrgBranch').click(function (event) {
+                var $queryArea = $('#queryArea');
+                $queryArea.find('input[name="receiptNo"]').val('@(_model.ReceiptNo)');
+                @*$queryArea.find('select[name="CategoryID"]').val('@((int)CategoryDefinition.CategoryEnum.發票開立營業人)');*@
+                $queryArea.find('input[name="BranchRelation"]').prop('checked', true);
+                $inquiryAgent.inquire();
+                $('#@(_viewID)').closest('div.currentDialog').dialog('close');
+            });
+        });
+                                                                  </script>
+</div>

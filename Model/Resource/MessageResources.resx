@@ -196,7 +196,7 @@
     <value>GoogleId can not be over 64 characters，TAG:&lt; GoogleId /&gt;</value>
   </data>
   <data name="AlertInvalidSeller" xml:space="preserve">
-    <value>賣方為非註冊店家,開立人統一編號:{0}，TAG:&lt; SellerId /&gt;</value>
+    <value>賣方為非註冊營業人,開立人統一編號:{0}，TAG:&lt; SellerId /&gt;</value>
   </data>
   <data name="AlertInvoiceCarrierComplete" xml:space="preserve">
     <value>上傳載具資料不完全，請檢查；1.載具類別、2.顯碼或隱瑪至少填一。</value>
@@ -320,10 +320,10 @@
     <value>公司統一編號錯誤: {0}, Incorrect TAG:&lt; BuyerId /&gt;</value>
   </data>
   <data name="InvalidSellerNotAttributionTheAgent" xml:space="preserve">
-    <value>上傳店家並無登記在此發票開立代理店家底下:{0}，TAG:&lt; SellerId /&gt;；代理發票開立店家:{1}</value>
+    <value>上傳營業人並無登記在此發票開立代理營業人底下:{0}，TAG:&lt; SellerId /&gt;；代理發票開立營業人:{1}</value>
   </data>
   <data name="InvalidSellerOrAgent" xml:space="preserve">
-    <value>發票開立人為非註冊店家:{0}，TAG:&lt; SellerId /&gt;；也未註冊於機構:{1}，代理發票傳送</value>
+    <value>發票開立人為非註冊營業人:{0}，TAG:&lt; SellerId /&gt;；也未註冊於機構:{1}，代理發票傳送</value>
   </data>
   <data name="InvalidSellingPrice" xml:space="preserve">
     <value>應稅銷售額合計(新台幣)不可為負數且為整數，上傳資料：{0},TAG:&lt; SalesAmount /&gt;</value>

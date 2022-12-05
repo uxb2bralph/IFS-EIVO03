@@ -1,0 +1,89 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@functions
+{
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    IQueryable<Organization> _model;
+    QueryViewModel _viewModel;
+}
+@{
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    _viewModel = (QueryViewModel)ViewBag.ViewModel;
+
+    _model = (IQueryable<Organization>)this.Model;
+
+    Html.RenderPartial("~/Views/OrganizationQuery/Module/CompanyItemSorting.cshtml");
+
+    IQueryable<Organization> items;
+    int pageIndex = _viewModel.PageIndex ?? 0;
+    int pageSize = _viewModel.PageSize ?? 10;
+
+    if (TempData["SortedItems"] == null)
+    {
+        if (_viewModel.Paging == false)
+        {
+            items = _model;
+        }
+        else
+        {
+            items = _model
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize);
+        }
+    }
+    else
+    {
+        if (_viewModel.Paging == false)
+        {
+            items = ((IQueryable<Organization>)TempData["SortedItems"]);
+        }
+        else
+        {
+            items = ((IQueryable<Organization>)TempData["SortedItems"])
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize);
+        }
+    }
+
+}
+@{
+    int idx = 0;
+}
+@foreach (var item in items)
+{
+    idx++;
+    <tr>
+        <td>@(item.CompanyName)</td>
+        <td>@(item.ReceiptNo)</td>
+        <td>@(item.UndertakerName)</td>
+        <td><pre>@(item.ContactEmail)</pre></td>
+        <td>@(item.OrganizationStatus?.LevelExpression?.Description)</td>
+        <td>
+            @{
+                ViewBag.Index = idx;
+                Html.RenderPartial("~/Views/OrganizationQuery/Module/ProcessCompanyItem.cshtml", item);
+            }
+        </td>
+    </tr>
+}
+
+
+
+

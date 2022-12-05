@@ -1036,6 +1036,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\DataView\POS\C0401\03761209.cshtml" />
+    <Content Include="Views\Common\Module\QueryPagingControl.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="MvcHelper\CreateInvoiceSummaryReport.aspx" />
     <Content Include="Published\PrintSingleAllowance.aspx" />
@@ -1094,7 +1095,6 @@
     <Content Include="Views\Module\OrganizationList.ascx" />
     <Content Include="Views\Module\QueryMessage.ascx" />
     <Content Include="Views\Organization\LogoUpdated.ascx" />
-    <Content Include="Views\Organization\Module\ApplyIssuerAgent.ascx" />
     <Content Include="Views\InvoiceBusiness\Module\UploadVoidInvoice.cshtml" />
     <Content Include="Views\InvoiceBusiness\Module\UploadAllowance.cshtml" />
     <Content Include="Views\Organization\Module\EditItem.cshtml" />
@@ -1598,6 +1598,15 @@
     <Content Include="Views\Organization\Module\CustomSettings.cshtml" />
     <Content Include="Views\Organization\Module\CustomSmtp.cshtml" />
     <Content Include="Views\Shared\AlertMessageDialog.cshtml" />
+    <Content Include="Views\Organization\Module\ApplyIssuerAgent.cshtml" />
+    <Content Include="Views\OrganizationQuery\Module\CompanyItemList.cshtml" />
+    <Content Include="Views\OrganizationQuery\Module\CompanyItemSorting.cshtml" />
+    <Content Include="Views\OrganizationQuery\Module\ProcessCompanyItem.cshtml" />
+    <Content Include="Views\OrganizationQuery\Module\SellerItemList.cshtml" />
+    <Content Include="Views\OrganizationQuery\Module\SellerList.cshtml" />
+    <Content Include="Views\Organization\Module\ApplyBillingPlan.cshtml" />
+    <Content Include="Views\Organization\Module\ProcessHeadquarter.cshtml" />
+    <Content Include="Views\_Test\TestJobItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">
@@ -1721,6 +1730,7 @@
     <Compile Include="Module\JsGrid\JsGridInitialization.ascx.designer.cs">
       <DependentUpon>JsGridInitialization.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\AppSettings.cs" />
     <Compile Include="Properties\Settings.Designer.cs" />
     <Compile Include="Published\eInvoiceServiceGoogleCBM.asmx.cs">
       <DependentUpon>eInvoiceServiceGoogleCBM.asmx</DependentUpon>
@@ -1897,6 +1907,7 @@
       <DependentUpon>PrintControlPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Services\DailyJobs.cs" />
+    <Compile Include="Services\MonthlyBillingJob.cs" />
     <Compile Include="Services\ServiceWorkItem.cs" />
     <Compile Include="AddOn\Published\eInvoiceService_201311.asmx.cs">
       <SubType>Component</SubType>

@@ -377,6 +377,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\SampleController.cs" />
+    <Compile Include="Controllers\TestWebController.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Module\Ajax\PagingControl.ascx.cs">
       <DependentUpon>PagingControl.ascx</DependentUpon>
@@ -774,6 +775,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\TestWeb\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

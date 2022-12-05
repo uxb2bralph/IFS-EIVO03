@@ -76,7 +76,9 @@
 
                 var $formData = $('#theForm').serializeObject();
                 $formData.paperStyle = style;
-                //$formData.processType = processType;
+                if (!isNaN(processType)) {
+                    $formData.ProcessType = processType;
+                }
 
                 showLoading();
                 $.post('@(Url.Action("Print","InvoiceProcess"))', $formData, function (data) {

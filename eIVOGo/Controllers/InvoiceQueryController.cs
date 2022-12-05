@@ -134,7 +134,7 @@ namespace eIVOGo.Controllers
             ViewBag.ViewModel = viewModel;
             if(!viewModel.BusinessBorder.HasValue)
             {
-                viewModel.BusinessBorder = Naming.B2CCategoryID.店家;
+                viewModel.BusinessBorder = CategoryDefinition.CategoryEnum.發票開立營業人;
             }
             ViewBag.QueryAction = "InquireInvoiceMedia";
 
@@ -145,7 +145,7 @@ namespace eIVOGo.Controllers
         {
             ViewBag.ViewModel = viewModel;
 
-            if (viewModel.BusinessBorder == Naming.B2CCategoryID.店家)
+            if (viewModel.BusinessBorder == CategoryDefinition.CategoryEnum.發票開立營業人)
             {
                 viewModel.TaxNo = viewModel.TaxNo.GetEfficientString();
                 if (viewModel.TaxNo == null || viewModel.TaxNo.Length != 9)
@@ -175,7 +175,7 @@ namespace eIVOGo.Controllers
                 return View("~/Views/InvoiceQuery/InvoiceMediaReport.cshtml");
             }
 
-            if (viewModel.BusinessBorder == Naming.B2CCategoryID.境外電商)
+            if (viewModel.BusinessBorder == CategoryDefinition.CategoryEnum.境外電商)
             {
                 ProcessRequest processItem = new ProcessRequest
                 {
@@ -608,11 +608,11 @@ namespace eIVOGo.Controllers
 
         public static readonly int[] AvailableMemberCategory = new int[]
         {
-            (int)Naming.MemberCategoryID.發票開立人,
-            (int)Naming.MemberCategoryID.GOOGLE_Taiwan,
-            (int)Naming.MemberCategoryID.店家發票自動配號,
-            (int)Naming.MemberCategoryID.開立發票店家代理,
-            (int)Naming.MemberCategoryID.境外電商,
+            (int)CategoryDefinition.CategoryEnum.發票開立營業人,
+            (int)CategoryDefinition.CategoryEnum.GoogleTaiwan,
+            (int)CategoryDefinition.CategoryEnum.營業人發票自動配號,
+            (int)CategoryDefinition.CategoryEnum.經銷商,
+            (int)CategoryDefinition.CategoryEnum.境外電商,
         };
 
         public ActionResult InquireSummary(InquireInvoiceViewModel viewModel)

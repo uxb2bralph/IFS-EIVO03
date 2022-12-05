@@ -13,14 +13,11 @@
 @using Uxnet.Web.WebUI
 
 @{
-    Layout = "~/Views/Template/MvcMainPage.cshtml";
+    Layout = "~/Views/Common/QueryIndex.cshtml";
     ViewBag.ActionName = "首頁 > 會員管理維護";
 }
 
-@section headContent {
-
-}
-@section formContent {
+@section QueryForm {
     @{
         Html.RenderPartial("~/Views/OrganizationQuery/Module/InquireOrganization.cshtml");
     }

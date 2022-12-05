@@ -55,52 +55,6 @@ namespace Business.Helper.ReportProcessor
                     taskItem.ResponsePath = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".xlsx");
                 }
 
-                IQueryable<InvoiceItem> GetInvoice(int sellerID,DateTime dateFrom,DateTime dateTo)
-                {
-                    var invoice = models.GetTable<InvoiceItem>()
-                                        .Where(i => i.SellerID == sellerID)
-                                        .Where(i => i.InvoiceDate >= dateFrom)
-                                        .Where(i => i.InvoiceDate < dateTo);
-                    return invoice;
-                }
-
-                IQueryable<InvoiceCancellation> GetInvoiceCancellation(int sellerID, DateTime dateFrom, DateTime dateTo)
-                {
-                    var cancelInvoice = models.GetTable<InvoiceCancellation>()
-                                        .Where(i => i.CancelDate >= dateFrom)
-                                        .Where(i => i.CancelDate < dateTo)
-                                        .Join(models.GetTable<InvoiceItem>().Where(i => i.SellerID == sellerID),
-                                            c => c.InvoiceID, i => i.InvoiceID, (c, i) => c);
-
-                    return cancelInvoice;
-                }
-
-
-                IQueryable<InvoiceAllowance> GetAllowance(int sellerID, DateTime dateFrom, DateTime dateTo)
-                {
-                    var allowance = models.GetTable<InvoiceAllowance>()
-                                        .Where(i => i.AllowanceDate >= viewModel.DateFrom)
-                                        .Where(i => i.AllowanceDate < viewModel.DateTo.Value.AddDays(1))
-                                        .Join(models.GetTable<InvoiceAllowanceSeller>()
-                                            .Where(i => i.SellerID == sellerID),
-                                a => a.AllowanceID, s => s.AllowanceID, (a, s) => a);
-                    return allowance;
-                }
-
-                IQueryable<InvoiceAllowanceCancellation> GetAllowanceCancellation(int sellerID, DateTime dateFrom, DateTime dateTo)
-                {
-                    var cancelAllowance = models.GetTable<InvoiceAllowanceCancellation>()
-                                        .Where(i => i.CancelDate >= dateFrom)
-                                        .Where(i => i.CancelDate < dateTo)
-                                        .Join(models.GetTable<InvoiceAllowance>()
-                                            .Join(models.GetTable<InvoiceAllowanceSeller>()
-                                                    .Where(i => i.SellerID == sellerID),
-                                                a => a.AllowanceID, s => s.AllowanceID, (a, s) => a),
-                                        c => c.AllowanceID, a => a.AllowanceID, (c, a) => c);
-
-                    return cancelAllowance;
-                }
-
                 var issuers = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == viewModel.AgentID);
                 var sellers = models.GetTable<Organization>()
                     .Where(c => c.CompanyID == viewModel.SellerID
@@ -136,10 +90,10 @@ namespace Business.Helper.ReportProcessor
                                 var seller = issuer;
                                 r[0] = seller.CompanyName;
                                 r[1] = seller.ReceiptNo;
-                                r[2] = GetInvoice(seller.CompanyID, idx, end).Count();
-                                r[3] = GetInvoiceCancellation(seller.CompanyID, idx, end).Count();
-                                r[4] = GetAllowance(seller.CompanyID, idx, end).Count();
-                                r[5] = GetAllowanceCancellation(seller.CompanyID, idx, end).Count();
+                                r[2] = models.GetInvoice(seller.CompanyID, idx, end).Count();
+                                r[3] = models.GetInvoiceCancellation(seller.CompanyID, idx, end).Count();
+                                r[4] = models.GetAllowance(seller.CompanyID, idx, end).Count();
+                                r[5] = models.GetAllowanceCancellation(seller.CompanyID, idx, end).Count();
                                 r[6] = $"{idx:yyyyMM}";
                                 r[7] = $"{seller.OrganizationExtension?.GoLiveDate:yyyy/MM/dd}";
                                 r[8] = $"{seller.OrganizationExtension?.ExpirationDate:yyyy/MM/dd}";
@@ -177,5 +131,52 @@ namespace Business.Helper.ReportProcessor
 
             }
         }
+
+        public static IQueryable<InvoiceItem> GetInvoice(this GenericManager<EIVOEntityDataContext> models, int sellerID, DateTime dateFrom, DateTime dateTo)
+        {
+            var invoice = models.GetTable<InvoiceItem>()
+                                .Where(i => i.SellerID == sellerID)
+                                .Where(i => i.InvoiceDate >= dateFrom)
+                                .Where(i => i.InvoiceDate < dateTo);
+            return invoice;
+        }
+
+        public static IQueryable<InvoiceCancellation> GetInvoiceCancellation(this GenericManager<EIVOEntityDataContext> models, int sellerID, DateTime dateFrom, DateTime dateTo)
+        {
+            var cancelInvoice = models.GetTable<InvoiceCancellation>()
+                                .Where(i => i.CancelDate >= dateFrom)
+                                .Where(i => i.CancelDate < dateTo)
+                                .Join(models.GetTable<InvoiceItem>().Where(i => i.SellerID == sellerID),
+                                    c => c.InvoiceID, i => i.InvoiceID, (c, i) => c);
+
+            return cancelInvoice;
+        }
+
+
+        public static IQueryable<InvoiceAllowance> GetAllowance(this GenericManager<EIVOEntityDataContext> models, int sellerID, DateTime dateFrom, DateTime dateTo)
+        {
+            var allowance = models.GetTable<InvoiceAllowance>()
+                                .Where(i => i.AllowanceDate >= dateFrom)
+                                .Where(i => i.AllowanceDate < dateTo)
+                                .Join(models.GetTable<InvoiceAllowanceSeller>()
+                                    .Where(i => i.SellerID == sellerID),
+                        a => a.AllowanceID, s => s.AllowanceID, (a, s) => a);
+            return allowance;
+        }
+
+        public static IQueryable<InvoiceAllowanceCancellation> GetAllowanceCancellation(this GenericManager<EIVOEntityDataContext> models, int sellerID, DateTime dateFrom, DateTime dateTo)
+        {
+            var cancelAllowance = models.GetTable<InvoiceAllowanceCancellation>()
+                                .Where(i => i.CancelDate >= dateFrom)
+                                .Where(i => i.CancelDate < dateTo)
+                                .Join(models.GetTable<InvoiceAllowance>()
+                                    .Join(models.GetTable<InvoiceAllowanceSeller>()
+                                            .Where(i => i.SellerID == sellerID),
+                                        a => a.AllowanceID, s => s.AllowanceID, (a, s) => a),
+                                c => c.AllowanceID, a => a.AllowanceID, (c, a) => c);
+
+            return cancelAllowance;
+        }
+
     }
 }

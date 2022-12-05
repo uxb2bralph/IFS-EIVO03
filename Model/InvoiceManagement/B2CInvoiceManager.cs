@@ -49,7 +49,7 @@ namespace Model.InvoiceManagement
                         var seller = this.GetTable<Organization>().Where(o => o.ReceiptNo == invItem.SellerId).FirstOrDefault();
                         if (seller == null)
                         {
-                            result.Add(idx, new Exception(String.Format("賣方為非註冊店家,統一編號:{0}", invItem.SellerId)));
+                            result.Add(idx, new Exception(String.Format("賣方為非註冊營業人,統一編號:{0}", invItem.SellerId)));
                             continue;
                         }
 

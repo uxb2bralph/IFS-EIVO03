@@ -295,7 +295,7 @@ namespace Model.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 賣方為非註冊店家,開立人統一編號:{0}，TAG:&lt; SellerId /&gt;.
+        ///   Looks up a localized string similar to 賣方為非註冊營業人,開立人統一編號:{0}，TAG:&lt; SellerId /&gt;.
         /// </summary>
         public static string AlertInvalidSeller {
             get {
@@ -659,7 +659,7 @@ namespace Model.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 上傳店家並無登記在此發票開立代理店家底下:{0}，TAG:&lt; SellerId /&gt;；代理發票開立店家:{1}.
+        ///   Looks up a localized string similar to 上傳營業人並無登記在此發票開立代理營業人底下:{0}，TAG:&lt; SellerId /&gt;；代理發票開立營業人:{1}.
         /// </summary>
         public static string InvalidSellerNotAttributionTheAgent {
             get {
@@ -668,7 +668,7 @@ namespace Model.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 發票開立人為非註冊店家:{0}，TAG:&lt; SellerId /&gt;；也未註冊於機構:{1}，代理發票傳送.
+        ///   Looks up a localized string similar to 發票開立人為非註冊營業人:{0}，TAG:&lt; SellerId /&gt;；也未註冊於機構:{1}，代理發票傳送.
         /// </summary>
         public static string InvalidSellerOrAgent {
             get {

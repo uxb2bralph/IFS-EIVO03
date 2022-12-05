@@ -40,7 +40,7 @@
                     .append(data);
             };
         </script>
-        <div id="@(_listID)" style="overflow-x:auto;">
+        <div id="@(_listID)" style="overflow-x: auto; min-width: max-content;">
             @{
                 Html.RenderPartial(_viewModel.ResultView, _model);
             }
@@ -50,6 +50,52 @@
     {
         <nav aria-label="Page navigation">
             <ul class="pagination" id="@(_paginationID)"></ul>
+            <div class="col-lg-2 col-4 input-group">
+                每頁筆數：
+                <select name="PageSize" class="form-control-sm" onchange="resetPageSize();">
+                    <option>10</option>
+                    <option>30</option>
+                    <option>50</option>
+                    <option>100</option>
+                    <option value="10000">全部</option>
+                </select>
+                @if (_viewModel.InitQuery == true)
+                {
+                    <script>
+                        function resetPageSize() {
+                            var event = event || window.event;
+                            var pageSize = $(event.target).val();
+                            if (!isNaN(pageSize)) {
+                                $inquiryAgent.viewModel.PageSize = pageSize;
+                                $global.viewModel.PageSize = pageSize;
+                                $inquiryAgent.inquire();
+                            }
+                        }
+                    </script>
+                }
+                else
+                {
+                    <script>
+                        function resetPageSize() {
+                            var event = event || window.event;
+                            var pageSize = $(event.target).val();
+                            if (!isNaN(pageSize)) {
+                                $inquiryAgent.viewModel.PageSize = pageSize;
+                                $global.viewModel.PageSize = pageSize;
+                                $inquiryAgent.inquire();
+                            }
+                        }
+                    </script>
+                }
+                @if (_viewModel.PageSize.HasValue)
+                {
+                    <script>
+                        $(function () {
+                            $('select[name="PageSize"]').val('@(_viewModel.PageSize)');
+                        });
+                    </script>
+                }
+            </div>
         </nav>
         <script>
             $(function () {

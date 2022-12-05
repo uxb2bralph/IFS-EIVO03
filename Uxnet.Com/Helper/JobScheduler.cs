@@ -102,6 +102,7 @@ namespace Uxnet.Com.Helper
                 if (nextSchedule)
                     item.Schedule = job.GetScheduleToNextTurn(item.Schedule);
                 job.Dispose();
+                Logger.Info($"Job item done => {type.FullName}");
             }
         }
 
