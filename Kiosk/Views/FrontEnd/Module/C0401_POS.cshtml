@@ -68,15 +68,15 @@
         <table>
             <tr>
                 <td>
-                    <div class="cutfield" style="/*width:5cm;*/border-top:0px;border:0px;/*font-weight:bold;*/">
+                    <div class="cutfield" style="border-top:0px;border:0px;">
                         @if (_logoUrl != null)
                         {
                             <img id="logo" style="max-width:5.2cm;max-height:1.7cm;" src='@(_logoUrl)' />
                         }
                         else
                         {
-                            <div style="text-align:left; width:4.4cm">
-                                <h3 class="title-small" style="width:4.2cm; padding-top:0px;font-weight:bold; height: 1.3cm; @(_sellerName != null && _sellerName.Length > 16 ? "font-size:small;" : null)">@(_sellerName)</h3>
+                            <div style="text-align:center;">
+                                <h3 class="title-small" style="width:4.5cm; padding-top:0px;font-weight:bold;@(_sellerName != null && _sellerName.Length > 16 ? "font-size:small;" : null)">@(_sellerName)</h3>
                             </div>
                         }
                         @if (_isDuplicatedPrint)
@@ -121,50 +121,14 @@
             </tr>
         </table>
     </div>
-
     <div class="listfield" style="border-top:0px;border-bottom: 0px">
         <table style="width:4.8cm;font-size:8pt;font-weight:bold;">
-            <tr>
-                <td colspan="3">
-                    <p style="display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">品名</p>
-                </td>
-            </tr>
-            <tr>
-                <td style="width:20%">
-                    <p style="display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">數量</p>
-                </td>
-                <td style="width:40%">
-                    <p style="display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">單價</p>
-                </td>
-                <td style="width:40%">
-                    <p style="display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">小計</p>
-                </td>
-            </tr>
-
-            @{ int _itemIdx;}
-            @for (_itemIdx = 0; _productItem != null && _itemIdx < _productItem.Length; _itemIdx++)
-            {
-                var item = _productItem[_itemIdx];
-                <tr>
-                    <td colspan="3" height="15" valign="top">@(item.Description)</td>
-                </tr>
-                <tr>
-                    <td align="right" valign="top">@(String.Format("{0:##,###,###,##0.##}", item.Quantity))</td>
-                    <td align="right" valign="top">@(String.Format("{0:##,###,###,##0.##}", item.UnitPrice))</td>
-                    <td align="right" valign="top">@(String.Format("{0:##,###,###,##0.##}", item.Amount))</td>
-                </tr>
-            }
             @if (_productItem != null)
             {
                 <tr>
                     <td colspan="3" style="font-size: 8pt;">
-                        <p style="border-top: 1px dotted #808080;">
+                        <p style="border-top: 1px dashed #808080;">
                             <span style="font-size: 8pt;">總計：@(_model.InvoiceItem.Length)項&nbsp;&nbsp;金額：@(String.Format("{0:##,###,###,##0.##}", _model.TotalAmount))</span><br />
-                            課稅別：@(_model.TaxType == (byte)Naming.TaxTypeDefinition.免稅
-                                        ? ""
-                                        : _model.TaxType == (byte)Naming.TaxTypeDefinition.零稅率 
-                                            ? "TZ" 
-                                            : "TX")&nbsp;&nbsp;<br />
                             @if (!IsB2C())
                             {
                                 <text>應稅銷售額：@(String.Format("{0:##,###,###,##0.##}", _model.SalesAmount))</text><br />
@@ -172,10 +136,11 @@
                                 <text>免稅銷售額：@(String.Format("{0:##,###,###,##0.##}", _model.FreeTaxSalesAmountSpecified ? _model.FreeTaxSalesAmount : 0)) </text><br />
                                 <text>稅額：@(String.Format("{0:##,###,###,##0.##} ", _model.BuyerMark == 3 || _model.BuyerMark == 4 ? 0 : _model.TaxAmount))</text> <br />
                             }
-                            備註：
-                            @(_model.MainRemark)
-                            @(String.Join(";", _model.InvoiceItem.Select(d => d.Remark.GetEfficientString()).Where(r=>r!=null)).Replace("\r\n","<br/>").Replace("\n","<br/>"))<br />
-                            退貨請憑電子發票證明聯辦理<br />
+                            @{
+                                String[] remark = _model.MainRemark?.Split(';');
+                            }
+                            @BuildRemark(remark)
+                            退換貨時請持發票及交易明細回原店辦理<br />
                         </p>
                     </td>
                 </tr>
@@ -183,6 +148,18 @@
         </table>
     </div>
 </div>
+@helper BuildRemark(String[] remark)
+{
+    if (remark != null)
+    {
+        <text>
+            門市:@(remark.Length>0 ? remark[0] : null) 序號:@(remark.Length>1 ? remark[1] : null)
+            <br />
+            序號2:@(remark.Length > 2 ? remark[2] : null)
+            <br>
+        </text>
+    }
+}
 
 
 

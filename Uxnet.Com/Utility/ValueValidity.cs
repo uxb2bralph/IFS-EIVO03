@@ -407,6 +407,7 @@ namespace Utility
             if (receiptNo.Length != 8)
                 return false;
 
+            const int checkCode = 5;  //  2023-4-1開始新規定
             int code;
             if(!int.TryParse(receiptNo,out code))
             {
@@ -427,10 +428,10 @@ namespace Utility
                 digitSum(((code % 100) / 10) * 4) +
                 (code % 10);
 
-            if (checkSum % 10 == 0)
+            if (checkSum % checkCode == 0)
                 return true;
 
-            if ((code % 100) / 10 == 7 && (checkSum + 1) % 10 == 0)
+            if ((code % 100) / 10 == 7 && (checkSum + 1) % checkCode == 0)
                 return true;
 
             return false;

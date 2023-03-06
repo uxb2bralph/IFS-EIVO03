@@ -92,6 +92,7 @@
     <Compile Include="DataExchange\TrackCodeExchange.cs" />
     <Compile Include="DataExchange\InvoiceBuyerExchange.cs" />
     <Compile Include="Helper\CommittingDataExtensions.cs" />
+    <Compile Include="Helper\MvcExtensions.cs" />
     <Compile Include="Helper\MvcValidation.cs" />
     <Compile Include="Helper\QueryExtensionMethods.cs" />
     <Compile Include="MessageManagement\ExtensionMethods.cs" />
@@ -105,6 +106,8 @@
     <Compile Include="MessageManagement\SMSHelper.cs" />
     <Compile Include="MessageManagement\InvoiceWinningNotificationManager.cs" />
     <Compile Include="MessageManagement\SMSManager.cs" />
+    <Compile Include="Service\InvoiceBusiness.cs" />
+    <Compile Include="Service\PdfDocumentGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -1,0 +1,88 @@
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+@using System.Globalization
+
+@using Newtonsoft.Json
+@using Model.Models.ViewModel
+@using Model.Schema.EIVO
+@using Model.Helper
+@using Model.Locale
+@using Kiosk.Helper
+@using Utility
+@using Uxnet.Web.WebUI
+
+@functions
+{
+    InvoiceRootInvoice _model = null;
+}
+@{
+    Layout = "~/Views/FrontEnd/Module/ReceiptTemplate.cshtml";
+    _model = (InvoiceRootInvoice)this.Model;
+
+    InvoiceRootInvoiceInvoiceItem[] _productItem = _model.InvoiceItem;
+
+}
+
+@section InvoiceDetails
+{
+    <table style="width:5.2cm;font-size:8pt;font-weight:bold;">
+        <thead>
+            <tr>
+                <td style=" border-top: dashed; border-bottom: dashed;height:32px;">
+                    <p style="display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">品名</p>
+                </td>
+                <td style="width: 40%; border-top: dashed; border-bottom: dashed; ">
+                    <p style="display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">金額(含稅)</p>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int _itemIdx;}
+            @for (_itemIdx = 0; _productItem != null && _itemIdx < _productItem.Length; _itemIdx++)
+            {
+                var item = _productItem[_itemIdx];
+                <tr>
+                    <td height="15" valign="top">@(item.Description)</td>
+                    <td align="right" valign="top">@(String.Format("{0:##,###,###,##0.##}", item.Amount))</td>
+                </tr>
+            }
+            @if (_productItem != null)
+            {
+                var strA = _model.TotalAmount > 0
+                    ? $"{-_model.TotalAmount:##,###,###,###}"
+                    : "";
+                <tr>
+                    <td colspan="2" style="height: 32px; border-bottom: dashed;">@($"總計{new String('*',22-strA.Length)}{strA}")</td>
+                </tr>
+                if (_model.TotalAmount > 0)
+                {
+                    <tr>
+                        <td colspan="2" style="font-size: 8pt; height: 32px;">
+                            支付金額：
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="font-size: 8pt; text-align: right; border-bottom: dashed; height: 32px;">
+                            @(strA)
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="2" style="text-align:center">
+                        <p style="font-size: 7pt;">
+                            Thank you for visiting our store<br />
+                            謝謝惠顧
+                        </p>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+
+
+

@@ -26,16 +26,19 @@
 }
 @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");}
 
-<div class="border_gray" style="overflow-x: auto; min-width: max-content;">
-    @{ var recordCount = _model.Count();}
-    @if (recordCount > 0)
-    {
-        Html.RenderPartial("~/Views/AllowanceProcess/Module/AllowanceQueryPaging.cshtml", _model);
-        Html.RenderPartial("~/Views/AllowanceProcess/Module/ResultAction.cshtml", _model);
-    }
-    else
-    {
-        <font color="red">查無資料!!</font>
+<div class="border_gray query_result">
+    @{
+        var recordCount = _model.Count();
+        _viewModel.RecordCount = recordCount;
+        if (recordCount > 0)
+        {
+            Html.RenderPartial("~/Views/AllowanceProcess/Module/AllowanceQueryPaging.cshtml", _model);
+            Html.RenderPartial("~/Views/AllowanceProcess/Module/ResultAction.cshtml", _model);
+        }
+        else
+        {
+            <font color="red">查無資料!!</font>
+        }
     }
 </div>
 

@@ -31,18 +31,18 @@
             <th aria-sort="other">
                 <input name="chkAll" type="checkbox" />
             </th>
-            <th data-sort="1">日期</th>
-            <th data-sort="2">Customer ID</th>
-            <th data-sort="3">開立發票營業人</th>
-            <th data-sort="4">統編</th>
-            <th data-sort="5">折讓號碼</th>
+            <th><a href="javascript:void(0);" onclick="$inquiryAgent.sort('AllowanceDate',this);">日期</a></th>
+            <th><a href="javascript:void(0);" onclick="$inquiryAgent.sort('CustomerID',this);">Customer ID</a></th>
+            <th><a href="javascript:void(0);" onclick="$inquiryAgent.sort('Seller',this);">開立發票營業人</a></th>
+            <th><a href="javascript:void(0);" onclick="$inquiryAgent.sort('ReceiptNo',this);">統編</a></th>
+            <th><a href="javascript:void(0);" onclick="$inquiryAgent.sort('AllowanceNo',this);">折讓號碼</a></th>
             <th aria-sort="other">大平台折讓單證號碼</th>
-            <th data-sort="6">未稅金額</th>
-            <th data-sort="7">稅額</th>
+            <th><a href="javascript:void(0);" onclick="$inquiryAgent.sort('SalesAmount',this);">未稅金額</a></th>
+            <th><a href="javascript:void(0);" onclick="$inquiryAgent.sort('TaxAmount',this);">稅額</a></th>
             <th aria-sort="other">含稅金額</th>
             <th aria-sort="other">幣別</th>
-            <th data-sort="9">買受人統編</th>
-            <th data-sort="other">買受人EMail</th>
+            <th><a href="javascript:void(0);" onclick="$inquiryAgent.sort('BuyerNo',this);">買受人統編</a></th>
+            <th>買受人EMail</th>
             <th aria-sort="other">備註</th>
         </tr>
     </thead>
@@ -64,53 +64,39 @@
                         </text>
                     }
                 }
-
-                <script>
-                    debugger;
-                    $(function () {
-
-                        var $table = $('#@(_listID)');
-
-                        uiAllowanceQuery.paging = function (data) {
-                            //uiAllowanceQuery.pagePlacement.html(data);
-                            var $tbody = $table.find('tbody');
-                            $tbody.empty();
-                            var $data = $(data);
-                            $data.appendTo($('body')).appendTo($tbody);
-                        };
-
-                        uiAllowanceQuery.sort = (function () {
-                            var orderBy = [];
-
-                            initSortable($table, uiAllowanceQuery.inquire, uiAllowanceQuery.pageIndex, orderBy);
-
-                            this.getSort = function () {
-                                return orderBy;
-                            };
-
-                            return this;
-                        })();
-
-                        var chkBox = $(".itemList input[name='chkAll']");
-                        var chkItem = $(".itemList input[name='chkItem']");
-                        chkBox.click(function () {
-                            $(".itemList input[name='chkItem']")
-                                .prop('checked', chkBox.is(':checked'));
-                        });
-
-                        chkItem.click(function (e) {
-                            if (!$(this).is(':checked')) {
-                                chkBox.prop('checked', false);
-                            }
-                        });
-
-                    });
-                </script>
+                                
             </td>
         </tr>
     </tfoot>
 </table>
+<script>
+    $(function () {
+        $("#@(_listID)").find("input[name='chkAll']")
+            .click(function () {
+                $("#@(_listID)").find("input[name='chkItem']")
+                    .prop('checked', $(this).is(':checked'));
+            });
 
+        $("#@(_listID)").find("input[name='chkItem']")
+            .click(function (e) {
+                if (!$(this).is(':checked')) {
+                    $("#@(_listID)").find("input[name='chkAll']").prop('checked', false);
+                }
+            });
+    });
+    $inquiryAgent.doPage = function (data) {
+        $('#@(_listID) tbody')
+            .empty()
+            .append(data);
+
+        $("#@(_listID)").find("input[name='chkItem']")
+            .click(function (e) {
+                if (!$(this).is(':checked')) {
+                    $("#@(_listID)").find("input[name='chkAll']").prop('checked', false);
+                }
+            });
+    };
+</script>
 
 
 

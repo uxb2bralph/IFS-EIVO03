@@ -12,7 +12,7 @@
 
     <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td class="Bargain_btn">
+            <td >
                 <button type="button" class="btn" name="btnVoid" onclick="uiInvoiceQuery.voidInvoice(<%= (int)Naming.VoidActionMode.註銷重開 %>);">註銷發票</button>&nbsp;&nbsp;
                 <button type="button" class="btn" name="btnVoidCancellation" onclick="uiInvoiceQuery.voidInvoice(<%= (int)Naming.VoidActionMode.註銷作廢 %>);">註銷作廢發票</button>
             </td>

@@ -35,7 +35,9 @@ namespace Model.InvoiceManagement.zhTW
                 invNo = invItem.CancelInvoiceNumber.Substring(2);
 
                 invoice = mgr.GetTable<InvoiceItem>()
-                                .Where(i => i.No == invNo && i.TrackCode == trackCode).FirstOrDefault();
+                                .Where(i => i.No == invNo && i.TrackCode == trackCode)
+                                .OrderByDescending(i => i.InvoiceID)
+                                .FirstOrDefault();
 
                 if (invoice == null)
                 {
@@ -44,7 +46,8 @@ namespace Model.InvoiceManagement.zhTW
             }
             else
             {
-                invoice = mgr.GetTable<InvoicePurchaseOrder>().Where(p => p.OrderNo == invItem.CancelDataNumber)
+                invoice = mgr.GetTable<InvoicePurchaseOrder>()
+                            .Where(p => p.OrderNo == invItem.CancelDataNumber)
                             .Select(p => p.InvoiceItem)
                             .Where(i => i.Organization.ReceiptNo == invItem.SellerId)
                             .FirstOrDefault();

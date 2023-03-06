@@ -21,6 +21,11 @@ namespace InvoiceClient
 {
     public partial class MainForm : Form
     {
+        public static MainForm AppMainForm
+        {
+            get;
+            private set;
+        }
         public MainForm()
         {
             Logger.OutputWritter = Console.Out;
@@ -28,6 +33,7 @@ namespace InvoiceClient
             InitializeComponent();
             this.invoiceClientServiceController.ServiceName = Settings.Default.ServiceName;
             initializeWorkItem();
+            AppMainForm = this;
         }
 
         private void initializeWorkItem()
@@ -99,18 +105,6 @@ namespace InvoiceClient
             }
         }
 
-        private bool initializeActivation()
-        {
-            String actKey = Microsoft.VisualBasic.Interaction.InputBox("New input identification code:", "Enable the system");
-            if (!String.IsNullOrEmpty(actKey) && InvoiceClient.Helper.AppSigner.ResetCertificate(actKey))
-            {
-                InvoiceClient.Helper.AppSigner.InstallRootCA();
-                MessageBox.Show("New input identification code!!", "Enable the system", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return true;
-            }
-            return false;
-        }
-
         private void miClose_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -121,16 +115,6 @@ namespace InvoiceClient
             //this.ShowInTaskbar = false;
             this.Text = Settings.Default.AppTitle;
             notifyIcon.Visible = true;
-
-            if (String.IsNullOrEmpty(Settings.Default.ActivationKey))
-            {
-                if (!initializeActivation())
-                {
-                    MessageBox.Show("Could not create identification!!", "Activation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    this.Close();
-                    return;
-                }
-            }
 
             InvoiceClientTransferManager.StartUp(Settings.Default.InvoiceTxnPath);
 
@@ -148,8 +132,9 @@ namespace InvoiceClient
         {
             if (this.WindowState == FormWindowState.Minimized)
             {
+                this.WindowState = FormWindowState.Minimized;
                 this.ShowInTaskbar = false;
-                this.Hide();
+                //this.Hide();
             }
         }
 

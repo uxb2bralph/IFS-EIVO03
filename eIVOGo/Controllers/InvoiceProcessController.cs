@@ -102,6 +102,17 @@ namespace eIVOGo.Controllers
         }
 
         [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
+        public ActionResult Index2023(InquireInvoiceViewModel viewModel)
+        {
+            ViewBag.ResultAction = "Common";
+            ViewBag.ViewModel = viewModel;
+            models.Inquiry = createModelInquiry();
+
+            return View("~/Views/InvoiceProcess/Index2023.cshtml", models.Inquiry);
+
+        }
+
+        [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS, Naming.RoleID.ROLE_SELLER })]
         public ActionResult IssuingNotice(InquireInvoiceViewModel viewModel)
         {
             ViewResult result = (ViewResult)Index(viewModel);
@@ -278,6 +289,24 @@ namespace eIVOGo.Controllers
                 return View("~/Views/InvoiceProcess/Module/QueryResult.cshtml", models.Items);
             }
         }
+
+        public ActionResult Inquire2023(InquireInvoiceViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)Inquire(viewModel);
+            IQueryable<InvoiceItem> items = result.Model as IQueryable<InvoiceItem>;
+            viewModel.RecordCount = items?.Count();
+
+            if (ViewBag.ResultAction == null)
+            {
+                result.ViewName = "~/Views/InvoiceProcess/DataQuery/ItemList.cshtml";
+            }
+            else
+            {
+                result.ViewName = "~/Views/InvoiceProcess/Module/InvoiceQueryResult.cshtml";
+            }
+            return result;
+        }
+
 
         private String checkQueryAction(String resultAction)
         {
@@ -1026,20 +1055,20 @@ namespace eIVOGo.Controllers
             {
 
                 var profile = HttpContext.GetUser();
-                if (profile.IsSystemAdmin())
-                {
-                    var items = models.GetTable<InvoiceItem>().Where(i => chkItem.Contains(i.InvoiceID));
-                    doVoidInvoice(items, mode);
-                }
-                else
-                {
-                    var items = models.GetTable<InvoiceItem>()
-                        .Where(i => i.AuthorizeToVoid == null)
-                        .Where(i => chkItem.Contains(i.InvoiceID));
-                    authorizeToVoid(items, mode);
-                }
+                //if (profile.IsSystemAdmin())
+                //{
+                var items = models.GetTable<InvoiceItem>().Where(i => chkItem.Contains(i.InvoiceID));
+                doVoidInvoice(items, mode);
+                //}
+                //else
+                //{
+                //    var items = models.GetTable<InvoiceItem>()
+                //        .Where(i => i.AuthorizeToVoid == null)
+                //        .Where(i => chkItem.Contains(i.InvoiceID));
+                //    authorizeToVoid(items, mode);
+                //}
 
-                return View("~/Views/InvoiceProcess/ResultAction/VoidDone.ascx");
+                return View("~/Views/InvoiceProcess/ResultAction/VoidDone.cshtml");
             }
             else
             {
@@ -1072,10 +1101,22 @@ namespace eIVOGo.Controllers
             if (mode == Naming.VoidActionMode.註銷作廢)
             {
                 String storedPath = Path.Combine(Logger.LogPath, "C0401(Outbound)").CheckStoredPath();
-
+                var profile = HttpContext.GetUser();
                 foreach (var item in items)
                 {
-                    item.CreateC0401().ConvertToXml().Save(Path.Combine(storedPath, "C0401_" + item.TrackCode + item.No + "_" + DateTime.Now.Ticks + ".xml"));
+                    var c0401 = item.CreateC0401().ConvertToXml();
+                    c0401.Save(Path.Combine(storedPath, "C0401_" + item.TrackCode + item.No + "_" + DateTime.Now.Ticks + ".xml"));
+
+                    models.GetTable<ExceptionLog>().InsertOnSubmit(new ExceptionLog
+                    {
+                        DataContent = c0401.OuterXml,
+                        CompanyID = item.SellerID,
+                        LogTime = DateTime.Now,
+                        TypeID = (int)Naming.DocumentTypeDefinition.E_InvoiceVoid,
+                        Message = $"發票註銷({item.TrackCode}{item.No}),UID:{profile?.UID},PID:{profile?.PID}"
+                    });
+                    models.SubmitChanges();
+
                     models.ExecuteCommand(@"DELETE FROM CDS_Document
                         FROM    DerivedDocument INNER JOIN
                                 CDS_Document ON DerivedDocument.DocID = CDS_Document.DocID
@@ -1107,10 +1148,23 @@ namespace eIVOGo.Controllers
             }
             else if (mode == Naming.VoidActionMode.註銷重開)
             {
+                var profile = HttpContext.GetUser();
                 String storedPath = Path.Combine(Logger.LogPath, "Archive").CheckStoredPath();
                 foreach (var item in items)
                 {
-                    item.CreateC0401().ConvertToXml().Save(Path.Combine(storedPath, "C0401_" + item.TrackCode + item.No + "_" + DateTime.Now.Ticks + ".xml"));
+                    var c0401 = item.CreateC0401().ConvertToXml();
+                    c0401.Save(Path.Combine(storedPath, "C0401_" + item.TrackCode + item.No + "_" + DateTime.Now.Ticks + ".xml"));
+
+                    models.GetTable<ExceptionLog>().InsertOnSubmit(new ExceptionLog
+                    {
+                        DataContent = c0401.OuterXml,
+                        CompanyID = item.SellerID,
+                        LogTime= DateTime.Now,
+                        TypeID = (int)Naming.DocumentTypeDefinition.E_InvoiceVoid,
+                        Message = $"發票註銷({item.TrackCode}{item.No}),UID:{profile?.UID},PID:{profile?.PID}"
+                    });
+                    models.SubmitChanges();
+
                     models.ExecuteCommand(@"DELETE FROM CDS_Document
                         FROM    DerivedDocument INNER JOIN
                                 CDS_Document ON DerivedDocument.DocID = CDS_Document.DocID

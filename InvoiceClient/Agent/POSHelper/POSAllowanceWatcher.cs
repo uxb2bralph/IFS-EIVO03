@@ -31,7 +31,7 @@ namespace InvoiceClient.Agent.POSHelper
             using (WebClientEx client = new WebClientEx())
             {
                 client.Timeout = 43200000;
-                client.Headers[HttpRequestHeader.ContentType] = "text/xml";
+                client.Headers[HttpRequestHeader.ContentType] = "application/xml";
                 client.Encoding = Encoding.UTF8;
 
                 using (Stream stream = client.OpenWrite(url))

@@ -16,7 +16,7 @@
     {%>
     <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td class="Bargain_btn">
+            <td >
                 <%  Html.RenderPartial("~/Views/InvoiceProcess/ResultAction/PrintAction.cshtml"); %>
             </td>
         </tr>

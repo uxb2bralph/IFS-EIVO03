@@ -7,9 +7,38 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace eIVOGo.Published {
-    
-    
-    public partial class SignXmlPage {
+namespace eIVOGo.Published
+{
+
+
+    public partial class SignXmlPage
+    {
+
+        /// <summary>
+        /// dataToSign control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTextArea dataToSign;
+
+        /// <summary>
+        /// dataSignature control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTextArea dataSignature;
+
+        /// <summary>
+        /// btnVerifyCms control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnVerifyCms;
     }
 }

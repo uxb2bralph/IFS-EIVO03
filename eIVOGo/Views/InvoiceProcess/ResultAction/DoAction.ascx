@@ -18,7 +18,7 @@
 
     <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td class="Bargain_btn">
+            <td >
                 <button type="button" class="btn" name="btnDoCancel" onclick="uiInvoiceQuery.commitAction();">執行<%= _viewModel.ActionTitle  %></button>
             </td>
         </tr>

@@ -45,13 +45,8 @@ namespace InvoiceClient.Helper
                 String certContent = invSvc.GetSignerCertificateContent(Settings.Default.ActivationKey);
                 if (!String.IsNullOrEmpty(certContent))
                 {
-                    using (FileStream fs = new FileStream(certFile, FileMode.CreateNew, FileAccess.Write))
-                    {
-                        byte[] buf = Convert.FromBase64String(certContent);
-                        fs.Write(buf, 0, buf.Length);
-                        fs.Flush();
-                        fs.Close();
-                    }
+                    byte[] buf = Convert.FromBase64String(certContent);
+                    File.WriteAllBytes(certFile, buf);
                 }
             }
 

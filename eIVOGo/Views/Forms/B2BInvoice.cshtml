@@ -254,6 +254,7 @@
 <script>
     var uiInvoice;
     $(function () {
+        var preview;
         uiInvoice = {
 @*preview: function () {
                 //var event = event || window.event;
@@ -276,6 +277,10 @@
 
                     @*$form.prop('target', 'commit').prop('action', '@Html.Raw(Url.Action("CommitA0401","InvoiceBusiness",new { _viewModel.InvoiceProcessType }))').submit();*@
                     showLoading();
+                    if (forPreview) {
+                        preview = window.open('', '_blank', 'popup');
+                    }
+
                     $.post('@Html.Raw(Url.Action(_viewModel.InvoiceProcessType==Naming.InvoiceProcessType.A0401
                                 ? "CommitA0401"
                                 : "CommitA0101", "InvoiceBusiness", new { _viewModel.InvoiceProcessType }))', $formData, function (data) {
@@ -285,20 +290,21 @@
                         } else {
                             var $data = $(data);
                             if (forPreview) {
-                                $data.dialog({
-                                    width: 640,
-                                    buttons: [
-                                        {
-                                            text: "關閉",
-                                            icons: {
-                                                primary: "ui-icon-close"
-                                            },
-                                            click: function () {
-                                                $data.dialog("close");
-                                            }
-                                        }
-                                    ]
-                                });
+                                preview.document.write(data);
+                                //$data.dialog({
+                                //    width: 640,
+                                //    buttons: [
+                                //        {
+                                //            text: "關閉",
+                                //            icons: {
+                                //                primary: "ui-icon-close"
+                                //            },
+                                //            click: function () {
+                                //                $data.dialog("close");
+                                //            }
+                                //        }
+                                //    ]
+                                //});
                             } else {
                                 $data.find('a').on('click', function (evt) {
                                     $data.dialog('close');

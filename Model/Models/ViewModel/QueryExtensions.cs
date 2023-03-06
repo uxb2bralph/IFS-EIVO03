@@ -126,7 +126,7 @@ namespace Model.Models.ViewModel
             viewModel.DataNo = viewModel.DataNo.GetEfficientString();
             if (viewModel.DataNo != null)
             {
-                var poItems = models.GetTable<InvoicePurchaseOrder>().Where(p => p.OrderNo == viewModel.DataNo);
+                var poItems = models.GetTable<InvoicePurchaseOrder>().Where(p => p.OrderNo.StartsWith(viewModel.DataNo));
                 items = items.Join(poItems, i => i.InvoiceID, p => p.InvoiceID, (i, p) => i);
                 effective = true;
             }

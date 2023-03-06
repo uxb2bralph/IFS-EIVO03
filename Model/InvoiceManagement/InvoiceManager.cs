@@ -325,7 +325,9 @@ namespace Model.InvoiceManagement
                             invNo = invItem.CancelInvoiceNumber;
                         }
                         invItem.SellerId = invItem.SellerId.GetEfficientString();
-                        var invoice = this.EntityList.Where(i => i.No == invNo && i.TrackCode == trackCode).FirstOrDefault();
+                        var invoice = this.EntityList.Where(i => i.No == invNo && i.TrackCode == trackCode)
+                            .OrderByDescending(i => i.InvoiceID)
+                            .FirstOrDefault();
 
                         if (invoice == null)
                         {

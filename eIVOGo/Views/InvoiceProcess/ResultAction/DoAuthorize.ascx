@@ -12,7 +12,7 @@
 
     <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td class="Bargain_btn">
+            <td >
                 <button type="button" class="btn" name="btnAuthorize" onclick="uiInvoiceQuery.authorize();">核准列印</button>
             </td>
         </tr>

@@ -146,6 +146,8 @@
       <Name>System.Drawing</Name>
     </Reference>
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -198,7 +200,7 @@
     <Compile Include="BusinessManagement\BusinessManager.cs" />
     <Compile Include="Helper\GlobalDefinition.cs" />
     <Compile Include="Helper\LoginExtension.cs" />
-    <Compile Include="Helper\MvcExtensions.cs" />
+    <Compile Include="Helper\ProcessRequestProcessor\ProcessRequestExtensions.cs" />
     <Compile Include="Helper\ReportProcessor\InvoiceDataReportExtensions.cs" />
     <Compile Include="Helper\Validation\CaptchaValidationAttribute.cs" />
     <Compile Include="Helper\WebPageUtility.cs" />

@@ -20,19 +20,31 @@
     ModelSource<InvoiceItem> models;
     InvoiceItem _model;
 
-
+    QueryViewModel _viewModel = (QueryViewModel)ViewBag.ViewModel;
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _model = (InvoiceItem)this.Model;
 
 }
-<div>
-    @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "發票");}
+@if (_viewModel?.DialogID == null && _model.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.A0401)
+{
+    _model.Organization = models.GetTable<Organization>()
+        .Where(c => c.CompanyID == _model.SellerID).First();
+    Html.RenderPartial("~/Views/DataView/PreviewA0401.cshtml", _model);
+}
+else
+{
+    <div>
+        @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "發票");}
 
-    <div class="border_gray">
-        @{ Html.RenderPartial("~/Views/DataView/Module/Invoice.cshtml", _model);}
-
+        <div class="border_gray">
+            @{
+                Html.RenderPartial("~/Views/DataView/Module/Invoice.cshtml", _model);
+            }
+        </div>
     </div>
-</div>
+}
+
+
 
 
 

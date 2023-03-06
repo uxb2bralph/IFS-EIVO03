@@ -29,6 +29,8 @@ namespace InvoiceClient.Agent
         protected bool _retryConnection;
         protected Naming.ChannelIDType _channelID = Naming.ChannelIDType.ForGoogleOnLine;
 
+        public Naming.InvoiceProcessType? PreferredProcessType { get; set; }
+
         public static readonly HttpClient TheHttpClient = new HttpClient() 
         {
             Timeout = Timeout.InfiniteTimeSpan,
@@ -77,7 +79,11 @@ namespace InvoiceClient.Agent
             {
                 while (_watcher != null)
                 {
-                    _watcher.WaitForChanged(WatcherChangeTypes.Created);
+                    var result = _watcher.WaitForChanged(WatcherChangeTypes.Created, Settings.Default.AutoInvServiceInterval > 0 ? Settings.Default.AutoInvServiceInterval * 60 * 1000 : 1800000);
+                    if (result.TimedOut)
+                    {
+                        InvokeProcess();
+                    }
                 }
             });
 

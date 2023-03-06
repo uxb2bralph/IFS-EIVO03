@@ -1,0 +1,50 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+
+@using Model.Locale
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using TaskCenter.Controllers
+@using Newtonsoft.Json
+@using Business.Helper
+@using Model.Helper
+@{
+    Layout = null;
+    ModelStateDictionary _modelState;
+    ModelSource models;
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController)ViewContext.Controller).DataSource;
+
+    IQueryable<InvoiceNoInterval> _model = (IQueryable<InvoiceNoInterval>)this.Model;
+
+    var items = _model.ToList()
+        .Select(i => new
+        {
+            i.InvoiceTrackCodeAssignment.Organization.ReceiptNo,
+            Year = i.InvoiceTrackCodeAssignment.InvoiceTrackCode.Year,
+            Month = String.Format("{0:00}-{1:00}", i.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo * 2 - 1, i.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo * 2),
+            i.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode,
+            i.InvoiceTrackCodeAssignment.InvoiceTrackCode.InvoiceType,
+            StartNo = $"{i.StartNo:00000000}",
+            EndNo = $"{i.EndNo:00000000}",
+            Next = $"{i.CurrentAllocatingNo():00000000}",
+            Total = i.EndNo - i.StartNo + 1,
+            Available = i.EndNo - i.CurrentAllocatingNo() + 1,
+            Locked = i.LockID.HasValue,
+        });
+
+    Response.Clear();
+    Response.ClearContent();
+    Response.ClearHeaders();
+    Response.ContentType = "application/json";
+
+    JsonSerializer serializer = JsonSerializer.Create(Utility.ExtensionMethods.CommonJsonSettings);
+    serializer.Serialize(Response.Output, items);
+
+}
+
+
+

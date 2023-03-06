@@ -90,8 +90,9 @@ namespace Model.Models.ViewModel
         Invoice = 1,        //發票
         VoidInvoice = 2,    //作廢發票
         Allowance = 3,      //折讓單
-        VoidAllowance = 4,  //作廢折讓單
-        CountInvoice = 11,        //發票資料筆數
+		VoidAllowance = 4,  //作廢折讓單
+		InovoiceNoAllocation = 5,  //發票配號狀態
+		CountInvoice = 11,        //發票資料筆數
         CountVoidInvoice = 12,    //作廢發票資料筆數
         CountAllowance = 13,      //折讓單資料筆數
         CountVoidAllowance = 14,  //作廢折讓單資料筆數
@@ -102,6 +103,9 @@ namespace Model.Models.ViewModel
     public partial class InvoiceDataQueryViewModel : InquireInvoiceViewModel
     {
         public DataQueryType? QueryType { get; set; }
+        public int? Year { get; set; }
+        public int? PeriodNo { get; set; }
+        public String IssuerNo { get; set; }
     }
 
     public partial class InquireNoIntervalViewModel
@@ -345,7 +349,7 @@ namespace Model.Models.ViewModel
         public String BranchNo { get; set; }
     }
 
-    public class DocumentQueryViewModel : QueryViewModel
+    public class DocumentQueryViewModel : ProcessRequestViewModel
     {
         [JsonIgnore]
         public int? id
@@ -365,7 +369,6 @@ namespace Model.Models.ViewModel
         public bool? NameOnly { get; set; }
         public bool? AppendAttachment { get; set; }
         public String MailTo { get; set; }
-
     }
 
     public class ExceptionLogQueryViewModel : QueryViewModel
@@ -379,7 +382,6 @@ namespace Model.Models.ViewModel
         public bool? PrintBack { get; set; }
         public bool? PrintCuttingLine { get; set; }
         public String PaperStyle { get; set; }
-        public Naming.InvoiceProcessType? ProcessType { get; set; }
         public bool? PrintBuyerAddr { get; set; }
         public bool? UseCustomView { get; set; }
         public bool? CreateNew { get; set; }
@@ -394,7 +396,11 @@ namespace Model.Models.ViewModel
         public int? TaskID { get; set; }
         public InvoiceProcessType? ProcessType { get; set; }
         public String Comment { get; set; }
-
+        public ProcessModelDefinition? ProcessModel { get; set;}
+        public enum ProcessModelDefinition
+        {
+            ByTask = 1,
+        }
     }
     public class InvoiceRequestViewModel : ProcessRequestViewModel
     {

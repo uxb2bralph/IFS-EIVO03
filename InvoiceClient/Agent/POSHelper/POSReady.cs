@@ -47,6 +47,8 @@ namespace InvoiceClient.Agent.POSHelper
             _Settings.MIGResponse.CheckStoredPath();
         }
 
+        public static LocalSettings Settings => _Settings;
+
         public new class LocalSettings : InvoiceServerInspector.LocalSettings
         {
             public String InvoiceNoPreload { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "InvoiceNo");
@@ -54,13 +56,20 @@ namespace InvoiceClient.Agent.POSHelper
             public int Booklet { get; set; } = 10;
             public String LoadInvoiceNoUrl { get; set; } = "/POSDevice/AllocateInvoiceNo";
             public String PreparedInvoice { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "PreparedInvoice");
+            public String BlindReturn { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "BlindReturn");
+            public String ZeroAmount { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "ZeroAmountReceipt");
+            public String Replacement { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "Replacement");
             public String SellerInvoice { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "SellerInvoice");
             public String PrintInvoice { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "PrintInvoice");
             public String PrintC0401 { get; set; } = "http://localhost:10800/FrontEnd/PrintC0401";
+            public String PrintBlindReturn { get; set; } = "http://localhost:10800/FrontEnd/BlindReturn";
+            public String PrintZeroAmount { get; set; } = "http://localhost:10800/FrontEnd/PrintZeroAmount";
+            public String PrintReplacement { get; set; } = "http://localhost:10800/FrontEnd/Replacement";
+            public String PrintD0401 { get; set; } = "http://localhost:10800/FrontEnd/PrintD0401";
             public String VerifyAllowance { get; set; } = "/POSDevice/VerifyAllowance";
             public String PreparedAllowance { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "PreparedAllowance");
             public String MIGResponse { get; set; } = Path.Combine(Logger.LogPath, "MIGResponse");
-
+            public bool UserPOSPrinter { get; set; } = false;
         }
 
         public POSReady()

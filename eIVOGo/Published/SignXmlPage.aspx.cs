@@ -1,14 +1,12 @@
-// Decompiled with JetBrains decompiler
-// Type: eIVOCenter.Published.SignXmlPage
-// Assembly: eIVOGo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-// MVID: 8B476B36-1EE2-44A6-8FDF-8020926EC7C6
-// Assembly location: C:\Project\VM-SIT04\IFS-EIVO03\eIVOGo\bin\eIVOGo.dll
-
+using Model.Helper;
+using Model.Locale;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -132,6 +130,26 @@ namespace eIVOGo.Published
             x509Store.Open(OpenFlags.ReadOnly);
             this._certs = x509Store.Certificates.Cast<X509Certificate2>();
             x509Store.Close();
+        }
+
+        protected void btnVerifyCms_Click(object sender, EventArgs e)
+        {
+            this.lbViewCert.Visible = false;
+            if (String.IsNullOrEmpty(dataToSign.Value) || String.IsNullOrEmpty(dataSignature.Value))
+            {
+                return;
+            }
+
+            CryptoUtility crypto = new CryptoUtility();
+            if (crypto.VerifyPKCS7(dataToSign.Value, dataSignature.Value))
+            {
+                this.lblMsg.Text = crypto.CA_Log.Subject;
+                this.lblMsg.ForeColor = Color.Black;
+                this.lbViewCert.Visible = true;
+                this.ViewState["cert"] = (object)new X509Certificate((X509Certificate)crypto.SignerCertificate);
+            }
+            else
+                this.lblMsg.Text = "≈Á√±•¢±—!!Ω–¿À¨dlog!!";
         }
     }
 }

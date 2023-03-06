@@ -159,7 +159,13 @@ namespace ModelExtension.DataExchange
             {
                 if (bResult)
                 {
-                    BusinessRelationship model = viewModel.CommitBusinessRelationshipViewModel(models, new ModelStateDictionary { });
+                    ModelStateDictionary modelState = new ModelStateDictionary { };
+                    BusinessRelationship model = viewModel.CommitBusinessRelationshipViewModel(models, modelState);
+                    if (model == null) 
+                    {
+                        status.Append(modelState.ErrorMessage());
+                        bResult = false;
+                    }
                 }
             }
 

@@ -11,7 +11,23 @@
 @using Model.Security.MembershipManagement
 @using eIVOGo.Controllers
 @using Business.Helper
+@{
 
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    IEnumerable<Organization> _model;
+    String _fieldName;
+    String _contentID;
+    UserProfileMember _profile;
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IEnumerable<Organization>)this.Model;
+    _fieldName = (String)ViewBag.FieldName ?? "BuyerID";
+    _contentID = (String)ViewBag.FieldID ?? ("id" + DateTime.Now.Ticks);
+    _profile = Context.GetUser();
+}
 <input type="text" size="40" id="@(_contentID)" class="form-control" value="" placeholder="請輸入檢索關鍵字" />
 <input type="hidden" name="@(_fieldName)" />
 <script>
@@ -27,7 +43,17 @@
             }
         });
         $input.autocomplete({
-            source: '@(Url.Action("SearchCounterpart", "Home"))',
+            source: function (request, response) {
+                    showLoading();
+                $.post('@(Url.Action("SearchCounterpart", "Home"))', { 'term': request.term, 'sellerID': $('[name="SellerID"]').val() }, function (data) {
+                        hideLoading();
+                        if ($.isArray(data)) {
+                            response(data);
+                        } else {
+                            response([]);
+                        }
+                    });
+                },
             select: function (event, ui) {
                 $input.val(ui.item.label);
                 $('input:hidden[name="@(_fieldName)"]').val(ui.item.value);
@@ -43,34 +69,15 @@
             },
         });
     });
-
-    @if (Request[_fieldName] != null)
-        {
+</script>
+@if (Request[_fieldName] != null)
+{
+    <script>
         $(function () {
             $('input:hidden[name="@(_fieldName)"]').val('@(Request[_fieldName])');
-                });
-    }
-</script>
+        });
+    </script>
+}
 
 
-<script runat="server">
 
-    ModelStateDictionary _modelState;
-    ModelSource<InvoiceItem> models;
-    IEnumerable<Organization> _model;
-    String _fieldName;
-    String _contentID;
-    UserProfileMember _profile;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-        _model = (IEnumerable<Organization>)this.Model;
-        _fieldName = (String)ViewBag.FieldName ?? "BuyerID";
-        _contentID = (String)ViewBag.FieldID ?? ("id" + DateTime.Now.Ticks);
-        _profile = Context.GetUser();
-    }
-
-</script>

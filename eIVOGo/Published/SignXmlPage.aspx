@@ -50,6 +50,13 @@
         <asp:Button ID="btnVerify" runat="server" onclick="btnVerify_Click" 
             Text="Verify" />
         <br />
+        DataToSign:<textarea runat="server" ID="dataToSign" cols="80" rows="5"></textarea>
+        <br />
+        DataSignature:<textarea runat="server" ID="dataSignature" cols="80" rows="10"></textarea>
+        <br />
+        <asp:Button ID="btnVerifyCms" runat="server"
+            Text="Verify CMS" OnClick="btnVerifyCms_Click" />
+        <br />
         <asp:Label ID="lblMsg" runat="server" EnableViewState="False" ForeColor="Red"></asp:Label>
     
         <asp:LinkButton ID="lbViewCert" runat="server" onclick="lbViewCert_Click" 

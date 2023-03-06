@@ -70,8 +70,9 @@
                             $this.$queryResult.remove();
                         }
 
-                        $this.$queryResult = $(data);
-                        $placement.after($this.$queryResult);
+                        //$this.$queryResult = $(data);
+                        //$placement.after($this.$queryResult);
+                        $global.createTab('queryResult', '查詢', data, true);
                         $this.initQuery = false;
 
                     } else {

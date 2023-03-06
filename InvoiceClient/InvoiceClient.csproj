@@ -124,6 +124,9 @@
     <Compile Include="Agent\CsvAllowanceCancellationWatcher.cs" />
     <Compile Include="Agent\CsvAllowanceWatcher.cs" />
     <Compile Include="Agent\CsvInvoiceCancellationWatcherForCrossBorderMerchant.cs" />
+    <Compile Include="Agent\CsvRequestHelper\CsvInvoiceCancellationRequestWatcher.cs" />
+    <Compile Include="Agent\CsvRequestHelper\CsvInvoiceRequestWatcher.cs" />
+    <Compile Include="Agent\CsvRequestHelper\CsvRequestWatcher.cs" />
     <Compile Include="Agent\D0401Watcher.cs" />
     <Compile Include="Agent\D0501Watcher.cs" />
     <Compile Include="Agent\FolderBuckleWatcher.cs" />
@@ -136,6 +139,8 @@
     <Compile Include="Agent\MIGHelper\C0501Watcher.cs" />
     <Compile Include="Agent\MIGHelper\C0401Watcher.cs" />
     <Compile Include="Agent\POSHelper\POSAllowanceWatcher.cs" />
+    <Compile Include="Agent\POSHelper\POSPrintWatcher.cs" />
+    <Compile Include="Agent\POSHelper\PreparedAllowanceWatcher.cs" />
     <Compile Include="Agent\POSHelper\PreparedInvoiceWatcher.cs" />
     <Compile Include="Agent\POSHelper\InvoicePrintWatcher.cs" />
     <Compile Include="Agent\POSHelper\POSReady.cs" />

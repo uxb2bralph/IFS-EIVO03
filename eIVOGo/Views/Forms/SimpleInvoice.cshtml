@@ -41,7 +41,7 @@
                 </th>
                 <td class="tdleft">
                     @{ ViewBag.FieldID = "SearchBuyer";
-                        Html.RenderPartial("~/Views/DataFlow/CounterpartBusinessSelector.ascx");}
+                        Html.RenderPartial("~/Views/DataFlow/CounterpartBusinessSelector.cshtml");}
 
                     <input name="BuyerReceiptNo" type="hidden" />
                     <input class="form-control" name="CustomerID" id="CustomerID" type="text" />
@@ -53,11 +53,11 @@
                     <script>
                         $global.onBusiness = function (buyerID) {
                             showLoading();
-                            $.post('@Html.Raw(Url.Action("Organization", "DataEntity"))', { 'id': buyerID, 'masterID': $('select[name="SellerID"]').val() }, function (data) {
+                            $.post('@Html.Raw(Url.Action("Organization", "DataEntity"))', { 'id': buyerID, 'masterID': $('[name="SellerID"]').val() }, function (data) {
                                 hideLoading();
                                 if ($.isPlainObject(data) && data) {
                                     $('input[name="BuyerReceiptNo"]').val(data.ReceiptNo);
-                                    if ($('select[name="SellerID"]').val() != '2478') {
+                                    if ($('[name="SellerID"]').val() != '2478') {
                                         $('input[name="BuyerName"]').val(data.CompanyName);
                                     }
                                     $('input[name="Address"]').val(data.Addr);

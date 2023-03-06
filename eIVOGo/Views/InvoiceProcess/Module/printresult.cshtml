@@ -31,7 +31,8 @@
     <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401
             ? "PrintA0401AsPDF"
             : "PrintC0401AsPDF","DataView",_viewModel))" target="_blank">列印資料下載(PDF合併)</a>
-    @{ var viewModel = new
+    @{
+        var viewModel = new
         {
             _viewModel.CreateNew,
             _viewModel.KeyID,
@@ -42,9 +43,11 @@
             _viewModel.PrintCuttingLine,
             _viewModel.ProcessType,
             UseCustomView = true,
-        };}
-
+        };
+    }
     <a href='javascript:$("").launchDownload("@(Url.Action("ZipInvoicePDF","DataView"))", @(JsonConvert.SerializeObject(viewModel)), "report", true);'>列印資料下載(ZIP)</a>
+    <br />
+    <a href='javascript:uiInvoiceQuery.submitTask(@Html.Raw(viewModel.JsonStringify()));'>列印資料(ZIP)提交工作項</a>
     <br />
     <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401
             ? "PrintA0401"

@@ -11,6 +11,7 @@ using InvoiceClient.Properties;
 using System.Threading;
 using InvoiceClient.Agent;
 using Model.Resource;
+using InvoiceClient.Helper;
 
 namespace InvoiceClient
 {
@@ -32,15 +33,44 @@ namespace InvoiceClient
 
             if (Environment.UserInteractive /*|| Debugger.IsAttached*/)
             {
-                if (Settings.Default.ClearTxnPath
-                        && Directory.Exists(Settings.Default.InvoiceTxnPath))
-                    ClearDirectory();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
+
+                if (AppSigner.SignerCertificate == null)
+                {
+                    if (String.IsNullOrEmpty(Settings.Default.ActivationKey))
+                    {
+                        if (!InitializeActivation())
+                        {
+                            MessageBox.Show("Could not create identification!!", "Activation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            Application.Exit();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid Signer Certificate !!", "Activation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Application.Exit();
+                        return;
+                    }
+                }
+
+                if (Settings.Default.ClearTxnPath
+                        && Directory.Exists(Settings.Default.InvoiceTxnPath))
+                {
+                    ClearDirectory();
+                }
                 Application.Run(new MainForm());
             }
             else
             {
+                if (AppSigner.SignerCertificate == null)
+                {
+                    Logger.Error("Signer Certificate not ready, Please Check...");
+                    Application.Exit();
+                    return;
+                }
+
                 ServiceBase[] services = 
                     {
                         new InvoiceClientService() 
@@ -49,6 +79,19 @@ namespace InvoiceClient
             }
             
         }
+
+        internal static bool InitializeActivation()
+        {
+            String actKey = Microsoft.VisualBasic.Interaction.InputBox("New input identification code:", "Enable the system");
+            if (!String.IsNullOrEmpty(actKey) && InvoiceClient.Helper.AppSigner.ResetCertificate(actKey))
+            {
+                InvoiceClient.Helper.AppSigner.InstallRootCA();
+                MessageBox.Show("New input identification code!!", "Enable the system", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return true;
+            }
+            return false;
+        }
+
 
         internal static void Install(bool undo, string[] args)
         {

@@ -24,7 +24,16 @@ namespace InvoiceClient.Agent
 
         protected override Root processUpload(WS_Invoice.eInvoiceService invSvc, XmlDocument docInv)
         {
-            var result = invSvc.UploadInvoiceV2(docInv).ConvertTo<Root>();
+            Root result;
+            if (PreferredProcessType.HasValue)
+            {
+                result = invSvc.UploadInvoiceByClient(docInv, Settings.Default.ClientID, (int)_channelID, false, (int)PreferredProcessType).ConvertTo<Root>();
+            }
+            else
+            {
+                result = invSvc.UploadInvoiceV2(docInv).ConvertTo<Root>();
+            }
+
             return result;
         }
 

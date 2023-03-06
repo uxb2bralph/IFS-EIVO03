@@ -39,6 +39,12 @@
             .Join(models.GetTable<InvoiceProduct>(), d => d.ProductID, p => p.ProductID, (d, p) => p)
             .Join(models.GetTable<InvoiceProductItem>(), d => d.ProductID, i => i.ProductID, (p, i) => i)
             .OrderBy(i => i.ItemID).ToArray();
+
+        if (_products.Length == 0)
+        {
+            _products = _model.InvoiceDetails.SelectMany(d => d.InvoiceProduct.InvoiceProductItem).ToArray();
+        }
+
         _pageCount = _products.Length > __FIRST_PAGE_ITEM_COUNT
                 ? (_products.Length + (__PAGE_ITEM_COUNT - __FIRST_PAGE_ITEM_COUNT) + __PAGE_ITEM_COUNT - 1) / __PAGE_ITEM_COUNT
                 : 1;
@@ -61,17 +67,38 @@
         <div class="pageOne" style="max-height:27cm;overflow-y:auto;">
             @{
                 String height = "height: 17cm;";
-                if (_model.Organization.LogoURL != null)
+                if (_model.Organization.EnglishName != null)
+                {
+                    height = "height: 14.5cm;";
+                    <div class="title" style="padding: 0px;">
+                        <div style="  text-align: left;    margin-left: 20px;    font-size: xx-large;    font-family: serif;font-weight:bolder">
+                            @if (_model.Organization.LogoURL != null)
+                            {
+                                <img id="logo" style="max-width:5.2cm;max-height:1.7cm;" src='@(eIVOGo.Properties.Settings.Default.WebApDomain + VirtualPathUtility.ToAbsolute("~/" + _model.Organization.LogoURL))' />
+                            }
+                            else
+                            {
+                                <text>@(_model.Organization.EnglishName)</text>
+                            }
+                        </div>
+                        <div style="margin-top: -20px;font-size: 20px;font-weight: bold;">
+                            @(_model.Organization.CompanyName)
+                        </div>
+                    </div>
+                }
+                else if (_model.Organization.LogoURL != null)
                 {
                     height = "height: 14.5cm;";
                     <div class="title">
                         <img id="logo" style="max-width:5.2cm;max-height:1.7cm;" src='@(eIVOGo.Properties.Settings.Default.WebApDomain + VirtualPathUtility.ToAbsolute("~/" + _model.Organization.LogoURL))' />
                     </div>
                 }
+                else
+                {
+
+                }
             }
-            @*<div class="title">
-                <img src="images/chc_logo.gif" width="403" height="51"></div>*@
-            <h2>電子發票證明聯</h2>
+            <h2 style="padding-top:5px;">電子發票證明聯</h2>
             <p class="text-center">@(String.Format("{0:yyyy-MM-dd}", _model.InvoiceDate))</p>
             <div class="invoice_data">
                 <p>
@@ -107,7 +134,7 @@
                                         <td>
                                             @if (product.Brief?.IndexOf('\n') >= 0)
                                             {
-                                                <pre>@Html.Raw(product.Brief)</pre>
+                                                <div style="overflow-wrap: anywhere;">@Html.Raw(product.Brief.Replace("\r\n", "<br/>"))</div>
                                             }
                                             else
                                             {
@@ -246,7 +273,7 @@
                                             <td>
                                                 @if (product.Brief?.IndexOf('\n') >= 0)
                                                 {
-                                                    <pre>@Html.Raw(product.Brief)</pre>
+                                                    <div style="overflow-wrap: anywhere;">@Html.Raw(product.Brief.Replace("\r\n", "<br/>"))</div>
                                                 }
                                                 else
                                                 {

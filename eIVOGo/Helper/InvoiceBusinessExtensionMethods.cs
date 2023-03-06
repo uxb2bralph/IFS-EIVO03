@@ -15,6 +15,7 @@ using Model.Locale;
 using Model.Models.ViewModel;
 using Model.Security;
 using Model.Security.MembershipManagement;
+using ModelExtension.Service;
 using Utility;
 
 namespace eIVOGo.Helper
@@ -24,36 +25,13 @@ namespace eIVOGo.Helper
         public static void MarkPrintedLog<TEntity>(this GenericManager<EIVOEntityDataContext,TEntity> models,InvoiceItem item,UserProfileMember profile)
             where TEntity : class, new()
         {
-            if (!item.CDS_Document.DocumentPrintLog.Any(l => l.TypeID == (int)Naming.DocumentTypeDefinition.E_Invoice))
-            {
-                item.CDS_Document.DocumentPrintLog.Add(new DocumentPrintLog
-                {
-                    PrintDate = DateTime.Now,
-                    UID = profile.UID,
-                    TypeID = (int)Naming.DocumentTypeDefinition.E_Invoice
-                });
-            }
-
-            models.DeleteAnyOnSubmit<DocumentPrintQueue>(d => d.DocID == item.InvoiceID);
-            models.DeleteAnyOnSubmit<DocumentAuthorization>(d => d.DocID == item.InvoiceID);
-            models.SubmitChanges();
+            models.MarkPrintedLog(item, profile.UID);
         }
 
         public static void MarkPrintedLog<TEntity>(this GenericManager<EIVOEntityDataContext, TEntity> models, InvoiceAllowance item, UserProfileMember profile)
             where TEntity : class, new()
         {
-            if (!item.CDS_Document.DocumentPrintLog.Any(l => l.TypeID == (int)Naming.DocumentTypeDefinition.E_Allowance))
-            {
-                item.CDS_Document.DocumentPrintLog.Add(new DocumentPrintLog
-                {
-                    PrintDate = DateTime.Now,
-                    UID = profile.UID,
-                    TypeID = (int)Naming.DocumentTypeDefinition.E_Allowance
-                });
-            }
-
-            models.DeleteAnyOnSubmit<DocumentPrintQueue>(d => d.DocID == item.AllowanceID);
-            models.SubmitChanges();
+            models.MarkPrintedLog(item, profile.UID);
         }
 
 

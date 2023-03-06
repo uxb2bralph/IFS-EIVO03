@@ -23,9 +23,6 @@ namespace InvoiceClient.Agent
 
         }
 
-        public Naming.InvoiceProcessType? PreferredProcessType { get; set; }
-
-
         protected override Root processUpload(WS_Invoice.eInvoiceService invSvc, XmlDocument docInv)
         {
             Root result;

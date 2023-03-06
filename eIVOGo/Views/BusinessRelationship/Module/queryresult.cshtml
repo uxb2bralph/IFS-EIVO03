@@ -23,7 +23,7 @@ IQueryable<BusinessRelationship> _model;
 @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");}
 
 
-<div class="border_gray" style="overflow-x: auto; min-width: max-content;">
+<div class="border_gray query_result">
     @{ var recordCount = _model.Count();}
     @if (recordCount > 0)
     {

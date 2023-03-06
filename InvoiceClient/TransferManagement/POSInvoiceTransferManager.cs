@@ -15,11 +15,16 @@ namespace InvoiceClient.TransferManagement
     public class POSInvoiceTransferManager : ITransferManager
     {
         private InvoiceWatcher _SellerInvoiceWatcher;
-        //private InvoiceWatcher _PreparedInvoiceWatcher;
+        private InvoiceWatcher _PreparedInvoiceWatcher;
         private InvoiceWatcher _PreInvoiceWatcher;
+        private InvoiceWatcher _PrintInvoiceWatcher;
         private InvoiceCancellationWatcher _CancellationWatcher;
         private AllowanceWatcher _AllowanceWatcher;
         private AllowanceCancellationWatcher _AllowanceCancellationWatcher;
+        private InvoiceWatcher _BlindReturnWatcher;
+        private InvoiceWatcher _PreparedAllowanceWatcher;
+        private InvoiceWatcher _ReplacementWatcher;
+        private InvoiceWatcher _ZeroAmountWatcher;
 
 
         public void EnableAll(String fullPath)
@@ -27,8 +32,38 @@ namespace InvoiceClient.TransferManagement
             _SellerInvoiceWatcher = new InvoiceWatcherV2(POSReady._Settings.SellerInvoice);
             _SellerInvoiceWatcher.StartUp();
 
-            //_PreparedInvoiceWatcher = new PreparedInvoiceWatcher(POSReady._Settings.PreparedInvoice);
-            //_PreparedInvoiceWatcher.StartUp();
+            _PreparedInvoiceWatcher = new PreparedInvoiceWatcher(POSReady._Settings.PreparedInvoice);
+            _PreparedInvoiceWatcher.StartUp();
+
+            _BlindReturnWatcher = new PreparedInvoiceWatcher(POSReady._Settings.BlindReturn)
+            {
+                ConvertPrintFormUrl = POSReady._Settings.PrintBlindReturn,
+            };
+            _BlindReturnWatcher.StartUp();
+
+            _ReplacementWatcher = new PreparedInvoiceWatcher(POSReady._Settings.Replacement)
+            {
+                ConvertPrintFormUrl = POSReady._Settings.PrintReplacement,
+            };
+            _ReplacementWatcher.StartUp();
+
+            _ZeroAmountWatcher = new PreparedInvoiceWatcher(POSReady._Settings.ZeroAmount)
+            {
+                ConvertPrintFormUrl = POSReady._Settings.PrintZeroAmount,
+            };
+            _ZeroAmountWatcher.StartUp();
+
+            _PreparedAllowanceWatcher = new PreparedAllowanceWatcher(POSReady._Settings.PreparedAllowance)
+            {
+                ConvertPrintFormUrl = POSReady._Settings.PrintD0401,
+            };
+            _PreparedAllowanceWatcher.StartUp();
+
+            if (POSReady._Settings.UserPOSPrinter)
+            {
+                _PrintInvoiceWatcher = new POSPrintWatcher(POSReady._Settings.PrintInvoice);
+                _PrintInvoiceWatcher.StartUp();
+            }
 
             _PreInvoiceWatcher = new POSInvoiceWatcher(Path.Combine(fullPath, Settings.Default.UploadPreInvoiceFolder));
             _PreInvoiceWatcher.StartUp();
@@ -49,39 +84,31 @@ namespace InvoiceClient.TransferManagement
 
         public void PauseAll()
         {
-            //if (_PreparedInvoiceWatcher != null)
-            //{
-            //    _PreparedInvoiceWatcher.Dispose();
-            //}
-
-            if (_SellerInvoiceWatcher != null)
-            {
-                _SellerInvoiceWatcher.Dispose();
-            }
-            if (_CancellationWatcher != null)
-            {
-                _CancellationWatcher.Dispose();
-            }
-            if (_PreInvoiceWatcher != null)
-            {
-                _PreInvoiceWatcher.Dispose();
-            }
-            if (_AllowanceWatcher != null)
-            {
-                _AllowanceWatcher.Dispose();
-            }
-            if (_AllowanceCancellationWatcher != null)
-            {
-                _AllowanceCancellationWatcher.Dispose();
-            }
+            _PreparedInvoiceWatcher?.Dispose();
+            _BlindReturnWatcher?.Dispose();
+            _ZeroAmountWatcher?.Dispose();
+            _ReplacementWatcher?.Dispose();
+            _PreparedAllowanceWatcher?.Dispose();
+            _PrintInvoiceWatcher?.Dispose();
+            _SellerInvoiceWatcher?.Dispose();
+            _CancellationWatcher?.Dispose();
+            _PreInvoiceWatcher?.Dispose();
+            _AllowanceWatcher?.Dispose();
+            _AllowanceCancellationWatcher?.Dispose();
 
         }
 
         public String ReportError()
         {
             StringBuilder sb = new StringBuilder();
-            //if (_PreparedInvoiceWatcher != null)
-            //    sb.Append(_PreparedInvoiceWatcher.ReportError());
+            if (_PreparedInvoiceWatcher != null)
+                sb.Append(_PreparedInvoiceWatcher.ReportError());
+            if (_BlindReturnWatcher != null)
+                sb.Append(_BlindReturnWatcher.ReportError());
+            if (_ZeroAmountWatcher != null)
+                sb.Append(_ZeroAmountWatcher.ReportError());
+            if (_ReplacementWatcher != null)
+                sb.Append(_ReplacementWatcher.ReportError());
             if (_SellerInvoiceWatcher != null)
                 sb.Append(_SellerInvoiceWatcher.ReportError());
             if (_CancellationWatcher != null)
@@ -92,6 +119,10 @@ namespace InvoiceClient.TransferManagement
                 sb.Append(_AllowanceWatcher.ReportError());
             if (_AllowanceCancellationWatcher != null)
                 sb.Append(_AllowanceCancellationWatcher.ReportError());
+            if (_PrintInvoiceWatcher != null)
+                sb.Append(_PrintInvoiceWatcher.ReportError());
+            if (_PreparedAllowanceWatcher != null)
+                sb.Append(_PreparedAllowanceWatcher.ReportError());
 
             return sb.ToString();
 
@@ -99,13 +130,17 @@ namespace InvoiceClient.TransferManagement
 
         public void SetRetry()
         {
-            //_PreparedInvoiceWatcher.Retry();
+            _PreparedInvoiceWatcher.Retry();
+            _BlindReturnWatcher.Retry();
+            _ZeroAmountWatcher.Retry();
+            _ReplacementWatcher.Retry();
             _SellerInvoiceWatcher.Retry();
             _CancellationWatcher.Retry();
             _PreInvoiceWatcher.Retry();
             _AllowanceWatcher.Retry();
             _AllowanceCancellationWatcher.Retry();
-
+            _PrintInvoiceWatcher?.Retry();
+            _PreparedAllowanceWatcher.Retry();
         }
 
 

@@ -24,7 +24,7 @@ namespace ExternalPdfWrapper
                                 String.Format(AppSettings.Default.ConvertPattern, pdfFile, htmlSource.Contains("://") ? htmlSource : $"file://{htmlSource}"),
                                 args != null && args.Length > 0 ? String.Join(" ", args) : ""),
                 CreateNoWindow = true,
-                //UseShellExecute = false,
+                UseShellExecute = false,
                 WindowStyle = ProcessWindowStyle.Hidden,
                 //WorkingDirectory = AppDomain.CurrentDomain.RelativeSearchPath,
             };

@@ -15,7 +15,7 @@
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
 @{
-    Layout = "~/Views/Template/MvcMainPage.cshtml";
+    Layout = "~/Views/Common/QueryIndex.cshtml";
 
     ModelStateDictionary _modelState;
     ModelSource<InvoiceItem> models;
@@ -26,9 +26,11 @@
 
     ViewBag.ActionName = "首頁 > 發票作業";
 }
-@section headContent {
-
+@section QueryForm {
+    @{
+        Html.RenderPartial("~/Views/AllowanceProcess/AllowanceQuery.cshtml");
+    }
 }
-@{ Html.RenderPartial("~/Views/AllowanceProcess/AllowanceQuery.cshtml");}
+
 
 

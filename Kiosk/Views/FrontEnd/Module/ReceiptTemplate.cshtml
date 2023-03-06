@@ -1,0 +1,68 @@
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+@using System.Globalization
+
+@using Newtonsoft.Json
+@using Model.Models.ViewModel
+@using Model.Schema.EIVO
+@using Model.Helper
+@using Model.Locale
+@using Kiosk.Helper
+@using Utility
+@using Uxnet.Web.WebUI
+
+@functions
+{
+    InvoiceRootInvoice _model = null;
+    String _logoUrl = null;
+    String _sellerName = "瑞士商菲利普莫里斯股份有限公司";
+}
+@{
+    _model = (InvoiceRootInvoice)this.Model;
+
+    InvoiceRootInvoiceInvoiceItem[] _productItem = _model.InvoiceItem;
+
+}
+
+<div style="page-break-after: always;width:5.5cm;margin-left: 0cm;margin-right:0cm">
+
+    <div class="container" style="border-top:0px;border-bottom: 0px;page-break-after: always;">
+        <div class="cutfield" style="/*width:5cm;*/border-top:0px;border:0px;/*font-weight:bold;*/">
+            @if (_logoUrl != null)
+            {
+                <img id="logo" style="max-width:5.2cm;max-height:1.7cm;" src='@(_logoUrl)' />
+            }
+            else
+            {
+                <div style="text-align:center;">
+                    <h3 class="title-small" style="width:4.5cm; padding-top:0px;font-weight:bold;@(_sellerName != null && _sellerName.Length > 16 ? "font-size:small;" : null)">@(_sellerName)</h3>
+                </div>
+            }
+            <p style="line-height: 18px; padding-top: 20px;">
+                @{
+                    String[] remark = _model.MainRemark?.Split(';');
+                }
+                營業人統編：@(_model.SellerId)<br />
+                門市：@(remark!=null && remark.Length>0 ? remark[0] : null)<br />
+                序號：@(remark != null && remark.Length > 1 ? remark[1] : null)<br />
+                序號2：@(remark != null && remark.Length > 2 ? remark[2] : null)<br />
+                @{
+                    DateTime invoiceDate;
+                    bool result = DateTime.TryParseExact(String.Format("{0} {1}", _model.InvoiceDate, _model.InvoiceTime), "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate);
+                }
+                系統日期：@(result ? $"{invoiceDate:yyyy-MM-dd}" : null)<br />
+            </p>
+            <div style="text-align: center; padding-top: 10px; padding-bottom: 10px;">
+                <h3 class="title-small" style="width:4.5cm; padding-top:0px;font-weight:bold;">交易明細</h3>
+            </div>
+            @RenderSection("InvoiceDetails",false)
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

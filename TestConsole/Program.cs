@@ -31,6 +31,7 @@ using Model.Schema.TXN;
 using ModelExtension.Helper;
 using Model.Locale;
 using Model.Models.ViewModel;
+using System.Collections.Specialized;
 
 namespace TestConsole
 {
@@ -108,7 +109,7 @@ namespace TestConsole
             //test18();
             //test19();
 
-            test20(args);
+            //test20(args);
             //test24();
             //test21(args);
             //test22(args);
@@ -130,7 +131,54 @@ namespace TestConsole
             //String json = File.ReadAllText("G:\\temp\\test.json");
             //InvoiceRoot invoice = JsonConvert.DeserializeObject<InvoiceRoot>(json);
 
+            //test33();
+
             //Console.ReadKey();
+
+            //test34();
+            Uxnet.Com.Helper.DefaultTools.Program.Main(args);
+
+        }
+
+        private static void test34()
+        {
+            NameValueCollection data = new NameValueCollection();
+            data.Add("SignDate", "中 華 民 國 一 一 一 年 十 二 月 十 七 日");
+            data.Add("BuyerIdNo", "70762419");
+            data.Add("BuyerAddress", "台北市中正區南海路20號6樓");
+            data.Add("BuyerName", "網際優勢股份有限公司");
+            data.Add("PayWeekDate", "三");
+            data.Add("EndDate", "113 年 10 月 31 日");
+            data.Add("CreditDate", "150");
+            data.Add("Amount", "150,000,000");
+            data.Add("No", "12-F1O-1234");
+            ///印鑑圖檔送格式如下擇一：
+            ///1、將圖檔讀出以base64 inline格式傳送
+            ///或
+            ///2、URL型式 => http(s)://...../someone.jpg
+            ///範例採方法 1
+            String buyerSeal = "buyer.jpg";
+            data.Add("BuyerSeal", $"data:image/jpeg;base64,{Convert.ToBase64String(File.ReadAllBytes(buyerSeal))}");
+            String sellerSeal = "seller.jpg";
+            data.Add("SellerSeal", $"data:image/jpeg;base64,{Convert.ToBase64String(File.ReadAllBytes(sellerSeal))}");
+            var pdfData = GetContractPdf("https://ff.uxcds.com/ContractHome/Home/GetContract", data);
+        }
+
+        public static byte[] GetContractPdf(String contractUrl,NameValueCollection values)
+        {
+            using(WebClient client = new WebClient()) 
+            {
+                return client.UploadValues(contractUrl, values);
+            }
+        }
+
+        private static void test33()
+        {
+            String dataToSign = "登入帳號:bdseller";
+            String dataSignature = "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";
+            Uxnet.Com.Security.UseCrypto.CryptoUtility utility = new Uxnet.Com.Security.UseCrypto.CryptoUtility();
+            Console.WriteLine(Encoding.Default.CodePage);
+            Console.WriteLine(utility.VerifyPKCS7(dataToSign, dataSignature));
         }
 
         static void SaveToExcel()
@@ -536,15 +584,6 @@ namespace TestConsole
                 TotalAmount = item.InvoiceAmountType.TotalAmount ?? 0,
                 Currency = item.InvoiceAmountType.CurrencyType?.AbbrevName ?? "TWD"
             };
-        }
-
-        private static void test21(string[] args)
-        {
-            if (args != null && args.Length > 1)
-            {
-                int.TryParse(args[1], out int wait);
-                (new Uxnet.Com.Helper.DefaultTools.Program()).Print(args[0], wait);
-            }
         }
 
         private static void test20(string[] args)

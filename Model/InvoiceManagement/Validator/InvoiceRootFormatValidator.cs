@@ -224,7 +224,7 @@ namespace Model.InvoiceManagement.Validator
 
                 if (_invItem.CustomerDefined.StampDutyFlagSpecified)
                 {
-                    _container.InvoiceItemExtension.StampDutyFlag = (byte)_invItem.CustomerDefined.StampDutyFlag;
+                    _container.InvoiceItemExtension.StampDutyFlag = (byte?)_invItem.CustomerDefined.StampDutyFlag;
                 }
             }
 

@@ -259,28 +259,38 @@ namespace eIVOGo.Controllers.TrackCodeNo
                     {
                         ModelState.AddModelError("IntervalID", "該區間之號碼已經被使用,不可修改!!!!");
                     }
-                    else if (table.Any(t => t.IntervalID != model.IntervalID && t.TrackID == model.TrackID && t.StartNo >= viewModel.EndNo && t.InvoiceNoAssignments.Count > 0
-                        && t.SellerID == model.SellerID))
-                    {
-                        ModelState.AddModelError("StartNo", "違反序時序號原則該區段無法修改!!");
-                    }
+                    //else if (table.Any(t => t.IntervalID != model.IntervalID && t.TrackID == model.TrackID && t.StartNo >= viewModel.EndNo && t.InvoiceNoAssignments.Count > 0
+                    //    && t.SellerID == model.SellerID))
+                    //{
+                    //    ModelState.AddModelError("StartNo", "違反序時序號原則該區段無法修改!!");
+                    //}
                     else if (table.Any(t => t.IntervalID != model.IntervalID && t.TrackID == model.TrackID
                         && ((t.EndNo <= viewModel.EndNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.StartNo >= viewModel.StartNo) || (t.StartNo <= viewModel.StartNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.EndNo >= viewModel.EndNo))))
                     {
-                        ModelState.AddModelError("StartNo", "系統中已存在重疊的區段!!");
+                        var appliedItem = table
+                                .Where(t => t.TrackID == viewModel.TrackID
+                                    && ((t.EndNo <= viewModel.EndNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.StartNo >= viewModel.StartNo) || (t.StartNo <= viewModel.StartNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.EndNo >= viewModel.EndNo)))
+                                .First();
+                        ModelState.AddModelError("StartNo", $"本區段營業人({appliedItem.InvoiceTrackCodeAssignment.Organization.ReceiptNo})已使用!!");
+                        //ModelState.AddModelError("StartNo", "系統中已存在重疊的區段!!");
                     }
                 }
                 else
                 {
-                    if (table.Any(t => t.TrackID == viewModel.TrackID && t.StartNo >= viewModel.EndNo && t.InvoiceNoAssignments.Count > 0
-                        && t.SellerID == viewModel.SellerID))
-                    {
-                        ModelState.AddModelError("StartNo", "違反序時序號原則該區段無法新增!!");
-                    }
-                    else if (table.Any(t => t.TrackID == viewModel.TrackID
+                    //if (table.Any(t => t.TrackID == viewModel.TrackID && t.StartNo >= viewModel.EndNo && t.InvoiceNoAssignments.Count > 0
+                    //    && t.SellerID == viewModel.SellerID))
+                    //{
+                    //    ModelState.AddModelError("StartNo", "違反序時序號原則該區段無法新增!!");
+                    //}
+                    //else 
+                    if (table.Any(t => t.TrackID == viewModel.TrackID
                         && ((t.EndNo <= viewModel.EndNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.StartNo >= viewModel.StartNo) || (t.StartNo <= viewModel.StartNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.EndNo >= viewModel.EndNo))))
                     {
-                        ModelState.AddModelError("StartNo", "系統中已存在重疊的區段!!");
+                        var appliedItem = table
+                                .Where(t => t.TrackID == viewModel.TrackID
+                                    && ((t.EndNo <= viewModel.EndNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.StartNo >= viewModel.StartNo) || (t.StartNo <= viewModel.StartNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.EndNo >= viewModel.EndNo)))
+                                .First();
+                        ModelState.AddModelError("StartNo", $"本區段營業人({appliedItem.InvoiceTrackCodeAssignment.Organization.ReceiptNo})已使用!!");
                     }
                 }
             }

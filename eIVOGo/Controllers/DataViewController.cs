@@ -33,6 +33,9 @@ using Utility;
 using Uxnet.Com.Security.UseCrypto;
 using Model.Schema.EIVO;
 using Newtonsoft.Json;
+using Uxnet.Com.Helper;
+using System.Threading.Tasks;
+using Business.Helper.ProcessRequestProcessor;
 
 namespace eIVOGo.Controllers
 {
@@ -115,7 +118,7 @@ namespace eIVOGo.Controllers
 
             this.TempData["viewModel"] = viewModel;
             String[] useThermalPOSArgs;
-            String pdfFile = this.CreateContentAsPDF(getInvoiceViewPath(item, out useThermalPOSArgs, viewModel.PaperStyle), item, Session.Timeout, useThermalPOSArgs);
+            String pdfFile = this.CreateContentAsPDF(getInvoiceViewPath(item, out useThermalPOSArgs, viewModel.PaperStyle, viewModel.ProcessType), item, Session.Timeout, useThermalPOSArgs);
 
             if (pdfFile != null)
             {
@@ -207,39 +210,75 @@ namespace eIVOGo.Controllers
 
             var profile = HttpContext.GetUser();
 
-            var items = models.GetTable<DocumentPrintQueue>()
-                .Where(i => i.UID == profile.UID)
-                .Join(models.GetTable<CDS_Document>()
-                        .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice),
-                    i => i.DocID, d => d.DocID, (i, d) => i);
-
-            //Response.Clear();
-            //Response.ClearContent();
-            //Response.ClearHeaders();
-            Response.AppendCookie(new HttpCookie("FileDownloadToken", viewModel.FileDownloadToken));
-            //Response.AddHeader("Cache-control", "max-age=1");
-            //Response.ContentType = "application/octet-stream";
-            //Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}({1:yyyy-MM-dd HH-mm-ss}).zip", HttpUtility.UrlEncode("電子發票下載"), DateTime.Now));
-
-            String outFile = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".zip");
-            using (var zipOut = System.IO.File.Create(outFile))
+            if(viewModel.ProcessModel == ProcessRequestViewModel.ProcessModelDefinition.ByTask)
             {
-                using (ZipArchive zip = new ZipArchive(zipOut, ZipArchiveMode.Create))
-                {
-                    foreach (var doc in items)
-                    {
-                        InvoiceItem item = doc.CDS_Document.InvoiceItem;
-                        var pdfFile = GetInvoicePDF(item, viewModel);
-                        models.MarkPrintedLog(item, profile);
+                viewModel.Message = "發票列印下載";
 
-                        zip.CreateEntryFromFile(pdfFile, Path.GetFileName(pdfFile));
+                ProcessRequest processItem = new ProcessRequest
+                {
+                    Sender = profile.UID,
+                    SubmitDate = DateTime.Now,
+                    ProcessStart = DateTime.Now,
+                    ResponsePath = System.IO.Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".zip"),
+                    ViewModel = viewModel.JsonStringify(),
+                };
+                models.GetTable<ProcessRequest>().InsertOnSubmit(processItem);
+                models.SubmitChanges();
+
+                viewModel.TaskID = processItem.TaskID;
+                viewModel.Push($"{DateTime.Now.Ticks}.json");
+
+                Task.Run(() => 
+                {
+                    processItem.TaskID.ZipInvoicePDF();
+                });
+
+                return View("~/Views/Shared/Module/PromptCheckDownload.cshtml",
+                        new AttachmentViewModel
+                        {
+                            TaskID = processItem.TaskID,
+                            FileName = processItem.ResponsePath,
+                            FileDownloadName = "發票列印下載.zip",
+                        });
+            }
+            else
+            {
+                String outFile = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".zip");
+
+                var items = models.GetTable<DocumentPrintQueue>()
+                    .Where(i => i.UID == profile.UID)
+                    .Join(models.GetTable<CDS_Document>()
+                            .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice),
+                        i => i.DocID, d => d.DocID, (i, d) => i);
+
+                using (var zipOut = System.IO.File.Create(outFile))
+                {
+                    using (ZipArchive zip = new ZipArchive(zipOut, ZipArchiveMode.Create))
+                    {
+                        foreach (var doc in items)
+                        {
+                            InvoiceItem item = doc.CDS_Document.InvoiceItem;
+                            var pdfFile = GetInvoicePDF(item, viewModel);
+                            models.MarkPrintedLog(item, profile);
+
+                            zip.CreateEntryFromFile(pdfFile, Path.GetFileName(pdfFile));
+                        }
                     }
                 }
-            }
 
-            var result = new FilePathResult(outFile, "application/octet-stream");
-            result.FileDownloadName = "發票列印下載.zip";
-            return result;
+                //Response.Clear();
+                //Response.ClearContent();
+                //Response.ClearHeaders();
+                Response.AppendCookie(new HttpCookie("FileDownloadToken", viewModel.FileDownloadToken));
+                //Response.AddHeader("Cache-control", "max-age=1");
+                //Response.ContentType = "application/octet-stream";
+                //Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}({1:yyyy-MM-dd HH-mm-ss}).zip", HttpUtility.UrlEncode("電子發票下載"), DateTime.Now));
+
+
+                var result = new FilePathResult(outFile, "application/octet-stream");
+                result.FileDownloadName = "發票列印下載.zip";
+                return result;
+            }
         }
 
         public ActionResult GetCustomerAllowancePDF(RenderStyleViewModel viewModel, bool? ackDel, bool? html)
@@ -735,7 +774,7 @@ namespace eIVOGo.Controllers
                             {
                                 pdfPackage = pdfItems[0];
                             }
-                            zip.CreateEntryFromFile(pdfPackage, $"{packageIdx:000000}-{idxItem.TrackCode}{idxItem.No}-{item.InvoiceBuyer.CustomerName}.pdf");
+                            zip.CreateEntryFromFile(pdfPackage, $"{packageIdx:000000}-{idxItem.TrackCode}{idxItem.No}-{item.InvoiceBuyer.CustomerName.EscapeFileNameCharacter('_')}.pdf");
                         }
 
                         packageIdx++;

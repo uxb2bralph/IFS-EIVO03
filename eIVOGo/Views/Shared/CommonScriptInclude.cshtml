@@ -75,6 +75,18 @@
                 hideLoading();
             },
             onReady: [],
+            nothingToken: false,
+            doNothing: function () {
+                this.nothingToken = true;
+                $.post('@Html.Raw(Url.Action("SystemInfo","Home"))', null, function (data) {
+                    if ($.isPlainObject(data)) {
+                        console.log(data);
+                    }
+                    if ($global.nothingToken) {
+                        setTimeout($global.doNothing, 30000);
+                    }
+                });
+            },
         };
     })();
 

@@ -1,0 +1,53 @@
+﻿
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using Model.Models.ViewModel
+@using Model.Schema.EIVO
+@using Model.Helper
+@using Model.Locale
+@using Kiosk.Helper
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    Layout = "~/Views/FrontEnd/PrintInvoiceContent.cshtml";
+
+    InvoiceRootInvoice _model = null;
+
+    if (Request.ContentType.StartsWith("application/json", StringComparison.InvariantCultureIgnoreCase))
+    {
+        String data = Request.ReadToEnd();
+        if (!String.IsNullOrEmpty(data))
+        {
+            _model = JsonConvert.DeserializeObject<InvoiceRootInvoice>(data);
+        }
+    }
+    else if (Request.ContentType.Contains("xml"))
+    {
+        System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+        doc.Load(Request.InputStream);
+        _model = doc.TrimAll().ConvertTo<InvoiceRootInvoice>();
+    }
+
+
+}
+
+@section InvoiceTitle
+{
+    @{
+        <text>保固期換貨-@(_model?.DataNumber)</text>
+    }
+}
+
+@section InvoiceContent
+{
+    @{
+        if (_model != null)
+        {
+            Html.RenderPartial("~/Views/FrontEnd/Module/ReceiptDetails.cshtml", _model);
+        }
+    }
+}
+

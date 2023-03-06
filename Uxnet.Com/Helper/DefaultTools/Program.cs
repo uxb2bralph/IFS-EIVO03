@@ -1,10 +1,14 @@
-﻿using System;
+﻿using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.WinForms;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -15,128 +19,73 @@ namespace Uxnet.Com.Helper.DefaultTools
 {
     public class Program
     {
-        private WebBrowser _wb;
+        private WebView2 _webView;
+
         protected FileSystemWatcher _watcher;
         protected bool _running = true;
         protected Queue<String> _queue;
-        protected Thread _main;
+        private String _InProgress;
+        private AutoResetEvent _queueIsReady;
 
         [STAThread()]
         public static void Main(string[] args)
         {
-
-            if (!Win32.Winspool.SetDefaultPrinter(Settings.Default.PdfPrinterName))
-            {
-                Logger.Warn(String.Format("預設印表機設定失敗 => {0}", Settings.Default.PdfPrinterName));
-                return;
-            }
-
             if (args != null && args.Length > 0)
             {
                 Program prog = new Program();
                 Logger.Info(args[0]);
-                prog.startUp(args[0]);
+                //prog.startUp(args[0]);
+                prog.PrintUrl(args[0]);
             }
             else
             {
-                (new Program()).Run();
+                (new Program()).StartUp();
             }
+
+            //Application.Run();
         }
 
-        public void Run()
+        public Program()
         {
-            Settings.Default.PDFWorkingQueue.CheckStoredPath();
-            _watcher = new FileSystemWatcher(Settings.Default.PDFWorkingQueue);
-            _watcher.Created += new FileSystemEventHandler(_watcher_Created);
-            _watcher.Filter = "*.txt";
-            _watcher.EnableRaisingEvents = true;
 
-            _queue = new Queue<string>();
-            _main = Thread.CurrentThread;
-
-            Logger.Info("PDF列印服務啟動...");
-
-            //ThreadPool.QueueUserWorkItem(arg =>
-            //    {
-            //        while (String.Compare(Console.ReadLine(), "Quit", true) != 0) ;
-            //        _running = false;
-            //        _main.Interrupt();
-            //    });
-
-            foreach (String fullPath in Directory.GetFiles(_watcher.Path, "*.txt"))
+            if (Win32.Winspool.SetDefaultPrinter(Settings.Default.PdfPrinterName))
             {
-                processFile(getFullPath(fullPath));
+                Logger.Warn(String.Format("使用預設印表機 => {0}", Settings.Default.PdfPrinterName));
+            }
+            else
+            {
+                Logger.Warn(String.Format("預設印表機設定失敗 => {0}", Settings.Default.PdfPrinterName));
+                Application.Exit();
             }
 
-            ThreadPool.QueueUserWorkItem(p =>
-            {
-                while (_running)
-                {
-                    _watcher.WaitForChanged(WatcherChangeTypes.Created);
-                }
-            });
+            _webView = new WebView2();
+            _webView.NavigationCompleted += Wb_NavigationCompleted;
+            _webView.NavigationStarting += Wb_NavigationStarting;
+        }
+
+        public int PrintTimeoutInSeconds { get; set; } = 30;
+
+
+        public void StartUp()
+        {
+            Initialize();
+            ProcessPrintRequest();
 
             while (_running)
             {
                 try
                 {
-                    Logger.Info(String.Format("[{0}] 佇列中的工作件數:[{1}]", DateTime.Now, _queue.Count));
-                    while (_queue.Count > 0)
+                    if(!_queue.Any())
                     {
-                        processFile(getFullPath(_queue.Dequeue()));
+                        _queueIsReady.WaitOne();
+                    }
+
+                    Logger.Info(String.Format("[{0}] 佇列中的工作件數:[{1}]", DateTime.Now, _queue.Count));
+                    while (_queue.Any())
+                    {
+                        ProcessUrl(ReadIntentUrl(_queue.Dequeue()));
                         Logger.Info(String.Format("[{0}] 佇列中的工作件數:[{1}]", DateTime.Now, _queue.Count));
                     }
-
-                    if (!Thread.Yield())
-                    {
-                        Logger.Info(String.Format("[{0}] 工作結束,等待...", DateTime.Now));
-                        Thread.Sleep(Timeout.Infinite);
-                    }
-
-                }
-                catch (Exception ex)
-                {
-
-                }
-            }
-        }
-
-        private String getFullPath(String pathFile)
-        {
-            String fullPath;
-            using (StreamReader sr = new StreamReader(pathFile))
-            {
-                fullPath = sr.ReadLine();
-                sr.Close();
-            }
-            File.Delete(pathFile);
-            return fullPath;
-        }
-
-        private void processFile(String fullPath)
-        {
-            String outputFolder = Path.GetDirectoryName(fullPath);
-
-            Logger.Info(String.Format("[{0}] 處理檔案 => {1}", DateTime.Now, fullPath));
-            startUp(fullPath);
-            Logger.Info(String.Format("[{0}] 處理完畢 => {1}", DateTime.Now, fullPath));
-
-            if (File.Exists(Settings.Default.PdfOutput))
-            {
-                String fileName = Path.GetFileNameWithoutExtension(fullPath);
-                String outputPath = Path.Combine(outputFolder, String.Format("{0}.pdf", fileName));
-                String pdfDest = Path.Combine(outputFolder, Path.GetFileName(Settings.Default.PdfOutput));
-                try
-                {
-                    if (File.Exists(outputPath))
-                    {
-                        File.Delete(outputPath);
-                    }
-
-                    Logger.Info(String.Format("[{0}] 搬移檔案 => {1} => {2}", DateTime.Now, Settings.Default.PdfOutput, outputPath));
-                    File.Move(Settings.Default.PdfOutput, pdfDest);
-                    File.Move(pdfDest, outputPath);
-                    Logger.Info(String.Format("[{0}] 搬移完畢 => {1}", DateTime.Now, Settings.Default.PdfOutput, outputPath));
                 }
                 catch (Exception ex)
                 {
@@ -145,91 +94,160 @@ namespace Uxnet.Com.Helper.DefaultTools
             }
         }
 
+        private void Initialize()
+        {
+            Settings.Default.PDFWorkingQueue.CheckStoredPath();
+            _InProgress = Path.Combine(Logger.LogPath,"InProgress").CheckStoredPath();
+            _watcher = new FileSystemWatcher(Settings.Default.PDFWorkingQueue);
+            Logger.Info($"工作佇列資料夾:{Settings.Default.PDFWorkingQueue}");
+            _watcher.Created += new FileSystemEventHandler(_watcher_Created);
+            _watcher.Filter = "*.txt";
+            _watcher.EnableRaisingEvents = true;
+
+            _queue = new Queue<string>();
+            _queueIsReady = new AutoResetEvent(false);
+
+            ThreadPool.QueueUserWorkItem(p =>
+            {
+                while (_running)
+                {
+                    var result = _watcher.WaitForChanged(WatcherChangeTypes.Created, 300000);
+                    Thread.Sleep(100);
+                    ProcessPrintRequest();
+                }
+            });
+
+
+            Logger.Info("PDF列印服務啟動...");
+        }
+
+        private String ReadIntentUrl(String pathFile)
+        {
+            String url = File.ReadAllText(pathFile);
+            File.Delete(pathFile);
+            return url;
+        }
+
+        private void ProcessUrl(String url)
+        {
+            String outputFolder = Path.GetDirectoryName(url);
+
+            Logger.Info(String.Format("[{0}] 處理檔案 => {1}", DateTime.Now, url));
+            PrintUrl(url);
+            Logger.Info(String.Format("[{0}] 處理完畢 => {1}", DateTime.Now, url));
+
+            //if (File.Exists(Settings.Default.PdfOutput))
+            //{
+            //    String fileName = Path.GetFileNameWithoutExtension(fullPath);
+            //    String outputPath = Path.Combine(outputFolder, String.Format("{0}.pdf", fileName));
+            //    String pdfDest = Path.Combine(outputFolder, Path.GetFileName(Settings.Default.PdfOutput));
+            //    try
+            //    {
+            //        if (File.Exists(outputPath))
+            //        {
+            //            File.Delete(outputPath);
+            //        }
+
+            //        Logger.Info(String.Format("[{0}] 搬移檔案 => {1} => {2}", DateTime.Now, Settings.Default.PdfOutput, outputPath));
+            //        File.Move(Settings.Default.PdfOutput, pdfDest);
+            //        File.Move(pdfDest, outputPath);
+            //        Logger.Info(String.Format("[{0}] 搬移完畢 => {1}", DateTime.Now, Settings.Default.PdfOutput, outputPath));
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Logger.Error(ex);
+            //    }
+            //}
+        }
+
+        private void ProcessPrintRequest()
+        {
+            IEnumerable<String> items;
+            do
+            {
+                items = Directory.EnumerateFiles(Settings.Default.PDFWorkingQueue, "*.txt");
+                foreach (var item in items)
+                {
+                    Logger.Info(String.Format("[{0}] 發現檔案 => {1}", DateTime.Now, item));
+                    String destPath = Path.Combine(_InProgress,Path.GetFileName(item));
+                    if (!File.Exists(destPath))
+                    {
+                        File.Move(item, destPath);
+                        _queue.Enqueue(destPath);
+                        Logger.Info(String.Format("[{0}] 放入新工作,佇列中的工作件數:[{1}]", DateTime.Now, _queue.Count));
+                    }
+                }
+            } while(items.Any());
+
+            if(_queue.Any())
+            {
+                _queueIsReady.Set();
+            }
+        }
+
         private void _watcher_Created(object sender, FileSystemEventArgs e)
         {
-            Logger.Info(String.Format("[{0}] 發現檔案 => {1}", DateTime.Now, e.FullPath));
-            _queue.Enqueue(e.FullPath);
-            Logger.Info(String.Format("[{0}] 放入新工作,佇列中的工作件數:[{1}]", DateTime.Now, _queue.Count));
-            if (_main.ThreadState == ThreadState.WaitSleepJoin)
-            {
-                _main.Interrupt();
-                Logger.Info(String.Format("[{0}] 喚起主程序進行PDF列印...", DateTime.Now));
-            }
+
         }
 
 
-        void startUp(String url)
+        bool _printing = true;
+        bool _readyToPrint = false;
+        public bool PrintUrl(String url)
         {
-            //foreach (var ptr in PrinterSettings.InstalledPrinters)
-            //{
-            //    Logger.Info("發現印表機:"+ptr);
-            //}
-
-            WebBrowser wb = new WebBrowser();
-            wb.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(wb_DocumentCompleted);
-            wb.Navigating += new WebBrowserNavigatingEventHandler(wb_Navigating);
-            wb.Navigated += new WebBrowserNavigatedEventHandler(wb_Navigated);
-            _wb = wb;
-            _wb.Navigate(url);
-            _wb.Show();
-            System.Windows.Forms.Application.DoEvents();
-
-            DateTime timeOut = DateTime.Now.AddMilliseconds(Settings.Default.MaxWaitingInterval);
-            Logger.Info(String.Format("Timeout:{0}ms", Settings.Default.MaxWaitingInterval));
-            Logger.Info(String.Format("Output:{0}", Settings.Default.PdfOutput));
-
-            while (!File.Exists(Settings.Default.PdfOutput) && _running)
+            var target = new Uri(url);
+            if(_webView.Source?.AbsoluteUri == target.AbsoluteUri)
+            {
+                _webView.Reload();
+            }
+            else
+            {
+                _webView.Source = target;
+            }
+            _printing = true;
+            _readyToPrint = false;
+            DateTime start = DateTime.Now;
+            while (_printing)
             {
                 System.Windows.Forms.Application.DoEvents();
+                if (_readyToPrint)
+                {
+                    _readyToPrint = false;
+                    PrintAsync();
+                }
+
+                if((DateTime.Now-start).TotalSeconds > PrintTimeoutInSeconds) 
+                {
+                    return false;
+                }
             }
 
+            return true;
         }
 
-        public void Print(String url,int wait = 1000)
+        private void Wb_NavigationStarting(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
         {
-            //foreach (var ptr in PrinterSettings.InstalledPrinters)
-            //{
-            //    Logger.Info("發現印表機:"+ptr);
-            //}
-
-            WebBrowser wb = new WebBrowser();
-            wb.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(wb_DocumentCompleted);
-            wb.Navigating += new WebBrowserNavigatingEventHandler(wb_Navigating);
-            wb.Navigated += new WebBrowserNavigatedEventHandler(wb_Navigated);
-            _wb = wb;
-            _wb.Navigate(url);
-            _wb.Show();
-            System.Windows.Forms.Application.DoEvents();
-
-            DateTime timeOut = DateTime.Now.AddMilliseconds(wait);
-            Logger.Info(String.Format("Timeout:{0}ms", wait));
-
-            while (DateTime.Now < timeOut && _running)
-            {
-                System.Windows.Forms.Application.DoEvents();
-            }
-
+            WebView2 wb = (WebView2)sender;
+            Logger.Info(String.Format("Navigating:{0}", e.Uri));
         }
 
-        void wb_Navigated(object sender, WebBrowserNavigatedEventArgs e)
+        CoreWebView2 _coreWeb;
+        private async void PrintAsync()
         {
-            Logger.Info(String.Format("Navigated:{0}", e.Url));
+            CoreWebView2PrintSettings printSettings = null;
+            printSettings = _coreWeb.Environment.CreatePrintSettings();
+            printSettings.ShouldPrintBackgrounds = true;
+            printSettings.ShouldPrintHeaderAndFooter = false;
+            CoreWebView2PrintStatus status  = await _coreWeb.PrintAsync(printSettings);
+            Logger.Info($"document printed...{status}");
+            _printing = false;
         }
 
-        void wb_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        private void Wb_NavigationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
         {
-            Logger.Info(String.Format("Navigating:{0}", e.Url));
-        }
-
-        void wb_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            Logger.Info(e.Url);
-            if (_wb.ReadyState == WebBrowserReadyState.Complete)
-            {
-                //Logger.Info("Printer Name:" + (new PrintDocument()).PrinterSettings.PrinterName);
-                _wb.Print();
-                Logger.Info("Start printing...");
-            }
+            WebView2 wb = (WebView2)sender;
+            _coreWeb = wb.CoreWebView2;
+            _readyToPrint = true;
         }
 
     }

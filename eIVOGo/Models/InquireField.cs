@@ -388,7 +388,8 @@ namespace eIVOGo.Models
     {
         public override void BuildQueryExpression(ModelSource<EIVOEntityDataContext, InvoiceItem> models)
         {
-            models.Items = models.Items.QueryByInvoiceNo((InquireInvoiceViewModel)_viewModel, models, ref effective);
+            models.Items = models.Items.QueryByInvoiceNo((InquireInvoiceViewModel)_viewModel, models, ref effective)
+                            .QueryByDataNo((InquireInvoiceViewModel)_viewModel, models, ref effective);
             base.BuildQueryExpression(models);
         }
 

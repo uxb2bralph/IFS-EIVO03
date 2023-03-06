@@ -119,5 +119,14 @@ namespace Kiosk.Controllers
             }
             return View("~/Views/FrontEnd/PrintC0401POS.cshtml", viewModel);
         }
+
+        protected override void HandleUnknownAction(string actionName)
+        {
+            if (!String.IsNullOrEmpty(actionName))
+            {
+                this.View(actionName).ExecuteResult(this.ControllerContext);
+            }
+        }
+
     }
 }

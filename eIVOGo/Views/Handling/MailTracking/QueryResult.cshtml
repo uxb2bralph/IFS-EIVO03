@@ -39,13 +39,14 @@
             uiHandling.items = [];
         }
 
-        @if (_model.Count() > 0)
+        @if (_model.Any())
         {
             List<_PackItem> items = new List<_PackItem>();
             //var grouping = _model.GroupBy(i => i.InvoiceBuyer.Address)
             //                            .OrderBy(a => a.Key);
             //Logger.Debug(models.GetDataContext().GetCommand(grouping).CommandText);
-            foreach (var g in _model.GroupBy(i => i.InvoiceBuyer.Address)
+            var dataItems = _model.ToList();
+            foreach (var g in dataItems.GroupBy(i => i.InvoiceBuyer.Address)
                                         .OrderBy(a => a.Key))
             {
                 foreach (var i in g)
@@ -60,6 +61,8 @@
                         Address = i.InvoiceBuyer.Address,
                         Remark = ""
                     });
+
+                    Logger.Info($"PackageID:{items.Last().PackageID}");
                 }
             }
             //var items = _model.ToList()

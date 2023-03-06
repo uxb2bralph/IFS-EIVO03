@@ -69,6 +69,10 @@
                 return false;
             }
 
+            if (!confirm('確定註銷選取的發票？')) {
+                return false;
+            }
+
             $('#theForm').ajaxForm({
                 url: "@(Url.Action("VoidInvoice","InvoiceProcess"))" + '?mode=' + mode,
                 beforeSubmit: function () {

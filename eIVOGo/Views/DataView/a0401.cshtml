@@ -33,7 +33,7 @@
     <link href="../App_Themes/Ver2016/eivo.css?1.1" rel="stylesheet" type="text/css" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 </head>
-<body style="font-family:KaiTi">
+<body>
     <form id="theForm" runat="server">
         @{ String invoicePrintView;}
         @if (_viewModel?.UseCustomView == true && (invoicePrintView = _model.Organization.OrganizationStatus.InvoicePrintView.GetEfficientString()) != null)

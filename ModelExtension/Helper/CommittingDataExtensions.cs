@@ -360,7 +360,7 @@ namespace ModelExtension.Helper
 
             if (orgItem == null)
             {
-                orgItem = CommitOrganizationViewModel(viewModel, models, new ModelStateDictionary { });
+                orgItem = CommitOrganizationViewModel(viewModel, models, modelState);
             }
 
             Organization masterItem = models.GetTable<Organization>().Where(m => m.CompanyID == viewModel.MasterID).FirstOrDefault();
@@ -375,7 +375,12 @@ namespace ModelExtension.Helper
                 {
                     ReceiptNo = viewModel.MasterNo,
                     CompanyName = viewModel.MasterName,
-                }).CommitOrganizationViewModel(models, new ModelStateDictionary { });
+                }).CommitOrganizationViewModel(models, modelState);
+            }
+
+            if (masterItem == null || orgItem == null)
+            {
+                return null;
             }
 
             if(!viewModel.BusinessID.HasValue)

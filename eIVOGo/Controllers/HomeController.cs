@@ -75,18 +75,35 @@ namespace eIVOGo.Controllers
         }
 
         [Authorize]
-        public ActionResult SearchCounterpart(String term)
+        public ActionResult SearchCounterpart(String term, int? sellerID)
         {
             GetCounterpart(term);
 
             IQueryable<Organization> items = (IQueryable<Organization>)ViewBag.DataItems;
 
-            return Json(items.OrderBy(o => o.ReceiptNo).ToArray()
-                .Select(o => new
-                {
-                    label = $"{o.ReceiptNo} {o.CompanyName}",
-                    value = o.CompanyID
-                }), JsonRequestBehavior.AllowGet);
+            if(sellerID.HasValue)
+            {
+                var dataItems = items
+                    .OrderBy(o => o.ReceiptNo)
+                    .Select(o => new { C = o, R = o.RelativeRelation.Where(b => b.MasterID == sellerID).FirstOrDefault() })
+                    .ToArray();
+                return Json(dataItems
+                    .Select(o => new
+                    {
+                        label = $"{o.C.ReceiptNo} {o.R?.CompanyName ?? o.C.CompanyName}",
+                        value = o.C.CompanyID
+                    }), JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(items.OrderBy(o => o.ReceiptNo).ToArray()
+                    .Select(o => new
+                    {
+                        label = $"{o.ReceiptNo} {o.CompanyName}",
+                        value = o.CompanyID
+                    }), JsonRequestBehavior.AllowGet);
+
+            }
         }
 
         [Authorize]
@@ -164,7 +181,7 @@ namespace eIVOGo.Controllers
         {
             return Json(new
             {
-                Version = "2021-07-01",
+                Version = "2023-02-13",
             }, JsonRequestBehavior.AllowGet);
         }
 

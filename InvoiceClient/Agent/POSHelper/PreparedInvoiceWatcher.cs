@@ -26,6 +26,8 @@ namespace InvoiceClient.Agent.POSHelper
 
         }
 
+        public String ConvertPrintFormUrl { get; set; } = POSReady.Settings.PrintC0401;
+
         protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {
             if (rootInvoiceNo != null && rootInvoiceNo.Count() > 0)
@@ -101,8 +103,8 @@ namespace InvoiceClient.Agent.POSHelper
                         try
                         {
                             var invItem = item.Invoice[idx];
-                            String tmpHtml = Path.Combine(POSReady._Settings.PrintInvoice, $"{invItem.InvoiceNumber}.htm");
-                            File.WriteAllText(tmpHtml, client.UploadString(POSReady._Settings.PrintC0401, JsonConvert.SerializeObject(invItem)));
+                            String tmpHtml = Path.Combine(POSReady._Settings.PrintInvoice, $"{invItem.InvoiceNumber ?? invItem.DataNumber}.htm");
+                            File.WriteAllText(tmpHtml, client.UploadString(ConvertPrintFormUrl, JsonConvert.SerializeObject(invItem)));
                             eventItems.Add(invItem);
                         }
                         catch (Exception ex)

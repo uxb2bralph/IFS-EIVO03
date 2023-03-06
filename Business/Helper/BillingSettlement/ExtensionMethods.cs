@@ -14,22 +14,22 @@ namespace Business.Helper.BillingSettlement
 {
     public static class ExtensionMethods
     {
-        public static Settlement AssertMonthlyBillingSettlement(this DateTime current, GenericManager<EIVOEntityDataContext> models)
+        public static Settlement AssertMonthlyBillingSettlement(this DateTime settlementDate, GenericManager<EIVOEntityDataContext> models)
         {
             lock (typeof(ExtensionMethods))
             {
                 Settlement settlement = models.GetTable<Settlement>()
-                            .Where(s => s.Year == current.Year)
-                            .Where(s => s.Month == current.Month)
+                            .Where(s => s.Year == settlementDate.Year)
+                            .Where(s => s.Month == settlementDate.Month)
                             .FirstOrDefault();
                 if (settlement == null)
                 {
                     settlement = new Settlement
                     {
-                        Year = current.Year,
-                        Month = current.Month,
-                        SettlementDate = current,
-                        StartDate = new DateTime(current.Year, current.Month, 1),
+                        Year = settlementDate.Year,
+                        Month = settlementDate.Month,
+                        SettlementDate = settlementDate,
+                        StartDate = new DateTime(settlementDate.Year, settlementDate.Month, 1),
                     };
                     settlement.EndExclusiveDate = settlement.StartDate.AddMonths(1);
                     models.GetTable<Settlement>().InsertOnSubmit(settlement);

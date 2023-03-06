@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace Business.Helper
+namespace ModelExtension.Helper
 {
     public static class MvcExtensions
     {

@@ -75,6 +75,7 @@
                 }
 
                 var $formData = $('#theForm').serializeObject();
+                $formData = $.extend($formData, $('input[name="chkItem"]').serializeObject());
                 $formData.paperStyle = style;
                 if (!isNaN(processType)) {
                     $formData.ProcessType = processType;
@@ -96,6 +97,19 @@
                     }
                 });
             },
+            submitTask: function (viewModel) {
+                viewModel.ProcessModel = @((int)ProcessRequestViewModel.ProcessModelDefinition.ByTask);
+                showLoading();
+                $.post('@(Url.Action("ZipInvoicePDF", "DataView"))', viewModel, function (data) {
+                    hideLoading();
+                    if ($.isPlainObject(data)) {
+                        alert(data.message);
+                    } else {
+                        $(data).appendTo($('body'));
+                    }
+                });
+            },
+
             download: function () {
                 if ($postForm) {
                     $postForm.remove();
@@ -116,6 +130,7 @@
             download2021: function () {
 
                 var $formData = $('#theForm').serializeObject();
+                $formData = $.extend($formData, $('input[name="chkItem"]').serializeObject());
                 showLoading();
                 $.post('@(Url.Action("CreateXlsx2021","InvoiceProcess"))', $formData, function (data) {
                     hideLoading();

@@ -4,6 +4,12 @@ div#border_gray{
 	margin:10px 0px;
 	padding:10px;
 }
+
+div.query_result {
+	overflow-x: auto;
+	min-width: auto;
+}
+
 div.border_gray{
 	border:4px solid #DDD;
 	background:#FFFFFF;

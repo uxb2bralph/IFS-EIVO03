@@ -32,24 +32,24 @@
 
     function showInvoiceModal(docID) {
         var element = event.target;
-        $.post('@Html.Raw(Url.Action("ShowInvoiceContent", "DataView"))', 'docID=' + docID, function (html) {
-                //            $(element).after($(html).find("#mainContent"));
-                $(html).dialog({
-                    width: 640,
-                    buttons: [
-                        {
-                            text: "關閉",
-                            icons: {
-                                primary: "ui-icon-close"
-                            },
-                            click: function () {
-                                $(this).dialog("close");
-                            }
+        $.post('@Html.Raw(Url.Action("ShowInvoiceContent", "DataView"))', { 'docID': docID, 'DialogID': 'preivew' }, function (html) {
+            //            $(element).after($(html).find("#mainContent"));
+            $(html).dialog({
+                width: 640,
+                buttons: [
+                    {
+                        text: "關閉",
+                        icons: {
+                            primary: "ui-icon-close"
+                        },
+                        click: function () {
+                            $(this).dialog("close");
                         }
-                    ]
-                });
+                    }
+                ]
             });
-        }
+        });
+    }
 
     function showAllowanceModal(docID) {
         showLoading();

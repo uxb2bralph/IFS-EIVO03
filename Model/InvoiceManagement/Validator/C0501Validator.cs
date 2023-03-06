@@ -38,7 +38,9 @@ namespace Model.InvoiceManagement.Validator
             }
 
             invItem.SellerId = invItem.SellerId.GetEfficientString();
-            invoice = mgr.GetTable<InvoiceItem>().Where(i => i.No == invNo && i.TrackCode == trackCode).FirstOrDefault();
+            invoice = mgr.GetTable<InvoiceItem>().Where(i => i.No == invNo && i.TrackCode == trackCode)
+                            .OrderByDescending(i => i.InvoiceID)
+                            .FirstOrDefault();
 
             if (invoice == null)
             {

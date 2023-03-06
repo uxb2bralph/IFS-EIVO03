@@ -32,7 +32,8 @@ namespace eIVOGo.Services
                 {
                     using (ModelSource<EIVOEntityDataContext> models = new ModelSource<EIVOEntityDataContext>())
                     {
-                        var settlement = DateTime.Now.AssertMonthlyBillingSettlement(models);
+                        var settlement = DateTime.Now.AddMonths(-1)
+                                .AssertMonthlyBillingSettlement(models);
                         settlement.DoMonthlyBillingSettlement(models);
                         models.DoSubmitBill();
                     }

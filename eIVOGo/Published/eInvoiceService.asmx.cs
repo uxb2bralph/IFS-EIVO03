@@ -34,6 +34,7 @@ using Model.InvoiceManagement.ErrorHandle;
 using Newtonsoft.Json;
 using ModelExtension.Notification;
 using eIVOGo.Module.Common;
+using ModelExtension.Service;
 
 namespace eIVOGo.Published
 {
@@ -412,6 +413,29 @@ namespace eIVOGo.Published
 
             PortalNotification.NotifyToActivate = PortalExtensionMethods.NotifyToActivate;
             PortalNotification.NotifyToResetPassword = PortalExtensionMethods.NotifyToResetPassword;
+
+            PdfDocumentGenerator.CreateInvoicePdf = (viewModel) =>
+            {
+                try
+                {
+                    using (WebClient client = new WebClient())
+                    {
+                        client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                        client.Encoding= Encoding.UTF8;
+
+                        viewModel.NameOnly = true;
+                        String result = client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/DataView/PrintSingleInvoiceAsPDF")}",
+                            viewModel.JsonStringify());
+                        return result;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
+
+                return null;
+            };
 
             AddOn();
 
