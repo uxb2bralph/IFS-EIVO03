@@ -52,6 +52,7 @@ namespace eIVOGo.Helper
                     return models.GetInvoiceByAgent(items, profile.CurrentUserRole.OrganizationCategory.CompanyID);
 
                 case Naming.CategoryID.COMP_E_INVOICE_GOOGLE_TW:
+                case Naming.CategoryID.COMP_E_INVOICE_B2C_SELLER:
                     return items.Where(i => i.SellerID == profile.CurrentUserRole.OrganizationCategory.CompanyID);
 
                 case Naming.CategoryID.COMP_E_INVOICE_B2C_BUYER:

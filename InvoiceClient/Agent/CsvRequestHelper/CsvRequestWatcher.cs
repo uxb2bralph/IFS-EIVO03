@@ -50,7 +50,7 @@ namespace InvoiceClient.Agent.CsvRequestHelper
 
                 sr.ReadLine();
                 int lineIdx = 0;
-                using (CsvParser parser = new CsvParser(sr))
+                using (CsvParser parser = new CsvParser(sr, new CsvHelper.Configuration.Configuration() { TrimOptions = CsvHelper.Configuration.TrimOptions.Trim }, leaveOpen: false))
                 {
                     String[] column;
                     while ((column = parser.Read()) != null)

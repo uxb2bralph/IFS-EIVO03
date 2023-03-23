@@ -46,6 +46,7 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     .OrderBy(d => d.DocID);
 
             var buffer = queryItems.Take(4096).ToList();
+            String backup = Path.Combine(Logger.LogDailyPath, "C0501").CheckStoredPath();
             while (buffer.Count > 0)
             {
                 foreach (var item in buffer)
@@ -63,7 +64,14 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     try
                     {
                         var fileName = Path.Combine(Settings.Default.C0501Outbound, $"C0501-{invoiceItem.InvoiceID}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
-                        invoiceItem.CreateC0501().ConvertToXml().Save(fileName);
+                        var xmlMIG = invoiceItem.CreateC0501().ConvertToXml();
+                        xmlMIG.Save(fileName);
+                        Thread.Sleep(10);
+                        if (!File.Exists(fileName))
+                        {
+                            continue;
+                        }
+                        xmlMIG.Save(Path.Combine(backup, Path.GetFileName(fileName)));
 
                         item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
                         models.SubmitChanges();

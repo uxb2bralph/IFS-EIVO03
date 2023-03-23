@@ -118,7 +118,7 @@ namespace Kiosk.Helper
 
             StringBuilder sb = new StringBuilder();
             DateTime invoiceDate;
-            if (DateTime.TryParseExact(String.Format("{0} {1}", item.InvoiceDate, item.InvoiceTime), "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate))
+            if (DateTime.TryParseExact(String.Format("{0} {1}", item.InvoiceDate?.Replace("/","").Replace("-",""), item.InvoiceTime), "yyyyMMdd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate))
             {
                 sb.Append(item.InvoiceNumber);
                 sb.Append(String.Format("{0:000}{1:00}{2:00}", invoiceDate.Year - 1911, invoiceDate.Month, invoiceDate.Day));

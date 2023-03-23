@@ -9,12 +9,15 @@ using InvoiceClient.Properties;
 using Model.Schema.EIVO;
 using InvoiceClient.Agent;
 using InvoiceClient.Agent.POSHelper;
+using InvoiceClient.Agent.MIGHelper;
+using InvoiceClient.Agent.CsvRequestHelper;
 
 namespace InvoiceClient.TransferManagement
 {
     public class POSInvoiceTransferManager : ITransferManager
     {
         private InvoiceWatcher _SellerInvoiceWatcher;
+        private InvoiceWatcher _B2BSellerInvoiceWatcher;
         private InvoiceWatcher _PreparedInvoiceWatcher;
         private InvoiceWatcher _PreInvoiceWatcher;
         private InvoiceWatcher _PrintInvoiceWatcher;
@@ -25,12 +28,26 @@ namespace InvoiceClient.TransferManagement
         private InvoiceWatcher _PreparedAllowanceWatcher;
         private InvoiceWatcher _ReplacementWatcher;
         private InvoiceWatcher _ZeroAmountWatcher;
+        private InvoiceWatcher _C0401Watcher;
+        private InvoiceWatcher _C0501Watcher;
+        private InvoiceWatcher _A0401Watcher;
+        private InvoiceWatcher _A0501Watcher;
+
 
 
         public void EnableAll(String fullPath)
         {
-            _SellerInvoiceWatcher = new InvoiceWatcherV2(POSReady._Settings.SellerInvoice);
+            _SellerInvoiceWatcher = new InvoiceWatcherV2(POSReady._Settings.SellerInvoice)
+            {
+                PreferredProcessType = Model.Locale.Naming.InvoiceProcessType.C0401,
+            };
             _SellerInvoiceWatcher.StartUp();
+
+            _B2BSellerInvoiceWatcher = new InvoiceWatcherV2(POSReady._Settings.B2BSellerInvoice)
+            {
+                PreferredProcessType = Model.Locale.Naming.InvoiceProcessType.A0401,
+            };
+            _B2BSellerInvoiceWatcher.StartUp();
 
             _PreparedInvoiceWatcher = new PreparedInvoiceWatcher(POSReady._Settings.PreparedInvoice);
             _PreparedInvoiceWatcher.StartUp();
@@ -77,9 +94,31 @@ namespace InvoiceClient.TransferManagement
             _AllowanceCancellationWatcher = new AllowanceCancellationWatcherV2(Path.Combine(fullPath, Settings.Default.UploadAllowanceCancellationFolder));
             _AllowanceCancellationWatcher.StartUp();
 
+            _C0401Watcher = new CsvC0401RequestWatcher(Path.Combine(fullPath, POSReady._Settings.C0401))
+            {
+                ResponsePath = POSReady._Settings.SellerInvoice,
+                PreparedPrintPath = POSReady._Settings.PreparedInvoice,
+            };
+            _C0401Watcher.StartUp();
+
+            _A0401Watcher = new CsvInvoiceRequestWatcher(Path.Combine(fullPath, POSReady._Settings.A0401))
+            {
+                ResponsePath = POSReady._Settings.B2BSellerInvoice,
+                PreparedPrintPath = POSReady._Settings.PreparedInvoice,
+            };
+            _A0401Watcher.StartUp();
+
+            _C0501Watcher = new CsvInvoiceCancellationRequestWatcher(Path.Combine(fullPath, POSReady._Settings.C0501));
+            _C0501Watcher.StartUp();
+
+            _A0501Watcher = new CsvInvoiceCancellationRequestWatcher(Path.Combine(fullPath, POSReady._Settings.A0501));
+            _A0501Watcher.StartUp();
+
             _SellerInvoiceWatcher.InitializeDependency(_PreInvoiceWatcher);
             _CancellationWatcher.InitializeDependency(_SellerInvoiceWatcher);
             _AllowanceCancellationWatcher.InitializeDependency( _AllowanceWatcher);
+            _C0501Watcher.InitializeDependency(_C0401Watcher);
+            _A0501Watcher.InitializeDependency(_A0401Watcher);
         }
 
         public void PauseAll()
@@ -91,11 +130,15 @@ namespace InvoiceClient.TransferManagement
             _PreparedAllowanceWatcher?.Dispose();
             _PrintInvoiceWatcher?.Dispose();
             _SellerInvoiceWatcher?.Dispose();
+            _B2BSellerInvoiceWatcher?.Dispose();
             _CancellationWatcher?.Dispose();
             _PreInvoiceWatcher?.Dispose();
             _AllowanceWatcher?.Dispose();
             _AllowanceCancellationWatcher?.Dispose();
-
+            _C0401Watcher?.Dispose();
+            _A0401Watcher?.Dispose();
+            _C0501Watcher?.Dispose();
+            _A0501Watcher?.Dispose();
         }
 
         public String ReportError()
@@ -111,6 +154,8 @@ namespace InvoiceClient.TransferManagement
                 sb.Append(_ReplacementWatcher.ReportError());
             if (_SellerInvoiceWatcher != null)
                 sb.Append(_SellerInvoiceWatcher.ReportError());
+            if (_B2BSellerInvoiceWatcher != null)
+                sb.Append(_B2BSellerInvoiceWatcher.ReportError());
             if (_CancellationWatcher != null)
                 sb.Append(_CancellationWatcher.ReportError());
             if (_PreInvoiceWatcher != null)
@@ -123,7 +168,14 @@ namespace InvoiceClient.TransferManagement
                 sb.Append(_PrintInvoiceWatcher.ReportError());
             if (_PreparedAllowanceWatcher != null)
                 sb.Append(_PreparedAllowanceWatcher.ReportError());
-
+            if (_C0401Watcher != null)
+                sb.Append(_C0401Watcher.ReportError());
+            if (_A0401Watcher != null)
+                sb.Append(_A0401Watcher.ReportError());
+            if (_C0501Watcher != null)
+                sb.Append(_C0501Watcher.ReportError());
+            if (_A0501Watcher != null)
+                sb.Append(_A0501Watcher.ReportError());
             return sb.ToString();
 
         }
@@ -135,12 +187,17 @@ namespace InvoiceClient.TransferManagement
             _ZeroAmountWatcher.Retry();
             _ReplacementWatcher.Retry();
             _SellerInvoiceWatcher.Retry();
+            _B2BSellerInvoiceWatcher.Retry();
             _CancellationWatcher.Retry();
             _PreInvoiceWatcher.Retry();
             _AllowanceWatcher.Retry();
             _AllowanceCancellationWatcher.Retry();
             _PrintInvoiceWatcher?.Retry();
             _PreparedAllowanceWatcher.Retry();
+            _C0401Watcher.Retry();
+            _A0401Watcher.Retry();
+            _C0501Watcher.Retry();
+            _A0501Watcher.Retry();
         }
 
 

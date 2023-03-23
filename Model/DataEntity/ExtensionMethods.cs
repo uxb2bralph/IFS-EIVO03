@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq.Mapping;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using DataAccessLayer.basis;
 using Model.Locale;
@@ -404,6 +406,31 @@ namespace Model.DataEntity
             var currentAllocated = (item.InvoiceNoAllocation.Max(a => (int?)a.InvoiceNo) + 1) ?? item.StartNo;
             var currentNo = (item.InvoiceNoAssignments.Max(a => a.InvoiceNo) + 1) ?? item.StartNo;
             return Math.Max(currentAllocated, currentNo);
+        }
+
+        public static ColumnAttribute GetColumnAttribute(this PropertyInfo propertyInfo)
+        {
+            if (Attribute.IsDefined(propertyInfo, typeof(ColumnAttribute)))
+            {
+                return (ColumnAttribute)Attribute.GetCustomAttribute(propertyInfo, typeof(ColumnAttribute));
+            }
+
+            return null;
+        }
+        public static bool CheckPrimaryKey(this PropertyInfo propertyInfo)
+        {
+            return propertyInfo.GetColumnAttribute()?.IsPrimaryKey == true;
+
+            //if (propertyInfo.CustomAttributes?.Any() == true)
+            //{
+            //    if (propertyInfo.CustomAttributes
+            //        .Any(p => p.NamedArguments
+            //            .Any(a => a.MemberName == "IsPrimaryKey" && a.TypedValue.Value.Equals(true))))
+            //    {
+            //        return true;
+            //    }
+            //}
+            //return false;
         }
     }
 

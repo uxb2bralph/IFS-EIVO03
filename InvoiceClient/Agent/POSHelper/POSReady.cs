@@ -60,16 +60,22 @@ namespace InvoiceClient.Agent.POSHelper
             public String ZeroAmount { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "ZeroAmountReceipt");
             public String Replacement { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "Replacement");
             public String SellerInvoice { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "SellerInvoice");
+            public String B2BSellerInvoice { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "B2BSellerInvoice");
             public String PrintInvoice { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "PrintInvoice");
-            public String PrintC0401 { get; set; } = "http://localhost:10800/FrontEnd/PrintC0401";
-            public String PrintBlindReturn { get; set; } = "http://localhost:10800/FrontEnd/BlindReturn";
-            public String PrintZeroAmount { get; set; } = "http://localhost:10800/FrontEnd/PrintZeroAmount";
-            public String PrintReplacement { get; set; } = "http://localhost:10800/FrontEnd/Replacement";
-            public String PrintD0401 { get; set; } = "http://localhost:10800/FrontEnd/PrintD0401";
+            public String PrintC0401 { get; set; } = "https://eguitest.uxifs.com/Kiosk/FrontEnd/PrintC0401";
+            public String PrintBlindReturn { get; set; } = "https://eguitest.uxifs.com/Kiosk/FrontEnd/BlindReturn";
+            public String PrintZeroAmount { get; set; } = "https://eguitest.uxifs.com/Kiosk/FrontEnd/PrintZeroAmount";
+            public String PrintReplacement { get; set; } = "https://eguitest.uxifs.com/Kiosk/FrontEnd/Replacement";
+            public String PrintD0401 { get; set; } = "https://eguitest.uxifs.com/Kiosk/FrontEnd/PrintD0401";
             public String VerifyAllowance { get; set; } = "/POSDevice/VerifyAllowance";
             public String PreparedAllowance { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "PreparedAllowance");
             public String MIGResponse { get; set; } = Path.Combine(Logger.LogPath, "MIGResponse");
             public bool UserPOSPrinter { get; set; } = false;
+            public string C0401 { get; set; } = "C0401";
+            public string C0501 { get; set; } = "C0501";
+            public string A0401 { get; set; } = "A0401";
+            public string A0501 { get; set; } = "A0501";
+
         }
 
         public POSReady()

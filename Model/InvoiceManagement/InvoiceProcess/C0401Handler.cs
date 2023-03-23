@@ -48,6 +48,8 @@ namespace Model.InvoiceManagement.InvoiceProcess
             var buffer = (procIdx >= 0 && totalProc > 0)
                     ? queryItems.Where(d => (d.DocID % totalProc.Value) == procIdx.Value).Take(4096).ToList()
                     : queryItems.Take(4096).ToList();
+
+            String backup = Path.Combine(Logger.LogDailyPath, "C0401").CheckStoredPath();
             while (buffer.Count > 0)
             {
                 foreach (var item in buffer)
@@ -57,7 +59,14 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     try
                     {
                         var fileName = Path.Combine(Settings.Default.C0401Outbound, $"C0401-{invoiceItem.InvoiceID}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
-                        invoiceItem.CreateC0401().ConvertToXml().Save(fileName);
+                        var xmlMIG = invoiceItem.CreateC0401().ConvertToXml();
+                        xmlMIG.Save(fileName);
+                        Thread.Sleep(10);
+                        if (!File.Exists(fileName))
+                        {
+                            continue;
+                        }
+                        xmlMIG.Save(Path.Combine(backup, $"C0401-{invoiceItem.InvoiceID}-{invoiceItem.TrackCode}{invoiceItem.No}.xml"));
 
                         item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
                         models.SubmitChanges();

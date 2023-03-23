@@ -8,6 +8,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Web;
@@ -24,6 +25,7 @@ using Model.InvoiceManagement;
 using Model.Locale;
 using Model.Models.ViewModel;
 using Model.Security.MembershipManagement;
+using Newtonsoft.Json.Linq;
 using QRCoder;
 using Utility;
 
@@ -181,5 +183,53 @@ namespace eIVOGo.Controllers
         {
             return Json(viewModel);
         }
+
+        public ActionResult EditItem(DataTableQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            JObject json = JObject.Parse(RequestBody);
+            Table<Organization> org = models.GetTable<Organization>();
+            IQueryable<Organization> items = org;
+            Expression<Func<Organization, String>> order = o => o.CompanyName;
+
+            //string propertyName = "CompanyName"; // 要排序的屬性名稱
+            //Type sourceType = typeof(Organization); // 源類型
+            //Type keyType = typeof(string); // 排序鍵類型
+            //var propertyExpression = CreateExpression(sourceType, keyType, propertyName);
+
+            //items = items.OrderBy(propertyExpression);
+            items = items.OrderBy(order);
+            items = items.Skip(1000).Take(50);
+            var sqlCmd = items.ToString();
+
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
+        public static Expression<Func<TSource, TKey>> CreateExpression<TSource, TKey>(string propertyName)
+        {
+            var parameter = Expression.Parameter(typeof(TSource), "x");
+            var property = Expression.Property(parameter, typeof(TSource).GetProperty(propertyName));
+            var lambda = Expression.Lambda<Func<TSource, TKey>>(property, parameter);
+            return lambda;
+        }
+
+        public static LambdaExpression CreateExpression(Type sourceType, Type keyType, string propertyName)
+        {
+            var parameter = Expression.Parameter(sourceType, "x");
+            var property = Expression.Property(parameter, sourceType.GetProperty(propertyName));
+            var keySelector = Expression.Lambda(property, parameter);
+
+            var resultType = typeof(Func<,>).MakeGenericType(sourceType, keyType);
+            var lambda = Expression.Lambda(resultType, keySelector.Body, keySelector.Parameters);
+
+            return lambda;
+        }
+
+        public ActionResult Dump()
+        {
+            Request.SaveAs(Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}.txt"), true);
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

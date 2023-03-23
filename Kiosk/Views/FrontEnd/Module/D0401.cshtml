@@ -22,7 +22,7 @@
 @{
 
     _model = (AllowanceRootAllowance)this.Model;
-    String _logoUrl = null;
+    String _logoUrl = "../Resource/Triumphnew.gif";
     String _sellerName = "瑞士商菲利普莫里斯股份有限公司";
 
 }
@@ -33,7 +33,9 @@
         <div class="container" style="border-top: 0px; border-bottom: 0px; font-size:small;">
             @if (_logoUrl != null)
             {
-                <img id="logo" style="max-width:5.2cm;max-height:1.7cm;" src='@(_logoUrl)' />
+                <div style="padding-left: 20px;">
+                    <img id="logo" style="max-width:5.2cm;max-height:1.7cm;" src='@(_logoUrl)' />
+                </div>
             }
             else
             {

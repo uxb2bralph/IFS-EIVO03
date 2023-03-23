@@ -125,6 +125,7 @@
     <Compile Include="Agent\CsvAllowanceWatcher.cs" />
     <Compile Include="Agent\CsvInvoiceCancellationWatcherForCrossBorderMerchant.cs" />
     <Compile Include="Agent\CsvRequestHelper\CsvInvoiceCancellationRequestWatcher.cs" />
+    <Compile Include="Agent\CsvRequestHelper\CsvC0401RequestWatcher.cs" />
     <Compile Include="Agent\CsvRequestHelper\CsvInvoiceRequestWatcher.cs" />
     <Compile Include="Agent\CsvRequestHelper\CsvRequestWatcher.cs" />
     <Compile Include="Agent\D0401Watcher.cs" />

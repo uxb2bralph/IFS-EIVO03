@@ -18,18 +18,21 @@ using CsvHelper;
 using InvoiceClient.WS_Invoice;
 using System.Xml.Linq;
 using XmlLib;
+using Win32;
 
 namespace InvoiceClient.Agent.CsvRequestHelper
 {
     public class CsvInvoiceRequestWatcher : CsvRequestWatcher
     {
-        XElement _invoice, _root;
-        List<String[]> _master, _details;
+        protected XElement _invoice, _root;
+        protected List<String[]> _master, _details;
         public CsvInvoiceRequestWatcher(String fullPath)
             : base(fullPath)
         {
 
         }
+
+        public String PreparedPrintPath { get; set; }
 
         protected override void processFile(string invFile)
         {
@@ -64,24 +67,39 @@ namespace InvoiceClient.Agent.CsvRequestHelper
 
                 processUpload();
                 _root.Save(Path.Combine(_ResponsedPath, $"{Path.GetFileNameWithoutExtension(fileName)}.xml"));
+
+                if (PreparedPrintPath != null)
+                {
+                    var docInv = _root.ToXmlDocument();
+                    InvoiceRoot invoice = docInv.TrimAll().ConvertTo<InvoiceRoot>();
+                    InvoiceRoot stored = new InvoiceRoot
+                    {
+                        Invoice = invoice.Invoice.Where(i => i.PrintMark == "Y" || i.PrintMark == "y").ToArray()
+                    };
+
+                    stored.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(PreparedPrintPath, $"{Path.GetFileNameWithoutExtension(fileName)}.xml"));
+                }
             }
         }
 
         protected virtual void processUpload()
         {
             _root = new XElement("InvoiceRoot");
-            foreach (var invRow in DataItems)
+            foreach (var invRow in _master)
             {
                 _invoice = new XElement("Invoice",
                     new XElement("InvoiceNumber", invRow[0]),
                     new XElement("InvoiceDate", invRow[1]),
                     new XElement("InvoiceTime", invRow[2]),
-                    new XElement("SellerId", invRow[3]),
+                    new XElement("SellerId", invRow[3].PadLeft(8, '0')),
                     new XElement("BuyerName", invRow[13]),
-                    new XElement("BuyerId", invRow[12]),
+                    new XElement("BuyerId", invRow[12].PadLeft(8, '0')),
+                    new XElement("InvoiceType", "07"),
                     new XElement("BuyerMark", invRow[22]),
                     new XElement("CustomsClearanceMark", invRow[24]),
-                    new XElement("DonateMark", invRow[29]),
+                    new XElement("DonateMark", "0"),
+                    new XElement("PrintMark", "Y"),
+                    new XElement("RandomNumber", $"{DateTime.Now.Ticks % 10000:0000}"),
                     new XElement("SalesAmount", invRow[31]),
                     new XElement("TaxType", invRow[32]),
                     new XElement("TaxRate", invRow[33]),
@@ -103,6 +121,7 @@ namespace InvoiceClient.Agent.CsvRequestHelper
                     new XElement("BondedAreaConfirm", invRow[30])
                 );
 
+                int seqNo = 1;
                 foreach(var col in _details.Where(d => d[0] == invRow[0]))
                 {
                     _invoice.Add(new XElement("InvoiceItem",
@@ -111,7 +130,7 @@ namespace InvoiceClient.Agent.CsvRequestHelper
                         new XElement("Unit", col[3]),
                         new XElement("UnitPrice", col[4]),
                         new XElement("Amount", col[5]),
-                        new XElement("SequenceNumber", col[1]),
+                        new XElement("SequenceNumber", seqNo++),
                         new XElement("Item", col[7]),
                         new XElement("Remark", col[6])
                     ));

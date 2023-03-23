@@ -7,6 +7,7 @@ using Model.DataEntity;
 using Model.Helper;
 using Model.Locale;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using static Model.Locale.Naming;
 
 namespace Model.Models.ViewModel
@@ -504,4 +505,20 @@ namespace Model.Models.ViewModel
         public int? AgentID { get; set; }
         public bool? BranchRelation { get; set; }
     }
+
+    public partial class DataTableQueryViewModel : QueryViewModel 
+    {
+        public String TableName { get; set; }
+        public DataTableColumn[] KeyItem { get; set; }
+        public DataTableColumn[] DataItem { get; set; }
+        //public KeyValuePair<String,Object>[] DataItem { get; set; }
+    }
+
+    public partial class DataTableColumn
+    {
+        public String Name { get; set; }
+        public String Value { get; set; }
+    }
+
+
 }

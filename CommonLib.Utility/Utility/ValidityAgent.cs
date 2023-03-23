@@ -235,6 +235,11 @@ namespace CommonLib.Utility
             return path;
         }
 
+        public static string BuildDateStylePath(this DateTime date)
+        {
+            return Path.Combine($"{date:yyyy}", $"{date:MM}", $"{date:dd}");
+        }
+
         public static byte[] HexToByteArray(this string hexString)
         {
             byte[] bytes = new byte[hexString.Length / 2];
