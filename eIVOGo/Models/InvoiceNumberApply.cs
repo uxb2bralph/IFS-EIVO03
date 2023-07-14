@@ -48,6 +48,7 @@ namespace eIVOGo.Models
         public DateTime? ApplyByAppointDateFrom { get; set; }
         [Display(Name = "委任迄日")]
         public DateTime? ApplyByAppointDateTo { get; set; }
+        public DateTime? ApplyDate { get; set; }
         #endregion
 
         public bool IsApplyB2B { get; set; }
@@ -103,18 +104,17 @@ namespace eIVOGo.Models
         #region 申請人
         [Required(ErrorMessage = "必輸欄位")]
         [Display(Name = "營業人名稱")]
-        [RegularExpression(@"^[\u4E00-\u9FFF-, ]{0,50}$", ErrorMessage = "限中文字或長度過長")]
+        [RegularExpression(@"^[\u4E00-\u9FFF]{0,50}$", ErrorMessage = "限中文字或長度過長")]
         public string BusinessName { get; set; }
         [Required(ErrorMessage = "必輸欄位")]
         [Display(Name = "統一編號")]
         [RegularExpression(@"^\d{8}$", ErrorMessage = "8碼(半型)數字")]
         public string BusinessID { get; set; }
-        [Required(ErrorMessage = "必輸欄位")]
-        [RegularExpression(@"^\d{10}$", ErrorMessage = "10碼(半型)數字")]
+        [RegularExpression(@"^\d{9}$", ErrorMessage = "9碼(半型)數字")]
         [Display(Name = "稅籍編號")]
         public string BusinessTaxID { get; set; }
         [Required(ErrorMessage = "必輸欄位")]
-        [RegularExpression(@"^[\u4E00-\u9FFFA-Za-z0-9-, ]{0,40}$", ErrorMessage = "限中文英數字(半型)或長度過長")]
+        [RegularExpression(@"^[\u4E00-\u9FFFA-Za-z0-9-,]{0,40}$", ErrorMessage = "限中文英數字(半型)或長度過長")]
         [Display(Name = "營業地址")]
         public string BusinessAddr { get; set; }
         [Required(ErrorMessage = "必輸欄位")]
@@ -130,15 +130,14 @@ namespace eIVOGo.Models
         [Display(Name = "手機號碼")]
         public string BusinessMobile { get; set; }
         [Required(ErrorMessage = "必輸欄位")]
-        [RegularExpression(@"^(09)([0-9]{2})$|(\d{2,3}-{1}\d{3,4}\d{4})$", ErrorMessage = "格式有誤, 市話請輸入XX-XXXXXXXX 或 XXX-XXXXXXX")]
+        [RegularExpression(@"^(09)([0-9]{8})$|(\d{2,3}-{1}\d{3,4}\d{4})$", ErrorMessage = "格式有誤, 市話請輸入XX-XXXXXXXX 或 XXX-XXXXXXX")]
         [Display(Name = "聯絡電話")]
         public string BusinessTelNo { get; set; }
-        [Required(ErrorMessage = "必輸欄位")]
         [RegularExpression(@"\d{2,3}-{1}\d{3,4}\d{4}", ErrorMessage = "格式有誤, 請輸入XX-XXXXXXXX 或 XXX-XXXXXXX")]
         [Display(Name = "傳真號碼")]
         public string BusinessFaxNo { get; set; }
         [Required(ErrorMessage = "必輸欄位")]
-        [RegularExpression(@"^[\u4E00-\u9FFFA-Za-z0-9-, ]{0,40}$", ErrorMessage = "限中文英數字(半型)或長度過長")]
+        [RegularExpression(@"^[\u4E00-\u9FFFA-Za-z0-9-,]{0,40}$", ErrorMessage = "限中文英數字(半型)或長度過長")]
         [Display(Name = "通訊地址")]
         public string BusinessContactAddr { get; set; }
         [Required(ErrorMessage = "必輸欄位")]
@@ -260,7 +259,8 @@ namespace eIVOGo.Models
             data.b2cTransferDoc2BusinessID = "70762419";
             data.b2cTransferDoc2BusinessTaxID = "101700372";
             data.b2cDoc1 = true;
-            data.b2cDoc1Type = 1;
+            data.b2cDoc1Type = 3;
+            data.b2cDoc1Other = "我是其他文件";
             data.b2cDoc2 = true;
             data.b2cDoc3 = true;
             data.b2cDoc4 = true;
@@ -295,7 +295,7 @@ namespace eIVOGo.Models
             data.SysChk111 = true;
             data.BusinessName = "有限公司";
             data.BusinessID = "88888888";
-            data.BusinessTaxID = "9999999999";
+            data.BusinessTaxID = "999999999";
             data.BusinessAddr = "新北市永和區環河西路三段333巷333號3樓之3A室";
             data.BusinessOwner = "yoyo老闆";
             data.BusinessContactName = "yoyo老闆太太";

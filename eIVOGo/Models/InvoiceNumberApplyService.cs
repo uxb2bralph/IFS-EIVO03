@@ -106,15 +106,22 @@ namespace eIVOGo.Models
             WordModel.td21 = apply.AgentID;
             WordModel.td22 = apply.AgentContactName;
             WordModel.td23 = apply.AgentTelNo;
+            //僅開立B2B或B2G電子發票營業人-Turnkey上線通行碼
+            WordModel.tc10 = apply.b2bTransferDoc1TurnkeyToken;
+            //僅開立B2B或B2G電子發票營業人-代傳統編
+            WordModel.tc30 = apply.b2bTransferDoc2BusinessID;
+            //僅開立B2B或B2G電子發票營業人-代傳稅籍
+            WordModel.tc31 = apply.b2bTransferDoc2BusinessTaxID;
+            //委認期間
             WordModel.td35 = (apply.ApplyByAppointDateFrom==null)?string.Empty: apply.ApplyByAppointDateFrom?.ToFullTaiwanDate();
             WordModel.td37 = (apply.ApplyByAppointDateFrom == null) ? string.Empty : apply.ApplyByAppointDateFrom?.ToYYYMMTaiwanDate();
             WordModel.td36 = (apply.ApplyByAppointDateTo==null)? string.Empty : apply.ApplyByAppointDateTo?.ToFullTaiwanDate();
             WordModel.td38 = (apply.ApplyByAppointDateTo == null) ? string.Empty : apply.ApplyByAppointDateTo?.ToYYYMMTaiwanDate();
-            WordModel.td40 = (System.DateTime.Now).ToFullTaiwanDate();
+            WordModel.td40 = (apply.ApplyDate!=null)? apply.ApplyDate?.ToFullTaiwanDate():(System.DateTime.Now).ToFullTaiwanDate();
             WordModel.tc40 = apply.b2cTransferDoc1TurnkeyToken;
             WordModel.tc41 = apply.b2cTransferDoc2BusinessID;
             WordModel.tc42 = apply.b2cTransferDoc2BusinessTaxID;
-
+            WordModel.tc67 = apply.b2cDoc1Other;
             //系統廠商
             WordModel.tf00 = apply.SysSupplierBusinessID;
             WordModel.tf01= apply.SysSupplierNo;

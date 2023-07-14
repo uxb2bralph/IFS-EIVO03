@@ -97,7 +97,8 @@ namespace eIVOGo.Models.ViewModel
         public string cc27 { get; set; } = UnCheckedBox;//b2bDoc4=false
         public string cc28 { get; set; } = UnCheckedBox;//b2bDoc5=true
         public string cc29 { get; set; } = UnCheckedBox;//b2bDoc5=false
-
+        public string tc30 { get; set; } = string.Empty;//b2bTransferDoc2BusinessID
+        public string tc31 { get; set; } = string.Empty;//b2bTransferDoc2BusinessTaxID
         #endregion
 
         #region 同時開立b2c及b2c電子發票營業人文件

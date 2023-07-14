@@ -47,7 +47,11 @@ namespace eIVOGo.Properties
         public string GetBackupPath() { return Path.Combine(BasePath, BackupFolder); }
         public string JsonFileNameFormat { get; set; }
         public string GetJsonFileName(string businessId) { return string.Format(JsonFileNameFormat, businessId); }
-        public string GetJsonFileFullPath(string businessId) { return string.Format("{0}"+ GetJsonFileName(businessId), BasePath); }
+        public string GetJsonFileFullPath(string businessId) { return Path.Combine(BasePath, GetJsonFileName(businessId)); }
+
+        public string ZipFileNameFormat { get; set; }
+        public string GetZipFileName(string businessId) { return string.Format(ZipFileNameFormat, businessId); }
+        public string GetZipFileFullPath(string businessId) { return Path.Combine(BasePath, GetZipFileName(businessId)); }
         public string JsonFileNameFormatReg { get; set; }
         public bool NotifyEnable { get; set; }
         public string NotifyMailTo { get; set; }

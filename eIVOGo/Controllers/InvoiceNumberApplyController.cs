@@ -77,7 +77,6 @@ namespace eIVOGo.Controllers
             return View("../InvoiceNumberApply/QueryResult", ViewBag);
         }
 
-
         [AllowAnonymous]
         public ActionResult Apply(string templateID= "AppointApply")
         {
@@ -148,6 +147,7 @@ namespace eIVOGo.Controllers
         [AuthorizedSysAdmin()]
         public ActionResult TransferOrganization(string businessID)
         {
+            #region check
             response.BusinessID = businessID;
 
             if (string.IsNullOrEmpty(businessID))
@@ -166,7 +166,7 @@ namespace eIVOGo.Controllers
                 response.Message = "Json檔不存在";
                 response.IsInvalid = true;
             }
-
+            #endregion
             if (response.IsInvalid)
             {
                 ModelState.AddModelError("Message", response.DisplayMessage);
@@ -255,7 +255,7 @@ namespace eIVOGo.Controllers
                         }
                     }
 
-                    return File(memoryStream.ToArray(), "application/zip", string.Format("ApplyWord_{0}.zip", businessID));
+                    return File(memoryStream.ToArray(), "application/zip", AppSettings.Default.InvoiceNumberApplySetting.GetZipFileName(businessID));
                 };
             }
             catch (Exception ex)
@@ -274,7 +274,10 @@ namespace eIVOGo.Controllers
         [AllowAnonymous]
         public ActionResult Create(InvoiceNumberApplyViewModel viewModel)
         {
-            response.BusinessID = viewModel.Apply.BusinessID;
+            if (viewModel == null)
+            {
+                return View("../InvoiceNumberApply/Apply", viewModel);
+            }
 
             if (viewModel.Apply == null || !this.ModelState.IsValid)
             {
@@ -283,6 +286,8 @@ namespace eIVOGo.Controllers
                 viewModel.EncryptedCode = string.Empty;
                 return View("../InvoiceNumberApply/Apply", viewModel);
             }
+
+            response.BusinessID = viewModel.Apply.BusinessID;
 
             try
             {
