@@ -107,6 +107,8 @@ namespace eIVOGo.Models.ViewModel
         public string cc32 { get; set; } = UnCheckedBox;//b2cRequiredDoc3
         public string cc33 { get; set; } = UnCheckedBox;//b2cRequiredDoc4
         public string cc34 { get; set; } = UnCheckedBox;//b2cRequiredDoc5
+        public string cc68 { get; set; } = UnCheckedBox;//b2cRequiredDoc6
+        public string cc69 { get; set; } = UnCheckedBox;//b2cRequiredDoc7
         public string tc40 { get; set; } = UnCheckedBox;//b2cTransferDoc1TurnkeyToken
         public string cc40 { get; set; } = UnCheckedBox;//b2cTransferDoc1=true
         public string cc41 { get; set; } = UnCheckedBox;//b2cTransferDoc1=false

@@ -80,6 +80,8 @@ namespace eIVOGo.Models
         public bool b2cRequiredDoc3 { get; set; } = false;
         public bool b2cRequiredDoc4 { get; set; } = false;
         public bool b2cRequiredDoc5 { get; set; } = false;
+        public bool b2cRequiredDoc6 { get; set; } = false;
+        public bool b2cRequiredDoc7 { get; set; } = false;
         //傳輸方式
         public bool? b2cTransferDoc1 { get; set; } = null;
         public string b2cTransferDoc1TurnkeyToken { get; set; } = string.Empty;
@@ -253,6 +255,8 @@ namespace eIVOGo.Models
             data.b2cRequiredDoc3 = true;
             data.b2cRequiredDoc4 = true;
             data.b2cRequiredDoc5 = true;
+            data.b2cRequiredDoc6 = true;
+            data.b2cRequiredDoc7 = true;
             data.b2cTransferDoc1 = false;
             data.b2cTransferDoc1TurnkeyToken = string.Empty;
             data.b2cTransferDoc2 = true;

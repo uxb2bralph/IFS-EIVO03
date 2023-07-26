@@ -229,6 +229,8 @@ namespace eIVOGo.Models
             checkedList.Add("cc32", item.b2cRequiredDoc3);
             checkedList.Add("cc33", item.b2cRequiredDoc4);
             checkedList.Add("cc34", item.b2cRequiredDoc5);
+            checkedList.Add("cc68", item.b2cRequiredDoc6);
+            checkedList.Add("cc69", item.b2cRequiredDoc7);
             checkedList.Add("cc40", item.b2cTransferDoc1 == true);
             checkedList.Add("cc41", item.b2cTransferDoc1 == false);
             checkedList.Add("cc42", item.b2cTransferDoc2 == true);

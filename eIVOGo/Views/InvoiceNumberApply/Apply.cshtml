@@ -450,7 +450,19 @@
 
                                     </tr>
                                     <tr>
-                                        <td>具備正確讀取共通性載具之條碼掃描機具或設備證明文件(如掃描槍)</td>
+                                        <td>
+                                            具備正確讀取共通性載具之條碼掃描機具或設備證明文件(如掃描槍)
+                                            <div class="input-group">
+                                                <div class="form-check">
+                                                    @Html.CheckBoxFor(m => m.Apply.b2cRequiredDoc6, new { @class = "form-check-input" })
+                                                    <label class="form-check-label">請提供品牌、型號及產品文件 </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    @Html.CheckBoxFor(m => m.Apply.b2cRequiredDoc7, new { @class = "form-check-input" })
+                                                    <label class="form-check-label">經營無實體店面營業人檢附可輸入共通性載具之畫面</label>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td>
                                             <div class="form-check mt-3">
                                                 @Html.CheckBoxFor(m => m.Apply.b2cRequiredDoc4, new { @class = "form-check-input" })
@@ -458,7 +470,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            ○請提供品牌、型號及產品文件<br>○屬於經營無實體店面營業人免付
+
                                         </td>
                                     </tr>
                                     <tr>
