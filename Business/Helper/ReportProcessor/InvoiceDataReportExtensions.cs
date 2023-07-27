@@ -1,4 +1,6 @@
 ﻿using DataAccessLayer.basis;
+using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Presentation;
 using Model.DataEntity;
 using Model.Helper;
 using Model.InvoiceManagement;
@@ -10,8 +12,10 @@ using ModelExtension.Helper;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Linq;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -64,11 +68,11 @@ namespace Business.Helper.ReportProcessor
 
                 try
                 {
-
                     using (DataSet ds = new DataSet())
                     {
+                        int chargeAmountByAgent = 0;
                         DataTable table = new DataTable("發票資料明細");
-                        ds.Tables.Add(table);
+//ds.Tables.Add(table);
                         table.Columns.Add("營業人名稱");
                         table.Columns.Add("統一編號");
                         table.Columns.Add("發票", typeof(int));
@@ -78,7 +82,8 @@ namespace Business.Helper.ReportProcessor
                         table.Columns.Add("月份");
                         table.Columns.Add("上線日期", typeof(String));
                         table.Columns.Add("註記停用日期", typeof(String));
-
+                        table.Columns.Add("總張數", typeof(int));
+                        table.Columns.Add("計費", typeof(int));
 
                         foreach (var issuer in sellers)
                         {
@@ -98,11 +103,38 @@ namespace Business.Helper.ReportProcessor
                                 r[7] = $"{seller.OrganizationExtension?.GoLiveDate:yyyy/MM/dd}";
                                 r[8] = $"{seller.OrganizationExtension?.ExpirationDate:yyyy/MM/dd}";
 
+                                var sellerMonthlyBilling = GetSellerMonthlyBilling(
+                                    dataModels: models
+                                    , organization: seller
+                                    , idx);
+
+                                r[9] = (sellerMonthlyBilling == null) ? 0:sellerMonthlyBilling.TotalIssueCount;
+                                r[10] = (sellerMonthlyBilling == null) ? 0:sellerMonthlyBilling.IssueChargeAmount;
+                                
+                                //上線月份不計費
+                                if ((seller.OrganizationExtension?.GoLiveDate?.ToString("yyyyMM")
+                                            == $"{idx:yyyyMM}"))
+                                {
+                                    r[10] = 0;
+                                }
+
+                                chargeAmountByAgent += Convert.ToInt32(r[10]);
+
                                 table.Rows.Add(r);
                                 idx = end;
+
                             }
                         }
 
+                        DataTable orderedDataTable 
+                            = table.AsEnumerable()
+                            .OrderByDescending(row => !string.IsNullOrWhiteSpace(row.Field<string>("上線日期")))
+                            .ThenBy(row => row.Field<string>("上線日期"))
+                            .CopyToDataTable();
+
+                        orderedDataTable.Rows.Add(new Object[] { "" });
+                        orderedDataTable.Rows.Add(new Object[] { "月服務費", chargeAmountByAgent });
+                        ds.Tables.Add(orderedDataTable);
                         using (var xls = ds.ConvertToExcel())
                         {
                             xls.SaveAs(taskItem.ResponsePath);
@@ -141,6 +173,21 @@ namespace Business.Helper.ReportProcessor
             return invoice;
         }
 
+        public static MonthlyBilling GetSellerMonthlyBilling(
+            GenericManager<EIVOEntityDataContext> dataModels
+            , Organization organization
+            , DateTime queryFromDate)
+        {
+
+            return dataModels.GetTable<Settlement>()
+                    .Where(i => i.Year == Convert.ToInt32($"{queryFromDate:yyyy}"))
+                    .Where(i => i.Month == Convert.ToInt32($"{queryFromDate:MM}"))
+                    .Join(dataModels.GetTable<MonthlyBilling>().Where(i => i.Organization==organization),
+                                    c => c.SettlementID
+                                    , i => i.SettlementID
+                                    , (c, i) => i).FirstOrDefault();
+        }
+
         public static IQueryable<InvoiceCancellation> GetInvoiceCancellation(this GenericManager<EIVOEntityDataContext> models, int sellerID, DateTime dateFrom, DateTime dateTo)
         {
             var cancelInvoice = models.GetTable<InvoiceCancellation>()
@@ -177,6 +224,5 @@ namespace Business.Helper.ReportProcessor
 
             return cancelAllowance;
         }
-
     }
 }

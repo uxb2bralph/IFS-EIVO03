@@ -44,7 +44,9 @@ namespace Business.Helper.BillingSettlement
         {
             lock (typeof(ExtensionMethods))
             {
-                var category = models.GetTable<OrganizationCategory>().Where(c => c.CategoryID == (int)CategoryDefinition.CategoryEnum.發票開立營業人);
+                var category = models.GetTable<OrganizationCategory>()
+                        .Where(c => c.CategoryID == (int)CategoryDefinition.CategoryEnum.發票開立營業人 
+                            || c.CategoryID == (int)CategoryDefinition.CategoryEnum.經銷商);
                 var orgItems = models.GetTable<Organization>()
                                     .Where(o => category.Any(c => c.CompanyID == o.CompanyID));
 
