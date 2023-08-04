@@ -413,7 +413,7 @@
                                         </tr>
                                     </thread>
                                     <tr>
-                                        <td rowspan="5">必備文件</td>
+                                        <td rowspan="6">必備文件</td>
                                         <td>使用電子發票承諾書</td>
                                         <td>
                                             <div class="form-check mt-3">
@@ -474,6 +474,33 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td>
+                                            檢附可接受買受人以共通性載具索取及捐贈碼捐贈電子發票之證明文件
+                                            <div class="input-group">
+                                                <div class="form-check">
+                                                    @Html.RadioButtonFor(m => m.Apply.b2cDoc1Type, 1, new { @class = "form-check-input" })
+                                                    <label class="form-check-label">網頁畫面</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    @Html.RadioButtonFor(m => m.Apply.b2cDoc1Type, 2, new { @class = "form-check-input" })
+                                                    <label class="form-check-label">交易明細</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    @Html.RadioButtonFor(m => m.Apply.b2cDoc1Type, 3, new { @class = "form-check-input" })
+                                                    <label class="form-check-label">其他</label>
+                                                    @Html.TextBoxFor(m => m.Apply.b2cDoc1Other, new { @class = "form-check-label" })
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-check mt-3">
+                                                @Html.CheckBoxFor(m => m.Apply.b2cRequiredDoc8, new { @class = "form-check-input" })
+                                                <label class="form-check-label">是</label>
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
                                         <td>電子發票開立系統自行檢測表</td>
                                         <td>
                                             <div class="form-check mt-3">
@@ -529,39 +556,6 @@
                                     </tr>
                                     <tr>
                                         <td rowspan="7">其他應檢具文件</td>
-                                        <td>
-                                            檢附可接受買受人以共通性載具索取及捐贈碼捐贈電子發票之證明文件
-                                            <div class="input-group">
-                                                <div class="form-check">
-                                                    @Html.RadioButtonFor(m => m.Apply.b2cDoc1Type, 1, new { @class = "form-check-input" })
-                                                    <label class="form-check-label">網頁畫面</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    @Html.RadioButtonFor(m => m.Apply.b2cDoc1Type, 2, new { @class = "form-check-input" })
-                                                    <label class="form-check-label">交易明細</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    @Html.RadioButtonFor(m => m.Apply.b2cDoc1Type, 3, new { @class = "form-check-input" })
-                                                    <label class="form-check-label">其他</label>
-                                                    @Html.TextBoxFor(m => m.Apply.b2cDoc1Other, new { @class = "form-check-label" })
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="input-group">
-                                                <div class="form-check">
-                                                    @Html.RadioButtonFor(m => m.Apply.b2cDoc1, true, new { @class = "form-check-input" })
-                                                    <label class="form-check-label">是</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    @Html.RadioButtonFor(m => m.Apply.b2cDoc1, false, new { @class = "form-check-input" })
-                                                    <label class="form-check-label">否</label>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
                                         <td>「營業人銷貨退回、進貨退出或折讓證明單」樣張</td>
                                         <td>
                                             <div class="input-group">

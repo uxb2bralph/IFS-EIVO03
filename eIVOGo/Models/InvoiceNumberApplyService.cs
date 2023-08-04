@@ -230,6 +230,7 @@ namespace eIVOGo.Models
             checkedList.Add("cc33", item.b2cRequiredDoc4);
             checkedList.Add("cc34", item.b2cRequiredDoc5);
             checkedList.Add("cc68", item.b2cRequiredDoc6);
+            checkedList.Add("cc50", item.b2cRequiredDoc8);
             checkedList.Add("cc69", item.b2cRequiredDoc7);
             checkedList.Add("cc40", item.b2cTransferDoc1 == true);
             checkedList.Add("cc41", item.b2cTransferDoc1 == false);
@@ -239,8 +240,6 @@ namespace eIVOGo.Models
             checkedList.Add("rc64", item.b2cDoc1Type == 1);
             checkedList.Add("rc65", item.b2cDoc1Type == 2);
             checkedList.Add("rc66", item.b2cDoc1Type == 3);
-            checkedList.Add("cc50", item.b2cDoc1 == true);
-            checkedList.Add("cc51", item.b2cDoc1 == false);
             checkedList.Add("cc52", item.b2cDoc2 == true);
             checkedList.Add("cc53", item.b2cDoc2 == false);
             checkedList.Add("cc54", item.b2cDoc3 == true);

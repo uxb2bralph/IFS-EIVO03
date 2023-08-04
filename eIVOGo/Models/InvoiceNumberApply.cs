@@ -81,6 +81,7 @@ namespace eIVOGo.Models
         public bool b2cRequiredDoc4 { get; set; } = false;
         public bool b2cRequiredDoc5 { get; set; } = false;
         public bool b2cRequiredDoc6 { get; set; } = false;
+        public bool b2cRequiredDoc8 { get; set; } = false; 
         public bool b2cRequiredDoc7 { get; set; } = false;
         //傳輸方式
         public bool? b2cTransferDoc1 { get; set; } = null;
@@ -91,7 +92,6 @@ namespace eIVOGo.Models
         public bool? b2cTransferDoc3 { get; set; } = null;
 
         //其他文件
-        public bool? b2cDoc1 { get; set; } = null;
         public int? b2cDoc1Type { get; set; } = null;
         public string b2cDoc1Other { get; set; } = string.Empty;
 
@@ -262,7 +262,7 @@ namespace eIVOGo.Models
             data.b2cTransferDoc2 = true;
             data.b2cTransferDoc2BusinessID = "70762419";
             data.b2cTransferDoc2BusinessTaxID = "101700372";
-            data.b2cDoc1 = true;
+            data.b2cRequiredDoc8 = true;
             data.b2cDoc1Type = 3;
             data.b2cDoc1Other = "我是其他文件";
             data.b2cDoc2 = true;
@@ -344,7 +344,7 @@ namespace eIVOGo.Models
             data.b2cTransferDoc2 = true;
             data.b2cTransferDoc2BusinessID = "70762419";
             data.b2cTransferDoc2BusinessTaxID = "101700372";
-            data.b2cDoc1 = true;
+            data.b2cRequiredDoc8 = true;
             data.b2cDoc1Type = 1;
             data.b2cDoc2 = true;
             data.b2cDoc3 = true;
@@ -429,7 +429,7 @@ namespace eIVOGo.Models
             b2cTransferDoc2BusinessID = string.Empty,
             b2cTransferDoc2BusinessTaxID = string.Empty,
             b2cTransferDoc3 = false,
-            b2cDoc1 = false,
+            b2cRequiredDoc8 = false,
             b2cDoc1Type = null,
             b2cDoc1Other = string.Empty,
             b2cDoc2 = null,
@@ -571,7 +571,7 @@ namespace eIVOGo.Models
             this.b2cTransferDoc2BusinessID = b2cTransferDoc2BusinessID;
             this.b2cTransferDoc2BusinessTaxID = b2cTransferDoc2BusinessTaxID;
             this.b2cTransferDoc3 = b2cTransferDoc3;
-            this.b2cDoc1 = b2cDoc1;
+            this.b2cRequiredDoc8 = b2cRequiredDoc8;
             this.b2cDoc1Type = b2cDoc1Type;
             this.b2cDoc1Other = b2cDoc1Other;
             this.b2cDoc2 = b2cDoc2;
@@ -684,7 +684,7 @@ namespace eIVOGo.Models
             "b2cTransferDoc2BusinessID=" + this.b2cTransferDoc2BusinessID + ", " +
             "b2cTransferDoc2BusinessTaxID=" + this.b2cTransferDoc2BusinessTaxID + ", " +
             "b2cTransferDoc3=" + this.b2cTransferDoc3 + ", " +
-            "b2cDoc1=" + this.b2cDoc1 + ", " +
+            "b2cRequiredDoc8=" + this.b2cRequiredDoc8 + ", " +
             "b2cDoc1Other=" + this.b2cDoc1Other + ", " +
             "b2cDoc2=" + this.b2cDoc2 + ", " +
             "b2cDoc3=" + this.b2cDoc3 + ", " +

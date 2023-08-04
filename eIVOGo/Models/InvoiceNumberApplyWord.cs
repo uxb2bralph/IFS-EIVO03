@@ -122,8 +122,7 @@ namespace eIVOGo.Models.ViewModel
         public string rc65 { get; set; } = UnCheckedRadioButton;//b2cDoc1Type=2
         public string rc66 { get; set; } = UnCheckedRadioButton;//b2cDoc1Type=3
         public string tc67 { get; set; } = string.Empty;//b2cDoc1Other
-        public string cc50 { get; set; } = UnCheckedBox;//b2cDoc1=true
-        public string cc51 { get; set; } = UnCheckedBox;//b2cDoc1=false
+        public string cc50 { get; set; } = UnCheckedBox;//b2cRequiredDoc8=true
         public string cc52 { get; set; } = UnCheckedBox;//b2cDoc2=true
         public string cc53 { get; set; } = UnCheckedBox;//b2cDoc2=false
         public string cc54 { get; set; } = UnCheckedBox;//b2cDoc3=true
