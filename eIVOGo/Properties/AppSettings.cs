@@ -37,22 +37,26 @@ namespace eIVOGo.Properties
 
     public class InvoiceNumberApplySetting
     {
-        public string BasePath { get; set; }
-        public string BackupFolder { get; set; }
+        public string ApplyFileBase { get; set; }
+        public string GetApplyFileBase()
+        {
+            return Path.Combine(AppSettings.AppRoot, ApplyFileBase);
+        }
+        public string ApplyFileBackupFolder { get; set; }
         public string WordTemplateFolder { get; set; }
-        public string GetWordTemplateFolder(string wordFileName) {
+        public string GetWordTemplateFilePath(string wordFileName) {
             return Path.Combine(AppSettings.AppRoot, WordTemplateFolder, wordFileName);
         }
 
-        public string GetBackupPath() { return Path.Combine(BasePath, BackupFolder); }
-        public string JsonFileNameFormat { get; set; }
-        public string GetJsonFileName(string businessId) { return string.Format(JsonFileNameFormat, businessId); }
-        public string GetJsonFileFullPath(string businessId) { return Path.Combine(BasePath, GetJsonFileName(businessId)); }
+        public string GetApplyFileBackupFolder() { return Path.Combine(GetApplyFileBase(), ApplyFileBackupFolder); }
+        public string ApplyFileNameFormat { get; set; }
+        public string GetApplyFileName(string businessId) { return string.Format(ApplyFileNameFormat, businessId); }
+        public string GetApplyFilePath(string businessId) { return Path.Combine(GetApplyFileBase(), GetApplyFileName(businessId)); }
 
         public string ZipFileNameFormat { get; set; }
         public string GetZipFileName(string businessId) { return string.Format(ZipFileNameFormat, businessId); }
-        public string GetZipFileFullPath(string businessId) { return Path.Combine(BasePath, GetZipFileName(businessId)); }
-        public string JsonFileNameFormatReg { get; set; }
+        public string GetZipFilePath(string businessId) { return Path.Combine(GetApplyFileBase(), GetZipFileName(businessId)); }
+        public string ApplyFileNameFormatReg { get; set; }
         public bool NotifyEnable { get; set; }
         public string NotifyMailTo { get; set; }
         public IEnumerable<InvoiceNumberApplySysSupplier> SysSupplier { get; set; }

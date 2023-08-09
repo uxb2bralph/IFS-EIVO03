@@ -48,11 +48,13 @@ namespace eIVOGo.Models
 
         public IEnumerable<FileInfo> GetApplyJsonFilesInfo()
         {
-            DirectoryInfo di = new DirectoryInfo(AppSettings.Default.InvoiceNumberApplySetting.BasePath);
+            DirectoryInfo di = new DirectoryInfo(AppSettings.Default.InvoiceNumberApplySetting.GetApplyFileBase());
+
+            if (!di.Exists ) { di.Create(); }
 
             IEnumerable<FileInfo> fileInfos
                 = di.GetFiles("*")
-                    .Where(m => new Regex(AppSettings.Default.InvoiceNumberApplySetting.JsonFileNameFormatReg)
+                    .Where(m => new Regex(AppSettings.Default.InvoiceNumberApplySetting.ApplyFileNameFormatReg)
                                     .IsMatch(m.Name));
 
             if (!string.IsNullOrEmpty(this.BusinessId))
@@ -142,7 +144,7 @@ namespace eIVOGo.Models
             WordModel.tg05 = apply.ReportDate;
 
             XmlDocument doc = new XmlDocument();
-            doc.Load(AppSettings.Default.InvoiceNumberApplySetting.GetWordTemplateFolder(WordSet.TemplateFileName));
+            doc.Load(AppSettings.Default.InvoiceNumberApplySetting.GetWordTemplateFilePath(WordSet.TemplateFileName));
             StringBuilder sb = new StringBuilder(doc.OuterXml);
 
             foreach (var prop in WordPropInfo)
@@ -159,7 +161,7 @@ namespace eIVOGo.Models
            
             try
             {
-                string filePath = AppSettings.Default.InvoiceNumberApplySetting.GetJsonFileFullPath(this.BusinessId);
+                string filePath = AppSettings.Default.InvoiceNumberApplySetting.GetApplyFilePath(this.BusinessId);
                 item = filePath.DeserializeObjectFromFile<InvoiceNumberApply>();
             }
             catch (FileNotFoundException ex)
@@ -340,8 +342,9 @@ namespace eIVOGo.Models
 
             FileInfo fileInfo
                  = new InvoiceNumberApplyService(businessID).GetApplyJsonFilesInfo().FirstOrDefault();
+
             fileInfo.MoveTo(string.Format("{0}\\{1}.{2}"
-                , AppSettings.Default.InvoiceNumberApplySetting.GetBackupPath()
+                , AppSettings.Default.InvoiceNumberApplySetting.GetApplyFileBackupFolder()
                 , fileInfo.Name
                 , System.DateTime.Now.ToString("yyyyMMddHHmmss")));
         }

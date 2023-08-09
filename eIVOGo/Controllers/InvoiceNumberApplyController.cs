@@ -291,7 +291,7 @@ namespace eIVOGo.Controllers
 
             try
             {
-                string jsonFilePath = AppSettings.Default.InvoiceNumberApplySetting.GetJsonFileFullPath(viewModel.Apply.BusinessID);
+                string jsonFilePath = AppSettings.Default.InvoiceNumberApplySetting.GetApplyFilePath(viewModel.Apply.BusinessID);
                 viewModel.Apply.SerializeObjectToJsonFile(jsonFilePath);
             }
             catch (Exception ex)
