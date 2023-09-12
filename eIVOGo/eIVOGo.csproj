@@ -1051,6 +1051,7 @@
     <Content Include="Views\DataExchange\Module\ItemListSorting.cshtml" />
     <Content Include="Views\DataExchange\Module\DataItemQuery.cshtml" />
     <Content Include="Views\DataExchange\Module\NewItem.cshtml" />
+    <Content Include="Views\InvoiceNumberApply\Create.cshtml" />
     <None Include="Views\Handling\MailTracking\QueryResult.cshtml" />
     <Content Include="MvcHelper\CreateInvoiceSummaryReport.aspx" />
     <Content Include="Published\PrintSingleAllowance.aspx" />
@@ -1630,7 +1631,15 @@
     <Content Include="Views\InvoiceProcess\DataQuery\ItemTable.cshtml" />
     <Content Include="Views\InvoiceProcess\DataQuery\ItemList.cshtml" />
     <Content Include="Views\InvoiceProcess\DataQuery\ItemListSorting.cshtml" />
-    <Content Include="Views\_Test\Testing.cshtml" />
+    <Content Include="Views\InvoiceNumberApply\Index.cshtml" />
+    <Content Include="Views\InvoiceNumberApply\Apply.cshtml" />
+    <Content Include="Views\InvoiceNumberApply\Query.cshtml" />
+    <Content Include="Views\InvoiceNumberApply\Set.cshtml" />
+    <Content Include="Views\InvoiceNumberApply\Message.cshtml" />
+    <Content Include="Views\InvoiceNumberApply\QueryIndex.cshtml" />
+    <Content Include="Views\InvoiceNumberApply\QueryItemList.cshtml" />
+    <Content Include="Views\InvoiceNumberApply\QueryResult.cshtml" />
+    <Content Include="Views\InvoiceNumberApply\QueryList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOn\Published\eInvoiceService_201612.asmx.cs">
@@ -1650,6 +1659,7 @@
     <Compile Include="Controllers\HandlingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InquireInvoiceController.cs" />
+    <Compile Include="Controllers\InvoiceNumberApplyController.cs" />
     <Compile Include="Controllers\InvoiceAuditController.cs" />
     <Compile Include="Controllers\InvoiceBusinessController.cs" />
     <Compile Include="Controllers\IndividualProcessController.cs" />
@@ -1685,6 +1695,7 @@
     <Compile Include="Helper\BranchBusinessCounterpartUploadManager.cs" />
     <Compile Include="Helper\BusinessCounterpartXmlUploadManager.cs" />
     <Compile Include="Helper\DataQuery\InvoiceItemQueryExtensions.cs" />
+    <Compile Include="Helper\DateTimeExtensions.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Helper\InvoiceBusinessExtensionMethods.cs" />
     <Compile Include="Helper\LoginHandler.cs" />
@@ -1693,12 +1704,19 @@
     <Compile Include="Helper\PortalExtensionMethods.cs" />
     <Compile Include="Helper\QueryExtensionMethods.cs" />
     <Compile Include="Helper\Security\Authorization\UserAuthorizeAttribute.cs" />
+    <Compile Include="Models\DateLessThanAttribute.cs" />
+    <Compile Include="Models\InvoiceNumberApply.cs" />
+    <Compile Include="Models\InvoiceNumberApplyResponse.cs" />
+    <Compile Include="Models\InvoiceNumberApplyService.cs" />
+    <Compile Include="Models\InvoiceNumberApplyWord.cs" />
     <Compile Include="Models\DataItemDefinition.cs" />
     <Compile Include="Models\DataListSource.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Models\InquireField.cs" />
     <Compile Include="Models\InquireOrganization.cs" />
+    <Compile Include="Models\ViewModel\InvoiceNumberApplyQueryViewModel.cs" />
+    <Compile Include="Models\ViewModel\InvoiceNumberApplyViewModel.cs" />
     <Compile Include="Models\ViewModel\LoginViewModel.cs" />
     <Compile Include="Module\Base\CommonInquireEntity.cs">
       <SubType>ASPXCodeBehind</SubType>
@@ -1946,6 +1964,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="resource\InvoiceNumberApply\" />
     <Folder Include="Views\InvoiceService\" />
     <Folder Include="Views\Issuer\" />
     <Folder Include="Views\SystemExceptionLog\" />
