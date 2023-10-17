@@ -72,6 +72,7 @@ namespace Model.Models.ViewModel
                 viewModel.CreationDate = item.OrganizationExtension?.CreationDate;
                 viewModel.AutoBlankTrack = item.OrganizationExtension?.AutoBlankTrack;
                 viewModel.AutoBlankTrackEmittance = item.OrganizationExtension?.AutoBlankTrackEmittance;
+                viewModel.InvoiceNotUploadedAlert = item.OrganizationExtension.InvoiceNotUploadedAlert;
             }
             return viewModel;
         }

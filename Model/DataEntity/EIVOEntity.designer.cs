@@ -34519,6 +34519,8 @@ namespace Model.DataEntity
 		
 		private System.Nullable<int> _InvoiceNoSafetyStock;
 		
+		private System.Nullable<bool> _InvoiceNotUploadedAlert;
+		
 		private EntityRef<Organization> _Organization;
 		
     #region Extensibility Method Definitions
@@ -34547,6 +34549,8 @@ namespace Model.DataEntity
     partial void OnCreationDateChanged();
     partial void OnInvoiceNoSafetyStockChanging(System.Nullable<int> value);
     partial void OnInvoiceNoSafetyStockChanged();
+    partial void OnInvoiceNotUploadedAlertChanging(System.Nullable<bool> value);
+    partial void OnInvoiceNotUploadedAlertChanged();
     #endregion
 		
 		public OrganizationExtension()
@@ -34785,6 +34789,27 @@ namespace Model.DataEntity
 					this._InvoiceNoSafetyStock = value;
 					this.SendPropertyChanged("InvoiceNoSafetyStock");
 					this.OnInvoiceNoSafetyStockChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvoiceNotUploadedAlert", DbType="Bit")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=12)]
+		public System.Nullable<bool> InvoiceNotUploadedAlert
+		{
+			get
+			{
+				return this._InvoiceNotUploadedAlert;
+			}
+			set
+			{
+				if ((this._InvoiceNotUploadedAlert != value))
+				{
+					this.OnInvoiceNotUploadedAlertChanging(value);
+					this.SendPropertyChanging();
+					this._InvoiceNotUploadedAlert = value;
+					this.SendPropertyChanged("InvoiceNotUploadedAlert");
+					this.OnInvoiceNotUploadedAlertChanged();
 				}
 			}
 		}

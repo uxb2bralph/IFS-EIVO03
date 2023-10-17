@@ -151,7 +151,7 @@ namespace ModelExtension.Helper
             extension.CreationDate = viewModel.CreationDate;
             extension.AutoBlankTrack = viewModel.AutoBlankTrack;
             extension.AutoBlankTrackEmittance = viewModel.AutoBlankTrackEmittance;
-
+            extension.InvoiceNotUploadedAlert = viewModel.InvoiceNotUploadedAlert;
             models.SubmitChanges();
 
             models.ExecuteCommand("delete OrganizationSettings where CompanyID = {0}", item.CompanyID);
