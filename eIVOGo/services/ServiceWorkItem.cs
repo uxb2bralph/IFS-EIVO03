@@ -89,6 +89,7 @@ namespace eIVOGo.Services
 
             InvoiceNoSafetyStockNotification.Notify();
             DailyJobs.Notify();
+            InvoiceNotUploadNotification.Notify();
         }
 
 

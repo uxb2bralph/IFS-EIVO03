@@ -204,8 +204,11 @@
                     <th>
                         設定傳送發票對應資料
                     </th>
-                    <td colspan="3">
+                    <td>
                         <input type="checkbox" value="@($"{true}")" name="DownloadDataNumber" @(_viewModel.DownloadDataNumber == true ? "checked" : null) />使用傳送企業發票對應資料
+                    </td>
+                    <td colspan="2">
+                        <input type="checkbox" value="@($"{true}")" name="InvoiceNotUploadedAlert" @(_viewModel.InvoiceNotUploadedAlert == true ? "checked" : null) />未上傳發票時通知
                     </td>
                 </tr>
                 <tr>

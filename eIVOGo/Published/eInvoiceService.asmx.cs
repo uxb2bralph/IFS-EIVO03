@@ -127,6 +127,24 @@ namespace eIVOGo.Published
                     }
                 };
 
+            EIVOPlatformFactory.NotifyInvoiceNotUpload =
+                p =>
+                {
+                    using (WebClient client = new WebClient())
+                    {
+                        try
+                        {
+                            client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                            client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/NotifyInvoiceNotUpload")}", p.JsonStringify());
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Warn(String.Format("電子發票未上傳通知,ID:{0}", p));
+                            Logger.Error(ex);
+                        }
+                    }
+                };
 
             EIVOPlatformFactory.NotifyIssuedInvoiceCancellation =
                 e =>

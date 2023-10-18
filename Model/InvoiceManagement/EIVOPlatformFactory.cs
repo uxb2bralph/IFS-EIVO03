@@ -69,6 +69,11 @@ namespace Model.InvoiceManagement
             set;
         }
 
+        public static Action<OrganizationViewModel> NotifyInvoiceNotUpload
+        {
+            get;
+            set;
+        }
 
         public static Action<int> NotifyIssuedAllowance
         {

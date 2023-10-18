@@ -1,0 +1,57 @@
+
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@using eIVOGo.Properties;
+@{
+
+    //ModelSource<InvoiceItem> models;
+    Organization _model;
+    OrganizationViewModel _viewModel;
+
+    //models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (Organization)this.Model;
+    _viewModel = (OrganizationViewModel)ViewBag.ViewModel;
+
+}
+
+@{
+    /*
+    var mailing = models.GetUserListByCompanyID(_model.CompanyID)
+            .Select(u => u.EMail)
+            .Take(0)
+            .ToList();
+    */
+    var mailing=new List<string>();
+    mailing.Add(_model.ContactEmail);
+    mailing.Add(eIVOGo.Properties.Settings.Default.WebMaster);
+    var mailTo = String.Join(",",
+            mailing.Where(m => m != null));
+
+    if (!String.IsNullOrEmpty(mailTo))
+    {
+        var smtpSettings = _model.CustomSmtpHost.Where(s => s.Status == (int)CustomSmtpHost.StatusType.Enabled).FirstOrDefault();
+
+        String subject = $"{_model.CompanyName}({_model.ReceiptNo}) 營業人未上傳發票通知";
+        String body = Html.Partial("~/Views/Notification/Module/AlertInvoiceNotUpload.cshtml", _model).ToString();
+        body.SendMailMessage(mailTo, subject, smtpSettings);
+    }
+
+}
+
+
+

@@ -30,6 +30,8 @@ using Model.Locale;
 using Model.Security.MembershipManagement;
 using Utility;
 using ModelExtension.Helper;
+using System.Windows.Controls;
+using static Model.Locale.Naming;
 
 namespace eIVOGo.Controllers
 {
@@ -326,6 +328,83 @@ namespace eIVOGo.Controllers
             return View("~/Views/Notification/NotifyLowerInvoiceNoStock.cshtml", item);
         }
 
+        public ActionResult NotifyInvoiceNotUpload(OrganizationViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
 
+            if (viewModel.KeyID != null)
+            {
+                viewModel.CompanyID = viewModel.DecryptKeyValue();
+            }
+
+            Organization item = models.GetTable<Organization>()
+                    .Where(o => o.CompanyID == viewModel.CompanyID)
+                    .FirstOrDefault();
+
+            if (viewModel == null)
+            {
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
+            }
+
+            return View("~/Views/Notification/NotifyInvoiceNotUpload.cshtml", item);
+            
+        }
+        public FileContentResult NotifyInvoiceNotUploadList(int? id)
+        {
+            //DateTime dt1 = DateTime.Now;
+            if (id == 0) return null;
+            int yyyy = int.Parse(id.ToString().Substring(0, 4));
+            int mm = int.Parse(id.ToString().Substring(4, 2));
+            int dd = int.Parse(id.ToString().Substring(6, 2));
+            using (InvoiceManager mgr = new InvoiceManager())
+            {
+                DateTime checkDate = DateTime.Parse($"{yyyy}/{mm}/{dd}");
+
+                var eligibleInvoiceCountZeroSellers
+                    = InvoiceNotUploadNotification
+                        .GetInvoiceUploadZeroWeatherSettingAlertOrNotList   (
+                        mgr,
+                        checkDate);
+
+                var eligibleInvoiceCountZeroSellersOrgs = 
+                    mgr.GetTable<Organization>()
+                    .Where(x => eligibleInvoiceCountZeroSellers.Contains(x.CompanyID))
+                    .Select(y=> new { 
+                        SellerId = y.ReceiptNo,
+                        SellerName = y.CompanyName,
+                        CompanyId = y.CompanyID,
+                        SellerStatus = y.OrganizationStatus.CurrentLevel
+                    }).ToList();
+
+                //DateTime dt2 = DateTime.Now;
+                //Logger.Info($"TotalSeconds={(dt2 - dt1).TotalSeconds}");
+                ClosedXML.Excel.XLWorkbook excel;
+                using (DataSet ds = new DataSet())
+                {
+                    DataTable table = new DataTable($"未上傳發票{id}列表");
+                    table.Columns.Add("統一編號");
+                    table.Columns.Add("公司名稱");
+                    table.Columns.Add("公司代碼");
+                    foreach (var org in eligibleInvoiceCountZeroSellersOrgs)
+                    {
+                        var r = table.NewRow();
+                        r[0] = org.SellerId;
+                        r[1] = org.SellerName;
+                        r[2] = org.CompanyId;
+                        table.Rows.Add(r);
+                    }
+
+                    ds.Tables.Add(table);
+                    excel = ds.ConvertToExcel();
+
+                }
+
+                using (var ms = new MemoryStream())
+                {
+                    excel.SaveAs(ms);
+                    return File(ms.ToArray(), "application/octet-stream", $"未上傳發票{id}列表.xlsx");
+                }
+            }
+        }
     }
 }

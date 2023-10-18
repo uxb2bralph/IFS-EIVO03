@@ -44,7 +44,7 @@ namespace Model.Models.ViewModel
         public bool? SetToPrintInvoice { get; set; }
         public bool? AutoBlankTrack { get; set; }
         public bool? AutoBlankTrackEmittance { get; set; }
-
+        public bool? InvoiceNotUploadedAlert { get; set; }  
         public string InvoicePrintView { get; set; }
         public string C0401POSView { get; set; }
         public bool? IronSteelIndustry { get; set; }
