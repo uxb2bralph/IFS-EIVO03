@@ -1598,7 +1598,6 @@
     <Compile Include="Helper\BranchBusinessCounterpartUploadManager.cs" />
     <Compile Include="Helper\BusinessCounterpartXmlUploadManager.cs" />
     <Compile Include="Helper\DataQuery\InvoiceItemQueryExtensions.cs" />
-    <Compile Include="Helper\DateTimeExtensions.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Helper\InvoiceBusinessExtensionMethods.cs" />
     <Compile Include="Helper\LoginHandler.cs" />
@@ -1607,7 +1606,6 @@
     <Compile Include="Helper\PortalExtensionMethods.cs" />
     <Compile Include="Helper\QueryExtensionMethods.cs" />
     <Compile Include="Helper\Security\Authorization\UserAuthorizeAttribute.cs" />
-    <Compile Include="Models\DateLessThanAttribute.cs" />
     <Compile Include="Models\DataItemDefinition.cs" />
     <Compile Include="Models\DataListSource.cs">
       <SubType>ASPXCodeBehind</SubType>
