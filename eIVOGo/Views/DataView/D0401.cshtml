@@ -1,5 +1,4 @@
-﻿
-@using System.Linq
+﻿@using System.Linq
 @using System.IO
 @using System.Linq.Expressions
 
@@ -17,48 +16,38 @@
 @using Uxnet.Web.WebUI
 @{
 
-    ModelSource<InvoiceItem> models;
-    InvoiceAllowance _model;
-    DocumentQueryViewModel _viewModel;
+  ModelSource<InvoiceItem> models;
+  InvoiceAllowance _model;
+  DocumentQueryViewModel _viewModel;
 
-    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
-    _model = (InvoiceAllowance)this.Model;
-    _viewModel = (DocumentQueryViewModel)ViewBag.ViewModel;
+  models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+  _model = (InvoiceAllowance)this.Model;
+  _viewModel = (DocumentQueryViewModel)ViewBag.ViewModel;
 }
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>電子發票系統</title>
-    <style type="text/css" media="print">
-        div.fspace {
-            height: 9.3cm;
-        }
-
-        div.bspace {
-            height: 10cm;
-        }
-
-        body {
-            margin: 0px;
-            margin-left: 0cm;
-            margin-right: 0cm;
-        }
-    </style>
-    <link href="@VirtualPathUtility.ToAbsolute("~/App_Themes/POSAllowance/POS_allowance.css")" rel="stylesheet" type="text/css" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title>電子發票系統</title>
+  <link href="@VirtualPathUtility.ToAbsolute("~/App_Themes/POSAllowance/POS_allowance.css")" rel="stylesheet" />
+  <link href="@VirtualPathUtility.ToAbsolute("~/App_Themes/POSAllowance/POS_allowances_v1.css")" rel="stylesheet" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 </head>
-<body style="font-family:KaiTi">
-    <form id="theForm">
-        @{ Html.RenderPartial("~/Views/DataView/Module/D0401.cshtml", _model);}
 
-    </form>
+<body>
+  <form id="theForm">
+    @{
+      Html.RenderPartial("~/Views/DataView/Module/D0401.cshtml", _model);
+    }
+  </form>
 </body>
+
 </html>
 @if (_viewModel?.ResultMode == Naming.DataResultMode.Print)
 {
-    <script>
-        window.onload = function () {
-            window.print();
-        };
-    </script>
+  <script>
+    window.onload = function () {
+      window.print();
+    };
+  </script>
 }
