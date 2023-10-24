@@ -98,11 +98,13 @@
             <span>@(_buyer.IsB2C() ? null : String.Format("買方{0}", _buyer.ReceiptNo))</span>
           </div>
         </div>
+        <div class="eivo__block1"></div>
         <div class="code1">
             @{ String data = $"{_model.InvoiceDate.Value.Year - 1911:000}{(_model.InvoiceDate.Value.Month + 1) / 2 * 2:00}{_model.TrackCode}{_model.No}{_model.RandomNo}";}
             <img id="barcode" alt="" src="@(data.GetBarcode39ImageSrc(wide:2,narrow:1,height:33,margin:0))" />
             @*<img id="barcode" alt="" width="160" height="22" src="@(String.Format("{0}{1}?{2}", Uxnet.Web.Properties.Settings.Default.HostUrl, VirtualPathUtility.ToAbsolute("~/Published/GetBarCode39.ashx"), data))" />*@
         </div>
+        <div class="eivo__block2"></div>
         <div class="code2">
             <img alt="" src="@(_model.GetLeftQRCodeImageSrc(qrVersion:8))" />
             <img alt="" src="@("**".CreateQRCodeImageSrc(width:100,height:100,qrVersion:8))" />
