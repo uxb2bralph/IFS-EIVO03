@@ -444,7 +444,7 @@ namespace eIVOGo.Helper
       try
       {
         qrContent = item.GetQRCodeContent();
-        return qrContent.CreateQRCodeImageSrc(width: 100, height: 100, qrVersion: qrVersion);
+        return qrContent.CreateQRCodeImageSrc(width: 100, height: 100, margin: 0, qrVersion: qrVersion);
       }
       catch (Exception ex)
       {
@@ -458,7 +458,7 @@ namespace eIVOGo.Helper
         try
         {
           qrContent = $"{qrContent.Substring(0, 88)}:1:1:1:品項過長，詳列於發票明細:1:1:";
-          return qrContent.CreateQRCodeImageSrc(width: 100, height: 100, qrVersion: 10);
+          return qrContent.CreateQRCodeImageSrc(width: 100, height: 100, margin: 0, qrVersion: 10);
         }
         catch (Exception ex)
         {
@@ -494,7 +494,7 @@ namespace eIVOGo.Helper
       }
     }
 
-    public static String CreateQRCodeImageSrc(this String content, int width = 160, int height = 160, int margin = 0, int qrVersion = 10)
+    public static String CreateQRCodeImageSrc(this String content, int width = 100, int height = 100, int margin = 0, int qrVersion = 10)
     {
       using (Bitmap img = content.CreateQRCode(width, height, margin, qrVersion))
       {
