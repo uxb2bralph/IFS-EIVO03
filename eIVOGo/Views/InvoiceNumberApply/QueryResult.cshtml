@@ -1,0 +1,46 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using Model.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@{
+
+    ModelSource<InvoiceItem> models;
+    Model.Security.MembershipManagement.UserProfileMember _profile;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _profile = Business.Helper.WebPageUtility.UserProfile;
+    List<InvoiceNumberApplyQueryViewModel> _model = (List<InvoiceNumberApplyQueryViewModel>)ViewBag.Model;
+    InvoiceNumberApplyQueryViewModel _viewModel = ViewBag.ViewModel as InvoiceNumberApplyQueryViewModel;
+}
+@if (!models.InquiryHasError)
+{
+    Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");
+
+    <div class="container border_gray query_result">
+        @if (_model.Count > 0)
+        {
+            Html.RenderPartial("~/Views/InvoiceNumberApply/QueryList.cshtml", _model);
+
+            //Html.RenderPartial("~/Views/Common/Module/QueryPagingControl.cshtml", _model);
+        }
+        else
+        {
+            <font color="red">查無資料!!</font>
+        }
+    </div>
+}
+
