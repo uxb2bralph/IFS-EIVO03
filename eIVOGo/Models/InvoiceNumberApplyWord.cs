@@ -70,6 +70,7 @@ namespace eIVOGo.Models.ViewModel
         #region 申請項目-停用整合服務平台功能/委任加值服務中心申請
         public string cb40 { get; set; } = UnCheckedBox;
         public string cb50 { get; set; } = UnCheckedBox;
+        public string cb51 { get; set; } = UnCheckedBox;
 
         #endregion
 
@@ -97,6 +98,9 @@ namespace eIVOGo.Models.ViewModel
         public string cc27 { get; set; } = UnCheckedBox;//b2bDoc4=false
         public string cc28 { get; set; } = UnCheckedBox;//b2bDoc5=true
         public string cc29 { get; set; } = UnCheckedBox;//b2bDoc5=false
+        public string cc64 { get; set; } = UnCheckedBox;//b2bDoc6=true
+        public string cc65 { get; set; } = UnCheckedBox;//b2bDoc6=false
+        
         public string tc30 { get; set; } = string.Empty;//b2bTransferDoc2BusinessID
         public string tc31 { get; set; } = string.Empty;//b2bTransferDoc2BusinessTaxID
         #endregion
@@ -135,6 +139,8 @@ namespace eIVOGo.Models.ViewModel
         public string cc61 { get; set; } = UnCheckedBox;//b2cDoc6=false
         public string cc62 { get; set; } = UnCheckedBox;//b2cDoc7=true
         public string cc63 { get; set; } = UnCheckedBox;//b2cDoc7=false
+        public string cc66 { get; set; } = UnCheckedBox;//b2cDoc8=true
+        public string cc67 { get; set; } = UnCheckedBox;//b2cDoc8=false
         #endregion
 
         #region 申請人/聯絡方式
@@ -151,11 +157,16 @@ namespace eIVOGo.Models.ViewModel
         public string td15 { get; set; } = string.Empty; //BusinessEmail 
 
         #endregion
-        #region 事務所
+        #region 委任專業代理
         public string td20 { get; set; } = string.Empty; //AgentName
         public string td21 { get; set; } = string.Empty; //AgentID 
         public string td22 { get; set; } = string.Empty; //AgentContactName 
         public string td23 { get; set; } = string.Empty; //AgentTelNo 
+        public string td28 { get; set; } = string.Empty; //Agent負責人
+        public string td24 { get; set; } = string.Empty; //AgentDateFrom
+        public string td25 { get; set; } = string.Empty; //AgentDateTo
+        public string td26 { get; set; } = string.Empty; //AgentDateFrom
+        public string td27 { get; set; } = string.Empty; //AgentDateTo
         #endregion
 
         #region 系統廠商

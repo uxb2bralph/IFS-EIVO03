@@ -51,6 +51,17 @@ namespace eIVOGo.Models
         public DateTime? ApplyDate { get; set; }
         #endregion
 
+        //[委任專業代理人查詢下戴電子發票]
+        #region 委任專業代理人查詢下戴電子發票
+        public bool AppointToAgnet { get; set; } = false;
+        [Display(Name = "委任專案代理起日")]
+        [DateLessThan("AgentDateFrom", ErrorMessage = "委任代理迄日不應小於委任代理起日")]
+        public DateTime? AgentDateFrom { get; set; }
+        [Display(Name = "委任專業代理迄日")]
+        public DateTime? AgentDateTo { get; set; }
+        public DateTime? AgentDate { get; set; }
+        #endregion
+
         public bool IsApplyB2B { get; set; }
         #region 僅開立B2B或B2G電子發票營業人文件
         //必備文件
@@ -71,6 +82,7 @@ namespace eIVOGo.Models
         public bool? b2bDoc3 { get; set; } = null;
         public bool? b2bDoc4 { get; set; } = null;
         public bool? b2bDoc5 { get; set; } = null;
+        public bool? b2bDoc6 { get; set; } = null; //一,委託專業代理人事務委任書
         #endregion
         public bool IsApplyB2C { get; set; }
         #region 同時開立b2c及b2c電子發票營業人文件
@@ -101,6 +113,7 @@ namespace eIVOGo.Models
         public bool? b2cDoc5 { get; set; } = null;
         public bool? b2cDoc6 { get; set; } = null;
         public bool? b2cDoc7 { get; set; } = null;
+        public bool? b2cDoc8 { get; set; } = null; //二,委託專業代理人事務委任書(書表6)
         #endregion
 
         #region 申請人
@@ -148,8 +161,8 @@ namespace eIVOGo.Models
         public string BusinessEmail { get; set; }
         #endregion
 
-        #region 事務所
-        [Display(Name = "事務所名稱")]
+        #region 委任專業代理
+        [Display(Name = "專業代理人名稱")]
         [RegularExpression(@"^[\u4E00-\u9FFF-, ]{0,40}$", ErrorMessage = "限中文字或長度過長")]
         public string AgentName { get; set; }
         [Display(Name = "統一編號")]
@@ -161,6 +174,10 @@ namespace eIVOGo.Models
         [RegularExpression(@"^(09)([0-9]{2})$|(\d{2,3}-{1}\d{3,4}\d{4})$", ErrorMessage = "格式有誤, 市話請輸入XX-XXXXXXXX 或 XXX-XXXXXXX")]
         [Display(Name = "聯絡人電話")]
         public string AgentTelNo { get; set; }
+        public string AppointDuration { get; set; }
+        [RegularExpression(@"^[\u4E00-\u9FFFA-Za-z-, ]{0,40}$", ErrorMessage = "限中英文或長度過長")]
+        [Display(Name = "負責人")]
+        public string AgentBoss { get; set; }
         #endregion
 
         #region 系統廠商
@@ -271,6 +288,7 @@ namespace eIVOGo.Models
             data.b2cDoc5 = false;
             data.b2cDoc6 = false;
             data.b2cDoc7 = true;
+            data.b2cDoc8 = true;
             data.SysChk11 = true;
             data.SysChk12 = true;
             data.SysChk13 = true;
@@ -311,6 +329,7 @@ namespace eIVOGo.Models
             data.AgentName = "我是代理人";
             data.AgentID = "77777777";
             data.AgentContactName = "我是代理人的聯絡人";
+            data.AgentBoss = "我是代理人的負責人";
             data.AgentTelNo = "02-55555555";
             data.SysChkEmployeeTitle = "專員";
             data.SysChkEmployeeName = "我是檢測人員";

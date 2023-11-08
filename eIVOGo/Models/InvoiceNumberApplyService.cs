@@ -104,10 +104,16 @@ namespace eIVOGo.Models
             WordModel.td13 = apply.BusinessFaxNo;
             WordModel.td14 = apply.BusinessContactAddr;
             WordModel.td15 = apply.BusinessEmail;
-            WordModel.td20 = apply.AgentName;
-            WordModel.td21 = apply.AgentID;
-            WordModel.td22 = apply.AgentContactName;
-            WordModel.td23 = apply.AgentTelNo;
+            //事務所(代理人)
+            WordModel.td20 = apply.AgentName; //專業代理人名稱
+            WordModel.td21 = apply.AgentID;//專業代理人統一編號
+            WordModel.td22 = apply.AgentContactName;//專業代理人聯絡人
+            WordModel.td23 = apply.AgentTelNo;//專業代理人聯絡人電話
+            WordModel.td28 = apply.AgentBoss;//專業代理人負責人
+            WordModel.td24 = (apply.AgentDateFrom == null) ? string.Empty : apply.AgentDateFrom?.ToFullTaiwanDate();
+            WordModel.td26 = (apply.AgentDateFrom == null) ? string.Empty : apply.AgentDateFrom?.ToYYYMMTaiwanDate();
+            WordModel.td25 = (apply.AgentDateTo == null) ? string.Empty : apply.AgentDateTo?.ToFullTaiwanDate();
+            WordModel.td27 = (apply.AgentDateTo == null) ? string.Empty : apply.AgentDateTo?.ToYYYMMTaiwanDate();
             //僅開立B2B或B2G電子發票營業人-Turnkey上線通行碼
             WordModel.tc10 = apply.b2bTransferDoc1TurnkeyToken;
             //僅開立B2B或B2G電子發票營業人-代傳統編
@@ -205,6 +211,7 @@ namespace eIVOGo.Models
             checkedList.Add("rb34", item.GetNumberByYearReason == 5);
             checkedList.Add("cb40", item.StopUse);
             checkedList.Add("cb50", item.ApplyByAppoint);
+            checkedList.Add("cb51", item.AppointToAgnet);
             checkedList.Add("cc00", item.b2bRequiredDoc1);
             checkedList.Add("cc01", item.b2bRequiredDoc2);
             checkedList.Add("cc02", item.b2bRequiredDoc3);
@@ -225,6 +232,9 @@ namespace eIVOGo.Models
             checkedList.Add("cc27", item.b2bDoc4 == false);
             checkedList.Add("cc28", item.b2bDoc5 == true);
             checkedList.Add("cc29", item.b2bDoc5 == false);
+            //一,委託專業代理人事務委任書
+            checkedList.Add("cc64", item.b2bDoc6 == true);
+            checkedList.Add("cc65", item.b2bDoc6 == false);
 
             checkedList.Add("cc30", item.b2cRequiredDoc1);
             checkedList.Add("cc31", item.b2cRequiredDoc2);
@@ -254,6 +264,8 @@ namespace eIVOGo.Models
             checkedList.Add("cc61", item.b2cDoc6 == false);
             checkedList.Add("cc62", item.b2cDoc7 == true);
             checkedList.Add("cc63", item.b2cDoc7 == false);
+            checkedList.Add("cc66", item.b2cDoc8 == true);//二,委託專業代理人事務委任書(書表6)
+            checkedList.Add("cc67", item.b2cDoc8 == false);
             checkedList.Add("ce00", item.SysChk11==true);
             checkedList.Add("ce01", item.SysChk11 == false);
             checkedList.Add("ce02", item.SysChk12==true);

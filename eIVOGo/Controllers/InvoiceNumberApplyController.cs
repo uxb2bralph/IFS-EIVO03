@@ -77,7 +77,6 @@ namespace eIVOGo.Controllers
             return View("../InvoiceNumberApply/QueryResult", ViewBag);
         }
 
-        [AllowAnonymous]
         public ActionResult Apply(string templateID= "AppointApply")
         {
             InvoiceNumberApply apply=null;

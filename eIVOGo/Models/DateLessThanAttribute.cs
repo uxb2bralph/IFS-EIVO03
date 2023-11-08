@@ -20,8 +20,8 @@ namespace eIVOGo.Models.ViewModel
         {
             ErrorMessage = ErrorMessageString;
             //wait to do...判斷空值
-            if (value ==null)
-                throw new ArgumentException("inputValue is null.");
+            if (value == null)
+                return ValidationResult.Success;
 
             var currentValue = (DateTime)value;
 

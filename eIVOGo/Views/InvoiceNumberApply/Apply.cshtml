@@ -29,6 +29,16 @@
             });
         });
         $(function () {
+            $("#Apply_AgentDateFrom").datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
+        });
+        $(function () {
+            $("#Apply_AgentDateTo").datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
+        });
+        $(function () {
             $("#Apply_SysChkDatetime").datepicker({
                 dateFormat: 'yy-mm-dd'
             });
@@ -181,6 +191,21 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-check mt-3">
+                                @Html.CheckBoxFor(m => m.Apply.AppointToAgnet, new { @class = "form-check-input" })
+                                <label class="form-check-label">
+                                    委任專業代理人查詢下載電子發票相關業務（請務必填寫本申請書「專業代理人」各欄項資料）
+                                </label>
+                                <div class="form-control" id="ApplyByAppointCollapse">
+                                    <div class="input-group">
+                                        @Html.Label("委任期間自", "委任期間自", new { @class = "form-check-label" })
+                                        @Html.TextBoxFor(m => m.Apply.AgentDateFrom, "{0:yyyy-MM-dd}", new { @class = "form-control" })
+                                        @Html.Label("至", "至", new { @class = "form-check-label" })
+                                        @Html.TextBoxFor(m => m.Apply.AgentDateTo, "{0:yyyy-MM-dd}", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.Apply.AgentDateFrom, null, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="p-3 mb-3" id="docPage">
@@ -305,7 +330,7 @@
 
                                     </tr>
                                     <tr>
-                                        <td rowspan="5">其他文件</td>
+                                        <td rowspan="6">其他文件</td>
                                         <td>「營業人銷貨退回、進貨退出或折讓證明單」樣張</td>
                                         <td>
                                             <div class="input-group">
@@ -396,6 +421,21 @@
                                             </button>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>委託專業代理人事務委任書</td>
+                                        <td>
+                                            <div class="input-group">
+                                                <div class="form-check">
+                                                    @Html.RadioButtonFor(m => m.Apply.b2bDoc6, true, new { @class = "form-check-input" })
+                                                    <label class="form-check-label">是</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    @Html.RadioButtonFor(m => m.Apply.b2bDoc6, false, new { @class = "form-check-input" })
+                                                    <label class="form-check-label">否</label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>
@@ -470,7 +510,6 @@
                                             </div>
                                         </td>
                                         <td>
-
                                         </td>
                                     </tr>
                                     <tr>
@@ -555,7 +594,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td rowspan="7">其他應檢具文件</td>
+                                        <td rowspan="8">其他應檢具文件</td>
                                         <td>「營業人銷貨退回、進貨退出或折讓證明單」樣張</td>
                                         <td>
                                             <div class="input-group">
@@ -664,6 +703,21 @@
                                             </button>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>委託專業代理人事務委任書</td>
+                                        <td>
+                                            <div class="input-group">
+                                                <div class="form-check">
+                                                    @Html.RadioButtonFor(m => m.Apply.b2cDoc8, true, new { @class = "form-check-input" })
+                                                    <label class="form-check-label">是</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    @Html.RadioButtonFor(m => m.Apply.b2cDoc8, false, new { @class = "form-check-input" })
+                                                    <label class="form-check-label">否</label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>
@@ -750,7 +804,7 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group-text bg-info mb-3">
-                                事務所(代理人)
+                                委任專業代理人
                             </div>
                             <div class="row mb-2">
                                 @Html.LabelFor(m => m.Apply.AgentName, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
@@ -774,6 +828,13 @@
                                 <div class="col-sm-4">
                                     @Html.TextBoxFor(m => m.Apply.AgentTelNo, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(m => m.Apply.AgentTelNo, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                @Html.LabelFor(m => m.Apply.AgentBoss, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(m => m.Apply.AgentBoss, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Apply.AgentBoss, null, new { @class = "text-danger" })
                                 </div>
                             </div>
                         </div>
