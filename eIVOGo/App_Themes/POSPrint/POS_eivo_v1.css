@@ -23,8 +23,8 @@ body {
 }
 
 .eivo__wrapper {
-  padding: 0 7px 0 0;
-  height: 273.3px;
+  padding: 0 7px 0 3px;
+  min-height: 273.3px;
   border-bottom: 1px dashed #f1f1f1;
 }
 .eivo__cutfield {
@@ -32,10 +32,12 @@ body {
 }
 .eivo__cutfield .code1 {
   margin: 0;
-  padding: 0;
+  padding: 0 7px;
+  padding-top: 10px;
 }
 .eivo__cutfield .code1 img {
   width: 100%;
+  height: 26px;
 }
 .eivo__cutfield .code2 {
   display: flex;
@@ -43,6 +45,7 @@ body {
   justify-content: space-around;
   margin: 0;
   padding: 0;
+  padding-top: 7px;
 }
 .eivo__cutfield .code2 img {
   width: 62px;
@@ -71,14 +74,6 @@ body {
   line-height: 1;
   text-align: center;
 }
-.eivo__block1 {
-  display: block;
-  height: 7px;
-}
-.eivo__block2 {
-  display: block;
-  height: 4px;
-}
 .eivo__deal {
   padding-top: 4px;
 }
@@ -94,6 +89,7 @@ body {
 .eivo__listfield .itemGroup__wrapper {
   font-size: 12px;
   line-height: 1.2;
+  padding: 3px 0;
 }
 .eivo__listfield .itemGroup__wrapper--border {
   border-bottom: 1px dashed #000000;
