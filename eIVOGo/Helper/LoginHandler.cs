@@ -24,10 +24,10 @@ namespace eIVOGo.Helper
 
         public string RedirectToAsLoginSuccessfully { get; set; }
 
-        public bool ProcessLogin(string pid, string password, out string msg)
+        public bool ProcessLogin(string pid, string password, out string msg, out UserProfileMember member)
         {
-            UserProfileMember up = UserProfileFactory.CreateInstance(pid, password);
-            bool auth = processLoginUsingRole(out msg, up);
+            member = UserProfileFactory.CreateInstance(pid, password);
+            bool auth = processLoginUsingRole(out msg, member);
             //if (up != null)
             //{
             //   if (up.Profile.UserProfileStatus.CurrentLevel == (int)Naming.MemberStatusDefinition.Wait_For_Check)
@@ -51,42 +51,42 @@ namespace eIVOGo.Helper
             HttpContext.Current.Session[WebKey.USER_PROFILE] = up;
         }
 
-        public bool NormalLogin(string pid)
-        {
-            bool bAuth = false;
+        //public bool NormalLogin(string pid)
+        //{
+        //    bool bAuth = false;
 
-            UserProfileMember up = UserProfileFactory.CreateInstance(pid);
-            if (up != null)	//new login
-            {
-                HttpContext.Current.Session.Add(WebKey.USER_PROFILE, up);
-                bAuth = true;
-            }
+        //    UserProfileMember up = UserProfileFactory.CreateInstance(pid);
+        //    if (up != null)	//new login
+        //    {
+        //        HttpContext.Current.Session.Add(WebKey.USER_PROFILE, up);
+        //        bAuth = true;
+        //    }
 
-            if (bAuth)
-            {
-                string url = FormsAuthentication.GetRedirectUrl(pid, false);
-                FormsAuthentication.SetAuthCookie(pid, false);
+        //    if (bAuth)
+        //    {
+        //        string url = FormsAuthentication.GetRedirectUrl(pid, false);
+        //        FormsAuthentication.SetAuthCookie(pid, false);
 
-                if (url != null && url.Length > 0 && !url.EndsWith("default.aspx"))
-                {
-                    System.Web.Security.FormsAuthentication.RedirectFromLoginPage(pid, false);
-                }
-                else
-                {
-                    if (up.RoleIndex >= 0)
-                    {
+        //        if (url != null && url.Length > 0 && !url.EndsWith("default.aspx"))
+        //        {
+        //            System.Web.Security.FormsAuthentication.RedirectFromLoginPage(pid, false);
+        //        }
+        //        else
+        //        {
+        //            if (up.RoleIndex >= 0)
+        //            {
 
-                    }
-                    else
-                    {
-                        bAuth = false;
-                    }
-                }
-            }
+        //            }
+        //            else
+        //            {
+        //                bAuth = false;
+        //            }
+        //        }
+        //    }
 
-            return bAuth;
+        //    return bAuth;
 
-        }
+        //}
 
 
         public bool ProcessLogin(X509Certificate2 signerCert, out string msg)

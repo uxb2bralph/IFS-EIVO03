@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -6,8 +7,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Utility;
 
-namespace Uxnet.Com.DataAccessLayer
+namespace DataAccessLayer
 {
     public static class ExtensionMethods
     {
@@ -29,12 +31,34 @@ namespace Uxnet.Com.DataAccessLayer
             return tbl;
         }
 
+        public static DataTable ToDataTable<T>(this IEnumerable<T> query,DataTable tbl)
+        {
+            Type t = typeof(T);
+            PropertyInfo[] props = null;
+            props = t.GetProperties();
+
+            foreach (T item in query)
+            {
+                DataRow row = tbl.NewRow();
+                foreach (PropertyInfo pi in props)
+                {
+                    if (tbl.Columns.Contains(pi.Name))
+                    {
+                        row[pi.Name] = pi.GetValue(item, null) ?? DBNull.Value;
+                    }
+                }
+                tbl.Rows.Add(row);
+            }
+            return tbl;
+        }
+
         public static PropertyInfo[] BuildDataColumns<T>(this IEnumerable<T> query, DataTable table)
         {
             PropertyInfo[] props = null;
             if (props == null) //尚未初始化
             {
-                Type t = typeof(T);
+                var item = query.FirstOrDefault();
+                Type t = item?.GetType() ?? typeof(T);
                 props = t.GetProperties();
                 foreach (PropertyInfo pi in props)
                 {
@@ -95,5 +119,34 @@ namespace Uxnet.Com.DataAccessLayer
             }
         }
 
+        public static XLWorkbook ConvertToExcel(this DataSet ds)
+        {
+            XLWorkbook excel = new XLWorkbook();
+            excel.Worksheets.Add(ds);
+            return excel;
+        }
+
+        public static void PrepareExcelDownload<T>(this IEnumerable<T> items, string resultFile, Action<DataTable> revise = null)
+        {
+            Task.Run(() =>
+            {
+                try
+                {
+                    using (DataSet ds = new DataSet())
+                    {
+                        DataTable dataTable = items.ToDataTable<T>();
+                        if (revise != null)
+                            revise(dataTable);
+                        ds.Tables.Add(dataTable);
+                        using (XLWorkbook excel = ds.ConvertToExcel())
+                            excel.SaveAs(resultFile);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error((object)ex);
+                }
+            });
+        }
     }
 }

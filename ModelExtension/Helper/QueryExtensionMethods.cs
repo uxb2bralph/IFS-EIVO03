@@ -5,12 +5,13 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Threading.Tasks;
+using System.Collections;
 using DataAccessLayer.basis;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
 using Model.DataEntity;
 using Model.Locale;
 using Model.Security.MembershipManagement;
-using System.Threading.Tasks;
 using Utility;
 
 namespace ModelExtension.Helper
@@ -18,18 +19,18 @@ namespace ModelExtension.Helper
     public static class QueryExtensionMethods
     {
         public static DataSet GetDataSetResult<TEntity>(this ModelSource<TEntity> models)
-            where TEntity : class,new()
+            where TEntity : class, new()
         {
             return models.GetDataSetResult(models.Items);
         }
 
         public static ClosedXML.Excel.XLWorkbook GetExcelResult<TEntity>(this ModelSource<TEntity> models)
-            where TEntity : class,new()
+            where TEntity : class, new()
         {
             return models.GetExcelResult(models.Items);
         }
 
-        public static DataSet GetDataSetResult<TEntity>(this ModelSource<TEntity> models,IQueryable items)
+        public static DataSet GetDataSetResult<TEntity>(this ModelSource<TEntity> models, IQueryable items)
             where TEntity : class, new()
         {
             using (SqlCommand sqlCmd = (SqlCommand)models.GetCommand(items))
@@ -99,24 +100,23 @@ namespace ModelExtension.Helper
             }
         }
 
-
-        public static ClosedXML.Excel.XLWorkbook GetExcelResult<TEntity>(this ModelSource<TEntity> models,IQueryable items,String tableName = null)
+        public static ClosedXML.Excel.XLWorkbook GetExcelResult<TEntity>(this ModelSource<TEntity> models, IQueryable items, String tableName = null)
             where TEntity : class, new()
         {
             using (DataSet ds = models.GetDataSetResult(items))
             {
                 if (tableName != null)
                     ds.Tables[0].TableName = ds.DataSetName = tableName;
-                return ConvertToExcel(ds);
+                return ds.ConvertToExcel();
             }
         }
 
-        public static ClosedXML.Excel.XLWorkbook ConvertToExcel(this DataSet ds)
-        {
-            ClosedXML.Excel.XLWorkbook xls = new ClosedXML.Excel.XLWorkbook();
-            xls.Worksheets.Add(ds);
-            return xls;
-        }
+        //public static ClosedXML.Excel.XLWorkbook ConvertToExcel(this DataSet ds)
+        //{
+        //    ClosedXML.Excel.XLWorkbook xls = new ClosedXML.Excel.XLWorkbook();
+        //    xls.Worksheets.Add(ds);
+        //    return xls;
+        //}
 
         public static void SaveAsExcel(this SqlCommand sqlCmd, DataTable table, String resultFile, int? taskID = null)
         {

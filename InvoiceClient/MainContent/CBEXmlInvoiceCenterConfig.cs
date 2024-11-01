@@ -74,5 +74,9 @@ namespace InvoiceClient.MainContent
             get { return "境外電商電子發票"; }
         }
 
+        public void ReportStatus()
+        {
+
+        }
     }
 }

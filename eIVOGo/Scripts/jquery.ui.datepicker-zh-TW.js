@@ -1,8 +1,9 @@
 ﻿/* Chinese initialisation for the jQuery UI date picker plugin. */
 /* Written by Ressol (ressol@gmail.com). */
-jQuery(function($){
+jQuery(function ($) {
+	var dateSelected = false;
 	$.datepicker.regional['zh-TW'] = {
-		closeText: '關閉',
+		closeText: '清除',
 		prevText: '&#x3c;上月',
 		nextText: '下月&#x3e;',
 		currentText: '今天',
@@ -18,6 +19,33 @@ jQuery(function($){
 		firstDay: 1,
 		isRTL: false,
 		showMonthAfterYear: true,
+		beforeShow: function (input, inst) {
+			dateSelected = false;
+		},
+		onUpdateDatepicker: function (inst) {
+			debugger;
+			var $target = $(event.target)
+			if ($target.is('[data-handler="today"]')) {
+				var d = new Date();
+				inst.input.val(d.toISOString().split('T')[0].replaceAll('-', '/'));
+				dateSelected = true;
+				inst.input.datepicker('hide');
+			}
+			//var $input = $(this);
+			//var btnToday = inst.dpDiv.find('button').eq(0);
+			//btnToday.on('click', function () {
+			//	$input.datepicker('setDate', new Date());
+			//	$input.datepicker('hide');
+			//});
+		},
+		onClose: function (dateText, inst) {
+			if (!dateSelected) {
+				inst.input.val('');
+			}
+		},
+		onSelect: function (dateText, inst) {
+			dateSelected = true;
+		},
 		yearSuffix: '年'};
 	$.datepicker.setDefaults($.datepicker.regional['zh-TW']);
 });

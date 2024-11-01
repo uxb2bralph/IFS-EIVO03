@@ -19,10 +19,11 @@ using ProcessorUnit.Helper;
 using Newtonsoft.Json;
 using Model.Schema.EIVO;
 using Model.Models.ViewModel;
+using Uxnet.ToolAdapter.Properties;
 
 namespace ProcessorUnit.Execution
 {
-    public class InvoiceJsonRequestForCBEProcessor : ExecutorForever
+    public class InvoiceJsonRequestForCBEProcessor : ProcessRequestExecutorForever
     {
         public static readonly JsonSerializerSettings _JSON_Settings = new JsonSerializerSettings
         {
@@ -32,12 +33,12 @@ namespace ProcessorUnit.Execution
         public InvoiceJsonRequestForCBEProcessor()
         {
             appliedProcessType = Naming.InvoiceProcessType.C0401_Json_CBE;
-            processRequest = (jsonData, requestItem) => 
+            processRequest = (jsonData, requestItem) =>
             {
                 Root result = this.CreateMessageToken();
                 dynamic json = JsonConvert.DeserializeObject(jsonData);
                 var s = JsonConvert.SerializeObject((object)json.InvoiceRoot.Invoice);
-                InvoiceRoot invoice = new InvoiceRoot 
+                InvoiceRoot invoice = new InvoiceRoot
                 {
                     Invoice = JsonConvert.DeserializeObject<InvoiceRootInvoice[]>(s)
                 };
@@ -50,7 +51,7 @@ namespace ProcessorUnit.Execution
                     }
 
                     var token = manager.GetTable<OrganizationToken>().Where(t => t.CompanyID == requestItem.AgentID).FirstOrDefault();
-                    if(token!=null)
+                    if (token != null)
                     {
                         manager.UploadInvoiceAutoTrackNo(result, token, invoice);
                         manager.BindProcessedItem(requestItem);
@@ -76,7 +77,7 @@ namespace ProcessorUnit.Execution
         {
             ProcessRequest requestItem = queueItem.ProcessRequest;
             String requestFile = requestItem.RequestPath.StoreTargetPath();
-            if(File.Exists(requestFile))
+            if (File.Exists(requestFile))
             {
                 Organization agent = requestItem.Organization;
                 requestItem.ProcessStart = DateTime.Now;
@@ -89,7 +90,7 @@ namespace ProcessorUnit.Execution
 
                 if (SettingsHelper.Instance.ResponsePath != null)
                 {
-                    responsePath = responsePath.Replace(Uxnet.Com.Properties.AppSettings.AppRoot, SettingsHelper.Instance.ResponsePath);
+                    responsePath = responsePath.Replace(AppSettingsBase.AppRoot, SettingsHelper.Instance.ResponsePath);
                 }
 
                 File.WriteAllText(responsePath, result);

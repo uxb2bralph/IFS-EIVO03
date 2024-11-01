@@ -1,0 +1,38 @@
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    Layout = "~/Views/InvoiceProcess/DataQuery/DataItemTableTemplate.cshtml";
+    ModelSource<InvoiceItem> models;
+    QueryViewModel _viewModel;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _viewModel = (QueryViewModel)ViewBag.ViewModel;
+
+}
+
+@section PrepareQueryResult
+{
+    @{ 
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/PrepareInvoiceQueryResult.cshtml");
+    }
+}
+
+@section DataItemList
+{
+    @{ 
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceQueryList.cshtml");
+    }
+}

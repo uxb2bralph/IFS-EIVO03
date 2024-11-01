@@ -30,7 +30,7 @@ using Model.Locale;
 using Model.Security.MembershipManagement;
 using ModelExtension.Helper;
 using Utility;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
 using System.Security.Cryptography.X509Certificates;
 using Uxnet.Com.Security.UseCrypto;
 

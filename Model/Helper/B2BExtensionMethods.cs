@@ -12,6 +12,8 @@ using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
 using Model.Locale;
 using Utility;
+using Model.Properties;
+using DataAccessLayer.basis;
 
 namespace Model.Helper
 {
@@ -41,6 +43,17 @@ namespace Model.Helper
             return result;
         }
 
+        public static Object CreateB2BInvoiceCancellationMIG(this InvoiceItem item)
+        {
+            if (AppSettings.Default.UseMIG40)
+            {
+                return item.CreateF0501();
+            }
+            else
+            {
+                return item.CreateA0501();
+            }
+        }
         public static Model.Schema.TurnKey.A0501.CancelInvoice CreateA0501(this InvoiceItem item)
         {
             InvoiceCancellation cancelItem = item.InvoiceCancellation;
@@ -87,6 +100,18 @@ namespace Model.Helper
             return result;
         }
 
+        public static Object CreateB2BAllowanceCancellationMIG(this InvoiceAllowance item)
+        {
+            if (AppSettings.Default.UseMIG40)
+            {
+                return item.CreateG0501();
+            }
+            else
+            {
+                return item.CreateB0501();
+            }
+        }
+
         public static Model.Schema.TurnKey.B0501.CancelAllowance CreateB0501(this InvoiceAllowance item)
         {
             InvoiceAllowanceCancellation cancelItem = item.InvoiceAllowanceCancellation;
@@ -99,7 +124,7 @@ namespace Model.Helper
                 AllowanceDate = String.Format("{0:yyyyMMdd}", item.AllowanceDate),
                 CancelDate = String.Format("{0:yyyyMMdd}", cancelItem.CancelDate),
                 CancelTime = cancelItem.CancelDate.Value,
-                CancelAllowanceNumber = item.AllowanceNumber.Length > 16 ? $"{item.AllowanceID:0000000000000000}" : item.AllowanceNumber,
+                CancelAllowanceNumber = item.TurnkeyAllowanceNo,
                 Remark = cancelItem.Remark,
                 BuyerId = item.InvoiceAllowanceBuyer.ReceiptNo,
                 SellerId = item.InvoiceAllowanceSeller.ReceiptNo,
@@ -107,6 +132,18 @@ namespace Model.Helper
             };
 
             return result;
+        }
+
+        public static Object CreateB2BInvoiceMIG(this InvoiceItem item)
+        {
+            if (AppSettings.Default.UseMIG40)
+            {
+                return item.CreateF0401();
+            }
+            else
+            {
+                return item.CreateA0401();
+            }
         }
 
         public static Model.Schema.TurnKey.A0401.Invoice CreateA0401(this InvoiceItem item)
@@ -117,15 +154,15 @@ namespace Model.Helper
                 {
                     Buyer = new Schema.TurnKey.A0401.MainBuyer
                     {
-                        //Address = item.InvoiceBuyer.Address,
+                        Address = item.InvoiceBuyer.Address,
                         //CustomerNumber = item.InvoiceBuyer.CustomerID,
                         //EmailAddress = item.InvoiceBuyer.EMail,
-                        //FacsimileNumber = item.InvoiceBuyer.Fax,
+                        FacsimileNumber = item.InvoiceBuyer.Fax,
                         Identifier = item.InvoiceBuyer.ReceiptNo,
                         Name = item.InvoiceBuyer.Name,
-                        //PersonInCharge = item.InvoiceBuyer.PersonInCharge,
+                        PersonInCharge = item.InvoiceBuyer.PersonInCharge,
                         //RoleRemark = item.InvoiceBuyer.RoleRemark,
-                        //TelephoneNumber = item.InvoiceBuyer.Phone
+                        TelephoneNumber = item.InvoiceBuyer.Phone
                     },
                     BuyerRemark = (MainBuyerRemark?)item.BuyerRemark,
                     BuyerRemarkSpecified = item.BuyerRemark.HasValue,
@@ -141,7 +178,7 @@ namespace Model.Helper
                     InvoiceTime = item.InvoiceDate.Value,
                     //InvoiceTimeSpecified = true,
                     InvoiceNumber = String.Format("{0}{1}", item.TrackCode, item.No),
-                    MainRemark = item.Remark,
+                    MainRemark = item.Remark.GetEfficientStringMaxSize(0, 200),
                     //PermitNumber = item.PermitNumber,
                     //PermitDate = item.PermitDate.HasValue ? String.Format("{0:yyyyMMdd}", item.PermitDate.Value) : null,
                     //PermitWord = item.PermitWord,
@@ -168,7 +205,7 @@ namespace Model.Helper
                     DiscountAmountSpecified = item.InvoiceAmountType.DiscountAmount.HasValue,
                     ExchangeRateSpecified = false,
                     OriginalCurrencyAmountSpecified = false,
-                    SalesAmount = (item.InvoiceAmountType.SalesAmount ?? item.InvoiceAmountType.FreeTaxSalesAmount ?? item.InvoiceAmountType.ZeroTaxSalesAmount ?? (item.InvoiceAmountType.TotalAmount-item.InvoiceAmountType.TaxAmount))
+                    SalesAmount = (item.InvoiceAmountType.SalesAmount ?? item.InvoiceAmountType.FreeTaxSalesAmount ?? item.InvoiceAmountType.ZeroTaxSalesAmount ?? (item.InvoiceAmountType.TotalAmount - item.InvoiceAmountType.TaxAmount))
                                     .ToFix(item.InvoiceAmountType.CurrencyType?.Decimals ?? 0),
                     TaxAmount = item.InvoiceAmountType.TaxAmount.ToFix(item.InvoiceAmountType.CurrencyType?.Decimals ?? 0),
                     TaxRate = item.InvoiceAmountType.TaxRate.HasValue ? item.InvoiceAmountType.TaxRate.ToFix(2) : 0.05m,
@@ -187,7 +224,7 @@ namespace Model.Helper
 
         public static Model.Schema.TurnKey.A0101.Invoice CreateA0101(this InvoiceItem item)
         {
-            var a0401 = item.CreateA0401();
+            var a0401 = item.CreateB2BInvoiceMIG();
             var data = JsonConvert.SerializeObject(a0401);
             return JsonConvert.DeserializeObject<Model.Schema.TurnKey.A0101.Invoice>(data);
         }
@@ -204,8 +241,8 @@ namespace Model.Helper
                     items.Add(new Model.Schema.TurnKey.A0401.DetailsProductItem
                     {
                         Amount = productItem.CostAmount.HasValue ? productItem.CostAmount.Value : 0m,
-                        Description = detailItem.InvoiceProduct.Brief.Length>256?
-                        detailItem.InvoiceProduct.Brief.Substring(0,256):
+                        Description = detailItem.InvoiceProduct.Brief.Length > 256 ?
+                        detailItem.InvoiceProduct.Brief.Substring(0, 256) :
                         detailItem.InvoiceProduct.Brief,
                         Quantity = productItem.Piece.HasValue ? productItem.Piece.Value : 0,
                         RelateNumber = productItem.RelateNumber,
@@ -219,6 +256,18 @@ namespace Model.Helper
             return items.ToArray();
         }
 
+        public static Object CreateB2BAllowanceMIG(this InvoiceAllowance item)
+        {
+            if (AppSettings.Default.UseMIG40)
+            {
+                return item.CreateG0401();
+            }
+            else
+            {
+                return item.CreateB0401();
+            }
+        }
+
         public static Model.Schema.TurnKey.B0401.Allowance CreateB0401(this InvoiceAllowance item)
         {
             var result = new Model.Schema.TurnKey.B0401.Allowance
@@ -226,7 +275,7 @@ namespace Model.Helper
                 Main = new Schema.TurnKey.B0401.Main
                 {
                     AllowanceDate = String.Format("{0:yyyyMMdd}", item.AllowanceDate),
-                    AllowanceNumber = item.AllowanceNumber.Length>16 ? $"{item.AllowanceID:0000000000000000}" : item.AllowanceNumber,
+                    AllowanceNumber = item.TurnkeyAllowanceNo,
                     AllowanceType = (Model.Schema.TurnKey.B0401.AllowanceTypeEnum)item.AllowanceType,
                     Buyer = new Schema.TurnKey.B0401.MainBuyer
                     {
@@ -264,7 +313,7 @@ namespace Model.Helper
             {
                 AllowanceSequenceNumber = d.InvoiceAllowanceItem.No.ToString(),
                 Amount = d.InvoiceAllowanceItem.Amount.HasValue ? d.InvoiceAllowanceItem.Amount.Value : 0m,
-                OriginalSequenceNumber = d.InvoiceAllowanceItem.OriginalSequenceNo.HasValue ? d.InvoiceAllowanceItem.OriginalSequenceNo.Value.ToString() : "",
+                OriginalSequenceNumber = d.InvoiceAllowanceItem.OriginalSequenceNo?.ToString() ?? "1",
                 OriginalInvoiceDate = String.Format("{0:yyyyMMdd}", d.InvoiceAllowanceItem.InvoiceDate),
                 OriginalDescription = d.InvoiceAllowanceItem.OriginalDescription,
                 OriginalInvoiceNumber = d.InvoiceAllowanceItem.InvoiceNo,
@@ -453,7 +502,7 @@ namespace Model.Helper
                 SellerId = item.InvoiceAllowanceSeller.ReceiptNo,
                 AllowanceDate = string.Format("{0:yyyy/MM/dd}", (object)item.AllowanceDate),
                 CancelDate = string.Format("{0:yyyy/MM/dd}", (object)item.InvoiceAllowanceCancellation.CancelDate),
-                CancelAllowanceNumber = item.AllowanceNumber,
+                CancelAllowanceNumber = item.TurnkeyAllowanceNo,
                 CancelTime = string.Format("{0:HH:mm:ss}", (object)item.InvoiceAllowanceCancellation.CancelDate),
                 CancelReason = item.InvoiceAllowanceCancellation.Remark,
                 Remark = ""

@@ -73,5 +73,11 @@ namespace InvoiceClient.MainContent
         {
             get { return "虛擬通路"; }
         }
+
+        public void ReportStatus()
+        {
+
+        }
     }
+
 }

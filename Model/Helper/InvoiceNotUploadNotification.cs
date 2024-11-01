@@ -39,21 +39,18 @@ namespace Model.Helper
                         {
                             using (InvoiceManager mgr = new InvoiceManager())
                             {
-                                var checkDate = DateTime.Now.Date.AddDays(-1);
+                                var checkDate = DateTime.Today.AddDays(-1);
 
-                                List<int> eligibleInvoiceCountZeroSellersWeatherSettingAlertOrNot = 
+                                var eligibleInvoiceCountZeroSellersWeatherSettingAlertOrNot = 
                                     GetInvoiceUploadZeroWeatherSettingAlertOrNotList(
                                         mgr, 
                                         checkDate);
 
-                                var eligibleInvoiceCountZeroSellers = 
-                                    mgr.GetTable<Organization>()
-                                    .Where(x=> eligibleInvoiceCountZeroSellersWeatherSettingAlertOrNot.Contains(x.CompanyID))
-                                    .Where(x=>x.OrganizationExtension.InvoiceNotUploadedAlert == true)
-                                    .Select(y=>y.CompanyID) 
-                                    .ToList();
+                                var eligibleInvoiceCountZeroSellers =
+                                    eligibleInvoiceCountZeroSellersWeatherSettingAlertOrNot
+                                        .Where(x => x.OrganizationSettings.Any(s => s.Settings == "InvoiceNotUploadedAlert"));
 
-                                foreach (var sellerID in eligibleInvoiceCountZeroSellers)
+                                foreach (var seller in eligibleInvoiceCountZeroSellers)
                                 {
                                     /* 2023.09.19 會議討論暫時不納入
                                     var mailing = mgr.GetUserListByCompanyID(item.SellerId)
@@ -64,7 +61,7 @@ namespace Model.Helper
                                     */
 
                                     OrganizationViewModel orgModel = new OrganizationViewModel { };
-                                    orgModel.CompanyID = sellerID;
+                                    orgModel.CompanyID = seller.CompanyID;
                                     EIVOPlatformFactory.NotifyInvoiceNotUpload(orgModel);
                                 }
                             }
@@ -74,36 +71,37 @@ namespace Model.Helper
             }
         }
 
-        public static List<int> GetInvoiceUploadZeroWeatherSettingAlertOrNotList(
+        public static IQueryable<Organization> GetInvoiceUploadZeroWeatherSettingAlertOrNotList(
             InvoiceManager mgr, 
             DateTime checkDate)
         {
             var eligibleSellers =
                  mgr.GetTable<Organization>()
-                     .Where(x => (x.OrganizationExtension.ExpirationDate == null)
-                         || (x.OrganizationExtension.ExpirationDate.Value.CompareTo(checkDate) >= 0))
-                     .Where(x => x.OrganizationExtension.GoLiveDate.Value.CompareTo(checkDate) <= 0)
-                     //.Where(x => x.OrganizationExtension.InvoiceNotUploadedAlert == true)
+                     .Where(x => (!x.OrganizationExtension.ExpirationDate.HasValue)
+                         || (x.OrganizationExtension.ExpirationDate >= checkDate))
+                     .Where(x => x.OrganizationExtension.GoLiveDate <= checkDate)
                      .Where(x => x.OrganizationStatus.CurrentLevel != (int)Naming.MemberStatusDefinition.Mark_To_Delete)
-                     .Join(mgr.GetTable<OrganizationCategory>(),
-                        i => i.CompanyID, d => d.CompanyID, (i, d) => d)
-                     .Where(y =>
-                         y.CategoryID == (int)CategoryDefinition.CategoryEnum.發票開立營業人
-                         || y.CategoryID == (int)CategoryDefinition.CategoryEnum.經銷商)
-                     .Select(z => z.CompanyID)
-                     .ToList();
+                     .Where(x => x.OrganizationCategory
+                                    .Where(y=> y.CategoryID == (int)CategoryDefinition.CategoryEnum.發票開立營業人
+                                        || y.CategoryID == (int)CategoryDefinition.CategoryEnum.經銷商)
+                                    .Any());
 
-            var eligibleInvoiceCountNotZeroSellers =
-                mgr.GetTable<InvoiceItem>()
-                    .Where(x => x.InvoiceDate.Value.Year == checkDate.Year)
-                    .Where(x => x.InvoiceDate.Value.Month == checkDate.Month)
-                    .Where(x => x.InvoiceDate.Value.Day == checkDate.Day)
-                    .Where(x => eligibleSellers.Contains((int)x.SellerID))
-                    .GroupBy(x => x.SellerID)
-                    .Select(y => y.Key ?? 0);
+            //var eligibleInvoiceCountNotZeroSellers =
+            //    mgr.GetTable<InvoiceItem>()
+            //        .Where(x => x.InvoiceDate.Value.Year == checkDate.Year)
+            //        .Where(x => x.InvoiceDate.Value.Month == checkDate.Month)
+            //        .Where(x => x.InvoiceDate.Value.Day == checkDate.Day)
+            //        .Where(x => eligibleSellers.Contains((int)x.SellerID))
+            //        .GroupBy(x => x.SellerID)
+            //        .Select(y => y.Key ?? 0);
 
+            //var eligibleInvoiceCountZeroSellers
+            //    = eligibleSellers.Except(eligibleInvoiceCountNotZeroSellers).ToList();
+            var invoiceItems = mgr.GetTable<InvoiceItem>()
+                .Where(i => i.InvoiceDate >= checkDate)
+                .Where(i => i.InvoiceDate < checkDate.AddDays(1));
             var eligibleInvoiceCountZeroSellers
-                = eligibleSellers.Except(eligibleInvoiceCountNotZeroSellers).ToList();
+                = eligibleSellers.Where(c => !invoiceItems.Any(i => i.SellerID == c.CompanyID));
 
             return eligibleInvoiceCountZeroSellers;
         }

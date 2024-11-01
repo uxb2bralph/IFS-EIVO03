@@ -11,6 +11,7 @@ using InvoiceClient.Agent;
 using Utility;
 using Newtonsoft.Json;
 using Model.Locale;
+using InvoiceClient.Helper;
 
 namespace InvoiceClient.TransferManagement
 {
@@ -29,6 +30,7 @@ namespace InvoiceClient.TransferManagement
             public String AllowanceRequestPath { get; set; } = "Allowance";
             public String VoidAllowanceRequestPath { get; set; } = "CancelAllowance";
         }
+        public ITabWorkItem WorkItem { get; set; }
 
         public XmlInvoiceTransferManagerForCBE()
         {

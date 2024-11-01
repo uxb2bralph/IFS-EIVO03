@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Utility;
 using Uxnet.Com.Security.UseCrypto;
+using DataAccessLayer;
 
 namespace Business.Helper.ReportProcessor
 {
@@ -29,12 +30,12 @@ namespace Business.Helper.ReportProcessor
     {
         public static void CreateReport(this MonthlyReportQueryViewModel viewModel)
         {
-            if(!viewModel.DateFrom.HasValue)
+            if (!viewModel.DateFrom.HasValue)
             {
                 viewModel.DateFrom = DateTime.Today;
             }
 
-            if(!viewModel.DateTo.HasValue)
+            if (!viewModel.DateTo.HasValue)
             {
                 viewModel.DateTo = viewModel.DateFrom.Value.AddMonths(1);
             }
@@ -72,7 +73,7 @@ namespace Business.Helper.ReportProcessor
                     {
                         int chargeAmountByAgent = 0;
                         DataTable table = new DataTable("發票資料明細");
-//ds.Tables.Add(table);
+                        //ds.Tables.Add(table);
                         table.Columns.Add("營業人名稱");
                         table.Columns.Add("統一編號");
                         table.Columns.Add("發票", typeof(int));
@@ -87,7 +88,7 @@ namespace Business.Helper.ReportProcessor
 
                         foreach (var issuer in sellers)
                         {
-                            for (DateTime idx = viewModel.DateFrom.Value; idx < viewModel.DateTo; )
+                            for (DateTime idx = viewModel.DateFrom.Value; idx < viewModel.DateTo;)
                             {
                                 var end = idx.AddMonths(1);
                                 var r = table.NewRow();
@@ -108,9 +109,9 @@ namespace Business.Helper.ReportProcessor
                                     , organization: seller
                                     , idx);
 
-                                r[9] = (sellerMonthlyBilling == null) ? 0:sellerMonthlyBilling.TotalIssueCount;
-                                r[10] = (sellerMonthlyBilling == null) ? 0:sellerMonthlyBilling.IssueChargeAmount;
-                                
+                                r[9] = (sellerMonthlyBilling == null) ? 0 : sellerMonthlyBilling.TotalIssueCount;
+                                r[10] = (sellerMonthlyBilling == null) ? 0 : sellerMonthlyBilling.IssueChargeAmount;
+
                                 //上線月份不計費
                                 if ((seller.OrganizationExtension?.GoLiveDate?.ToString("yyyyMM")
                                             == $"{idx:yyyyMM}"))
@@ -126,7 +127,7 @@ namespace Business.Helper.ReportProcessor
                             }
                         }
 
-                        DataTable orderedDataTable 
+                        DataTable orderedDataTable
                             = table.AsEnumerable()
                             .OrderByDescending(row => !string.IsNullOrWhiteSpace(row.Field<string>("上線日期")))
                             .ThenBy(row => row.Field<string>("上線日期"))
@@ -182,7 +183,7 @@ namespace Business.Helper.ReportProcessor
             return dataModels.GetTable<Settlement>()
                     .Where(i => i.Year == Convert.ToInt32($"{queryFromDate:yyyy}"))
                     .Where(i => i.Month == Convert.ToInt32($"{queryFromDate:MM}"))
-                    .Join(dataModels.GetTable<MonthlyBilling>().Where(i => i.Organization==organization),
+                    .Join(dataModels.GetTable<MonthlyBilling>().Where(i => i.Organization == organization),
                                     c => c.SettlementID
                                     , i => i.SettlementID
                                     , (c, i) => i).FirstOrDefault();
@@ -191,9 +192,11 @@ namespace Business.Helper.ReportProcessor
         public static IQueryable<InvoiceCancellation> GetInvoiceCancellation(this GenericManager<EIVOEntityDataContext> models, int sellerID, DateTime dateFrom, DateTime dateTo)
         {
             var cancelInvoice = models.GetTable<InvoiceCancellation>()
-                                .Where(i => i.CancelDate >= dateFrom)
-                                .Where(i => i.CancelDate < dateTo)
-                                .Join(models.GetTable<InvoiceItem>().Where(i => i.SellerID == sellerID),
+                                
+                                .Join(models.GetTable<InvoiceItem>()
+                                    .Where(i => i.InvoiceDate >= dateFrom)
+                                    .Where(i => i.InvoiceDate < dateTo)
+                                    .Where(i => i.SellerID == sellerID),
                                     c => c.InvoiceID, i => i.InvoiceID, (c, i) => c);
 
             return cancelInvoice;

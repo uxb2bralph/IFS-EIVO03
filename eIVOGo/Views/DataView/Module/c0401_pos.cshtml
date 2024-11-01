@@ -52,7 +52,7 @@
 @if (_model != null)
 {
   <div class="page__break--after">
-    <div class="eivo__wrapper" style="@(_buyer.IsB2C() ? "page-break-after: always; min-height: 273.3px;" : "min-height: 310px;")">
+    <div class="eivo__wrapper" style="@(_buyer.IsB2C() ? "page-break-after: always" : null)">
       <div class="eivo__cutfield">
         @if (_model.Organization.LogoURL != null)
         {
@@ -100,7 +100,7 @@
         </div>
         <div class="code1">
             @{ String data = $"{_model.InvoiceDate.Value.Year - 1911:000}{(_model.InvoiceDate.Value.Month + 1) / 2 * 2:00}{_model.TrackCode}{_model.No}{_model.RandomNo}";}
-            <img id="barcode" alt="" src="@(data.GetBarcode39ImageSrc(wide:2,narrow:1,height:35,margin:0))" />
+            <img id="barcode" alt="" src="@(data.GetBarcode39ImageSrc(wide:2,narrow:1,height:33,margin:0))" />
             @*<img id="barcode" alt="" width="160" height="22" src="@(String.Format("{0}{1}?{2}", Uxnet.Web.Properties.Settings.Default.HostUrl, VirtualPathUtility.ToAbsolute("~/Published/GetBarCode39.ashx"), data))" />*@
         </div>
         <div class="code2">

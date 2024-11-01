@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 
 using InvoiceClient.Agent;
@@ -65,7 +68,7 @@ namespace InvoiceClient.TransferManagement
         {
             using (WS_Invoice.eInvoiceService invSvc = InvoiceWatcher.CreateInvoiceService())
             {
-
+                var tmpInfo = ServiceInfo ?? AppSettings.Default.ServiceInfo;
                 try
                 {
                     Root token = invSvc.CreateMessageToken("讀取系統服務資訊");
@@ -73,14 +76,38 @@ namespace InvoiceClient.TransferManagement
                     if (result != null)
                     {
                         Logger.Info("ServerInfo:" + result);
-                        ServiceInfo = JsonConvert.DeserializeObject<ServiceInfo>(result);
+                        AppSettings.Default.ServiceInfo = ServiceInfo = JsonConvert.DeserializeObject<ServiceInfo>(result);
+                        if (tmpInfo == null)
+                        {
+                            AppSettings.Default.Save();
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.Error(ex);
+                    ServiceInfo = tmpInfo;
+                    Task.Run(() =>
+                    {
+                        MessageBox.Show($"請檢查網址及網路是否正確!!\r\n{Settings.Default.InvoiceClient_WS_Invoice_eInvoiceService}", "伺服端連線異常", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+                    });
                 }
             }
+
+            if (ServiceInfo == null)
+            {
+                //MessageBox.Show($"伺服端連線異常，請檢查網址及網路是否正確!!\r\n{Settings.Default.InvoiceClient_WS_Invoice_eInvoiceService}", "程式即將終止", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show($"用戶端ServiceInfo初始化失敗!!", "程式即將終止", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                Process.GetCurrentProcess().Kill();
+            }
+            //else
+            //{
+            //    if(!AppSettings.Default.DefaultProcessType.HasValue)
+            //    {
+            //        AppSettings.Default.DefaultProcessType = ServiceInfo.DefaultProcessType;
+            //        AppSettings.Default.Save();
+            //    }
+            //}
         }
 
 

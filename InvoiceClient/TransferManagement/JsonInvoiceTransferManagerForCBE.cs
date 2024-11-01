@@ -12,6 +12,7 @@ using Utility;
 using Newtonsoft.Json;
 using Model.Locale;
 using InvoiceClient.MainContent;
+using InvoiceClient.Helper;
 
 namespace InvoiceClient.TransferManagement
 {
@@ -22,6 +23,7 @@ namespace InvoiceClient.TransferManagement
         private InvoiceWatcher _AllowanceWatcher;
         private InvoiceWatcher _AllowanceCancellationWatcher;
         private JsonInvoiceTransferManagerForCBE.LocalSettings _Settings;
+        public ITabWorkItem WorkItem { get; set; }
 
         public JsonInvoiceTransferManagerForCBE()
         {

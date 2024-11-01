@@ -18,7 +18,7 @@ using Model.DataEntity;
 using Model.Models.ViewModel;
 using ModelExtension.Helper;
 using Utility;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
 using Uxnet.Web.Controllers;
 
 namespace eIVOGo.Controllers

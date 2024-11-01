@@ -17,6 +17,8 @@ using Newtonsoft.Json.Linq;
 using System.Web;
 using System.Net;
 using Uxnet.Com.Helper;
+using Model.Helper;
+using System.Security.Cryptography;
 
 namespace InvoiceClient.Agent.POSHelper
 {
@@ -25,26 +27,32 @@ namespace InvoiceClient.Agent.POSHelper
     {
         private static InvoiceNoInspector _Instance;
 
-        private String _InvoiceNoInProgress;
-
         public InvoiceNoInspector()
         {
-
-            _InvoiceNoInProgress = $"{POSReady._Settings.InvoiceNoPreload}(InProgress)";
-            _InvoiceNoInProgress.CheckStoredPath();
-
             _Instance = this;
         }
 
         public override void StartUp()
         {
-            InvokeService(ReceiveInvoiceNo);
+            InvokeService(CheckToPreload);
+        }
+
+        private void CheckToPreload()
+        {
+            if(POSReady.Settings.PreloadInvoiceNo)
+            {
+                ReceiveInvoiceNo();
+            }
         }
 
         private void ReceiveInvoiceNo()
         {
-            String path = Path.Combine(POSReady._Settings.InvoiceNoPreload, $"{DateTime.Today.Year:0000}", $"{(DateTime.Today.Month + 1) / 2:00}");
-            path.CheckStoredPath();
+            if (POSReady.Settings.SellerReceiptNo == null)
+            {
+                return;
+            }
+
+            String path = GetInvoiceNoPreloadPath(DateTime.Today).CheckStoredPath();
 
             if (Directory.EnumerateFiles(path).Count() > POSReady._Settings.LowVolumeAlert)
                 return;
@@ -54,11 +62,18 @@ namespace InvoiceClient.Agent.POSHelper
             {
                 client.Timeout = 43200000;
                 client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                var seed = $"{DateTime.Now.Ticks % 100000000:00000000}";
+                client.Headers["Seed"] = seed ;
+                using (SHA256 hash = SHA256.Create())
+                {
+                    client.Headers["Authorization"] = Settings.Default.ActivationKey.ComputeAuthorization(Settings.Default.SellerReceiptNo, hash, seed);
+                }
+
                 String result = client.UploadString(url,
                     JsonConvert.SerializeObject(
                         new
                         {
-                            SellerID = Settings.Default.SellerReceiptNo,
+                            SellerID = POSReady.Settings.SellerReceiptNo,
                             POSReady._Settings.Booklet,
                         }));
                 try
@@ -67,8 +82,7 @@ namespace InvoiceClient.Agent.POSHelper
 
                     if (invoiceNo?.invoice_issue!=null)
                     {
-                        path = Path.Combine(POSReady._Settings.InvoiceNoPreload, $"{invoiceNo.Year:0000}", $"{invoiceNo.PeriodNo:00}");
-                        path.CheckStoredPath();
+                        path = GetInvoiceNoPreloadPath(invoiceNo.Year, invoiceNo.PeriodNo).CheckStoredPath();
 
                         foreach (var item in invoiceNo.invoice_issue)
                         {
@@ -90,12 +104,23 @@ namespace InvoiceClient.Agent.POSHelper
             get { return null; }
         }
 
-        public static InvoiceIssue ConsumeInvoiceNo()
+        public static String GetInvoiceNoPreloadPath(DateTime invoiceDate)
+        {
+            return GetInvoiceNoPreloadPath(invoiceDate.Year, (invoiceDate.Month + 1) / 2);
+        }
+
+        public static String GetInvoiceNoPreloadPath(int? year,int? periodNo)
+        {
+            return Path.Combine(POSReady._Settings.InvoiceNoPreload, POSReady.Settings.SellerReceiptNo, $"{year:0000}", $"{periodNo:00}");
+        }
+
+
+        public static InvoiceIssue ConsumeInvoiceNo(DateTime invoiceDate)
         {
             InvoiceIssue result = null;
             if (_Instance != null)
             {
-                String path = Path.Combine(POSReady._Settings.InvoiceNoPreload, $"{DateTime.Today.Year:0000}", $"{(DateTime.Today.Month + 1) / 2:00}");
+                String path = GetInvoiceNoPreloadPath(invoiceDate);
                 path.CheckStoredPath();
                 lock (_Instance)
                 {

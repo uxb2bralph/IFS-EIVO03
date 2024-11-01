@@ -1,0 +1,78 @@
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+
+    ModelSource<InvoiceItem> models;
+    String _listID = "itemList" + DateTime.Now.Ticks;
+    QueryViewModel _viewModel;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _viewModel = (QueryViewModel)ViewBag.ViewModel;
+
+}
+
+@RenderSection("PrepareQueryResult")
+
+<table id="@(_listID)" class="table01 itemList">
+    <thead>
+        <tr>
+            @foreach (var col in _viewModel.DataColumns)
+            {
+                Write(col.ShowHeader(null));
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @RenderSection("DataItemList", true)
+    </tbody>
+    <tfoot>
+        <tr>
+            @foreach (var col in _viewModel.DataColumns)
+            {
+                Write(col.ShowFooter(this.Model));
+            }
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+    $(function () {
+        $("#@(_listID)").find("input[name='chkAll']")
+            .click(function () {
+                $("#@(_listID)").find("input[name='chkItem']")
+                    .prop('checked', $(this).is(':checked'));
+            });
+
+        $("#@(_listID)").find("input[name='chkItem']")
+            .click(function (e) {
+                if (!$(this).is(':checked')) {
+                    $("#@(_listID)").find("input[name='chkAll']").prop('checked', false);
+                }
+            });
+    });
+    $inquiryAgent.doPage = function (data) {
+        $('#@(_listID) tbody')
+            .empty()
+            .append(data);
+
+        $("#@(_listID)").find("input[name='chkItem']")
+            .click(function (e) {
+                if (!$(this).is(':checked')) {
+                    $("#@(_listID)").find("input[name='chkAll']").prop('checked', false);
+                }
+            });
+    };
+</script>

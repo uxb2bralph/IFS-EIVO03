@@ -33,7 +33,10 @@ namespace InvoiceClient.MainContent
         {
             get { return "社福機構"; }
         }
+        public void ReportStatus()
+        {
 
+        }
         private void btnAutoWelfare_Click(object sender, EventArgs e)
         {
             int interval;

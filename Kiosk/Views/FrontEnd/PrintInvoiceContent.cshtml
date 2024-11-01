@@ -10,6 +10,7 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@using Kiosk.Properties
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,23 +19,28 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <style type="text/css">
         @@page {
-            /*size: portrait;*/ /* 直向 */
-            /*size: A4 portrait;*/ /* 混合使用 */
-            margin: -0cm; /* 邊界與內容的距離 */
+            /*size: portrait;*/
+            /* 直向 */
+            /*size: A4 portrait;*/
+            /* 混合使用 */
+            margin: 0.2cm;
+            /* 邊界與內容的距離 */
         }
 
         @@media print {
             body {
-                zoom: 150%;
+                zoom: @($"{AppSettings.Default.Zoom}%");
             }
         }
 
+        p {
+            /*font-weight: bolder;*/
+        }
+
         body {
-            margin: 0px;
-            margin-left: 0.6cm;
-            margin-right: 0.6cm;
-            padding: 0px;
-            font-family: "Arial", "Verdana","Helvetica", "sans-serif", "細明體", "新細明體";
+            margin:0px;
+            font-weight: bold;
+            font-family: monospace;
         }
 
         .container {
@@ -43,11 +49,11 @@
             /*height:9.4cm;*/
             border-top: 1px dotted #999;
             border-bottom: 1px dotted #999;
-            padding-top: 0.3cm;
+            @* padding-top: 0.3cm; *@
         }
 
             .container .cutfield {
-                border: 1px dashed #808080;
+                @* border: 1px dashed #808080; *@
                 display: block;
                 /*width:5.7cm;*/
                 /*height:9cm;*/
@@ -55,25 +61,25 @@
                 float: left;
             }
 
-                .container .cutfield h2 {
-                    font-size: 17pt;
-                    line-height: 1;
-                    letter-spacing: -1px;
-                    /*text-align:center;*/
-                    padding: 0;
-                    margin-left: 5px;
-                    margin-top: 0;
-                    margin-right: 0;
-                    margin-bottom: 0;
-                }
+        .container .cutfield h2 {
+            font-size: 20pt;
+            line-height: 1;
+            @* letter-spacing: -1px; *@
+            /*text-align:center;*/
+            padding: 0;
+            margin-left: 5px;
+            margin-top: 0;
+            margin-right: 0;
+            margin-bottom: 0;
+        }
 
                 .container .cutfield h3 {
-                    width: 5.2cm;
+                    width: 5.5cm;
                     font-size: 13pt;
                     line-height: 1.4;
-                    text-align: center;
+                    @* text-align: center;
                     padding: 0;
-                    padding-top: 1cm;
+                    padding-top: 1cm; *@
                     /*padding-bottom:0.2cm;*/
                     margin: 0 auto;
                 }
@@ -88,15 +94,15 @@
                         margin: 0;
                     }
 
-                .container .cutfield p {
-                    font-size: 8pt;
-                    line-height: 1.2;
-                    padding: 0;
-                    padding-top: 0.1cm;
-                    padding-left: 0.1cm;
-                    padding-right: 0.2cm;
-                    margin: 0;
-                }
+        .container .cutfield p {
+            font-size: 12pt;
+            line-height: 1;
+            padding: 0;
+            /*padding-top: 0.1cm;*/
+            padding-left: 0.1cm;
+            padding-right: 0.2cm;
+            margin: 0;
+        }
 
                     .container .cutfield p.sign {
                         font-size: 10pt;
@@ -130,7 +136,7 @@
                 .container .cutfield .code1 {
                     /*text-align:center;*/
                     padding: 0;
-                    padding-top: 0.2cm;
+                    padding-top: 2px;
                     margin: 0;
                 }
 
@@ -269,12 +275,14 @@
             height: 8.9cm;
         }
 
-        body, td, th {
-            font-family: Verdana, Arial, Helvetica, sans-serif, "細明體", "新細明體";
+        body,
+        td,
+        th {
+            /* font-family: Verdana, Arial, Helvetica, sans-serif, "細明體", "新細明體"; */
         }
     </style>
 </head>
-<body style="margin:0px;">
+<body style="margin:0px;font-weight: bold;font-family: monospace;">
     <form id="theForm">
         @RenderSection("InvoiceContent")
     </form>

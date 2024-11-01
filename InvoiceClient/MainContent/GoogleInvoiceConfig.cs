@@ -73,5 +73,9 @@ namespace InvoiceClient.MainContent
         {
             get { return "E-GUI Request"; }
         }
+        public void ReportStatus()
+        {
+
+        }
     }
 }

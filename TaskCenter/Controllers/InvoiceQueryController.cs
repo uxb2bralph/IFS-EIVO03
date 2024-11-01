@@ -1,5 +1,4 @@
 ﻿using ApplicationResource;
-using Business.Helper;
 using Model.DataEntity;
 using Model.Locale;
 using Model.Models.ViewModel;
@@ -28,7 +27,7 @@ namespace TaskCenter.Controllers
 
             if (item != null)
             {
-                switch(viewModel.QueryType)
+                switch (viewModel.QueryType)
                 {
                     case DataQueryType.Invoice:
                     case DataQueryType.CountInvoice:
@@ -49,7 +48,7 @@ namespace TaskCenter.Controllers
                     case DataQueryType.InovoiceNoAllocation:
                         return JsonInvoiceNoAllocation(viewModel, item);
 
-				}
+                }
             }
 
             if (!ModelState.IsValid)
@@ -60,10 +59,10 @@ namespace TaskCenter.Controllers
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
         }
 
-		public ActionResult JsonInvoiceNoAllocation(InvoiceDataQueryViewModel viewModel, Organization agent)
-		{
+        public ActionResult JsonInvoiceNoAllocation(InvoiceDataQueryViewModel viewModel, Organization agent)
+        {
             IQueryable<InvoiceTrackCodeAssignment> assignments = models.GetTable<InvoiceTrackCodeAssignment>();
-			IQueryable<InvoiceNoInterval> items = models.GetTable<InvoiceNoInterval>();
+            IQueryable<InvoiceNoInterval> items = models.GetTable<InvoiceNoInterval>();
 
             viewModel.IssuerNo = viewModel.IssuerNo.GetEfficientString();
             if (viewModel.IssuerNo != null)
@@ -75,18 +74,18 @@ namespace TaskCenter.Controllers
             }
             else
             {
-				var issuers = models.GetTable<InvoiceIssuerAgent>().Where(x => x.AgentID == agent.CompanyID);
+                var issuers = models.GetTable<InvoiceIssuerAgent>().Where(x => x.AgentID == agent.CompanyID);
                 assignments = assignments.Where(a => a.SellerID == agent.CompanyID
                                 || issuers.Any(x => x.IssuerID == a.SellerID));
-			}
+            }
 
             IQueryable<InvoiceTrackCode> trackItems = models.GetTable<InvoiceTrackCode>();
-			if (viewModel.Year.HasValue)
-			{
-                trackItems= trackItems.Where(x => x.Year == viewModel.Year);
-			}
+            if (viewModel.Year.HasValue)
+            {
+                trackItems = trackItems.Where(x => x.Year == viewModel.Year);
+            }
 
-			if (viewModel.PeriodNo.HasValue)
+            if (viewModel.PeriodNo.HasValue)
             {
                 trackItems = trackItems.Where(x => x.PeriodNo == viewModel.PeriodNo);
             }
@@ -96,10 +95,10 @@ namespace TaskCenter.Controllers
 
             return View("~/Views/InvoiceQuery/JsonInvoiceNoAllocation.cshtml", items);
 
-		}
+        }
 
 
-		public ActionResult JsonInvoice(InvoiceDataQueryViewModel viewModel,Organization agent)
+        public ActionResult JsonInvoice(InvoiceDataQueryViewModel viewModel, Organization agent)
         {
             IQueryable<InvoiceItem> items = models.DataContext.GetInvoiceByAgent(agent.CompanyID);
 
@@ -117,7 +116,7 @@ namespace TaskCenter.Controllers
                         .Take(viewModel.PageSize.Value);
                 }
 
-                var dataItems = items.Select(c => c.CreateC0401(true)).ToList();
+                var dataItems = items.Select(c => c.CreateInvoiceMIG(true)).ToList();
                 return Content(dataItems.JsonStringify(), "application/json");
             }
         }
@@ -140,7 +139,7 @@ namespace TaskCenter.Controllers
                         .Take(viewModel.PageSize.Value);
                 }
 
-                var dataItems = items.Select(c => c.CreateC0501(true)).ToList();
+                var dataItems = items.Select(c => c.CreateInvoiceCancellationMIG(true)).ToList();
                 return Content(dataItems.JsonStringify(), "application/json");
             }
         }
@@ -162,8 +161,8 @@ namespace TaskCenter.Controllers
                     items = items.Skip((viewModel.PageIndex.Value - 1) * viewModel.PageSize.Value)
                         .Take(viewModel.PageSize.Value);
                 }
-                var dataItems = items.Select(c => c.CreateD0401(models, true)).ToList();
-                return Content(dataItems.JsonStringify(), "application/json");
+                var dataItems = items.Select(c => c.CreateAllowanceMIG(models, true)).ToList();
+                return Content(dataItems.JsonStringify().Replace(".00000", ""), "application/json");
             }
         }
 
@@ -185,7 +184,7 @@ namespace TaskCenter.Controllers
                         .Take(viewModel.PageSize.Value);
                 }
 
-                var dataItems = items.Select(c => c.CreateD0501(true)).ToList();
+                var dataItems = items.Select(c => c.CreateAllowanceCancellationMIG(true)).ToList();
                 return Content(dataItems.JsonStringify(), "application/json");
 
             }

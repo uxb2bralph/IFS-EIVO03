@@ -361,9 +361,6 @@ namespace Model.DataEntity
     partial void InsertDocumentFlowBranch(DocumentFlowBranch instance);
     partial void UpdateDocumentFlowBranch(DocumentFlowBranch instance);
     partial void DeleteDocumentFlowBranch(DocumentFlowBranch instance);
-    partial void InsertDataProcessLog(DataProcessLog instance);
-    partial void UpdateDataProcessLog(DataProcessLog instance);
-    partial void DeleteDataProcessLog(DataProcessLog instance);
     partial void InsertA0401DispatchQueue(A0401DispatchQueue instance);
     partial void UpdateA0401DispatchQueue(A0401DispatchQueue instance);
     partial void DeleteA0401DispatchQueue(A0401DispatchQueue instance);
@@ -388,9 +385,6 @@ namespace Model.DataEntity
     partial void InsertD0501DispatchQueue(D0501DispatchQueue instance);
     partial void UpdateD0501DispatchQueue(D0501DispatchQueue instance);
     partial void DeleteD0501DispatchQueue(D0501DispatchQueue instance);
-    partial void InsertC0401DispatchQueue(C0401DispatchQueue instance);
-    partial void UpdateC0401DispatchQueue(C0401DispatchQueue instance);
-    partial void DeleteC0401DispatchQueue(C0401DispatchQueue instance);
     partial void InsertA0101DispatchQueue(A0101DispatchQueue instance);
     partial void UpdateA0101DispatchQueue(A0101DispatchQueue instance);
     partial void DeleteA0101DispatchQueue(A0101DispatchQueue instance);
@@ -514,6 +508,24 @@ namespace Model.DataEntity
     partial void InsertBillSubmission(BillSubmission instance);
     partial void UpdateBillSubmission(BillSubmission instance);
     partial void DeleteBillSubmission(BillSubmission instance);
+    partial void InsertC0401DispatchQueue(C0401DispatchQueue instance);
+    partial void UpdateC0401DispatchQueue(C0401DispatchQueue instance);
+    partial void DeleteC0401DispatchQueue(C0401DispatchQueue instance);
+    partial void InsertDataProcessLog(DataProcessLog instance);
+    partial void UpdateDataProcessLog(DataProcessLog instance);
+    partial void DeleteDataProcessLog(DataProcessLog instance);
+    partial void InsertDocumentPostLog(DocumentPostLog instance);
+    partial void UpdateDocumentPostLog(DocumentPostLog instance);
+    partial void DeleteDocumentPostLog(DocumentPostLog instance);
+    partial void InsertInvoicePurchaseOrderAudit(InvoicePurchaseOrderAudit instance);
+    partial void UpdateInvoicePurchaseOrderAudit(InvoicePurchaseOrderAudit instance);
+    partial void DeleteInvoicePurchaseOrderAudit(InvoicePurchaseOrderAudit instance);
+    partial void InsertMasterBranch(MasterBranch instance);
+    partial void UpdateMasterBranch(MasterBranch instance);
+    partial void DeleteMasterBranch(MasterBranch instance);
+    partial void InsertMasterOrganization(MasterOrganization instance);
+    partial void UpdateMasterOrganization(MasterOrganization instance);
+    partial void DeleteMasterOrganization(MasterOrganization instance);
     #endregion
 		
 		public EIVOEntityDataContext() : 
@@ -1434,14 +1446,6 @@ namespace Model.DataEntity
 			}
 		}
 		
-		public System.Data.Linq.Table<DataProcessLog> DataProcessLog
-		{
-			get
-			{
-				return this.GetTable<DataProcessLog>();
-			}
-		}
-		
 		public System.Data.Linq.Table<A0401DispatchQueue> A0401DispatchQueue
 		{
 			get
@@ -1503,14 +1507,6 @@ namespace Model.DataEntity
 			get
 			{
 				return this.GetTable<D0501DispatchQueue>();
-			}
-		}
-		
-		public System.Data.Linq.Table<C0401DispatchQueue> C0401DispatchQueue
-		{
-			get
-			{
-				return this.GetTable<C0401DispatchQueue>();
 			}
 		}
 		
@@ -1842,6 +1838,54 @@ namespace Model.DataEntity
 			}
 		}
 		
+		public System.Data.Linq.Table<C0401DispatchQueue> C0401DispatchQueue
+		{
+			get
+			{
+				return this.GetTable<C0401DispatchQueue>();
+			}
+		}
+		
+		public System.Data.Linq.Table<DataProcessLog> DataProcessLog
+		{
+			get
+			{
+				return this.GetTable<DataProcessLog>();
+			}
+		}
+		
+		public System.Data.Linq.Table<DocumentPostLog> DocumentPostLog
+		{
+			get
+			{
+				return this.GetTable<DocumentPostLog>();
+			}
+		}
+		
+		public System.Data.Linq.Table<InvoicePurchaseOrderAudit> InvoicePurchaseOrderAudit
+		{
+			get
+			{
+				return this.GetTable<InvoicePurchaseOrderAudit>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MasterBranch> MasterBranches
+		{
+			get
+			{
+				return this.GetTable<MasterBranch>();
+			}
+		}
+		
+		public System.Data.Linq.Table<MasterOrganization> MasterOrganizations
+		{
+			get
+			{
+				return this.GetTable<MasterOrganization>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.MatchDocumentAttachment")]
 		public int MatchDocumentAttachment()
 		{
@@ -2041,6 +2085,12 @@ namespace Model.DataEntity
 		private EntitySet<MonthlyBilling> _MonthlyBilling;
 		
 		private EntityRef<BillingExtension> _BillingExtension;
+		
+		private EntitySet<InvoicePurchaseOrderAudit> _InvoicePurchaseOrderAudit;
+		
+		private EntitySet<MasterBranch> _MasterBranches;
+		
+		private EntityRef<MasterOrganization> _MasterOrganization;
 		
 		private bool serializing;
 		
@@ -3459,6 +3509,79 @@ namespace Model.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoicePurchaseOrderAudit", Storage="_InvoicePurchaseOrderAudit", ThisKey="CompanyID", OtherKey="SellerID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=65, EmitDefaultValue=false)]
+		public EntitySet<InvoicePurchaseOrderAudit> InvoicePurchaseOrderAudit
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._InvoicePurchaseOrderAudit.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._InvoicePurchaseOrderAudit;
+			}
+			set
+			{
+				this._InvoicePurchaseOrderAudit.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_MasterBranch", Storage="_MasterBranches", ThisKey="CompanyID", OtherKey="BranchID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=66, EmitDefaultValue=false)]
+		public EntitySet<MasterBranch> MasterBranches
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._MasterBranches.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._MasterBranches;
+			}
+			set
+			{
+				this._MasterBranches.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_MasterOrganization", Storage="_MasterOrganization", ThisKey="CompanyID", OtherKey="MasterID", IsUnique=true, IsForeignKey=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=67, EmitDefaultValue=false)]
+		public MasterOrganization MasterOrganization
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._MasterOrganization.HasLoadedOrAssignedValue == false)))
+				{
+					return null;
+				}
+				return this._MasterOrganization.Entity;
+			}
+			set
+			{
+				MasterOrganization previousValue = this._MasterOrganization.Entity;
+				if (((previousValue != value) 
+							|| (this._MasterOrganization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MasterOrganization.Entity = null;
+						previousValue.Organization = null;
+					}
+					this._MasterOrganization.Entity = value;
+					if ((value != null))
+					{
+						value.Organization = this;
+					}
+					this.SendPropertyChanged("MasterOrganization");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -3899,6 +4022,30 @@ namespace Model.DataEntity
 			entity.Organization = null;
 		}
 		
+		private void attach_InvoicePurchaseOrderAudit(InvoicePurchaseOrderAudit entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_InvoicePurchaseOrderAudit(InvoicePurchaseOrderAudit entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
+		private void attach_MasterBranches(MasterBranch entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_MasterBranches(MasterBranch entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
 		private void Initialize()
 		{
 			this._OrganizationCategory = new EntitySet<OrganizationCategory>(new Action<OrganizationCategory>(this.attach_OrganizationCategory), new Action<OrganizationCategory>(this.detach_OrganizationCategory));
@@ -3942,6 +4089,9 @@ namespace Model.DataEntity
 			this._BillingIncrement = new EntitySet<BillingIncrement>(new Action<BillingIncrement>(this.attach_BillingIncrement), new Action<BillingIncrement>(this.detach_BillingIncrement));
 			this._MonthlyBilling = new EntitySet<MonthlyBilling>(new Action<MonthlyBilling>(this.attach_MonthlyBilling), new Action<MonthlyBilling>(this.detach_MonthlyBilling));
 			this._BillingExtension = default(EntityRef<BillingExtension>);
+			this._InvoicePurchaseOrderAudit = new EntitySet<InvoicePurchaseOrderAudit>(new Action<InvoicePurchaseOrderAudit>(this.attach_InvoicePurchaseOrderAudit), new Action<InvoicePurchaseOrderAudit>(this.detach_InvoicePurchaseOrderAudit));
+			this._MasterBranches = new EntitySet<MasterBranch>(new Action<MasterBranch>(this.attach_MasterBranches), new Action<MasterBranch>(this.detach_MasterBranches));
+			this._MasterOrganization = default(EntityRef<MasterOrganization>);
 			OnCreated();
 		}
 		
@@ -5167,8 +5317,6 @@ namespace Model.DataEntity
 		
 		private EntityRef<IssuingNotice> _IssuingNotice;
 		
-		private EntitySet<DataProcessLog> _DataProcessLogs;
-		
 		private EntitySet<A0401DispatchQueue> _A0401DispatchQueue;
 		
 		private EntitySet<A0501DispatchQueue> _A0501DispatchQueue;
@@ -5182,8 +5330,6 @@ namespace Model.DataEntity
 		private EntitySet<D0401DispatchQueue> _D0401DispatchQueue;
 		
 		private EntitySet<D0501DispatchQueue> _D0501DispatchQueue;
-		
-		private EntitySet<C0401DispatchQueue> _C0401DispatchQueue;
 		
 		private EntitySet<A0101DispatchQueue> _A0101DispatchQueue;
 		
@@ -5210,6 +5356,10 @@ namespace Model.DataEntity
 		private EntityRef<ProcessRequestDocument> _ProcessRequestDocument;
 		
 		private EntityRef<CustomerDefined> _CustomerDefined;
+		
+		private EntitySet<C0401DispatchQueue> _C0401DispatchQueue;
+		
+		private EntitySet<DataProcessLog> _DataProcessLog;
 		
 		private EntityRef<DocumentType> _DocumentType;
 		
@@ -6006,27 +6156,8 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_DataProcessLog", Storage="_DataProcessLogs", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=31, EmitDefaultValue=false)]
-		public EntitySet<DataProcessLog> DataProcessLogs
-		{
-			get
-			{
-				if ((this.serializing 
-							&& (this._DataProcessLogs.HasLoadedOrAssignedValues == false)))
-				{
-					return null;
-				}
-				return this._DataProcessLogs;
-			}
-			set
-			{
-				this._DataProcessLogs.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_A0401DispatchQueue", Storage="_A0401DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=32, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=31, EmitDefaultValue=false)]
 		public EntitySet<A0401DispatchQueue> A0401DispatchQueue
 		{
 			get
@@ -6045,7 +6176,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_A0501DispatchQueue", Storage="_A0501DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=33, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=32, EmitDefaultValue=false)]
 		public EntitySet<A0501DispatchQueue> A0501DispatchQueue
 		{
 			get
@@ -6064,7 +6195,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_C0501DispatchQueue", Storage="_C0501DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=34, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=33, EmitDefaultValue=false)]
 		public EntitySet<C0501DispatchQueue> C0501DispatchQueue
 		{
 			get
@@ -6083,7 +6214,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_B0401DispatchQueue", Storage="_B0401DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=35, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=34, EmitDefaultValue=false)]
 		public EntitySet<B0401DispatchQueue> B0401DispatchQueue
 		{
 			get
@@ -6102,7 +6233,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_B0501DispatchQueue", Storage="_B0501DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=36, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=35, EmitDefaultValue=false)]
 		public EntitySet<B0501DispatchQueue> B0501DispatchQueue
 		{
 			get
@@ -6121,7 +6252,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_D0401DispatchQueue", Storage="_D0401DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=37, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=36, EmitDefaultValue=false)]
 		public EntitySet<D0401DispatchQueue> D0401DispatchQueue
 		{
 			get
@@ -6140,7 +6271,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_D0501DispatchQueue", Storage="_D0501DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=38, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=37, EmitDefaultValue=false)]
 		public EntitySet<D0501DispatchQueue> D0501DispatchQueue
 		{
 			get
@@ -6158,27 +6289,8 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_C0401DispatchQueue", Storage="_C0401DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=39, EmitDefaultValue=false)]
-		public EntitySet<C0401DispatchQueue> C0401DispatchQueue
-		{
-			get
-			{
-				if ((this.serializing 
-							&& (this._C0401DispatchQueue.HasLoadedOrAssignedValues == false)))
-				{
-					return null;
-				}
-				return this._C0401DispatchQueue;
-			}
-			set
-			{
-				this._C0401DispatchQueue.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_A0101DispatchQueue", Storage="_A0101DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=40, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=38, EmitDefaultValue=false)]
 		public EntitySet<A0101DispatchQueue> A0101DispatchQueue
 		{
 			get
@@ -6197,7 +6309,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_A0102DispatchQueue", Storage="_A0102DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=41, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=39, EmitDefaultValue=false)]
 		public EntitySet<A0102DispatchQueue> A0102DispatchQueue
 		{
 			get
@@ -6216,7 +6328,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_A0201DispatchQueue", Storage="_A0201DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=42, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=40, EmitDefaultValue=false)]
 		public EntitySet<A0201DispatchQueue> A0201DispatchQueue
 		{
 			get
@@ -6235,7 +6347,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_A0202DispatchQueue", Storage="_A0202DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=43, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=41, EmitDefaultValue=false)]
 		public EntitySet<A0202DispatchQueue> A0202DispatchQueue
 		{
 			get
@@ -6254,7 +6366,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_A0301DispatchQueue", Storage="_A0301DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=44, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=42, EmitDefaultValue=false)]
 		public EntitySet<A0301DispatchQueue> A0301DispatchQueue
 		{
 			get
@@ -6273,7 +6385,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_A0302DispatchQueue", Storage="_A0302DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=45, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=43, EmitDefaultValue=false)]
 		public EntitySet<A0302DispatchQueue> A0302DispatchQueue
 		{
 			get
@@ -6292,7 +6404,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_B0101DispatchQueue", Storage="_B0101DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=46, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=44, EmitDefaultValue=false)]
 		public EntitySet<B0101DispatchQueue> B0101DispatchQueue
 		{
 			get
@@ -6311,7 +6423,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_B0102DispatchQueue", Storage="_B0102DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=47, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=45, EmitDefaultValue=false)]
 		public EntitySet<B0102DispatchQueue> B0102DispatchQueue
 		{
 			get
@@ -6330,7 +6442,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_B0201DispatchQueue", Storage="_B0201DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=48, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=46, EmitDefaultValue=false)]
 		public EntitySet<B0201DispatchQueue> B0201DispatchQueue
 		{
 			get
@@ -6349,7 +6461,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_B0202DispatchQueue", Storage="_B0202DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=49, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=47, EmitDefaultValue=false)]
 		public EntitySet<B0202DispatchQueue> B0202DispatchQueue
 		{
 			get
@@ -6368,7 +6480,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_DocumentPrintQueue", Storage="_DocumentPrintQueue", ThisKey="DocID", OtherKey="DocID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=50, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=48, EmitDefaultValue=false)]
 		public DocumentPrintQueue DocumentPrintQueue
 		{
 			get
@@ -6403,7 +6515,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_ProcessRequestDocument", Storage="_ProcessRequestDocument", ThisKey="DocID", OtherKey="DocID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=51, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=49, EmitDefaultValue=false)]
 		public ProcessRequestDocument ProcessRequestDocument
 		{
 			get
@@ -6438,7 +6550,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_CustomerDefined", Storage="_CustomerDefined", ThisKey="DocID", OtherKey="DocID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=52, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=50, EmitDefaultValue=false)]
 		public CustomerDefined CustomerDefined
 		{
 			get
@@ -6469,6 +6581,44 @@ namespace Model.DataEntity
 					}
 					this.SendPropertyChanged("CustomerDefined");
 				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_C0401DispatchQueue", Storage="_C0401DispatchQueue", ThisKey="DocID", OtherKey="DocID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=51, EmitDefaultValue=false)]
+		public EntitySet<C0401DispatchQueue> C0401DispatchQueue
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._C0401DispatchQueue.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._C0401DispatchQueue;
+			}
+			set
+			{
+				this._C0401DispatchQueue.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_DataProcessLog", Storage="_DataProcessLog", ThisKey="DocID", OtherKey="DocID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=52, EmitDefaultValue=false)]
+		public EntitySet<DataProcessLog> DataProcessLog
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._DataProcessLog.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._DataProcessLog;
+			}
+			set
+			{
+				this._DataProcessLog.Assign(value);
 			}
 		}
 		
@@ -6716,18 +6866,6 @@ namespace Model.DataEntity
 			entity.CDS_Document = null;
 		}
 		
-		private void attach_DataProcessLogs(DataProcessLog entity)
-		{
-			this.SendPropertyChanging();
-			entity.CDS_Document = this;
-		}
-		
-		private void detach_DataProcessLogs(DataProcessLog entity)
-		{
-			this.SendPropertyChanging();
-			entity.CDS_Document = null;
-		}
-		
 		private void attach_A0401DispatchQueue(A0401DispatchQueue entity)
 		{
 			this.SendPropertyChanging();
@@ -6807,18 +6945,6 @@ namespace Model.DataEntity
 		}
 		
 		private void detach_D0501DispatchQueue(D0501DispatchQueue entity)
-		{
-			this.SendPropertyChanging();
-			entity.CDS_Document = null;
-		}
-		
-		private void attach_C0401DispatchQueue(C0401DispatchQueue entity)
-		{
-			this.SendPropertyChanging();
-			entity.CDS_Document = this;
-		}
-		
-		private void detach_C0401DispatchQueue(C0401DispatchQueue entity)
 		{
 			this.SendPropertyChanging();
 			entity.CDS_Document = null;
@@ -6944,6 +7070,30 @@ namespace Model.DataEntity
 			entity.CDS_Document = null;
 		}
 		
+		private void attach_C0401DispatchQueue(C0401DispatchQueue entity)
+		{
+			this.SendPropertyChanging();
+			entity.CDS_Document = this;
+		}
+		
+		private void detach_C0401DispatchQueue(C0401DispatchQueue entity)
+		{
+			this.SendPropertyChanging();
+			entity.CDS_Document = null;
+		}
+		
+		private void attach_DataProcessLog(DataProcessLog entity)
+		{
+			this.SendPropertyChanging();
+			entity.CDS_Document = this;
+		}
+		
+		private void detach_DataProcessLog(DataProcessLog entity)
+		{
+			this.SendPropertyChanging();
+			entity.CDS_Document = null;
+		}
+		
 		private void Initialize()
 		{
 			this._InvoiceItem = default(EntityRef<InvoiceItem>);
@@ -6970,7 +7120,6 @@ namespace Model.DataEntity
 			this._DocumentAuthorization = default(EntityRef<DocumentAuthorization>);
 			this._DocumentPrintLog = new EntitySet<DocumentPrintLog>(new Action<DocumentPrintLog>(this.attach_DocumentPrintLog), new Action<DocumentPrintLog>(this.detach_DocumentPrintLog));
 			this._IssuingNotice = default(EntityRef<IssuingNotice>);
-			this._DataProcessLogs = new EntitySet<DataProcessLog>(new Action<DataProcessLog>(this.attach_DataProcessLogs), new Action<DataProcessLog>(this.detach_DataProcessLogs));
 			this._A0401DispatchQueue = new EntitySet<A0401DispatchQueue>(new Action<A0401DispatchQueue>(this.attach_A0401DispatchQueue), new Action<A0401DispatchQueue>(this.detach_A0401DispatchQueue));
 			this._A0501DispatchQueue = new EntitySet<A0501DispatchQueue>(new Action<A0501DispatchQueue>(this.attach_A0501DispatchQueue), new Action<A0501DispatchQueue>(this.detach_A0501DispatchQueue));
 			this._C0501DispatchQueue = new EntitySet<C0501DispatchQueue>(new Action<C0501DispatchQueue>(this.attach_C0501DispatchQueue), new Action<C0501DispatchQueue>(this.detach_C0501DispatchQueue));
@@ -6978,7 +7127,6 @@ namespace Model.DataEntity
 			this._B0501DispatchQueue = new EntitySet<B0501DispatchQueue>(new Action<B0501DispatchQueue>(this.attach_B0501DispatchQueue), new Action<B0501DispatchQueue>(this.detach_B0501DispatchQueue));
 			this._D0401DispatchQueue = new EntitySet<D0401DispatchQueue>(new Action<D0401DispatchQueue>(this.attach_D0401DispatchQueue), new Action<D0401DispatchQueue>(this.detach_D0401DispatchQueue));
 			this._D0501DispatchQueue = new EntitySet<D0501DispatchQueue>(new Action<D0501DispatchQueue>(this.attach_D0501DispatchQueue), new Action<D0501DispatchQueue>(this.detach_D0501DispatchQueue));
-			this._C0401DispatchQueue = new EntitySet<C0401DispatchQueue>(new Action<C0401DispatchQueue>(this.attach_C0401DispatchQueue), new Action<C0401DispatchQueue>(this.detach_C0401DispatchQueue));
 			this._A0101DispatchQueue = new EntitySet<A0101DispatchQueue>(new Action<A0101DispatchQueue>(this.attach_A0101DispatchQueue), new Action<A0101DispatchQueue>(this.detach_A0101DispatchQueue));
 			this._A0102DispatchQueue = new EntitySet<A0102DispatchQueue>(new Action<A0102DispatchQueue>(this.attach_A0102DispatchQueue), new Action<A0102DispatchQueue>(this.detach_A0102DispatchQueue));
 			this._A0201DispatchQueue = new EntitySet<A0201DispatchQueue>(new Action<A0201DispatchQueue>(this.attach_A0201DispatchQueue), new Action<A0201DispatchQueue>(this.detach_A0201DispatchQueue));
@@ -6992,6 +7140,8 @@ namespace Model.DataEntity
 			this._DocumentPrintQueue = default(EntityRef<DocumentPrintQueue>);
 			this._ProcessRequestDocument = default(EntityRef<ProcessRequestDocument>);
 			this._CustomerDefined = default(EntityRef<CustomerDefined>);
+			this._C0401DispatchQueue = new EntitySet<C0401DispatchQueue>(new Action<C0401DispatchQueue>(this.attach_C0401DispatchQueue), new Action<C0401DispatchQueue>(this.detach_C0401DispatchQueue));
+			this._DataProcessLog = new EntitySet<DataProcessLog>(new Action<DataProcessLog>(this.attach_DataProcessLog), new Action<DataProcessLog>(this.detach_DataProcessLog));
 			this._DocumentType = default(EntityRef<DocumentType>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			OnCreated();
@@ -9711,6 +9861,10 @@ namespace Model.DataEntity
 		
 		private EntityRef<AuthorizeToVoid> _AuthorizeToVoid;
 		
+		private EntitySet<DocumentPostLog> _DocumentPostLog;
+		
+		private EntitySet<InvoicePurchaseOrderAudit> _InvoicePurchaseOrderAudit;
+		
 		private EntityRef<CDS_Document> _CDS_Document;
 		
 		private EntityRef<Organization> _Organization;
@@ -11022,6 +11176,44 @@ namespace Model.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceItem_DocumentPostLog", Storage="_DocumentPostLog", ThisKey="InvoiceID", OtherKey="InvoiceID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=47, EmitDefaultValue=false)]
+		public EntitySet<DocumentPostLog> DocumentPostLog
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._DocumentPostLog.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._DocumentPostLog;
+			}
+			set
+			{
+				this._DocumentPostLog.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceItem_InvoicePurchaseOrderAudit", Storage="_InvoicePurchaseOrderAudit", ThisKey="InvoiceID", OtherKey="InvoiceID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=48, EmitDefaultValue=false)]
+		public EntitySet<InvoicePurchaseOrderAudit> InvoicePurchaseOrderAudit
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._InvoicePurchaseOrderAudit.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._InvoicePurchaseOrderAudit;
+			}
+			set
+			{
+				this._InvoicePurchaseOrderAudit.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_InvoiceItem", Storage="_CDS_Document", ThisKey="InvoiceID", OtherKey="DocID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public CDS_Document CDS_Document
 		{
@@ -11214,6 +11406,30 @@ namespace Model.DataEntity
 			entity.InvoiceItem = null;
 		}
 		
+		private void attach_DocumentPostLog(DocumentPostLog entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceItem = this;
+		}
+		
+		private void detach_DocumentPostLog(DocumentPostLog entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceItem = null;
+		}
+		
+		private void attach_InvoicePurchaseOrderAudit(InvoicePurchaseOrderAudit entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceItem = this;
+		}
+		
+		private void detach_InvoicePurchaseOrderAudit(InvoicePurchaseOrderAudit entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceItem = null;
+		}
+		
 		private void Initialize()
 		{
 			this._InvoiceByHousehold = default(EntityRef<InvoiceByHousehold>);
@@ -11238,6 +11454,8 @@ namespace Model.DataEntity
 			this._InvoiceWinningNumber = default(EntityRef<InvoiceWinningNumber>);
 			this._InvoiceMail = default(EntityRef<InvoiceMail>);
 			this._AuthorizeToVoid = default(EntityRef<AuthorizeToVoid>);
+			this._DocumentPostLog = new EntitySet<DocumentPostLog>(new Action<DocumentPostLog>(this.attach_DocumentPostLog), new Action<DocumentPostLog>(this.detach_DocumentPostLog));
+			this._InvoicePurchaseOrderAudit = new EntitySet<InvoicePurchaseOrderAudit>(new Action<InvoicePurchaseOrderAudit>(this.attach_InvoicePurchaseOrderAudit), new Action<InvoicePurchaseOrderAudit>(this.detach_InvoicePurchaseOrderAudit));
 			this._CDS_Document = default(EntityRef<CDS_Document>);
 			this._Organization = default(EntityRef<Organization>);
 			this._Organization1 = default(EntityRef<Organization>);
@@ -17450,7 +17668,7 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MainMenu", DbType="Xml", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MainMenu", DbType="Xml", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
 		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
 		public System.Xml.Linq.XElement MainMenu
 		{
@@ -28568,7 +28786,7 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExtraRemark", DbType="Xml", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExtraRemark", DbType="Xml", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
 		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
 		public System.Xml.Linq.XElement ExtraRemark
 		{
@@ -33103,7 +33321,7 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExtraRemark", DbType="Xml", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExtraRemark", DbType="Xml", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
 		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
 		public System.Xml.Linq.XElement ExtraRemark
 		{
@@ -34519,7 +34737,7 @@ namespace Model.DataEntity
 		
 		private System.Nullable<int> _InvoiceNoSafetyStock;
 		
-		private System.Nullable<bool> _InvoiceNotUploadedAlert;
+		private string _MailSubjectAlias;
 		
 		private EntityRef<Organization> _Organization;
 		
@@ -34549,8 +34767,8 @@ namespace Model.DataEntity
     partial void OnCreationDateChanged();
     partial void OnInvoiceNoSafetyStockChanging(System.Nullable<int> value);
     partial void OnInvoiceNoSafetyStockChanged();
-    partial void OnInvoiceNotUploadedAlertChanging(System.Nullable<bool> value);
-    partial void OnInvoiceNotUploadedAlertChanged();
+    partial void OnMailSubjectAliasChanging(string value);
+    partial void OnMailSubjectAliasChanged();
     #endregion
 		
 		public OrganizationExtension()
@@ -34793,23 +35011,23 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvoiceNotUploadedAlert", DbType="Bit")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MailSubjectAlias", DbType="NVarChar(64)")]
 		[global::System.Runtime.Serialization.DataMemberAttribute(Order=12)]
-		public System.Nullable<bool> InvoiceNotUploadedAlert
+		public string MailSubjectAlias
 		{
 			get
 			{
-				return this._InvoiceNotUploadedAlert;
+				return this._MailSubjectAlias;
 			}
 			set
 			{
-				if ((this._InvoiceNotUploadedAlert != value))
+				if ((this._MailSubjectAlias != value))
 				{
-					this.OnInvoiceNotUploadedAlertChanging(value);
+					this.OnMailSubjectAliasChanging(value);
 					this.SendPropertyChanging();
-					this._InvoiceNotUploadedAlert = value;
-					this.SendPropertyChanged("InvoiceNotUploadedAlert");
-					this.OnInvoiceNotUploadedAlertChanged();
+					this._MailSubjectAlias = value;
+					this.SendPropertyChanged("MailSubjectAlias");
+					this.OnMailSubjectAliasChanged();
 				}
 			}
 		}
@@ -37340,223 +37558,6 @@ namespace Model.DataEntity
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="[proc].DataProcessLog")]
-	[global::System.Runtime.Serialization.DataContractAttribute()]
-	public partial class DataProcessLog : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _LogID;
-		
-		private int _DocID;
-		
-		private System.DateTime _LogDate;
-		
-		private int _Status;
-		
-		private System.Nullable<int> _StepID;
-		
-		private EntityRef<CDS_Document> _CDS_Document;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnLogIDChanging(int value);
-    partial void OnLogIDChanged();
-    partial void OnDocIDChanging(int value);
-    partial void OnDocIDChanged();
-    partial void OnLogDateChanging(System.DateTime value);
-    partial void OnLogDateChanged();
-    partial void OnStatusChanging(int value);
-    partial void OnStatusChanged();
-    partial void OnStepIDChanging(System.Nullable<int> value);
-    partial void OnStepIDChanged();
-    #endregion
-		
-		public DataProcessLog()
-		{
-			this.Initialize();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
-		public int LogID
-		{
-			get
-			{
-				return this._LogID;
-			}
-			set
-			{
-				if ((this._LogID != value))
-				{
-					this.OnLogIDChanging(value);
-					this.SendPropertyChanging();
-					this._LogID = value;
-					this.SendPropertyChanged("LogID");
-					this.OnLogIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int NOT NULL")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
-		public int DocID
-		{
-			get
-			{
-				return this._DocID;
-			}
-			set
-			{
-				if ((this._DocID != value))
-				{
-					if (this._CDS_Document.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnDocIDChanging(value);
-					this.SendPropertyChanging();
-					this._DocID = value;
-					this.SendPropertyChanged("DocID");
-					this.OnDocIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogDate", DbType="DateTime NOT NULL")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
-		public System.DateTime LogDate
-		{
-			get
-			{
-				return this._LogDate;
-			}
-			set
-			{
-				if ((this._LogDate != value))
-				{
-					this.OnLogDateChanging(value);
-					this.SendPropertyChanging();
-					this._LogDate = value;
-					this.SendPropertyChanged("LogDate");
-					this.OnLogDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
-		public int Status
-		{
-			get
-			{
-				return this._Status;
-			}
-			set
-			{
-				if ((this._Status != value))
-				{
-					this.OnStatusChanging(value);
-					this.SendPropertyChanging();
-					this._Status = value;
-					this.SendPropertyChanged("Status");
-					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StepID", DbType="Int")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
-		public System.Nullable<int> StepID
-		{
-			get
-			{
-				return this._StepID;
-			}
-			set
-			{
-				if ((this._StepID != value))
-				{
-					this.OnStepIDChanging(value);
-					this.SendPropertyChanging();
-					this._StepID = value;
-					this.SendPropertyChanged("StepID");
-					this.OnStepIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_DataProcessLog", Storage="_CDS_Document", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true)]
-		public CDS_Document CDS_Document
-		{
-			get
-			{
-				return this._CDS_Document.Entity;
-			}
-			set
-			{
-				CDS_Document previousValue = this._CDS_Document.Entity;
-				if (((previousValue != value) 
-							|| (this._CDS_Document.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._CDS_Document.Entity = null;
-						previousValue.DataProcessLogs.Remove(this);
-					}
-					this._CDS_Document.Entity = value;
-					if ((value != null))
-					{
-						value.DataProcessLogs.Add(this);
-						this._DocID = value.DocID;
-					}
-					else
-					{
-						this._DocID = default(int);
-					}
-					this.SendPropertyChanged("CDS_Document");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void Initialize()
-		{
-			this._CDS_Document = default(EntityRef<CDS_Document>);
-			OnCreated();
-		}
-		
-		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
-		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public void OnDeserializing(StreamingContext context)
-		{
-			this.Initialize();
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="[proc].A0401DispatchQueue")]
 	[global::System.Runtime.Serialization.DataContractAttribute()]
 	public partial class A0401DispatchQueue : INotifyPropertyChanging, INotifyPropertyChanged
@@ -38823,173 +38824,6 @@ namespace Model.DataEntity
 					if ((value != null))
 					{
 						value.D0501DispatchQueue.Add(this);
-						this._DocID = value.DocID;
-					}
-					else
-					{
-						this._DocID = default(int);
-					}
-					this.SendPropertyChanged("CDS_Document");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void Initialize()
-		{
-			this._CDS_Document = default(EntityRef<CDS_Document>);
-			OnCreated();
-		}
-		
-		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
-		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public void OnDeserializing(StreamingContext context)
-		{
-			this.Initialize();
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="[proc].C0401DispatchQueue")]
-	[global::System.Runtime.Serialization.DataContractAttribute()]
-	public partial class C0401DispatchQueue : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _DocID;
-		
-		private int _StepID;
-		
-		private System.DateTime _DispatchDate;
-		
-		private EntityRef<CDS_Document> _CDS_Document;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnDocIDChanging(int value);
-    partial void OnDocIDChanged();
-    partial void OnStepIDChanging(int value);
-    partial void OnStepIDChanged();
-    partial void OnDispatchDateChanging(System.DateTime value);
-    partial void OnDispatchDateChanged();
-    #endregion
-		
-		public C0401DispatchQueue()
-		{
-			this.Initialize();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
-		public int DocID
-		{
-			get
-			{
-				return this._DocID;
-			}
-			set
-			{
-				if ((this._DocID != value))
-				{
-					if (this._CDS_Document.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnDocIDChanging(value);
-					this.SendPropertyChanging();
-					this._DocID = value;
-					this.SendPropertyChanged("DocID");
-					this.OnDocIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StepID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
-		public int StepID
-		{
-			get
-			{
-				return this._StepID;
-			}
-			set
-			{
-				if ((this._StepID != value))
-				{
-					this.OnStepIDChanging(value);
-					this.SendPropertyChanging();
-					this._StepID = value;
-					this.SendPropertyChanged("StepID");
-					this.OnStepIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DispatchDate", DbType="DateTime NOT NULL")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
-		public System.DateTime DispatchDate
-		{
-			get
-			{
-				return this._DispatchDate;
-			}
-			set
-			{
-				if ((this._DispatchDate != value))
-				{
-					this.OnDispatchDateChanging(value);
-					this.SendPropertyChanging();
-					this._DispatchDate = value;
-					this.SendPropertyChanged("DispatchDate");
-					this.OnDispatchDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_C0401DispatchQueue", Storage="_CDS_Document", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public CDS_Document CDS_Document
-		{
-			get
-			{
-				return this._CDS_Document.Entity;
-			}
-			set
-			{
-				CDS_Document previousValue = this._CDS_Document.Entity;
-				if (((previousValue != value) 
-							|| (this._CDS_Document.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._CDS_Document.Entity = null;
-						previousValue.C0401DispatchQueue.Remove(this);
-					}
-					this._CDS_Document.Entity = value;
-					if ((value != null))
-					{
-						value.C0401DispatchQueue.Add(this);
 						this._DocID = value.DocID;
 					}
 					else
@@ -41920,6 +41754,10 @@ namespace Model.DataEntity
 		
 		private string _ViewModel;
 		
+		private System.Nullable<int> _TotalCount;
+		
+		private System.Nullable<int> _ProgressCount;
+		
 		private EntityRef<ProcessRequestQueue> _ProcessRequestQueue;
 		
 		private EntityRef<ProcessCompletionNotification> _ProcessCompletionNotification;
@@ -41966,6 +41804,10 @@ namespace Model.DataEntity
     partial void OnLogIDChanged();
     partial void OnViewModelChanging(string value);
     partial void OnViewModelChanged();
+    partial void OnTotalCountChanging(System.Nullable<int> value);
+    partial void OnTotalCountChanged();
+    partial void OnProgressCountChanging(System.Nullable<int> value);
+    partial void OnProgressCountChanged();
     #endregion
 		
 		public ProcessRequest()
@@ -42220,8 +42062,50 @@ namespace Model.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalCount", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=12)]
+		public System.Nullable<int> TotalCount
+		{
+			get
+			{
+				return this._TotalCount;
+			}
+			set
+			{
+				if ((this._TotalCount != value))
+				{
+					this.OnTotalCountChanging(value);
+					this.SendPropertyChanging();
+					this._TotalCount = value;
+					this.SendPropertyChanged("TotalCount");
+					this.OnTotalCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProgressCount", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=13)]
+		public System.Nullable<int> ProgressCount
+		{
+			get
+			{
+				return this._ProgressCount;
+			}
+			set
+			{
+				if ((this._ProgressCount != value))
+				{
+					this.OnProgressCountChanging(value);
+					this.SendPropertyChanging();
+					this._ProgressCount = value;
+					this.SendPropertyChanged("ProgressCount");
+					this.OnProgressCountChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProcessRequest_ProcessRequestQueue", Storage="_ProcessRequestQueue", ThisKey="TaskID", OtherKey="TaskID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=12, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=14, EmitDefaultValue=false)]
 		public ProcessRequestQueue ProcessRequestQueue
 		{
 			get
@@ -42256,7 +42140,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProcessRequest_ProcessCompletionNotification", Storage="_ProcessCompletionNotification", ThisKey="TaskID", OtherKey="TaskID", IsUnique=true, IsForeignKey=false)]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=13, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=15, EmitDefaultValue=false)]
 		public ProcessCompletionNotification ProcessCompletionNotification
 		{
 			get
@@ -42291,7 +42175,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProcessRequest_ProcessExceptionNotification", Storage="_ProcessExceptionNotification", ThisKey="TaskID", OtherKey="TaskID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=14, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=16, EmitDefaultValue=false)]
 		public EntitySet<ProcessExceptionNotification> ProcessExceptionNotification
 		{
 			get
@@ -42310,7 +42194,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProcessRequest_ProcessRequestDocument", Storage="_ProcessRequestDocument", ThisKey="TaskID", OtherKey="TaskID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=15, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=17, EmitDefaultValue=false)]
 		public EntitySet<ProcessRequestDocument> ProcessRequestDocument
 		{
 			get
@@ -42329,7 +42213,7 @@ namespace Model.DataEntity
 		}
 		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProcessRequest_ProcessRequestCondition", Storage="_ProcessRequestCondition", ThisKey="TaskID", OtherKey="TaskID")]
-		[global::System.Runtime.Serialization.DataMemberAttribute(Order=16, EmitDefaultValue=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=18, EmitDefaultValue=false)]
 		public EntitySet<ProcessRequestCondition> ProcessRequestCondition
 		{
 			get
@@ -47962,6 +47846,1315 @@ namespace Model.DataEntity
 		private void Initialize()
 		{
 			this._MonthlyBilling = new EntitySet<MonthlyBilling>(new Action<MonthlyBilling>(this.attach_MonthlyBilling), new Action<MonthlyBilling>(this.detach_MonthlyBilling));
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Runtime.Serialization.OnSerializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnSerializing(StreamingContext context)
+		{
+			this.serializing = true;
+		}
+		
+		[global::System.Runtime.Serialization.OnSerializedAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnSerialized(StreamingContext context)
+		{
+			this.serializing = false;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="[proc].C0401DispatchQueue")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class C0401DispatchQueue : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _DocID;
+		
+		private int _StepID;
+		
+		private System.DateTime _DispatchDate;
+		
+		private System.Nullable<System.DateTime> _BookingTime;
+		
+		private EntityRef<CDS_Document> _CDS_Document;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnDocIDChanging(int value);
+    partial void OnDocIDChanged();
+    partial void OnStepIDChanging(int value);
+    partial void OnStepIDChanged();
+    partial void OnDispatchDateChanging(System.DateTime value);
+    partial void OnDispatchDateChanged();
+    partial void OnBookingTimeChanging(System.Nullable<System.DateTime> value);
+    partial void OnBookingTimeChanged();
+    #endregion
+		
+		public C0401DispatchQueue()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int DocID
+		{
+			get
+			{
+				return this._DocID;
+			}
+			set
+			{
+				if ((this._DocID != value))
+				{
+					if (this._CDS_Document.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDocIDChanging(value);
+					this.SendPropertyChanging();
+					this._DocID = value;
+					this.SendPropertyChanged("DocID");
+					this.OnDocIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StepID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int StepID
+		{
+			get
+			{
+				return this._StepID;
+			}
+			set
+			{
+				if ((this._StepID != value))
+				{
+					this.OnStepIDChanging(value);
+					this.SendPropertyChanging();
+					this._StepID = value;
+					this.SendPropertyChanged("StepID");
+					this.OnStepIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DispatchDate", DbType="DateTime NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public System.DateTime DispatchDate
+		{
+			get
+			{
+				return this._DispatchDate;
+			}
+			set
+			{
+				if ((this._DispatchDate != value))
+				{
+					this.OnDispatchDateChanging(value);
+					this.SendPropertyChanging();
+					this._DispatchDate = value;
+					this.SendPropertyChanged("DispatchDate");
+					this.OnDispatchDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BookingTime", DbType="DateTime")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public System.Nullable<System.DateTime> BookingTime
+		{
+			get
+			{
+				return this._BookingTime;
+			}
+			set
+			{
+				if ((this._BookingTime != value))
+				{
+					this.OnBookingTimeChanging(value);
+					this.SendPropertyChanging();
+					this._BookingTime = value;
+					this.SendPropertyChanged("BookingTime");
+					this.OnBookingTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_C0401DispatchQueue", Storage="_CDS_Document", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public CDS_Document CDS_Document
+		{
+			get
+			{
+				return this._CDS_Document.Entity;
+			}
+			set
+			{
+				CDS_Document previousValue = this._CDS_Document.Entity;
+				if (((previousValue != value) 
+							|| (this._CDS_Document.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CDS_Document.Entity = null;
+						previousValue.C0401DispatchQueue.Remove(this);
+					}
+					this._CDS_Document.Entity = value;
+					if ((value != null))
+					{
+						value.C0401DispatchQueue.Add(this);
+						this._DocID = value.DocID;
+					}
+					else
+					{
+						this._DocID = default(int);
+					}
+					this.SendPropertyChanged("CDS_Document");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._CDS_Document = default(EntityRef<CDS_Document>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="[proc].DataProcessLog")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class DataProcessLog : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _LogID;
+		
+		private int _DocID;
+		
+		private System.DateTime _LogDate;
+		
+		private int _Status;
+		
+		private System.Nullable<int> _StepID;
+		
+		private string _Content;
+		
+		private EntityRef<CDS_Document> _CDS_Document;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnLogIDChanging(int value);
+    partial void OnLogIDChanged();
+    partial void OnDocIDChanging(int value);
+    partial void OnDocIDChanged();
+    partial void OnLogDateChanging(System.DateTime value);
+    partial void OnLogDateChanged();
+    partial void OnStatusChanging(int value);
+    partial void OnStatusChanged();
+    partial void OnStepIDChanging(System.Nullable<int> value);
+    partial void OnStepIDChanged();
+    partial void OnContentChanging(string value);
+    partial void OnContentChanged();
+    #endregion
+		
+		public DataProcessLog()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int LogID
+		{
+			get
+			{
+				return this._LogID;
+			}
+			set
+			{
+				if ((this._LogID != value))
+				{
+					this.OnLogIDChanging(value);
+					this.SendPropertyChanging();
+					this._LogID = value;
+					this.SendPropertyChanged("LogID");
+					this.OnLogIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int DocID
+		{
+			get
+			{
+				return this._DocID;
+			}
+			set
+			{
+				if ((this._DocID != value))
+				{
+					if (this._CDS_Document.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDocIDChanging(value);
+					this.SendPropertyChanging();
+					this._DocID = value;
+					this.SendPropertyChanged("DocID");
+					this.OnDocIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogDate", DbType="DateTime NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public System.DateTime LogDate
+		{
+			get
+			{
+				return this._LogDate;
+			}
+			set
+			{
+				if ((this._LogDate != value))
+				{
+					this.OnLogDateChanging(value);
+					this.SendPropertyChanging();
+					this._LogDate = value;
+					this.SendPropertyChanged("LogDate");
+					this.OnLogDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public int Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StepID", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public System.Nullable<int> StepID
+		{
+			get
+			{
+				return this._StepID;
+			}
+			set
+			{
+				if ((this._StepID != value))
+				{
+					this.OnStepIDChanging(value);
+					this.SendPropertyChanging();
+					this._StepID = value;
+					this.SendPropertyChanged("StepID");
+					this.OnStepIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Content", DbType="NVarChar(MAX)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6)]
+		public string Content
+		{
+			get
+			{
+				return this._Content;
+			}
+			set
+			{
+				if ((this._Content != value))
+				{
+					this.OnContentChanging(value);
+					this.SendPropertyChanging();
+					this._Content = value;
+					this.SendPropertyChanged("Content");
+					this.OnContentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_DataProcessLog", Storage="_CDS_Document", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public CDS_Document CDS_Document
+		{
+			get
+			{
+				return this._CDS_Document.Entity;
+			}
+			set
+			{
+				CDS_Document previousValue = this._CDS_Document.Entity;
+				if (((previousValue != value) 
+							|| (this._CDS_Document.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CDS_Document.Entity = null;
+						previousValue.DataProcessLog.Remove(this);
+					}
+					this._CDS_Document.Entity = value;
+					if ((value != null))
+					{
+						value.DataProcessLog.Add(this);
+						this._DocID = value.DocID;
+					}
+					else
+					{
+						this._DocID = default(int);
+					}
+					this.SendPropertyChanged("CDS_Document");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._CDS_Document = default(EntityRef<CDS_Document>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DocumentPostLog")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class DocumentPostLog : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _LogID;
+		
+		private int _InvoiceID;
+		
+		private string _PostCode;
+		
+		private string _RegisterCode;
+		
+		private string _ZipCode;
+		
+		private string _MailType;
+		
+		private string _ChkCode;
+		
+		private System.Nullable<System.DateTime> _CreateDate;
+		
+		private EntityRef<InvoiceItem> _InvoiceItem;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnLogIDChanging(int value);
+    partial void OnLogIDChanged();
+    partial void OnInvoiceIDChanging(int value);
+    partial void OnInvoiceIDChanged();
+    partial void OnPostCodeChanging(string value);
+    partial void OnPostCodeChanged();
+    partial void OnRegisterCodeChanging(string value);
+    partial void OnRegisterCodeChanged();
+    partial void OnZipCodeChanging(string value);
+    partial void OnZipCodeChanged();
+    partial void OnMailTypeChanging(string value);
+    partial void OnMailTypeChanged();
+    partial void OnChkCodeChanging(string value);
+    partial void OnChkCodeChanged();
+    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreateDateChanged();
+    #endregion
+		
+		public DocumentPostLog()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int LogID
+		{
+			get
+			{
+				return this._LogID;
+			}
+			set
+			{
+				if ((this._LogID != value))
+				{
+					this.OnLogIDChanging(value);
+					this.SendPropertyChanging();
+					this._LogID = value;
+					this.SendPropertyChanged("LogID");
+					this.OnLogIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvoiceID", DbType="Int NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int InvoiceID
+		{
+			get
+			{
+				return this._InvoiceID;
+			}
+			set
+			{
+				if ((this._InvoiceID != value))
+				{
+					if (this._InvoiceItem.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnInvoiceIDChanging(value);
+					this.SendPropertyChanging();
+					this._InvoiceID = value;
+					this.SendPropertyChanged("InvoiceID");
+					this.OnInvoiceIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PostCode", DbType="NVarChar(10) NOT NULL", CanBeNull=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public string PostCode
+		{
+			get
+			{
+				return this._PostCode;
+			}
+			set
+			{
+				if ((this._PostCode != value))
+				{
+					this.OnPostCodeChanging(value);
+					this.SendPropertyChanging();
+					this._PostCode = value;
+					this.SendPropertyChanged("PostCode");
+					this.OnPostCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegisterCode", DbType="NVarChar(10) NOT NULL", CanBeNull=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public string RegisterCode
+		{
+			get
+			{
+				return this._RegisterCode;
+			}
+			set
+			{
+				if ((this._RegisterCode != value))
+				{
+					this.OnRegisterCodeChanging(value);
+					this.SendPropertyChanging();
+					this._RegisterCode = value;
+					this.SendPropertyChanged("RegisterCode");
+					this.OnRegisterCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ZipCode", DbType="NVarChar(10) NOT NULL", CanBeNull=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public string ZipCode
+		{
+			get
+			{
+				return this._ZipCode;
+			}
+			set
+			{
+				if ((this._ZipCode != value))
+				{
+					this.OnZipCodeChanging(value);
+					this.SendPropertyChanging();
+					this._ZipCode = value;
+					this.SendPropertyChanged("ZipCode");
+					this.OnZipCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MailType", DbType="NVarChar(10) NOT NULL", CanBeNull=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6)]
+		public string MailType
+		{
+			get
+			{
+				return this._MailType;
+			}
+			set
+			{
+				if ((this._MailType != value))
+				{
+					this.OnMailTypeChanging(value);
+					this.SendPropertyChanging();
+					this._MailType = value;
+					this.SendPropertyChanged("MailType");
+					this.OnMailTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ChkCode", DbType="NVarChar(10) NOT NULL", CanBeNull=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=7)]
+		public string ChkCode
+		{
+			get
+			{
+				return this._ChkCode;
+			}
+			set
+			{
+				if ((this._ChkCode != value))
+				{
+					this.OnChkCodeChanging(value);
+					this.SendPropertyChanging();
+					this._ChkCode = value;
+					this.SendPropertyChanged("ChkCode");
+					this.OnChkCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=8)]
+		public System.Nullable<System.DateTime> CreateDate
+		{
+			get
+			{
+				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceItem_DocumentPostLog", Storage="_InvoiceItem", ThisKey="InvoiceID", OtherKey="InvoiceID", IsForeignKey=true)]
+		public InvoiceItem InvoiceItem
+		{
+			get
+			{
+				return this._InvoiceItem.Entity;
+			}
+			set
+			{
+				InvoiceItem previousValue = this._InvoiceItem.Entity;
+				if (((previousValue != value) 
+							|| (this._InvoiceItem.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._InvoiceItem.Entity = null;
+						previousValue.DocumentPostLog.Remove(this);
+					}
+					this._InvoiceItem.Entity = value;
+					if ((value != null))
+					{
+						value.DocumentPostLog.Add(this);
+						this._InvoiceID = value.InvoiceID;
+					}
+					else
+					{
+						this._InvoiceID = default(int);
+					}
+					this.SendPropertyChanged("InvoiceItem");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._InvoiceItem = default(EntityRef<InvoiceItem>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.InvoicePurchaseOrderAudit")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class InvoicePurchaseOrderAudit : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _SellerID;
+		
+		private string _OrderNo;
+		
+		private System.Nullable<int> _InvoiceID;
+		
+		private EntityRef<InvoiceItem> _InvoiceItem;
+		
+		private EntityRef<Organization> _Organization;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnSellerIDChanging(int value);
+    partial void OnSellerIDChanged();
+    partial void OnOrderNoChanging(string value);
+    partial void OnOrderNoChanged();
+    partial void OnInvoiceIDChanging(System.Nullable<int> value);
+    partial void OnInvoiceIDChanged();
+    #endregion
+		
+		public InvoicePurchaseOrderAudit()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellerID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int SellerID
+		{
+			get
+			{
+				return this._SellerID;
+			}
+			set
+			{
+				if ((this._SellerID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSellerIDChanging(value);
+					this.SendPropertyChanging();
+					this._SellerID = value;
+					this.SendPropertyChanged("SellerID");
+					this.OnSellerIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrderNo", DbType="NVarChar(64) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public string OrderNo
+		{
+			get
+			{
+				return this._OrderNo;
+			}
+			set
+			{
+				if ((this._OrderNo != value))
+				{
+					this.OnOrderNoChanging(value);
+					this.SendPropertyChanging();
+					this._OrderNo = value;
+					this.SendPropertyChanged("OrderNo");
+					this.OnOrderNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvoiceID", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public System.Nullable<int> InvoiceID
+		{
+			get
+			{
+				return this._InvoiceID;
+			}
+			set
+			{
+				if ((this._InvoiceID != value))
+				{
+					if (this._InvoiceItem.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnInvoiceIDChanging(value);
+					this.SendPropertyChanging();
+					this._InvoiceID = value;
+					this.SendPropertyChanged("InvoiceID");
+					this.OnInvoiceIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceItem_InvoicePurchaseOrderAudit", Storage="_InvoiceItem", ThisKey="InvoiceID", OtherKey="InvoiceID", IsForeignKey=true, DeleteRule="CASCADE")]
+		public InvoiceItem InvoiceItem
+		{
+			get
+			{
+				return this._InvoiceItem.Entity;
+			}
+			set
+			{
+				InvoiceItem previousValue = this._InvoiceItem.Entity;
+				if (((previousValue != value) 
+							|| (this._InvoiceItem.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._InvoiceItem.Entity = null;
+						previousValue.InvoicePurchaseOrderAudit.Remove(this);
+					}
+					this._InvoiceItem.Entity = value;
+					if ((value != null))
+					{
+						value.InvoicePurchaseOrderAudit.Add(this);
+						this._InvoiceID = value.InvoiceID;
+					}
+					else
+					{
+						this._InvoiceID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("InvoiceItem");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoicePurchaseOrderAudit", Storage="_Organization", ThisKey="SellerID", OtherKey="CompanyID", IsForeignKey=true)]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.InvoicePurchaseOrderAudit.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.InvoicePurchaseOrderAudit.Add(this);
+						this._SellerID = value.CompanyID;
+					}
+					else
+					{
+						this._SellerID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._InvoiceItem = default(EntityRef<InvoiceItem>);
+			this._Organization = default(EntityRef<Organization>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="center.MasterBranches")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class MasterBranch : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _MasterID;
+		
+		private int _BranchID;
+		
+		private EntityRef<Organization> _Organization;
+		
+		private EntityRef<MasterOrganization> _MasterOrganization;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnMasterIDChanging(int value);
+    partial void OnMasterIDChanged();
+    partial void OnBranchIDChanging(int value);
+    partial void OnBranchIDChanged();
+    #endregion
+		
+		public MasterBranch()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MasterID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int MasterID
+		{
+			get
+			{
+				return this._MasterID;
+			}
+			set
+			{
+				if ((this._MasterID != value))
+				{
+					if (this._MasterOrganization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnMasterIDChanging(value);
+					this.SendPropertyChanging();
+					this._MasterID = value;
+					this.SendPropertyChanged("MasterID");
+					this.OnMasterIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BranchID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public int BranchID
+		{
+			get
+			{
+				return this._BranchID;
+			}
+			set
+			{
+				if ((this._BranchID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBranchIDChanging(value);
+					this.SendPropertyChanging();
+					this._BranchID = value;
+					this.SendPropertyChanged("BranchID");
+					this.OnBranchIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_MasterBranch", Storage="_Organization", ThisKey="BranchID", OtherKey="CompanyID", IsForeignKey=true)]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.MasterBranches.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.MasterBranches.Add(this);
+						this._BranchID = value.CompanyID;
+					}
+					else
+					{
+						this._BranchID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MasterOrganization_MasterBranch", Storage="_MasterOrganization", ThisKey="MasterID", OtherKey="MasterID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public MasterOrganization MasterOrganization
+		{
+			get
+			{
+				return this._MasterOrganization.Entity;
+			}
+			set
+			{
+				MasterOrganization previousValue = this._MasterOrganization.Entity;
+				if (((previousValue != value) 
+							|| (this._MasterOrganization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MasterOrganization.Entity = null;
+						previousValue.MasterBranches.Remove(this);
+					}
+					this._MasterOrganization.Entity = value;
+					if ((value != null))
+					{
+						value.MasterBranches.Add(this);
+						this._MasterID = value.MasterID;
+					}
+					else
+					{
+						this._MasterID = default(int);
+					}
+					this.SendPropertyChanged("MasterOrganization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._Organization = default(EntityRef<Organization>);
+			this._MasterOrganization = default(EntityRef<MasterOrganization>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="center.MasterOrganization")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class MasterOrganization : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _MasterID;
+		
+		private string _EnterpriseName;
+		
+		private EntitySet<MasterBranch> _MasterBranches;
+		
+		private EntityRef<Organization> _Organization;
+		
+		private bool serializing;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnMasterIDChanging(int value);
+    partial void OnMasterIDChanged();
+    partial void OnEnterpriseNameChanging(string value);
+    partial void OnEnterpriseNameChanged();
+    #endregion
+		
+		public MasterOrganization()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MasterID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int MasterID
+		{
+			get
+			{
+				return this._MasterID;
+			}
+			set
+			{
+				if ((this._MasterID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnMasterIDChanging(value);
+					this.SendPropertyChanging();
+					this._MasterID = value;
+					this.SendPropertyChanged("MasterID");
+					this.OnMasterIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EnterpriseName", DbType="NVarChar(128)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public string EnterpriseName
+		{
+			get
+			{
+				return this._EnterpriseName;
+			}
+			set
+			{
+				if ((this._EnterpriseName != value))
+				{
+					this.OnEnterpriseNameChanging(value);
+					this.SendPropertyChanging();
+					this._EnterpriseName = value;
+					this.SendPropertyChanged("EnterpriseName");
+					this.OnEnterpriseNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MasterOrganization_MasterBranch", Storage="_MasterBranches", ThisKey="MasterID", OtherKey="MasterID")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3, EmitDefaultValue=false)]
+		public EntitySet<MasterBranch> MasterBranches
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._MasterBranches.HasLoadedOrAssignedValues == false)))
+				{
+					return null;
+				}
+				return this._MasterBranches;
+			}
+			set
+			{
+				this._MasterBranches.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_MasterOrganization", Storage="_Organization", ThisKey="MasterID", OtherKey="CompanyID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.MasterOrganization = null;
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.MasterOrganization = this;
+						this._MasterID = value.CompanyID;
+					}
+					else
+					{
+						this._MasterID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_MasterBranches(MasterBranch entity)
+		{
+			this.SendPropertyChanging();
+			entity.MasterOrganization = this;
+		}
+		
+		private void detach_MasterBranches(MasterBranch entity)
+		{
+			this.SendPropertyChanging();
+			entity.MasterOrganization = null;
+		}
+		
+		private void Initialize()
+		{
+			this._MasterBranches = new EntitySet<MasterBranch>(new Action<MasterBranch>(this.attach_MasterBranches), new Action<MasterBranch>(this.detach_MasterBranches));
+			this._Organization = default(EntityRef<Organization>);
 			OnCreated();
 		}
 		

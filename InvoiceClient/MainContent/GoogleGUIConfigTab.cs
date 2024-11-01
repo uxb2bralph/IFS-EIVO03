@@ -40,6 +40,10 @@ namespace InvoiceClient.MainContent
             get { return "Configuration"; }
         }
 
+        public void ReportStatus()
+        {
+
+        }
         private void SystemConfigTab_VisibleChanged(object sender, EventArgs e)
         {
             if (this.Visible)

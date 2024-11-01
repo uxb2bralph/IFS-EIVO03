@@ -12,7 +12,7 @@ using System.Collections;
 using System.Drawing;
 using System.IO;
 using Utility;
-using Config;
+using Model;
 
 namespace Uxnet.Web.Module.Common
 {

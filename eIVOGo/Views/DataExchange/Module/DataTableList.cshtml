@@ -162,6 +162,9 @@
                 }
 
                 var viewModel = $.extend({}, $inquiryAgent.viewModel, $keyItems.serializeObject());
+                if (!$.isArray(viewModel.KeyItems)) {
+                    viewModel.KeyItems = [viewModel.KeyItems];
+                }
                 showLoading();
                 $.ajax({
                     url: '@(Url.Action("DeleteItem", "DataExchange"))',

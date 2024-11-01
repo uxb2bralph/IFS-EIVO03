@@ -182,10 +182,19 @@ namespace Model.InvoiceManagement
                     }
 
                     InvoiceItem newItem = validator.InvoiceItem;
-
-                    C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
-                    C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document,
-                        deferredNotice ? Naming.InvoiceStepDefinition.文件準備中 : Naming.InvoiceStepDefinition.已接收資料待通知);
+                    if (!newItem.InvoiceBuyer.IsB2C() && validator.ExpectedSeller.HybridB2B())
+                    {
+                        newItem.CDS_Document.ProcessType = (int)(int)Naming.InvoiceProcessType.A0401;
+                        A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                        A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document,
+                            deferredNotice ? Naming.InvoiceStepDefinition.文件準備中 : Naming.InvoiceStepDefinition.已接收資料待通知);
+                    }
+                    else
+                    {
+                        C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                        C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document,
+                            deferredNotice ? Naming.InvoiceStepDefinition.文件準備中 : Naming.InvoiceStepDefinition.已接收資料待通知);
+                    }
 
                     this.EntityList.InsertOnSubmit(newItem);
                     this.SubmitChanges();
@@ -415,9 +424,19 @@ namespace Model.InvoiceManagement
                             }
                             else
                             {
-                                C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
-                                C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document,
-                                    deferredNotice ? Naming.InvoiceStepDefinition.文件準備中 : Naming.InvoiceStepDefinition.已接收資料待通知);
+                                if(!newItem.InvoiceBuyer.IsB2C() && validator.ExpectedSeller.HybridB2B())
+                                {
+                                    newItem.CDS_Document.ProcessType = (int)(int)Naming.InvoiceProcessType.A0401;
+                                    A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                                    A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document,
+                                        deferredNotice ? Naming.InvoiceStepDefinition.文件準備中 : Naming.InvoiceStepDefinition.已接收資料待通知);
+                                }
+                                else
+                                {
+                                    C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+                                    C0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document,
+                                        deferredNotice ? Naming.InvoiceStepDefinition.文件準備中 : Naming.InvoiceStepDefinition.已接收資料待通知);
+                                }
                             }
 
                             this.EntityList.InsertOnSubmit(newItem);

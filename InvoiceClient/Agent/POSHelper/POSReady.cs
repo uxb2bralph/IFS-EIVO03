@@ -62,6 +62,9 @@ namespace InvoiceClient.Agent.POSHelper
             public String SellerInvoice { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "SellerInvoice");
             public String B2BSellerInvoice { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "B2BSellerInvoice");
             public String PrintInvoice { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "PrintInvoice");
+            public String ReprintReceipt { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "ReprintReceipt");
+            public String ReprintInvoice { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "ReprintInvoice");
+            public String ReprintAllowance { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "ReprintAllowance");
             public String PrintC0401 { get; set; } = "https://eguitest.uxifs.com/Kiosk/FrontEnd/PrintC0401";
             public String PrintBlindReturn { get; set; } = "https://eguitest.uxifs.com/Kiosk/FrontEnd/BlindReturn";
             public String PrintZeroAmount { get; set; } = "https://eguitest.uxifs.com/Kiosk/FrontEnd/PrintZeroAmount";
@@ -71,11 +74,23 @@ namespace InvoiceClient.Agent.POSHelper
             public String PreparedAllowance { get; set; } = Path.Combine(Logger.LogPath, "InvoiceNoInspector", "PreparedAllowance");
             public String MIGResponse { get; set; } = Path.Combine(Logger.LogPath, "MIGResponse");
             public bool UserPOSPrinter { get; set; } = false;
+            public bool PreloadInvoiceNo { get; set; } = false;
             public string C0401 { get; set; } = "C0401";
             public string C0501 { get; set; } = "C0501";
             public string A0401 { get; set; } = "A0401";
             public string A0501 { get; set; } = "A0501";
+            public bool Initialized { get; set; } = false;
+            public string InitBatch { get; set; } = "Init.bat";
+            public string SellerReceiptNo { get; set; }
+            public bool UserClose { get; set; } = true;
+            public String DefaultPOSPrinter { get; set; }
+            public int InvoiceFileEncodingPage { get; set; } = Encoding.Unicode.CodePage;
 
+            public void Save()
+            {
+                String filePath = Path.Combine(Logger.LogPath, "InvoiceNoInspector.json");
+                File.WriteAllText(filePath, this.JsonStringify());
+            }
         }
 
         public POSReady()

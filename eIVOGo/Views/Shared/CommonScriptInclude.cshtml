@@ -16,9 +16,9 @@
 @using Uxnet.Web.WebUI
 @using Newtonsoft.Json
 
-<script type="text/javascript" src="~/Scripts/jquery-3.6.0.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery-3.7.1.js"></script>
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/jquery-ui-1.13.2.js"))"></script>
-<script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/bootstrap.js?1.1"))"></script>
+<script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/bootstrap.bundle.js?1.1"))"></script>
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/jquery.ui.datepicker-zh-TW.js"))"></script>
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/jquery.form.js"))"></script>
 <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/Scripts/uxeivo.js"))"></script>
@@ -36,6 +36,121 @@
 <script>
 
     var $global = (function () {
+        var $printContainer = {};
+
+        function doPrint2023($element, printDone) {
+
+            $global.preview = window.open('', '_blank', 'popup');
+            $element.find('style').attr('nonce', 'Y2hiY29kZQ==');
+            $global.preview.document.write($element.html());
+            $global.preview.document.write('<script nonce="Y2hiY29kZQ==">window.print();\<\/script>');
+
+            setTimeout(function () {
+                if (typeof printDone === "function") {
+                    printDone();
+                }
+            }, 3000);
+
+        }
+
+        function doOpenToPrint(html, printDone) {
+
+            $global.preview = window.open('', '_blank', 'popup');
+            $global.preview.document.write(html);
+            $global.preview.document.write('<script>window.print();\<\/script>');
+
+            setTimeout(function () {
+                if (typeof printDone === "function") {
+                    printDone();
+                }
+            }, 3000);
+
+        }
+
+        function doPrint($element, printDone) {
+
+            if ($printContainer.$prnFrame) {
+                $printContainer.$prnFrame.remove();
+            }
+
+            var strFrameName = ("printer-" + (new Date()).getTime());
+            var jFrame = $("<iframe name='" + strFrameName + "'>");
+
+            jFrame
+                .css("width", "1px")
+                .css("height", "1px")
+                .css("position", "absolute")
+                .css("display", "none")
+                .appendTo($("body:first"));
+
+            var objFrame = window.frames[strFrameName];
+            $printContainer.$prnFrame = jFrame;
+
+            var objDoc = objFrame.document;
+            objDoc.write($printContainer.documentTemplate);
+            var container = null;
+            var count = 0;
+            while (container == null && count < 100) {
+                container = objDoc.getElementById('printContainer');
+                count++;
+            }
+
+            if (container == null) {
+                alert('列印失敗!! 請重試...');
+            }
+
+            $element.find('style').attr('nonce', 'Y2hiY29kZQ==');
+            var $nodes = $.parseHTML($element.html(), objDoc, true);
+            $nodes.forEach(function (node, index) {
+                if (node.nodeName.toLowerCase() == 'script') {
+                    var s = objDoc.createElement('script');
+                    s.innerText = node.innerText;
+                    container.appendChild(s);
+                } else {
+                    container.appendChild(node);
+                }
+            });
+
+            objFrame.focus();
+            setTimeout(function () {
+                objFrame.print();
+                if (typeof printDone === "function") {
+                    printDone();
+                }
+            }, 3000);
+
+        }
+
+        function doPrintHtml(html, printDone) {
+
+            var old = document.querySelector('iframe[name="prnFrame"]');
+            if (old) {
+                old.remove();
+            }
+
+            var jFrame = $("<iframe name='prnFrame'>");
+
+            jFrame
+                .css("width", "1px")
+                .css("height", "1px")
+                .css("position", "absolute")
+                .css("display", "none")
+                .appendTo($("body:first"));
+
+            $printContainer.objFrame = window.frames['prnFrame'];
+            $printContainer.objDoc = $printContainer.objFrame.document;
+
+            $printContainer.objDoc.write(html);
+
+            $printContainer.objFrame.focus();
+            setTimeout(function () {
+                $printContainer.objFrame.print();
+                if (typeof printDone === "function") {
+                    printDone();
+                }
+            }, 3000);
+
+        }
 
         return {
             registerCloseEvent: function ($tab) {
@@ -86,6 +201,42 @@
                         setTimeout($global.doNothing, 30000);
                     }
                 });
+            },
+            printContent: function ($element, printDone) {
+                if ($printContainer == undefined) {
+                    showLoading();
+                    $.post('<%= Html.Raw(Url.Action("PrintPage", "Helper")) %>', {}, function (data) {
+                        hideLoading();
+                        if ($.isPlainObject(data)) {
+                            alertModal("無法取得列印文件!!");
+                        } else {
+                            $printContainer = { 'documentTemplate': data };
+                            doPrint($element, printDone);
+                        }
+                    });
+                } else {
+                    doPrint($element, printDone);
+                }
+            },
+            printHtml: function (html, printDone) {
+                doPrintHtml(html, printDone);
+            },
+            openToPrintHtml: function (html, printDone) {
+                doOpenToPrint(html, printDone);
+            },
+            getPrintArea: function ($element) {
+                var $printArea = $element.find('#printArea');
+                if ($printArea.length > 0) {
+                    return $printArea;
+                }
+
+                var $div = $('<div></div>').append($element);
+                $printArea = $div.find('#printArea');
+                if ($printArea.length > 0) {
+                    return $printArea;
+                } else {
+                    return $element;
+                }
             },
         };
     })();
@@ -354,5 +505,68 @@
         $('<div>' + alertMessage + '</div>')
             .dialog({ "title": "<div class='modal-title'><h4><i class='fa fa-clock-o'></i>訊息</h4></div>" });
     }
+
+    function ajaxSubmitForm(form) {
+        $(form).ajaxSubmit({
+            beforeSubmit: function () {
+                showLoading();
+            },
+            success: function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    if (form.done) {
+                        form.done(data);
+                    } else if (data.message) {
+                        alert(data.message);
+                    }
+                } else {
+                    if (form.done) {
+                        form.done(data);
+                    } else {
+                        $(data).appendTo($('body'));
+                    }
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                hideLoading();
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        });
+    }
+
+    function doPost(url, viewModel, done) {
+        showLoading();
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify(viewModel),
+            type: "POST",
+            //dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    if (data.result) {
+                        if (done) {
+                            done(data);
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                } else {
+                    if (done) {
+                        done(data);
+                    }
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                hideLoading();
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        });
+    }
+
 
 </script>

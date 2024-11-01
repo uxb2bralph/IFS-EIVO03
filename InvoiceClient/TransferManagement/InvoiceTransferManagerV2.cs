@@ -9,6 +9,7 @@ using InvoiceClient.Properties;
 using Model.Schema.EIVO;
 using InvoiceClient.Agent;
 using InvoiceClient.Agent.POSHelper;
+using InvoiceClient.Helper;
 
 namespace InvoiceClient.TransferManagement
 {
@@ -20,6 +21,7 @@ namespace InvoiceClient.TransferManagement
         private AllowanceWatcher _AllowanceWatcher;
         private AllowanceCancellationWatcher _AllowanceCancellationWatcher;
 
+        public ITabWorkItem WorkItem { get; set; }
 
         public void EnableAll(String fullPath)
         {

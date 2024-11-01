@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="EINVTurnkey2" Class="TurnKey2DataContext" Serialization="Unidirectional" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=192.168.200.23\SQLEXPRESS,1433;Initial Catalog=EINVTurnkey2;Integrated Security=True" SettingsObjectName="Model.Properties.Settings" SettingsPropertyName="EINVTurnkey2ConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=192.168.200.90\SQLEXPRESS,1433;Initial Catalog=EINVTurnkey2;Integrated Security=True;Trust Server Certificate=True" SettingsObjectName="Model.Properties.Settings" SettingsPropertyName="EINVTurnkey2ConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.TURNKEY_USER_PROFILE" Member="TURNKEY_USER_PROFILE">
     <Type Name="TURNKEY_USER_PROFILE">
       <Column Name="USER_ID" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
@@ -162,6 +162,27 @@
       <Column Name="DocNo" Type="System.String" DbType="NVarChar(32) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Status" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
       <Column Name="FileName" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TurnkeyTriggerLog" Member="TurnkeyTriggerLogs">
+    <Type Name="TurnkeyTriggerLog">
+      <Column Name="SEQNO" Type="System.String" DbType="VarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="SUBSEQNO" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="UUID" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Column Name="MESSAGE_TYPE" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="CATEGORY_TYPE" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="PROCESS_TYPE" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="FROM_PARTY_ID" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="TO_PARTY_ID" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="MESSAGE_DTS" Type="System.String" DbType="VarChar(17)" CanBeNull="true" />
+      <Column Name="CHARACTER_COUNT" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="STATUS" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="IN_OUT_BOUND" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="FROM_ROUTING_ID" Type="System.String" DbType="VarChar(39)" CanBeNull="true" />
+      <Column Name="TO_ROUTING_ID" Type="System.String" DbType="VarChar(39)" CanBeNull="true" />
+      <Column Name="INVOICE_IDENTIFIER" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="LockID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LogID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
     </Type>
   </Table>
 </Database>

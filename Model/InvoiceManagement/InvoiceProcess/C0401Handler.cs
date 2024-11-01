@@ -18,6 +18,7 @@ using System.Security.Cryptography.Pkcs;
 using Uxnet.Com.Security.UseCrypto;
 using System.Data.Linq;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace Model.InvoiceManagement.InvoiceProcess
 {
@@ -37,86 +38,130 @@ namespace Model.InvoiceManagement.InvoiceProcess
             _table = models.GetTable<C0401DispatchQueue>();
         }
 
+        static C0401DispatchQueue GetReadyItem(C0401Handler handler)
+        {
+            lock (typeof(C0401Handler))
+            {
+                C0401DispatchQueue item = handler._table
+                    .Where(q => q.StepID == (int)Naming.InvoiceStepDefinition.已開立)
+                    .Where(q => !q.BookingTime.HasValue)
+                    .FirstOrDefault();
+
+                if (item == null)
+                {
+                    DateTime available = DateTime.Now.AddMinutes(-5);
+                    item = handler._table
+                    .Where(q => q.StepID == (int)Naming.InvoiceStepDefinition.已開立)
+                    .Where(q => q.BookingTime < available)
+                    .FirstOrDefault();
+                }
+
+                if (item != null)
+                {
+                    handler.models.ExecuteCommand("update [proc].C0401DispatchQueue set BookingTime = GetDate() where DocID={0} and StepID={1}",
+                        item.DocID, item.StepID);
+                }
+
+                return item;
+
+            }
+        }
+
         public void WriteToTurnkey(int? procIdx = null, int? totalProc = null)
         {
-            int docID = 0;
-            IQueryable<C0401DispatchQueue> queryItems =
-                _table
-                    .Where(q => q.DocID > docID && q.StepID == (int)Naming.InvoiceStepDefinition.已開立)
-                    .OrderBy(d => d.DocID);
-
-            var buffer = (procIdx >= 0 && totalProc > 0)
-                    ? queryItems.Where(d => (d.DocID % totalProc.Value) == procIdx.Value).Take(4096).ToList()
-                    : queryItems.Take(4096).ToList();
-
-            String backup = Path.Combine(Logger.LogDailyPath, "C0401").CheckStoredPath();
-            while (buffer.Count > 0)
+            C0401DispatchQueue item;
+            while ((item = GetReadyItem(this)) != null)
             {
-                foreach (var item in buffer)
+                WriteToTurnkey(item);
+            }
+        }
+
+        //static List<C0401DispatchQueue> GetReadyItem(C0401Handler handler, int maxCount = 4096)
+        //{
+        //    lock (typeof(C0401Handler))
+        //    {
+        //        DateTime available = DateTime.Now.AddMinutes(-5);
+        //        var items = handler._table
+        //            .Where(q => q.StepID == (int)Naming.InvoiceStepDefinition.已開立)
+        //            .Where(q => !q.BookingTime.HasValue || q.BookingTime < available)
+        //            .Take(maxCount)
+        //            .ToList();
+
+        //        foreach (var item in items)
+        //        {
+        //            handler.models.ExecuteCommand("update [proc].C0401DispatchQueue set BookingTime = GetDate() where DocID={0} and StepID={1}",
+        //                item.DocID, item.StepID);
+        //        }
+
+        //        return items;
+
+        //    }
+        //}
+
+        //public void WriteToTurnkey(int? procIdx = null, int? totalProc = null)
+        //{
+        //    foreach (var item in GetReadyItem(this))
+        //    {
+        //        WriteToTurnkey(item);
+        //    }
+        //}
+
+        private void WriteToTurnkey(C0401DispatchQueue item)
+        {
+            var invoiceItem = item.CDS_Document.InvoiceItem;
+            try
+            {
+                var xmlMIG = invoiceItem.CreateInvoiceMIG().ConvertToXml();
+                item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done, xmlMIG.OuterXml);
+                models.SubmitChanges();
+
+                var fileName = Path.Combine(Settings.Default.C0401Outbound, $"INV0401-{invoiceItem.InvoiceID}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
+                xmlMIG.Save(fileName);
+
+                if (invoiceItem.Organization.OrganizationStatus.SubscribeB2BInvoicePDF == true
+                    && (!invoiceItem.InvoiceBuyer.IsB2C() || invoiceItem.Organization.OrganizationStatus.PrintAll == true)
+                    && item.CDS_Document.DocumentSubscriptionQueue == null)
                 {
-                    docID = item.DocID;
-                    var invoiceItem = item.CDS_Document.InvoiceItem;
-                    try
-                    {
-                        var fileName = Path.Combine(Settings.Default.C0401Outbound, $"C0401-{invoiceItem.InvoiceID}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
-                        var xmlMIG = invoiceItem.CreateC0401().ConvertToXml();
-                        xmlMIG.Save(fileName);
-                        Thread.Sleep(10);
-                        if (!File.Exists(fileName))
-                        {
-                            continue;
-                        }
-                        xmlMIG.Save(Path.Combine(backup, $"C0401-{invoiceItem.InvoiceID}-{invoiceItem.TrackCode}{invoiceItem.No}.xml"));
-
-                        item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
-                        models.SubmitChanges();
-
-                        if (invoiceItem.Organization.OrganizationStatus.SubscribeB2BInvoicePDF == true
-                            && (!invoiceItem.InvoiceBuyer.IsB2C() || invoiceItem.Organization.OrganizationStatus.PrintAll == true)
-                            && item.CDS_Document.DocumentSubscriptionQueue == null)
-                        {
-                            models.ExecuteCommand(
-                                @"INSERT INTO DocumentSubscriptionQueue
+                    models.ExecuteCommand(
+                        @"INSERT INTO DocumentSubscriptionQueue
                                 (DocID)
                             SELECT  {0}
                             WHERE   (NOT EXISTS
                                     (SELECT NULL
                                         FROM DocumentSubscriptionQueue
                                         WHERE (DocID = {0})))", item.DocID);
-                        }
+                }
 
 
-                        if (invoiceItem.Organization.OrganizationStatus.DownloadDataNumber == true)
-                        {
-                            models.ExecuteCommand(@"INSERT INTO DocumentMappingQueue
+                if (invoiceItem.Organization.OrganizationStatus.DownloadDataNumber == true)
+                {
+                    models.ExecuteCommand(@"INSERT INTO DocumentMappingQueue
                                             (DocID)
                                         SELECT  {0}
                                         WHERE   (NOT EXISTS
                                                 (SELECT NULL
                                                     FROM DocumentMappingQueue
                                                     WHERE (DocID = {0})))", invoiceItem.InvoiceID);
-                        }
-
-                        if (invoiceItem.Organization.OrganizationStatus.DownloadDispatch == true)
-                        {
-                            PushStepQueueOnSubmit(models, item.CDS_Document, Naming.InvoiceStepDefinition.回傳MIG);
-                            models.SubmitChanges();
-                        }
-
-                        models.ExecuteCommand("delete [proc].C0401DispatchQueue where DocID={0} and StepID={1}",
-                            item.DocID, item.StepID);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Warn($"fail to write to turnkey: {item.DocID}");
-                        Logger.Error(ex);
-                    }
-
                 }
-                buffer = (procIdx >= 0 && totalProc > 0)
-                    ? queryItems.Where(d => (d.DocID % totalProc.Value) == procIdx.Value).Take(4096).ToList()
-                    : queryItems.Take(4096).ToList();
+
+                if (invoiceItem.Organization.OrganizationStatus.DownloadDispatch == true)
+                {
+                    PushStepQueueOnSubmit(models, item.CDS_Document, Naming.InvoiceStepDefinition.回傳MIG);
+                    models.SubmitChanges();
+                }
+
+                models.ExecuteCommand("delete [proc].C0401DispatchQueue where DocID={0} and StepID={1}",
+                    item.DocID, item.StepID);
+
+                //models.ExecuteCommand("update [proc].C0401DispatchQueue set StepID = 1323 where DocID={0} and StepID={1}",
+                //    item.DocID, item.StepID);
+
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn($"fail to write to turnkey: {item.DocID}");
+                Logger.Error(ex);
             }
         }
 

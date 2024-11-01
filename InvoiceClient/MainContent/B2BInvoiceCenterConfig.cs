@@ -73,5 +73,10 @@ namespace InvoiceClient.MainContent
         {
             get { return "B2B電子發票"; }
         }
+
+        public void ReportStatus()
+        {
+
+        }
     }
 }

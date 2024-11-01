@@ -25,6 +25,7 @@ namespace InvoiceClient.Agent.POSHelper
 
         protected override XmlDocument prepareInvoiceDocument(string invoiceFile)
         {
+            invoiceFile.ReviseXmlContent();
             var docInv = base.prepareInvoiceDocument(invoiceFile);
 
             String url = $"{POSReady._Settings.ServiceHost}{POSReady._Settings.VerifyAllowance}";

@@ -11,6 +11,7 @@ using InvoiceClient.Agent;
 using Model.Locale;
 using Utility;
 using Newtonsoft.Json;
+using InvoiceClient.Helper;
 
 namespace InvoiceClient.TransferManagement
 {
@@ -23,6 +24,7 @@ namespace InvoiceClient.TransferManagement
         private AllowanceCancellationWatcher _AllowanceCancellationWatcher;
         private InvoiceEnterpriseWatcher _EnterpriseWatcher;
         private LocalSettings _Settings;
+        public ITabWorkItem WorkItem { get; set; }
 
         public InvoiceTransferManagerForAgent()
         {

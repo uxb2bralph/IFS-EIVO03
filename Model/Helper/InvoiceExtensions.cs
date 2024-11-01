@@ -517,7 +517,7 @@ namespace Model.Helper
             return SignAndCheck(certificate, sb, Naming.CACatalogDefinition.平台自動開立, docID, Naming.DocumentTypeDefinition.E_ReceiptCancellation);
         }
 
-        public static void PushLogOnSubmit(this CDS_Document docItem, GenericManager<EIVOEntityDataContext> models, Naming.InvoiceStepDefinition stepID, Naming.DataProcessStatus status)
+        public static void PushLogOnSubmit(this CDS_Document docItem, GenericManager<EIVOEntityDataContext> models, Naming.InvoiceStepDefinition stepID, Naming.DataProcessStatus status,String content = null)
         {
             models.GetTable<DataProcessLog>().InsertOnSubmit(
                 new DataProcessLog
@@ -525,7 +525,8 @@ namespace Model.Helper
                     CDS_Document = docItem,
                     LogDate = DateTime.Now,
                     StepID = (int)stepID,
-                    Status = (int)status
+                    Status = (int)status,
+                    Content = content,
                 });
         }
 

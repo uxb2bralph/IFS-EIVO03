@@ -46,7 +46,6 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     .OrderBy(d => d.DocID);
 
             var buffer = queryItems.Take(4096).ToList();
-            String backup = Path.Combine(Logger.LogDailyPath, "A0501").CheckStoredPath();
             while (buffer.Count > 0)
             {
                 foreach (var item in buffer)
@@ -56,18 +55,12 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     try
                     {
                         var fileName = Path.Combine(Settings.Default.A0501Outbound, $"A0501-{invoiceItem.InvoiceID}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
-                        var xmlMIG = invoiceItem.CreateA0501().ConvertToXml();
-                        xmlMIG.Save(fileName);
-                        Thread.Sleep(10);
-                        if (!File.Exists(fileName))
-                        {
-                            continue;
-                        }
-                        xmlMIG.Save(Path.Combine(backup, Path.GetFileName(fileName)));
+                        var xmlMIG = invoiceItem.CreateB2BInvoiceCancellationMIG().ConvertToXml();
 
-                        item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
+                        item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done, xmlMIG.OuterXml);
                         item.CDS_Document.CurrentStep = (int)Naming.InvoiceStepDefinition.已接收;
                         models.SubmitChanges();
+                        xmlMIG.Save(fileName);
 
                         if (invoiceItem.Organization.OrganizationStatus.DownloadDispatch == true)
                         {
@@ -77,6 +70,9 @@ namespace Model.InvoiceManagement.InvoiceProcess
 
                         models.ExecuteCommand("delete [proc].A0501DispatchQueue where DocID={0} and StepID={1}",
                             item.DocID, item.StepID);
+
+                        //models.ExecuteCommand("update [proc].A0501DispatchQueue set StepID = 1323 where DocID={0} and StepID={1}",
+                        //    item.DocID, item.StepID);
 
                     }
                     catch (Exception ex)

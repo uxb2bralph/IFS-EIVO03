@@ -33,6 +33,9 @@ namespace eIVOGo.Published
     // [System.Web.Script.Services.ScriptService]
     public class eInvoiceService_Google : eInvoiceService
     {
+        public eInvoiceService_Google() : base() 
+        {
+        }
 
         [WebMethod]
         public override XmlDocument UploadInvoiceAutoTrackNoV2(XmlDocument uploadData)

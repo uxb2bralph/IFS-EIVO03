@@ -1,0 +1,47 @@
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    InvoiceItem _model = this.Model as InvoiceItem;
+}
+@{
+    if (_model != null)
+    {
+        String invoiceUrl = $"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/DataView/ShowInvoice")}?DocID={_model.InvoiceID}&UseCustomView=true";
+        String pdfFile = Path.Combine(Logger.LogDailyPath, $"{Guid.NewGuid()}.pdf");
+        invoiceUrl.ConvertHtmlToPDF(pdfFile, Session.Timeout);
+        if (File.Exists(pdfFile))
+        {
+            Response.Clear();
+            Response.ContentType = "application/pdf";
+            Response.BinaryWrite(File.ReadAllBytes(pdfFile));
+            File.Delete(pdfFile);
+            Response.Flush();
+            Response.End();
+        }
+        else
+        {
+            <script>
+                alert('資料錯誤!!');
+            </script>
+        }
+    }
+    else
+    {
+        <script>
+            alert('資料錯誤!!');
+        </script>
+    }
+}

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Web;
+using System.Web.Mvc;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -19,7 +20,7 @@ namespace Uxnet.Web.Module.Common
     /// <summary>
     ///		Summary description for Page_CA.
     /// </summary>
-    public partial class SignContext : System.Web.UI.UserControl, ICallbackEventHandler
+    public partial class SignContext : ViewUserControl, ICallbackEventHandler
     {
 
         private Control _launcher;
@@ -170,6 +171,7 @@ namespace Uxnet.Web.Module.Common
         }
 
         public bool AutoSign { get; set; }
+        public Encoding DataToSignEncoding { get; set; }
 
         public X509Certificate2 SignerCertificate { get; set; }
 
@@ -201,7 +203,7 @@ namespace Uxnet.Web.Module.Common
             }
             else
             {
-                if (ca.VerifyPKCS7(dataToSign, dataSignature))
+                if (ca.VerifyPKCS7((DataToSignEncoding ?? Encoding.Default).GetBytes(dataToSign), Convert.FromBase64String(dataSignature)))
                 {
                     SignerCertificate = new X509Certificate2(ca.SignerCertificate);
 

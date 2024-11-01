@@ -46,7 +46,6 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     .OrderBy(d => d.DocID);
 
             var buffer = queryItems.Take(4096).ToList();
-            String backup = Path.Combine(Logger.LogDailyPath, "B0501").CheckStoredPath();
             while (buffer.Count > 0)
             {
                 foreach (var item in buffer)
@@ -56,17 +55,10 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     try
                     {
                         var fileName = Path.Combine(Settings.Default.B0501Outbound, $"B0501-{allowance.AllowanceID}-{allowance.AllowanceNumber}.xml");
-                        var xmlMIG = allowance.CreateB0501().ConvertToXml();
-                        xmlMIG.Save(fileName);
-                        Thread.Sleep(10);
-                        if (!File.Exists(fileName))
-                        {
-                            continue;
-                        }
-                        xmlMIG.Save(Path.Combine(backup, Path.GetFileName(fileName)));
-
-                        item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
+                        var xmlMIG = allowance.CreateB2BAllowanceCancellationMIG().ConvertToXml();
+                        item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done, xmlMIG.OuterXml);
                         models.SubmitChanges();
+                        xmlMIG.Save(fileName);
 
                         if (allowance.InvoiceAllowanceSeller.Organization.OrganizationStatus.DownloadDispatch == true)
                         {
@@ -76,6 +68,9 @@ namespace Model.InvoiceManagement.InvoiceProcess
 
                         models.ExecuteCommand("delete [proc].B0501DispatchQueue where DocID={0} and StepID={1}",
                             item.DocID, item.StepID);
+
+                        //models.ExecuteCommand("update [proc].B0501DispatchQueue set StepID = 1323 where DocID={0} and StepID={1}",
+                        //    item.DocID, item.StepID);
 
                     }
                     catch (Exception ex)

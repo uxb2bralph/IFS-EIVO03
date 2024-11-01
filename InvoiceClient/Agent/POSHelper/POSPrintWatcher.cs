@@ -29,11 +29,17 @@ namespace InvoiceClient.Agent.POSHelper
 
         delegate void PrintContent();
         PrintContent doPrint;
-        
+
         protected override void processFile(String invFile)
         {
             if (!File.Exists(invFile))
                 return;
+
+            if (String.IsNullOrEmpty(POSReady.Settings.DefaultPOSPrinter)
+                || !Win32.Winspool.SetDefaultPrinter(POSReady.Settings.DefaultPOSPrinter))
+            {
+                return;
+            }
 
             String fileName = Path.GetFileName(invFile);
             String fullPath = Path.Combine(_inProgressPath, fileName);
@@ -49,7 +55,7 @@ namespace InvoiceClient.Agent.POSHelper
 
             try
             {
-                doPrint = () => 
+                doPrint = () =>
                 {
                     if (_printAgent.PrintUrl(fullPath))
                     {

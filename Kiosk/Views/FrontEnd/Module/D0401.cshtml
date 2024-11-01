@@ -68,7 +68,7 @@
                     }
                     <text>品名：@(d.OriginalDescription)</text><br />
                     <text>數量：@(String.Format("{0:##,###,###,##0.##}", d.Quantity)) </text><br />
-                    @*<text>單價：@(String.Format("{0:##,###,###,##0.##}", d.UnitPrice))</text>*@<br />
+                    <text>單價：@(String.Format("{0:##,###,###,##0.##}", d.UnitPrice))</text><br />
                     if (withTax)
                     {
                         <text>金額(含稅)：</text>

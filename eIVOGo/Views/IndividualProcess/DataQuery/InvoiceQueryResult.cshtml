@@ -42,21 +42,21 @@
             if (_viewModel.BuyerName != null || _viewModel.RandomNo != null)
             {
                 Html.RenderPartial("~/Views/DataView/Module/Invoice.cshtml", _model);
-                if(!_model.InvoiceBuyer.IsB2C())
+                if (!_model.InvoiceBuyer.IsB2C() || _model.Organization.OrganizationSettings.Any(s => s.Settings == "AllowPrintAll"))
                 {
                     <div>
-                        <button type="button" class="btn btnPrint" onclick="$('').launchDownload('@Url.Action("PrintSingleInvoiceAsPDF","DataView",
-                                                                                        new RenderStyleViewModel 
-                                                                                        {
-                                                                                            CreateNew=true,
-                                                                                            PaperStyle= "A4",
-                                                                                            PrintCuttingLine=false,
-                                                                                            ProcessType= Naming.InvoiceProcessType.C0401,
-                                                                                            UseCustomView=true,
-                                                                                        })', { 'keyID':'@Html.Raw(_model.InvoiceID.EncryptKey())'});">下載發票PDF</button>
-                        @if(_model.CDS_Document.Attachment.Count>0)
+                        <button type="button" class="btn btnPrint" onclick="$('').launchDownload('@Url.Action("PrintSingleInvoiceAsPDF", "DataView",
+                               new RenderStyleViewModel
+                               {
+                                   CreateNew = true,
+                                   PaperStyle = "A4",
+                                   PrintCuttingLine = false,
+                                   ProcessType = Naming.InvoiceProcessType.C0401,
+                                   UseCustomView = true,
+                               })', { 'keyID':'@Html.Raw(_model.InvoiceID.EncryptKey())'});">下載發票PDF</button>
+                        @if (_model.CDS_Document.Attachment.Count > 0)
                         {
-                            <button type="button" class="btn" onclick="$('').launchDownload('@Url.Action("DownloadInvoiceAttachment","InvoiceQuery")', { 'keyID':'@Html.Raw(_model.InvoiceID.EncryptKey())'});">下載附件檔</button>
+                            <button type="button" class="btn" onclick="$('').launchDownload('@Url.Action("DownloadInvoiceAttachment", "InvoiceQuery")', { 'keyID':'@Html.Raw(_model.InvoiceID.EncryptKey())'});">下載附件檔</button>
                         }
                     </div>
                 }

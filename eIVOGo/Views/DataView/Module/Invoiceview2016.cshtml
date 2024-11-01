@@ -21,7 +21,7 @@
     int _itemIdx;
     int _pageCount = 0;
 
-    int __FIRST_PAGE_ITEM_COUNT = 15;
+    int __FIRST_PAGE_ITEM_COUNT = 14;
     const int __PAGE_ITEM_COUNT = 18;
 
     ModelSource<InvoiceItem> models;
@@ -33,7 +33,7 @@
 
     if (_model != null)
     {
-        __FIRST_PAGE_ITEM_COUNT = _model.Organization.LogoURL != null ? 12 : 15;
+        __FIRST_PAGE_ITEM_COUNT = _model.Organization.LogoURL != null ? 12 : 14;
 
         _products = models.GetTable<InvoiceDetail>().Where(d => d.InvoiceID == _model.InvoiceID)
             .Join(models.GetTable<InvoiceProduct>(), d => d.ProductID, p => p.ProductID, (d, p) => p)
@@ -99,6 +99,10 @@
                 }
             }
             <h2 style="padding-top:5px;">電子發票證明聯</h2>
+            @if (_model.InvoiceCancellation != null)
+            {
+                <p style="padding-top: 0; color: red; text-align: center; font-size: xx-large;">(作廢)</p>
+            }
             <p class="text-center">@(String.Format("{0:yyyy-MM-dd}", _model.InvoiceDate))</p>
             <div class="invoice_data">
                 <p>

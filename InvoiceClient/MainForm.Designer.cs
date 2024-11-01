@@ -37,7 +37,10 @@
             this.miActivate = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.invoiceClientServiceController = new System.ServiceProcess.ServiceController();
+            this.MainStatus = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.contextMenu.SuspendLayout();
+            this.MainStatus.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon
@@ -90,11 +93,29 @@
             // 
             this.invoiceClientServiceController.ServiceName = "InvoiceClientService";
             // 
+            // MainStatus
+            // 
+            this.MainStatus.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.MainStatus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.MainStatus.Location = new System.Drawing.Point(0, 492);
+            this.MainStatus.Name = "MainStatus";
+            this.MainStatus.Size = new System.Drawing.Size(1041, 30);
+            this.MainStatus.TabIndex = 2;
+            this.MainStatus.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(131, 23);
+            this.toolStripStatusLabel1.Text = "Ver.2024.03.15";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1041, 522);
+            this.Controls.Add(this.MainStatus);
             this.Controls.Add(this.tabControl1);
             this.Name = "MainForm";
             this.Text = "電子發票－營業人用戶端";
@@ -102,7 +123,10 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.contextMenu.ResumeLayout(false);
+            this.MainStatus.ResumeLayout(false);
+            this.MainStatus.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -115,6 +139,8 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.ServiceProcess.ServiceController invoiceClientServiceController;
         private System.Windows.Forms.ToolStripMenuItem miActivate;
+        private System.Windows.Forms.StatusStrip MainStatus;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
 

@@ -27,7 +27,7 @@ using Model.Resource;
 using Model.Security.MembershipManagement;
 using Utility;
 using Model.InvoiceManagement.InvoiceProcess;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
 using ModelExtension.Helper;
 using eIVOGo.Helper.Security.Authorization;
 
@@ -306,6 +306,11 @@ namespace eIVOGo.Controllers
 
             InvoiceItem newItem = validator.InvoiceItem;
             newItem.CDS_Document.ProcessType = (int?)viewModel.InvoiceProcessType;
+            if (viewModel.ForPreview == true)
+            {
+                return View("~/Views/DataView/Module/InvoiceContent.cshtml", newItem);
+            }
+
             models.GetTable<InvoiceItem>().InsertOnSubmit(newItem);
             A0101Handler.PushStepQueueOnSubmit(models, newItem.CDS_Document, Naming.InvoiceStepDefinition.待傳送);
             models.SubmitChanges();
@@ -322,7 +327,7 @@ namespace eIVOGo.Controllers
         public ActionResult CommitAllowance(AllowanceViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            if(viewModel.KeyID!=null)
+            if (viewModel.KeyID != null)
             {
                 viewModel.SellerID = viewModel.DecryptKeyValue();
             }
@@ -353,7 +358,7 @@ namespace eIVOGo.Controllers
 
         }
 
-        public ActionResult EncryptContent(String content,String key)
+        public ActionResult EncryptContent(String content, String key)
         {
             com.tradevan.qrutil.QREncrypter qrencrypter = new com.tradevan.qrutil.QREncrypter();
             return Content(qrencrypter.AESEncrypt(content, key));
@@ -372,7 +377,7 @@ namespace eIVOGo.Controllers
             Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("InvoiceRequestSample.xlsx")));
 
             DataSet ds;
-            switch(viewModel.ProcessType)
+            switch (viewModel.ProcessType)
             {
                 case Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer:
                 case Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByIssuer:

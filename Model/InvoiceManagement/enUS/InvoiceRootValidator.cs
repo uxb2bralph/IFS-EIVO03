@@ -76,22 +76,22 @@ namespace Model.InvoiceManagement.enUS
                 return new Exception(String.Format("Number can not be blank，TAG:< DataNumber />"));
             }
 
-            if (invItem.DataNumber.Length > 60)
+            if (invItem.DataNumber?.Length > 60)
             {
                 return new Exception(String.Format("Maximum length of DataNumber is 60 digitals; Incorrect Data Number:{0}, Incorrect TAG: < DataNumber />", invItem.DataNumber));
             }
 
-             bool InvOrder = mgr.GetTable<InvoicePurchaseOrder>().Any(d => d.OrderNo == invItem.DataNumber);
-             if (InvOrder)
-             {
-                 var InvOrderData = mgr.GetTable<InvoicePurchaseOrder>().Where(d => d.OrderNo == invItem.DataNumber);
-                 var InvData = mgr.GetTable<InvoiceItem>().Where(i => i.SellerID == seller.CompanyID).Join(InvOrderData, i => i.InvoiceID, o => o.InvoiceID, (i, o) => i);
+            bool InvOrder = mgr.GetTable<InvoicePurchaseOrder>().Any(d => d.OrderNo == invItem.DataNumber);
+            if (InvOrder)
+            {
+                var InvOrderData = mgr.GetTable<InvoicePurchaseOrder>().Where(d => d.OrderNo == invItem.DataNumber);
+                var InvData = mgr.GetTable<InvoiceItem>().Where(i => i.SellerID == seller.CompanyID).Join(InvOrderData, i => i.InvoiceID, o => o.InvoiceID, (i, o) => i);
 
-                 if (InvData != null && InvData.Count() > 0)
-                 {
-                     return new Exception(String.Format("Duplicated DataNumber; Incorrect Data Number:{0}, Incorrect TAG: < DataNumber />", invItem.DataNumber));
-                 }
-             }
+                if (InvData != null && InvData.Count() > 0)
+                {
+                    return new Exception(String.Format("Duplicated DataNumber; Incorrect Data Number:{0}, Incorrect TAG: < DataNumber />", invItem.DataNumber));
+                }
+            }
 
             if (String.IsNullOrEmpty(invItem.DataDate))
             {
@@ -360,7 +360,7 @@ namespace Model.InvoiceManagement.enUS
                     return new Exception(String.Format("Format of Unit Price error, Incorrect Unit Price: {0}，Incorrect TAG:< UnitPrice />", product.UnitCost));
                 }
 
-               
+
                 if (!Regex.IsMatch(product.CostAmount.ToString(), RegularExpressions))
                 {
                     return new Exception(String.Format("Format of Amount error, Incorrect Amount: {0}, Incorrect TAG:< Amount />", product.CostAmount));

@@ -4,9 +4,10 @@
 
 @using eIVOGo.Helper
 @using eIVOGo.Models
-@using eIVOGo.Models.ViewModel
-@using Model.Models.ViewModel
 @using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Business.Helper
+@using Model.Models.ViewModel
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
@@ -21,6 +22,7 @@
     _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
 
     _model = (IQueryable<InvoiceAllowance>)this.Model;
+    var _profile = Context.GetUser();
 }
 @if (_viewModel != null)
 {
@@ -36,13 +38,37 @@
                 {
                     if (_viewModel.ProcessType == Naming.InvoiceProcessType.B0401)
                     {
-                        <button type="button" class="btn" name="paperStyle" value="A4" onclick="uiAllowanceQuery.print('A4');">A4格式列印</button>
+                        <button type="button" class="btn mr-2" name="paperStyle" value="A4" onclick="uiAllowanceQuery.print('A4');">A4格式列印</button>
                     }
                     else if (_viewModel.ProcessType == Naming.InvoiceProcessType.D0401)
                     {
-                        <button type="button" class="btn" name="paperStyle" value="POS" onclick="uiAllowanceQuery.print('POS');">熱感紙規格列印</button>
+                        <button type="button" class="btn mr-2" name="paperStyle" value="POS" onclick="uiAllowanceQuery.print('POS');">熱感紙規格列印</button>
                     }
-                    <input type="button" class="btn" name="btnPrint" value="Excel下載" onclick="uiAllowanceQuery.download2021();" />
+                    <input type="button" class="btn mr-2" name="btnPrint" value="Excel下載" onclick="uiAllowanceQuery.download2021();" />
+                    if (_profile.IsSystemAdmin() || _profile.CurrentUserRole.OrganizationCategory.Organization.ReceiptNo == "43460094")
+                    {
+                        <input type="button" class="btn mr-2" name="btnPrint" value="ERP下載" onclick="uiAllowanceQuery.downloadERP();" />
+                        <script>
+                            uiAllowanceQuery.downloadERP = function () {
+
+                                var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
+                                $formData = $.extend($formData, $('input[name="chkItem"]').serializeObject());
+                                showLoading();
+                                $.post('@(Url.Action("CreateCustomERPResult", "AllowanceProcess"))', $formData, function (data) {
+                                    hideLoading();
+                                    if ($.isPlainObject(data)) {
+                                        if (data.message != undefined) {
+                                            alert(data.message);
+                                        }
+                                    } else {
+                                        $(data).appendTo($('body'));
+                                    }
+                                });
+
+                            }
+                        </script>
+                    }
+
                     <button type="button" class="btn" name="btnNotify" onclick="uiAllowanceQuery.notify();">重送開立通知</button>
 
                     Html.RenderPartial("~/Views/AllowanceProcess/Module/DoVoidAllowance.cshtml");

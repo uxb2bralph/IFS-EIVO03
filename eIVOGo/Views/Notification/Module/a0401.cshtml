@@ -108,7 +108,7 @@ else if (_model.Organization.EnterpriseGroupMember.Any(g => g.EnterpriseID == 1)
 <br />
 @if (_model.Organization.OrganizationExtension?.CustomNotification != null)
 {
-    Write(new HtmlString(_model.Organization.OrganizationExtension?.CustomNotification));
+    Write(new HtmlString(HttpUtility.HtmlDecode(_model.Organization.OrganizationExtension?.CustomNotification)));
     <br />
 }
 信件寄送時間：@(DateTime.Now)

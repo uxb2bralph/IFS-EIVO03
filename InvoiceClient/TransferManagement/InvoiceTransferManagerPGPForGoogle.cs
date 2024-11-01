@@ -10,6 +10,7 @@ using Model.Schema.EIVO;
 using InvoiceClient.Agent;
 using Utility;
 using Newtonsoft.Json;
+using InvoiceClient.Helper;
 
 namespace InvoiceClient.TransferManagement
 {
@@ -28,6 +29,7 @@ namespace InvoiceClient.TransferManagement
         private InvoiceWatcher _InvoicePDFWatcher;
 
         private InvoiceTransferManagerPGPForGoogle.LocalSettings _Settings;
+        public ITabWorkItem WorkItem { get; set; }
 
         public InvoiceTransferManagerPGPForGoogle()
         {

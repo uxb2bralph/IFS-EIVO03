@@ -17,9 +17,6 @@
     <Setting Name="BtnSaveTitle" Type="System.String" Scope="Application">
       <Value Profile="(Default)">儲存(&amp;S)</Value>
     </Setting>
-    <Setting Name="PdfPrinterName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Bullzip PDF Printer</Value>
-    </Setting>
     <Setting Name="SqlLog" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>

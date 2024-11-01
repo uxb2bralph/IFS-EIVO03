@@ -1,0 +1,34 @@
+﻿
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using Model.Models.ViewModel
+@using Model.Schema.EIVO
+@using Model.Helper
+@using Model.Locale
+@using Kiosk.Helper
+@using Kiosk.Properties
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+
+    Response.Clear();
+    Response.ContentType = "application/json";
+
+    String sampleData = Server.MapPath("~/Content/TestData.xml");
+    if(File.Exists(sampleData))
+    {
+        File.Copy(sampleData, Path.Combine(AppSettings.Default.PreparedInvoice, "TestData.xml"), true);
+        Response.Write((new { result = true }).JsonStringify());
+    }
+    else
+    {
+        Response.Write((new { result = false,message = "測試列印資料錯誤！" }).JsonStringify());
+    }
+
+    Response.Flush();
+    Response.End();
+}
+

@@ -1,0 +1,143 @@
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+@using System.Globalization
+
+@using Newtonsoft.Json
+@using Model.Models.ViewModel
+@using Model.Schema.EIVO
+@using Model.Helper
+@using Model.Locale
+@using Kiosk.Helper
+@using Utility
+@using Uxnet.Web.WebUI
+
+@functions
+{
+    InvoiceRootInvoice _model = null;
+
+    bool IsB2C()
+    {
+        return _model.BuyerId == "0000000000";
+    }
+}
+@{
+    _model = (InvoiceRootInvoice)this.Model;
+    InvoiceRootInvoiceInvoiceItem[] _productItem = _model.InvoiceItem;
+
+}
+
+<div style="page-break-after: always;width:5.5cm;margin-left:0.1cm">
+
+    <div class="container" style="border-top:0px;border-bottom: 0px;page-break-after: always;">
+        <div class="cutfield">
+            <div style="text-align: center;">
+                <h3 class="title-small">銷貨明細</h3>
+            </div>
+            <p style="line-height: 18px;">
+                @{
+                    String[] remark = _model.MainRemark?.Split(';');
+                }
+                @if (Kiosk.Properties.AppSettings.Default.PrintMode == Kiosk.Properties.PrintMode.ForHeadquarter)
+                {
+                    <text>
+                        賣方:黛安芬國際股份有限公司<br />
+                        買方:@(_model.BuyerName)<br />
+                    </text>
+                }
+                銷貨單號:<br />
+                發票號碼:@(_model.InvoiceNumber)<br />
+                購買時間:@(String.Format("{0} {1}", _model.InvoiceDate, _model.InvoiceTime))<br />
+            </p>
+            <table style="width:5.2cm;letter-spacing:-1px;">
+                @*<tr>
+                    <td colspan="3">
+                        <p style="display: inline-block;padding: 2px 0px;margin: 0;line-height: 1.5">品名</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:20%">
+                        <p style="display: inline-block;padding: 2px 0px;margin: 0;line-height: 1.5">數量</p>
+                    </td>
+                    <td style="width:40%">
+                        <p style="display: inline-block;padding: 2px 0px;margin: 0;line-height: 1.5">單價</p>
+                    </td>
+                    <td style="width:40%">
+                        <p style="display: inline-block;padding: 2px 0px;margin: 0;line-height: 1.5">小計</p>
+                    </td>
+                </tr>*@
+
+                @{ int _itemIdx;}
+                @for (_itemIdx = 0; _productItem != null && _itemIdx < _productItem.Length; _itemIdx++)
+                {
+                    var item = _productItem[_itemIdx];
+                    <tr>
+                        <td colspan="3" valign="top">@(item.Description)</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">@(String.Format("{0:##,###,###,##0.##}", item.Quantity))</td>
+                        <td align="right" valign="top">@(String.Format("{0:##,###,###,##0.##}", item.UnitPrice))</td>
+                        <td align="right" valign="top">
+                            @(String.Format("{0:##,###,###,##0.##}", item.Amount))&nbsp;
+                            @(item.TaxType == (byte)Naming.TaxTypeDefinition.免稅
+                                        ? ""
+                                        : item.TaxType == (byte)Naming.TaxTypeDefinition.零稅率
+                                            ? "TZ"
+                                            : "TX")
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div class="" style="border-top:0px;border-bottom: 0px">
+            <table style="width:5.5cm;">
+                @if (_productItem != null)
+                {
+                    <tr>
+                        <td>
+                            <p style="border-top: 1px dashed #808080;">
+                                @*<span style="">總計:@(_model.InvoiceItem.Length)項&nbsp;&nbsp;金額:@(String.Format("{0:##,###,###,##0.##}", _model.TotalAmount))</span><br />*@
+                                @if (true || !IsB2C())
+                                {
+                                    <text>應稅銷售額:@(String.Format("{0:##,###,###,##0.##}", _model.SalesAmount))</text><br />
+                                    <text>零稅率銷售額:@(String.Format("{0:##,###,###,##0.##}", _model.ZeroTaxSalesAmountSpecified ? _model.ZeroTaxSalesAmount : 0)) </text><br />
+                                    <text>免稅銷售額:@(String.Format("{0:##,###,###,##0.##}", _model.FreeTaxSalesAmountSpecified ? _model.FreeTaxSalesAmount : 0)) </text><br />
+                                    <text>稅額:@(String.Format("{0:##,###,###,##0.##} ", _model.BuyerMark == 3 || _model.BuyerMark == 4 ? 0 : _model.TaxAmount))</text> <br />
+                                }
+                                備註:@Html.Raw(_model.MainRemark?.Replace(";", "<br />"))<br />
+                                @if (_model.CustomerDefined?.Payment?.Any() == true)
+                                {
+                                    <text>
+                                        付款方式及金額: @(_model.CustomerDefined.Payment[0].Method) / $@(_model.CustomerDefined.Payment[0].Amount)<br />
+                                    </text>
+                                }
+                                @if (_model.CarrierId1 != null)
+                                {
+                                    <text>
+                                        載具號碼: @(_model.CarrierId1)<br />
+                                    </text>
+                                }
+                                @if (_model.NPOBAN != null)
+                                {
+                                    <text>
+                                        愛心碼: @(_model.NPOBAN)<br />
+                                    </text>
+                                }
+                                @*換貨請於購買日起七日內持發票<br />
+                                正本與銷貨明細至原購買門店辦理<br />*@
+                            </p>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+

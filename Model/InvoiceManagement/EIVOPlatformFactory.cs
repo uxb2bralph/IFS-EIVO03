@@ -6,17 +6,17 @@ using System.Security.Cryptography.Pkcs;
 using System.Text;
 using System.Threading;
 using System.Xml;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 using Model.DataEntity;
 using Model.Properties;
 using Utility;
-using System.Security.Cryptography.X509Certificates;
 using Uxnet.Com.Security.UseCrypto;
 using Model.Helper;
 using Model.Locale;
 using Uxnet.Com.Helper;
 using Model.InvoiceManagement.InvoiceProcess;
-using System.Threading.Tasks;
 using Model.Models.ViewModel;
 
 namespace Model.InvoiceManagement
@@ -124,6 +124,343 @@ namespace Model.InvoiceManagement
             get;
             set;
         }
+
+        //public static QueuedProcessHandler CheckTurnkey { get; set; } = new QueuedProcessHandler
+        //{
+        //    Process = () =>
+        //    {
+        //        Task.Run(() =>
+        //        {
+        //            using (InvoiceManager models = new InvoiceManager())
+        //            {
+        //                using (TurnKey2DataContext turnkeyDB = new TurnKey2DataContext())
+        //                {
+        //                    var items = models.GetTable<C0401DispatchQueue>().Where(q => q.StepID == (int)Naming.InvoiceStepDefinition.MIG_P);
+        //                    for (var item = items.FirstOrDefault(); item != null;)
+        //                    {
+        //                        var invoice = item.CDS_Document.InvoiceItem;
+        //                        var log = turnkeyDB.GetTable<V_Invoice>()
+        //                                .Where(i => i.TrackCode == invoice.TrackCode)
+        //                                .Where(i => i.No == invoice.No)
+        //                                .Where(i => i.DocType == "C0401" || i.DocType == "A0401")
+        //                                .OrderByDescending(i => i.MESSAGE_DTS)
+        //                                .FirstOrDefault();
+
+        //                        if (log != null)
+        //                        {
+        //                            if (log.STATUS == "C")
+        //                            {
+        //                                invoice.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_C, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{invoice.TrackCode}{invoice.No}:C0401:C");
+        //                            }
+        //                            else
+        //                            {
+        //                                invoice.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_E, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{invoice.TrackCode}{invoice.No}:C0401:E");
+        //                            }
+        //                            models.SubmitChanges();
+        //                            models.ExecuteCommand("delete [proc].C0401DispatchQueue where DocID={0} and StepID={1}",
+        //                                item.DocID, item.StepID);
+        //                        }
+
+        //                        item = items.Where(c => c.DocID > item.DocID)
+        //                                        .FirstOrDefault();
+        //                    }
+        //                }
+        //            }
+        //        });
+
+        //        Task.Run(() =>
+        //        {
+        //            using (InvoiceManager models = new InvoiceManager())
+        //            {
+        //                using (TurnKey2DataContext turnkeyDB = new TurnKey2DataContext())
+        //                {
+        //                    var items = models.GetTable<C0501DispatchQueue>().Where(q => q.StepID == (int)Naming.InvoiceStepDefinition.MIG_P);
+        //                    for (var item = items.FirstOrDefault(); item != null;)
+        //                    {
+        //                        var invoice = item.CDS_Document.DerivedDocument.ParentDocument.InvoiceItem;
+        //                        var log = turnkeyDB.GetTable<V_Invoice>()
+        //                                .Where(i => i.TrackCode == invoice.TrackCode)
+        //                                .Where(i => i.No == invoice.No)
+        //                                .Where(i => i.DocType == "C0501" || i.DocType == "A0501")
+        //                                .OrderByDescending(i => i.MESSAGE_DTS)
+        //                                .FirstOrDefault();
+
+        //                        if (log != null)
+        //                        {
+        //                            if (log.STATUS == "C")
+        //                            {
+        //                                item.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_C, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{invoice.TrackCode}{invoice.No}:C0501:C");
+        //                            }
+        //                            else
+        //                            {
+        //                                item.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_E, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{invoice.TrackCode}{invoice.No}:C0501:E");
+        //                            }
+        //                            models.SubmitChanges();
+        //                            models.ExecuteCommand("delete [proc].C0501DispatchQueue where DocID={0} and StepID={1}",
+        //                                item.DocID, item.StepID);
+        //                        }
+
+        //                        item = items.Where(c => c.DocID > item.DocID)
+        //                                        .FirstOrDefault();
+        //                    }
+        //                }
+        //            }
+        //        });
+
+        //        Task.Run(() =>
+        //        {
+        //            using (InvoiceManager models = new InvoiceManager())
+        //            {
+        //                using (TurnKey2DataContext turnkeyDB = new TurnKey2DataContext())
+        //                {
+        //                    var items = models.GetTable<D0401DispatchQueue>().Where(q => q.StepID == (int)Naming.InvoiceStepDefinition.MIG_P);
+        //                    for (var item = items.FirstOrDefault(); item != null;)
+        //                    {
+        //                        var invoice = item.CDS_Document.InvoiceAllowance;
+        //                        var allowanceNo = invoice.AllowanceNumber;
+        //                        var log = turnkeyDB.GetTable<V_Allowance>()
+        //                                .Where(i => i.AllowanceNo == allowanceNo)
+        //                                .Where(i => i.DocType == "D0401" || i.DocType == "B0401")
+        //                                .OrderByDescending(i => i.MESSAGE_DTS)
+        //                                .FirstOrDefault();
+
+        //                        if (log != null)
+        //                        {
+        //                            if (log.STATUS == "C")
+        //                            {
+        //                                invoice.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_C, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{allowanceNo}:D0401:C");
+        //                            }
+        //                            else
+        //                            {
+        //                                invoice.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_E, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{allowanceNo}:D0401:E");
+        //                            }
+        //                            models.SubmitChanges();
+        //                            models.ExecuteCommand("delete [proc].D0401DispatchQueue where DocID={0} and StepID={1}",
+        //                                item.DocID, item.StepID);
+        //                        }
+
+        //                        item = items.Where(c => c.DocID > item.DocID)
+        //                                        .FirstOrDefault();
+        //                    }
+        //                }
+        //            }
+        //        });
+
+        //        Task.Run(() =>
+        //        {
+        //            using (InvoiceManager models = new InvoiceManager())
+        //            {
+        //                using (TurnKey2DataContext turnkeyDB = new TurnKey2DataContext())
+        //                {
+        //                    var items = models.GetTable<D0501DispatchQueue>().Where(q => q.StepID == (int)Naming.InvoiceStepDefinition.MIG_P);
+        //                    for (var item = items.FirstOrDefault(); item != null;)
+        //                    {
+        //                        var invoice = item.CDS_Document.DerivedDocument.ParentDocument.InvoiceAllowance;
+        //                        var allowanceNo = invoice.AllowanceNumber;
+        //                        var log = turnkeyDB.GetTable<V_Allowance>()
+        //                                .Where(i => i.AllowanceNo == allowanceNo)
+        //                                .Where(i => i.DocType == "D0501" || i.DocType == "A0501")
+        //                                .OrderByDescending(i => i.MESSAGE_DTS)
+        //                                .FirstOrDefault();
+
+        //                        if (log != null)
+        //                        {
+        //                            if (log.STATUS == "C")
+        //                            {
+        //                                item.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_C, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{allowanceNo}:D0501:C");
+        //                            }
+        //                            else
+        //                            {
+        //                                item.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_E, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{allowanceNo}:D0501:E");
+        //                            }
+        //                            models.SubmitChanges();
+        //                            models.ExecuteCommand("delete [proc].D0501DispatchQueue where DocID={0} and StepID={1}",
+        //                                item.DocID, item.StepID);
+        //                        }
+
+        //                        item = items.Where(c => c.DocID > item.DocID)
+        //                                        .FirstOrDefault();
+        //                    }
+        //                }
+        //            }
+        //        });
+
+        //        Task.Run(() =>
+        //        {
+        //            using (InvoiceManager models = new InvoiceManager())
+        //            {
+        //                using (TurnKey2DataContext turnkeyDB = new TurnKey2DataContext())
+        //                {
+        //                    var items = models.GetTable<A0401DispatchQueue>().Where(q => q.StepID == (int)Naming.InvoiceStepDefinition.MIG_P);
+        //                    for (var item = items.FirstOrDefault(); item != null;)
+        //                    {
+        //                        var invoice = item.CDS_Document.InvoiceItem;
+        //                        var log = turnkeyDB.GetTable<V_Invoice>()
+        //                                .Where(i => i.TrackCode == invoice.TrackCode)
+        //                                .Where(i => i.No == invoice.No)
+        //                                .Where(i => i.DocType == "C0401" || i.DocType == "A0401")
+        //                                .OrderByDescending(i => i.MESSAGE_DTS)
+        //                                .FirstOrDefault();
+
+        //                        if (log != null)
+        //                        {
+        //                            if (log.STATUS == "C")
+        //                            {
+        //                                invoice.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_C, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{invoice.TrackCode}{invoice.No}:A0401:C");
+        //                            }
+        //                            else
+        //                            {
+        //                                invoice.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_E, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{invoice.TrackCode}{invoice.No}:A0401:E");
+        //                            }
+        //                            models.SubmitChanges();
+        //                            models.ExecuteCommand("delete [proc].A0401DispatchQueue where DocID={0} and StepID={1}",
+        //                                item.DocID, item.StepID);
+        //                        }
+
+        //                        item = items.Where(c => c.DocID > item.DocID)
+        //                                        .FirstOrDefault();
+        //                    }
+        //                }
+        //            }
+        //        });
+
+        //        Task.Run(() =>
+        //        {
+        //            using (InvoiceManager models = new InvoiceManager())
+        //            {
+        //                using (TurnKey2DataContext turnkeyDB = new TurnKey2DataContext())
+        //                {
+        //                    var items = models.GetTable<A0501DispatchQueue>().Where(q => q.StepID == (int)Naming.InvoiceStepDefinition.MIG_P);
+        //                    for (var item = items.FirstOrDefault(); item != null;)
+        //                    {
+        //                        var invoice = item.CDS_Document.DerivedDocument.ParentDocument.InvoiceItem;
+        //                        var log = turnkeyDB.GetTable<V_Invoice>()
+        //                                .Where(i => i.TrackCode == invoice.TrackCode)
+        //                                .Where(i => i.No == invoice.No)
+        //                                .Where(i => i.DocType == "C0501" || i.DocType == "A0501")
+        //                                .OrderByDescending(i => i.MESSAGE_DTS)
+        //                                .FirstOrDefault();
+
+        //                        if (log != null)
+        //                        {
+        //                            if (log.STATUS == "C")
+        //                            {
+        //                                item.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_C, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{invoice.TrackCode}{invoice.No}:A0501:C");
+        //                            }
+        //                            else
+        //                            {
+        //                                item.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_E, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{invoice.TrackCode}{invoice.No}:A0501:E");
+        //                            }
+        //                            models.SubmitChanges();
+        //                            models.ExecuteCommand("delete [proc].A0501DispatchQueue where DocID={0} and StepID={1}",
+        //                                item.DocID, item.StepID);
+        //                        }
+
+        //                        item = items.Where(c => c.DocID > item.DocID)
+        //                                        .FirstOrDefault();
+        //                    }
+        //                }
+        //            }
+        //        });
+
+        //        Task.Run(() =>
+        //        {
+        //            using (InvoiceManager models = new InvoiceManager())
+        //            {
+        //                using (TurnKey2DataContext turnkeyDB = new TurnKey2DataContext())
+        //                {
+        //                    var items = models.GetTable<B0401DispatchQueue>().Where(q => q.StepID == (int)Naming.InvoiceStepDefinition.MIG_P);
+        //                    for (var item = items.FirstOrDefault(); item != null;)
+        //                    {
+        //                        var invoice = item.CDS_Document.InvoiceAllowance;
+        //                        var allowanceNo = invoice.AllowanceNumber;
+        //                        var log = turnkeyDB.GetTable<V_Allowance>()
+        //                                .Where(i => i.AllowanceNo == allowanceNo)
+        //                                .Where(i => i.DocType == "D0401" || i.DocType == "B0401")
+        //                                .OrderByDescending(i => i.MESSAGE_DTS)
+        //                                .FirstOrDefault();
+
+        //                        if (log != null)
+        //                        {
+        //                            if (log.STATUS == "C")
+        //                            {
+        //                                invoice.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_C, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{allowanceNo}:B0401:C");
+        //                            }
+        //                            else
+        //                            {
+        //                                invoice.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_E, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{allowanceNo}:B0401:E");
+        //                            }
+        //                            models.SubmitChanges();
+        //                            models.ExecuteCommand("delete [proc].B0401DispatchQueue where DocID={0} and StepID={1}",
+        //                                item.DocID, item.StepID);
+        //                        }
+
+        //                        item = items.Where(c => c.DocID > item.DocID)
+        //                                        .FirstOrDefault();
+        //                    }
+        //                }
+        //            }
+        //        });
+
+        //        Task.Run(() =>
+        //        {
+        //            using (InvoiceManager models = new InvoiceManager())
+        //            {
+        //                using (TurnKey2DataContext turnkeyDB = new TurnKey2DataContext())
+        //                {
+        //                    var items = models.GetTable<B0501DispatchQueue>().Where(q => q.StepID == (int)Naming.InvoiceStepDefinition.MIG_P);
+        //                    for (var item = items.FirstOrDefault(); item != null;)
+        //                    {
+        //                        var invoice = item.CDS_Document.DerivedDocument.ParentDocument.InvoiceAllowance;
+        //                        var allowanceNo = invoice.AllowanceNumber;
+        //                        var log = turnkeyDB.GetTable<V_Allowance>()
+        //                                .Where(i => i.AllowanceNo == allowanceNo)
+        //                                .Where(i => i.DocType == "D0501" || i.DocType == "A0501")
+        //                                .OrderByDescending(i => i.MESSAGE_DTS)
+        //                                .FirstOrDefault();
+
+        //                        if (log != null)
+        //                        {
+        //                            if (log.STATUS == "C")
+        //                            {
+        //                                item.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_C, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{allowanceNo}:B0501:C");
+        //                            }
+        //                            else
+        //                            {
+        //                                item.CDS_Document.PushLogOnSubmit(models, Naming.InvoiceStepDefinition.MIG_E, Naming.DataProcessStatus.Done);
+        //                                Console.WriteLine($"{allowanceNo}:B0501:E");
+        //                            }
+        //                            models.SubmitChanges();
+        //                            models.ExecuteCommand("delete [proc].B0501DispatchQueue where DocID={0} and StepID={1}",
+        //                                item.DocID, item.StepID);
+        //                        }
+
+        //                        item = items.Where(c => c.DocID > item.DocID)
+        //                                        .FirstOrDefault();
+        //                    }
+        //                }
+        //            }
+        //        });
+
+        //    },
+        //    PeriodInMinutes = 60,
+
+        //};
 
         static EIVOPlatformFactory()
         {
@@ -240,6 +577,7 @@ namespace Model.InvoiceManagement
                             var t = Task.Factory.ContinueWhenAll(__Tasks.ToArray(), ts =>
                             {
                                 Logger.Info($"EIVOPlatformFatory finished:{DateTime.Now}");
+                                __Tasks.Clear();
                             });
                             t.Wait();
 

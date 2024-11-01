@@ -47,16 +47,30 @@ namespace Uxnet.Com.Helper.DefaultTools
 
         public Program()
         {
+            using(PrintDocument doc = new PrintDocument()) 
+            {
+                var printerName = doc.DefaultPageSettings.PrinterSettings.PrinterName;
+                if (String.IsNullOrEmpty(printerName))
+                {
+                    var result = MessageBox.Show("未設定預設印表機，系統無法進行列印！！", "系統錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    Logger.Info(String.Format("使用預設印表機 => {0}", printerName));
+                }
+            }
 
-            if (Win32.Winspool.SetDefaultPrinter(Settings.Default.PdfPrinterName))
-            {
-                Logger.Warn(String.Format("使用預設印表機 => {0}", Settings.Default.PdfPrinterName));
-            }
-            else
-            {
-                Logger.Warn(String.Format("預設印表機設定失敗 => {0}", Settings.Default.PdfPrinterName));
-                Application.Exit();
-            }
+            //if (Win32.Winspool.SetDefaultPrinter(Settings.Default.PdfPrinterName))
+            //{
+            //    Logger.Warn(String.Format("使用預設印表機 => {0}", Settings.Default.PdfPrinterName));
+            //}
+            //else
+            //{
+            //    String msg = String.Format("預設印表機設定失敗 => {0}", Settings.Default.PdfPrinterName);
+            //    Logger.Warn(msg);
+            //    var result = MessageBox.Show(msg, "系統錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    Application.Exit();
+            //}
 
             _webView = new WebView2();
             _webView.NavigationCompleted += Wb_NavigationCompleted;

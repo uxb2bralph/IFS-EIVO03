@@ -15,6 +15,12 @@ using Model.Security.MembershipManagement;
 using ModelExtension.Helper;
 using Newtonsoft.Json;
 using Utility;
+using System.Text.RegularExpressions;
+using System.Drawing;
+using System.IO;
+using ZXing;
+using DataAccessLayer;
+using Model.Helper;
 
 namespace eIVOGo.Controllers
 {
@@ -99,6 +105,39 @@ namespace eIVOGo.Controllers
             return View("Index");
         }
 
+        public ActionResult CommitMasterOrganization(QueryViewModel viewModel)
+        {
+            int? companyID = null;
+            if (viewModel.KeyID != null)
+            {
+                companyID = viewModel.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<Organization>().Where(o => o.CompanyID == companyID).FirstOrDefault();
+            if (item == null)
+            {
+                return Json(new { result = false, message = "資料不存在!!" });
+            }
+
+            if (item.MasterOrganization == null)
+            {
+                item.MasterOrganization = new MasterOrganization
+                {
+                    EnterpriseName = item.CompanyName,
+                };
+
+                models.SubmitChanges();
+            }
+            else
+            {
+                models.ExecuteCommand(@"DELETE FROM center.MasterOrganization
+                    WHERE   (MasterID = {0})", item.CompanyID);
+            }
+
+            return Json(new { result = true });
+        }
+
+
         public ActionResult MailTracking(MailTrackingViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -110,18 +149,71 @@ namespace eIVOGo.Controllers
             ViewBag.ViewModel = viewModel;
             viewModel.StartNo = viewModel.StartNo.GetEfficientString();
             viewModel.EndNo = viewModel.EndNo.GetEfficientString();
-            if (viewModel.StartNo == null || viewModel.StartNo.Length != 10)
+            viewModel.UserType = viewModel.UserType;
+
+            IQueryable<InvoiceItem> items =
+                models.GetTable<InvoiceItem>()
+                    .Where(i => !models.GetTable<InvoiceCancellation>().Any(c => c.InvoiceID == i.InvoiceID));
+
+            bool hasQuery = false;
+            if (viewModel.DateFilter == FilterType.Include
+                && viewModel.DateFrom.HasValue
+                && viewModel.DateTo.HasValue)
             {
-                ModelState.AddModelError("StartNo", "發票起號由2碼英文+8碼數字組成，共10碼。");
+                hasQuery = true;
+                items = items
+                    .Where(i => i.InvoiceDate >= viewModel.DateFrom.Value)
+                    .Where(i => i.InvoiceDate < viewModel.DateTo.Value.AddDays(1));
             }
-            else if (viewModel.EndNo == null || viewModel.EndNo.Length != 10)
+
+            String trackCode = null;
+            String endTrackCode = null;
+            if (viewModel.StartNo != null)
             {
-                ModelState.AddModelError("EndNo", "發票迄號由2碼英文+8碼數字組成，共10碼。");
+                if (viewModel.StartNo.Length != 10)
+                {
+                    ModelState.AddModelError("StartNo", "發票起號由2碼英文+8碼數字組成，共10碼。");
+                }
+                else
+                {
+                    hasQuery = true;
+                    trackCode = viewModel.StartNo.Substring(0, 2);
+                    String startNo = viewModel.StartNo.Substring(2, 8);
+
+                    items = items.Where(i => i.TrackCode == trackCode)
+                                .Where(i => String.Compare(i.No, startNo) >= 0);
+                }
             }
-            else if(viewModel.StartNo.Substring(0, 2) != viewModel.EndNo.Substring(0, 2))
+
+            if (viewModel.EndNo != null)
             {
-                ModelState.AddModelError("StartNo", "發票起、迄號字軌不相同!!");
-                ModelState.AddModelError("EndNo", "發票起、迄號字軌不相同!!");
+                if (viewModel.EndNo.Length != 10)
+                {
+                    ModelState.AddModelError("EndNo", "發票迄號由2碼英文+8碼數字組成，共10碼。");
+                }
+                else if (trackCode != null && (endTrackCode = viewModel.EndNo.Substring(0, 2)) != trackCode)
+                {
+                    ModelState.AddModelError("StartNo", "發票起、迄號字軌不相同!!");
+                    ModelState.AddModelError("EndNo", "發票起、迄號字軌不相同!!");
+                }
+                else
+                {
+                    hasQuery = true;
+                    String endNo = viewModel.EndNo.Substring(2, 8);
+
+                    items = items.Where(i => i.TrackCode == endTrackCode)
+                        .Where(i => String.Compare(i.No, endNo) <= 0);
+                }
+            }
+
+            if (!hasQuery)
+            {
+                ModelState.AddModelError("Message", "請指定發票號碼或日期查詢條件!!");
+            }
+
+            if (viewModel.UserType == null) //Amy
+            {
+                ModelState.AddModelError("UserType", "請選擇發票種類!!");
             }
 
             if (!ModelState.IsValid)
@@ -130,51 +222,44 @@ namespace eIVOGo.Controllers
                 return View("~/Views/Shared/ReportInputError.cshtml");
             }
 
-            String startNo = viewModel.StartNo.Substring(2, 8);
-            String endNo = viewModel.EndNo.Substring(2, 8);
-            String trackCode = viewModel.StartNo.Substring(0, 2);
-
-            IQueryable<InvoiceItem> items = models.GetTable<InvoiceItem>();
-            IQueryable<InvoiceItem> exclusive = models.GetTable<InvoiceItem>();
-            bool hasExclusive = false;
-            if (viewModel.DateFrom.HasValue)
+            if (viewModel.DateFilter == FilterType.Exclude)
             {
-                hasExclusive = true;
-                exclusive = exclusive.Where(i => i.InvoiceDate >= viewModel.DateFrom);
-            }
+                IQueryable<InvoiceItem> exclusive = models.GetTable<InvoiceItem>();
+                bool hasExclusive = false;
+                if (viewModel.DateFrom.HasValue)
+                {
+                    hasExclusive = true;
+                    exclusive = exclusive.Where(i => i.InvoiceDate >= viewModel.DateFrom);
+                }
 
-            if (viewModel.DateTo.HasValue)
-            {
-                hasExclusive = true;
-                exclusive = exclusive.Where(i => i.InvoiceDate < viewModel.DateTo.Value.AddDays(1));
-            }
+                if (viewModel.DateTo.HasValue)
+                {
+                    hasExclusive = true;
+                    exclusive = exclusive.Where(i => i.InvoiceDate < viewModel.DateTo.Value.AddDays(1));
+                }
 
-            if(hasExclusive)
-            {
-                items = items.Where(i => !exclusive.Any(x => x.InvoiceID == i.InvoiceID));
+                if (hasExclusive)
+                {
+                    items = items.Where(i => !exclusive.Any(x => x.InvoiceID == i.InvoiceID));
+                }
             }
 
             if (viewModel.ChannelID.HasValue)
             {
-                items = items.Join(models.GetTable<CDS_Document>().Where(d => d.ChannelID == (int?)viewModel.ChannelID), 
+                items = items.Join(models.GetTable<CDS_Document>().Where(d => d.ChannelID == (int?)viewModel.ChannelID),
                     i => i.InvoiceID, d => d.DocID, (i, d) => i);
             }
 
-            if (viewModel.Attachment == 1)
+            if (viewModel.Attachment == 1 || viewModel.UserType == 1) //Amy-1121115-UserType
             {
                 items = items.Join(models.GetTable<CDS_Document>().Where(d => d.Attachment.Any()),
                     i => i.InvoiceID, d => d.DocID, (i, d) => i);
             }
-            else if (viewModel.Attachment == 0)
+            else if (viewModel.Attachment == 0 || viewModel.UserType == 0)//Amy-1121115-UserType
             {
                 items = items.Join(models.GetTable<CDS_Document>().Where(d => !d.Attachment.Any()),
                     i => i.InvoiceID, d => d.DocID, (i, d) => i);
             }
-
-            items = items.Where(i => i.TrackCode == trackCode
-                && String.Compare(i.No, startNo) >= 0
-                && String.Compare(i.No, endNo) <= 0
-                && i.InvoiceCancellation == null);
 
             //var resultItems = items
             //    .Where(i => i.InvoiceBuyer.Address != null && i.InvoiceBuyer.ReceiptNo == "0000000000")
@@ -185,12 +270,19 @@ namespace eIVOGo.Controllers
 
             var resultItems = items.Join(models.GetTable<InvoiceBuyer>().Where(i => i.Address != null),
                     i => i.InvoiceID, b => b.InvoiceID, (i, b) => i);
-                //.OrderBy(i => i.InvoiceBuyer.ReceiptNo)
-                //.ThenBy(i => i.InvoiceBuyer.Address)
-                //.ThenBy(i => i.TrackCode)
-                //.ThenBy(i => i.No);
+            //.OrderBy(i => i.InvoiceBuyer.ReceiptNo)
+            //.ThenBy(i => i.InvoiceBuyer.Address)
+            //.ThenBy(i => i.TrackCode)
+            //.ThenBy(i => i.No);
 
-            return View("~/Views/Handling/MailTracking/QueryResult.cshtml", resultItems);
+            if (viewModel.UserType == 1)//Amy-1121115-UserType
+            {
+                return View("~/Views/Handling/MailTracking/QueryResult.cshtml", resultItems); //VIP
+            }
+            else
+            {
+                return View("~/Views/Handling/MailTracking/QueryResultGeneralUser.cshtml", resultItems); ////Amy:一般用戶
+            }
         }
 
         public ActionResult InvoiceMailItems(bool? showTable, int[] id, int[] packageID)
@@ -332,7 +424,11 @@ namespace eIVOGo.Controllers
             {
                 DataTable table = new DataTable();
                 ds.Tables.Add(table);
-                table.Columns.Add("掛號號碼");
+                table.Columns.Add("掛號號碼1");
+                table.Columns.Add("掛號號碼2"); //Amy-1121116
+                table.Columns.Add("掛號號碼3"); //Amy-1121116
+                table.Columns.Add("掛號號碼4"); //Amy-1130115
+                table.Columns.Add("掛號號碼5"); //Amy-1130115
                 table.Columns.Add("姓名");
                 table.Columns.Add("寄件地名或地址");
                 table.Columns.Add("備考");
@@ -347,15 +443,23 @@ namespace eIVOGo.Controllers
                 foreach (var m in items)
                 {
                     var item = models.GetTable<InvoiceItem>().Where(i => i.InvoiceID == m.PackageID).FirstOrDefault();
+                    var data = models.GetTable<DocumentPostLog>().Where(i => i.InvoiceID == m.PackageID).FirstOrDefault();//Amy-1130115, 因應郵務需求增加ZipCode, 及ChkCode
                     if (item == null)
                         continue;
                     var mailNo = m.MailNo1.GetEfficientString();
                     if (mailNo == null)
                         continue;
+                    var mailNO2 = m.MailNo2.GetEfficientString(); //Amy-1121116
+                    var mailNO3 = m.MailNo3.GetEfficientString(); //Amy-1121117
                     var row = table.NewRow();
                     table.Rows.Add(row);
 
-                    row["掛號號碼"] = mailNo;
+                    row["掛號號碼1"] = mailNo;
+                    row["掛號號碼2"] = mailNO2;
+                    row["掛號號碼3"] = mailNO3;
+                    //row["掛號號碼4"] = data.ZipCode; //Amy-1130115
+                    row["掛號號碼4"] = (data?.ZipCode?.Length == 6) ? $"{data.ZipCode.Substring(0, 3)}00" : data?.ZipCode;  //Amy-1130119-郵遞區號等於6碼的只取前3碼,補2個零,若小於6碼的,取原資料
+                    row["掛號號碼5"] = data?.ChkCode;//Amy-1130115
                     row["遞件日期"] = $"{m.DeliveryDate:yyyy/MM/dd}";
                     row["姓名"] = item.InvoiceBuyer.ContactName;
                     row["寄件地名或地址"] = item.InvoiceBuyer.Address;
@@ -378,6 +482,75 @@ namespace eIVOGo.Controllers
 
             return new EmptyResult();
         }
+
+        public ActionResult GeneratePostData(String jsonData) //Amy-1121114-郵政資訊
+        {
+            var items = JsonConvert.DeserializeObject<MailTrackingCsvViewModel[]>(jsonData);
+            models.ExecuteCommand("delete DocumentPostLog ");
+
+            foreach (var m in items)
+            {
+                var item = models.GetTable<InvoiceItem>().Where(i => i.InvoiceID == m.PackageID).FirstOrDefault();
+                var MailNo1 = m.MailNo1.GetEfficientString();
+                var MailNo2 = m.MailNo2.GetEfficientString();
+                var MailNo3 = m.MailNo3.GetEfficientString();
+                if (item == null || MailNo1 == null || MailNo2 == null || MailNo3 == null)
+                {
+                    ViewBag.Message = "產生郵件號碼失敗或不完整,請重新產生!!";
+                    return View("~/Views/Shared/AlertMessage.cshtml");
+                }
+
+                var pattern = @"(?<zipcode>^\d+?)(?<city>\D+[縣市])(?<district>\D+?(市區|鎮區|鎮市|[鄉鎮市區]))(?<others>.+)";
+                Match zipMatch = Regex.Match(item.InvoiceBuyer.Address, pattern);
+                var zipcode = zipMatch.Groups["zipcode"].ToString().PadRight(5, '0');
+                var ChkCode = GetPostChkcode(MailNo1, MailNo2, MailNo3, zipcode);
+
+
+                models.GetTable<DocumentPostLog>().InsertOnSubmit
+                (new DocumentPostLog
+                {
+                    InvoiceID = item.InvoiceID,
+                    PostCode = MailNo1.ToString(),
+                    RegisterCode = m.MailNo2.GetEfficientString(),
+                    ZipCode = zipcode,
+                    MailType = m.MailNo3.ToString(),
+                    ChkCode = ChkCode.ToString(),
+                    CreateDate = DateTime.Now
+                }
+                );
+                models.SubmitChanges();
+            }
+            return new EmptyResult();
+        }
+
+        private int GetPostChkcode(string MailNo1, string MailNo2, string MailNo3, string zipcode)
+        {
+
+            int oddSum = 0;
+            int evenSum = 0;
+            var sCode = MailNo1.Trim() + MailNo2.Trim() + MailNo3.Trim() + zipcode.Trim();
+            // 计算奇数位和偶数位的数字之和
+            for (int i = 0; i < sCode.Length; i++)
+            {
+                int digit = int.Parse(sCode[i].ToString());
+
+                if (i % 2 == 0) // 奇数位
+                {
+                    oddSum += digit;
+                }
+                else // 偶数位
+                {
+                    evenSum += digit;
+                }
+            }
+            var leftchar = (oddSum * 3 + evenSum).ToString().Substring(0, 1); //取第一個位元
+            // 计算最终的 ChkCode
+            int chkCode = 10 - int.Parse(leftchar);
+
+            return chkCode;
+
+        }
+
 
         // GET: Handling/Edit/5
         public ActionResult Edit(int id)

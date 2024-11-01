@@ -34,7 +34,7 @@
         <td class="tdleft">
             <select name="AgentID">
                 <option value="">全部</option>
-                @foreach (var a in _model)
+                @foreach (var a in _model.OrderBy(o=>o.ReceiptNo))
                 {
                     <option value="@(a.CompanyID)">@($"({a.ReceiptNo}) {a.CompanyName}")</option>
                 }

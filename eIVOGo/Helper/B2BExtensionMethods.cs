@@ -216,7 +216,7 @@ namespace eIVOGo.Helper
         }
 
 
-        public static String CreatePdfFile(this InvoiceItem item,bool alwaysCreateNew = false)
+        public static String CreatePdfFile(this InvoiceItem item,bool alwaysCreateNew = true)
         {
 
             String fileName = TempForReceivePDF.GetDateStylePath(item.InvoiceDate.Value) + "\\" + item.TrackCode + item.No + ".pdf";
@@ -227,7 +227,7 @@ namespace eIVOGo.Helper
                 using (WebClient client = new WebClient())
                 {
                     client.Encoding = Encoding.UTF8;
-                    String tempPDF = client.DownloadString(String.Format("{0}{1}?id={2}&nameOnly=true",
+                    String tempPDF = client.DownloadString(String.Format("{0}{1}?id={2}&nameOnly=true&processType=A0401",
                                             Uxnet.Web.Properties.Settings.Default.HostUrl,
                                             VirtualPathUtility.ToAbsolute("~/DataView/PrintSingleInvoiceAsPDF"),
                                             item.InvoiceID));
@@ -269,7 +269,7 @@ namespace eIVOGo.Helper
 
         }
 
-        public static String CreatePdfFile(this InvoiceAllowance item, bool alwaysCreateNew = false)
+        public static String CreatePdfFile(this InvoiceAllowance item, bool alwaysCreateNew = true)
         {
 
             String fileName = $"{TempForReceivePDF.GetDateStylePath(item.AllowanceDate.Value)}\\{item.AllowanceNumber}.pdf";

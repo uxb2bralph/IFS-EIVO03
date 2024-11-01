@@ -73,6 +73,9 @@ namespace InvoiceClient.MainContent
         {
             get { return "Excel Electronic Invoice"; }
         }
+        public void ReportStatus()
+        {
 
+        }
     }
 }

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Uxnet.ToolAdapter.Properties;
 
 namespace TaskCenter.Properties
 {
-    public partial class AppSettings : Uxnet.Com.Properties.AppSettings
+    public partial class AppSettings : AppSettingsBase
     {
         static AppSettings()
         {

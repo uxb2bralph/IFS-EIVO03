@@ -34,11 +34,13 @@ namespace InvoiceClient.Agent.TurnkeyCSVHelper
         protected override XmlDocument prepareInvoiceDocument(string invoiceFile)
         {
             XElement root = ERPInvoiceParser.ConvertToXml(invoiceFile);
-            foreach(var item in root.Elements("Invoice"))
+            foreach (var item in root.Elements("Invoice"))
             {
                 item.Add(new XElement("PrintMark", "Y"));
             }
-            return root.ToXmlDocument();
+            var doc = root.ToXmlDocument();
+            doc.LoadXml(doc.OuterXml);
+            return doc;
         }
         protected override bool processError(IEnumerable<RootResponseInvoiceNo> rootInvoiceNo, XmlDocument docInv, string fileName)
         {

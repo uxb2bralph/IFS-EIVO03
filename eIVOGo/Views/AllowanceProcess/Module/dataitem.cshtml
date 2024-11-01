@@ -1,12 +1,23 @@
-
 @using System.IO
 @using System.Linq.Expressions
-@using Model.Locale
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Controllers
 @using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
 @{
 
     InvoiceAllowance _model;
     _model = (InvoiceAllowance)this.Model;
+    InquireInvoiceViewModel _viewModel;
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+
 }
 <td><input name="chkItem" type="checkbox" value="@(_model.AllowanceID)" /></td>
 <td>@(String.Format("{0:yyyy/MM/dd}", _model.AllowanceDate))</td>
@@ -14,8 +25,8 @@
 <td style="white-space:nowrap;">@(_model.InvoiceAllowanceSeller.CustomerName)</td>
 <td style="white-space:nowrap;">@(_model.InvoiceAllowanceSeller.ReceiptNo)</td>
 <td style="white-space:nowrap;"><a onclick="showAllowanceModal(@(_model.AllowanceID));">@(_model.AllowanceNumber)</a></td>
-@*<td style="white-space:nowrap;">@(_model.AllowanceNumber.Length > 16 ? $"{_model.AllowanceID:0000000000000000}" : _model.AllowanceNumber)</td>*@
-<td style="white-space:nowrap;">@($"{_model.AllowanceID:0000000000000000}")</td>
+<td style="white-space:nowrap;">@(_model.TurnkeyAllowanceNo)</td>
+@*<td style="white-space:nowrap;">@($"{_model.AllowanceID:0000000000000000}")</td>*@
 <td align="right" style="white-space:nowrap;">
     @{ var amount = _model.InvoiceAllowanceDetails.Sum(d => d.InvoiceAllowanceItem.Amount);}
 
@@ -29,6 +40,43 @@
 <td align="right" style="white-space:nowrap;">@(String.Format("{0:##,###,###,##0.##}", amount + tax))</td>
 <td>@(_model.CurrencyType?.AbbrevName)</td>
 <td style="white-space:nowrap;">@(_model.InvoiceAllowanceBuyer.IsB2C() ? "" : _model.InvoiceAllowanceBuyer.ReceiptNo)</td>
+<td style="white-space:nowrap;">
+    @(_model.InvoiceAllowanceCancellation==null ? "" : $"已作廢({_model.InvoiceAllowanceCancellation.CancelDate:yyyy/MM/dd})")
+    @if (_viewModel.MIG == true)
+    {
+        Write(((Naming.InvoiceProcessType?)_model.CDS_Document.ProcessType)?.ToString() ?? "D0401");
+        if (_model.CDS_Document.DataProcessLog.Any(l => l.StepID == (int)Naming.InvoiceStepDefinition.MIG_C))
+        {
+            Write(":C");
+        }
+        else if (_model.CDS_Document.DataProcessLog.Any(l => l.StepID == (int)Naming.InvoiceStepDefinition.MIG_E))
+        {
+            Write(":E");
+        }
+        else
+        {
+            Write(":P");
+        }
+        if (_model.InvoiceAllowanceCancellation != null)
+        {
+            Write(",");
+            var doc = _model.CDS_Document.ChildDocument.FirstOrDefault()?.CDS_Document;
+            Write(((Naming.InvoiceProcessType?)doc.ProcessType)?.ToString() ?? "D0501");
+            if (doc?.DataProcessLog.Any(l => l.StepID == (int)Naming.InvoiceStepDefinition.MIG_C) == true)
+            {
+                Write(":C");
+            }
+            else if (doc?.DataProcessLog.Any(l => l.StepID == (int)Naming.InvoiceStepDefinition.MIG_E) == true)
+            {
+                Write(":E");
+            }
+            else
+            {
+                Write(":P");
+            }
+        }
+    }
+</td>
 <td style="white-space:nowrap;">@(_model.InvoiceAllowanceBuyer.EMail)</td>
 <td></td>
 @*<td>

@@ -70,9 +70,9 @@ namespace eIVOGo.Controllers
             ViewBag.ViewModel = viewModel;
             var item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
 
-            if(item==null)
+            if (item == null)
             {
-                if(viewModel.ResetID.HasValue)
+                if (viewModel.ResetID.HasValue)
                 {
                     item = models.GetTable<ResetUserPassword>().Where(r => r.ResetID == viewModel.ResetID)
                         .Select(r => r.UserProfile).FirstOrDefault();

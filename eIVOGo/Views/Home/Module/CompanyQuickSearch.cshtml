@@ -33,9 +33,9 @@
     _modelState = (ModelStateDictionary)ViewBag.ModelState;
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _model = (IQueryable<Organization>)this.Model;
-    _fieldName = _viewModel.FieldName ?? "SellerID";
+    _fieldName = _viewModel.FieldName ?? ViewBag.FieldName ?? "SellerID";
     _profile = Context.GetUser();
-    _item = _model.Where(c => c.CompanyID == _viewModel.SellerID).FirstOrDefault();
+    _item = _model?.Where(c => c.CompanyID == _viewModel.SellerID).FirstOrDefault();
 }
 
 <input type="text" class="form-control" size="40" id="@(_contentID)" value="@(_item!=null ? $"{_item.ReceiptNo} {_item.CompanyName}" : null)" placeholder="請輸入檢索關鍵字" />

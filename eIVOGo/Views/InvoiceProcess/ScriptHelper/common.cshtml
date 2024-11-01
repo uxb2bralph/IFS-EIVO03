@@ -74,8 +74,9 @@
                     return false;
                 }
 
-                var $formData = $('#theForm').serializeObject();
-                $formData = $.extend($formData, $('input[name="chkItem"]').serializeObject());
+                var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
+                $formData = { ...$formData, ...$('#queryResult').find('input,select,textarea').serializeObject() };
+                //$formData = $.extend($formData, $('input[name="chkItem"]').serializeObject());
                 $formData.paperStyle = style;
                 if (!isNaN(processType)) {
                     $formData.ProcessType = processType;
@@ -129,10 +130,10 @@
 
             download2021: function () {
 
-                var $formData = $('#theForm').serializeObject();
+                var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
                 $formData = $.extend($formData, $('input[name="chkItem"]').serializeObject());
                 showLoading();
-                $.post('@(Url.Action("CreateXlsx2021","InvoiceProcess"))', $formData, function (data) {
+                $.post('@(Url.Action("CreateXlsx2024","InvoiceProcess"))', $formData, function (data) {
                     hideLoading();
                     if ($.isPlainObject(data)) {
                         if (data.message != undefined) {

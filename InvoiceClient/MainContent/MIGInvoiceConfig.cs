@@ -73,5 +73,9 @@ namespace InvoiceClient.MainContent
         {
             get { return "MIG發票資料"; }
         }
+        public void ReportStatus()
+        {
+
+        }
     }
 }

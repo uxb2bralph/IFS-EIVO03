@@ -23,21 +23,37 @@
 
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _model = this.Model as String[];
+
+    QueryViewModel _viewModel = new QueryViewModel();
+    ((SampleController<InvoiceItem>)ViewContext.Controller).BuildViewModel(_viewModel);
+
 }
 @{
     if (_model == null)
     {
-        _model = models.GetTable<Organization>().Where(
-                        o => o.OrganizationCategory.Any(
-                            c => c.CategoryID == (int)Naming.CategoryID.COMP_E_INVOICE_B2C_SELLER
-                                || c.CategoryID == (int)Naming.CategoryID.COMP_VIRTUAL_CHANNEL
-                                || c.CategoryID == (int)Naming.CategoryID.COMP_E_INVOICE_GOOGLE_TW
-                                || c.CategoryID == (int)Naming.CategoryID.COMP_INVOICE_AGENT))
+
+        var orgItems = models.GetTable<Organization>().Where(
+                                o => o.OrganizationCategory.Any(
+                                    c => c.CategoryID == (int)Naming.CategoryID.COMP_E_INVOICE_B2C_SELLER
+                                        || c.CategoryID == (int)Naming.CategoryID.COMP_VIRTUAL_CHANNEL
+                                        || c.CategoryID == (int)Naming.CategoryID.COMP_E_INVOICE_GOOGLE_TW
+                                        || c.CategoryID == (int)Naming.CategoryID.COMP_INVOICE_AGENT));
+
+        if (_viewModel.KeyItems?.Length > 0)
+        {
+            orgItems = orgItems.Where(o => _viewModel.KeyItems.Contains(o.ReceiptNo));
+        }
+
+        var agents = models.GetTable<InvoiceIssuerAgent>().Where(a => orgItems.Any(o => a.IssuerID == o.CompanyID))
+                        .Join(models.GetTable<Organization>(), a => a.AgentID, c => c.CompanyID, (a, c) => c);
+
+        _model = orgItems.Union(agents)
             .Where(o => o.ContactEmail != null)
             .Select(o => o.ContactEmail)
             .ToList()
             .Select(m => m.GetEfficientString())
             .Where(m => m != null)
+            .Distinct()
             .ToArray();
 
     }

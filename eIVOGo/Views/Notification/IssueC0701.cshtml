@@ -1,0 +1,54 @@
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+
+    ModelSource<InvoiceItem> models;
+    InvoiceItem _model;
+    DocumentQueryViewModel _viewModel;
+
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (InvoiceItem)this.Model;
+    _viewModel = (DocumentQueryViewModel)ViewBag.ViewModel;
+}
+
+@if (_viewModel.ForTest == true)
+{
+    Html.RenderPartial("~/Views/Notification/Module/IssuedC0701.cshtml", _model);
+}
+else if (_model.Organization.OrganizationStatus.InvoiceNoticeSetting.CheckNotice(Naming.InvoiceNoticeStatus.Cancelling))
+{
+    var mailing = models.GetUserListByCompanyID(_model.InvoiceBuyer.BuyerID)
+            .Select(u => u.EMail).ToList();
+    mailing.Add(_model.InvoiceBuyer.EMail);
+
+    mailing.Add(_viewModel.MailTo.GetEfficientString());
+    var mailTo = String.Join(",",
+            mailing.Where(m => m != null));
+
+    if (!String.IsNullOrEmpty(mailTo))
+    {
+        var smtpSettings = _model.InvoiceSeller.Organization.CustomSmtpHost.Where(s => s.Status == (int)CustomSmtpHost.StatusType.Enabled).FirstOrDefault();
+
+        String subject = _model.Organization.CompanyName + "註銷電子發票郵件通知(此張發票因屬發票系統問題致使錯誤開立已由營業人上傳註銷)";
+        String body = Html.Partial("~/Views/Notification/Module/IssuedC0701.cshtml", _model).ToString();
+        body.SendMailMessage(mailTo, subject, smtpSettings);
+    }
+
+}
+
+

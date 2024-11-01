@@ -35,7 +35,43 @@
 <td>@(_model.InvoiceAmountType.CurrencyType?.AbbrevName)</td>
 <td>@(_model.InvoiceWinningNumber!=null ? _model.InvoiceWinningNumber.PrizeType : "N/A")</td>
 <td>@(_model.InvoiceBuyer.IsB2C() ? "" : _model.InvoiceBuyer.ReceiptNo)</td>
-<td>@(_model.InvoiceCancellation==null ? "" : $"已作廢({_model.InvoiceCancellation.CancelDate:yyyy/MM/dd})")</td>
+<td>
+    @(_model.InvoiceCancellation==null ? "" : $"已作廢({_model.InvoiceCancellation.CancelDate:yyyy/MM/dd})")
+    @if (_viewModel.MIG == true)
+    {
+        Write(((Naming.InvoiceProcessType?)_model.CDS_Document.ProcessType)?.ToString() ?? "C0401");
+        if (_model.CDS_Document.DataProcessLog.Any(l => l.StepID == (int)Naming.InvoiceStepDefinition.MIG_C))
+        {
+            Write(":C");
+        }
+        else if (_model.CDS_Document.DataProcessLog.Any(l => l.StepID == (int)Naming.InvoiceStepDefinition.MIG_E))
+        {
+            Write(":E");
+        }
+        else
+        {
+            Write(":P");
+        }
+        if(_model.InvoiceCancellation != null)
+        {
+            Write(",");
+            var doc = _model.CDS_Document.ChildDocument.FirstOrDefault()?.CDS_Document;
+            Write(((Naming.InvoiceProcessType?)doc.ProcessType)?.ToString() ?? "C0501");
+            if (doc?.DataProcessLog.Any(l => l.StepID == (int)Naming.InvoiceStepDefinition.MIG_C) == true)
+            {
+                Write(":C");
+            }
+            else if (doc?.DataProcessLog.Any(l => l.StepID == (int)Naming.InvoiceStepDefinition.MIG_E) == true)
+            {
+                Write(":E");
+            }
+            else
+            {
+                Write(":P");
+            }
+        }
+    }
+</td>
 <td>@(_model.InvoiceBuyer.CustomerName)</td>
 <td>@(_model.InvoiceBuyer.ContactName)</td>
 <td>@(_model.InvoiceBuyer.Address)</td>

@@ -20,6 +20,7 @@ namespace Model.Models.ViewModel
         public static string __DECIMAL_AMOUNT_PATTERN = "^-?\\d{1,12}(.[0-9]{0,4})?$";
         public static string __CELLPHONE_BARCODE = "3J0002";
         public static String __自然人憑證 = "CQ0001";
+        public static String __CROSS_BORDER_MURCHANT = "5G0001";
 
         protected ModelSource<TEntity> _mgr;
         protected Organization _owner;
@@ -323,6 +324,36 @@ namespace Model.Models.ViewModel
                     return null;
                 }
             }
+            else if (_invItem.CarrierType == __CROSS_BORDER_MURCHANT)
+            {
+                if (_invItem.CarrierId1 != null)
+                {
+                    _carrier = new InvoiceCarrier
+                    {
+                        CarrierType = _invItem.CarrierType,
+                        CarrierNo = _invItem.CarrierId1,
+                        CarrierNo2 = _invItem.CarrierId1
+                    };
+
+                    return null;
+                }
+                else if (_invItem.CarrierId2 != null)
+                {
+                    _carrier = new InvoiceCarrier
+                    {
+                        CarrierType = _invItem.CarrierType,
+                        CarrierNo = _invItem.CarrierId2,
+                        CarrierNo2 = _invItem.CarrierId2
+                    };
+
+                    return null;
+                }
+                else
+                {
+                    return new Exception(String.Format(MessageResources.InvalidPublicCarrierType, _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
+                }
+            }
+
 
             return new Exception(String.Format(MessageResources.InvalidPublicCarrierType, _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
         }

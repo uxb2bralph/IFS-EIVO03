@@ -32,7 +32,7 @@ namespace InvoiceClient.Agent
 
         protected override JsonResult processUpload(String requestFile)
         {
-            return UploadTo(requestFile, $"{ServerInspector.ServiceInfo.TaskCenterUrl}/InvoiceData/UploadInvoiceRequestXlsx?keyID={HttpUtility.UrlEncode(ServerInspector.ServiceInfo.AgentToken)}&sender={ServerInspector.ServiceInfo.AgentUID}&processType={(int?)ServerInspector.ServiceInfo.DefaultProcessType}");
+            return UploadTo(requestFile, $"{ServerInspector.ServiceInfo.TaskCenterUrl}/InvoiceData/UploadInvoiceRequestXlsx?keyID={HttpUtility.UrlEncode(ServerInspector.ServiceInfo.AgentToken)}&sender={ServerInspector.ServiceInfo.AgentUID}&processType={(int?)XlsxInvoiceTransferManager.Default?.Settings.DefaultProcessType ?? (int?)ServerInspector.ServiceInfo.DefaultProcessType}");
         }
 
     }

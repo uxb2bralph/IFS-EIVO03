@@ -30,7 +30,7 @@ using Model.Locale;
 using Model.Security.MembershipManagement;
 using ModelExtension.Helper;
 using Utility;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
 using eIVOGo.Published;
 using Newtonsoft.Json;
 

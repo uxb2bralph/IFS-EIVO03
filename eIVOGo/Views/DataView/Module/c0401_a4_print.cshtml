@@ -13,6 +13,31 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
+@helper WrapSellerName(String sellerName)
+{
+    if (sellerName?.Length > 11)
+    {
+        var idx = sellerName.IndexOf("股份有限公司");
+        if (idx < 0)
+        {
+            idx = sellerName.IndexOf("有限公司");
+        }
+        if (idx < 0)
+        {
+            idx = sellerName.IndexOf("公司");
+        }
+        if (idx >= 0)
+        {
+            @Html.Raw(sellerName.Substring(0, idx))
+            <br />
+            @Html.Raw(sellerName.Substring(idx))
+        }
+    }
+    else
+    {
+        @Html.Raw(sellerName)
+    }
+}
 @{
 
     RenderStyleViewModel _viewModel;
@@ -21,6 +46,7 @@
     InvoiceItem _model;
     InvoiceProductItem[] _productItem;
     InvoiceBuyer _buyer;
+    DocumentPostLog _postdata;
     Organization _buyerOrg;
     bool _isDuplicatedPrint = false;
     const int _FirstCheckCount = 6;
@@ -37,6 +63,7 @@
         .Join(models.GetTable<InvoiceProductItem>(), p => p.ProductID, i => i.ProductID, (p, i) => i).ToArray();
 
     _buyer = _model.InvoiceBuyer;
+    _postdata = _model.DocumentPostLog.OrderByDescending(w => w.LogID).FirstOrDefault();
     if (_buyer != null && _buyer.BuyerID.HasValue)
     {
         _buyerOrg = _buyer.Organization;
@@ -51,11 +78,11 @@
         @@page {
             size: portrait; /* 直向 */
             size: A4 portrait; /* 混合使用 */
-            margin: -0.5cm; /* 邊界與內容的距離 */
+            margin: 0cm; /* 邊界與內容的距離 */
         }
     </style>
-    <div style="text-align:center; position:absolute;margin-left:0.3cm;height:7cm;margin-top:2cm;font-size:small">請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
-    <div style="text-align: center; position: absolute; margin-left: 20.1cm; height: 7cm; margin-top: 2cm; font-size: small">請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
+    @*<div style="text-align:center; position:absolute;margin-left:0.3cm;height:7cm;margin-top:2cm;font-size:small">請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
+        <div style="text-align: center; position: absolute; margin-left: 20.6cm; height: 7cm; margin-top: 2cm; font-size: small">請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>*@
     <div style="page-break-after: always;margin-left:0.5cm;margin-right:0.5cm;margin-bottom:0cm;margin-top:0.5cm;">
         <div class="fspace">
             <div class="company" style="padding-top: 0.5cm;padding-left: 1.0cm;">
@@ -74,6 +101,35 @@
                         : _buyer.ContactName)@*@(_buyer.ContactName)*@
                         鈞啟
                     </p>
+                    @if (_postdata != null)
+                    {
+                        <div class="code3">
+                            @*Amy.1121114**@
+                            <p style="margin-left: 20px; margin-top: 2px; font-size: 1.0em;">
+                                大宗郵資已付掛號函件
+                            </p>
+                            <p style="margin-left: 20px; margin-top: -2px; font-size: 1.0em; ">
+                                @{
+                                    //String data1 = $"{_postdata.PostCode}{_postdata.RegisterCode}{_postdata.MailType}{_postdata.ZipCode}{_postdata.ChkCode}"; //1130104-common out
+                                    //1130104-修改為:_postdata.ZipCode若等於6碼,則取出郵遞區號左邊3碼,不足5碼處補0, 若小於6碼,取出郵遞區號
+                                    string data1;
+
+                                    if (_postdata.ZipCode.Length != 5)
+                                    {
+                                        data1 = $"{_postdata.PostCode}{_postdata.RegisterCode}{_postdata.MailType}{(_postdata.ZipCode.Length > 3 ? _postdata.ZipCode.Substring(0, 3) : _postdata.ZipCode).PadRight(5, '0')}{_postdata.ChkCode}";
+                                    }
+                                    else
+                                    {
+                                        data1 = $"{_postdata.PostCode}{_postdata.RegisterCode}{_postdata.MailType}{_postdata.ZipCode}{_postdata.ChkCode}";
+                                    }
+
+                                }
+                                <img id="barcode" alt="" width="160" height="100" src="@(data1.GetBarcode20ImageSrc())" />
+                            </p>
+                            @*@{ String data1 = $"{_model.InvoiceDate.Value.Year - 1911:000}{_model.InvoiceDate.Value.Month:00}{_model.TrackCode}{_model.No}{_model.RandomNo}";}*@
+                            @*<img id="barcode" alt="" width="160" height="22" src="@(String.Format("{0}{1}?{2}", Uxnet.Web.Properties.Settings.Default.HostUrl, VirtualPathUtility.ToAbsolute("~/Published/GetBarCode39.ashx"), data))" />*@
+                        </div>
+                    }
                 </div>
             </div>
             <div class="container" style="border-bottom-style:none;border-top-style:none;margin-left:0.2cm">
@@ -87,7 +143,7 @@
                     }
                     else
                     {
-                        <h3 style="width:@(_model.InvoiceSeller.CustomerName?.Length>16 ? "5.2cm" : "4.2cm");" class="title-small">@(_model.InvoiceSeller.CustomerName)</h3>
+                        <h3 style="width:@(_model.InvoiceSeller.CustomerName?.Length>16 ? "5.2cm" : "5.2cm");" class="title-small">@WrapSellerName(_model.InvoiceSeller.CustomerName)</h3>
                     }
                     @if (_isDuplicatedPrint)
                     {
@@ -109,16 +165,14 @@
                         賣方@(_model.Organization.ReceiptNo) @(_buyer.IsB2C() ? null : String.Format("買方{0}", _buyer.ReceiptNo))
                     </p>
                     <div class="code1">
-                        @{ String data = $"{_model.InvoiceDate.Value.Year - 1911:000}{_model.InvoiceDate.Value.Month:00}{_model.TrackCode}{_model.No}{_model.RandomNo}";}
-
-                        <img id="barcode" alt="" width="160" height="22" src="@(data.GetBarcode39ImageSrc())" />
-                        @*<img id="barcode" alt="" width="160" height="22" src="@(String.Format("{0}{1}?{2}", Uxnet.Web.Properties.Settings.Default.HostUrl, VirtualPathUtility.ToAbsolute("~/Published/GetBarCode39.ashx"), data))" />*@
+                        @{
+                            String data = $"{_model.InvoiceDate.Value.Year - 1911:000}{(_model.InvoiceDate.Value.Month + 1) / 2 * 2:00}{_model.TrackCode}{_model.No}{_model.RandomNo}";
+                        }
+                        <img id="barcode" alt="" style="max-width:5.4cm;" src="@(data.GetBarcode39ImageSrc(margin:10,height:40,wide:3,narrow:1))" />
                     </div>
-                    <div class="code2">
-                        <img id="qrcode1" alt="" width="80" height="80" src="@(_model.GetLeftQRCodeImageSrc())" />
-                        <img id="qrcode2" alt="" width="80" height="80" src="@("**".CreateQRCodeImageSrc(width:180,height:180,qrVersion:10))" />
-                        @*<img id="qrcode1" alt="" width="80" height="80" src="@(String.Format("{0}{1}?invoiceID={2}", Uxnet.Web.Properties.Settings.Default.HostUrl, VirtualPathUtility.ToAbsolute("~/DataView/GetLeftQRCode"), _model.InvoiceID))" />
-            <img id="qrcode2" alt="" width="80" height="80" src="@(String.Format("{0}{1}?invoiceID={2}", Uxnet.Web.Properties.Settings.Default.HostUrl, VirtualPathUtility.ToAbsolute("~/DataView/GetRightQRCode"), _model.InvoiceID))" />*@
+                    <div class="code2" style="padding-left:0.1cm;text-align: center;">
+                        <img style="margin-right: 0.3cm;width:2.5cm;" alt="" src="@(_model.GetLeftQRCodeImageSrc(width:180,height:180,qrVersion:10))" />
+                        <img style="width: 2.5cm;margin-left: -0.2cm" alt="" src="@("**".CreateQRCodeImageSrc(width:180,height:180,qrVersion:10))" />
                     </div>
                 </div>
             </div>
@@ -215,21 +269,22 @@
                 </div>
                 @if (_viewModel?.PrintBack == true)
                 {
-                    <div style="text-align:center; position:absolute;margin-left:-0.3cm;margin-top:12cm;font-size:small">請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
-                    <div style="text-align:center; position:absolute;margin-left:19cm;margin-top:12cm;font-size:small">請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
+                    @*<div style="text-align:center; position:absolute;margin-left:-0.3cm;margin-top:12cm;font-size:small">請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>
+                        <div style="text-align:center; position:absolute;margin-left:20.1cm;margin-top:12cm;font-size:small">請<br />沿<br />虛<br />線<br />先<br />摺<br />再<br />撕</div>*@
                     <div class="container" style="border-bottom-style:none;border-top-style:none;margin-left:18px;margin-right:0px;padding-top:0.2cm;height:17cm;">
-                        <div style="width: 7.2cm; height: 8.8cm; display: block; overflow: hidden; float: right;"></div>
+                        <div style="width: 7.6cm; height: 8.8cm; display: block; overflow: hidden; float: right;"></div>
                         <div class="cutfield" style="float: right;">
                             <h3 class="notop">領獎收據</h3>
-                            <p class="sign">
-                                一、金額(新臺幣)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;元整<br />
-                                二、中獎人簽名(正楷)或蓋章<br />
-                                <br />
-                                三、電話<br />
-                                四、兌獎若有疑義，<img id="qrcode3" alt="" width="80" height="80" src="../images/invoiceqrcode.png" style="float: right; margin: 15px" /> <br />
-                                請洽客服專線：<br />
-                                4128282；或請至<br />
-                                下列網址查詢
+                            <p class="sign" style="font-size:8pt; ">
+                                一、金額(新臺幣)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;元整<br>
+                                二、中獎人簽名(正楷)或蓋章<br>
+                                <br>
+                                三、電話<br>
+                                四、兌獎若有疑義，
+                                請洽客服專線：<br>
+                                <img id="qrcode3" alt="" width="80" height="80" src="../images/invoiceqrcode.png" style="float: right;margin-left: 15px;">
+                                4128282；<br>
+                                或請至下列網址查詢
                                 http://invoice.etax.nat.gov.tw/
                             </p>
                         </div>
@@ -281,9 +336,4 @@
         }
     }
     @*<p runat="server" style="page-break-after: always" visible="@(printBack && !IsFinal)"></p>*@
-
-
-
-
-
 

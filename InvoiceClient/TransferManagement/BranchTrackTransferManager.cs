@@ -8,12 +8,14 @@ using System.Text;
 using InvoiceClient.Properties;
 using Model.Schema.EIVO;
 using InvoiceClient.Agent;
+using InvoiceClient.Helper;
 
 namespace InvoiceClient.TransferManagement
 {
     public class BranchTrackTransferManager : ITransferManager
     {
         private BranchTrackWatcher _BranchTrackWatcher;
+        public ITabWorkItem WorkItem { get; set; }
 
         public void EnableAll(String fullPath)
         {

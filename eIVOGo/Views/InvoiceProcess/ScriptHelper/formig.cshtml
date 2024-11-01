@@ -1,4 +1,4 @@
-
+﻿
 @using System.IO
 @using System.Linq.Expressions
 
@@ -21,52 +21,38 @@
             window.uiInvoiceQuery = {};
         }
         window.uiInvoiceQuery.C0401 = function () {
-            if ($postForm) {
-                $postForm.remove();
+
+            if (!$('input[name="chkItem"]').is(':checked')) {
+                alert('請選擇重送資料!!');
+                return false;
             }
 
-            $postForm = $('<form method="post" target="dataFrame" />').prop('action', '@(Url.Action("DownloadC0401","InvoiceProcess"))')
-                .css('display', 'none').appendTo($('body'));
+            var $formData = $('input[name="chkItem"]:checked').serializeObject();
+            $('').launchDownload('@(Url.Action("DownloadC0401", "InvoiceProcess"))', $formData);
 
-            $('#theForm').serializeArray().forEach(function (item, index) {
-                $('<input type="hidden">')
-                    .prop('name', item.name).prop('value',item.value)
-                    .appendTo($postForm);
-            });
-            $postForm.submit();
             //showLoading();
         };
 
         window.uiInvoiceQuery.C0701 = function () {
-            if ($postForm) {
-                $postForm.remove();
+            if (!$('input[name="chkItem"]').is(':checked')) {
+                alert('請選擇重送資料!!');
+                return false;
             }
 
-            $postForm = $('<form method="post" target="dataFrame" />').prop('action', '@(Url.Action("DownloadC0701","InvoiceProcess"))')
-                .css('display', 'none').appendTo($('body'));
+            var $formData = $('input[name="chkItem"]:checked').serializeObject();
+            $('').launchDownload('@(Url.Action("DownloadC0701", "InvoiceProcess"))', $formData);
 
-            $('#theForm').serializeArray().forEach(function (item, index) {
-                $('<input type="hidden">')
-                    .prop('name', item.name).prop('value',item.value)
-                    .appendTo($postForm);
-            });
-            $postForm.submit();
             //showLoading();
         };
         window.uiInvoiceQuery.C0501 = function () {
-            if ($postForm) {
-                $postForm.remove();
+            if (!$('input[name="chkItem"]').is(':checked')) {
+                alert('請選擇重送資料!!');
+                return false;
             }
 
-            $postForm = $('<form method="post" target="dataFrame" />').prop('action', '@(Url.Action("DownloadC0501","InvoiceProcess"))')
-                .css('display', 'none').appendTo($('body'));
+            var $formData = $('input[name="chkItem"]:checked').serializeObject();
+            $('').launchDownload('@(Url.Action("DownloadC0501", "InvoiceProcess"))', $formData);
 
-            $('#theForm').serializeArray().forEach(function (item, index) {
-                $('<input type="hidden">')
-                    .prop('name', item.name).prop('value',item.value)
-                    .appendTo($postForm);
-            });
-            $postForm.submit();
             //showLoading();
         };
     });

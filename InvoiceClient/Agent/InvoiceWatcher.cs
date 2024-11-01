@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.Net;
 using Model.Locale;
 using System.Net.Http;
+using InvoiceClient.TransferManagement;
 
 namespace InvoiceClient.Agent
 {
@@ -31,7 +32,9 @@ namespace InvoiceClient.Agent
 
         public Naming.InvoiceProcessType? PreferredProcessType { get; set; }
 
-        public static readonly HttpClient TheHttpClient = new HttpClient() 
+        public ITransferManager TransferManager { get; set; }
+
+        public static readonly HttpClient TheHttpClient = new HttpClient()
         {
             Timeout = Timeout.InfiniteTimeSpan,
         };
@@ -87,7 +90,7 @@ namespace InvoiceClient.Agent
                 }
             });
 
-            if(Settings.Default.AutoRetry)
+            if (Settings.Default.AutoRetry)
             {
                 ThreadPool.QueueUserWorkItem(p =>
                 {
@@ -150,7 +153,7 @@ namespace InvoiceClient.Agent
             _inProgressPath = Path.Combine(fullPath + "(Processing)", $"{Process.GetCurrentProcess().Id}");
             _inProgressPath.CheckStoredPath();
 
-            if(Settings.Default.ResponseUpload)
+            if (Settings.Default.ResponseUpload)
             {
                 _ResponsedPath = fullPath + "(Response)";
                 _ResponsedPath.CheckStoredPath();
@@ -178,7 +181,7 @@ namespace InvoiceClient.Agent
 
         protected InvoiceWatcher _dependentWatcher;
         protected List<InvoiceWatcher> _reponseTo;
-        
+
         public void InitializeDependency(InvoiceWatcher dependentWatcher)
         {
             _dependentWatcher = dependentWatcher;
@@ -240,6 +243,23 @@ namespace InvoiceClient.Agent
                                 //}
                             }
                         } while (files != null && files.Count() > 0);
+
+                        if (AppSettings.Default.WatchSubDirectories)
+                        {
+                            bool hasFile;
+                            IEnumerable<String> items;
+                            do
+                            {
+                                hasFile = false;
+                                items = Directory.EnumerateFiles(_watcher.Path, "*.*", SearchOption.AllDirectories);
+                                foreach (String fullPath in items)
+                                {
+                                    hasFile = true;
+                                    done = true;
+                                    processFile(fullPath);
+                                }
+                            } while (hasFile);
+                        }
 
                         if (done)
                         {
@@ -377,7 +397,7 @@ namespace InvoiceClient.Agent
                     storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
                 }
             }
-            catch(System.Net.WebException ex)
+            catch (System.Net.WebException ex)
             {
                 if (_retryConnection)
                 {
@@ -417,7 +437,7 @@ namespace InvoiceClient.Agent
                     docInv.Load(invoiceFile);
                     retryCount = 100;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     if (retryCount < 10)
                     {
@@ -454,6 +474,30 @@ namespace InvoiceClient.Agent
         protected virtual void processError(string message, XmlDocument docInv, string fileName)
         {
             Logger.Warn(String.Format("在上傳發票檔({0})時,傳送失敗!!原因如下:\r\n{1}", fileName, message));
+            if (docInv?.DocumentElement?["SourceLog"] != null && docInv?.DocumentElement?["ToFail"] != null)
+            {
+                ToFail(docInv.DocumentElement["SourceLog"].InnerText, docInv.DocumentElement["ToFail"].InnerText);
+            }
+        }
+
+        private void ToFail(string logItem, string failedPath)
+        {
+            var items = logItem.Split(';')
+                .Select(i => i.GetEfficientString())
+                .Where(i => i != null).ToArray();
+
+            List<String> failedItems = new List<string>();
+            foreach (var item in items)
+            {
+                String failedItem = Path.Combine(failedPath, Path.GetFileName(item));
+                if (File.Exists(item))
+                {
+                    storeFile(item, failedItem);
+                }
+                failedItems.Add(failedItem);
+            }
+
+            MainForm.Alert($"檔案：\r\n{String.Join("\r\n", failedItems)}", "資料處理發生錯誤", transferManager: this.TransferManager);
         }
 
         public static WS_Invoice.eInvoiceService CreateInvoiceService()
@@ -471,7 +515,7 @@ namespace InvoiceClient.Agent
             return result;
         }
 
-        protected void storeFile(String srcName,String destName)
+        protected void storeFile(String srcName, String destName)
         {
             try
             {
@@ -496,7 +540,7 @@ namespace InvoiceClient.Agent
 
                 InvoiceRoot invoice = docInv.TrimAll().ConvertTo<InvoiceRoot>();
                 InvoiceRoot stored = docInv.TrimAll().ConvertTo<InvoiceRoot>();
-                stored.Invoice = rootInvoiceNo.Where(i=>i.ItemIndexSpecified).Select(i=>invoice.Invoice[i.ItemIndex]).ToArray();
+                stored.Invoice = rootInvoiceNo.Where(i => i.ItemIndexSpecified).Select(i => invoice.Invoice[i.ItemIndex]).ToArray();
 
                 stored.ConvertToXml().SaveDocumentWithEncoding(Path.Combine(_failedTxnPath, Path.GetFileName(fileName)));
             }
@@ -504,10 +548,11 @@ namespace InvoiceClient.Agent
             return true;
         }
 
+        public String ContentName { get; set; } = "發票資料";
         public virtual String ReportError()
         {
             int count = Directory.GetFiles(_failedTxnPath).Length;
-            return count > 0 ? String.Format("{0}筆發票資料傳送失敗!!\r\n", count) : null;
+            return count > 0 ? String.Format("{0}筆{1}作業失敗!!\r\n", count, ContentName) : null;
         }
 
         #region IDisposable Members

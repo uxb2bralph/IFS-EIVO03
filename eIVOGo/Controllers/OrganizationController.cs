@@ -112,6 +112,18 @@ namespace eIVOGo.Controllers
             return View("~/Views/Organization/Module/ApplyIssuerAgent.cshtml", item);
         }
 
+        public ActionResult ApplyMaster(OrganizationViewModel viewModel)
+        {
+            var result = ApplyIssuerAgent(viewModel);
+            Organization item = (result as ViewResult)?.Model as Organization;
+            if (item != null)
+            {
+                ((ViewResult)result).ViewName = "~/Views/Organization/Module/ApplyMaster.cshtml";
+            }
+            return result;
+        }
+
+
         public ActionResult ApplyBillingPlan(OrganizationViewModel viewModel)
         {
             ViewResult result = (ViewResult)ApplyIssuerAgent(viewModel);
@@ -182,6 +194,40 @@ namespace eIVOGo.Controllers
                 foreach (var id in agentID)
                 {
                     models.ExecuteCommand("insert InvoiceIssuerAgent (AgentID,IssuerID) values ({0},{1})", id, item.CompanyID);
+                }
+            }
+
+            return Json(new { result = true });
+        }
+
+        public ActionResult CommitMaster(OrganizationViewModel viewModel, int?[] masterID)
+        {
+            ViewResult result = (ViewResult)ApplyIssuerAgent(viewModel);
+            Organization item = result.Model as Organization;
+
+            if (item == null)
+            {
+                return result;
+            }
+
+            if (masterID != null && masterID.Length > 0)
+            {
+                foreach (var id in masterID)
+                {
+                    if (!models.GetTable<MasterOrganization>().Any(m => m.MasterID == id))
+                    {
+                        return View("~/Views/Shared/AlertMessage.cshtml", model: $"指派非主機構!!");
+                    }
+                }
+            }
+
+            models.ExecuteCommand("DELETE FROM center.MasterBranches WHERE (BranchID = {0})", item.CompanyID);
+            if (masterID != null && masterID.Length > 0)
+            {
+                foreach (var id in masterID)
+                {
+                    models.ExecuteCommand(@"INSERT INTO center.MasterBranches (MasterID, BranchID)
+                            VALUES ({0},{1})", id, item.CompanyID);
                 }
             }
 

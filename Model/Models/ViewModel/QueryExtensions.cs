@@ -17,21 +17,31 @@ namespace Model.Models.ViewModel
 {
     public static class QueryExtensions
     {
-        public static IQueryable<InvoiceItem> InquireInvoice(this IQueryable<InvoiceItem> items, InquireInvoiceViewModel viewModel,  GenericManager<EIVOEntityDataContext> models,bool queryVoid = false)
+        public static IQueryable<InvoiceItem> InquireInvoice(this IQueryable<InvoiceItem> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, bool queryVoid = false)
         {
             bool effective = false;
             items = items.QueryByProcessType(viewModel, models, ref effective)
                         .QueryByInvoiceNo(viewModel, models, ref effective)
+                        .QueryByInvoiceDate(viewModel, models, ref effective)
                         .QueryByDataNo(viewModel, models, ref effective)
                         .QueryByBuyerReceiptNo(viewModel, models, ref effective)
                         .QueryByBuyerName(viewModel, models, ref effective)
                         .QueryByCustomerID(viewModel, models, ref effective)
                         .QueryByWinning(viewModel, models, ref effective);
 
-            if(queryVoid == false)
+            if (queryVoid == false)
             {
-                items = items.QueryEffective(viewModel, models, ref effective)
-                    .QueryByInvoiceDate(viewModel, models, ref effective);
+                items = items.QueryEffective(viewModel, models, ref effective);
+            }
+
+            if (viewModel.SellerID.HasValue)
+            {
+                items = items.Where(i => i.SellerID == viewModel.SellerID);
+            }
+
+            if (viewModel.AgentID.HasValue)
+            {
+                items = models.DataContext.GetInvoiceByAgent(items, viewModel.AgentID.Value);
             }
 
             IQueryable<InvoiceCarrier> carrierItems = null;
@@ -58,6 +68,8 @@ namespace Model.Models.ViewModel
             {
                 items = items.Where(i => i.PrintMark == viewModel.PrintMark);
             }
+
+            items = items.QueryByAttachment(viewModel, models, ref effective);
 
             return items;
         }
@@ -99,23 +111,62 @@ namespace Model.Models.ViewModel
         }
 
 
-        public static IQueryable<InvoiceItem> QueryByInvoiceNo(this IQueryable<InvoiceItem> items,InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
+        public static IQueryable<InvoiceItem> QueryByInvoiceNo(this IQueryable<InvoiceItem> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
             viewModel.InvoiceNo = viewModel.InvoiceNo.GetEfficientString();
+            viewModel.EndNo = viewModel.EndNo.GetEfficientString();
+            String invoiceNo = viewModel.InvoiceNo ?? viewModel.EndNo;
             if (viewModel.InvoiceNo != null)
             {
-                String invoiceNo = viewModel.InvoiceNo;
-                if (invoiceNo.Length == 10)
+                if (viewModel.EndNo != null && invoiceNo != viewModel.EndNo)
                 {
-                    String trackCode = invoiceNo.Substring(0, 2);
-                    String no = invoiceNo.Substring(2);
-                    items = items.Where(i => i.No == no && i.TrackCode == trackCode);
+                    if (String.Compare(invoiceNo, viewModel.EndNo) > 0)
+                    {
+                        String tmp = invoiceNo;
+                        invoiceNo = viewModel.EndNo;
+                        viewModel.EndNo = tmp;
+                    }
 
+                    if (invoiceNo.Length == 10)
+                    {
+                        String trackCode = invoiceNo.Substring(0, 2);
+                        String no = invoiceNo.Substring(2);
+                        items = items.Where(i => String.Compare(i.No, no) >= 0 && String.Compare(i.TrackCode, trackCode) >= 0);
+
+                    }
+                    else
+                    {
+                        items = items.Where(i => String.Compare(i.No, invoiceNo) >= 0);
+                    }
+
+                    invoiceNo = viewModel.EndNo;
+                    if (invoiceNo.Length == 10)
+                    {
+                        String trackCode = invoiceNo.Substring(0, 2);
+                        String no = invoiceNo.Substring(2);
+                        items = items.Where(i => String.Compare(i.No, no) <= 0 && String.Compare(i.TrackCode, trackCode) <= 0);
+
+                    }
+                    else
+                    {
+                        items = items.Where(i => String.Compare(i.No, invoiceNo) <= 0);
+                    }
                 }
                 else
                 {
-                    items = items.Where(i => i.No == invoiceNo);
+                    if (invoiceNo.Length == 10)
+                    {
+                        String trackCode = invoiceNo.Substring(0, 2);
+                        String no = invoiceNo.Substring(2);
+                        items = items.Where(i => i.No == no && i.TrackCode == trackCode);
+
+                    }
+                    else
+                    {
+                        items = items.Where(i => i.No == invoiceNo);
+                    }
                 }
+
                 effective = true;
             }
             return items;
@@ -142,7 +193,7 @@ namespace Model.Models.ViewModel
                 {
                     items = items
                         .Join(models.GetTable<CDS_Document>()
-                            .Where(d => !d.ProcessType.HasValue 
+                            .Where(d => !d.ProcessType.HasValue
                                 || (d.ProcessType != (int)Naming.InvoiceProcessType.A0401
                                     && d.ProcessType != (int)Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer)),
                             i => i.InvoiceID, d => d.DocID, (i, d) => i);
@@ -183,7 +234,7 @@ namespace Model.Models.ViewModel
         public static IQueryable<InvoiceItem> QueryByWelfare(this IQueryable<InvoiceItem> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
             viewModel.AgencyCode = viewModel.AgencyCode.GetEfficientString();
-            if (viewModel.AgencyCode!=null)
+            if (viewModel.AgencyCode != null)
             {
                 items = items.Where(i => i.InvoiceDonation.AgencyCode == viewModel.AgencyCode);
                 effective = true;
@@ -219,7 +270,7 @@ namespace Model.Models.ViewModel
         public static IQueryable<InvoiceItem> QueryByBuyerName(this IQueryable<InvoiceItem> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
             viewModel.BuyerName = viewModel.BuyerName.GetEfficientString();
-            if (viewModel.BuyerName!=null)
+            if (viewModel.BuyerName != null)
             {
                 effective = true;
                 items = items.Join(models.GetTable<InvoiceBuyer>().Where(d => d.CustomerName.Contains(viewModel.BuyerName)),
@@ -300,19 +351,25 @@ namespace Model.Models.ViewModel
             return items;
         }
 
-        public static IQueryable<InvoiceAllowance> InquireAllowance(this IQueryable<InvoiceAllowance> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models,bool queryVoid = false)
+        public static IQueryable<InvoiceAllowance> InquireAllowance(this IQueryable<InvoiceAllowance> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, bool queryVoid = false)
         {
             bool effective = false;
             items = items.QueryByProcessType(viewModel, models, ref effective)
                         .QueryByDataNo(viewModel, models, ref effective)
                         .QueryByBuyerReceiptNo(viewModel, models, ref effective)
                         .QueryByBuyerName(viewModel, models, ref effective)
+                        .QueryByAllowanceDate(viewModel, models, ref effective)
+                        .QueryBySeller(viewModel, models, ref effective)
                         .QueryByCustomerID(viewModel, models, ref effective);
 
             if (queryVoid == false)
             {
-                items = items.QueryByAllowanceDate(viewModel, models, ref effective)
-                        .QueryEffective(viewModel, models, ref effective);
+                items = items.QueryEffective(viewModel, models, ref effective);
+            }
+
+            if (viewModel.AgentID.HasValue)
+            {
+                items = models.DataContext.GetAllowanceByAgent(items, viewModel.AgentID.Value);
             }
 
             return items;
@@ -321,7 +378,7 @@ namespace Model.Models.ViewModel
         public static IQueryable<InvoiceAllowance> QueryByBuyerName(this IQueryable<InvoiceAllowance> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
             viewModel.BuyerName = viewModel.BuyerName.GetEfficientString();
-            if (viewModel.BuyerName!=null)
+            if (viewModel.BuyerName != null)
             {
                 effective = true;
                 items = items.Where(d => d.InvoiceAllowanceBuyer.CustomerName.Contains(viewModel.BuyerName));
@@ -334,7 +391,8 @@ namespace Model.Models.ViewModel
             if (viewModel != null && viewModel.CompanyID.HasValue)
             {
                 effective = true;
-                items = items.Where(d => d.InvoiceAllowanceSeller.SellerID == viewModel.CompanyID);
+                var sellerItems = models.GetTable<InvoiceAllowanceSeller>().Where(a => a.SellerID == viewModel.CompanyID);
+                items = items.Where(d => sellerItems.Any(s => s.AllowanceID == d.AllowanceID));
             }
 
             return items;
@@ -343,7 +401,7 @@ namespace Model.Models.ViewModel
         public static IQueryable<InvoiceAllowance> QueryByCustomerID(this IQueryable<InvoiceAllowance> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
             viewModel.CustomerID = viewModel.CustomerID.GetEfficientString();
-            if (viewModel.CustomerID!=null)
+            if (viewModel.CustomerID != null)
             {
                 effective = true;
                 items = items.Where(i => i.InvoiceAllowanceBuyer.CustomerID == viewModel.CustomerID);
@@ -354,7 +412,7 @@ namespace Model.Models.ViewModel
         public static IQueryable<InvoiceAllowance> QueryByBuyerReceiptNo(this IQueryable<InvoiceAllowance> items, InquireInvoiceViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ref bool effective)
         {
             viewModel.BuyerReceiptNo = viewModel.BuyerReceiptNo.GetEfficientString();
-            if (viewModel.BuyerReceiptNo!=null)
+            if (viewModel.BuyerReceiptNo != null)
             {
                 effective = true;
                 items = items.Where(d => d.InvoiceAllowanceBuyer.ReceiptNo == viewModel.BuyerReceiptNo.GetEfficientString());

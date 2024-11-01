@@ -31,6 +31,21 @@ namespace Model.Helper
             return computedAuth;
         }
 
+        public static String ComputeAuthorization(this String keyID, String receiptNo, SHA256 hash, String seed)
+        {
+            String computedAuth = Convert.ToBase64String(
+                    Encoding.Default.GetBytes(
+                        String.Concat(
+                            hash.ComputeHash(
+                                Encoding.Default.GetBytes($"{receiptNo}{keyID}{seed}")
+                            ).Select(b => b.ToString("x2"))
+                        )
+                    )
+                );
+
+            return computedAuth;
+        }
+
         public static bool IsSystemAdmin(this UserProfileMember profile)
         {
             return profile != null && profile.CurrentUserRole.RoleID == (int)Naming.RoleID.ROLE_SYS;

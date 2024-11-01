@@ -82,6 +82,7 @@
                     <th style="min-width: 120px;">未稅金額</th>
                     <th style="min-width: 120px;">營業稅額</th>
                     <th>課稅別</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -108,13 +109,16 @@
                             <input class="form-control" name="UnitCost" type="number" value="@(_viewModel.UnitCost[i])" onblur="@(_formID).calcSingle(@(i));" />
                         </td>
                         <td>
-                            <input class="form-control" name="Amount" type="number" value="@*@(_viewModel.Amount[i])*@" />
+                            <input class="form-control" name="Amount" type="number" value="" />
                         </td>
                         <td>
-                            <input class="form-control" name="Tax" type="number" value="@*@(_viewModel.Tax[i]:##,###,###,##0.##)*@" />
+                            <input class="form-control" name="Tax" type="number" value="" />
                         </td>
                         <td>
                             <input name="TaxType" type="hidden" value="@((int)_viewModel.TaxType[i])" />@(_viewModel.TaxType[i])
+                        </td>
+                        <td>
+                            <a class="btn" onclick="@(_formID).deleteItem();">刪除</a>
                         </td>
                     </tr>
                 }
@@ -155,6 +159,15 @@
                 });
 
             },
+            clear: function () {
+                var $piece = $form.find('input[name="Piece"]');
+                $piece.each(function (idx) {
+                    var piece = $piece.eq(idx).val();
+                    if (isNaN(piece) || piece <=0) {
+                        $piece.eq(idx).closest('tr').remove();
+                    }
+                });
+            },
             calcSingle: function (idx) {
                 var piece = Number($form.find('input[name="Piece"]').eq(idx).val());
                 var cost = Number($form.find('input[name="UnitCost"]').eq(idx).val());
@@ -162,7 +175,7 @@
                 var $amount = $form.find('input[name="Amount"]').eq(idx);
                 var $tax = $form.find('input[name="Tax"]').eq(idx);
 
-                if (isNaN(piece) || isNaN(cost) || isNaN(taxType) || taxType != 1) {
+                if (isNaN(piece) || isNaN(cost) /*|| isNaN(taxType) || taxType != 1*/) {
                     return;
                 }
 
@@ -179,6 +192,7 @@
             },
             commit: function () {
                 if (this.sum()) {
+                    this.clear();
                     var $formData = $form.serializeObject();
                     $formData.buyerReceiptNo = '@(_viewModel.BuyerReceiptNo)';
                     $formData.buyerName = '@(_viewModel.BuyerName)';
@@ -227,6 +241,15 @@
 
                 return true;
             },
+
+            deleteItem: function () {
+                if (confirm('確認刪除此項?')) {
+                    var event = event || window.event;
+                    var $tr = $(event.target).closest('tr');
+                    $tr.remove();
+                }
+            },
+
         };
 
         @(_formID) = formObject;

@@ -10,6 +10,8 @@ using Model.Schema.EIVO;
 using InvoiceClient.Agent;
 using Utility;
 using Newtonsoft.Json;
+using InvoiceClient.Helper;
+using Model.Locale;
 
 namespace InvoiceClient.TransferManagement
 {
@@ -22,8 +24,10 @@ namespace InvoiceClient.TransferManagement
         private InvoiceWatcher _AllowanceCancellationWatcher;
         private InvoiceWatcher _FullAllowanceWatcher;
 
+        static XlsxInvoiceTransferManager _Default;
+
         LocalSettings _Settings;
-        class LocalSettings
+        internal class LocalSettings
         {
             public String InvoiceRequestPath { get; set; } = "Invoice_Xlsx";
             public String VoidInvoiceRequestPath { get; set; } = "CancelInvoice_Xlsx";
@@ -31,8 +35,10 @@ namespace InvoiceClient.TransferManagement
             public String VoidAllowanceRequestPath { get; set; } = "CancelAllowance_Xlsx";
             public String FullAllowanceRequestPath { get; set; } = "FullAllowance_Xlsx";
             public String DelayedInvoiceRequestPath { get; set; } = "Delayed_Invoice_Xlsx";
+            public Naming.InvoiceProcessType? DefaultProcessType { get; set; }
 
         }
+        public ITabWorkItem WorkItem { get; set; }
 
         public XlsxInvoiceTransferManager()
         {
@@ -46,7 +52,13 @@ namespace InvoiceClient.TransferManagement
                 _Settings = new LocalSettings { };
                 File.WriteAllText(filePath, JsonConvert.SerializeObject(_Settings));
             }
+
+            _Default = this;
         }
+
+        internal static XlsxInvoiceTransferManager Default => _Default;
+
+        internal LocalSettings Settings => _Settings;
 
         public void EnableAll(String fullPath)
         {

@@ -7,63 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Utility;
+using Uxnet.ToolAdapter.Properties;
 
 namespace JobHelper.Properties
 {
-    public class AppSettings
+    public class AppSettings : AppSettingsBase
     {
-
-        public static String AppRoot
-        {
-            get;
-            private set;
-        } = AppDomain.CurrentDomain.BaseDirectory;
-
-        static JObject _Settings;
-
         static AppSettings()
         {
             _default = Initialize<AppSettings>(typeof(AppSettings).Namespace);
         }
 
-        public AppSettings()
+        public AppSettings() : base()
         {
 
-        }
-
-        protected static T Initialize<T>(String propertyName)
-            where T : AppSettings, new()
-        {
-            T currentSettings;
-            //String fileName = $"{Assembly.GetExecutingAssembly().GetName()}.settings.json";
-            String fileName = "App.settings.json";
-            String filePath = Path.Combine(AppRoot, fileName);
-            if (File.Exists(filePath))
-            {
-                _Settings = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(filePath));
-            }
-            else
-            {
-                _Settings = new JObject();
-            }
-
-            //String propertyName = Assembly.GetExecutingAssembly().GetName().Name;
-            if (_Settings[propertyName] != null)
-            {
-                currentSettings = _Settings[propertyName].ToObject<T>();
-            }
-            else
-            {
-                currentSettings = new T();
-                _Settings[propertyName] = JObject.FromObject(currentSettings);
-            }
-
-            File.WriteAllText(filePath, JsonConvert.SerializeObject(_Settings));
-            return currentSettings;
         }
 
         static AppSettings _default;
-
         public static AppSettings Default
         {
             get => _default;
@@ -75,7 +35,7 @@ namespace JobHelper.Properties
         public String InvoiceTransactionRoot { get; set; } = "C:\\Users\\10090557\\sftp";
         public String[] RequestType { get; set; } = { "SellerInvoice", "CancelInvoice", "Allowance" };
         public String CommandEncryptGPG { get; set; } = "call pgp_encrypt.bat {0} {1}";
-
+        public String[] ActiveEIVODBConnection { get; set; } = { };
     }
 
 }

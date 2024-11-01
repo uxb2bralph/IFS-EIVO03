@@ -11,6 +11,7 @@ using InvoiceClient.Agent;
 using Utility;
 using Newtonsoft.Json;
 using InvoiceClient.Agent.MIGHelper;
+using InvoiceClient.Helper;
 
 namespace InvoiceClient.TransferManagement
 {
@@ -26,6 +27,7 @@ namespace InvoiceClient.TransferManagement
         private InvoiceWatcher _D0501Watcher;
         private InvoiceWatcher _B0501Watcher;
         private LocalSettings _Settings;
+        public ITabWorkItem WorkItem { get; set; }
 
         public MIGInvoiceTransferManagerV2()
         {

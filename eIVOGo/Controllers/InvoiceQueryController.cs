@@ -13,6 +13,7 @@ using Model.Locale;
 using System.Web.Script.Serialization;
 using System.IO;
 using System.IO.Compression;
+using System.Threading.Tasks;
 using Utility;
 using System.Threading;
 using System.Data.SqlClient;
@@ -23,9 +24,9 @@ using eIVOGo.Models.ViewModel;
 using Model.Models.ViewModel;
 using ModelExtension.Helper;
 using Model.Helper;
-using System.Threading.Tasks;
 using eIVOGo.Helper.Security.Authorization;
 using Uxnet.Com.Helper;
+using DataAccessLayer;
 
 namespace eIVOGo.Controllers
 {
@@ -90,7 +91,7 @@ namespace eIVOGo.Controllers
                 ModelState.AddModelError("InvoiceDateFrom", "請輸入查詢迄日");
             }
 
-            if(!viewModel.AgentID.HasValue && !viewModel.SellerID.HasValue)
+            if (!viewModel.AgentID.HasValue && !viewModel.SellerID.HasValue)
             {
                 ModelState.AddModelError("AgentID", "請選擇代理人");
                 ModelState.AddModelError("SellerID", "請輸入開立人統編");
@@ -132,7 +133,7 @@ namespace eIVOGo.Controllers
         public ActionResult InvoiceMediaReport(TaxMediaQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            if(!viewModel.BusinessBorder.HasValue)
+            if (!viewModel.BusinessBorder.HasValue)
             {
                 viewModel.BusinessBorder = CategoryDefinition.CategoryEnum.發票開立營業人;
             }
@@ -249,7 +250,7 @@ namespace eIVOGo.Controllers
                 {
                     String tmp = $"{resultFile}.tmp";
                     Exception exception = null;
-                    using (StreamWriter writer = new StreamWriter(tmp,false,Encoding.UTF8))
+                    using (StreamWriter writer = new StreamWriter(tmp, false, Encoding.UTF8))
                     {
                         using (ModelSource<InvoiceItem> db = new ModelSource<InvoiceItem>())
                         {
@@ -364,7 +365,7 @@ namespace eIVOGo.Controllers
             models.Inquiry = createModelInquiry();
             models.BuildQuery();
 
-            return View("InquiryResult",models.Inquiry);
+            return View("InquiryResult", models.Inquiry);
         }
 
         [RoleAuthorize(RoleID = new Naming.RoleID[] { Naming.RoleID.ROLE_SYS })]
@@ -408,7 +409,7 @@ namespace eIVOGo.Controllers
         }
 
 
-        public ActionResult GridPage(int index,int size, InquireInvoiceViewModel viewModel)
+        public ActionResult GridPage(int index, int size, InquireInvoiceViewModel viewModel)
         {
             //ViewBag.HasQuery = true;
             ViewBag.ViewModel = viewModel;
@@ -460,7 +461,7 @@ namespace eIVOGo.Controllers
             String resultFile = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".xlsx");
             _userProfile["assignDownload"] = resultFile;
 
-            ThreadPool.QueueUserWorkItem(stateInfo => 
+            ThreadPool.QueueUserWorkItem(stateInfo =>
             {
                 try
                 {
@@ -470,7 +471,7 @@ namespace eIVOGo.Controllers
                         using (DataSet ds = new DataSet())
                         {
                             adapter.Fill(ds);
-                            using(XLWorkbook xls = new XLWorkbook())
+                            using (XLWorkbook xls = new XLWorkbook())
                             {
                                 xls.Worksheets.Add(ds);
                                 xls.SaveAs(resultFile);
@@ -479,7 +480,7 @@ namespace eIVOGo.Controllers
                     }
                     models.Dispose();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logger.Error(ex);
                 }
@@ -629,7 +630,7 @@ namespace eIVOGo.Controllers
                 ModelState.AddModelError("InvoiceDateTo", "請輸入查詢迄日");
             }
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View("~/Views/Shared/ReportInputError.cshtml");
             }
@@ -746,7 +747,7 @@ namespace eIVOGo.Controllers
                                 table.Columns.Add(new DataColumn("未作廢總金額", typeof(decimal)));
                                 table.Columns.Add(new DataColumn("已作廢總筆數", typeof(int)));
                                 table.Columns.Add(new DataColumn("已作廢總金額", typeof(decimal)));
-                                table.TableName = $"月報表({yy.Key}-{ mm.Key})";
+                                table.TableName = $"月報表({yy.Key}-{mm.Key})";
 
                                 ds.Tables.Add(table);
 

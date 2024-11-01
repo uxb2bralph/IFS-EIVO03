@@ -1,0 +1,48 @@
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using eIVOGo.Properties
+@using Model.DataEntity
+@using Model.Locale
+@using Utility
+@using Business.Helper
+@using Model.Helper
+@using Uxnet.Web.WebUI
+
+@{
+    ModelSource<InvoiceItem> models;
+    ModelStateDictionary _modelState;
+    LoginViewModel _viewModel = ViewBag.ViewModel as LoginViewModel;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+
+    InvoiceUserCarrier _model = this.Model as InvoiceUserCarrier;
+    InvoiceUserCarrier carrier = _model;
+
+}
+
+<form id="carrier" action="@Html.Raw(AppSettings.Default.GovCarrierLocalVerrificationUrl)" method="post">
+    <input type="hidden" name="card_ban" value="@(AppSettings.Default.InvoiceCarrierProviderID)" />
+    <input type="hidden" name="card_no1" value="@(_viewModel.CardNo1)" />
+    <input type="hidden" name="card_no2" value="@(_viewModel.CardNo1)" />
+    <input type="hidden" name="card_type" value="@(_viewModel.CardType)" />
+    <input type="hidden" name="back_url" value="@Html.Raw($"{Settings.Default.WebApDomain}{Url.Action("ValidateUserToken","IndividualProcess")}")" />
+    <input type="hidden" name="token" value="@Html.Raw(_viewModel.Token)" />
+</form>
+<script>
+    debugger;
+    $(function () {
+        $('#carrier').submit();
+    });
+</script>
+

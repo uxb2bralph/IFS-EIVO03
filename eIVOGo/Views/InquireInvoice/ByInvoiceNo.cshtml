@@ -23,7 +23,11 @@
         發票號碼
     </th>
     <td class="tdleft">
-        <input name="InvoiceNo" type="text" class="form-control" value="@(_viewModel?.InvoiceNo)" size="32" maxlength="10" />
+        <div class="input-group text-nowrap">
+            <input name="InvoiceNo" type="text" class="form-control" value="@(_viewModel?.InvoiceNo)" size="12" maxlength="12" />
+            <label class="label">～</label>
+            <input name="EndNo" type="text" class="form-control" value="@(_viewModel?.EndNo)" size="12" maxlength="12" />
+        </div>
     </td>
 </tr>
 <tr>

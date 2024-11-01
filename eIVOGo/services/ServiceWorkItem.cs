@@ -89,7 +89,6 @@ namespace eIVOGo.Services
 
             InvoiceNoSafetyStockNotification.Notify();
             DailyJobs.Notify();
-            InvoiceNotUploadNotification.Notify();
         }
 
 
@@ -165,23 +164,23 @@ namespace eIVOGo.Services
 
             public void DoJob()
             {
-                Task.Run(() =>
-                {
-                    DateTime calcPeriod = DateTime.Today.AddMonths(-2);
-                    int year = calcPeriod.Year;
-                    int periodNo = (calcPeriod.Month + 1) / 2;
+                //Task.Run(() =>
+                //{
+                //    DateTime calcPeriod = DateTime.Today.AddMonths(-2);
+                //    int year = calcPeriod.Year;
+                //    int periodNo = (calcPeriod.Month + 1) / 2;
 
-                    using (TrackNoIntervalManager models = new TrackNoIntervalManager())
-                    {
-                        foreach (var item in models.PromptTrackCodeAssignment(year, periodNo).ToList())
-                        {
-                            if (item.Organization.OrganizationExtension?.AutoBlankTrack == true)
-                            {
-                                models.SettleUnassignedInvoiceNO(item);
-                            }
-                        }
-                    }
-                });
+                //    using (TrackNoIntervalManager models = new TrackNoIntervalManager())
+                //    {
+                //        foreach (var item in models.PromptTrackCodeAssignment(year, periodNo).ToList())
+                //        {
+                //            if (item.Organization.OrganizationExtension?.AutoBlankTrack == true)
+                //            {
+                //                models.SettleUnassignedInvoiceNO(item);
+                //            }
+                //        }
+                //    }
+                //});
             }
 
             public void Dispose()
@@ -225,7 +224,7 @@ namespace eIVOGo.Services
 
         //    }
         //}
-        
-        
+
+
     }
 }

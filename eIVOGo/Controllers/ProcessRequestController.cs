@@ -27,7 +27,7 @@ using Model.Resource;
 using Model.Security.MembershipManagement;
 using Utility;
 using Model.InvoiceManagement.InvoiceProcess;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
 using ModelExtension.Helper;
 using eIVOGo.Helper.Security.Authorization;
 

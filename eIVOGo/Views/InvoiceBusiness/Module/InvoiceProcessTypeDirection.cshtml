@@ -1,15 +1,29 @@
-
+@using System.Linq
 @using System.IO
 @using System.Linq.Expressions
 
-
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
 @using eIVOGo.Helper
-@using Model.Locale
+@using eIVOGo.Models
 @using eIVOGo.Models.ViewModel
 @using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using eIVOGo.Properties
 @using Model.DataEntity
-@using eIVOGo.Controllers
+@using Model.Locale
+@using Model.InvoiceManagement.InvoiceProcess
+@using Utility
+@using Business.Helper
+@using Model.Helper
+@using Uxnet.Web.WebUI
 @{
+    ModelSource<InvoiceItem> models;
+    ModelStateDictionary _modelState;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+
     InvoiceViewModel _viewModel;
 
     ViewBag.ActionName = "首頁 > 電子發票開立";
@@ -28,18 +42,24 @@
         switchAction = "CreateInvoice";
         linkText = "線上開立";
     }
+
+    var profile = Context.GetUser();
+    Organization orgItem = models.GetTable<Organization>().Where(c => c.CompanyID == profile.CurrentUserRole.OrganizationCategory.CompanyID).FirstOrDefault();
 }
-    <div class="border_gray">
-        【選擇電子發票型式：
-        <input type="radio" name="InvoiceProcessType" value="@((int)Naming.InvoiceProcessType.C0401)" @(_viewModel.InvoiceProcessType == Naming.InvoiceProcessType.C0401 ? "checked" : null) />熱感紙證明聯(B2C、一般B2B)&nbsp;&nbsp;
-        <input type="radio" name="InvoiceProcessType" value="@((int)Naming.InvoiceProcessType.A0401)" @(_viewModel.InvoiceProcessType == Naming.InvoiceProcessType.A0401 ? "checked" : null) />B2B存證&nbsp;&nbsp;
-        <input type="radio" name="InvoiceProcessType" value="@((int)Naming.InvoiceProcessType.A0101)" @(_viewModel.InvoiceProcessType == Naming.InvoiceProcessType.A0101 ? "checked" : null) />B2B交換
-        】
-        <script>
+<div class="border_gray">
+    【選擇電子發票型式：
+    <input type="radio" name="InvoiceProcessType" value="@((int)Naming.InvoiceProcessType.C0401)" @(_viewModel.InvoiceProcessType == Naming.InvoiceProcessType.C0401 ? "checked" : null) />熱感紙證明聯(B2C、一般B2B)
+    <input type="radio" class="ml-2" name="InvoiceProcessType" value="@((int)Naming.InvoiceProcessType.A0401)" @(_viewModel.InvoiceProcessType == Naming.InvoiceProcessType.A0401 ? "checked" : null) />B2B存證
+    @if (orgItem?.InvoiceExchange() == true)
+    {
+        <input type="radio" class="ml-2" name="InvoiceProcessType" value="@((int)Naming.InvoiceProcessType.A0101)" @(_viewModel.InvoiceProcessType == Naming.InvoiceProcessType.A0101 ? "checked" : null) /><text>B2B交換</text>
+    }
+    】
+    <script>
         debugger;
         $(function () {
-            var $input = $('input:radio[name="InvoiceProcessType"]');
-            @if(_viewModel.InvoiceProcessType.HasValue)
+                    var $input = $('input:radio[name="InvoiceProcessType"]');
+                    @if(_viewModel.InvoiceProcessType.HasValue)
             {
                 <text>
                     $('input:radio[name="InvoiceProcessType"][value="@((int?)_viewModel.InvoiceProcessType)"]').prop('checked', true);
@@ -50,7 +70,7 @@
                 $('').launchDownload('@Html.Raw(Url.Action(actionName,"InvoiceBusiness"))', { 'invoiceProcessType': $(this).val() });
             });
         });
-        </script>
-        【選擇其他開立方式：@Html.Raw(Html.ActionLink(linkText, switchAction, "InvoiceBusiness"))】
-    </div>
+    </script>
+    【選擇其他開立方式：@Html.Raw(Html.ActionLink(linkText, switchAction, "InvoiceBusiness"))】
+</div>
 

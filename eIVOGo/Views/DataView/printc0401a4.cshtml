@@ -11,14 +11,13 @@
 @using Model.Models.ViewModel
 @using eIVOGo.Module.Common
 @using Model.DataEntity
-@using Model.Helper
 @using Model.Locale
 @using Utility
 @using Business.Helper
 @using Model.Helper
 @using Uxnet.Web.WebUI
 @{
-
+    Layout = "~/Views/DataView/C0401A4Template.cshtml";
     ModelSource<InvoiceItem> models;
     IQueryable<DocumentPrintQueue> _model;
     RenderStyleViewModel _viewModel;
@@ -36,55 +35,29 @@
         }
     }
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <title>電子發票系統</title>
-    <link href="../App_Themes/NewPrint/New_eivo.css" rel="stylesheet" type="text/css" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <style type="text/css">
-        div.fspace {
-            height: 9.0cm;
-        }
+@{
+    var profile = Context.GetUser();
+    DocumentPrintQueue item;
+    var items = _model.OrderBy(d => d.CDS_Document.InvoiceItem.No);
+}
+@while ((item = items.FirstOrDefault()) != null)
+{
+    String invoicePrintView;
 
-        div.bspace {
-            height: 9.0cm;
-        }
-
-        body, td, th {
-            font-family: Verdana, Arial, Helvetica, sans-serif, "細明體", "新細明體";
-        }
-    </style>
-</head>
-<body>
-    <form id="theForm" runat="server">
-        @{
-            var profile = Context.GetUser();
-            DocumentPrintQueue item;
-            var items = _model.OrderBy(d => d.CDS_Document.InvoiceItem.No);
-        }
-        @while ((item = items.FirstOrDefault()) != null)
-        {
-            String invoicePrintView;
-
-            if (_viewModel?.UseCustomView == true && (invoicePrintView = item.CDS_Document.InvoiceItem.Organization.OrganizationStatus.InvoicePrintView.GetEfficientString()) != null)
-            {
-                Html.RenderPartial(invoicePrintView, item.CDS_Document.InvoiceItem);
-            }
-            else if(_viewModel?.PrintCuttingLine == true)
-            {
-                Html.RenderPartial("~/Views/DataView/Module/C0401_A4_Print.cshtml", item.CDS_Document.InvoiceItem);
-            }
-            else
-            {
-                Html.RenderPartial("~/Views/DataView/Module/C0401_A4.cshtml", item.CDS_Document.InvoiceItem);
-            }
-            models.MarkPrintedLog(item.CDS_Document.InvoiceItem, profile);
-        }
-    </form>
-</body>
-</html>
-
+    if (_viewModel?.UseCustomView == true && (invoicePrintView = item.CDS_Document.InvoiceItem.Organization.OrganizationStatus.InvoicePrintView.GetEfficientString()) != null)
+    {
+        Html.RenderPartial(invoicePrintView, item.CDS_Document.InvoiceItem);
+    }
+    else if (_viewModel?.PrintCuttingLine == true)
+    {
+        Html.RenderPartial("~/Views/DataView/Module/C0401_A4_Print.cshtml", item.CDS_Document.InvoiceItem);
+    }
+    else
+    {
+        Html.RenderPartial("~/Views/DataView/Module/C0401_A4.cshtml", item.CDS_Document.InvoiceItem);
+    }
+    models.MarkPrintedLog(item.CDS_Document.InvoiceItem, profile);
+}
 <script>
     window.onload = function () {
         window.print();

@@ -22,7 +22,7 @@ namespace eIVOGo.Helper
 {
     public static class InvoiceBusinessExtensionMethods
     {
-        public static void MarkPrintedLog<TEntity>(this GenericManager<EIVOEntityDataContext,TEntity> models,InvoiceItem item,UserProfileMember profile)
+        public static void MarkPrintedLog<TEntity>(this GenericManager<EIVOEntityDataContext, TEntity> models, InvoiceItem item, UserProfileMember profile)
             where TEntity : class, new()
         {
             models.MarkPrintedLog(item, profile.UID);
@@ -68,7 +68,7 @@ namespace eIVOGo.Helper
 
         public static IQueryable<Organization> FilterOrganizationByRole(this EIVOEntityDataContext models, UserProfileMember profile, IQueryable<Organization> items = null)
         {
-            if(items == null)
+            if (items == null)
             {
                 items = models.GetTable<Organization>();
             }
@@ -80,7 +80,7 @@ namespace eIVOGo.Helper
 
                 case Naming.CategoryID.COMP_INVOICE_AGENT:
                     var issuers = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == profile.CurrentUserRole.OrganizationCategory.CompanyID);
-                    return  items.Where(i => i.CompanyID == profile.CurrentUserRole.OrganizationCategory.CompanyID
+                    return items.Where(i => i.CompanyID == profile.CurrentUserRole.OrganizationCategory.CompanyID
                         || issuers.Any(a => a.IssuerID == i.CompanyID));
 
                 case Naming.CategoryID.COMP_E_INVOICE_GOOGLE_TW:
@@ -131,7 +131,8 @@ namespace eIVOGo.Helper
                     var agentID = profile.CurrentUserRole.OrganizationCategory.CompanyID;
                     var issuers = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == agentID)
                         .Select(a => a.IssuerID);
-                    return items.Where(i => i.AgentID == agentID
+                    return items.Where(i => i.Sender == profile.UID
+                                    || i.AgentID == agentID
                                     || issuers.Any(a => i.AgentID == a));
 
             }
@@ -157,14 +158,28 @@ namespace eIVOGo.Helper
         {
             List<InvoiceNoAllocation> items = new List<InvoiceNoAllocation>();
 
-            //receiptNo = receiptNo.GetEfficientString();
-            var seller = models.GetTable<Organization>().Where(c => c.ReceiptNo == viewModel.company_id).FirstOrDefault();
+            var receiptNo = viewModel.company_id.GetEfficientString();
+            var orgItems = models.GetTable<Organization>().Where(c => c.ReceiptNo == receiptNo);
+            var seller = orgItems.FirstOrDefault();
             bool auth = true;
             if (seller != null)
             {
                 if (viewModel.Seed != null && viewModel.Authorization != null)
                 {
                     auth = models.CheckAuthToken(seller, viewModel) != null;
+                }
+
+                if (!auth)
+                {
+                    if (viewModel.AccessToken != null)
+                    {
+                        int agentID = viewModel.AccessToken.DecryptKeyValue();
+                        auth = seller.CompanyID == agentID 
+                            || models.GetTable<InvoiceIssuerAgent>()
+                                .Where(a => a.AgentID == agentID)
+                                .Where(a => a.IssuerID == seller.CompanyID)
+                                .Any();
+                    }
                 }
 
                 if (auth)
@@ -190,7 +205,7 @@ namespace eIVOGo.Helper
                             mgr.Close();
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Logger.Error(ex);
                     }
@@ -200,7 +215,7 @@ namespace eIVOGo.Helper
             return items;
         }
 
-        public static bool CheckAvailableInterval(this GenericManager<EIVOEntityDataContext> models, POSDeviceViewModel viewModel,out String reason)
+        public static bool CheckAvailableInterval(this GenericManager<EIVOEntityDataContext> models, POSDeviceViewModel viewModel, out String reason)
         {
             reason = null;
             var seller = models.GetTable<Organization>().Where(c => c.ReceiptNo == viewModel.company_id).FirstOrDefault();
@@ -218,7 +233,7 @@ namespace eIVOGo.Helper
                     {
                         using (TrackNoManager mgr = new TrackNoManager(models, seller.CompanyID))
                         {
-                            if(!mgr.PeekInvoiceNo().HasValue)
+                            if (!mgr.PeekInvoiceNo().HasValue)
                             {
                                 auth = false;
                                 reason = "inovice no not available!";

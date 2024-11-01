@@ -136,6 +136,12 @@ namespace eIVOGo.Helper
             {
                 mailTo = $"{mailTo}@uxb2b.com";
             }
+            else
+            {
+                mailTo = String.Join(",",
+                    mailTo.Split(',').Select(m => m.GetEfficientString())
+                        .Where(m => m != null));
+            }
 
             using (MailMessage message = new MailMessage())
             {

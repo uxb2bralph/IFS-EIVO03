@@ -5,7 +5,7 @@ using System.Web;
 using Model.DataEntity;
 using Model.Models.ViewModel;
 using Utility;
-using Uxnet.Com.DataAccessLayer.Models;
+using DataAccessLayer.Models;
 
 namespace eIVOGo.Models
 {

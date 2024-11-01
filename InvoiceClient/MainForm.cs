@@ -16,6 +16,9 @@ using InvoiceClient.Properties;
 using Model.Schema.EIVO;
 using Utility;
 using InvoiceClient.TransferManagement;
+using System.Threading.Tasks;
+using InvoiceClient.Agent.POSHelper;
+using InvoiceClient.Agent.RuntimeHelper;
 
 namespace InvoiceClient
 {
@@ -26,10 +29,25 @@ namespace InvoiceClient
             get;
             private set;
         }
+
+        public static void Alert(string message,String caption,MessageBoxIcon icon = MessageBoxIcon.Warning,ITransferManager transferManager = null)
+        {
+            if (AppMainForm != null)
+            {
+                Task.Run(() =>
+                {
+                    MessageBox.Show(message, $"[{DateTime.Now}]{caption}", MessageBoxButtons.OK, icon);
+                });
+
+                if (AppMainForm.Visible)
+                {
+                    transferManager?.WorkItem?.ReportStatus();
+                }
+            }
+        }
+
         public MainForm()
         {
-            Logger.OutputWritter = Console.Out;
-            Logger.Info($"Process start at {DateTime.Now}");
             InitializeComponent();
             this.invoiceClientServiceController.ServiceName = Settings.Default.ServiceName;
             initializeWorkItem();
@@ -58,7 +76,9 @@ namespace InvoiceClient
                 {
                     Type type = manager.UIConfigType;
                     if (type != null)
-                        createTab(type);
+                    {
+                        manager.WorkItem = createTab(type);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -79,10 +99,9 @@ namespace InvoiceClient
                     Logger.Error(ex);
                 }
             }
-
         }
 
-        private void createTab(Type type)
+        private ITabWorkItem createTab(Type type)
         {
             if (type.GetInterface("InvoiceClient.Helper.ITabWorkItem") != null)
             {
@@ -101,13 +120,19 @@ namespace InvoiceClient
 
                     c.Dock = System.Windows.Forms.DockStyle.Fill;
                     tab.ResumeLayout();
+
+                    return workItem;
                 }
             }
+
+            return null;
         }
 
         private void miClose_Click(object sender, EventArgs e)
         {
-            this.Close();
+            //this.Close();
+            Settings.Default.Save();
+            Application.Exit();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -141,6 +166,16 @@ namespace InvoiceClient
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Settings.Default.Save();
+            if(!POSReady.Settings.UserClose)
+            {
+                if (e.CloseReason == CloseReason.UserClosing)
+                {
+                    e.Cancel = true;
+
+                    this.WindowState = FormWindowState.Minimized;
+                    this.ShowInTaskbar = false;
+                }
+            }
         }
 
         private void miActivate_Click(object sender, EventArgs e)

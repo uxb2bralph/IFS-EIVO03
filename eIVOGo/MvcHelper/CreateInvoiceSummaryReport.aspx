@@ -4,7 +4,7 @@
 <%@ Import Namespace="Model.DataEntity" %>
 <%@ Import Namespace="Utility" %>
 <%@ Import Namespace="System.Data" %>
-<%@ Import Namespace="Uxnet.Com.DataAccessLayer" %>
+<%@ Import Namespace="DataAccessLayer" %>
 <%@ Import Namespace="ClosedXML.Excel" %>
 <%@ Import Namespace="ModelExtension.Helper" %>
 

@@ -62,6 +62,10 @@ namespace DataAccessLayer.basis
         {
             get
             {
+                if (_mgr == null)
+                {
+                    CreateDataManager();
+                }
                 return _mgr;
             }
         }

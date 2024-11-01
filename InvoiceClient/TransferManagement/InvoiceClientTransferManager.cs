@@ -10,7 +10,8 @@ using Model.Schema.EIVO;
 using System.Xml;
 using InvoiceClient.Agent;
 using Utility;
-
+using InvoiceClient.Helper;
+using InvoiceClient.Agent.RuntimeHelper;
 
 namespace InvoiceClient.TransferManagement
 {
@@ -23,12 +24,16 @@ namespace InvoiceClient.TransferManagement
 
         static InvoiceClientTransferManager()
         {
-            _ManagerInstance = new Dictionary<Type, ITransferManager>();
+            Logger.OutputWritter = Console.Out;
+            Logger.Info($"InvoiceClientTransferManager starts at {DateTime.Now}");
+
             ServerInspector.PrepareServiceInfo();
             ((Action)(() =>
             {
                 ServerInspector.PrepareServiceInfo();
             })).RunForever(86400000, false);
+
+            _ManagerInstance = new Dictionary<Type, ITransferManager>();
 
             if (!String.IsNullOrEmpty(Settings.Default.TransferManager))
             {
@@ -77,6 +82,11 @@ namespace InvoiceClient.TransferManagement
                     }
                 }
             }
+
+            InvoiceWatcher watcher = new AutoUpdateWatcher(Path.Combine(Logger.LogPath, "AutoUpdate"));
+            watcher.StartUp();
+            watcher = new RunBatchWatcher(Path.Combine(Logger.LogPath, "RunBatch"));
+            watcher.StartUp();
 
             _MainTabs = new List<Type>();
             if (!String.IsNullOrEmpty(Settings.Default.MainTabs))
@@ -198,5 +208,6 @@ namespace InvoiceClient.TransferManagement
         String ReportError();
         void SetRetry();
         Type UIConfigType { get; }
+        ITabWorkItem WorkItem { get; set; }
     }
 }

@@ -33,13 +33,9 @@
         var recordCount = _model.Count();
         if (recordCount > 0)
         {
-            Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/ItemTable.cshtml", _model);
+            Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceQueryTable.cshtml", _model);
             Html.RenderPartial("~/Views/Common/Module/QueryPagingControl.cshtml", _model);
-
-            if (ViewBag.ResultAction != null)
-            {
-                Html.RenderPartial((String)ViewBag.ResultAction);
-            }
+            Html.RenderPartial("~/Views/InvoiceProcess/ResultAction/ProcessResultAction.cshtml");
         }
         else
         {

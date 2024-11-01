@@ -15,7 +15,7 @@ using Model.DataEntity;
 using Model.Locale;
 using Model.Security.MembershipManagement;
 using Utility;
-using Uxnet.Com.DataAccessLayer.Models;
+using DataAccessLayer.Models;
 using DataAccessLayer.basis;
 
 namespace eIVOGo.Models
@@ -128,7 +128,7 @@ namespace eIVOGo.Models
             if (!String.IsNullOrEmpty(CurrentController.Request["sellerID"]))
             {
                 effective = true;
-                models.Items = models.Items.Where(d => d.InvoiceSeller.SellerID == int.Parse(CurrentController.Request["sellerID"]));
+                models.Items = models.Items.Where(d => d.SellerID == int.Parse(CurrentController.Request["sellerID"]));
             }
 
             base.BuildQueryExpression(models);

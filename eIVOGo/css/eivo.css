@@ -35,5 +35,21 @@
         background: #FDF5E6;
     }
 
+.companyList {
+    min-width: 100%;
+}
+
+    .companyList th {
+        white-space: nowrap;
+    }
+
+    .companyList td {
+        white-space: nowrap;
+    }
+
+    .companyList tr:nth-child(even) {
+        background: #FDF5E6;
+    }
+
 
 

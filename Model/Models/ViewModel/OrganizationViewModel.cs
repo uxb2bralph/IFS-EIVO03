@@ -44,7 +44,7 @@ namespace Model.Models.ViewModel
         public bool? SetToPrintInvoice { get; set; }
         public bool? AutoBlankTrack { get; set; }
         public bool? AutoBlankTrackEmittance { get; set; }
-        public bool? InvoiceNotUploadedAlert { get; set; }  
+
         public string InvoicePrintView { get; set; }
         public string C0401POSView { get; set; }
         public bool? IronSteelIndustry { get; set; }
@@ -75,6 +75,17 @@ namespace Model.Models.ViewModel
 
         [JsonIgnore]
         public bool SendAllowanceMIGManually => Settings != null && Settings.Contains("SendAllowanceMIGManually");
+        [JsonIgnore]
+        public bool HybridB2B => Settings != null && Settings.Contains("HybridB2B");
+        [JsonIgnore]
+        public bool InvoiceNotUploadedAlert => Settings != null && Settings.Contains("InvoiceNotUploadedAlert");
+        [JsonIgnore]
+        public bool DisableC0401Template => Settings != null && Settings.Contains("DisableC0401Template");
+        [JsonIgnore]
+        public bool InvoiceExchange => Settings != null && Settings.Contains("InvoiceExchange");
+        [JsonIgnore]
+        public bool IgnoreDuplicatedNo => Settings != null && Settings.Contains("IgnoreDuplicatedNo");
+        public bool ForcedAuditNo => Settings != null && Settings.Contains("ForcedAuditNo");
         public int? InvoiceNoSafetyStock { get; set; }
         public int?[] GradeCount { get; set; }
         public int?[] BasicFee { get; set; }

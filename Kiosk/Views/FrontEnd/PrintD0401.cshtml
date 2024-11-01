@@ -10,6 +10,7 @@
 @using Kiosk.Helper
 @using Utility
 @using Uxnet.Web.WebUI
+@using Kiosk.Properties
 @{
     AllowanceRootAllowance _model = null;
 
@@ -33,13 +34,26 @@
 <html>
 <head>
     <title>折讓單-@(_model?.AllowanceNumber)</title>
-    <link href="@VirtualPathUtility.ToAbsolute("~/App_Themes/Ver2016/eivo.css")" rel="stylesheet" type="text/css" />
+    @* <link href="@VirtualPathUtility.ToAbsolute("~/App_Themes/Ver2016/eivo.css")" rel="stylesheet" type="text/css" /> *@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <style type="text/css" media="print">
+
+        @@page {
+            /*size: portrait;*/ /* 直向 */
+            /*size: A4 portrait;*/ /* 混合使用 */
+            margin: @(AppSettings.Default.Margin); /* 邊界與內容的距離 */
+        }
+
+        @@media print {
+            body {
+                zoom: @($"{AppSettings.Default.Zoom}%");
+            }
+        }
+
         body {
             margin: 0px;
             padding: 0px;
-            font-family: "Arial", "Verdana","Helvetica", "sans-serif", "細明體", "新細明體";
+            @* font-family: "Arial", "Verdana","Helvetica", "sans-serif", "細明體", "新細明體"; *@
         }
 
         .container {
@@ -49,6 +63,7 @@
             border-top: 1px dotted #999;
             border-bottom: 1px dotted #999;
             /*padding-top:0.3cm;*/
+            @* letter-spacing: -1px; *@
         }
 
             .container .cutfield {
@@ -94,7 +109,7 @@
                     }
 
                 .container .cutfield p {
-                    font-size: 8pt;
+                    font-size: 12pt;
                     line-height: 1.2;
                     padding: 0;
                     padding-top: 0.1cm;
@@ -177,7 +192,7 @@
             padding: 2px 0px;
             margin: 0;
             /*overflow:hidden;*/
-            font-size: 8pt;
+            font-size: 12pt;
             line-height: 1.5;
         }
 
@@ -266,11 +281,11 @@
             }
     </style>
 </head>
-<body style="font-family:KaiTi">
+<body style="margin:0px;font-weight: bold;font-family: monospace;">
     <form id="theForm">
-        @{ 
-            Html.RenderPartial("~/Views/FrontEnd/Module/D0401.cshtml", _model);
-            }
+        @{
+            Html.RenderPartial("~/Views/FrontEnd/Module/43460094/D0401.cshtml", _model);
+        }
     </form>
 </body>
 </html>

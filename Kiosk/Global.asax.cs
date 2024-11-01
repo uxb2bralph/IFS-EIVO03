@@ -8,6 +8,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
+using Utility;
 
 namespace Kiosk
 {
@@ -22,6 +23,14 @@ namespace Kiosk
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             //System.Diagnostics.Debugger.Launch();
+        }
+
+        void Application_Error(object sender, EventArgs e)
+        {
+            // Code that runs when an unhandled error occurs
+            var ex = Server.GetLastError();
+            if (ex != null)
+                Logger.Error(ex);
         }
     }
 }

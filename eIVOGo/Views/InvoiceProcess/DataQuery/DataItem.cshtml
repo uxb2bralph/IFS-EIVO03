@@ -1,0 +1,37 @@
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@using Business.Helper
+@functions
+{
+    ModelSource<InvoiceItem> models;
+    dynamic _model;
+    QueryViewModel _viewModel;
+}
+@{
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = this.Model as dynamic;
+    _viewModel = (QueryViewModel)ViewBag.ViewModel;
+}
+
+@{
+    foreach (var col in _viewModel.DataColumns)
+    {
+        Write(col.ShowBody(_model));
+    }
+}
+
+

@@ -14,6 +14,7 @@ using Model.Schema.EIVO;
 using Model.Models.ViewModel;
 using Utility;
 using System.Data;
+using Model.InvoiceManagement.InvoiceProcess;
 
 namespace Model.InvoiceManagement.Validator
 {
@@ -61,7 +62,7 @@ namespace Model.InvoiceManagement.Validator
 
         }
 
-        internal DetailsFieldIndex DetailsField = new DetailsFieldIndex { } ;
+        internal DetailsFieldIndex DetailsField = new DetailsFieldIndex { };
         internal class DetailsFieldIndex
         {
             public int Invoice_No { get; internal set; } = 0;
@@ -85,7 +86,7 @@ namespace Model.InvoiceManagement.Validator
 
         void resetFieldIndex()
         {
-            switch(processType)
+            switch (processType)
             {
                 case Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC:
                     InvoiceField.Data_ID = 0;
@@ -238,7 +239,7 @@ namespace Model.InvoiceManagement.Validator
         DateTime? InvoiceDate() { return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE ? null : GetData<DateTime>(InvoiceField.Invoice_Date); }
         String InvoiceNo()
         {
-            return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE || processType== Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC ? null : GetString(InvoiceField.Invoice_No);
+            return processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE || processType == Naming.InvoiceProcessType.C0401_Xlsx_Allocation_ByVAC ? null : GetString(InvoiceField.Invoice_No);
         }
         String DataID() { return GetString(InvoiceField.Data_ID); }
         DateTime? DataDate() { return GetData<DateTime>(InvoiceField.Data_Date); }
@@ -337,7 +338,7 @@ namespace Model.InvoiceManagement.Validator
                     }
                     else
                     {
-                        if(NPOBAN().Length<3||NPOBAN().Length>7)
+                        if (NPOBAN().Length < 3 || NPOBAN().Length > 7)
                             return new Exception(String.Format(MessageResources.InvalidDonationTaker, NPOBAN()));
                     }
 
@@ -375,7 +376,7 @@ namespace Model.InvoiceManagement.Validator
 
         }
 
-        public virtual Exception Validate(DataRow dataItem,IEnumerable<DataRow> details)
+        public virtual Exception Validate(DataRow dataItem, IEnumerable<DataRow> details)
         {
             _invItem = dataItem;
             _details = details;
@@ -443,16 +444,16 @@ namespace Model.InvoiceManagement.Validator
                 {
                     DocDate = DateTime.Now,
                     DocType = (int)Naming.DocumentTypeDefinition.E_Invoice,
-                    DocumentOwner = new DocumentOwner 
+                    DocumentOwner = new DocumentOwner
                     {
                         OwnerID = _owner.CompanyID
                     },
-                    ProcessType = processType== Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer
+                    ProcessType = processType == Naming.InvoiceProcessType.A0401_Xlsx_Allocation_ByIssuer
                         ? (int)Naming.InvoiceProcessType.A0401
                         : (int)Naming.InvoiceProcessType.C0401,
                 },
                 DonateMark = _donation == null ? "0" : "1",
-                InvoiceType = InvoiceTypeIndication == Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 
+                InvoiceType = InvoiceTypeIndication == Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
                                 ? (byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
                                 : (byte)Naming.InvoiceTypeDefinition.特種稅額計算之電子發票,
                 SellerID = _seller.CompanyID,
@@ -475,7 +476,7 @@ namespace Model.InvoiceManagement.Validator
                 InvoiceAmountType = new InvoiceAmountType
                 {
                     SalesAmount = SalesAmount(),
-                    ZeroTaxSalesAmount =  ZeroTaxSalesAmount(),
+                    ZeroTaxSalesAmount = ZeroTaxSalesAmount(),
                     FreeTaxSalesAmount = FreeTaxSalesAmount(),
                     TaxAmount = TaxAmount(),
                     TaxRate = TaxRate(),
@@ -493,6 +494,11 @@ namespace Model.InvoiceManagement.Validator
             if (_order != null)
             {
                 _newItem.InvoicePurchaseOrder = _order;
+            }
+
+            if (_orderAudit != null)
+            {
+                _orderAudit.InvoiceItem = _newItem;
             }
 
             _newItem.InvoiceDetails.AddRange(_productItems.Select(p => new InvoiceDetail
@@ -603,19 +609,29 @@ namespace Model.InvoiceManagement.Validator
         protected override Exception checkDataNumber()
         {
             _order = null;
+            _orderAudit = null;
             if (String.IsNullOrEmpty(DataID()))
             {
                 return new Exception(MessageResources.AlertDataNumber);
             }
 
-            if (DataID().Length > 60)
+            if (DataID()?.Length > 60)
             {
                 return new Exception(String.Format(MessageResources.AlertDataNumberLimitedLength, DataID()));
             }
 
+            if (_seller.ForcedAuditNo())
+            {
+                _orderAudit = _models.CreateInvoicePurchaseOrderAudit(_seller.CompanyID, DataID());
+                if (_orderAudit == null)
+                {
+                    return new Exception(String.Format(MessageResources.AlertDataNumberDuplicated, DataID()));
+                }
+            }
+
             var po = _models.GetTable<InvoicePurchaseOrder>().Where(d => d.OrderNo == DataID()
                     && d.InvoiceItem.SellerID == _seller.CompanyID).FirstOrDefault();
-            if (po!=null)
+            if (po != null)
             {
                 return new DuplicateDataNumberException(String.Format(MessageResources.AlertDataNumberDuplicated, DataID()))
                 {
@@ -641,6 +657,7 @@ namespace Model.InvoiceManagement.Validator
         protected void buildDataNumber()
         {
             _order = null;
+            _orderAudit = null;
 
             if (!String.IsNullOrEmpty(DataID()))
             {
@@ -710,7 +727,8 @@ namespace Model.InvoiceManagement.Validator
             if (processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE)
             {
                 randomNo = String.Format("{0:ffff}", DateTime.Now);
-            } else if ((randomNo = RandomNumber().GetEfficientString()) == null)
+            }
+            else if ((randomNo = RandomNumber().GetEfficientString()) == null)
             {
                 randomNo = String.Format("{0:ffff}", DateTime.Now);
                 //ValueValidity.GenerateRandomCode(4)
@@ -833,22 +851,22 @@ namespace Model.InvoiceManagement.Validator
                 if (checkPublicCarrierId(CarrierId1()))
                 {
                     _carrier = new InvoiceCarrier
-                        {
-                            CarrierType = CarrierType(),
-                            CarrierNo = CarrierId1(),
-                            CarrierNo2 = CarrierId1()
-                        };
+                    {
+                        CarrierType = CarrierType(),
+                        CarrierNo = CarrierId1(),
+                        CarrierNo2 = CarrierId1()
+                    };
 
                     return null;
                 }
                 else if (checkPublicCarrierId(CarrierId2()))
                 {
                     _carrier = new InvoiceCarrier
-                        {
-                            CarrierType = CarrierType(),
-                            CarrierNo = CarrierId2(),
-                            CarrierNo2 = CarrierId2()
-                        };
+                    {
+                        CarrierType = CarrierType(),
+                        CarrierNo = CarrierId2(),
+                        CarrierNo2 = CarrierId2()
+                    };
 
                     return null;
                 }
@@ -957,7 +975,7 @@ namespace Model.InvoiceManagement.Validator
             if (receiptNo == "0000000000")
             {
                 buyerName = BuyerName().CheckB2CMIGName();
-            }   
+            }
             else
             {
                 buyer = _models.GetTable<Organization>().Where(o => o.ReceiptNo == receiptNo).FirstOrDefault();
@@ -974,11 +992,11 @@ namespace Model.InvoiceManagement.Validator
                 BuyerMark = BuyerMark(),
                 Name = buyerName,
                 ReceiptNo = BuyerID(),
-                CustomerID = String.IsNullOrEmpty(CustomerID()) ? "" : CustomerID(),
+                CustomerID = CustomerID(),
                 CustomerName = receiptNo != "0000000000" ? buyerName : null,
-            };   
-            
-            if(_isCrossBorderMerchant)
+            };
+
+            if (_isCrossBorderMerchant)
             {
                 _buyer.CustomerNumber = _buyer.ReceiptNo;
                 _buyer.ReceiptNo = "0000000000";
@@ -987,7 +1005,7 @@ namespace Model.InvoiceManagement.Validator
             _buyer.ContactName = ContactName().GetEfficientString() ?? buyer?.ContactName;
             if (relationship == null)
             {
-                _buyer.Address = Address().GetEfficientString() ?? buyer?.Addr ;
+                _buyer.Address = Address().GetEfficientString() ?? buyer?.Addr;
                 _buyer.Phone = Phone().GetEfficientString() ?? buyer?.Phone;
                 _buyer.EMail = EMail().GetEfficientString()?.Replace(';', ',').Replace('、', ',').Replace(' ', ',') ?? buyer?.ContactEmail;
             }
@@ -995,7 +1013,7 @@ namespace Model.InvoiceManagement.Validator
             {
                 _buyer.Address = Address().GetEfficientString() ?? relationship.Addr;
                 _buyer.Phone = Phone().GetEfficientString() ?? relationship.Phone;
-                _buyer.EMail = EMail().GetEfficientString()?.Replace(';', ',').Replace('、', ',').Replace(' ', ',') ?? relationship.ContactEmail ;
+                _buyer.EMail = EMail().GetEfficientString()?.Replace(';', ',').Replace('、', ',').Replace(' ', ',') ?? relationship.ContactEmail;
             }
 
             return null;
@@ -1008,7 +1026,7 @@ namespace Model.InvoiceManagement.Validator
             _donation = null;
 
             var checkFunc = _deliveryCheck[Convert.ToInt32(PrintMark() == "Y"),
-                Convert.ToInt32(!String.IsNullOrEmpty(CarrierType()) 
+                Convert.ToInt32(!String.IsNullOrEmpty(CarrierType())
                     && !(String.IsNullOrEmpty(CarrierId1()) && String.IsNullOrEmpty(CarrierId2()))),
                 Convert.ToInt32(BuyerID() == "0000000000"),
                 Convert.ToInt32(DonateMark() == "1")];
@@ -1108,7 +1126,7 @@ namespace Model.InvoiceManagement.Validator
                 PieceUnit = GetString(i, DetailsField.Unit),
                 UnitCost = GetDetails<decimal>(i, DetailsField.Unit_Price),
                 Remark = GetString(i, DetailsField.Remark),
-                TaxType = processType==Naming.InvoiceProcessType.C0401_Xlsx_CBE
+                TaxType = processType == Naming.InvoiceProcessType.C0401_Xlsx_CBE
                             ? (byte)Naming.TaxTypeDefinition.應稅
                             : GetDetails<byte>(i, DetailsField.Item_Tax_Type),
                 No = (seqNo++)
@@ -1159,7 +1177,7 @@ namespace Model.InvoiceManagement.Validator
                 return new Exception(String.Format(MessageResources.InvalidDonationMark, DonateMark()));
             }
 
-            if ((printMark = PrintMark().GetEfficientString())==null)
+            if ((printMark = PrintMark().GetEfficientString()) == null)
             {
                 //return new Exception(MessageResources.InvalidPrintMark);
                 printMark = "N";
@@ -1173,7 +1191,7 @@ namespace Model.InvoiceManagement.Validator
                 }
             }
 
-            if(!InvoiceType().IsValidInvoiceType())
+            if (!InvoiceType().IsValidInvoiceType())
             {
                 return new Exception(String.Format(MessageResources.InvalidInvoiceType, InvoiceType()));
             }

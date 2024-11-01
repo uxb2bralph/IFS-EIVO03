@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Web;
 using DataAccessLayer.basis;
 using Model.Locale;
-using Uxnet.Com.DataAccessLayer.Models;
+using DataAccessLayer.Models;
 
 namespace Model.DataEntity
 {

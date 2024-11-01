@@ -11,10 +11,12 @@ namespace Uxnet.Com.Helper
     public class QueuedProcessHandler
     {
         private int _busyCount = 0;
+        private int _readyCount = 0;
 
         public Action Process { get; set; }
 
         public int? MaxWaitingCount { get; set; }
+        public int? PeriodInMinutes { get; set; }
 
         public void Notify()
         {
@@ -44,6 +46,18 @@ namespace Uxnet.Com.Helper
                             Logger.Error(ex);
                         }
                     } while (Interlocked.Decrement(ref _busyCount) > 0);
+
+                    if(PeriodInMinutes.HasValue)
+                    {
+                        if (Interlocked.Increment(ref _readyCount) == 1)
+                        {
+                            Task.Delay(PeriodInMinutes.Value * 60000).ContinueWith(ts =>
+                            {
+                                Interlocked.Exchange(ref this._readyCount, 0);
+                                this.Notify();
+                            });
+                        }
+                    }
                 });
             }
 

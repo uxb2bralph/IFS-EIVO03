@@ -1,0 +1,107 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using Business.Helper
+@using DataAccessLayer.basis
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Security.MembershipManagement
+@using Model.Models.ViewModel
+@using Utility
+@using Uxnet.Web.WebUI
+@using Newtonsoft.Json
+@functions
+{
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+    IEnumerable<String> _model;
+    QueryViewModel _viewModel;
+}
+@{
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    _viewModel = (QueryViewModel)ViewBag.ViewModel;
+
+    _model = this.Model as IEnumerable<String>;
+
+}
+@{
+    int idx = 0;
+}
+@foreach (var item in _model)
+{
+    idx++;
+    String fileName = Path.GetFileNameWithoutExtension(item);
+    String businessID = fileName.Substring(fileName.IndexOf('_') + 1);
+    FileInfo info = new FileInfo(item);
+    <tr id="@(businessID)">
+        <td>@(businessID)</td>
+        <td>@(info.LastWriteTime)</td>
+        <td>
+            <input type="button" value="歸檔" onclick="moveFile('@(businessID)','@Html.Raw(item.EncryptData())');" />
+        </td>
+        <td>
+            <input type="button" value="轉營業人" onclick="transferCompany('@(businessID)','@Html.Raw(item.EncryptData())');" />
+        </td>
+        <td>
+            <input type="button" value="zip" onclick="location.href='@Url.Action("SetAll", "InvoiceNumberApply", new { businessID })'" />
+        </td>
+        
+    @*<td>
+        <input type="button" target="_blank" value="UpdateData" onclick="location.href='@Url.Action("Update", "InvoiceNumberApply", new { businessID = @item.BusinessId })'" />
+    </td>*@
+        
+    </tr>
+}
+
+<script type="text/javascript">
+
+    function transferCompany(value, keyID) {
+        $.post('@(Url.Action("TransferOrganization", "InvoiceNumberApply"))'
+            , { 'KeyID': keyID }
+            , function (data) {
+                if ($.isPlainObject(data)) {
+                    if (data.result) {
+                        alert('營業人轉檔完成.');
+                        $('#' + value + '').remove();
+                    } else {
+                        alert(data.message);
+                    }
+                } else {
+                    $(data).appendTo($('body'));
+                }
+            });
+    }
+
+    function moveFile(value,keyID) {
+       $.post('@(Url.Action("MoveFile", "InvoiceNumberApply"))'
+           , { 'KeyID': keyID }
+           , function (data) {
+                if ($.isPlainObject(data)) {
+                    if (data.result) {
+                        alert('歸檔完成.');
+                        $('#' + value +'').remove();
+                    } else {
+                        alert(data.message);
+                    }
+                } else {
+                    $(data).appendTo($('body'));
+                }
+           });
+    }
+
+    $(this).submit(function () {
+
+        return true; // return false to cancel form action
+    });
+
+    $(document).ready(function () {
+
+    });
+
+</script>

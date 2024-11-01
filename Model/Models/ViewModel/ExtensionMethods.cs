@@ -27,6 +27,7 @@ namespace Model.Models.ViewModel
                 viewModel.BusinessContactPhone = item.OrganizationExtension?.BusinessContactPhone;
                 viewModel.RegAddr = item.RegAddr;
                 viewModel.UndertakerName = item.UndertakerName;
+                viewModel.CustomerNo = item.OrganizationExtension?.CustomerNo;
                 viewModel.Addr = item.Addr;
                 viewModel.EnglishName = item.EnglishName;
                 viewModel.EnglishAddr = item.EnglishAddr;
@@ -72,7 +73,6 @@ namespace Model.Models.ViewModel
                 viewModel.CreationDate = item.OrganizationExtension?.CreationDate;
                 viewModel.AutoBlankTrack = item.OrganizationExtension?.AutoBlankTrack;
                 viewModel.AutoBlankTrackEmittance = item.OrganizationExtension?.AutoBlankTrackEmittance;
-                viewModel.InvoiceNotUploadedAlert = item.OrganizationExtension.InvoiceNotUploadedAlert;
             }
             return viewModel;
         }

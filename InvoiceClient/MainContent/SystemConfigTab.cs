@@ -18,16 +18,18 @@ namespace InvoiceClient.MainContent
             InitializeComponent();
         }
 
-        private void btnReceiptNo_Click(object sender, EventArgs e)
-        {
-            Settings.Default["SellerReceiptNo"] = SellerReceiptNo.Text;
-            MessageBox.Show("Setup is complete!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
         private void btnServerUrl_Click(object sender, EventArgs e)
         {
             Settings.Default["InvoiceClient_WS_Invoice_eInvoiceService"] = ServerUrl.Text;
-            MessageBox.Show("Setup is complete!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            String actKey = Microsoft.VisualBasic.Interaction.InputBox("New input identification code:", "Enable the system", Settings.Default.ActivationKey);
+            if (!String.IsNullOrEmpty(actKey) && InvoiceClient.Helper.AppSigner.ResetCertificate(actKey))
+            {
+                MessageBox.Show("Setup is complete!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Connection failed!!", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public string TabName
@@ -39,7 +41,10 @@ namespace InvoiceClient.MainContent
         {
             get { return "System Setting"; }
         }
+        public void ReportStatus()
+        {
 
+        }
         private void SystemConfigTab_VisibleChanged(object sender, EventArgs e)
         {
             if (this.Visible)
@@ -60,6 +65,7 @@ namespace InvoiceClient.MainContent
                 {
                     Settings.Default["InvoiceTxnPath"] = dialog.SelectedPath;
                     MessageBox.Show("Setup is complete!!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Application.Restart();
                 }
             }
         }

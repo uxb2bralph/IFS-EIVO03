@@ -13,6 +13,7 @@ using Model.Resource;
 using Model.Schema.EIVO;
 using Model.Models.ViewModel;
 using Utility;
+using Model.InvoiceManagement.InvoiceProcess;
 
 namespace Model.InvoiceManagement.Validator
 {
@@ -23,11 +24,13 @@ namespace Model.InvoiceManagement.Validator
         public static String __自然人憑證 = "CQ0001";
         public static String __CROSS_BORDER_MURCHANT = "5G0001";
         public static readonly Regex __MatchCellPhoneBarcode = new Regex("^/((?<!,)[A-Z0-9+-\\.](?!,)){7}$");
-        public static readonly String[] __InvoiceDateTimeFormat = 
+        public static readonly String[] __InvoiceDateTimeFormat =
             {
                 "yyyy/MM/dd HH:mm:ss",
                 "yyyy-MM-dd HH:mm:ss",
                 "yyyyMMdd HH:mm:ss",
+                "yyyy/M/d H:m:s",
+                "yyyy-M-d H:m:s",
             };
 
         protected GenericManager<EIVOEntityDataContext> _models;
@@ -40,6 +43,7 @@ namespace Model.InvoiceManagement.Validator
         protected Organization _seller;
         protected bool _isCrossBorderMerchant;
         protected InvoicePurchaseOrder _order;
+        protected InvoicePurchaseOrderAudit _orderAudit;
         protected InvoiceBuyer _buyer;
         protected InvoiceCarrier _carrier;
         protected InvoiceDonation _donation;
@@ -49,7 +53,7 @@ namespace Model.InvoiceManagement.Validator
         protected bool _isAutoTrackNo;
         protected DateTime? _autoTrackNoInvoiceDate;
         protected Dictionary<int, TrackNoManager> _trackNoManagerList;
-        protected Func<Exception>[, , ,] _deliveryCheck;
+        protected Func<Exception>[,,,] _deliveryCheck;
         protected Naming.InvoiceProcessType? processType;
 
 
@@ -82,7 +86,7 @@ namespace Model.InvoiceManagement.Validator
                     return new Exception(String.Format(MessageResources.AlertPrintedInvoiceCarrierType, _invItem.CarrierType));
                 };
 
-            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.Yes, (int)DonationIntent.No] = 
+            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.Yes, (int)DonationIntent.No] =
                 _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.Yes, (int)DonationIntent.Yes];
 
             _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.Yes, (int)IsB2C.No, (int)DonationIntent.Yes] = () =>
@@ -97,13 +101,13 @@ namespace Model.InvoiceManagement.Validator
                 return new Exception(String.Format(MessageResources.AlertPrintedInvoiceDonation, _invItem.PrintMark));
             };
 
-            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.No, (int)DonationIntent.Yes] = () => 
+            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.No, (int)DonationIntent.Yes] = () =>
             {
                 return new Exception(String.Format(MessageResources.AlertDonationInvoiceCarryType, _invItem.CarrierType));
             };
 
-            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.Yes, (int)DonationIntent.No] = 
-            
+            _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.Yes, (int)DonationIntent.No] =
+
             _deliveryCheck[(int)PrintedMark.Yes, (int)CarrierIntent.No, (int)IsB2C.No, (int)DonationIntent.No] = () => { return null; };
 
             #endregion 
@@ -122,9 +126,9 @@ namespace Model.InvoiceManagement.Validator
                     }
                     else
                     {
-                        if(_invItem.NPOBAN.Length<3||_invItem.NPOBAN.Length>7)
+                        if (_invItem.NPOBAN.Length < 3 || _invItem.NPOBAN.Length > 7)
                             return new Exception(String.Format(MessageResources.InvalidDonationTaker, _invItem.NPOBAN));
-                    
+
 
                     }
 
@@ -198,7 +202,7 @@ namespace Model.InvoiceManagement.Validator
 
             _deliveryCheck[(int)PrintedMark.No, (int)CarrierIntent.No, (int)IsB2C.Yes, (int)DonationIntent.No] = checkPrintAll;
 
-            _deliveryCheck[(int)PrintedMark.No, (int)CarrierIntent.No, (int)IsB2C.No, (int)DonationIntent.Yes] =() => { return null; };
+            _deliveryCheck[(int)PrintedMark.No, (int)CarrierIntent.No, (int)IsB2C.No, (int)DonationIntent.Yes] = () => { return null; };
             _deliveryCheck[(int)PrintedMark.No, (int)CarrierIntent.No, (int)IsB2C.No, (int)DonationIntent.No] = checkPrintAll;
 
             #endregion
@@ -402,6 +406,11 @@ namespace Model.InvoiceManagement.Validator
                 _container.InvoicePurchaseOrder = _order;
             }
 
+            if (_orderAudit != null)
+            {
+                _orderAudit.InvoiceItem = _container;
+            }
+
             _container.InvoiceDetails.AddRange(_productItems.Select(p => new InvoiceDetail
             {
                 InvoiceProduct = p.InvoiceProduct,
@@ -419,7 +428,7 @@ namespace Model.InvoiceManagement.Validator
                     else
                     {
                         trackNoMgr = new TrackNoManager(_models, _seller.CompanyID);
-                        if(_autoTrackNoInvoiceDate.HasValue)
+                        if (_autoTrackNoInvoiceDate.HasValue)
                         {
                             trackNoMgr.ApplyInvoiceDate(_autoTrackNoInvoiceDate.Value);
                         }
@@ -472,7 +481,7 @@ namespace Model.InvoiceManagement.Validator
                 //}
 
                 if (!DateTime.TryParseExact($"{_invItem.InvoiceDate} {_invItem.InvoiceTime}", __InvoiceDateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate)
-                        || invoiceDate >= DateTime.Today.AddDays(1))
+                        || invoiceDate > DateTime.Today.AddDays(3))
                 {
                     return new Exception(String.Format(MessageResources.AlertInvoiceDateTime, _invItem.InvoiceDate, _invItem.InvoiceTime));
                 }
@@ -497,7 +506,7 @@ namespace Model.InvoiceManagement.Validator
 
                 if (currentItem != null)
                 {
-                    if (currentItem.SellerID == _seller.CompanyID && currentItem.RandomNo == _invItem.RandomNumber)
+                    if (currentItem.SellerID == _seller.CompanyID && (currentItem.RandomNo == _invItem.RandomNumber || _seller.IgnoreDuplicatedNo()))
                     {
                         DuplicateProcess = true;
                         _newItem = currentItem;
@@ -523,7 +532,7 @@ namespace Model.InvoiceManagement.Validator
 
             if (_invItem.CustomerDefined != null)
             {
-                _container.InvoiceItemExtension = new InvoiceItemExtension 
+                _container.InvoiceItemExtension = new InvoiceItemExtension
                 {
                     ProjectNo = _invItem.CustomerDefined.ProjectNo,
                     PurchaseNo = _invItem.CustomerDefined.PurchaseNo
@@ -543,19 +552,29 @@ namespace Model.InvoiceManagement.Validator
         protected virtual Exception checkDataNumber()
         {
             _order = null;
+            _orderAudit = null;
             if (String.IsNullOrEmpty(_invItem.DataNumber))
             {
                 return new Exception(MessageResources.AlertDataNumber);
             }
 
-            if (_invItem.DataNumber.Length > 60)
+            if (_invItem.DataNumber?.Length > 60)
             {
                 return new Exception(String.Format(MessageResources.AlertDataNumberLimitedLength, _invItem.DataNumber));
             }
 
+            if (_seller.ForcedAuditNo())
+            {
+                _orderAudit = _models.CreateInvoicePurchaseOrderAudit(_seller.CompanyID, _invItem.DataNumber);
+                if (_orderAudit == null)
+                {
+                    return new Exception(String.Format(MessageResources.AlertDataNumberDuplicated, _invItem.DataNumber));
+                }
+            }
+
             var po = _models.GetTable<InvoicePurchaseOrder>().Where(d => d.OrderNo == _invItem.DataNumber
                     && d.InvoiceItem.SellerID == _seller.CompanyID).FirstOrDefault();
-            if (po!=null)
+            if (po != null)
             {
                 return new DuplicateDataNumberException(String.Format(MessageResources.AlertDataNumberDuplicated, _invItem.DataNumber))
                 {
@@ -591,7 +610,7 @@ namespace Model.InvoiceManagement.Validator
                 return;
             }
 
-            if (_invItem.DataNumber.Length > 60)
+            if (_invItem.DataNumber?.Length > 60)
             {
                 return;
             }
@@ -659,14 +678,16 @@ namespace Model.InvoiceManagement.Validator
             }
             else if (_invItem.BuyerId == null)
             {
-                if (_isCrossBorderMerchant)
-                {
-                    _invItem.BuyerId = "0000000000";
-                }
-                else
-                {
-                    return new Exception(String.Format(MessageResources.InvalidBuyerId, _invItem.BuyerId));
-                }
+                _invItem.BuyerId = "0000000000";
+
+                //if (_isCrossBorderMerchant)
+                //{
+                //    _invItem.BuyerId = "0000000000";
+                //}
+                //else
+                //{
+                //    return new Exception(String.Format(MessageResources.InvalidBuyerId, _invItem.BuyerId));
+                //}
             }
             else if (!Regex.IsMatch(_invItem.BuyerId, "^[0-9]{8}$"))
             {
@@ -802,7 +823,7 @@ namespace Model.InvoiceManagement.Validator
             }
             else
             {
-                if(forced)
+                if (forced)
                 {
                     return new Exception(String.Format(MessageResources.InvalidPublicCarrierType, _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
                 }
@@ -870,11 +891,11 @@ namespace Model.InvoiceManagement.Validator
                 BuyerMark = _invItem.BuyerMark,
                 Name = _invItem.BuyerId == "0000000000" ? _invItem.BuyerName.CheckB2CMIGName() : _invItem.BuyerName,
                 ReceiptNo = _invItem.BuyerId,
-                CustomerID = String.IsNullOrEmpty(_invItem.GoogleId) ? "" : _invItem.GoogleId,
+                CustomerID = _invItem.GoogleId.GetEfficientString() ?? _invItem.CustomerID.GetEfficientString(),
                 CustomerName = _invItem.BuyerName,
-            };   
-            
-            if(_isCrossBorderMerchant)
+            };
+
+            if (_isCrossBorderMerchant)
             {
                 _buyer.CustomerNumber = _buyer.ReceiptNo;
                 _buyer.ReceiptNo = "0000000000";
@@ -940,7 +961,7 @@ namespace Model.InvoiceManagement.Validator
             _donation = null;
 
             var checkFunc = _deliveryCheck[Convert.ToInt32(_invItem.PrintMark == "Y"),
-                Convert.ToInt32(!String.IsNullOrEmpty(_invItem.CarrierType) 
+                Convert.ToInt32(!String.IsNullOrEmpty(_invItem.CarrierType)
                     && !(String.IsNullOrEmpty(_invItem.CarrierId1) && String.IsNullOrEmpty(_invItem.CarrierId2))),
                 Convert.ToInt32(_invItem.BuyerId == "0000000000"),
                 Convert.ToInt32(_invItem.DonateMark == "1")];
@@ -1101,11 +1122,11 @@ namespace Model.InvoiceManagement.Validator
                 }
             }
 
-            if(_invItem.InvoiceType.IsValidInvoiceType(out byte data))
+            if (_invItem.InvoiceType.IsValidInvoiceType(out byte data))
             {
                 _container.InvoiceType = data;
             }
-            else 
+            else
             {
                 return new Exception(String.Format(MessageResources.InvalidInvoiceType, _invItem.InvoiceType));
             }

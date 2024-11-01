@@ -13,9 +13,11 @@
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
+@using Model.InvoiceManagement.InvoiceProcess
 @using Utility
 @using Uxnet.Web.WebUI
 @{
+    Layout = "~/Views/DataView/C0401A4Template.cshtml";
 
     ModelSource<InvoiceItem> models;
     InvoiceItem _model;
@@ -35,48 +37,28 @@
         }
     }
 }
-<!DOCTYPE html>
-
-<html>
-<head>
-    <style type="text/css">
-        div.fspace {
-            height: 9.0cm;
-        }
-
-        div.bspace {
-            height: 9.0cm;
-        }
-
-        body, td, th {
-            font-family: Verdana, Arial, Helvetica, sans-serif, "細明體", "新細明體";
-        }
-    </style>
-    <title>電子發票系統</title>
-    <link href="../App_Themes/NewPrint/New_eivo.css" rel="stylesheet" type="text/css" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-    <form id="theForm" runat="server">
-        @{ String invoicePrintView;}
-        @if (_viewModel?.UseCustomView == true && (invoicePrintView = _model.Organization.OrganizationStatus.InvoicePrintView.GetEfficientString()) != null)
-        {
-            Html.RenderPartial(invoicePrintView, _model);
-        }
-        else
-        {
-            if (_viewModel.PrintCuttingLine == true)
-            {
-                Html.RenderPartial("~/Views/DataView/Module/C0401_A4_Print.cshtml", _model);
-            }
-            else
-            {
-                Html.RenderPartial("~/Views/DataView/Module/C0401_A4.cshtml", _model);
-            }
-        }
-    </form>
-</body>
-</html>
+@{
+    String invoicePrintView;
+}
+@if (_viewModel?.UseCustomView == true && (invoicePrintView = _model.Organization.OrganizationStatus.InvoicePrintView.GetEfficientString()) != null)
+{
+    if(_model.Organization.DisableC0401Template() == true)
+    {
+        Layout = null;
+    }
+    Html.RenderPartial(invoicePrintView, _model);
+}
+else
+{
+    if (_viewModel.PrintCuttingLine == true)
+    {
+        Html.RenderPartial("~/Views/DataView/Module/C0401_A4_Print.cshtml", _model);
+    }
+    else
+    {
+        Html.RenderPartial("~/Views/DataView/Module/C0401_A4.cshtml", _model);
+    }
+}
 
 
 

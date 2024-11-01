@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UXB2B Invoice Client G/W</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @{
+        Html.RenderPartial("~/Views/Shared/CommonScriptInclude.cshtml");
+    }
+</head>
+<body>
+    <div class="container body-content">
+        <div class="row">
+            <h1>重印發票</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="No" class="form-label">請輸入單號：</label>
+                <input type="text" class="form-control" name="No" id="No"><br />
+                <button type="button" class="btn-primary" onclick="reprint();">傳送</button>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <h1>列印設定</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label for="No" class="form-label">邊界調整：</label>
+                <input type="text" class="form-control" name="Margin" id="Margin" value="@(Kiosk.Properties.AppSettings.Default.Margin)" /><br />
+            </div>
+            <div class="col-md-4">
+                <label for="No" class="form-label">放大比例(%)：</label>
+                <input type="text" class="form-control" name="Zoom" id="Zoom" value="@(Kiosk.Properties.AppSettings.Default.Zoom)" /><br />
+            </div>
+            <div class="col-md-4">
+                <label for="No" class="form-label">發票列印模式：</label>
+                <select name="PrintMode" class="form-control">
+                    <option value="@((int)Kiosk.Properties.PrintMode.ForPOS)" selected="@(Kiosk.Properties.AppSettings.Default.PrintMode == Kiosk.Properties.PrintMode.ForPOS)">Cegi POS</option>
+                    <option value="@((int)Kiosk.Properties.PrintMode.ForHeadquarter)" selected="@(Kiosk.Properties.AppSettings.Default.PrintMode == Kiosk.Properties.PrintMode.ForHeadquarter)">公司端</option>
+                </select>
+                <br />
+            </div>
+            <div class="col-md-12">
+                <button type="button" class="btn-primary" onclick="commitSettings();">確定</button>
+                <button type="button" class="btn-primary ml-4" onclick="testPrinter();">列印測試</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function reprint() {
+        $.post('@Html.Raw(Url.Action("Reprint","FrontEnd"))', { 'No' : $('#No').val() }, function (data) {
+            if ($.isPlainObject(data)) {
+                if (data.result) {
+                    alert('重印已送出!!');
+                } else {
+                    alert(data.message);
+                }
+            } else {
+                $(data).appendTo($('body'));
+            }
+        });
+    }
+
+    function commitSettings() {
+        var event = event || window.event;
+        var viewModel = $(event.target).closest('div.row').find('input,select,textArea').serializeObject();
+        $.post('@Html.Raw(Url.Action("CommitSettings","FrontEnd"))', viewModel, function (data) {
+            if ($.isPlainObject(data)) {
+                if (data.result) {
+                    alert('設定完成!!');
+                } else {
+                    alert(data.message);
+                }
+            } else {
+                $(data).appendTo($('body'));
+            }
+        });
+    }
+
+    function testPrinter() {
+        $.post('@Html.Raw(Url.Action("TestPrinter","FrontEnd"))', null, function (data) {
+            if ($.isPlainObject(data)) {
+                if (data.result) {
+                    alert('已送出列印!!');
+                } else {
+                    alert(data.message);
+                }
+            } else {
+                $(data).appendTo($('body'));
+            }
+        });
+    }
+</script>
+</html>

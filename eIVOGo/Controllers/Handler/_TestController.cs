@@ -30,8 +30,9 @@ using Model.Locale;
 using Model.Security.MembershipManagement;
 using ModelExtension.Helper;
 using Utility;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
 using Newtonsoft.Json;
+using System.Collections.Specialized;
 
 namespace eIVOGo.Controllers.Handler
 {
@@ -45,5 +46,31 @@ namespace eIVOGo.Controllers.Handler
                 this.View(actionName).ExecuteResult(this.ControllerContext);
             }
         }
+
+        public ActionResult Test01()
+        {
+            NameValueCollection formValues = new NameValueCollection(Request.Form);
+            formValues.Add("test01", "hello...");
+            return Content(formValues.ToString());
+        }
+
+        public ActionResult ReloadSettings()
+        {
+            AppSettings.Reload();
+            return Content(AppSettings.Default.JsonStringify(), "application/json");
+        }
+
+        public ActionResult SaveSettings()
+        {
+            //AppSettings.SaveAll();
+            AppSettings.Default.Save();
+            return Content(AppSettings.AllSettings?.ToString(), "application/json");
+        }
+
+        public ActionResult AllSettings()
+        {
+            return Content(AppSettings.AllSettings?.ToString(), "application/json");
+        }
+
     }
 }

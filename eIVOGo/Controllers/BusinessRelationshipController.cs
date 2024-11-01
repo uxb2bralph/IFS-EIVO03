@@ -34,7 +34,7 @@ using Utility;
 using Uxnet.Com.Security.UseCrypto;
 using Newtonsoft.Json;
 using System.Data.SqlClient;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
 using eIVOGo.Helper.Security.Authorization;
 
 namespace eIVOGo.Controllers
@@ -84,7 +84,7 @@ namespace eIVOGo.Controllers
             return View("~/Views/BusinessRelationship/ImportCounterpartBusiness.cshtml");
         }
 
-        public ActionResult UploadCounterpartBusiness(BusinessRelationshipQueryViewModel viewModel,IEnumerable<HttpPostedFileBase> excelFile)
+        public ActionResult UploadCounterpartBusiness(BusinessRelationshipQueryViewModel viewModel, IEnumerable<HttpPostedFileBase> excelFile)
         {
             ViewBag.ViewModel = viewModel;
 
@@ -106,7 +106,7 @@ namespace eIVOGo.Controllers
             var profile = HttpContext.GetUser();
             List<String> available = null;
 
-            if(!profile.IsSystemAdmin())
+            if (!profile.IsSystemAdmin())
             {
                 available = models.GetQueryByAgent(profile.CurrentUserRole.OrganizationCategory.CompanyID)
                         .Select(o => o.ReceiptNo).ToList();
@@ -204,7 +204,7 @@ namespace eIVOGo.Controllers
             }
 
             viewModel.CompanyName = viewModel.CompanyName.GetEfficientString();
-            if (viewModel.CompanyName!=null)
+            if (viewModel.CompanyName != null)
             {
                 orgItems = orgItems.Where(i => i.CompanyName.Contains(viewModel.CompanyName) || i.OrganizationBranch.Any(b => b.BranchName.Contains(viewModel.CompanyName)));
             }
@@ -215,7 +215,7 @@ namespace eIVOGo.Controllers
             }
 
             viewModel.BranchNo = viewModel.BranchNo.GetEfficientString();
-            if (viewModel.BranchNo!=null)
+            if (viewModel.BranchNo != null)
             {
                 ViewBag.ByBranchNo = viewModel.BranchNo;
                 orgItems = orgItems.Where(i => i.OrganizationBranch.Any(b => b.BranchNo == viewModel.BranchNo));

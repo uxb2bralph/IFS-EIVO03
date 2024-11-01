@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="EIVO03" Class="EIVOEntityDataContext" Serialization="Unidirectional" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=NBT031112\SQLEXPRESS;Initial Catalog=EIVO03;Integrated Security=True;Persist Security Info=True" SettingsObjectName="Model.Properties.Settings" SettingsPropertyName="eInvoiceConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=192.168.200.90,1433;Initial Catalog=EIVO03;Integrated Security=True" SettingsObjectName="Model.Properties.Settings" SettingsPropertyName="eInvoiceConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Organization" Member="Organization">
     <Type Name="Organization">
       <Column Name="ContactName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
@@ -66,6 +66,9 @@
       <Association Name="Organization_BillingIncrement" Member="BillingIncrement" ThisKey="CompanyID" OtherKey="CompanyID" Type="BillingIncrement" />
       <Association Name="Organization_MonthlyBilling" Member="MonthlyBilling" ThisKey="CompanyID" OtherKey="CompanyID" Type="MonthlyBilling" />
       <Association Name="Organization_BillingExtension" Member="BillingExtension" ThisKey="CompanyID" OtherKey="CompanyID" Type="BillingExtension" Cardinality="One" />
+      <Association Name="Organization_InvoicePurchaseOrderAudit" Member="InvoicePurchaseOrderAudit" ThisKey="CompanyID" OtherKey="SellerID" Type="InvoicePurchaseOrderAudit" />
+      <Association Name="Organization_MasterBranch" Member="MasterBranches" ThisKey="CompanyID" OtherKey="BranchID" Type="MasterBranch" />
+      <Association Name="Organization_MasterOrganization" Member="MasterOrganization" ThisKey="CompanyID" OtherKey="MasterID" Type="MasterOrganization" Cardinality="One" />
     </Type>
   </Table>
   <Table Name="dbo.UserRole" Member="UserRole">
@@ -147,7 +150,6 @@
       <Association Name="CDS_Document_DocumentAuthorization" Member="DocumentAuthorization" ThisKey="DocID" OtherKey="DocID" Type="DocumentAuthorization" Cardinality="One" />
       <Association Name="CDS_Document_DocumentPrintLog" Member="DocumentPrintLog" ThisKey="DocID" OtherKey="DocID" Type="DocumentPrintLog" />
       <Association Name="CDS_Document_IssuingNotice" Member="IssuingNotice" ThisKey="DocID" OtherKey="DocID" Type="IssuingNotice" Cardinality="One" />
-      <Association Name="CDS_Document_DataProcessLog" Member="DataProcessLogs" ThisKey="DocID" OtherKey="DocID" Type="DataProcessLog" />
       <Association Name="CDS_Document_A0401DispatchQueue" Member="A0401DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="A0401DispatchQueue" />
       <Association Name="CDS_Document_A0501DispatchQueue" Member="A0501DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="A0501DispatchQueue" />
       <Association Name="CDS_Document_C0501DispatchQueue" Member="C0501DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="C0501DispatchQueue" />
@@ -155,7 +157,6 @@
       <Association Name="CDS_Document_B0501DispatchQueue" Member="B0501DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="B0501DispatchQueue" />
       <Association Name="CDS_Document_D0401DispatchQueue" Member="D0401DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="D0401DispatchQueue" />
       <Association Name="CDS_Document_D0501DispatchQueue" Member="D0501DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="D0501DispatchQueue" />
-      <Association Name="CDS_Document_C0401DispatchQueue" Member="C0401DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="C0401DispatchQueue" />
       <Association Name="CDS_Document_A0101DispatchQueue" Member="A0101DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="A0101DispatchQueue" />
       <Association Name="CDS_Document_A0102DispatchQueue" Member="A0102DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="A0102DispatchQueue" />
       <Association Name="CDS_Document_A0201DispatchQueue" Member="A0201DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="A0201DispatchQueue" />
@@ -169,6 +170,8 @@
       <Association Name="CDS_Document_DocumentPrintQueue" Member="DocumentPrintQueue" ThisKey="DocID" OtherKey="DocID" Type="DocumentPrintQueue" Cardinality="One" />
       <Association Name="CDS_Document_ProcessRequestDocument" Member="ProcessRequestDocument" ThisKey="DocID" OtherKey="DocID" Type="ProcessRequestDocument" Cardinality="One" />
       <Association Name="CDS_Document_CustomerDefined" Member="CustomerDefined" ThisKey="DocID" OtherKey="DocID" Type="CustomerDefined" Cardinality="One" />
+      <Association Name="CDS_Document_C0401DispatchQueue" Member="C0401DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="C0401DispatchQueue" />
+      <Association Name="CDS_Document_DataProcessLog" Member="DataProcessLog" ThisKey="DocID" OtherKey="DocID" Type="DataProcessLog" />
       <Association Name="DocumentType_CDS_Document" Member="DocumentType" ThisKey="DocType" OtherKey="TypeID" Type="DocumentType" IsForeignKey="true" />
       <Association Name="LevelExpression_CDS_Document" Member="LevelExpression" ThisKey="CurrentStep" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
     </Type>
@@ -334,6 +337,8 @@
       <Association Name="InvoiceItem_InvoiceWinningNumber" Member="InvoiceWinningNumber" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceWinningNumber" Cardinality="One" />
       <Association Name="InvoiceItem_InvoiceMail" Member="InvoiceMail" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceMail" Cardinality="One" />
       <Association Name="InvoiceItem_AuthorizeToVoid" Member="AuthorizeToVoid" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="AuthorizeToVoid" Cardinality="One" />
+      <Association Name="InvoiceItem_DocumentPostLog" Member="DocumentPostLog" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="DocumentPostLog" />
+      <Association Name="InvoiceItem_InvoicePurchaseOrderAudit" Member="InvoicePurchaseOrderAudit" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoicePurchaseOrderAudit" />
       <Association Name="CDS_Document_InvoiceItem" Member="CDS_Document" ThisKey="InvoiceID" OtherKey="DocID" Type="CDS_Document" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="Organization_InvoiceItem" Member="Organization" ThisKey="SellerID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
       <Association Name="Organization_InvoiceItem1" Member="Donatory" Storage="_Organization1" ThisKey="DonationID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
@@ -1313,7 +1318,7 @@
       <Column Name="AutoBlankTrackEmittance" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="InvoiceNoSafetyStock" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="InvoiceNotUploadedAlert" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="MailSubjectAlias" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Association Name="Organization_OrganizationExtension" Member="Organization" ThisKey="CompanyID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
     </Type>
   </Table>
@@ -1425,16 +1430,6 @@
       <Association Name="DocumentFlowControl_DocumentFlowBranch1" Member="BranchStepItem" ThisKey="BranchStep" OtherKey="StepID" Type="DocumentFlowControl" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="[proc].DataProcessLog" Member="DataProcessLog">
-    <Type Name="DataProcessLog">
-      <Column Name="LogID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="DocID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="LogDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="StepID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="CDS_Document_DataProcessLog" Member="CDS_Document" ThisKey="DocID" OtherKey="DocID" Type="CDS_Document" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="[proc].A0401DispatchQueue" Member="A0401DispatchQueue">
     <Type Name="A0401DispatchQueue">
       <Column Name="DocID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -1496,14 +1491,6 @@
       <Column Name="StepID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="DispatchDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="CDS_Document_D0501DispatchQueue" Member="CDS_Document" ThisKey="DocID" OtherKey="DocID" Type="CDS_Document" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="[proc].C0401DispatchQueue" Member="C0401DispatchQueue">
-    <Type Name="C0401DispatchQueue">
-      <Column Name="DocID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="StepID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="DispatchDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="CDS_Document_C0401DispatchQueue" Member="CDS_Document" ThisKey="DocID" OtherKey="DocID" Type="CDS_Document" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="[proc].A0101DispatchQueue" Member="A0101DispatchQueue">
@@ -1652,6 +1639,8 @@
       <Column Name="AgentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="LogID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ViewModel" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TotalCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProgressCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="ProcessRequest_ProcessRequestQueue" Member="ProcessRequestQueue" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessRequestQueue" Cardinality="One" />
       <Association Name="ProcessRequest_ProcessCompletionNotification" Member="ProcessCompletionNotification" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessCompletionNotification" Cardinality="One" />
       <Association Name="ProcessRequest_ProcessExceptionNotification" Member="ProcessExceptionNotification" ThisKey="TaskID" OtherKey="TaskID" Type="ProcessExceptionNotification" />
@@ -1893,6 +1882,64 @@
       <Column Name="BillID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="BillDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="BillSubmission_MonthlyBilling" Member="MonthlyBilling" ThisKey="BillID" OtherKey="BillID" Type="MonthlyBilling" />
+    </Type>
+  </Table>
+  <Table Name="[proc].C0401DispatchQueue" Member="C0401DispatchQueue">
+    <Type Name="C0401DispatchQueue">
+      <Column Name="DocID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StepID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DispatchDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="BookingTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="CDS_Document_C0401DispatchQueue" Member="CDS_Document" ThisKey="DocID" OtherKey="DocID" Type="CDS_Document" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="[proc].DataProcessLog" Member="DataProcessLog">
+    <Type Name="DataProcessLog">
+      <Column Name="LogID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DocID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LogDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StepID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Content" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="CDS_Document_DataProcessLog" Member="CDS_Document" ThisKey="DocID" OtherKey="DocID" Type="CDS_Document" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DocumentPostLog" Member="DocumentPostLog">
+    <Type Name="DocumentPostLog">
+      <Column Name="LogID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="InvoiceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PostCode" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="RegisterCode" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="ZipCode" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="MailType" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="ChkCode" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="InvoiceItem_DocumentPostLog" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoicePurchaseOrderAudit" Member="InvoicePurchaseOrderAudit">
+    <Type Name="InvoicePurchaseOrderAudit">
+      <Column Name="SellerID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OrderNo" Type="System.String" DbType="NVarChar(64) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="InvoiceID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="InvoiceItem_InvoicePurchaseOrderAudit" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="Organization_InvoicePurchaseOrderAudit" Member="Organization" ThisKey="SellerID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="center.MasterBranches" Member="MasterBranches">
+    <Type Name="MasterBranch">
+      <Column Name="MasterID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BranchID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Organization_MasterBranch" Member="Organization" ThisKey="BranchID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
+      <Association Name="MasterOrganization_MasterBranch" Member="MasterOrganization" ThisKey="MasterID" OtherKey="MasterID" Type="MasterOrganization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="center.MasterOrganization" Member="MasterOrganizations">
+    <Type Name="MasterOrganization">
+      <Column Name="MasterID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EnterpriseName" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Association Name="MasterOrganization_MasterBranch" Member="MasterBranches" ThisKey="MasterID" OtherKey="MasterID" Type="MasterBranch" />
+      <Association Name="Organization_MasterOrganization" Member="Organization" ThisKey="MasterID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.MatchDocumentAttachment" Method="MatchDocumentAttachment">

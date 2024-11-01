@@ -13,11 +13,11 @@ namespace Kiosk
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
-                name: "eINV",
-                url: "eINV/{action}",
-                defaults: new { controller = "FrontEnd" }
-            );
+            //routes.MapRoute(
+            //    name: "eINV",
+            //    url: "eINV/{action}",
+            //    defaults: new { controller = "FrontEnd" }
+            //);
 
             routes.MapRoute(
                 name: "Default",

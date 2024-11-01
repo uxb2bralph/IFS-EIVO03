@@ -34,14 +34,14 @@ else
 {
     <p>親愛的客戶您好：</p>
     <p>
-        @(_model.InvoiceAllowanceSeller.CustomerName)
-        已開立您下述電子發票折讓證明，請知悉。<br />
+        因部分客戶反映附件折讓單有格式問題,所以系統重新寄送提供本折讓通知。<br />
+        荷蘭商聯邦快遞國際股份有限公司台灣分公司 已開立您下述電子發票折讓證明，請知悉。
     </p>
 }
 @{ Html.RenderPartial("~/Views/Notification/Module/AllowanceMailView.cshtml", _model);}
 @if (_model.InvoiceAllowanceSeller.Organization.OrganizationExtension?.CustomNotification != null)
 {
-    Write(new HtmlString(_model.InvoiceAllowanceSeller.Organization.OrganizationExtension?.CustomNotification));
+    Write(new HtmlString(HttpUtility.HtmlDecode(_model.InvoiceAllowanceSeller.Organization.OrganizationExtension?.CustomNotification)));
     <br />
 }
 信件寄送時間：@(DateTime.Now)

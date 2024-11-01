@@ -1,7 +1,4 @@
 
-@{ Register Src="~/Module/Common/PagingControl.ascx" TagName="PagingControl" TagPrefix="uc2" }
-@{ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" }
-@{ Register Src="~/Module/Common/ActionHandler.ascx" TagName="ActionHandler" TagPrefix="uc1" }
 @using System.IO
 @using System.Linq.Expressions
 
@@ -20,13 +17,26 @@
     </table>
 
 
-<script runat="server">
+    <script>
+        window.uiInvoiceQuery.desireToVoid = function (allow) {
+            if (!$('input[name="chkItem"]').is(':checked')) {
+                alert('請選擇核准註銷資料!!');
+                return false;
+            }
 
+            var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
+            $formData = {
+                ...$formData,
+                ...$('#queryResult').find('input,select,textarea').serializeObject(),
+                allow: allow,
+            };
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-    }
+            doPost('@(Url.Action("DesireToVoidInvoice","InvoiceProcess"))', $formData, function (data) {
+                var $data = $(data);
+                $('body').append($data);
+                $data.remove();
+            });
+        };
 
-</script>
+    </script>
 

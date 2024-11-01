@@ -28,6 +28,7 @@ namespace Model.Models.ViewModel
         public int? PackageID { get; set; }
         public String MailNo1 { get; set; }
         public String MailNo2 { get; set; }
+        public String MailNo3 { get; set; } //Amy-1121110-郵件種類碼
         public DateTime? DeliveryDate { get; set; }
         public int?[] InvoiceID { get; set; }
     }

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnReceiptNo = new System.Windows.Forms.Button();
             this.SellerReceiptNo = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.btnTxnPath = new System.Windows.Forms.Button();
@@ -39,21 +38,12 @@
             this.InvoiceTxnPath = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // btnReceiptNo
-            // 
-            this.btnReceiptNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnReceiptNo.Location = new System.Drawing.Point(596, 170);
-            this.btnReceiptNo.Name = "btnReceiptNo";
-            this.btnReceiptNo.Size = new System.Drawing.Size(154, 39);
-            this.btnReceiptNo.TabIndex = 34;
-            this.btnReceiptNo.Text = "Confirm";
-            this.btnReceiptNo.UseVisualStyleBackColor = true;
-            // 
             // SellerReceiptNo
             // 
             this.SellerReceiptNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.SellerReceiptNo.Location = new System.Drawing.Point(0, 176);
             this.SellerReceiptNo.Name = "SellerReceiptNo";
+            this.SellerReceiptNo.ReadOnly = true;
             this.SellerReceiptNo.Size = new System.Drawing.Size(590, 35);
             this.SellerReceiptNo.TabIndex = 33;
             // 
@@ -69,8 +59,9 @@
             // 
             // btnTxnPath
             // 
+            this.btnTxnPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTxnPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnTxnPath.Location = new System.Drawing.Point(596, 98);
+            this.btnTxnPath.Location = new System.Drawing.Point(659, 98);
             this.btnTxnPath.Name = "btnTxnPath";
             this.btnTxnPath.Size = new System.Drawing.Size(154, 39);
             this.btnTxnPath.TabIndex = 22;
@@ -90,20 +81,24 @@
             // 
             // btnServerUrl
             // 
+            this.btnServerUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnServerUrl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnServerUrl.Location = new System.Drawing.Point(596, 26);
+            this.btnServerUrl.Location = new System.Drawing.Point(659, 26);
             this.btnServerUrl.Name = "btnServerUrl";
             this.btnServerUrl.Size = new System.Drawing.Size(154, 39);
             this.btnServerUrl.TabIndex = 20;
             this.btnServerUrl.Text = "Confirm";
             this.btnServerUrl.UseVisualStyleBackColor = true;
+            this.btnServerUrl.Click += new System.EventHandler(this.btnServerUrl_Click);
             // 
             // ServerUrl
             // 
+            this.ServerUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ServerUrl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.ServerUrl.Location = new System.Drawing.Point(0, 32);
             this.ServerUrl.Name = "ServerUrl";
-            this.ServerUrl.Size = new System.Drawing.Size(590, 35);
+            this.ServerUrl.Size = new System.Drawing.Size(642, 35);
             this.ServerUrl.TabIndex = 19;
             // 
             // label1
@@ -130,7 +125,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.InvoiceTxnPath);
-            this.Controls.Add(this.btnReceiptNo);
             this.Controls.Add(this.SellerReceiptNo);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.btnTxnPath);
@@ -147,8 +141,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnReceiptNo;
         private System.Windows.Forms.TextBox SellerReceiptNo;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnTxnPath;

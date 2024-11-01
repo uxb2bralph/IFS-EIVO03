@@ -127,24 +127,6 @@ namespace eIVOGo.Published
                     }
                 };
 
-            EIVOPlatformFactory.NotifyInvoiceNotUpload =
-                p =>
-                {
-                    using (WebClient client = new WebClient())
-                    {
-                        try
-                        {
-                            client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                            client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/Notification/NotifyInvoiceNotUpload")}", p.JsonStringify());
-
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Warn(String.Format("電子發票未上傳通知,ID:{0}", p));
-                            Logger.Error(ex);
-                        }
-                    }
-                };
 
             EIVOPlatformFactory.NotifyIssuedInvoiceCancellation =
                 e =>
@@ -439,7 +421,7 @@ namespace eIVOGo.Published
                     using (WebClient client = new WebClient())
                     {
                         client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                        client.Encoding= Encoding.UTF8;
+                        client.Encoding = Encoding.UTF8;
 
                         viewModel.NameOnly = true;
                         String result = client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/DataView/PrintSingleInvoiceAsPDF")}",
@@ -454,6 +436,8 @@ namespace eIVOGo.Published
 
                 return null;
             };
+
+            PdfDocumentGenerator.MergePDF = (pdfOut, pdfSource) => pdfOut.MergePDF(pdfSource);
 
             AddOn();
 
@@ -541,7 +525,7 @@ namespace eIVOGo.Published
                 }
 
                 EIVOPlatformFactory.Notify();
-                
+
             }
             catch (Exception ex)
             {
@@ -609,7 +593,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -741,44 +725,44 @@ namespace eIVOGo.Published
             //                        }).ToArray()
             //                    };
 
-                //                    ThreadPool.QueueUserWorkItem(ExceptionNotification.SendNotification,
-                //                        new ExceptionInfo
-                //                        {
-                //                            Token = token,
-                //                            ExceptionItems = items,
-                //                            InvoiceData = invoice
-                //                        });
-                //                }
-                //                else
-                //                {
-                //                    result.Result.value = 1;
-                //                }
+            //                    ThreadPool.QueueUserWorkItem(ExceptionNotification.SendNotification,
+            //                        new ExceptionInfo
+            //                        {
+            //                            Token = token,
+            //                            ExceptionItems = items,
+            //                            InvoiceData = invoice
+            //                        });
+            //                }
+            //                else
+            //                {
+            //                    result.Result.value = 1;
+            //                }
 
-                //                if (mgr.HasItem && token.Organization.OrganizationStatus.PrintAll == true)
-                //                {
-                //                    SharedFunction.SendMailMessage(token.Organization.CompanyName + "電子發票已匯入,請執行發票列印作業!!", Settings.Default.WebMaster, token.Organization.CompanyName + "電子發票開立郵件通知");
-                //                }
+            //                if (mgr.HasItem && token.Organization.OrganizationStatus.PrintAll == true)
+            //                {
+            //                    SharedFunction.SendMailMessage(token.Organization.CompanyName + "電子發票已匯入,請執行發票列印作業!!", Settings.Default.WebMaster, token.Organization.CompanyName + "電子發票開立郵件通知");
+            //                }
 
-                //            }
-                //            else
-                //            {
-                //                result.Result.message = "營業人憑證資料驗證不符!!";
-                //            }
-                //        }
-                //    }
-                //    else
-                //    {
-                //        result.Result.message = "發票資料簽章不符!!";
-                //    }
+            //            }
+            //            else
+            //            {
+            //                result.Result.message = "營業人憑證資料驗證不符!!";
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        result.Result.message = "發票資料簽章不符!!";
+            //    }
 
-                //    
-                //}
-                //catch (Exception ex)
-                //{
-                //    Logger.Error(ex);
-                //    result.Result.message = ex.Message;
-                //}
-                //return result.ConvertToXml();
+            //    
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logger.Error(ex);
+            //    result.Result.message = ex.Message;
+            //}
+            //return result.ConvertToXml();
         }
 
         [WebMethod]
@@ -855,7 +839,7 @@ namespace eIVOGo.Published
                 }
 
                 EIVOPlatformFactory.Notify();
-                
+
             }
             catch (Exception ex)
             {
@@ -932,7 +916,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -1010,7 +994,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -1094,7 +1078,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -1162,7 +1146,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -1798,7 +1782,7 @@ namespace eIVOGo.Published
         //    {
         //        CryptoUtility crypto = new CryptoUtility();
         //        uploadData.PreserveWhitespace = true;
-//if (crypto.VerifyXmlSignature(uploadData))
+        //if (crypto.VerifyXmlSignature(uploadData))
         //        {
         //            Model.Schema.TurnKey.A1101.Invoice invoice = uploadData.TrimAll().ConvertTo<Model.Schema.TurnKey.A1101.Invoice>();
         //            using (B2BInvoiceManager mgr = new B2BInvoiceManager())
@@ -1841,7 +1825,7 @@ namespace eIVOGo.Published
         //    {
         //        CryptoUtility crypto = new CryptoUtility();
         //        uploadData.PreserveWhitespace = true;
-//if (crypto.VerifyXmlSignature(uploadData))
+        //if (crypto.VerifyXmlSignature(uploadData))
         //        {
         //            Model.Schema.TurnKey.A1401.Invoice invoice = uploadData.TrimAll().ConvertTo<Model.Schema.TurnKey.A1401.Invoice>();
         //            using (B2BInvoiceManager mgr = new B2BInvoiceManager())
@@ -1927,7 +1911,7 @@ namespace eIVOGo.Published
         //    {
         //        CryptoUtility crypto = new CryptoUtility();
         //        uploadData.PreserveWhitespace = true;
-//if (crypto.VerifyXmlSignature(uploadData))
+        //if (crypto.VerifyXmlSignature(uploadData))
         //        {
         //            Model.Schema.TurnKey.B1101.Allowance allowance = uploadData.TrimAll().ConvertTo<Model.Schema.TurnKey.B1101.Allowance>();
         //            using (B2BInvoiceManager mgr = new B2BInvoiceManager())
@@ -2153,7 +2137,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -2222,7 +2206,7 @@ namespace eIVOGo.Published
                     result.Result.message = "發票資料簽章不符!!";
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -2322,7 +2306,7 @@ namespace eIVOGo.Published
 
                             int resultCount = 0;
                             //while (resultCount < Settings.Default.MaxResponseCountPerBatch)
-                            lock(typeof(eInvoiceService))
+                            lock (typeof(eInvoiceService))
                             {
                                 var resultItems = queryItems.Take(Settings.Default.MaxResponseCountPerBatch).ToList();
                                 //if (resultItems.Count() < 1)
@@ -2423,7 +2407,7 @@ namespace eIVOGo.Published
                             {
                                 foreach (var item in queryItems.Take(Settings.Default.MaxResponseCountPerBatch))
                                 {
-                                    if (mgr.ExecuteCommand("update DocumentSubscriptionQueue set WaitUntil = {1} where DocID = {0}", item.AllowanceID,executionTime) > 0)
+                                    if (mgr.ExecuteCommand("update DocumentSubscriptionQueue set WaitUntil = {1} where DocID = {0}", item.AllowanceID, executionTime) > 0)
                                     {
                                         pdfFiles.Add(
                                             String.Join("\t"
@@ -3273,7 +3257,7 @@ namespace eIVOGo.Published
         //    {
         //        CryptoUtility crypto = new CryptoUtility();
         //        sellerInfo.PreserveWhitespace = true;
-//if (crypto.VerifyXmlSignature(sellerInfo))
+        //if (crypto.VerifyXmlSignature(sellerInfo))
         //        {
         //            using (InvoiceManager mgr = new InvoiceManager())
         //            {
@@ -3334,7 +3318,7 @@ namespace eIVOGo.Published
         //    {
         //        CryptoUtility crypto = new CryptoUtility();
         //        sellerInfo.PreserveWhitespace = true;
-//if (crypto.VerifyXmlSignature(sellerInfo))
+        //if (crypto.VerifyXmlSignature(sellerInfo))
         //        {
         //            using (InvoiceManager mgr = new InvoiceManager())
         //            {
@@ -3422,7 +3406,7 @@ namespace eIVOGo.Published
         //    {
         //        CryptoUtility crypto = new CryptoUtility();
         //        sellerInfo.PreserveWhitespace = true;
-//if (crypto.VerifyXmlSignature(sellerInfo))
+        //if (crypto.VerifyXmlSignature(sellerInfo))
         //        {
         //            using (InvoiceManager mgr = new InvoiceManager())
         //            {
@@ -3488,7 +3472,7 @@ namespace eIVOGo.Published
                             if (items.Count() > 0)
                             {
                                 var item = items.First();
-                                var result = item.DerivedDocument.ParentDocument.InvoiceItem.CreateA0501();
+                                var result = item.DerivedDocument.ParentDocument.InvoiceItem.CreateB2BInvoiceCancellationMIG();
 
                                 item.MoveToNextStep(mgr);
 
@@ -3535,7 +3519,7 @@ namespace eIVOGo.Published
                             if (items.Count() > 0)
                             {
                                 var item = items.First();
-                                var result = item.DerivedDocument.ParentDocument.InvoiceAllowance.CreateB0501();
+                                var result = item.DerivedDocument.ParentDocument.InvoiceAllowance.CreateB2BAllowanceCancellationMIG();
 
                                 item.MoveToNextStep(mgr);
 

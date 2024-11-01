@@ -1,5 +1,4 @@
 ﻿using ApplicationResource;
-using Business.Helper;
 using Model.DataEntity;
 using Model.Locale;
 using Model.Models.ViewModel;
@@ -246,7 +245,7 @@ namespace TaskCenter.Controllers
                             DocDate = d.CDS_Document.DocDate,
                             No = d.CDS_Document.InvoiceItem?.InvoiceNo(),
                             ReceiptNo = d.CDS_Document.InvoiceItem?.Organization?.ReceiptNo,
-                            MIG = d.CDS_Document.InvoiceItem?.CreateC0401().GetXml()
+                            MIG = d.CDS_Document.InvoiceItem?.CreateInvoiceMIG().GetXml()
                         }).ToArray();
                     break;
 
@@ -265,7 +264,7 @@ namespace TaskCenter.Controllers
                             DocDate = d.CDS_Document.DocDate,
                             No = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.InvoiceNo(),
                             ReceiptNo = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.Organization?.ReceiptNo,
-                            MIG = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.CreateC0501().GetXml()
+                            MIG = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.CreateInvoiceCancellationMIG().GetXml()
                         }).ToArray();
                     break;
 
@@ -284,7 +283,7 @@ namespace TaskCenter.Controllers
                             DocDate = d.CDS_Document.DocDate,
                             No = d.CDS_Document.InvoiceItem?.InvoiceNo(),
                             ReceiptNo = d.CDS_Document.InvoiceItem?.Organization?.ReceiptNo,
-                            MIG = d.CDS_Document.InvoiceItem?.CreateA0401().GetXml()
+                            MIG = d.CDS_Document.InvoiceItem?.CreateB2BInvoiceMIG().GetXml()
                         }).ToArray();
                     break;
 
@@ -303,7 +302,7 @@ namespace TaskCenter.Controllers
                             DocDate = d.CDS_Document.DocDate,
                             No = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.InvoiceNo(),
                             ReceiptNo = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.Organization?.ReceiptNo,
-                            MIG = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.CreateA0501().GetXml()
+                            MIG = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceItem ?? d.CDS_Document.InvoiceItem)?.CreateB2BInvoiceCancellationMIG().GetXml()
                         }).ToArray();
                     break;
 
@@ -322,7 +321,7 @@ namespace TaskCenter.Controllers
                             DocDate = d.CDS_Document.DocDate,
                             No = d.CDS_Document.InvoiceAllowance?.AllowanceNumber,
                             ReceiptNo = d.CDS_Document.InvoiceAllowance?.InvoiceAllowanceSeller?.ReceiptNo,
-                            MIG = d.CDS_Document.InvoiceAllowance?.CreateD0401().GetXml()
+                            MIG = d.CDS_Document.InvoiceAllowance?.CreateAllowanceMIG().GetXml()
                         }).ToArray();
                     break;
 
@@ -341,7 +340,7 @@ namespace TaskCenter.Controllers
                             DocDate = d.CDS_Document.DocDate,
                             No = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.AllowanceNumber,
                             ReceiptNo = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.InvoiceAllowanceSeller?.ReceiptNo,
-                            MIG = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.CreateD0501().GetXml()
+                            MIG = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.CreateAllowanceCancellationMIG().GetXml()
                         }).ToArray();
                     break;
 
@@ -360,7 +359,7 @@ namespace TaskCenter.Controllers
                             DocDate = d.CDS_Document.DocDate,
                             No = d.CDS_Document.InvoiceAllowance?.AllowanceNumber,
                             ReceiptNo = d.CDS_Document.InvoiceAllowance?.InvoiceAllowanceSeller?.ReceiptNo,
-                            MIG = d.CDS_Document.InvoiceAllowance?.CreateB0401().GetXml()
+                            MIG = d.CDS_Document.InvoiceAllowance?.CreateB2BAllowanceMIG().GetXml()
                         }).ToArray();
                     break;
 
@@ -379,7 +378,7 @@ namespace TaskCenter.Controllers
                             DocDate = d.CDS_Document.DocDate,
                             No = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.AllowanceNumber,
                             ReceiptNo = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.InvoiceAllowanceSeller?.ReceiptNo,
-                            MIG = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.CreateB0501().GetXml()
+                            MIG = (d.CDS_Document.DerivedDocument?.ParentDocument?.InvoiceAllowance ?? d.CDS_Document.InvoiceAllowance)?.CreateB2BAllowanceCancellationMIG().GetXml()
                         }).ToArray();
                     break;
 

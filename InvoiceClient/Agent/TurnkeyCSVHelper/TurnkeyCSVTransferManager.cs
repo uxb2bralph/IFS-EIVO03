@@ -11,6 +11,7 @@ using InvoiceClient.Agent;
 using Utility;
 using Newtonsoft.Json;
 using InvoiceClient.TransferManagement;
+using InvoiceClient.Helper;
 
 namespace InvoiceClient.Agent.TurnkeyCSVHelper
 {
@@ -21,6 +22,8 @@ namespace InvoiceClient.Agent.TurnkeyCSVHelper
         private InvoiceWatcher _AllowanceWatcher;
         private InvoiceWatcher _AllowanceCancellationWatcher;
         private LocalSettings _Settings;
+
+        public ITabWorkItem WorkItem { get; set; }
 
         public TurnkeyCSVTransferManager()
         {

@@ -1,0 +1,62 @@
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Business.Helper
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    Layout = "~/Views/InvoiceProcess/DataQuery/PrepareQueryResultTemplate.cshtml";
+    ModelSource<InvoiceItem> models;
+    QueryViewModel _viewModel;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _viewModel = (QueryViewModel)ViewBag.ViewModel;
+}
+
+@section DataColumns
+{
+    @{ 
+        var _profile = Context.GetUser();
+
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/ItemCheckBox.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/CompanyName.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/ReceiptNo.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/InvoiceNo.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/InvoiceDate.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/BuyerName.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/BuyerNo.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/OrderNo.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/MIGStatus.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/Currency.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/SalesAmount.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/TaxType.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/TaxAmount.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/TotalAmount.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/Remark.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/PrintMark.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/IsWinning.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/CarrierNo.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/AgencyCode.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/CustomerID.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/EMail.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/IssuingNotice.cshtml");
+        if (_profile.IsSystemAdmin())
+        {
+            Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/BuyerAddress.cshtml");
+            Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/BuyerContact.cshtml");
+            Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/Attachment.cshtml");
+        }
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/DataProcess.cshtml");
+        Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/InvoiceItem/QuerySummary.cshtml");
+    }
+}

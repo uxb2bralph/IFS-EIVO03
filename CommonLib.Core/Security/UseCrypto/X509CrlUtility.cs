@@ -35,7 +35,7 @@ namespace CommonLib.Security.UseCrypto
 
         public bool IsNotRevoked()
         {
-            if (Settings.Default.IgnoreCertificateRevoked)
+            if (AppSettings.Default.IgnoreCertificateRevoked)
                 return true;
 
             //IntPtr pCert = IntPtr.Zero;

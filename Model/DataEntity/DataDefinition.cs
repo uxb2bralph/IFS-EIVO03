@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using Model.Locale;
 using Newtonsoft.Json;
@@ -125,7 +126,7 @@ namespace Model.DataEntity
         }
     }
 
-    public partial class ExtraBillingItem 
+    public partial class ExtraBillingItem
     {
         public enum BillingTypeEnum
         {
@@ -144,9 +145,27 @@ namespace Model.DataEntity
 
     public partial class Organization
     {
-        public IEnumerable<InvoiceIssuerAgent> BranchRelation 
+        public IEnumerable<InvoiceIssuerAgent> BranchRelation
         {
             get => this.InvoiceIssuerAgent.Where(a => a.RelationType == (int)Model.DataEntity.InvoiceIssuerAgent.Relationship.MasterBranch);
-        } 
+        }
+    }
+
+    public partial class UserRole
+    {
+        [DataMember]
+        public UserProfile User
+        {
+            get => UserProfile;
+            set => UserProfile = value;
+        }
+    }
+
+    public partial class InvoiceAllowance
+    {
+        public String TurnkeyAllowanceNo =>
+            AllowanceNumber?.Length > 16
+                ? $"{InvoiceAllowanceDetails.FirstOrDefault()?.InvoiceAllowanceItem.InvoiceNo}{AllowanceID % 1000000:000000}"
+                : AllowanceNumber;
     }
 }

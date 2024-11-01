@@ -91,13 +91,13 @@
                         }
                         @{
                             DateTime invoiceDate;
-                            if (DateTime.TryParseExact(String.Format("{0} {1}", _model.InvoiceDate, _model.InvoiceTime), "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate))
+                            if (DateTime.TryParseExact(String.Format("{0} {1}", _model.InvoiceDate?.Replace("/", ""), _model.InvoiceTime), "yyyyMMdd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate))
                             {
                                 <h2>@(invoiceDate.Year - 1911)年@((invoiceDate.Month % 2).Equals(0) ? String.Format("{0:00}-{1:00}", invoiceDate.Month - 1, invoiceDate.Month) : String.Format("{0:00}-{1:00}", invoiceDate.Month, invoiceDate.Month + 1))月 </h2>
                             }
                         }
                         <h2>@(_model.InvoiceNumber?.Substring(0,2))-@(_model.InvoiceNumber?.Substring(2))</h2>
-                        <p>
+                        <p style="font-size:small;">
                             @(String.Format("{0:yyyy-MM-dd HH:mm:ss}", invoiceDate))
                             @(IsB2C()
                                 ? ""
@@ -114,8 +114,8 @@
                             <img id="barcode" alt="" style="max-width:4.7cm;" src="@(data.GetBarcode39ImageSrc(margin:10,height:40,wide:3,narrow:1))" />
                         </div>
                         <div class="code2" style="padding-left:0.3cm;">
-                            <img style="margin-right: 0.3cm;width:2.0cm;" alt="" src="@(_model.GetLeftQRCodeImageSrc(qrVersion:8))" />
-                            <img style="margin-right: 0.3cm;width:2.0cm;" alt="" src="@("**".CreateQRCodeImageSrc(width:180,height:180,qrVersion:8))" />
+                            <img style="margin-right: 0.3cm;width:2.5cm;" alt="" src="@(_model.GetLeftQRCodeImageSrc(width:180,height:180,qrVersion:10))" />
+                            <img style="margin-right: 0.3cm;width:2.5cm;" alt="" src="@("**".CreateQRCodeImageSrc(width:180,height:180,qrVersion:10))" />
                         </div>
                     </div>
                 </td>

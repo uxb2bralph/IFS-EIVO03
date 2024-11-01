@@ -31,7 +31,7 @@ using Uxnet.Com.Security.UseCrypto;
 using Newtonsoft.Json;
 using System.Data;
 using ModelExtension.Helper;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
 using DataAccessLayer.basis;
 
 

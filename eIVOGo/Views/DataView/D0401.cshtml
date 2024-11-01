@@ -18,23 +18,23 @@
 
   ModelSource<InvoiceItem> models;
   InvoiceAllowance _model;
-  DocumentQueryViewModel _viewModel;
+  QueryViewModel _viewModel;
 
   models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
   _model = (InvoiceAllowance)this.Model;
-  _viewModel = (DocumentQueryViewModel)ViewBag.ViewModel;
+  _viewModel = (QueryViewModel)ViewBag.ViewModel;
 }
 <!DOCTYPE html>
 <html>
 
 <head>
   <title>電子發票系統</title>
-  <link href="@VirtualPathUtility.ToAbsolute("~/App_Themes/POSAllowance/POS_allowance.css")" rel="stylesheet" />
-  <link href="@VirtualPathUtility.ToAbsolute("~/App_Themes/POSAllowance/POS_allowances_v1.css")" rel="stylesheet" />
+  <link href="../App_Themes/POSAllowance/POS_allowance.css" rel="stylesheet" />
+  <link href="../App_Themes/POSAllowance/POS_allowances_v1.css" rel="stylesheet" />
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 </head>
 
-<body>
+<body style="margin:0px;font-weight: bold;font-family: monospace;">
   <form id="theForm">
     @{
       Html.RenderPartial("~/Views/DataView/Module/D0401.cshtml", _model);

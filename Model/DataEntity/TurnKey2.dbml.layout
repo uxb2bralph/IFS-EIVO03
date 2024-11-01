@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 15, 13.5" name="TurnKey2">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 15, 16.5" name="TurnKey2">
   <DataContextMoniker Name="/TurnKey2DataContext" />
   <nestedChildShapes>
     <classShape Id="f9580501-c62a-4436-8c70-506e6bca4319" absoluteBounds="0.75, 0.75, 2, 1.3525109863281251">
@@ -32,7 +32,7 @@
         <elementListCompartment Id="e1d9c99e-de95-4ffb-959b-052b24870bcc" absoluteBounds="6.765, 1.21, 1.9700000000000002, 1.901275634765625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="dabc68bb-cbb0-4b34-9629-b04c51243473" absoluteBounds="6.75, 4.75, 2, 1.7220992024739577">
+    <classShape Id="dabc68bb-cbb0-4b34-9629-b04c51243473" absoluteBounds="6.75, 4.75, 2, 1.7220992024739576">
       <DataClassMoniker Name="/TurnKey2DataContext/TO_CONFIG" />
       <nestedChildShapes>
         <elementListCompartment Id="9e470778-a091-4058-845f-f6d60c623b4a" absoluteBounds="6.765, 5.21, 1.9700000000000002, 1.1620992024739583" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
@@ -62,7 +62,7 @@
         <elementListCompartment Id="04290a23-127d-4317-bb5c-2c9e0da9a709" absoluteBounds="9.765, 1.21, 1.9700000000000002, 3.010040283203125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="7bb40786-4c8e-49b9-a040-be2a0b3c5c70" absoluteBounds="9.75, 5.75, 2, 1.1677168782552077">
+    <classShape Id="7bb40786-4c8e-49b9-a040-be2a0b3c5c70" absoluteBounds="9.75, 5.75, 2, 1.1677168782552076">
       <DataClassMoniker Name="/TurnKey2DataContext/TURNKEY_TRANSPORT_CONFIG" />
       <nestedChildShapes>
         <elementListCompartment Id="03307028-ee27-4ef0-88a2-c3b75ad232d9" absoluteBounds="9.765, 6.21, 1.9700000000000002, 0.60771687825520826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
@@ -90,6 +90,12 @@
       <DataClassMoniker Name="/TurnKey2DataContext/DocumentDispatchQueue" />
       <nestedChildShapes>
         <elementListCompartment Id="81e2ae6a-469d-4822-b73f-7d919e577df4" absoluteBounds="12.765, 1.2100000000000009, 1.9700000000000002, 0.97730509440104174" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6ca48570-b819-42cb-94f3-7780224d1993" absoluteBounds="3.5, 12.25, 2, 3.9396284993489576">
+      <DataClassMoniker Name="/TurnKey2DataContext/TurnkeyTriggerLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7abf4ba2-1d9a-49c0-bf85-c9cb91e436cc" absoluteBounds="3.515, 12.71, 1.9700000000000002, 3.379628499348958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

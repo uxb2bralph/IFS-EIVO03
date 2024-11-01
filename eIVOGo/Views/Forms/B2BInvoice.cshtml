@@ -269,7 +269,7 @@
                 }
             },*@
             commit: function (forPreview) {
-                if (this.sum()) {
+                if (!confirm('是否計算金額？') || this.sum()) {
                     var event = event || window.event;
                     var $form = $(event.target).parents('form');
                     var $formData = $form.serializeObject();

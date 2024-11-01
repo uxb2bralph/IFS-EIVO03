@@ -14,9 +14,9 @@
 @using Model.Locale
 @using Utility
 @using Business.Helper
-@using Model.Helper
 @using Uxnet.Web.WebUI
 @{
+    //Layout = "~/Views/DataView/PrintInvoiceContent.cshtml";
 
   ModelSource<InvoiceItem> models;
   IQueryable<DocumentPrintQueue> _model;
@@ -37,34 +37,31 @@
 }
 <!DOCTYPE html>
 <html>
-
 <head runat="server">
-  <title>電子發票系統</title>
+    <title>電子發票系統</title>
   <link href="../App_Themes/POSPrint/POS_eivo_v1.css" rel="stylesheet" type="text/css" />
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 </head>
-
-<body>
-  <form id="theForm" runat="server">
-    @{
-      var profile = Context.GetUser();
-      String invoicePrintView;
-      foreach (var item in _model.OrderBy(d => d.SubmitID).ToList())
-      {
-        invoicePrintView = _viewModel.UseCustomView == true
-        ? item.CDS_Document.InvoiceItem.Organization.OrganizationCustomSetting?.Settings?.C0401POSView
-        : null;
-        Html.RenderPartial(invoicePrintView ?? "~/Views/DataView/Module/C0401_POS.cshtml", item.CDS_Document.InvoiceItem);
-        models.MarkPrintedLog(item.CDS_Document.InvoiceItem, profile);
-      }
-    }
-  </form>
+<body style="margin:0px;">
+    <form id="theForm" runat="server">
+        @{ 
+            var profile = Context.GetUser();
+            String invoicePrintView;
+            foreach (var item in _model.OrderBy(d => d.SubmitID).ToList())
+            {
+                invoicePrintView = _viewModel.UseCustomView == true
+                    ? item.CDS_Document.InvoiceItem.Organization.OrganizationCustomSetting?.Settings?.C0401POSView
+                    : null;
+                Html.RenderPartial(invoicePrintView ?? "~/Views/DataView/Module/C0401_POS.cshtml", item.CDS_Document.InvoiceItem);
+                models.MarkPrintedLog(item.CDS_Document.InvoiceItem, profile);
+            }
+        }
+    </form>
 </body>
-
 </html>
 
-<script>
-  window.onload = function () {
-    window.print();
-  };
-</script>
+@*<script>
+    window.onload = function () {
+        window.print();
+    };
+</script>*@

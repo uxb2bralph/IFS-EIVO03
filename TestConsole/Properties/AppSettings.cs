@@ -5,10 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Uxnet.ToolAdapter.Properties;
 
 namespace TestConsole.Properties
 {
-    public partial class AppSettings : Uxnet.Com.Properties.AppSettings
+    public partial class AppSettings : AppSettingsBase
     {
         static AppSettings()
         {
@@ -21,7 +22,7 @@ namespace TestConsole.Properties
         }
 
         static AppSettings _default;
-        public new static AppSettings Default
+        public static AppSettings Default
         {
             get => _default;
         }

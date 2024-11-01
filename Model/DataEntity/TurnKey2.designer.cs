@@ -34,6 +34,9 @@ namespace Model.DataEntity
     partial void InsertDocumentDispatchQueue(DocumentDispatchQueue instance);
     partial void UpdateDocumentDispatchQueue(DocumentDispatchQueue instance);
     partial void DeleteDocumentDispatchQueue(DocumentDispatchQueue instance);
+    partial void InsertTurnkeyTriggerLog(TurnkeyTriggerLog instance);
+    partial void UpdateTurnkeyTriggerLog(TurnkeyTriggerLog instance);
+    partial void DeleteTurnkeyTriggerLog(TurnkeyTriggerLog instance);
     #endregion
 		
 		public TurnKey2DataContext() : 
@@ -183,6 +186,14 @@ namespace Model.DataEntity
 			get
 			{
 				return this.GetTable<DocumentDispatchQueue>();
+			}
+		}
+		
+		public System.Data.Linq.Table<TurnkeyTriggerLog> TurnkeyTriggerLogs
+		{
+			get
+			{
+				return this.GetTable<TurnkeyTriggerLog>();
 			}
 		}
 	}
@@ -2341,6 +2352,482 @@ namespace Model.DataEntity
 					this._FileName = value;
 					this.SendPropertyChanged("FileName");
 					this.OnFileNameChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TurnkeyTriggerLog")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class TurnkeyTriggerLog : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _SEQNO;
+		
+		private string _SUBSEQNO;
+		
+		private string _UUID;
+		
+		private string _MESSAGE_TYPE;
+		
+		private string _CATEGORY_TYPE;
+		
+		private string _PROCESS_TYPE;
+		
+		private string _FROM_PARTY_ID;
+		
+		private string _TO_PARTY_ID;
+		
+		private string _MESSAGE_DTS;
+		
+		private string _CHARACTER_COUNT;
+		
+		private string _STATUS;
+		
+		private string _IN_OUT_BOUND;
+		
+		private string _FROM_ROUTING_ID;
+		
+		private string _TO_ROUTING_ID;
+		
+		private string _INVOICE_IDENTIFIER;
+		
+		private System.Nullable<int> _LockID;
+		
+		private int _LogID;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnSEQNOChanging(string value);
+    partial void OnSEQNOChanged();
+    partial void OnSUBSEQNOChanging(string value);
+    partial void OnSUBSEQNOChanged();
+    partial void OnUUIDChanging(string value);
+    partial void OnUUIDChanged();
+    partial void OnMESSAGE_TYPEChanging(string value);
+    partial void OnMESSAGE_TYPEChanged();
+    partial void OnCATEGORY_TYPEChanging(string value);
+    partial void OnCATEGORY_TYPEChanged();
+    partial void OnPROCESS_TYPEChanging(string value);
+    partial void OnPROCESS_TYPEChanged();
+    partial void OnFROM_PARTY_IDChanging(string value);
+    partial void OnFROM_PARTY_IDChanged();
+    partial void OnTO_PARTY_IDChanging(string value);
+    partial void OnTO_PARTY_IDChanged();
+    partial void OnMESSAGE_DTSChanging(string value);
+    partial void OnMESSAGE_DTSChanged();
+    partial void OnCHARACTER_COUNTChanging(string value);
+    partial void OnCHARACTER_COUNTChanged();
+    partial void OnSTATUSChanging(string value);
+    partial void OnSTATUSChanged();
+    partial void OnIN_OUT_BOUNDChanging(string value);
+    partial void OnIN_OUT_BOUNDChanged();
+    partial void OnFROM_ROUTING_IDChanging(string value);
+    partial void OnFROM_ROUTING_IDChanged();
+    partial void OnTO_ROUTING_IDChanging(string value);
+    partial void OnTO_ROUTING_IDChanged();
+    partial void OnINVOICE_IDENTIFIERChanging(string value);
+    partial void OnINVOICE_IDENTIFIERChanged();
+    partial void OnLockIDChanging(System.Nullable<int> value);
+    partial void OnLockIDChanged();
+    partial void OnLogIDChanging(int value);
+    partial void OnLogIDChanged();
+    #endregion
+		
+		public TurnkeyTriggerLog()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SEQNO", DbType="VarChar(8) NOT NULL", CanBeNull=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public string SEQNO
+		{
+			get
+			{
+				return this._SEQNO;
+			}
+			set
+			{
+				if ((this._SEQNO != value))
+				{
+					this.OnSEQNOChanging(value);
+					this.SendPropertyChanging();
+					this._SEQNO = value;
+					this.SendPropertyChanged("SEQNO");
+					this.OnSEQNOChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SUBSEQNO", DbType="VarChar(5) NOT NULL", CanBeNull=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public string SUBSEQNO
+		{
+			get
+			{
+				return this._SUBSEQNO;
+			}
+			set
+			{
+				if ((this._SUBSEQNO != value))
+				{
+					this.OnSUBSEQNOChanging(value);
+					this.SendPropertyChanging();
+					this._SUBSEQNO = value;
+					this.SendPropertyChanged("SUBSEQNO");
+					this.OnSUBSEQNOChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UUID", DbType="VarChar(40)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public string UUID
+		{
+			get
+			{
+				return this._UUID;
+			}
+			set
+			{
+				if ((this._UUID != value))
+				{
+					this.OnUUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UUID = value;
+					this.SendPropertyChanged("UUID");
+					this.OnUUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MESSAGE_TYPE", DbType="VarChar(10)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public string MESSAGE_TYPE
+		{
+			get
+			{
+				return this._MESSAGE_TYPE;
+			}
+			set
+			{
+				if ((this._MESSAGE_TYPE != value))
+				{
+					this.OnMESSAGE_TYPEChanging(value);
+					this.SendPropertyChanging();
+					this._MESSAGE_TYPE = value;
+					this.SendPropertyChanged("MESSAGE_TYPE");
+					this.OnMESSAGE_TYPEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CATEGORY_TYPE", DbType="VarChar(5)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public string CATEGORY_TYPE
+		{
+			get
+			{
+				return this._CATEGORY_TYPE;
+			}
+			set
+			{
+				if ((this._CATEGORY_TYPE != value))
+				{
+					this.OnCATEGORY_TYPEChanging(value);
+					this.SendPropertyChanging();
+					this._CATEGORY_TYPE = value;
+					this.SendPropertyChanged("CATEGORY_TYPE");
+					this.OnCATEGORY_TYPEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PROCESS_TYPE", DbType="VarChar(10)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6)]
+		public string PROCESS_TYPE
+		{
+			get
+			{
+				return this._PROCESS_TYPE;
+			}
+			set
+			{
+				if ((this._PROCESS_TYPE != value))
+				{
+					this.OnPROCESS_TYPEChanging(value);
+					this.SendPropertyChanging();
+					this._PROCESS_TYPE = value;
+					this.SendPropertyChanged("PROCESS_TYPE");
+					this.OnPROCESS_TYPEChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FROM_PARTY_ID", DbType="VarChar(10)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=7)]
+		public string FROM_PARTY_ID
+		{
+			get
+			{
+				return this._FROM_PARTY_ID;
+			}
+			set
+			{
+				if ((this._FROM_PARTY_ID != value))
+				{
+					this.OnFROM_PARTY_IDChanging(value);
+					this.SendPropertyChanging();
+					this._FROM_PARTY_ID = value;
+					this.SendPropertyChanged("FROM_PARTY_ID");
+					this.OnFROM_PARTY_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TO_PARTY_ID", DbType="VarChar(10)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=8)]
+		public string TO_PARTY_ID
+		{
+			get
+			{
+				return this._TO_PARTY_ID;
+			}
+			set
+			{
+				if ((this._TO_PARTY_ID != value))
+				{
+					this.OnTO_PARTY_IDChanging(value);
+					this.SendPropertyChanging();
+					this._TO_PARTY_ID = value;
+					this.SendPropertyChanged("TO_PARTY_ID");
+					this.OnTO_PARTY_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MESSAGE_DTS", DbType="VarChar(17)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=9)]
+		public string MESSAGE_DTS
+		{
+			get
+			{
+				return this._MESSAGE_DTS;
+			}
+			set
+			{
+				if ((this._MESSAGE_DTS != value))
+				{
+					this.OnMESSAGE_DTSChanging(value);
+					this.SendPropertyChanging();
+					this._MESSAGE_DTS = value;
+					this.SendPropertyChanged("MESSAGE_DTS");
+					this.OnMESSAGE_DTSChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CHARACTER_COUNT", DbType="VarChar(10)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=10)]
+		public string CHARACTER_COUNT
+		{
+			get
+			{
+				return this._CHARACTER_COUNT;
+			}
+			set
+			{
+				if ((this._CHARACTER_COUNT != value))
+				{
+					this.OnCHARACTER_COUNTChanging(value);
+					this.SendPropertyChanging();
+					this._CHARACTER_COUNT = value;
+					this.SendPropertyChanged("CHARACTER_COUNT");
+					this.OnCHARACTER_COUNTChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_STATUS", DbType="VarChar(5)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=11)]
+		public string STATUS
+		{
+			get
+			{
+				return this._STATUS;
+			}
+			set
+			{
+				if ((this._STATUS != value))
+				{
+					this.OnSTATUSChanging(value);
+					this.SendPropertyChanging();
+					this._STATUS = value;
+					this.SendPropertyChanged("STATUS");
+					this.OnSTATUSChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IN_OUT_BOUND", DbType="VarChar(1)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=12)]
+		public string IN_OUT_BOUND
+		{
+			get
+			{
+				return this._IN_OUT_BOUND;
+			}
+			set
+			{
+				if ((this._IN_OUT_BOUND != value))
+				{
+					this.OnIN_OUT_BOUNDChanging(value);
+					this.SendPropertyChanging();
+					this._IN_OUT_BOUND = value;
+					this.SendPropertyChanged("IN_OUT_BOUND");
+					this.OnIN_OUT_BOUNDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FROM_ROUTING_ID", DbType="VarChar(39)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=13)]
+		public string FROM_ROUTING_ID
+		{
+			get
+			{
+				return this._FROM_ROUTING_ID;
+			}
+			set
+			{
+				if ((this._FROM_ROUTING_ID != value))
+				{
+					this.OnFROM_ROUTING_IDChanging(value);
+					this.SendPropertyChanging();
+					this._FROM_ROUTING_ID = value;
+					this.SendPropertyChanged("FROM_ROUTING_ID");
+					this.OnFROM_ROUTING_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TO_ROUTING_ID", DbType="VarChar(39)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=14)]
+		public string TO_ROUTING_ID
+		{
+			get
+			{
+				return this._TO_ROUTING_ID;
+			}
+			set
+			{
+				if ((this._TO_ROUTING_ID != value))
+				{
+					this.OnTO_ROUTING_IDChanging(value);
+					this.SendPropertyChanging();
+					this._TO_ROUTING_ID = value;
+					this.SendPropertyChanged("TO_ROUTING_ID");
+					this.OnTO_ROUTING_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_INVOICE_IDENTIFIER", DbType="VarChar(30)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=15)]
+		public string INVOICE_IDENTIFIER
+		{
+			get
+			{
+				return this._INVOICE_IDENTIFIER;
+			}
+			set
+			{
+				if ((this._INVOICE_IDENTIFIER != value))
+				{
+					this.OnINVOICE_IDENTIFIERChanging(value);
+					this.SendPropertyChanging();
+					this._INVOICE_IDENTIFIER = value;
+					this.SendPropertyChanged("INVOICE_IDENTIFIER");
+					this.OnINVOICE_IDENTIFIERChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LockID", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=16)]
+		public System.Nullable<int> LockID
+		{
+			get
+			{
+				return this._LockID;
+			}
+			set
+			{
+				if ((this._LockID != value))
+				{
+					this.OnLockIDChanging(value);
+					this.SendPropertyChanging();
+					this._LockID = value;
+					this.SendPropertyChanged("LockID");
+					this.OnLockIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=17)]
+		public int LogID
+		{
+			get
+			{
+				return this._LogID;
+			}
+			set
+			{
+				if ((this._LogID != value))
+				{
+					this.OnLogIDChanging(value);
+					this.SendPropertyChanging();
+					this._LogID = value;
+					this.SendPropertyChanged("LogID");
+					this.OnLogIDChanged();
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -106,6 +107,25 @@ namespace Kiosk.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Reprint(String no)
+        {
+            var items = Directory.EnumerateFiles(AppSettings.Default.InvoiceClientLogPath, $"{no}*.htm", SearchOption.AllDirectories);
+            var item = items.FirstOrDefault();
+            if (item != null)
+            {
+                try
+                {
+                    System.IO.File.Move(item, Path.Combine(AppSettings.Default.PrintInvoice, Path.GetFileName(item)));
+                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                    return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(new { result = false, message = "資料錯誤" }, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult PrintC0401()
         {
             InvoiceRootInvoice viewModel = new InvoiceRootInvoice
@@ -118,6 +138,31 @@ namespace Kiosk.Controllers
                 viewModel = JsonConvert.DeserializeObject<InvoiceRootInvoice>(data);
             }
             return View("~/Views/FrontEnd/PrintC0401POS.cshtml", viewModel);
+        }
+
+        public ActionResult CommitSettings(String margin, decimal? zoom, PrintMode? printMode)
+        {
+            margin = margin.GetEfficientString();
+            if (margin == null)
+            {
+                margin = "-0cm";
+            }
+
+            if (!(zoom > 0))
+            {
+                zoom = 100;
+            }
+
+            if(!printMode.HasValue)
+            {
+                printMode = PrintMode.ForPOS;
+            }
+
+            AppSettings.Default.Margin = margin;
+            AppSettings.Default.Zoom = zoom.Value;
+            AppSettings.Default.PrintMode = printMode.Value;
+            AppSettings.Default.Save();
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
         }
 
         protected override void HandleUnknownAction(string actionName)

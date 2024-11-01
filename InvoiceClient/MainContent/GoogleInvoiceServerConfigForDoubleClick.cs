@@ -104,7 +104,10 @@ namespace InvoiceClient.MainContent
         {
             get { return "Service"; }
         }
+        public void ReportStatus()
+        {
 
+        }
         private void InvoiceServerConfig_VisibleChanged(object sender, EventArgs e)
         {
             if (this.Visible)

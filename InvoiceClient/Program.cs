@@ -12,6 +12,8 @@ using System.Threading;
 using InvoiceClient.Agent;
 using Model.Resource;
 using InvoiceClient.Helper;
+using InvoiceClient.Agent.POSHelper;
+using InvoiceClient.TransferManagement;
 
 namespace InvoiceClient
 {
@@ -31,7 +33,8 @@ namespace InvoiceClient
                 Thread.CurrentThread.CurrentUICulture = MessageResources.Culture = System.Globalization.CultureInfo.GetCultureInfo(Settings.Default.AppCulture);
             }
 
-            if (Environment.UserInteractive /*|| Debugger.IsAttached*/)
+            if (Environment.UserInteractive /*|| Debugger.IsAttached*/
+                && AppSettings.Default.UseMainForm)
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -60,7 +63,18 @@ namespace InvoiceClient
                 {
                     ClearDirectory();
                 }
-                Application.Run(new MainForm());
+
+                var form = new MainForm
+                {
+                    //WindowState = FormWindowState.Minimized,
+                    //ShowInTaskbar = false
+                };
+                if(!POSReady.Settings.UserClose)
+                {
+                    form.WindowState = FormWindowState.Minimized;
+                    form.ShowInTaskbar = false;
+                }
+                Application.Run(form);
             }
             else
             {
@@ -71,13 +85,34 @@ namespace InvoiceClient
                     return;
                 }
 
-                ServiceBase[] services = 
+                if (ServiceController.GetServices().Where(s => s.ServiceName == Settings.Default.ServiceName).Any())
+                {
+                    ServiceBase[] services =
                     {
-                        new InvoiceClientService() 
+                        new InvoiceClientService()
                     };
-                ServiceBase.Run(services);
+                    ServiceBase.Run(services);
+                }
+                else
+                {
+                    Application.Run(new MyApplicationContext(() => 
+                    {
+                        InvoiceClientTransferManager.StartUp(Settings.Default.InvoiceTxnPath);
+                    }));
+                }
             }
             
+        }
+
+        class MyApplicationContext : ApplicationContext
+        {
+            public MyApplicationContext(Action action)
+            {
+                if(action != null)
+                {
+                    action();
+                }
+            }
         }
 
         internal static bool InitializeActivation()
@@ -106,12 +141,16 @@ namespace InvoiceClient
                         if (undo)
                         {
                             inst.Uninstall(state);
+                            AppSettings.Default.InstalledService = false;
+                            AppSettings.Default.Save();
                             MessageBox.Show("服務已移除!!", "服務設定", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else
                         {
                             inst.Install(state);
                             inst.Commit(state);
+                            AppSettings.Default.InstalledService = false;
+                            AppSettings.Default.Save();
                             MessageBox.Show("服務安裝成功!!", "服務設定", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }

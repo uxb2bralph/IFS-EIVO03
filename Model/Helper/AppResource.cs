@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
+using Model.Properties;
 using Newtonsoft.Json;
 using Utility;
 
@@ -20,7 +21,7 @@ namespace Model.Helper
             public CipherMode Mode { get; set; }
         }
 
-        public TripleDES CurrentTripleDES
+        public Aes CurrentTripleDES
         {
             get;
             private set;
@@ -28,13 +29,13 @@ namespace Model.Helper
 
         private AppResource()
         {
-            CurrentTripleDES = TripleDES.Create();
+            CurrentTripleDES = Aes.Create();
             InitializeKey();
         }
 
         public void InitializeKey(bool reset = false)
         {
-            string keyFile = Path.Combine(Logger.LogPath, "SystemKey.json");
+            string keyFile = Path.Combine(Logger.LogPath, AppSettings.Default.SystemKeyName ?? "SystemKey.json");
 
             void saveKeyResource()
             {
@@ -50,7 +51,7 @@ namespace Model.Helper
             if(reset)
             {
                 CurrentTripleDES.Dispose();
-                CurrentTripleDES = TripleDES.Create();
+                CurrentTripleDES = Aes.Create();
                 saveKeyResource();
                 return;
             }

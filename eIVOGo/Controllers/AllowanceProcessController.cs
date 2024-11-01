@@ -12,6 +12,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Threading.Tasks;
 
 using Business.Helper;
 using ClosedXML.Excel;
@@ -27,8 +28,8 @@ using Model.Security.MembershipManagement;
 using ModelExtension.Helper;
 using Utility;
 using Model.InvoiceManagement;
-using System.Threading.Tasks;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DataAccessLayer;
 
 namespace eIVOGo.Controllers
 {
@@ -42,7 +43,7 @@ namespace eIVOGo.Controllers
             _userProfile = WebPageUtility.UserProfile;
 
             var inquireConsumption = new InquireAllowanceConsumption { CurrentController = this };
-            
+
             return (ModelSourceInquiry<InvoiceAllowance>)(new InquireEffectiveAllowance { CurrentController = this })
                 .Append(new InquireAllowanceByRole(_userProfile) { CurrentController = this })
                 .Append(inquireConsumption)
@@ -66,7 +67,7 @@ namespace eIVOGo.Controllers
             ViewBag.ViewModel = viewModel;
 
             viewModel.Status = viewModel.Status.GetEfficientString();
-            switch(viewModel.Status)
+            switch (viewModel.Status)
             {
                 case "Normal":
                     viewModel.Cancelled = false;
@@ -86,7 +87,7 @@ namespace eIVOGo.Controllers
             modelSource.Inquiry = createModelInquiry();
             modelSource.BuildQuery();
 
-            if(viewModel.Status == "ReadyToMIG")
+            if (viewModel.Status == "ReadyToMIG")
             {
                 var d0401Ready = models.GetTable<D0401DispatchQueue>().Where(s => s.StepID == (int)Naming.InvoiceStepDefinition.待批次傳送);
                 var b0401Ready = models.GetTable<B0401DispatchQueue>().Where(s => s.StepID == (int)Naming.InvoiceStepDefinition.待批次傳送);
@@ -377,7 +378,7 @@ namespace eIVOGo.Controllers
                 return Json(new { result = false, message = "資料已列印請重新選擇!!" });
         }
 
-        public ActionResult IssueAllowanceNotice(int[] chkItem,bool? cancellation)
+        public ActionResult IssueAllowanceNotice(int[] chkItem, bool? cancellation)
         {
             if (chkItem != null && chkItem.Count() > 0)
             {
@@ -404,9 +405,9 @@ namespace eIVOGo.Controllers
         {
             if (chkItem != null && chkItem.Count() > 0)
             {
-                foreach(var id in chkItem)
+                foreach (var id in chkItem)
                 {
-                    if(models.ExecuteCommand(@"UPDATE [proc].D0401DispatchQueue
+                    if (models.ExecuteCommand(@"UPDATE [proc].D0401DispatchQueue
                         SET        StepID = {0}
                         WHERE   (DocID = {1}) AND (StepID = {2})",
                             (int)Naming.InvoiceStepDefinition.已開立,
@@ -454,6 +455,14 @@ namespace eIVOGo.Controllers
                 return View("~/Views/Shared/AlertMessage.cshtml");
             }
 
+        }
+
+        protected override void HandleUnknownAction(string actionName)
+        {
+            if (!String.IsNullOrEmpty(actionName))
+            {
+                this.View(actionName).ExecuteResult(this.ControllerContext);
+            }
         }
     }
 }

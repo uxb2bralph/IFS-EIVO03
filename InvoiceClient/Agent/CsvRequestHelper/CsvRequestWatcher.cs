@@ -63,6 +63,7 @@ namespace InvoiceClient.Agent.CsvRequestHelper
             return items;
         }
 
+        protected String lastLogPath;
         protected override void processFile(string invFile)
         {
             DataItems = null;
@@ -84,7 +85,8 @@ namespace InvoiceClient.Agent.CsvRequestHelper
             try
             {
                 DataItems = ParseCsv(fullPath);
-                storeFile(fullPath, Path.Combine(Logger.LogDailyPath, fileName));
+                lastLogPath = Path.Combine(Logger.LogDailyPath, fileName);
+                storeFile(fullPath, lastLogPath);
             }
             catch (Exception ex)
             {

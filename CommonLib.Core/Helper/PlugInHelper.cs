@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
-using CommonLib.Core.Properties;
 using CommonLib.Core.Utility;
 using CommonLib.PlugInAdapter;
 
@@ -21,32 +21,64 @@ namespace CommonLib.Core.Helper
 
         private PlugInHelper() 
         {
+            InitializePdfUtility();
+        }
+
+        private void InitializePdfUtility()
+        {
             try
             {
-                if (!String.IsNullOrEmpty(Settings.Default.IPdfUtilityImpl))
+                if (!String.IsNullOrEmpty(Startup.Properties["IPdfUtilityImpl"]))
                 {
-                    FileLogger.Logger.Info("Pdf Utility intent type => " + Settings.Default.IPdfUtilityImpl);
+                    FileLogger.Logger.Info("Pdf Utility intent type => " + Startup.Properties["IPdfUtilityImpl"]);
 
-                    Type type = Type.GetType(Settings.Default.IPdfUtilityImpl);
-                    if (type!=null && type.GetInterface("CommonLib.PlugInAdapter.IPdfUtility") != null)
+                    Type type = Type.GetType(Startup.Properties["IPdfUtilityImpl"]);
+                    if (type != null && type.GetInterface("CommonLib.PlugInAdapter.IPdfUtility") != null)
                     {
                         _pdfUtility = (IPdfUtility)type.Assembly.CreateInstance(type.FullName);
                         FileLogger.Logger.Info("Pdf Utility => " + _pdfUtility.GetType().FullName);
                     }
                     else
                     {
-                        FileLogger.Logger.Warn("Pdf Utility intent type not found => " + Settings.Default.IPdfUtilityImpl);
+                        FileLogger.Logger.Warn("Pdf Utility intent type not found => " + Startup.Properties["IPdfUtilityImpl"]);
+                    }
+                }
+
+                if (_pdfUtility == null)
+                {
+                    if (!String.IsNullOrEmpty(Startup.Properties["IPdfUtilityImplAssembly"]))
+                    {
+                        FileLogger.Logger.Info("Pdf Utility intent assembly => " + Startup.Properties["IPdfUtilityImplAssembly"]);
+
+                        var assembly = Assembly.LoadFrom(Startup.Properties["IPdfUtilityImplAssembly"]);
+                        if (assembly != null)
+                        {
+                            Type type = assembly.GetType(Startup.Properties["IPdfUtilityImplType"]);
+                            if (type != null && type.GetInterface("CommonLib.PlugInAdapter.IPdfUtility") != null)
+                            {
+                                _pdfUtility = (IPdfUtility)assembly.CreateInstance(type.FullName);
+                                FileLogger.Logger.Info("Pdf Utility => " + _pdfUtility.GetType().FullName);
+                            }
+                            else
+                            {
+                                FileLogger.Logger.Warn($"Pdf Utility intent type not found => {Startup.Properties["IPdfUtilityImplType"]},{Startup.Properties["IPdfUtilityImplAssembly"]}");
+                            }
+                        }
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                FileLogger.Logger.Error(ex);
             }
         }
 
         public static IPdfUtility GetPdfUtility()
         {
+            if (_instance._pdfUtility == null)
+            {
+                _instance.InitializePdfUtility();
+            }
             if (_instance._pdfUtility == null)
             {
                 throw new Exception("未設定PDF輸出套件!!");

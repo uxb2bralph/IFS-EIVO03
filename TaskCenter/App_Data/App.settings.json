@@ -1,0 +1,7 @@
+{
+  "Model.Properties": {
+    "StoreRoot": "WebStore",
+    "AttachmentTempStore": "TempAttachment",
+    "EINVTurnkeyRoot": "C:\\EINVTurnkey"
+  }
+}

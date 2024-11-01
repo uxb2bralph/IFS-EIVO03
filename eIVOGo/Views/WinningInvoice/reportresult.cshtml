@@ -1,19 +1,37 @@
 
+@using System.IO
+@using System.Linq.Expressions
 
-
+@using eIVOGo.Models
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@using eIVOGo.Controllers
 @using eIVOGo.Helper
+@using Model.Models.ViewModel
+@{
+    Layout = "~/Views/Template/MvcMainPage.cshtml";
 
-@section headContent { 
- 
+    ModelStateDictionary _modelState;
+    ModelSource<InvoiceItem> models;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    QueryViewModel _viewModel = ViewBag.ViewModel as QueryViewModel ?? new QueryViewModel { };
+
+    ViewBag.ActionName = "首頁 > 發票作業";
 }
-@{ Html.RenderPartial("Module/ReportResult", Model);}
 
-<script runat="server">
+@section headContent
+{
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        ViewBag.ActionName = "首頁 > 發票作業";
+}
+
+@section formContent {
+    @{
+        Html.RenderPartial("~/Views/WinningInvoice/Module/ReportResult.cshtml");
     }
+}
 
-</script>

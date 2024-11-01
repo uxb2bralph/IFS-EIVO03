@@ -14,6 +14,7 @@
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
+@using ModelExtension.Service
 @using Utility
 @using Uxnet.Web.WebUI
 @{
@@ -25,6 +26,13 @@
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _model = (InvoiceItem)this.Model;
     _viewModel = (DocumentQueryViewModel)ViewBag.ViewModel;
+
+    var renderViewModel = new RenderStyleViewModel
+    {
+        PaperStyle = "A4",
+        ProcessType = Naming.InvoiceProcessType.C0401,
+        CreateNew = true,
+    };
 
     String notificationView = _model?.Organization?.OrganizationStatus.CustomNotificationView;
 
@@ -57,7 +65,7 @@ else if (_viewModel.ForceTodo == true || _model.Organization.OrganizationStatus.
     if (!String.IsNullOrEmpty(mailTo))
     {
 
-        String subject = $"{_model.Organization.CompanyName} 電子發票{(_model.InvoiceDonation == null ? "開立" : "捐贈")}通知(發票號碼:{_model.TrackCode}{_model.No})";
+        String subject = $"{_model.Organization.OrganizationExtension?.MailSubjectAlias ?? _model.Organization.CompanyName} 電子發票{(_model.InvoiceDonation == null ? "開立" : "捐贈")}通知(發票號碼:{_model.TrackCode}{_model.No})";
         if (_model.InvoiceBuyer.IsB2C()
             || _model.Organization.OrganizationStatus.UseB2BStandalone == true)
         {
@@ -79,7 +87,15 @@ else if (_viewModel.ForceTodo == true || _model.Organization.OrganizationStatus.
         {
 
             //將Log下的B2B發票PDF，Copy至暫存資料夾
-            String pdfFile = models.PrepareToDownload(_model, false);
+            renderViewModel.DocID = _model.InvoiceID;
+            String pdfFile = Path.Combine(Logger.LogPath.GetDateStylePath(_model.InvoiceDate.Value), $"{_model.TrackCode}{_model.No}.pdf");
+            String fileName = PdfDocumentGenerator.CreateInvoicePdf(renderViewModel);
+            if(File.Exists(pdfFile))
+            {
+                File.Delete(pdfFile);
+            }
+            File.Move(fileName, pdfFile);
+            //models.PrepareToDownload(_model, false);
 
             if (_viewModel.AppendAttachment == true)
             {

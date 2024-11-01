@@ -54,7 +54,6 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     .OrderBy(d => d.DocID);
 
             var buffer = queryItems.Take(4096).ToList();
-            String backup = Path.Combine(Logger.LogDailyPath, "A0101").CheckStoredPath();
             while (buffer.Count > 0)
             {
                 foreach (var item in buffer)
@@ -65,18 +64,12 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     {
                         var fileName = Path.Combine(Settings.Default.A0101Outbound, $"A0101-{DateTime.Now:yyyyMMddHHmmssf}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
                         var xmlMIG = invoiceItem.CreateA0101().ConvertToXml();
-                        xmlMIG.Save(fileName);
-                        Thread.Sleep(10);
-                        if (!File.Exists(fileName))
-                        {
-                            continue;
-                        }
-                        xmlMIG.Save(Path.Combine(backup, Path.GetFileName(fileName)));
-
-                        item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
+                        item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done, xmlMIG.OuterXml);
                         item.CDS_Document.CurrentStep = (int)Naming.InvoiceStepDefinition.待接收;
 
                         models.SubmitChanges();
+                        xmlMIG.Save(fileName);
+
 
                         if (invoiceItem.Organization.OrganizationStatus.DownloadDispatch == true)
                         {
@@ -86,6 +79,9 @@ namespace Model.InvoiceManagement.InvoiceProcess
 
                         models.ExecuteCommand("delete [proc].A0101DispatchQueue where DocID={0} and StepID={1}",
                             item.DocID, item.StepID);
+
+                        //models.ExecuteCommand("update [proc].A0101DispatchQueue set StepID = 1323 where DocID={0} and StepID={1}",
+                        //    item.DocID, item.StepID);
 
                     }
                     catch (Exception ex)
@@ -280,7 +276,7 @@ namespace Model.InvoiceManagement.InvoiceProcess
                                             }
                                             File.Move(fullPath, Path.Combine(__A0101ReceiptDone, Path.GetFileName(fullPath)));
                                         }
-                                        catch(Exception ex)
+                                        catch (Exception ex)
                                         {
                                             Logger.Error(ex);
                                             File.Move(fullPath, Path.Combine(__A0101ReceiptFailed, Path.GetFileName(fullPath)));

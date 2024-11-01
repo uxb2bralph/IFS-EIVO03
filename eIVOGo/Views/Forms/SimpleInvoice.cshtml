@@ -144,15 +144,16 @@
                     <select id="CarrierType" name="CarrierType">
                         <option value="">不使用</option>
                         <option value="3J0002">手機條碼</option>
-                        @*<option value="3J0001">網際優勢會員條碼</option>
-                            <option value="1K0001">悠遊卡</option>
-                            <option value="BJ0001">行動 X 卡</option>
-                            <option value="2G0001">iCash</option>
-                            <option value="EK0002">信用卡</option>
-                            <option value="1K0002">台灣智慧卡</option>
-                            <option value="BK0001">SmartPay金融卡</option>
-                            <option value="1H0001">一卡通</option>*@
+                        @*<option value="1K0001">悠遊卡</option>
+        <option value="BJ0001">行動 X 卡</option>
+        <option value="2G0001">iCash</option>
+        <option value="EK0002">信用卡</option>
+        <option value="1K0002">台灣智慧卡</option>
+        <option value="BK0001">SmartPay金融卡</option>
+        <option value="1H0001">一卡通</option>*@
                         <option value="CQ0001">自然人憑證條碼</option>
+                        <option value="3J0001">網際優勢會員條碼</option>
+                        <option value="5G0001">境外電商</option>
                     </select>
                     @*<script>
                             $('#CarrierType').on('change', function (evt) {
@@ -315,7 +316,7 @@
                 }
             },
             commit: function (forPreview) {
-                if (this.sum()) {
+                if (!confirm('是否計算金額？') || this.sum()) {
                     var event = event || window.event;
                     var $form = $(event.target).parents('form');
                     var $formData = $form.serializeObject();

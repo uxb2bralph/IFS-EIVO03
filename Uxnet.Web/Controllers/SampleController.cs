@@ -14,7 +14,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Utility;
-using Uxnet.Com.DataAccessLayer.Models;
+using DataAccessLayer.Models;
 
 namespace Uxnet.Web.Controllers
 {

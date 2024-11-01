@@ -12,15 +12,16 @@ using System.Data;
 using Utility;
 using Model.InvoiceManagement;
 using ClosedXML.Excel;
+using Uxnet.ToolAdapter.Properties;
 
 namespace ProcessorUnit.Execution
 {
-    public class InvoiceExcelRequestProcessor : ExecutorForever
+    public class InvoiceExcelRequestProcessor : ProcessRequestExecutorForever
     {
         public InvoiceExcelRequestProcessor()
         {
             appliedProcessType = Naming.InvoiceProcessType.C0401_Xlsx;
-            processDataSet = (ds, requestItem) => 
+            processDataSet = (ds, requestItem) =>
             {
                 using (InvoiceDataSetManager manager = new InvoiceDataSetManager(models))
                 {
@@ -43,7 +44,7 @@ namespace ProcessorUnit.Execution
         {
             ProcessRequest requestItem = queueItem.ProcessRequest;
             String requestFile = requestItem.RequestPath.StoreTargetPath();
-            if(File.Exists(requestFile))
+            if (File.Exists(requestFile))
             {
                 Organization agent = requestItem.Organization;
                 requestItem.ProcessStart = DateTime.Now;
@@ -54,7 +55,7 @@ namespace ProcessorUnit.Execution
                     int idx = 1;
                     var tables = ds.Tables.Cast<DataTable>().ToList();
                     var expectedNames = __AcceptedTableName.ToList();
-                    foreach(var t in tables.ToList())
+                    foreach (var t in tables.ToList())
                     {
                         t.TableName = t.TableName.Replace("$", "");
                         var item = expectedNames.Where(n => n == t.TableName).FirstOrDefault();
@@ -65,7 +66,7 @@ namespace ProcessorUnit.Execution
                         }
                     }
 
-                    foreach(var t in tables)
+                    foreach (var t in tables)
                     {
                         var item = expectedNames.Where(n => t.TableName.Contains(n)).FirstOrDefault();
                         if (item != null)
@@ -91,7 +92,7 @@ namespace ProcessorUnit.Execution
 
                         if (SettingsHelper.Instance.ResponsePath != null)
                         {
-                            responsePath = responsePath.Replace(Uxnet.Com.Properties.AppSettings.AppRoot, SettingsHelper.Instance.ResponsePath);
+                            responsePath = responsePath.Replace(AppSettingsBase.AppRoot, SettingsHelper.Instance.ResponsePath);
                         }
 
                         xls.SaveAs(responsePath);

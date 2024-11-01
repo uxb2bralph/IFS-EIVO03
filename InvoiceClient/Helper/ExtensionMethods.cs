@@ -11,6 +11,7 @@ using Model.Schema.TXN;
 using Uxnet.Com.Security.UseCrypto;
 using Utility;
 using System.Diagnostics;
+using InvoiceClient.Agent.POSHelper;
 
 namespace InvoiceClient.Helper
 {
@@ -25,7 +26,7 @@ namespace InvoiceClient.Helper
             return docMsg;
         }
 
-        public static SignedCms Sign(this byte[] data,bool detached = false)
+        public static SignedCms Sign(this byte[] data, bool detached = false)
         {
             ContentInfo content = new ContentInfo(data);
             SignedCms signedCms = new SignedCms(content, detached);
@@ -66,7 +67,7 @@ namespace InvoiceClient.Helper
             };
         }
 
-        public static Process RunBatch(this String batchFileName,String args)
+        public static Process RunBatch(this String batchFileName, String args)
         {
             Logger.Info($"{batchFileName} {args}");
             ProcessStartInfo info = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, batchFileName), args)
@@ -99,11 +100,23 @@ namespace InvoiceClient.Helper
             }
         }
 
+        public static void ReviseXmlContent(this string invoiceFile)
+        {
+            var content = File.ReadAllText(invoiceFile, Encoding.GetEncoding(POSReady.Settings.InvoiceFileEncodingPage));
+            if (content.IndexOf('&') >= 0)
+            {
+                StringBuilder sb = new StringBuilder(content);
+                sb.Replace("&", "&amp;");
+                File.WriteAllText(invoiceFile, sb.ToString(), Encoding.GetEncoding(POSReady.Settings.InvoiceFileEncodingPage));
+            }
+        }
+
     }
 
     public interface ITabWorkItem
     {
-        String TabName {  get; }
-        String TabText {  get; }
+        String TabName { get; }
+        String TabText { get; }
+        void ReportStatus();
     }
 }

@@ -45,7 +45,7 @@ namespace Model.InvoiceManagement
                     try
                     {
                         var invItem = item.Invoice[idx];
-                        
+
                         Exception ex;
                         if ((ex = validator.Validate(invItem)) != null)
                         {
@@ -83,7 +83,7 @@ namespace Model.InvoiceManagement
                             if (this.ProcessType == Naming.InvoiceProcessType.A0401)
                             {
                                 A0401Handler.PushStepQueueOnSubmit(this, newItem.CDS_Document, Naming.InvoiceStepDefinition.已開立);
-                                switch((Naming.NotificationIndication?)item.Notification)
+                                switch ((Naming.NotificationIndication?)item.Notification)
                                 {
                                     case Naming.NotificationIndication.None:
                                         break;
@@ -150,11 +150,11 @@ namespace Model.InvoiceManagement
                     ProcessType = this.ProcessType,
                 };
                 int invSeq = 0;
-                void proc(InvoiceRootInvoice[] items,Naming.InvoiceTypeDefinition indication)
+                void proc(InvoiceRootInvoice[] items, Naming.InvoiceTypeDefinition indication)
                 {
                     validator.InvoiceTypeIndication = indication;
                     validator.StartAutoTrackNo(ApplyInvoiceDate);
-                    for (int idx = 0; idx < items.Length; idx++,invSeq++)
+                    for (int idx = 0; idx < items.Length; idx++, invSeq++)
                     {
                         try
                         {
@@ -260,7 +260,7 @@ namespace Model.InvoiceManagement
         public override Dictionary<int, Exception> SaveUploadAllowance(AllowanceRoot item, OrganizationToken owner)
         {
             Dictionary<int, Exception> result = new Dictionary<int, Exception>();
-            
+
             if (item != null && item.Allowance != null && item.Allowance.Length > 0)
             {
                 this.EventItems_Allowance = null;
@@ -276,10 +276,18 @@ namespace Model.InvoiceManagement
                         var allowanceItem = item.Allowance[idx];
 
                         Exception ex;
-                        if((ex = validator.Validate(allowanceItem)) != null)
+                        if ((ex = validator.Validate(allowanceItem)) != null)
                         {
-                            result.Add(idx, ex);
-                            continue;
+                            if (ex is DuplicateAllowanceNumberException)
+                            {
+                                eventItems.Add(((DuplicateAllowanceNumberException)ex).CurrentAllowance);
+                                continue;
+                            }
+                            else
+                            {
+                                result.Add(idx, ex);
+                                continue;
+                            }
                         }
 
                         InvoiceAllowance newItem = validator.Allowance;
@@ -301,7 +309,7 @@ namespace Model.InvoiceManagement
                         eventItems.Add(newItem);
 
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Logger.Error(ex);
                         result.Add(idx, ex);
@@ -319,7 +327,7 @@ namespace Model.InvoiceManagement
             return result;
         }
 
-        protected void PushProcessExceptionNotification(ProcessRequest requestItem,Organization notified)
+        protected void PushProcessExceptionNotification(ProcessRequest requestItem, Organization notified)
         {
             if (requestItem != null && notified != null)
             {
@@ -327,10 +335,10 @@ namespace Model.InvoiceManagement
                 {
                     this.GetTable<ProcessExceptionNotification>().InsertOnSubmit(
                         new ProcessExceptionNotification
-                            {
-                                TaskID = requestItem.TaskID,
-                                CompanyID = notified.CompanyID,
-                            }
+                        {
+                            TaskID = requestItem.TaskID,
+                            CompanyID = notified.CompanyID,
+                        }
                         );
                     this.SubmitChanges();
                 }

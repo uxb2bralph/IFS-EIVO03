@@ -12,6 +12,7 @@ using System.Globalization;
 using Model.Locale;
 using Model.InvoiceManagement.ErrorHandle;
 using Utility;
+using Model.InvoiceManagement.InvoiceProcess;
 
 namespace Model.InvoiceManagement.Validator
 {
@@ -37,7 +38,7 @@ namespace Model.InvoiceManagement.Validator
 
         public InvoiceAllowance Allowance
         {
-            get 
+            get
             {
                 return _newItem;
             }
@@ -67,12 +68,12 @@ namespace Model.InvoiceManagement.Validator
                 return ex;
             }
 
-            if((ex = CheckMandatoryFields()) != null)
+            if ((ex = CheckMandatoryFields()) != null)
             {
                 return ex;
             }
 
-            if((ex = CheckAllowanceItem()) != null)
+            if ((ex = CheckAllowanceItem()) != null)
             {
                 return ex;
             }
@@ -107,12 +108,12 @@ namespace Model.InvoiceManagement.Validator
             }
 
             String dataNo = null;
-            if(_originalInvoice == null)
+            if (_originalInvoice == null)
             {
                 dataNo = _allowanceItem.AllowanceItem?.Select(a => a.OriginalDataNumber.GetEfficientString())
                                     .Where(d => d != null)
                                     .FirstOrDefault();
-                if(dataNo!=null)
+                if (dataNo != null)
                 {
                     _originalInvoice = models.GetTable<InvoiceItem>().Where(v => v.SellerID == _seller.CompanyID)
                             .Join(models.GetTable<InvoicePurchaseOrder>().Where(p => p.OrderNo == dataNo),
@@ -151,7 +152,7 @@ namespace Model.InvoiceManagement.Validator
             {
                 return new Exception(String.Format(MessageResources.InvalidBuyerId, _allowanceItem.BuyerId));
             }
-            else if (_allowanceItem.BuyerName!=null && _allowanceItem.BuyerName.Length > 60)
+            else if (_allowanceItem.BuyerName != null && _allowanceItem.BuyerName.Length > 60)
             {
                 return new Exception(String.Format(MessageResources.AlertBuyerNameLength, _allowanceItem.BuyerName));
             }
@@ -178,7 +179,14 @@ namespace Model.InvoiceManagement.Validator
                             a => a.AllowanceID, s => s.AllowanceID, (a, s) => a).FirstOrDefault();
             if (currentItem != null)
             {
-                return new DuplicateAllowanceNumberException(String.Format(MessageResources.AlertAllowanceDuplicated, _allowanceItem.AllowanceNumber)) { CurrentAllowance = currentItem };
+                if (currentItem.InvoiceAllowanceSeller.SellerID == _seller.CompanyID && _seller.IgnoreDuplicatedNo())
+                {
+                    return new DuplicateAllowanceNumberException(String.Format(MessageResources.AlertAllowanceDuplicated, _allowanceItem.AllowanceNumber)) { CurrentAllowance = currentItem };
+                }
+                else
+                {
+                    return new Exception(String.Format(MessageResources.AlertAllowanceDuplicated, _allowanceItem.AllowanceNumber));
+                }
             }
 
             //折讓證明單日期
@@ -218,7 +226,8 @@ namespace Model.InvoiceManagement.Validator
         protected virtual Exception CheckAllowanceItem()
         {
             _productItems = new List<InvoiceAllowanceItem>();
-            var invTable = models.GetTable<InvoiceItem>();
+            var invTable = models.GetTable<InvoiceItem>()
+                            .Where(v => v.SellerID == _seller.CompanyID);
 
             InvoiceItem originalInvoice = null;
             foreach (var i in _allowanceItem.AllowanceItem)
@@ -229,7 +238,12 @@ namespace Model.InvoiceManagement.Validator
                     String invNo, trackCode;
                     trackCode = i.OriginalInvoiceNumber.Substring(0, 2);
                     invNo = i.OriginalInvoiceNumber.Substring(2);
-                    originalInvoice = invTable.Where(n => n.TrackCode == trackCode && n.No == invNo).FirstOrDefault();
+                    originalInvoice = invTable
+                        .Where(n => n.SellerID == _seller.CompanyID)
+                        .Where(n => n.TrackCode == trackCode)
+                        .Where(n => n.No == invNo)
+                        .OrderByDescending(n => n.InvoiceID)
+                        .FirstOrDefault();
                 }
                 else
                 {
@@ -398,7 +412,7 @@ namespace Model.InvoiceManagement.Validator
                 _newItem.InvoiceAllowanceBuyer.Phone = contact.TEL;
             }
 
-            _newItem.InvoiceAllowanceDetails.AddRange(_productItems.Select(p => new InvoiceAllowanceDetail 
+            _newItem.InvoiceAllowanceDetails.AddRange(_productItems.Select(p => new InvoiceAllowanceDetail
             {
                 InvoiceAllowanceItem = p,
             }));

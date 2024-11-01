@@ -4,13 +4,14 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using ClosedXML.Excel;
 using Model.DataEntity;
 using Model.InvoiceManagement;
 using Utility;
 using ModelExtension.Helper;
 using Model.Models.ViewModel;
-using System.Web.Mvc;
+using DataAccessLayer;
 
 namespace ModelExtension.DataExchange
 {
@@ -92,7 +93,7 @@ namespace ModelExtension.DataExchange
                 row = row.RowBelow();
                 try
                 {
-                    if (validate(dataRow,viewModel, status))
+                    if (validate(dataRow, viewModel, status))
                     {
                         dataRow.Cell((int)ColumnIndex.處理狀態).Value = "OK";
                     }
@@ -122,8 +123,8 @@ namespace ModelExtension.DataExchange
             viewModel.ContactEmail = dataRow.Cell((int)ColumnIndex.聯絡人電子郵件).GetString().GetEfficientString();
             viewModel.Addr = dataRow.Cell((int)ColumnIndex.地址).GetString().GetEfficientString();
             viewModel.Phone = dataRow.Cell((int)ColumnIndex.電話).GetString().GetEfficientString();
-            viewModel.Entrusting = dataRow.Cell((int)ColumnIndex.自動開立).Value as bool?;
-            viewModel.EntrustToPrint = dataRow.Cell((int)ColumnIndex.主動列印).Value as bool?;
+            viewModel.Entrusting = dataRow.Cell((int)ColumnIndex.自動開立).GetValue<bool?>();
+            viewModel.EntrustToPrint = dataRow.Cell((int)ColumnIndex.主動列印).GetValue<bool?>();
 
             if (viewModel.CompanyName == null)
             {
@@ -161,7 +162,7 @@ namespace ModelExtension.DataExchange
                 {
                     ModelStateDictionary modelState = new ModelStateDictionary { };
                     BusinessRelationship model = viewModel.CommitBusinessRelationshipViewModel(models, modelState);
-                    if (model == null) 
+                    if (model == null)
                     {
                         status.Append(modelState.ErrorMessage());
                         bResult = false;

@@ -20,7 +20,7 @@ namespace Model.InvoiceManagement.Validator
     {
         readonly List<Exception> exceptions = new List<Exception>();
 
-        public InvoiceRootFormatValidator(GenericManager<EIVOEntityDataContext> mgr, Organization owner) : base(mgr,owner)
+        public InvoiceRootFormatValidator(GenericManager<EIVOEntityDataContext> mgr, Organization owner) : base(mgr, owner)
         {
 
         }
@@ -141,7 +141,7 @@ namespace Model.InvoiceManagement.Validator
 
                 if (String.IsNullOrEmpty(_invItem.InvoiceDate))
                 {
-                    exceptions.Add( new Exception(MessageResources.AlertInvoiceDate));
+                    exceptions.Add(new Exception(MessageResources.AlertInvoiceDate));
                 }
                 else
                 {
@@ -154,7 +154,7 @@ namespace Model.InvoiceManagement.Validator
                     }
 
                     if (!DateTime.TryParseExact(String.Format("{0} {1}", _invItem.InvoiceDate, _invItem.InvoiceTime), InvoiceRootInvoiceValidator.__InvoiceDateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out invoiceDate)
-                            || invoiceDate >= DateTime.Today.AddDays(1))
+                            || invoiceDate > DateTime.Today.AddDays(3))
                     {
                         exceptions.Add(new Exception(String.Format(MessageResources.AlertInvoiceDateTime, _invItem.InvoiceDate, _invItem.InvoiceTime)));
                     }
@@ -164,7 +164,7 @@ namespace Model.InvoiceManagement.Validator
                     }
                 }
 
-                if(_container.InvoiceDate.HasValue)
+                if (_container.InvoiceDate.HasValue)
                 {
                     DateTime invoiceDate = _container.InvoiceDate.Value;
                     DateTime periodStart = new DateTime(invoiceDate.Year, (invoiceDate.Month - 1) / 2 * 2 + 1, 1);
@@ -216,7 +216,7 @@ namespace Model.InvoiceManagement.Validator
 
             if (_invItem.CustomerDefined != null)
             {
-                _container.InvoiceItemExtension = new InvoiceItemExtension 
+                _container.InvoiceItemExtension = new InvoiceItemExtension
                 {
                     ProjectNo = _invItem.CustomerDefined.ProjectNo,
                     PurchaseNo = _invItem.CustomerDefined.PurchaseNo
@@ -241,14 +241,14 @@ namespace Model.InvoiceManagement.Validator
                 exceptions.Add(new Exception(MessageResources.AlertDataNumber));
             }
 
-            if (_invItem.DataNumber.Length > 60)
+            if (_invItem.DataNumber?.Length > 60)
             {
                 exceptions.Add(new Exception(String.Format(MessageResources.AlertDataNumberLimitedLength, _invItem.DataNumber)));
             }
 
             var po = _models.GetTable<InvoicePurchaseOrder>().Where(d => d.OrderNo == _invItem.DataNumber
                     && d.InvoiceItem.SellerID == _seller.CompanyID).FirstOrDefault();
-            if (po!=null)
+            if (po != null)
             {
                 exceptions.Add(new DuplicateDataNumberException(String.Format(MessageResources.AlertDataNumberDuplicated, _invItem.DataNumber))
                 {
@@ -313,14 +313,16 @@ namespace Model.InvoiceManagement.Validator
             }
             else if (_invItem.BuyerId == null)
             {
-                if (_isCrossBorderMerchant)
-                {
-                    _invItem.BuyerId = "0000000000";
-                }
-                else
-                {
-                    exceptions.Add(new Exception(String.Format(MessageResources.InvalidBuyerId, _invItem.BuyerId)));
-                }
+                _invItem.BuyerId = "0000000000";
+
+                //if (_isCrossBorderMerchant)
+                //{
+                //    _invItem.BuyerId = "0000000000";
+                //}
+                //else
+                //{
+                //    exceptions.Add(new Exception(String.Format(MessageResources.InvalidBuyerId, _invItem.BuyerId)));
+                //}
             }
             else if (!Regex.IsMatch(_invItem.BuyerId, "^[0-9]{8}$"))
             {
@@ -357,11 +359,11 @@ namespace Model.InvoiceManagement.Validator
                 BuyerMark = _invItem.BuyerMark,
                 Name = _invItem.BuyerId == "0000000000" ? _invItem.BuyerName.CheckB2CMIGName() : _invItem.BuyerName,
                 ReceiptNo = _invItem.BuyerId,
-                CustomerID = String.IsNullOrEmpty(_invItem.GoogleId) ? "" : _invItem.GoogleId,
+                CustomerID = _invItem.GoogleId.GetEfficientString() ?? _invItem.CustomerID.GetEfficientString(),
                 CustomerName = _invItem.BuyerName,
-            };   
-            
-            if(_isCrossBorderMerchant)
+            };
+
+            if (_isCrossBorderMerchant)
             {
                 _buyer.CustomerNumber = _buyer.ReceiptNo;
                 _buyer.ReceiptNo = "0000000000";
@@ -391,7 +393,7 @@ namespace Model.InvoiceManagement.Validator
                     exceptions.Add(new Exception(String.Format(MessageResources.InvalidContactPhone, _invItem.Contact.TEL)));
                 }
 
-                _buyer.ContactName =  _invItem.Contact.Name;
+                _buyer.ContactName = _invItem.Contact.Name;
                 _buyer.Address = _invItem.Contact.Address;
                 _buyer.Phone = _invItem.Contact.TEL;
                 _buyer.EMail = _invItem.Contact.Email != null ? _invItem.Contact.Email.Replace(';', ',').Replace('、', ',').Replace(' ', ',') : null;
@@ -423,12 +425,12 @@ namespace Model.InvoiceManagement.Validator
                 exceptions.Add(new Exception(String.Format(MessageResources.InvalidSellingPrice, _invItem.SalesAmount)));
             }
 
-            if (_invItem.FreeTaxSalesAmount < 0 )
+            if (_invItem.FreeTaxSalesAmount < 0)
             {
                 exceptions.Add(new Exception(String.Format(MessageResources.InvalidFreeTaxAmount, _invItem.FreeTaxSalesAmount)));
             }
 
-            if (_invItem.ZeroTaxSalesAmount < 0 )
+            if (_invItem.ZeroTaxSalesAmount < 0)
             {
                 exceptions.Add(new Exception(String.Format(MessageResources.InvalidZeroTaxAmount, _invItem.ZeroTaxSalesAmount)));
             }
@@ -518,13 +520,13 @@ namespace Model.InvoiceManagement.Validator
             {
                 if (String.IsNullOrEmpty(product.InvoiceProduct.Brief) || product.InvoiceProduct.Brief.Length > 256)
                 {
-                    exceptions.Add( new Exception(String.Format(MessageResources.InvalidProductDescription, product.InvoiceProduct.Brief)));
+                    exceptions.Add(new Exception(String.Format(MessageResources.InvalidProductDescription, product.InvoiceProduct.Brief)));
                 }
 
 
                 if (!String.IsNullOrEmpty(product.PieceUnit) && product.PieceUnit.Length > 6)
                 {
-                    exceptions.Add( new Exception(String.Format(MessageResources.InvalidPieceUnit, product.PieceUnit)));
+                    exceptions.Add(new Exception(String.Format(MessageResources.InvalidPieceUnit, product.PieceUnit)));
                 }
 
 
@@ -552,7 +554,7 @@ namespace Model.InvoiceManagement.Validator
 
             if (_invItem.BuyerId == "0000000000" && _invItem.DonateMark != "0" && _invItem.DonateMark != "1")
             {
-                exceptions.Add( new Exception(String.Format(MessageResources.InvalidDonationMark, _invItem.DonateMark)));
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidDonationMark, _invItem.DonateMark)));
             }
 
             if (String.IsNullOrEmpty(_invItem.PrintMark))
@@ -565,13 +567,13 @@ namespace Model.InvoiceManagement.Validator
                 _invItem.PrintMark = _invItem.PrintMark.ToUpper();
                 if (_invItem.PrintMark != "Y" && _invItem.PrintMark != "N")
                 {
-                    exceptions.Add( new Exception(MessageResources.InvalidPrintMark));
+                    exceptions.Add(new Exception(MessageResources.InvalidPrintMark));
                 }
             }
 
-            if(!_invItem.InvoiceType.IsValidInvoiceType(out byte data))
+            if (!_invItem.InvoiceType.IsValidInvoiceType(out byte data))
             {
-                exceptions.Add( new Exception(String.Format(MessageResources.InvalidInvoiceType, _invItem.InvoiceType)));
+                exceptions.Add(new Exception(String.Format(MessageResources.InvalidInvoiceType, _invItem.InvoiceType)));
             }
 
 

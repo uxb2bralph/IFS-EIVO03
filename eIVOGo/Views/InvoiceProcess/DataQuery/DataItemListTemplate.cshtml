@@ -1,0 +1,78 @@
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@using Business.Helper
+@functions
+{
+    ModelSource<InvoiceItem> models;
+    IQueryable<dynamic> _model;
+    QueryViewModel _viewModel;
+
+}
+@RenderSection("PrepareQueryResult")
+@{
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<dynamic>)this.Model;
+    _viewModel = (QueryViewModel)ViewBag.ViewModel;
+
+    Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/ItemListSorting.cshtml");
+
+    IQueryable<dynamic> items;
+    int pageIndex = _viewModel.PageIndex ?? 0;
+    int pageSize = _viewModel.PageSize ?? 10;
+
+    if (TempData["SortedItems"] == null)
+    {
+        if (_viewModel.Paging == false)
+        {
+            items = _model;
+        }
+        else
+        {
+            items = _model
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize);
+        }
+    }
+    else
+    {
+        if (_viewModel.Paging == false)
+        {
+            items = ((IQueryable<dynamic>)TempData["SortedItems"]);
+        }
+        else
+        {
+            items = ((IQueryable<dynamic>)TempData["SortedItems"])
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize);
+        }
+    }
+}
+
+@{
+    int idx = 0;
+}
+@foreach (var item in items)
+{
+    idx++;
+    <tr>
+        @{
+            Html.RenderPartial("~/Views/InvoiceProcess/DataQuery/DataItem.cshtml", (object)item);
+        }
+    </tr>
+}
+

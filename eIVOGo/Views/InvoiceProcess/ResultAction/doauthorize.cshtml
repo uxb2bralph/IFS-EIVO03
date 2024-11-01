@@ -1,7 +1,4 @@
 
-@{ Register Src="~/Module/Common/PagingControl.ascx" TagName="PagingControl" TagPrefix="uc2" }
-@{ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" }
-@{ Register Src="~/Module/Common/ActionHandler.ascx" TagName="ActionHandler" TagPrefix="uc1" }
 @using System.IO
 @using System.Linq.Expressions
 
@@ -19,13 +16,27 @@
     </table>
 
 
-<script runat="server">
+    <script>
+        window.uiInvoiceQuery.authorize = function () {
+            if (!$('input[name="chkItem"]').is(':checked')) {
+                alert('請選擇核准重印資料!!');
+                return false;
+            }
+
+            var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
+            $formData = {
+                ...$formData,
+                ...$('#queryResult').find('input,select,textarea').serializeObject(),
+            };
+
+            doPost('@(Url.Action("AuthorizeToPrint", "InvoiceProcess"))', $formData, function (data) {
+                var $data = $(data);
+                $('body').append($data);
+                $data.remove();
+            });
+
+        };
 
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-    }
-
-</script>
+    </script>
 

@@ -31,7 +31,7 @@ using Uxnet.Com.Security.UseCrypto;
 using Newtonsoft.Json;
 using System.Data;
 using ModelExtension.Helper;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
 using DataAccessLayer.basis;
 
 namespace eIVOGo.Controllers.Accounting
@@ -60,13 +60,13 @@ namespace eIVOGo.Controllers.Accounting
             }
 
             IQueryable<InvoicePeriodExchangeRate> items = models.GetTable<InvoicePeriodExchangeRate>();
-            if(tmp.PeriodID.HasValue)
+            if (tmp.PeriodID.HasValue)
             {
                 items = items
                     .Where(t => t.PeriodID == tmp.PeriodID);
             }
 
-            if(tmp.CurrencyID.HasValue)
+            if (tmp.CurrencyID.HasValue)
             {
                 items = items.Where(t => t.CurrencyID == tmp.CurrencyID);
             }
@@ -148,7 +148,7 @@ namespace eIVOGo.Controllers.Accounting
 
             int count = 0;
             bool toUpdate = false;
-            if(tmp.PeriodID.HasValue && tmp.CurrencyID.HasValue)
+            if (tmp.PeriodID.HasValue && tmp.CurrencyID.HasValue)
             {
                 if (tmp.PeriodID != viewModel.PeriodID || tmp.CurrencyID != currency.CurrencyID)
                 {
@@ -343,7 +343,7 @@ namespace eIVOGo.Controllers.Accounting
                     {
                         return Json(new { result = false, message = "Excel檔未包含【匯率】資料表" }, JsonRequestBehavior.AllowGet);
                     }
-                     
+
                     table.Columns.Add(new DataColumn("處理狀態", typeof(String)));
                     int colStatus = table.Columns.Count - 1;
                     ExchangeRateQueryViewModel item = new ExchangeRateQueryViewModel { };
@@ -382,7 +382,7 @@ namespace eIVOGo.Controllers.Accounting
 
                 }
 
-                return View("~/Views/Shared/Module/PromptFileDownload.cshtml", 
+                return View("~/Views/Shared/Module/PromptFileDownload.cshtml",
                     File(fileName, "application/octet-stream", "匯率資料(回應).xlsx"));
 
             }

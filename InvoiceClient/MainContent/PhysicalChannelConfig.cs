@@ -73,5 +73,9 @@ namespace InvoiceClient.MainContent
         {
             get { return "實體通路電子發票"; }
         }
+        public void ReportStatus()
+        {
+
+        }
     }
 }

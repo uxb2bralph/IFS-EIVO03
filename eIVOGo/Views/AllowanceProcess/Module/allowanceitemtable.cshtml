@@ -42,6 +42,7 @@
             <th aria-sort="other">含稅金額</th>
             <th aria-sort="other">幣別</th>
             <th><a href="javascript:void(0);" onclick="$inquiryAgent.sort('BuyerNo',this);">買受人統編</a></th>
+            <th>狀態</th>
             <th>買受人EMail</th>
             <th aria-sort="other">備註</th>
         </tr>
@@ -52,7 +53,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="14">
+            <td colspan="15">
                 @if (_viewModel?.CurrencySummary == true)
                 {
                     foreach (var g in _model.GroupBy(i => i.CurrencyID))

@@ -44,7 +44,7 @@ else
 @{ Html.RenderPartial("~/Views/Notification/Module/AllowanceMailView.cshtml", _model);}
 @if (_model.InvoiceAllowanceSeller.Organization.OrganizationExtension?.CustomNotification != null)
 {
-    Write(new HtmlString(_model.InvoiceAllowanceSeller.Organization.OrganizationExtension?.CustomNotification));
+    Write(new HtmlString(HttpUtility.HtmlDecode(_model.InvoiceAllowanceSeller.Organization.OrganizationExtension?.CustomNotification)));
     <br />
 }
 信件寄送時間：@(DateTime.Now)

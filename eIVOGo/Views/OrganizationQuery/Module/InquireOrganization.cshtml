@@ -212,6 +212,12 @@
         });
     }
 
+    function applyMaster(value) {
+        $.post('@(Url.Action("ApplyMaster", "Organization"))', { 'keyID': value }, function (data) {
+            $global.createTab('applyMaster', '指派主機構', data, true);
+        });
+    }
+
     function applyBilling(value) {
         $.post('@(Url.Action("ApplyBillingPlan", "Organization"))', { 'keyID': value }, function (data) {
             $global.createTab('applyBilling', '收費標準', data, true);
@@ -226,17 +232,30 @@
             }, 800, 560);
     }
 
-    function applyRelationship(value) {
-        if (confirm('確認設定此開立人為B2B營業人?')) {
-            invokeAction('@(VirtualPathUtility.ToAbsolute("~/Handling/ApplyRelationship"))',
-                { 'companyID': value },
-                function () {
-                    inquireCompany(pageNum, function (data) {
-                        $('.companyList').html(data);
+        function applyRelationship(value) {
+            if (confirm('確認設定此開立人為B2B營業人?')) {
+                invokeAction('@(VirtualPathUtility.ToAbsolute("~/Handling/ApplyRelationship"))',
+                    { 'companyID': value },
+                    function () {
+                        $inquiryAgent.inquire();
                     });
-                });
+            }
         }
-    }
+
+        function commitMaster(keyID, action) {
+            if (confirm(action)) {
+                invokeAction('@(VirtualPathUtility.ToAbsolute("~/Handling/CommitMasterOrganization"))',
+                    { 'KeyID': keyID },
+                    function (resultValue) {
+                        if (resultValue.result) {
+                            alertModal('作業完成!!');
+                            $inquiryAgent.inquire();
+                        } else {
+                            alertModal(resultValue.message);
+                        }
+                    });
+            }
+        }
 
     function inquireUser(value) {
         $.post('@(Url.Action("AccountIndex", "Account", new { showTab = true }))', { 'sellerID': value }, function (data) {

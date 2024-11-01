@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Model.Models.ViewModel
 {
-    public class AuthTokenViewModel
+    public class AuthTokenViewModel : AuthQueryViewModel
     {
         public String Seed { get; set; }
         public String Authorization { get; set; }

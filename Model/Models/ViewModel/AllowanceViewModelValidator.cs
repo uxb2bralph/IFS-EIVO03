@@ -45,7 +45,7 @@ namespace Model.Models.ViewModel
 
         public InvoiceAllowance Allowance
         {
-            get 
+            get
             {
                 return _newItem;
             }
@@ -61,8 +61,8 @@ namespace Model.Models.ViewModel
             _newItem = null;
 
             //bool IsProxy = _owner.Organization.OrganizationCategory.Any(c => c.CategoryID == (int)CategoryDefinition.CategoryEnum.開立發票營業人代理);
-            
-            if((ex = CheckBusiness()) != null/* && !IsProxy*/)
+
+            if ((ex = CheckBusiness()) != null/* && !IsProxy*/)
             {
                 return ex;
             }
@@ -72,12 +72,12 @@ namespace Model.Models.ViewModel
             //    return ex;
             //}
 
-            if((ex = CheckMandatoryFields()) != null)
+            if ((ex = CheckMandatoryFields()) != null)
             {
                 return ex;
             }
 
-            if((ex = CheckAllowanceItem()) != null)
+            if ((ex = CheckAllowanceItem()) != null)
             {
                 return ex;
             }
@@ -93,7 +93,7 @@ namespace Model.Models.ViewModel
             {
                 return new Exception(String.Format(MessageResources.AlertInvalidSeller, $"CompanyID:{_allowanceItem.SellerID}"));
             }
-            else if(_owner==null)
+            else if (_owner == null)
             {
                 _owner = _seller;
             }
@@ -161,7 +161,13 @@ namespace Model.Models.ViewModel
             var invTable = _mgr.GetTable<InvoiceItem>();
 
             InvoiceItem originalInvoice = null;
-            for(int i=0;i<_allowanceItem.InvoiceNo.Length;i++)
+
+            if (!(_allowanceItem.InvoiceNo?.Length > 0))
+            {
+                return new Exception(String.Format(MessageResources.InvalidAllowance_NoInvoiceData, "N/A"));
+            }
+
+            for (int i = 0; i < _allowanceItem.InvoiceNo?.Length; i++)
             {
 
                 if (!String.IsNullOrEmpty(_allowanceItem.InvoiceNo[i]) && _allowanceItem.InvoiceNo[i].Length == 10)
@@ -225,7 +231,7 @@ namespace Model.Models.ViewModel
                     PieceUnit = _allowanceItem.PieceUnit[i],
                     OriginalDescription = _allowanceItem.OriginalDescription[i],
                     TaxType = (byte)_allowanceItem.TaxType[i],
-                    No = (short)(i+1),
+                    No = (short)(i + 1),
                     UnitCost = _allowanceItem.UnitCost[i],
                     Tax = _allowanceItem.Tax[i],
                 };
@@ -233,7 +239,7 @@ namespace Model.Models.ViewModel
                 _productItems.Add(allowanceItem);
             }
 
-            _newItem = new InvoiceAllowance() 
+            _newItem = new InvoiceAllowance()
             {
                 CDS_Document = new CDS_Document
                 {
@@ -275,7 +281,7 @@ namespace Model.Models.ViewModel
                 }
             };
 
-            _newItem.InvoiceAllowanceDetails.AddRange(_productItems.Select(p => new InvoiceAllowanceDetail 
+            _newItem.InvoiceAllowanceDetails.AddRange(_productItems.Select(p => new InvoiceAllowanceDetail
             {
                 InvoiceAllowanceItem = p,
             }));

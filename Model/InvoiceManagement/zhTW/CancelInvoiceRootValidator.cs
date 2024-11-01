@@ -102,14 +102,14 @@ namespace Model.InvoiceManagement.zhTW
 
             if (String.IsNullOrEmpty(invItem.CancelTime))
             {
-                if (!DateTime.TryParseExact(String.Format("{0}", invItem.CancelDate, invItem.CancelTime), "yyyy/MM/dd", CultureInfo.CurrentCulture, DateTimeStyles.None, out cancelDate))
+                if (!DateTime.TryParseExact(String.Format("{0}", invItem.CancelDate.Replace("/", ""), invItem.CancelTime), "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out cancelDate))
                 {
                     return new Exception(String.Format("作廢發票日期格式錯誤(YYYY/MM/DD)；傳送資料:{0}", invItem.CancelDate));
                 }
             }
             else
             {
-                if (!DateTime.TryParseExact(String.Format("{0} {1}", invItem.CancelDate, invItem.CancelTime), "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out cancelDate))
+                if (!DateTime.TryParseExact(String.Format("{0} {1}", invItem.CancelDate.Replace("/", ""), invItem.CancelTime), "yyyyMMdd HH:mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out cancelDate))
                 {
                     return new Exception(String.Format("作廢發票日期、發票時間格式錯誤(YYYY/MM/DD HH:mm:ss)；傳送資料:{0} {1}", invItem.CancelDate, invItem.CancelTime));
                 }

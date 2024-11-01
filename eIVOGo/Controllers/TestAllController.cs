@@ -74,9 +74,9 @@ namespace eIVOGo.Controllers
             //    }
             //}
 
-            if(!String.IsNullOrEmpty(data))
+            if (!String.IsNullOrEmpty(data))
             {
-                using(QRCodeData codeData = QRCodeGenerator.GenerateQrCode(data,QRCodeGenerator.ECCLevel.L))
+                using (QRCodeData codeData = QRCodeGenerator.GenerateQrCode(data, QRCodeGenerator.ECCLevel.L))
                 {
                     using (QRCode qrCode = new QRCode(codeData))
                     {
@@ -90,7 +90,7 @@ namespace eIVOGo.Controllers
                 }
 
             }
-            
+
 
             return new EmptyResult();
 
@@ -98,9 +98,9 @@ namespace eIVOGo.Controllers
 
         public ActionResult BarCode(String data, int? width, int? height, int? margin, int? wide, int? narrow, String format)
         {
-            if (!String.IsNullOrEmpty(data))
+            data = $"{data.GetEfficientString()}";
             {
-                using (Bitmap qrcode = data.GetCode39(false,wide,narrow,height,margin) /* data.CreateBarCode(width ?? 160, height ?? 160, margin ?? 0)*/)
+                using (Bitmap qrcode = data.GetCode39(false, wide, narrow, height, margin) /* data.CreateBarCode(width ?? 160, height ?? 160, margin ?? 0)*/)
                 {
                     Response.Clear();
                     format = format.GetEfficientString();
@@ -170,7 +170,7 @@ namespace eIVOGo.Controllers
             viewModel.Authorization = Request.Headers["Authorization"].GetEfficientString();
 
             String reason;
-            var result = models.CheckAvailableInterval(viewModel,out reason);
+            var result = models.CheckAvailableInterval(viewModel, out reason);
 
             return Json(new
             {
@@ -229,6 +229,12 @@ namespace eIVOGo.Controllers
         {
             Request.SaveAs(Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}.txt"), true);
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ResetKey()
+        {
+            AppResource.Instance.InitializeKey(true);
+            return Content("OK");
         }
 
     }

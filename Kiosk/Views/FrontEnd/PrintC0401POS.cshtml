@@ -43,9 +43,16 @@
         }
         else
         {
-            Html.RenderPartial("~/Views/FrontEnd/Module/C0401_POS.cshtml", _model);
+            Html.RenderPartial("~/Views/FrontEnd/Module/43460094/C0401_POS.cshtml", _model);
         }
 
-        Html.RenderPartial("~/Views/FrontEnd/Module/InvoiceReceipt.cshtml", _model);
+        if (_model.CustomerDefined?.ProjectNo == "NoPrintReceipt")
+        {
+
+        }
+        else
+        {
+            Html.RenderPartial("~/Views/FrontEnd/Module/43460094/InvoiceReceipt.cshtml", _model);
+        }
     }
 }

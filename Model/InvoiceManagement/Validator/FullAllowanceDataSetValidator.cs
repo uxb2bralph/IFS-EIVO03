@@ -101,7 +101,11 @@ namespace Model.InvoiceManagement.Validator
                 String invNo, trackCode;
                 trackCode = invoiceNo.Substring(0, 2);
                 invNo = invoiceNo.Substring(2);
-                originalInvoice = invTable.Where(n => n.TrackCode == trackCode && n.No == invNo).FirstOrDefault();
+                originalInvoice = invTable
+                    .Where(n => n.SellerID == _seller.CompanyID)
+                    .Where(n => n.TrackCode == trackCode)
+                    .Where(n => n.No == invNo)
+                    .FirstOrDefault();
             }
 
             if (originalInvoice == null)
@@ -137,7 +141,7 @@ namespace Model.InvoiceManagement.Validator
                 TaxType = originalInvoice.InvoiceAmountType.TaxType,
                 No = 1,
                 UnitCost = originalInvoice.InvoiceAmountType.SalesAmount,
-               
+
             };
 
             if (originalInvoice.InvoiceAmountType.TaxAmount > 0)

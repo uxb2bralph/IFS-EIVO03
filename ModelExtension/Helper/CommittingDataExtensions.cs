@@ -141,7 +141,7 @@ namespace ModelExtension.Helper
             item.OrganizationStatus.DownloadDispatch = viewModel.DownloadDispatch;
 
             var extension = item.OrganizationExtension;
-            if(extension==null)
+            if (extension == null)
             {
                 extension = item.OrganizationExtension = new OrganizationExtension { };
             }
@@ -151,7 +151,8 @@ namespace ModelExtension.Helper
             extension.CreationDate = viewModel.CreationDate;
             extension.AutoBlankTrack = viewModel.AutoBlankTrack;
             extension.AutoBlankTrackEmittance = viewModel.AutoBlankTrackEmittance;
-            extension.InvoiceNotUploadedAlert = viewModel.InvoiceNotUploadedAlert;
+            extension.CustomerNo = viewModel.CustomerNo.GetEfficientString();
+
             models.SubmitChanges();
 
             models.ExecuteCommand("delete OrganizationSettings where CompanyID = {0}", item.CompanyID);
@@ -253,12 +254,8 @@ namespace ModelExtension.Helper
 
             item.PID = viewModel.PID;
             item.UserName = viewModel.UserName;
-            if (!String.IsNullOrEmpty(viewModel.Password))
-            {
-                item.Password2 = Utility.ValueValidity.MakePassword(viewModel.Password);
-                if (viewModel.WaitForCheck == true)
-                    item.UserProfileStatus.CurrentLevel = (int)Naming.MemberStatusDefinition.Checked;
-            }
+            UpdatePassword(item, viewModel);
+
             item.EMail = viewModel.EMail;
             item.MailID = item.EMail.GetEfficientString()?
                 .Split(';', ',', ',')?[0];
@@ -272,7 +269,7 @@ namespace ModelExtension.Helper
 
             models.ExecuteCommand("delete ResetUserPassword where UID = {0}", item.UID);
 
-            if(isNew)
+            if (isNew)
             {
                 PortalNotification.NotifyToActivate(item);
                 viewModel.UID = item.UID;
@@ -282,6 +279,17 @@ namespace ModelExtension.Helper
             viewModel.CommitUserRoleViewModel(models, modelState, creator);
 
             return item;
+        }
+
+        public static void UpdatePassword(this UserProfile item, UserProfileViewModel viewModel)
+        {
+            if (!String.IsNullOrEmpty(viewModel.Password))
+            {
+                item.Password2 = Utility.ValueValidity.MakePassword(viewModel.Password);
+                if (viewModel.WaitForCheck == true)
+                    item.UserProfileStatus.CurrentLevel = (int)Naming.MemberStatusDefinition.Checked;
+            }
+            item.Expiration = DateTime.Today.AddDays(Model.Properties.AppSettings.Default.UserPasswordValidDays);
         }
 
         public static UserRole CommitUserRoleViewModel(this UserRoleViewModel viewModel, GenericManager<EIVOEntityDataContext> models, ModelStateDictionary modelState, UserProfileMember creator)
@@ -371,7 +379,7 @@ namespace ModelExtension.Helper
 
             if (masterItem == null)
             {
-                masterItem = (new OrganizationViewModel 
+                masterItem = (new OrganizationViewModel
                 {
                     ReceiptNo = viewModel.MasterNo,
                     CompanyName = viewModel.MasterName,
@@ -383,7 +391,7 @@ namespace ModelExtension.Helper
                 return null;
             }
 
-            if(!viewModel.BusinessID.HasValue)
+            if (!viewModel.BusinessID.HasValue)
             {
                 viewModel.BusinessID = Naming.InvoiceCenterBusinessType.銷項;
             }

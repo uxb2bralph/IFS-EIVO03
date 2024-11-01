@@ -35,7 +35,7 @@
                         else
                         { %>
                             <div style="text-align:left; width:4.4cm">
-                                <h3 class="title-small" style="width: 4.2cm; padding-top: 0px; font-weight: bold; height: 1.3cm;"><%=_item.SellerName  %></h3>
+                                <h3 class="title-small" style="width: 5.2cm; padding-top: 0px; font-weight: bold; height: 1.3cm;"><%=_item.SellerName  %></h3>
                             </div>
                         <%  } %>
                         <h2>電子發票證明聯</h2>

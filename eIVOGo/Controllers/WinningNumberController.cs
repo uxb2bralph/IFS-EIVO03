@@ -32,6 +32,7 @@ using Utility;
 using eIVOGo.Module.Common;
 using ModelExtension.Helper;
 using System.Threading.Tasks;
+using DataAccessLayer;
 
 namespace eIVOGo.Controllers
 {
@@ -245,7 +246,7 @@ namespace eIVOGo.Controllers
             {
                 models.GetDataContext().MatchWinningInvoiceNo(viewModel.Year, viewModel.PeriodNo);
 
-                var invoiceItems = models.PromptWinningInvoiceForNotification(viewModel.Year ?? -1, viewModel.PeriodNo?? -1);
+                var invoiceItems = models.PromptWinningInvoiceForNotification(viewModel.Year ?? -1, viewModel.PeriodNo ?? -1);
                 invoiceItems.Select(i => i.InvoiceID).NotifyWinningInvoice(false);
 
                 SharedFunction.doSendSMSMessage(new SharedFunction._MailQueryState { setYear = viewModel.Year.Value, setPeriod = viewModel.PeriodNo.Value });

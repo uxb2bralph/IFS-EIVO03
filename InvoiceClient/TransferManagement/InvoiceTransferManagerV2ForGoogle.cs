@@ -8,6 +8,7 @@ using System.Text;
 using InvoiceClient.Properties;
 using Model.Schema.EIVO;
 using InvoiceClient.Agent;
+using InvoiceClient.Helper;
 
 namespace InvoiceClient.TransferManagement
 {
@@ -21,6 +22,7 @@ namespace InvoiceClient.TransferManagement
         private InvoiceWatcher _AttachmentWatcher;
         private InvoiceWatcher _InvoicePDFWatcher;
 
+        public ITabWorkItem WorkItem { get; set; }
 
 
         public void EnableAll(String fullPath)

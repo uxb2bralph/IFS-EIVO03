@@ -1,0 +1,60 @@
+﻿
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@functions
+{
+    InquireInvoiceViewModel _viewModel;
+}
+@{
+
+    ModelStateDictionary _modelState;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    ModelSource<InvoiceItem> models;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+}
+@{
+    _viewModel = ViewBag.ViewModel as InquireInvoiceViewModel;
+    _viewModel.DataColumns.Add(new QueryResultDataColumnHelper
+    {
+        ShowHeader = ShowHeader,
+        ShowBody = ShowBody,
+        ShowFooter = ShowFooter
+    });
+}
+
+@helper ShowHeader(dynamic item)
+{
+    <th aria-sort="other">管理</th>
+}
+@helper ShowBody(dynamic po)
+{
+    InvoiceItem item = (InvoiceItem)po;
+    <td style="white-space: nowrap; min-width: 130px;">
+        @if (_viewModel.ResultAction == "Process" || _viewModel.ResultAction == "Notify")
+        {
+            @Html.Partial("~/Views/InvoiceProcess/DataAction/DataProcess.cshtml", item);
+        }
+        @if (_viewModel.ResultAction == "NotifyWinning")
+        {
+            @Html.Partial("~/Views/InvoiceProcess/DataAction/NotifyWinning.cshtml", item);
+        }
+    </td>
+}
+
+@helper ShowFooter(dynamic item)
+{
+}
+
+
+

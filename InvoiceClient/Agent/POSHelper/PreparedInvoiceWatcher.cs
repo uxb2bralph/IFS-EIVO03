@@ -18,7 +18,7 @@ using Utility;
 
 namespace InvoiceClient.Agent.POSHelper
 {
-    public class PreparedInvoiceWatcher : InvoiceWatcher
+    public class PreparedInvoiceWatcher : InvoiceProcessWatcher
     {
         public PreparedInvoiceWatcher(String fullPath)
             : base(fullPath)
@@ -41,54 +41,7 @@ namespace InvoiceClient.Agent.POSHelper
             return true;
         }
 
-        private Root processUploadCore(eInvoiceService invSvc, XmlDocument docInv)
-        {
-            DateTime ts = DateTime.Now;
-            Console.WriteLine($"start converting xml to object at {ts}");
-            InvoiceRoot invoice = docInv.TrimAll().ConvertTo<InvoiceRoot>();
-
-            Root result = new Root
-            {
-                UXB2B = "電子發票系統",
-                Result = new RootResult
-                {
-                    timeStamp = DateTime.Now,
-                    value = 0
-                }
-            };
-
-            List<InvoiceRootInvoice> eventItems = new List<InvoiceRootInvoice>();
-            var items = createPrintFormat(invoice, eventItems);
-            if (items.Count > 0)
-            {
-                result.Response = new RootResponse
-                {
-                    InvoiceNo =
-                    items.Select(d => new RootResponseInvoiceNo
-                    {
-                        Value = invoice.Invoice[d.Key].DataNumber,
-                        Description = d.Value.Message,
-                        ItemIndexSpecified = true,
-                        ItemIndex = d.Key,
-                    }).ToArray()
-                };
-            }
-            else
-            {
-                result.Result.value = 1;
-            }
-            Console.WriteLine($"total seconds: {(DateTime.Now - ts).TotalSeconds}");
-
-            return result;
-        }
-
-
-        protected override Root processUpload(WS_Invoice.eInvoiceService invSvc, XmlDocument docInv)
-        {
-            return processUploadCore(invSvc, docInv);
-        }
-
-        private Dictionary<int, Exception> createPrintFormat(InvoiceRoot item, List<InvoiceRootInvoice> eventItems)
+        protected override Dictionary<int, Exception> DoClientSideProcess(InvoiceRoot item, List<InvoiceRootInvoice> eventItems)
         {
             Dictionary<int, Exception> result = new Dictionary<int, Exception>();
 
@@ -103,7 +56,7 @@ namespace InvoiceClient.Agent.POSHelper
                         try
                         {
                             var invItem = item.Invoice[idx];
-                            String tmpHtml = Path.Combine(POSReady._Settings.PrintInvoice, $"{invItem.InvoiceNumber ?? invItem.DataNumber}.htm");
+                            String tmpHtml = Path.Combine(POSReady._Settings.PrintInvoice, $"{invItem.DataNumber ?? invItem.InvoiceNumber}.htm");
                             File.WriteAllText(tmpHtml, client.UploadString(ConvertPrintFormUrl, JsonConvert.SerializeObject(invItem)));
                             eventItems.Add(invItem);
                         }

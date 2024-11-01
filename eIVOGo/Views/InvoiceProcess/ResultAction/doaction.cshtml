@@ -1,7 +1,4 @@
 
-@{ Register Src="~/Module/Common/PagingControl.ascx" TagName="PagingControl" TagPrefix="uc2" }
-@{ Register Assembly="Model" Namespace="Model.DataEntity" TagPrefix="cc1" }
-@{ Register Src="~/Module/Common/ActionHandler.ascx" TagName="ActionHandler" TagPrefix="uc1" }
 @using System.IO
 @using System.Linq.Expressions
 
@@ -15,28 +12,18 @@
 @using Model.Locale
 @using Utility
 @using Uxnet.Web.WebUI
-
-    <table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td >
-                <button type="button" class="btn" name="btnDoCancel" onclick="uiInvoiceQuery.commitAction();">執行@(_viewModel.ActionTitle)</button>
-            </td>
-        </tr>
-    </table>
-
-
-<script runat="server">
-
-
-    ModelSource<InvoiceItem> models;
+@{
     InquireInvoiceViewModel _viewModel;
+    _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+}
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
-    }
+<table id="tblAction" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td>
+            <button type="button" class="btn" name="btnDoCancel" onclick="uiInvoiceQuery.commitAction();">執行@(_viewModel.ActionTitle)</button>
+        </td>
+    </tr>
+</table>
 
 
-</script>
 

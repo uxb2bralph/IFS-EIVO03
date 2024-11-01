@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using DataAccessLayer.basis;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
 using Model.DataEntity;
 using Model.Locale;
 using Model.Security.MembershipManagement;

@@ -9,12 +9,21 @@ namespace Uxnet.Com.Helper
     public class WebClientEx : WebClient
     {
         public int Timeout { get; set; }
+        protected WebRequest _request;
+
+        public WebClientEx() : base()
+        {
+            this.Encoding = Encoding.UTF8;
+        }
 
         protected override WebRequest GetWebRequest(Uri address)
         {
-            var request = base.GetWebRequest(address);
-            request.Timeout = Timeout;
-            return request;
+            _request = base.GetWebRequest(address);
+            _request.Timeout = Timeout;
+            return _request;
         }
+
+        public WebResponse Response => _request != null ? GetWebResponse(_request) : null;
+
     }
 }

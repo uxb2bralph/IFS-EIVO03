@@ -9,18 +9,8 @@ using Model.Models.ViewModel;
 
 namespace eIVOGo.Models.ViewModel
 {
-    public class CbsLoginViewModel
+    public class CbsLoginViewModel : UserProfileViewModel
     {
-        [Required(ErrorMessage = "Please enter {0}")]
-        [Display(Name = "PID")]
-        //[EmailAddress]
-        public string PID { get; set; }
-
-        [Required(ErrorMessage = "Please enter {0}")]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
-
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
 
@@ -36,6 +26,11 @@ namespace eIVOGo.Models.ViewModel
         [Display(Name = "EncryptedCode")]
         public string EncryptedCode { get; set; }
 
+        public String Token { get; set; }
+        public string CardNo1 { get; set; }
+        public string CardNo2 { get; set; }
+        public string CardType { get; set; }
+        public string Signature { get; set; }
     }
 
     public class TwoFactorViewModel : QueryViewModel

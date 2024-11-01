@@ -41,8 +41,11 @@
     <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.12.1.2\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="QREncrypter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -60,6 +63,21 @@
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -295,6 +313,12 @@
     <Compile Include="Schema\TurnKey\A0601.cs">
       <DependentUpon>A0601.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Schema\TurnKey\A1101.cs">
+      <DependentUpon>A1101.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\TurnKey\A1401.cs">
+      <DependentUpon>A1401.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Schema\TurnKey\B0101.cs">
       <DependentUpon>B0101.xsd</DependentUpon>
     </Compile>
@@ -312,6 +336,12 @@
     </Compile>
     <Compile Include="Schema\TurnKey\B0501.cs">
       <DependentUpon>B0501.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\TurnKey\B1101.cs">
+      <DependentUpon>B1101.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\TurnKey\B1401.cs">
+      <DependentUpon>B1401.xsd</DependentUpon>
     </Compile>
     <Compile Include="Schema\TurnKey\C0501\C0501Extensions.cs" />
     <Compile Include="Schema\TurnKey\C0401.cs">
@@ -343,6 +373,31 @@
     </Compile>
     <Compile Include="Schema\TurnKey\E0501.cs">
       <DependentUpon>E0501.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\TurnKey\F0401.cs">
+      <DependentUpon>F0401.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\TurnKey\F0401\F0401Extensions.cs" />
+    <Compile Include="Schema\TurnKey\F0501.cs">
+      <DependentUpon>F0501.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\TurnKey\F0501\F0501Extensions.cs" />
+    <Compile Include="Schema\TurnKey\F0601.cs">
+      <DependentUpon>F0601.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\TurnKey\F0701.cs">
+      <DependentUpon>F0701.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\TurnKey\G0401.cs">
+      <DependentUpon>G0401.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\TurnKey\G0401\G0401Extensions.cs" />
+    <Compile Include="Schema\TurnKey\G0501.cs">
+      <DependentUpon>G0501.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Schema\TurnKey\G0501\G0501Extensions.cs" />
+    <Compile Include="Schema\TurnKey\G0701.cs">
+      <DependentUpon>G0701.xsd</DependentUpon>
     </Compile>
     <Compile Include="Schema\TurnKey\ResponseType.cs" />
     <Compile Include="Schema\TXN\ServiceInfo.cs" />
@@ -527,6 +582,12 @@
     <None Include="Schema\TurnKey\A0601.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Schema\TurnKey\A1101.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\TurnKey\A1401.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Schema\TurnKey\B0101.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -543,6 +604,12 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Schema\TurnKey\B0501.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\TurnKey\B1101.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\TurnKey\B1401.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Schema\TurnKey\C0401.xsd">
@@ -572,6 +639,27 @@
     <None Include="Schema\TurnKey\E0501.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Schema\TurnKey\F0401.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\TurnKey\F0501.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\TurnKey\F0601.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\TurnKey\F0701.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\TurnKey\G0401.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\TurnKey\G0501.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\TurnKey\G0701.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Schema\TurnKey\GenericType_3.0.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -579,6 +667,12 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Schema\TurnKey\GenericType_3.2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\TurnKey\GenericType_4.0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schema\TurnKey\InvoiceEnvelope.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="SCMDataEntity\SCMEntity.dbml">
@@ -670,6 +764,10 @@
     <ProjectReference Include="..\Uxnet.Com\Uxnet.Com.csproj">
       <Project>{72edd90c-e7fe-44f4-8b9b-c9512f02d547}</Project>
       <Name>Uxnet.Com</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Uxnet.ToolAdapter\Uxnet.ToolAdapter.csproj">
+      <Project>{b3ae4afa-632c-493a-ac5a-9e6b7f9a2b30}</Project>
+      <Name>Uxnet.ToolAdapter</Name>
     </ProjectReference>
     <ProjectReference Include="..\Uxnet.Web\Uxnet.Web.csproj">
       <Project>{44839c05-8a69-4331-89eb-761509cd68eb}</Project>

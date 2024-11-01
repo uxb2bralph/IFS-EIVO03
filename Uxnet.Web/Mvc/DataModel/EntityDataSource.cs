@@ -8,7 +8,7 @@ using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using DataAccessLayer.basis;
 using Utility;
-using Uxnet.Com.DataAccessLayer.Models;
+using DataAccessLayer.Models;
 using Uxnet.Web.Controllers;
 using Uxnet.Web.WebUI;
 

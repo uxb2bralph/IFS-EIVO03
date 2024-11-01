@@ -10,6 +10,7 @@ using Model.Schema.EIVO;
 using InvoiceClient.Agent;
 using Utility;
 using Newtonsoft.Json;
+using InvoiceClient.Helper;
 
 namespace InvoiceClient.TransferManagement
 {
@@ -20,6 +21,7 @@ namespace InvoiceClient.TransferManagement
         private AllowanceWatcher _AllowanceWatcher;
         private AllowanceCancellationWatcher _AllowanceCancellationWatcher;
         private MIGInvoiceTransferManager.LocalSettings _Settings;
+        public ITabWorkItem WorkItem { get; set; }
 
         public MIGInvoiceTransferManager()
         {

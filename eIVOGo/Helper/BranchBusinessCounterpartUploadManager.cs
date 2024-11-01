@@ -273,6 +273,7 @@ namespace eIVOGo.Helper
                     EMail = column[2],
                     Address = column[3],
                     Password2 = ValueValidity.MakePassword(pid),
+                    Expiration = DateTime.Today.AddDays(Model.Properties.AppSettings.Default.UserPasswordValidDays),
                     UserProfileExtension = new UserProfileExtension
                     {
                         IDNo = column[1]

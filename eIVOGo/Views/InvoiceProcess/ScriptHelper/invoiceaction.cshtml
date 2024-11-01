@@ -31,25 +31,14 @@
                 return false;
             }
 
-            $('#theForm').ajaxForm({
-                url: "@(Url.Action(_viewModel.CommitAction,"InvoiceProcess"))",
-                beforeSubmit: function () {
-                    showLoading();
-                },
-                success: function (data) {
-                    hideLoading();
-                    if ($.isPlainObject(data)) {
-                        alert(data.message);
-                    } else {
-                        var $data = $(data);
-                        $('body').append($data);
-                        //$data.remove();
-                    }
-                },
-                error: function () {
-                    hideLoading();
-                }
-            }).submit();
+            var $formData = $('#queryArea').find('input,select,textarea').serializeObject();
+            $formData = { ...$formData, ...$('#queryResult').find('input,select,textarea').serializeObject() };
+
+            doPost("@(Url.Action(_viewModel.CommitAction,"InvoiceProcess"))", $formData, function (data) {
+                var $data = $(data);
+                $('body').append($data);
+            });
+
         };
     });
 </script>

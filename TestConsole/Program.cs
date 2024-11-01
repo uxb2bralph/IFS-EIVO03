@@ -22,7 +22,7 @@ using System.Net;
 using TestConsole.ServiceReference1;
 using ClosedXML.Excel;
 using System.Data;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
 using Model.InvoiceManagement;
 using Model.InvoiceManagement.InvoiceProcess;
 using Model.Schema.EIVO;
@@ -32,6 +32,19 @@ using ModelExtension.Helper;
 using Model.Locale;
 using Model.Models.ViewModel;
 using System.Collections.Specialized;
+using DocumentFormat.OpenXml.EMMA;
+using System.Reflection;
+using System.Linq.Dynamic.Core;
+using ProcessorUnit.Execution;
+using System.Windows.Forms;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Model.InvoiceManagement.ErrorHandle;
+using System.ComponentModel;
+using MimeKit;
+using MailKit.Net.Smtp;
+using System.Net.Security;
+using System.ServiceModel.MsmqIntegration;
+using System.Diagnostics;
 
 namespace TestConsole
 {
@@ -70,8 +83,6 @@ namespace TestConsole
             //Logger.Info("test...");
             //test06();
             //test07();
-
-            //test08(args);
 
             //Dictionary<int, String> d = new Dictionary<int, string>();
             //d.Add(0, "aaa");
@@ -133,11 +144,480 @@ namespace TestConsole
 
             //test33();
 
-            //Console.ReadKey();
 
             //test34();
-            Uxnet.Com.Helper.DefaultTools.Program.Main(args);
+            //test35(args);
+            //test36();
+            //test37();
+            //test38();
 
+            //string postData = "card_ban=97162640&card_no1=1234&card_no2=987654321&card_type=BG0001&token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiY3R5IjoiSldUIiwia2lkIjoiMDEifQ..wNSlKWvyuPo20rYz.9AH2ig6DWLTn1CEGDiSx72SNQVpsYKeNQ4SmI4xqcAcHuriic_2XokWfDBqJNi1uN1pO1iJk3WlANXVRG6W4MYFp_bKiuYRo1wITDo_xCy26WrkjSOQhtZfbltrzdFHPnKvMzBoiqu6njirr9uBPJFSlI7Qu8Er56NWnzWJNRtOUrkEcB4JQYdWZ2pfFvqKMDtmI_4iFWwNgCjHX3P1WWTxcnDKq5R_oX8xx_u9a3NhsKgEwOwCl3hyPawJmq9vWswbmCM5BSTYSVk5PHeWRKik9LTBd1KZuw3005RXlVRAYqJKrkvdOUMpmdmFFbfopZK4t4UjtfhXpvSXhAJbipgDL_EJSlbB09xrly3DCK5B2WMmUZ6TJ07ryOuhQ9ZhtxfFIzin6VeKu_YNT0D8nugegMVqWjXHJrw4BMBxchy5MCUZB_CMLyBGZvemCHDZrPOjckFEiORLt6D7TXJOOBQN5kCXE43zYxcv__bAqHtcOjR3q6Yy7i51caI2zmlgkS_G.oIjs4WBcUsTJkXmuw4_Z9g";
+
+            //using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes("XQcpGwtz5esvvdqTTsQ0bA==")))
+            //{
+            //    var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(postData));
+            //    var signature = Convert.ToBase64String(computeHash);
+            //    Console.WriteLine(signature);
+            //    //icBGpAidXkbKUaO2GjMtJA5jRyJlYnnOy9/M98mnd4o=
+            //    //icBGpAidXkbKUaO2GjMtJA5jRyJlYnnOy9/M98mnd4o=
+            //    //w264bIhLQbFQ7Pz3Mwz2g+Tz5wnZQPlDoNOHXXuj+xA=
+            //}
+
+            // Step 1: Get byte array
+            //string inputString = "card_ban=97162640&card_no1=1234&card_no2=987654321&card_type=BG0001&token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiY3R5IjoiSldUIiwia2lkIjoiMDEifQ..wNSlKWvyuPo20rYz.9AH2ig6DWLTn1CEGDiSx72SNQVpsYKeNQ4SmI4xqcAcHuriic_2XokWfDBqJNi1uN1pO1iJk3WlANXVRG6W4MYFp_bKiuYRo1wITDo_xCy26WrkjSOQhtZfbltrzdFHPnKvMzBoiqu6njirr9uBPJFSlI7Qu8Er56NWnzWJNRtOUrkEcB4JQYdWZ2pfFvqKMDtmI_4iFWwNgCjHX3P1WWTxcnDKq5R_oX8xx_u9a3NhsKgEwOwCl3hyPawJmq9vWswbmCM5BSTYSVk5PHeWRKik9LTBd1KZuw3005RXlVRAYqJKrkvdOUMpmdmFFbfopZK4t4UjtfhXpvSXhAJbipgDL_EJSlbB09xrly3DCK5B2WMmUZ6TJ07ryOuhQ9ZhtxfFIzin6VeKu_YNT0D8nugegMVqWjXHJrw4BMBxchy5MCUZB_CMLyBGZvemCHDZrPOjckFEiORLt6D7TXJOOBQN5kCXE43zYxcv__bAqHtcOjR3q6Yy7i51caI2zmlgkS_G.oIjs4WBcUsTJkXmuw4_Z9g";
+            //byte[] byteArray = Encoding.UTF8.GetBytes(inputString);
+
+            //// Step 2: Calculate signature using HMACSHA256 algorithm
+            //byte[] key = Convert.FromBase64String("XQcpGwtz5esvvdqTTsQ0bA==");
+            //byte[] result;
+
+            //using (HMACSHA256 hmac = new HMACSHA256(key))
+            //{
+            //    result = hmac.ComputeHash(byteArray);
+            //}
+
+            //// Step 3: Encode the result in base64
+            //string output = Convert.ToBase64String(result);
+
+            //Console.WriteLine(output);
+            //Task.Run(() => {
+            //    while (true)
+            //    {
+            //        Console.WriteLine(DateTime.Now);
+            //        Task.Run(() => 
+            //        {
+            //            MessageBox.Show("test...");
+            //        });
+            //        Thread.Sleep(1000);
+            //    }
+            //});
+            //MessageBox.Show("test...");
+            //using (ModelSource models = new ModelSource())
+            //{
+            //    DataLoadOptions options = new DataLoadOptions();
+            //    options.LoadWith<Organization>(o => o.OrganizationStatus);
+            //    options.LoadWith<Organization>(o => o.OrganizationCategory);
+            //    options.LoadWith<Organization>(o => o.OrganizationCustomSetting);
+            //    options.LoadWith<Organization>(o => o.OrganizationExtension);
+            //    options.LoadWith<Organization>(o => o.OrganizationSettings);
+            //    options.LoadWith<OrganizationCategory>(o => o.UserRole);
+            //    options.LoadWith<UserRole>(o => o.UserProfile);
+            //    options.LoadWith<UserProfile>(o => o.UserProfileExtension);
+            //    options.LoadWith<UserProfile>(o => o.UserProfileStatus);
+
+            //    models.DataContext.LoadOptions = options;
+
+            //    var items = models.GetTable<Organization>().Where(o => o.ReceiptNo == "29057255");
+            //    //foreach(var item in items)
+            //    //{
+            //    //    var s = item.OrganizationStatus;
+            //    //}
+            //    File.WriteAllText(@"G:\\temp\\data.json", items.JsonStringify());
+            //}
+
+            //if (args?.Length > 0 && File.Exists(args[0]))
+            //{
+            //    using (ModelSource models = new ModelSource())
+            //    {
+            //        var items = JsonConvert.DeserializeObject<Organization[]>(File.ReadAllText(args[0]));
+            //        models.GetTable<Organization>()
+            //            .InsertAllOnSubmit(items);
+            //        models.SubmitChanges();
+            //    }
+            //}
+
+            //using (ModelSource models = new ModelSource())
+            //{
+            //    DataLoadOptions options = new DataLoadOptions();
+            //    options.LoadWith<UserProfile>(o => o.UserProfileExtension);
+            //    options.LoadWith<UserProfile>(o => o.UserProfileStatus);
+
+            //    models.DataContext.LoadOptions = options;
+
+            //    var items = models.GetTable<UserProfile>().Where(o => o.PID == "43460094");
+            //    File.WriteAllText(@"G:\\temp\\data.json", items.JsonStringify());
+            //}
+
+            //if (args?.Length > 0 && File.Exists(args[0]))
+            //{
+            //    using (ModelSource models = new ModelSource())
+            //    {
+            //        var items = JsonConvert.DeserializeObject<UserProfile[]>(File.ReadAllText(args[0]));
+            //        models.GetTable<UserProfile>()
+            //            .InsertAllOnSubmit(items);
+            //        models.SubmitChanges();
+            //    }
+            //}
+
+            //test39(args);
+
+            //test40();
+
+            //test08(args);
+
+            //if (args?.Length > 1)
+            //{
+            //    System.Diagnostics.Debugger.Launch();
+            //    Console.WriteLine(UploadAllowanceV2(args));
+            //}
+
+            //dynamic _message = JsonConvert.DeserializeObject("{ 'aa' : 1}");
+            //int? val = (int?)_message.aa;
+            //val = (int?)_message.bb;
+
+            //if (args?.Length > 0)
+            //{
+            //    //System.Diagnostics.Debugger.Launch();
+            //    SendEmailFile(args);
+            //    //XmlDocument doc = new XmlDocument();
+            //    //doc.Load(args[0]);
+            //    //CancelAllowanceRoot root = doc.TrimAll().ConvertTo<CancelAllowanceRoot>();
+            //    //Console.WriteLine((new { CancelAllowanceRoot = root }).JsonStringify());
+            //}
+            //JobHelper.Tasks.CheckTurnkeyLog.Notify();
+            //ConsoleKeyInfo key;
+            //do
+            //{
+            //    key = Console.ReadKey();
+            //} while (key.Key != ConsoleKey.Q);
+            //Logger.Info("Process terminated..");
+
+            Application.Run(new MyApplicationContext());
+
+            //Console.ReadKey();
+        }
+
+        class MyApplicationContext : ApplicationContext
+        {
+            public MyApplicationContext() 
+            {
+                Console.WriteLine("Hello,World!!");
+            }
+        }
+
+        private static void SendEmailFile(string[] args)
+        {
+            if (args != null && args.Length > 0)
+            {
+                if (Directory.Exists(args[0]))
+                {
+                    var files = Directory.EnumerateFiles(args[0], "*.eml");
+                    if (files.Any())
+                    {
+                        using (var client = new SmtpClient())
+                        {
+                            var hostUrl = Uxnet.Web.Properties.Settings.Default.MailServer;
+                            var port = 25;
+                            var useSsl = false;
+
+                            client.ServerCertificateValidationCallback = (s, certificate, chain, sslPolicyErrors) => true;
+
+                            // 連接 Mail Server (郵件伺服器網址, 連接埠, 是否使用 SSL)
+                            client.Connect(hostUrl, port, useSsl);
+
+                            // 如果需要的話，驗證一下
+                            // client.Authenticate("account", "password");
+
+                            // 寄出郵件
+                            foreach (var f in files)
+                            {
+                                using (MimeMessage mimeMessage = MimeMessage.Load(f))
+                                {
+                                    try
+                                    {
+                                        client.Send(mimeMessage);
+                                    }
+                                    catch(Exception ex)
+                                    {
+                                        Console.WriteLine(ex.ToString());
+                                        continue;
+                                    }
+                                    //using (MailMessage message = new MailMessage())
+                                    //{
+                                    //    message.From = new MailAddress(mimeMessage.From.ToString());
+                                    //    message.To.Add(mimeMessage.To.ToString());
+                                    //    message.Subject = mimeMessage.Subject;
+                                    //    message.IsBodyHtml = true;
+                                    //    message.Body = mimeMessage.Body.ToString();
+
+                                    //    using (SmtpClient smtpclient = new SmtpClient(Uxnet.Web.Properties.Settings.Default.MailServer)
+                                    //    {
+                                    //        Credentials = CredentialCache.DefaultNetworkCredentials
+                                    //    })
+                                    //    {
+                                    //        smtpclient.Send(message);
+                                    //    }
+                                    //}
+
+                                }
+                                Console.WriteLine($"send => {f}");
+                                File.Delete(f);
+
+                            }
+
+                            // 中斷連線
+                            client.Disconnect(true);
+
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+        private static XmlDocument UploadAllowanceV2(string[] args)
+        {
+            XmlDocument uploadData = new XmlDocument();
+            uploadData.Load(args[1]);
+
+            Root result = new Root
+            {
+                UXB2B = "電子發票系統",
+                Result = new RootResult
+                {
+                    timeStamp = DateTime.Now,
+                    value = 0
+                }
+            };
+
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+
+            try
+            {
+                AllowanceRoot allowance = uploadData.TrimAll().ConvertTo<AllowanceRoot>();
+
+                using (GoogleInvoiceManagerV3 mgr = new GoogleInvoiceManagerV3 { InvoiceClientID = null, ChannelID = null, IgnoreDuplicateDataNumberException = true })
+                {
+                    ///憑證資料檢查
+                    ///
+                    var token = mgr.GetTable<Organization>()
+                        .Where(c => c.ReceiptNo == args[0])
+                        .FirstOrDefault()?.OrganizationToken;
+
+                    if (token != null)
+                    {
+                        List<AutomationItem> automation = new List<AutomationItem>();
+                        var items = mgr.SaveUploadAllowance(allowance, token);
+                        if (items.Count > 0)
+                        {
+                            result.Response = new RootResponse
+                            {
+                                InvoiceNo =
+                                items.Select(d => new RootResponseInvoiceNo
+                                {
+                                    Value = allowance.Allowance[d.Key].AllowanceNumber,
+                                    Description = d.Value.Message,
+                                    ItemIndexSpecified = true,
+                                    ItemIndex = d.Key,
+                                    StatusCode = (d.Value is InvoiceNotFoundException) ? "I01" : null,
+                                }).ToArray()
+                            };
+
+                            automation.AddRange(items.Select(d => new AutomationItem
+                            {
+                                Description = d.Value.Message,
+                                Status = 0,
+                                Allowance = new AutomationItemAllowance
+                                {
+                                    AllowanceNumber = allowance.Allowance[d.Key].AllowanceNumber,
+                                },
+                            }));
+
+                            ThreadPool.QueueUserWorkItem(ExceptionNotification.SendNotification,
+                                new ExceptionInfo
+                                {
+                                    Token = token,
+                                    ExceptionItems = items,
+                                    AllowanceData = allowance
+                                });
+                        }
+                        else
+                        {
+                            result.Result.value = 1;
+                        }
+
+                        if (mgr.EventItems_Allowance != null && mgr.EventItems_Allowance.Count() > 0)
+                        {
+                            //上傳後折讓
+                            automation.AddRange(mgr.EventItems_Allowance.Select(d => new AutomationItem
+                            {
+                                Description = "",
+                                Status = 1,
+                                Allowance = new AutomationItemAllowance
+                                {
+                                    AllowanceNumber = d.AllowanceNumber,
+                                    InvoiceNumber = d.InvoiceAllowanceDetails.Select(a => a.InvoiceAllowanceItem.InvoiceNo).ToArray()
+                                },
+                            }));
+                        }
+
+                        result.Automation = automation.ToArray();
+                    }
+                    else
+                    {
+                        result.Result.message = "營業人憑證資料驗證不符!!";
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                result.Result.message = ex.Message;
+            }
+            return result.ConvertToXml();
+        }
+
+        private static void test40()
+        {
+            string xmlString = @"<root>
+                                <element1>Some text with < and > characters</element1>
+                                <element2>Another text with & character</element2>
+                            </root>";
+
+            // Create a new XmlDocument instance
+            XmlDocument xmlDoc = new XmlDocument();
+
+            //// Load the XML string into the XmlDocument
+            //xmlDoc.LoadXml(xmlString);
+
+            //// Get the XML content as a string
+            //string xmlContent = xmlDoc.InnerXml;
+
+            //// Escape the reserved characters in the XML content
+            //string escapedXmlContent = System.Security.SecurityElement.Escape(xmlContent);
+
+            //// Print the escaped XML content
+            //Console.WriteLine(escapedXmlContent);
+
+            // Create XmlReaderSettings to configure the XmlReader
+            XmlReaderSettings settings = new XmlReaderSettings();
+
+            // Set the CheckCharacters property to true to enable checking for illegal characters
+            settings.CheckCharacters = true;
+
+            try
+            {
+                using (MemoryStream stream = new MemoryStream(Encoding.Unicode.GetBytes(xmlString)))
+                {
+                    // Create an XmlReader to read the XML file
+                    using (XmlReader reader = XmlReader.Create(stream, settings))
+                    {
+                        // Read the XML content using the XmlReader
+                        while (reader.Read())
+                        {
+                            // Check if the current node is an element
+                            if (reader.NodeType == XmlNodeType.Element)
+                            {
+                                // Do something with the element
+                                Console.WriteLine("Element: " + reader.Name);
+                            }
+                            // Check if the current node is text
+                            else if (reader.NodeType == XmlNodeType.Text)
+                            {
+                                // Do something with the text content
+                                Console.WriteLine("Text: " + reader.Value);
+                            }
+                            // Handle other node types as needed
+                        }
+                    }
+                }
+            }
+            catch (XmlException ex)
+            {
+                // Handle the XmlException
+                Console.WriteLine("Error parsing XML file: " + ex.Message);
+            }
+        }
+
+        private static void test39(string[] args)
+        {
+            if (args?.Length > 0 && File.Exists(args[0]))
+            {
+                ProcessResult(args[0]);
+            }
+        }
+
+        private static void ProcessResult(String resultFile)
+        {
+            using (ModelSource models = new ModelSource())
+            {
+                XmlDocument data = new XmlDocument();
+                data.Load(resultFile);
+                if (data.DocumentElement?.FirstChild != null)
+                {
+                    foreach (var item in data.DocumentElement.ChildNodes)
+                    {
+                        var msgType = (item as XmlElement)?["MessageType"]?.InnerText;
+                        var dataNo = (item as XmlElement)?["InvoiceNumber"]?.InnerText;
+                        var code = (item as XmlElement)?["ReturnCode"]?.InnerText;
+                        String no = dataNo;
+
+                        models.TurnkeyLogFeedback(msgType, code, no);
+                    }
+                }
+
+
+
+            }
+
+        }
+
+        private static void test38()
+        {
+            Console.WriteLine("Input TaskID:");
+            int taskID;
+            if (!int.TryParse(Console.ReadLine(), out taskID))
+            {
+                return;
+            }
+
+            var processor = new InvoiceExcelRequestForIssuerProcessor();
+            processor.ProcessRequestItem(taskID);
+
+        }
+
+        private static void test37()
+        {
+            using (ModelSource<EIVOEntityDataContext> models = new ModelSource<EIVOEntityDataContext>())
+            {
+                String expr = "ReceiptNo.StartsWith(@0)";
+                IQueryable items = models.GetTable<Organization>()
+                    .Where(expr, "7076");
+                String sqlCmd = items.ToString();
+                items = items.OrderBy("CompanyName desc");
+                sqlCmd = items.ToString();
+                items = items.OrderBy("ReceiptNo");
+                sqlCmd = items.ToString();
+                items = items.Skip(1000).Take(500);
+                sqlCmd = items.ToString();
+            }
+        }
+
+        private static void test36()
+        {
+            // 根據傳入的類別名稱動態載入類別
+            var type = typeof(Model.DataEntity.Organization);
+            if (type == null)
+            {
+                // 若類別不存在，回傳錯誤頁面
+                return;
+            }
+
+            foreach (var propertyInfo in type.GetProperties())
+            {
+                if (propertyInfo.PropertyType.GetInterface("System.Data.Linq.ITable") != null)
+                {
+                    Console.WriteLine($"{propertyInfo.Name}:{propertyInfo.PropertyType}");
+                }
+            }
+        }
+
+        private static void test35(string[] args)
+        {
+            Uxnet.Com.Helper.DefaultTools.Program.Main(args);
         }
 
         private static void test34()
@@ -164,9 +644,9 @@ namespace TestConsole
             var pdfData = GetContractPdf("https://ff.uxcds.com/ContractHome/Home/GetContract", data);
         }
 
-        public static byte[] GetContractPdf(String contractUrl,NameValueCollection values)
+        public static byte[] GetContractPdf(String contractUrl, NameValueCollection values)
         {
-            using(WebClient client = new WebClient()) 
+            using (WebClient client = new WebClient())
             {
                 return client.UploadValues(contractUrl, values);
             }
@@ -190,20 +670,20 @@ namespace TestConsole
 
             using (DataSet ds = new DataSet())
             {
-                for(int i=0;i<seller.Length;i++)
+                for (int i = 0; i < seller.Length; i++)
                 {
-                DataTable table = new DataTable();
+                    DataTable table = new DataTable();
                     table.TableName = $"{sellerName[i]}";
-                ds.Tables.Add(table);
-                table.Columns.Add("營業人名稱");
-                table.Columns.Add("統一編號");
-                table.Columns.Add("發票", typeof(int));
-                table.Columns.Add("作廢發票", typeof(int));
-                table.Columns.Add("折讓", typeof(int));
-                table.Columns.Add("作廢折讓", typeof(int));
-                table.Columns.Add("月份");
+                    ds.Tables.Add(table);
+                    table.Columns.Add("營業人名稱");
+                    table.Columns.Add("統一編號");
+                    table.Columns.Add("發票", typeof(int));
+                    table.Columns.Add("作廢發票", typeof(int));
+                    table.Columns.Add("折讓", typeof(int));
+                    table.Columns.Add("作廢折讓", typeof(int));
+                    table.Columns.Add("月份");
 
-                    for (DateTime idx = new DateTime(2022,1,1); idx < DateTime.Today;)
+                    for (DateTime idx = new DateTime(2022, 1, 1); idx < DateTime.Today;)
                     {
                         var end = idx.AddMonths(1);
                         var r = table.NewRow();
@@ -404,33 +884,33 @@ namespace TestConsole
                 var invoiceItems = models.GetTable<InvoiceItem>().OrderByDescending(i => i.InvoiceID)
                                 .Take(20);
 
-                var dataItems = invoiceItems.Select(i => i.CreateC0401(false)).ToArray();
+                var dataItems = invoiceItems.Select(i => i.CreateInvoiceMIG(false)).ToArray();
 
                 var jsonData = JsonConvert.SerializeObject(dataItems);
-                File.WriteAllText("G:\\temp\\C0401.json", jsonData);
+                File.WriteAllText("G:\\temp\\INV0401.json", jsonData);
 
                 var cancelItems = models.GetTable<InvoiceCancellation>()
                     .Select(c => c.InvoiceItem)
                     .OrderByDescending(i => i.InvoiceID)
                                 .Take(20);
 
-                jsonData = JsonConvert.SerializeObject(cancelItems.Select(i => i.CreateC0501(false)).ToArray());
-                File.WriteAllText("G:\\temp\\C0501.json", jsonData);
+                jsonData = JsonConvert.SerializeObject(cancelItems.Select(i => i.CreateInvoiceCancellationMIG(false)).ToArray());
+                File.WriteAllText("G:\\temp\\INV0501.json", jsonData);
 
                 var allowanceItems = models.GetTable<InvoiceAllowance>()
                     .OrderByDescending(i => i.AllowanceID)
                                 .Take(20);
 
-                jsonData = JsonConvert.SerializeObject(allowanceItems.Select(i => i.CreateD0401(models,false)).ToArray());
-                File.WriteAllText("G:\\temp\\D0401.json", jsonData);
+                jsonData = JsonConvert.SerializeObject(allowanceItems.Select(i => i.CreateAllowanceMIG(models, false)).ToArray());
+                File.WriteAllText("G:\\temp\\ALN0401.json", jsonData.Replace(".00000", ""));
 
                 var cancelAllowance = models.GetTable<InvoiceAllowanceCancellation>()
                     .Select(c => c.InvoiceAllowance)
                     .OrderByDescending(i => i.AllowanceID)
                                 .Take(20);
 
-                jsonData = JsonConvert.SerializeObject(cancelAllowance.Select(i => i.CreateD0501(false)).ToArray());
-                File.WriteAllText("G:\\temp\\D0501.json", jsonData);
+                jsonData = JsonConvert.SerializeObject(cancelAllowance.Select(i => i.CreateAllowanceCancellationMIG(false)).ToArray());
+                File.WriteAllText("G:\\temp\\ALN0501.json", jsonData);
             }
         }
 
@@ -444,7 +924,7 @@ namespace TestConsole
             public InvoiceDonation Donation => DataItem.InvoiceDonation;
             public ProductItem[] Products => DataItem.InvoiceDetails
                 .SelectMany(d => d.InvoiceProduct.InvoiceProductItem)
-                .Select(p => new ProductItem 
+                .Select(p => new ProductItem
                 {
                     Product = p,
                 })
@@ -619,9 +1099,9 @@ namespace TestConsole
             {
                 //models.SettleVacantInvoiceNo(year, period);
                 models.SettleUnassignedInvoiceNOPeriodically(year, period, sellerID);
-                if(sellerID.HasValue)
+                if (sellerID.HasValue)
                 {
-                    foreach(var item in models.GetTable<InvoiceIssuerAgent>().Where(r=>r.AgentID==sellerID))
+                    foreach (var item in models.GetTable<InvoiceIssuerAgent>().Where(r => r.AgentID == sellerID))
                     {
                         models.SettleUnassignedInvoiceNOPeriodically(year, period, item.IssuerID);
                     }
@@ -871,8 +1351,11 @@ namespace TestConsole
             {
                 using (ModelSource<InvoiceItem> mgr = new ModelSource<InvoiceItem>())
                 {
-                    var item = mgr.EntityList.Where(i => i.TrackCode == invoiceNo.Substring(0, 2)
-                        && i.No == invoiceNo.Substring(2)).FirstOrDefault();
+                    var item = mgr.EntityList
+                        .Where(i => i.TrackCode == invoiceNo.Substring(0, 2)
+                            && i.No == invoiceNo.Substring(2))
+                        .OrderByDescending(i => i.InvoiceID)
+                        .FirstOrDefault();
                     if (item != null)
                     {
                         doC0701(mgr, item, storedPath);
@@ -898,7 +1381,7 @@ namespace TestConsole
             void storedMIG(InvoiceItem item, String storedPath)
             {
                 String invoiceNo = item.TrackCode + item.No;
-                item.CreateC0401().ConvertToXml().Save(Path.Combine(storedPath, "C0401_" + invoiceNo + ".xml"));
+                item.CreateInvoiceMIG().ConvertToXml().Save(Path.Combine(storedPath, "INV0401_" + invoiceNo + ".xml"));
                 (new Model.Schema.TurnKey.C0701.VoidInvoice
                 {
                     VoidInvoiceNumber = invoiceNo,
@@ -998,7 +1481,7 @@ namespace TestConsole
             using (ModelSource<InvoiceItem> models = new ModelSource<InvoiceItem>())
             {
                 var item = models.GetTable<InvoiceItem>().OrderByDescending(i => i.InvoiceID).FirstOrDefault();
-                var a0401 = item.CreateA0401();
+                var a0401 = item.CreateB2BInvoiceMIG();
                 var data = JsonConvert.SerializeObject(a0401);
                 var a0101 = JsonConvert.DeserializeObject<Model.Schema.TurnKey.A0101.Invoice>(data);
             }

@@ -13,7 +13,6 @@
 @using Model.Helper
 @using eIVOGo.Controllers
 @{
-    UserProfileMember _profile = Context.GetUser();
     int? _idx = (TempData["ImportData"] as int?) ?? 0;
     TempData["ImportData"] = _idx + 1;
 }
@@ -23,7 +22,7 @@
             財政部大平台<br />發票字軌號碼
         </th>
         <td class="tdleft">
-            <input type="button" id="@($"btnImportData{_idx}")" value="立即傳送" />
+            <input type="button" id="@($"btnImportData{_idx}")" value="立即傳送(CSV)" class="mr-2" />
             <script>
                         $(function () {
 
@@ -64,6 +63,9 @@
                             });
                         });
             </script>
+            @{ 
+                Html.RenderPartial("~/Views/InvoiceNo/Module/UploadE0501.cshtml");
+            }
         </td>
     </tr>
 

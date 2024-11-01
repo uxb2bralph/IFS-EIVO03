@@ -1,0 +1,69 @@
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+@using System.Xml
+
+@using Newtonsoft.Json
+@using Business.Helper
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Model.Schema.EIVO
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    Layout = "~/Views/Template/ContentPage.cshtml";
+    ModelSource<InvoiceItem> models;
+    InvoiceItem _model;
+    QueryViewModel _viewModel = (QueryViewModel)ViewBag.ViewModel;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = this.Model as InvoiceItem;
+}
+
+@section headContent
+{
+
+}
+@section formContent
+{
+    @{
+        Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "發票內容檢視");
+    }
+    @if (_model == null)
+    {
+        <div>查無發票開立資料</div>
+    }
+    else
+    {
+        <div class="border_gray">
+            @{
+                Html.RenderPartial("~/Views/DataView/Module/Invoice.cshtml", _model);
+                <div>
+                    <button type="button" class="btn btnPrint" onclick="printInvoice();">
+                        列印發票
+                    </button>
+                </div>
+            }
+        <script>
+            window.printInvoice = function () {
+                var viewModel = {
+                    'keyID': '@Html.Raw(_model.InvoiceID.EncryptKey())'
+                };
+                doPost('@Url.Action("PrintSingleInvoice", "DataView")', viewModel, function (data) {
+                    $global.printHtml(data);
+                });
+            };
+        </script>
+        </div>
+    }
+
+}
+
+

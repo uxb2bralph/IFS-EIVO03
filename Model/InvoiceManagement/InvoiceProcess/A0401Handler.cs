@@ -45,7 +45,6 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     .OrderBy(d => d.DocID);
 
             var buffer = queryItems.Take(4096).ToList();
-            String backup = Path.Combine(Logger.LogDailyPath, "A0401").CheckStoredPath();
             while (buffer.Count > 0)
             {
                 foreach (var item in buffer)
@@ -55,17 +54,11 @@ namespace Model.InvoiceManagement.InvoiceProcess
                     try
                     {
                         var fileName = Path.Combine(Settings.Default.A0401Outbound, $"A0401-{invoiceItem.InvoiceID}-{invoiceItem.TrackCode}{invoiceItem.No}.xml");
-                        var xmlMIG = invoiceItem.CreateA0401().ConvertToXml();
-                        xmlMIG.Save(fileName);
-                        Thread.Sleep(10);
-                        if (!File.Exists(fileName))
-                        {
-                            continue;
-                        }
-                        xmlMIG.Save(Path.Combine(backup, Path.GetFileName(fileName)));
-
-                        item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done);
+                        var xmlMIG = invoiceItem.CreateB2BInvoiceMIG().ConvertToXml();
+                        item.CDS_Document.PushLogOnSubmit(models, (Naming.InvoiceStepDefinition)item.StepID, Naming.DataProcessStatus.Done, xmlMIG.OuterXml);
                         item.CDS_Document.CurrentStep = (int)Naming.InvoiceStepDefinition.已接收;
+                        xmlMIG.Save(fileName);
+
 
                         models.SubmitChanges();
 
@@ -88,6 +81,9 @@ namespace Model.InvoiceManagement.InvoiceProcess
 
                         models.ExecuteCommand("delete [proc].A0401DispatchQueue where DocID={0} and StepID={1}",
                             item.DocID, item.StepID);
+
+                        //models.ExecuteCommand("update [proc].A0401DispatchQueue set StepID = 1323 where DocID={0} and StepID={1}",
+                        //    item.DocID, item.StepID);
 
                     }
                     catch (Exception ex)

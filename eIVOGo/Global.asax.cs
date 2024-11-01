@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
@@ -44,6 +45,11 @@ namespace eIVOGo
 
         protected virtual void Application_Start(object sender, EventArgs e)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                | SecurityProtocolType.Tls11
+                | SecurityProtocolType.Tls
+                | SecurityProtocolType.Ssl3;
+
             // Code that runs on application startup
             AreaRegistration.RegisterAllAreas();
             //GlobalConfiguration.Configure(WebApiConfig.Register);

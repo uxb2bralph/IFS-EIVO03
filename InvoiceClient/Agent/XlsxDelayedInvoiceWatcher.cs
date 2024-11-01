@@ -36,7 +36,7 @@ namespace InvoiceClient.Agent
         {
             if ((DateTime.Today.Month % 2) == 1 && DateTime.Today.Day < 11)
             {
-                return UploadTo(requestFile, $"{ServerInspector.ServiceInfo.TaskCenterUrl}/InvoiceData/UploadInvoiceRequestXlsx?keyID={HttpUtility.UrlEncode(ServerInspector.ServiceInfo.AgentToken)}&sender={ServerInspector.ServiceInfo.AgentUID}&processType={(int?)ServerInspector.ServiceInfo.DefaultProcessType}&ConditionID={(int)ProcessRequestCondition.ConditionType.UseLastPeriodTrackCodeNo}");
+                return UploadTo(requestFile, $"{ServerInspector.ServiceInfo.TaskCenterUrl}/InvoiceData/UploadInvoiceRequestXlsx?keyID={HttpUtility.UrlEncode(ServerInspector.ServiceInfo.AgentToken)}&sender={ServerInspector.ServiceInfo.AgentUID}&processType={(int?)XlsxInvoiceTransferManager.Default?.Settings.DefaultProcessType ?? (int?)ServerInspector.ServiceInfo.DefaultProcessType}&ConditionID={(int)ProcessRequestCondition.ConditionType.UseLastPeriodTrackCodeNo}");
             }
             else
             {

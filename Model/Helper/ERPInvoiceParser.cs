@@ -14,11 +14,11 @@ namespace Model.Helper
     {
 
         String[] _seller = null;
-        XElement _root,_invoice = null;
+        XElement _root, _invoice = null;
 
         public XElement ParseData(String fileName, Encoding encoding)
         {
-             _seller = null;
+            _seller = null;
             _root = _invoice = null;
 
             using (StreamReader sr = new StreamReader(fileName, encoding))
@@ -33,7 +33,7 @@ namespace Model.Helper
                             continue;
                         }
 
-                        switch(column[0].ToUpper())
+                        switch (column[0].ToUpper())
                         {
                             case "H":
                                 _seller = column;
@@ -69,14 +69,21 @@ namespace Model.Helper
                 _root = new XElement("InvoiceRoot");
             }
 
+            DateTime invoiceDate = DateTime.MaxValue;
+            DateTime.TryParse(column[2], out invoiceDate);
+
             _invoice = new XElement("Invoice",
                     new XElement("InvoiceNumber", column[1]),
-                    new XElement("InvoiceDate", column[2]),
+                    new XElement("InvoiceDate", $"{invoiceDate:yyyy/MM/dd}"),
+                    new XElement("InvoiceTime", $"{invoiceDate:HH:mm:ss}"),
                     new XElement("InvoiceType", column[3]),
                     new XElement("SellerId", _seller[1]),
                     new XElement("BuyerId", column[4]),
                     new XElement("BuyerName", column[5]),
                     new XElement("Address", column[6]),
+                    new XElement("DonateMark", "0"),
+                    new XElement("PrintMark", "Y"),
+                    new XElement("TaxType", column[7]),
                     new XElement("TaxType", column[7]),
                     new XElement("TaxRate", column[8]),
                     new XElement("SalesAmount", column[9]),
@@ -106,7 +113,7 @@ namespace Model.Helper
             _invoice.Add(item);
         }
 
-        public static XElement ConvertToXml(String csvFile,Encoding encoding = null)
+        public static XElement ConvertToXml(String csvFile, Encoding encoding = null)
         {
             return (new ERPInvoiceParser()).ParseData(csvFile, encoding ?? Encoding.UTF8);
         }

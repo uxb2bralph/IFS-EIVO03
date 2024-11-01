@@ -1,0 +1,45 @@
+﻿
+@using System.IO
+@using System.Linq.Expressions
+
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Controllers
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+
+    ModelStateDictionary _modelState;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    ModelSource<InvoiceItem> models;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+}
+@{
+    QueryViewModel _viewModel = ViewBag.ViewModel as QueryViewModel;
+    _viewModel.DataColumns.Add(new QueryResultDataColumnHelper
+    {
+        ShowHeader = ShowHeader,
+        ShowBody = ShowBody,
+        ShowFooter = ShowFooter
+    });
+}
+
+@helper ShowHeader(dynamic item)
+{
+    <th><a href="javascript:void(0);" onclick="$inquiryAgent.sort('TotalAmount',this);">含稅金額</a></th>
+}
+@helper ShowBody(dynamic po)
+{
+    InvoiceItem item = (InvoiceItem)po;
+    <td align="right">@(String.Format("{0:##,###,###,##0.##}",item.InvoiceAmountType.TotalAmount))</td>
+}
+@helper ShowFooter(dynamic item)
+{}
+
+
+

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.WebPages;
 using Model.DataEntity;
 using Model.Helper;
 using Model.Locale;
@@ -33,6 +35,7 @@ namespace Model.Models.ViewModel
         public String PrintMark { get; set; }
         public int? InvoiceID { get; set; }
         public String InvoiceNo { get; set; }
+        public String EndNo { get; set; }
         public String AgencyCode { get; set; }
         public String CustomerID { get; set; }
         public Naming.InvoiceProcessType? ProcessType { get; set; }
@@ -52,7 +55,7 @@ namespace Model.Models.ViewModel
         }
 
         [JsonIgnore]
-        public DateTime? InvoiceDateTo 
+        public DateTime? InvoiceDateTo
         {
             get => DateTo;
             set => DateTo = value;
@@ -71,7 +74,7 @@ namespace Model.Models.ViewModel
         [JsonIgnore]
         public String AllowanceNo
         {
-            get => DataNo; 
+            get => DataNo;
             set => DataNo = value;
         }
 
@@ -83,6 +86,8 @@ namespace Model.Models.ViewModel
         public bool? Printed { get; set; }
         [JsonIgnore]
         public bool? HasAddr { get; set; }
+        [JsonIgnore]
+        public bool? MIG { get; set; }
 
     }
 
@@ -91,9 +96,9 @@ namespace Model.Models.ViewModel
         Invoice = 1,        //發票
         VoidInvoice = 2,    //作廢發票
         Allowance = 3,      //折讓單
-		VoidAllowance = 4,  //作廢折讓單
-		InovoiceNoAllocation = 5,  //發票配號狀態
-		CountInvoice = 11,        //發票資料筆數
+        VoidAllowance = 4,  //作廢折讓單
+        InovoiceNoAllocation = 5,  //發票配號狀態
+        CountInvoice = 11,        //發票資料筆數
         CountVoidInvoice = 12,    //作廢發票資料筆數
         CountAllowance = 13,      //折讓單資料筆數
         CountVoidAllowance = 14,  //作廢折讓單資料筆數
@@ -129,9 +134,9 @@ namespace Model.Models.ViewModel
             set => CompanyID = value;
         }
         public int? RelativeID { get; set; }
-        public Naming.InvoiceCenterBusinessType? BusinessID 
-        { 
-            get => (Naming.InvoiceCenterBusinessType ?)BusinessType; 
+        public Naming.InvoiceCenterBusinessType? BusinessID
+        {
+            get => (Naming.InvoiceCenterBusinessType?)BusinessType;
             set => BusinessType = (int?)value;
         }
         public String MasterNo { get; set; }
@@ -154,10 +159,17 @@ namespace Model.Models.ViewModel
 
     public partial class UserProfileViewModel : UserRoleViewModel
     {
-        public String PID { get; set; }
+        //[Required(ErrorMessage = "Please enter {0}")]
+        //[Display(Name = "PID")]
+        //[EmailAddress]
+        public string PID { get; set; }
         public String UserName { get; set; }
+
+        //[Required(ErrorMessage = "Please enter {0}")]
+        //[DataType(DataType.Password)]
+        //[Display(Name = "Password")]
         public String Password { get; set; }
-        public String Password1 {get;set;}
+        public String Password1 { get; set; }
         public String EMail { get; set; }
         public String Address { get; set; }
         public String Phone { get; set; }
@@ -190,7 +202,7 @@ namespace Model.Models.ViewModel
     public partial class AuthQueryViewModel : QueryViewModel
     {
         public int? AgentID { get; set; }
-        public String AccessToken 
+        public String AccessToken
         {
             get => KeyID;
             set => KeyID = value;
@@ -248,13 +260,18 @@ namespace Model.Models.ViewModel
         public String WinningNo { get; set; }
     }
 
+    public enum FilterType
+    {
+        Exclude = 0,
+        Include = 1,
+    }
     public partial class MailTrackingViewModel : InquireInvoiceViewModel
     {
         public String StartNo { get; set; }
-        public String EndNo { get; set; }
         public int? DeliveryStatus { get; set; }
+        public int? UserType { get; set; }  //Amy-1121115
         public Naming.ChannelIDType? ChannelID { get; set; }
-
+        public FilterType? DateFilter { get; set; }
     }
 
     public class QueryViewModel
@@ -342,7 +359,15 @@ namespace Model.Models.ViewModel
         public String EmptyKeyID { get; set; }
         public int[] ChkItem { get; set; }
         public bool? ForceTodo { get; set; }
+        [JsonIgnore]
+        public List<QueryResultDataColumnHelper> DataColumns { get; set; }
+    }
 
+    public class QueryResultDataColumnHelper
+    {
+        public Func<object, HelperResult> ShowHeader { get; set; }
+        public Func<object, HelperResult> ShowBody { get; set; }
+        public Func<object, HelperResult> ShowFooter { get; set; }
     }
 
     public class BusinessRelationshipQueryViewModel : BusinessRelationshipViewModel
@@ -389,6 +414,9 @@ namespace Model.Models.ViewModel
 
         [JsonIgnore]
         public bool? ForMailingPackage { get; set; }
+        public decimal? Zoom { get; set; }
+        public bool? IsPDF { get; set; }
+        public String HeaderView { get; set; }
     }
 
     public class ProcessRequestViewModel : AuthQueryViewModel
@@ -397,7 +425,7 @@ namespace Model.Models.ViewModel
         public int? TaskID { get; set; }
         public InvoiceProcessType? ProcessType { get; set; }
         public String Comment { get; set; }
-        public ProcessModelDefinition? ProcessModel { get; set;}
+        public ProcessModelDefinition? ProcessModel { get; set; }
         public enum ProcessModelDefinition
         {
             ByTask = 1,
@@ -506,7 +534,15 @@ namespace Model.Models.ViewModel
         public bool? BranchRelation { get; set; }
     }
 
-    public partial class DataTableQueryViewModel : QueryViewModel 
+    public class MailMessageViewModel : QueryViewModel
+    {
+        public int? CompanyID { get; set; }
+        public String MailTo { get; set; }
+        public String Subject { get; set; }
+        public String MailMessage { get; set; }
+    }
+
+    public partial class DataTableQueryViewModel : QueryViewModel
     {
         public String TableName { get; set; }
         public DataTableColumn[] KeyItem { get; set; }

@@ -15,6 +15,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Xml;
+using System.Threading.Tasks;
 
 using Business.Helper;
 using ClosedXML.Excel;
@@ -34,12 +35,15 @@ using Uxnet.Com.Security.UseCrypto;
 using Model.Schema.EIVO;
 using Newtonsoft.Json;
 using Uxnet.Com.Helper;
-using System.Threading.Tasks;
 using Business.Helper.ProcessRequestProcessor;
+using Model.InvoiceManagement.Validator;
+using Newtonsoft.Json.Linq;
+using CsvHelper.Configuration;
+using System.Web.Routing;
 
 namespace eIVOGo.Controllers
 {
-    
+
     public class DataViewController : SampleController<InvoiceItem>
     {
         // GET: DataView
@@ -93,7 +97,7 @@ namespace eIVOGo.Controllers
             }
         }
 
-        protected String getAllowanceViewPath(InvoiceAllowance item,out String[] useThermalPOSArgs)
+        protected String getAllowanceViewPath(InvoiceAllowance item, out String[] useThermalPOSArgs)
         {
             useThermalPOSArgs = null;
             if (item.CDS_Document.ProcessType == (int)Naming.InvoiceProcessType.B0401)
@@ -107,9 +111,9 @@ namespace eIVOGo.Controllers
             }
         }
 
-        public ActionResult PrintSingleInvoiceAsPDF(RenderStyleViewModel viewModel)
+        public ActionResult PrintSingleInvoiceAsPDF(RenderStyleViewModel viewModel, InquireInvoiceViewModel queryModel)
         {
-            ViewResult result = (ViewResult)ShowInvoice(viewModel);
+            ViewResult result = (ViewResult)ShowInvoice(viewModel, queryModel);
             InvoiceItem item = result.Model as InvoiceItem;
             if (item == null)
             {
@@ -131,8 +135,58 @@ namespace eIVOGo.Controllers
                 }
                 else
                 {
-                    return File(pdfFile, "application/pdf",$"{DateTime.Today:yyyy-MM-dd}.pdf");
+                    return File(pdfFile, "application/pdf", $"{DateTime.Today:yyyy-MM-dd}.pdf");
                 }
+            }
+            return new EmptyResult { };
+        }
+
+        private RouteValueDictionary Merge(object objA, object objB)
+        {
+            var routeValues = new RouteValueDictionary();
+
+            // Add properties of ClassA to routeValues
+            foreach (var prop in objA.GetType().GetProperties())
+            {
+                var v = prop.GetValue(objA);
+                if (v != null)
+                {
+                    routeValues.Add(prop.Name, v);
+                }
+            }
+
+            // Add properties of ClassB to routeValues
+            foreach (var prop in objB.GetType().GetProperties())
+            {
+                var v = prop.GetValue(objB);
+                if (v != null)
+                {
+                    if(routeValues.ContainsKey(prop.Name))
+                    {
+                        routeValues[prop.Name] = v;
+                    }
+                    else
+                    {
+                        routeValues.Add(prop.Name, v);
+                    }
+                }
+            }
+
+            return routeValues;
+        }
+
+        public ActionResult PrintInvoiceAsPDF(RenderStyleViewModel viewModel, InquireInvoiceViewModel queryModel)
+        {
+            String workUrl = $"{Uxnet.Web.Properties.Settings.Default.HostUrl}{Url.Action("ShowInvoice", "DataView", Merge(viewModel, queryModel))}";
+            String pdfFile = Path.Combine(Logger.LogDailyPath, $"{Guid.NewGuid()}.pdf");
+
+            workUrl.ConvertHtmlToPDF(pdfFile, 1);
+
+            if (pdfFile.AssertFile())
+            {
+                var content = System.IO.File.ReadAllBytes(pdfFile);
+                System.IO.File.Delete(pdfFile);
+                return File(content, "application/pdf", $"{DateTime.Today:yyyy-MM-dd}.pdf");
             }
 
             return new EmptyResult { };
@@ -179,7 +233,7 @@ namespace eIVOGo.Controllers
 
         }
 
-        protected String GetInvoicePDF(InvoiceItem item,RenderStyleViewModel viewModel)
+        protected String GetInvoicePDF(InvoiceItem item, RenderStyleViewModel viewModel)
         {
             String outputFile = Path.Combine(Logger.LogPath.GetDateStylePath(item.InvoiceDate.Value), String.Format("{0}{1}.pdf", item.TrackCode, item.No));
             if (viewModel.CreateNew != true && System.IO.File.Exists(outputFile))
@@ -210,7 +264,7 @@ namespace eIVOGo.Controllers
 
             var profile = HttpContext.GetUser();
 
-            if(viewModel.ProcessModel == ProcessRequestViewModel.ProcessModelDefinition.ByTask)
+            if (viewModel.ProcessModel == ProcessRequestViewModel.ProcessModelDefinition.ByTask)
             {
                 viewModel.Message = "發票列印下載";
 
@@ -228,7 +282,7 @@ namespace eIVOGo.Controllers
                 viewModel.TaskID = processItem.TaskID;
                 viewModel.Push($"{DateTime.Now.Ticks}.json");
 
-                Task.Run(() => 
+                Task.Run(() =>
                 {
                     processItem.TaskID.ZipInvoicePDF();
                 });
@@ -255,7 +309,7 @@ namespace eIVOGo.Controllers
                 {
                     using (ZipArchive zip = new ZipArchive(zipOut, ZipArchiveMode.Create))
                     {
-                        foreach (var doc in items)
+                        foreach (var doc in items.ToArray())
                         {
                             InvoiceItem item = doc.CDS_Document.InvoiceItem;
                             var pdfFile = GetInvoicePDF(item, viewModel);
@@ -356,7 +410,7 @@ namespace eIVOGo.Controllers
 
         }
 
-        public ActionResult ShowInvoicePageView(DocumentQueryViewModel viewModel)
+        public ActionResult ShowInvoicePageView(DocumentQueryViewModel viewModel, InquireInvoiceViewModel queryModel)
         {
             ViewBag.ViewModel = viewModel;
 
@@ -366,6 +420,30 @@ namespace eIVOGo.Controllers
             }
 
             var item = models.GetTable<InvoiceItem>().Where(a => a.InvoiceID == viewModel.DocID).FirstOrDefault();
+            if(item == null)
+            {
+                if(queryModel != null)
+                {
+                    if(queryModel.InvoiceDate.HasValue)
+                    {
+                        var seller = models.GetTable<Organization>().Where(s => s.ReceiptNo == queryModel.ReceiptNo).FirstOrDefault();
+                        if(seller!=null)
+                        {
+                            queryModel.InvoiceNo = queryModel.InvoiceNo.GetEfficientString();
+                            var match = queryModel.InvoiceNo.ParseInvoiceNo();
+                            if (match.Success)
+                            {
+                                item = models.GetTable<InvoiceItem>()
+                                    .Where(i => i.TrackCode == match.Groups[1].Value && i.No == match.Groups[2].Value)
+                                    .Where(i => i.InvoiceDate >= queryModel.InvoiceDate && i.InvoiceDate < queryModel.InvoiceDate.Value.AddDays(1))
+                                    .Where(i => i.SellerID == seller.CompanyID)
+                                    .FirstOrDefault();
+                            }
+                        }
+
+                    }
+                }
+            }
             if (item == null)
             {
                 return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
@@ -374,9 +452,9 @@ namespace eIVOGo.Controllers
             return View("~/Views/DataView/ShowInvoicePageView.cshtml", item);
         }
 
-        public ActionResult ShowInvoice(RenderStyleViewModel viewModel)
+        public ActionResult ShowInvoice(RenderStyleViewModel viewModel, InquireInvoiceViewModel queryModel)
         {
-            ViewResult result = (ViewResult)ShowInvoicePageView(viewModel);
+            ViewResult result = (ViewResult)ShowInvoicePageView(viewModel, queryModel);
 
             InvoiceItem item = result.Model as InvoiceItem;
             if (item == null)
@@ -385,15 +463,26 @@ namespace eIVOGo.Controllers
             return View(getInvoiceViewPath(item, out useThermalPOSArgs, viewModel.PaperStyle), item);
         }
 
-        public ActionResult ShowInvoiceContent(DocumentQueryViewModel viewModel)
+        public ActionResult ShowInvoiceContent(DocumentQueryViewModel viewModel, InquireInvoiceViewModel queryModel)
         {
-            ViewResult result = (ViewResult)ShowInvoicePageView(viewModel);
+            ViewResult result = (ViewResult)ShowInvoicePageView(viewModel, queryModel);
 
             InvoiceItem item = result.Model as InvoiceItem;
             if (item == null)
                 return result;
 
             return View("~/Views/DataView/Module/InvoiceContent.cshtml", item);
+        }
+
+        public ActionResult PrintSingleInvoice(RenderStyleViewModel viewModel, InquireInvoiceViewModel queryModel)
+        {
+            ViewResult result = (ViewResult)ShowInvoicePageView(viewModel, queryModel);
+
+            InvoiceItem item = result.Model as InvoiceItem;
+            if (item == null)
+                return result;
+
+            return View("~/Views/DataView/PrintSingleInvoice.cshtml", item);
         }
 
         [Authorize]
@@ -404,7 +493,7 @@ namespace eIVOGo.Controllers
             var items = models.GetTable<DocumentPrintQueue>()
                 .Where(i => i.UID == profile.UID)
                 .Join(models.GetTable<CDS_Document>()
-                        .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice), 
+                        .Where(d => d.DocType == (int)Naming.DocumentTypeDefinition.E_Invoice),
                     i => i.DocID, d => d.DocID, (i, d) => i);
 
             return View("~/Views/DataView/PrintA0401.cshtml", items);
@@ -557,21 +646,21 @@ namespace eIVOGo.Controllers
                 try
                 {
                     qrContent = item.GetQRCodeContent();
-                    using (Bitmap qrcode = qrContent.CreateQRCode(width: 180, height: 180,qrVersion: 10))
+                    using (Bitmap qrcode = qrContent.CreateQRCode(width: 180, height: 180, qrVersion: 10))
                     {
                         Response.Clear();
                         Response.ContentType = "image/jpeg";
                         qrcode.Save(Response.OutputStream, ImageFormat.Jpeg);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     retry = true;
                     Logger.Error(ex);
                     Logger.Warn($"產生發票QR Code失敗 => {item.InvoiceID},\r\n{qrContent}\r\n{ex}");
                 }
 
-                if(retry)
+                if (retry)
                 {
                     try
                     {
@@ -667,23 +756,50 @@ namespace eIVOGo.Controllers
                 SubmitDate = DateTime.Now,
                 ProcessStart = DateTime.Now,
                 ResponsePath = System.IO.Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".zip"),
+                ViewModel = viewModel.JsonStringify(),
             };
             models.GetTable<ProcessRequest>().InsertOnSubmit(processItem);
             models.SubmitChanges();
 
-            String outFile = processItem.ResponsePath;
+            viewModel.TaskID = processItem.TaskID;
+            viewModel.Push($"{DateTime.Now.Ticks}.json");
+
             if (viewModel.ForMailingPackage == true)
             {
-                ProcessInvoiceMailingPackage(viewModel, items, outFile);
+                Task.Run(() =>
+                {
+                    processItem.TaskID.ProcessInvoiceMailingPackage(items);
+                });
             }
             else
             {
-                ProcessInvoicePdfPackage(viewModel, items, outFile);
+                Task.Run(() =>
+                {
+                    processItem.TaskID.ProcessInvoicePdfPackage(items);
+                });
             }
 
-            var result = new FilePathResult(outFile, "application/octet-stream");
-            result.FileDownloadName = "發票列印下載.zip";
-            return result;
+            return View("~/Views/Shared/Module/PromptCheckDownload.cshtml",
+                    new AttachmentViewModel
+                    {
+                        TaskID = processItem.TaskID,
+                        FileName = processItem.ResponsePath,
+                        FileDownloadName = "發票列印下載.zip",
+                    });
+
+            //String outFile = processItem.ResponsePath;
+            //if (viewModel.ForMailingPackage == true)
+            //{
+            //    ProcessInvoiceMailingPackage(viewModel, items, outFile);
+            //}
+            //else
+            //{
+            //    ProcessInvoicePdfPackage(viewModel, items, outFile);
+            //}
+
+            //var result = new FilePathResult(outFile, "application/octet-stream");
+            //result.FileDownloadName = "發票列印下載.zip";
+            //return result;
         }
 
         private void ProcessInvoicePdfPackage(RenderStyleViewModel viewModel, MailTrackingCsvViewModel[] items, string outFile)

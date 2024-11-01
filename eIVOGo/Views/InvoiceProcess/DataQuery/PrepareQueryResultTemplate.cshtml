@@ -1,0 +1,23 @@
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    ModelSource<InvoiceItem> models;
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+
+    QueryViewModel _viewModel = ViewBag.ViewModel as QueryViewModel;
+    _viewModel.DataColumns = new List<QueryResultDataColumnHelper>();
+}
+@RenderSection("DataColumns")

@@ -5,6 +5,8 @@
 @using eIVOGo.Helper
 @using eIVOGo.Models
 @using eIVOGo.Controllers
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
 @using Model.DataEntity
 @using Model.Helper
 @using Model.Locale
@@ -16,19 +18,9 @@
     ModelSource<InvoiceItem> models;
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
 
-    //if (ViewBag.HasQuery)
-    //{
-    //    ModelSource<InvoiceItem> models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    InquireInvoiceViewModel _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+    _viewModel.UrlAction = Url.Action("Inquire2023", "InvoiceProcess");
 
-    //    if (((ASP.module_inquiry_inquiryitem_inquireinvoiceconsumption_ascx)inquireConsumption).QueryForB2C)
-    //    {
-    //        models.Items = models.Items.Where(i => i.DonateMark == "0"
-    //            && (i.PrintMark == "Y" || (i.PrintMark == "N" && i.InvoiceWinningNumber != null))
-    //            && !i.CDS_Document.DocumentPrintLog.Any(l => l.TypeID == (int)Naming.DocumentTypeDefinition.E_Invoice));
-    //    }
-
-    //    result.Visible = true;
-    //}
 }
 <!--交易畫面標題-->
 @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "MIG格式下載");}
@@ -39,6 +31,7 @@
         <tr>
             <th colspan="2" class="Head_style_a">
                 查詢條件
+                <input type="hidden" name="ResultAction" value="@(_viewModel.ResultAction ?? "CreateMIG")" />
             </th>
         </tr>
         @{ ((CommonInquiry<InvoiceItem>)this.Model).Render(Html);}
@@ -46,14 +39,6 @@
         @{ Html.RenderPartial("~/Views/InquireInvoice/ByWinningNumber.cshtml");
             Html.RenderPartial("~/Views/InquireInvoice/ByCancellation.cshtml");}
 
-        <tr>
-            <th>
-                每頁資料筆數
-            </th>
-            <td class="tdleft">
-                <input name="pageSize" type="text" value="@(Request["pageSize"] ?? Uxnet.Web.Properties.Settings.Default.PageSize.ToString())" />
-            </td>
-        </tr>
     </table>
     <!--表格 結束-->
 </div>
@@ -64,7 +49,7 @@
     <tbody>
         <tr>
             <td class="Bargain_btn">
-                <button type="button" onclick="uiInvoiceQuery.initQuery = true;uiInvoiceQuery.inquire();">查詢</button>
+                <button type="button" onclick="$inquiryAgent.initQuery = true; $inquiryAgent.inquire();">查詢</button>
             </td>
         </tr>
     </tbody>

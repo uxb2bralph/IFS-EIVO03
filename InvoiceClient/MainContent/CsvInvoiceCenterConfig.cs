@@ -73,6 +73,9 @@ namespace InvoiceClient.MainContent
         {
             get { return "CSV電子發票"; }
         }
+        public void ReportStatus()
+        {
 
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using DataAccessLayer.basis;
 using Model.Locale;
@@ -11,14 +12,14 @@ namespace Model.DataEntity
 {
     public static partial class ExtensionMethods
     {
-        public static InvoiceUserCarrierType GetDefaultUserCarrierType<TEntity>(this  GenericManager<EIVOEntityDataContext, TEntity> mgr, String typeName)
-            where TEntity : class,new()
+        public static InvoiceUserCarrierType GetDefaultUserCarrierType<TEntity>(this GenericManager<EIVOEntityDataContext, TEntity> mgr, String typeName)
+            where TEntity : class, new()
         {
             return mgr.GetTable<InvoiceUserCarrierType>().Where(t => t.CarrierType == typeName).FirstOrDefault();
         }
 
-        public static int? GetMemberCodeID<TEntity>(this  GenericManager<EIVOEntityDataContext, TEntity> mgr, String hashID)
-            where TEntity : class,new()
+        public static int? GetMemberCodeID<TEntity>(this GenericManager<EIVOEntityDataContext, TEntity> mgr, String hashID)
+            where TEntity : class, new()
         {
             var item = mgr.GetTable<MemberCode>().Where(m => m.HashID == hashID).FirstOrDefault();
             return item != null ? item.CodeID : (int?)null;
@@ -31,7 +32,7 @@ namespace Model.DataEntity
 
         public static string WinningTypeTransform(this String typeValue)
         {
-            switch(typeValue)
+            switch (typeValue)
             {
                 case "0":
                     return "特獎";
@@ -105,6 +106,11 @@ namespace Model.DataEntity
             return false;
         }
 
+        public static bool IsCrossBorderMerchant(this GenericManager<EIVOEntityDataContext> models, int? companyID)
+        {
+            return models.GetTable<OrganizationCategory>().Any(c => c.CompanyID == companyID && c.CategoryID == (int)Naming.CategoryID.COMP_CROSS_BORDER_MURCHANT);
+        }
+
         public static bool MoveToNextStep(this DocumentAccessaryFlow item, GenericManager<EIVOEntityDataContext> mgr)
         {
 
@@ -141,7 +147,7 @@ namespace Model.DataEntity
             return item.MoveToBranchStep(mgr, 0);
         }
 
-        public static bool MoveToSecondBranchStep(this CDS_Document item, GenericManager<EIVOEntityDataContext> mgr,bool isConcurrentFlow)
+        public static bool MoveToSecondBranchStep(this CDS_Document item, GenericManager<EIVOEntityDataContext> mgr, bool isConcurrentFlow)
         {
             var flowStep = item.DocumentFlowStep;
             if (flowStep != null)
@@ -289,7 +295,7 @@ namespace Model.DataEntity
 
         public static bool IsEnterpriseGroupMember(this Organization org)
         {
-            return org.EnterpriseGroupMember.Count > 0;
+            return org.EnterpriseGroupMember.Any();
         }
 
         public static Organization GetOrganizationByThumbprint(this GenericManager<EIVOEntityDataContext> mgr, String thumbprint)
@@ -306,7 +312,7 @@ namespace Model.DataEntity
         {
             var items = mgr.GetTable<OrganizationCategory>()
                     .Where(c => c.CompanyID == companyID);
-            if(category.HasValue)
+            if (category.HasValue)
             {
                 items = items.Where(c => c.CategoryID == (int)category);
 
@@ -316,7 +322,7 @@ namespace Model.DataEntity
                 .Select(r => r.UserProfile);
         }
 
-        public static IQueryable<UserProfile> GetUserListByCompanyID(this GenericManager<EIVOEntityDataContext> models, int[] companyID,IQueryable<UserRoleDefinition> rolesFilter = null)
+        public static IQueryable<UserProfile> GetUserListByCompanyID(this GenericManager<EIVOEntityDataContext> models, int[] companyID, IQueryable<UserRoleDefinition> rolesFilter = null)
         {
             var roles = rolesFilter ?? models.GetTable<UserRoleDefinition>();
             return models.GetTable<OrganizationCategory>()
@@ -345,10 +351,10 @@ namespace Model.DataEntity
 
         public static IQueryable<InvoiceItem> GetInvoiceByAgent(this EIVOEntityDataContext mgr, int agentID)
         {
-            return mgr.GetInvoiceByAgent(mgr.GetTable<InvoiceItem>(),agentID);
+            return mgr.GetInvoiceByAgent(mgr.GetTable<InvoiceItem>(), agentID);
         }
 
-        public static IQueryable<InvoiceItem> GetInvoiceByAgent(this EIVOEntityDataContext mgr, IQueryable<InvoiceItem> items, int agentID,bool excludeAgentID=false)
+        public static IQueryable<InvoiceItem> GetInvoiceByAgent(this EIVOEntityDataContext mgr, IQueryable<InvoiceItem> items, int agentID, bool excludeAgentID = false)
         {
             //return items.Join(mgr.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == agentID),
             //        i => i.SellerID, a => a.IssuerID, (i, a) => i);
@@ -364,7 +370,7 @@ namespace Model.DataEntity
             return mgr.GetAllowanceByAgent(mgr.GetTable<InvoiceAllowance>(), agentID);
         }
 
-        public static IQueryable<InvoiceAllowance> GetAllowanceByAgent(this EIVOEntityDataContext mgr, IQueryable<InvoiceAllowance> items,int agentID)
+        public static IQueryable<InvoiceAllowance> GetAllowanceByAgent(this EIVOEntityDataContext mgr, IQueryable<InvoiceAllowance> items, int agentID)
         {
             var issuers = mgr.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == agentID)
                 .Select(a => a.IssuerID);
@@ -384,7 +390,7 @@ namespace Model.DataEntity
             return $"{item.TrackCode}{item.No}";
         }
 
-        public static bool CheckNotice(this int? setting,Naming.InvoiceNoticeStatus checkStatus)
+        public static bool CheckNotice(this int? setting, Naming.InvoiceNoticeStatus checkStatus)
         {
             return setting.HasValue && (setting.Value & (int)checkStatus) > 0;
         }
@@ -435,7 +441,7 @@ namespace Model.DataEntity
     }
 
     public partial class EIVOEntityManager<TEntity> : GenericManager<EIVOEntityDataContext, TEntity>
-        where TEntity : class,new()
+        where TEntity : class, new()
     {
         public EIVOEntityManager() : base() { }
         public EIVOEntityManager(GenericManager<EIVOEntityDataContext> manager) : base(manager) { }

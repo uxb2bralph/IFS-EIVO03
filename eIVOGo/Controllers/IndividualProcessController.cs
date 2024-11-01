@@ -31,7 +31,14 @@ using Model.Security.MembershipManagement;
 using Model.InvoiceManagement.Validator;
 using ModelExtension.Helper;
 using Utility;
-using Uxnet.Com.DataAccessLayer;
+using DataAccessLayer;
+using System.Collections.Specialized;
+using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Web.UI.WebControls;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using DocumentFormat.OpenXml.Presentation;
 
 namespace eIVOGo.Controllers
 {
@@ -45,7 +52,7 @@ namespace eIVOGo.Controllers
 
         }
 
-        public ActionResult Inquire(InquireInvoiceViewModel viewModel,String ValidCode,String EncryptedCode)
+        public ActionResult Inquire(InquireInvoiceViewModel viewModel, String ValidCode, String EncryptedCode)
         {
             ViewBag.ViewModel = viewModel;
 
@@ -74,10 +81,11 @@ namespace eIVOGo.Controllers
                     ModelState.AddModelError("CarrierNo", "請輸入載具號碼!!");
                 }
 
-                if (!viewModel.InvoiceDate.HasValue)
-                {
-                    ModelState.AddModelError("InvoiceDate", "請輸入發票開立日期!!");
-                }
+            }
+
+            if (!viewModel.InvoiceDate.HasValue)
+            {
+                ModelState.AddModelError("InvoiceDate", "請輸入發票開立日期!!");
             }
 
             if (!ModelState.IsValid)
@@ -88,7 +96,7 @@ namespace eIVOGo.Controllers
 
             IQueryable<InvoiceItem> items = models.GetTable<InvoiceItem>();
 
-            if(match.Success)
+            if (match.Success)
             {
                 items = items
                     .Where(i => i.TrackCode == match.Groups[1].Value && i.No == match.Groups[2].Value)
@@ -116,6 +124,73 @@ namespace eIVOGo.Controllers
 
             var item = items.FirstOrDefault();
             return View("~/Views/IndividualProcess/DataQuery/InvoiceQueryResult.cshtml", item);
+        }
+
+        public ActionResult GetInvoicePDF(InquireInvoiceViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            viewModel.InvoiceNo = viewModel.InvoiceNo.GetEfficientString();
+            var match = viewModel.InvoiceNo.ParseInvoiceNo();
+
+            if (!match.Success || !viewModel.InvoiceDate.HasValue)
+            {
+                return HttpNotFound();
+            }
+
+            IQueryable<InvoiceItem> items = models.GetTable<InvoiceItem>()
+                .Where(i => i.TrackCode == match.Groups[1].Value && i.No == match.Groups[2].Value)
+                .Where(i => i.InvoiceDate >= viewModel.InvoiceDate && i.InvoiceDate < viewModel.InvoiceDate.Value.AddDays(1));
+
+            var item = items.FirstOrDefault();
+            if (item == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (item.InvoiceBuyer.IsB2C())
+            {
+                if(item.RandomNo != viewModel.RandomNo.GetEfficientString())
+                {
+                    return HttpNotFound();
+                }
+
+                if (item.InvoiceCarrier != null)
+                {
+                    if (item.InvoiceCarrier.CarrierNo != viewModel.CarrierNo.GetEfficientString())
+                    {
+                        return HttpNotFound();
+                    }
+                }
+            }
+            else
+            {
+                if (item.InvoiceBuyer.ReceiptNo != viewModel.BuyerReceiptNo.GetEfficientString())
+                {
+                    return HttpNotFound();
+                }
+            }
+
+            return View("~/Views/IndividualProcess/GetInvoicePDF.cshtml", item);
+        }
+
+        public ActionResult GetPrint(InquireInvoiceViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.InvoiceID = viewModel.DecryptKeyValue();
+            }
+
+            IQueryable<InvoiceItem> items = models.GetTable<InvoiceItem>()
+                .Where(i => i.InvoiceID == viewModel.InvoiceID);
+
+            var item = items.FirstOrDefault();
+            viewModel.RandomNo = item?.RandomNo;
+
+            return View("~/Views/IndividualProcess/Index.cshtml", item);
+
         }
 
         public ActionResult EditInvoiceBuyer(InvoiceBuyerViewModel viewModel)
@@ -184,7 +259,123 @@ namespace eIVOGo.Controllers
             return Json(new { result = true });
         }
 
+        public ActionResult ValidateCarrier()
+        {
+            Request.SaveAs(Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}.txt"), true);
 
+            var form = Request.Form;
+            if (form == null || String.IsNullOrEmpty(form["token"]) || form["ban"] != AppSettings.Default.InvoiceCarrierProviderID)
+            {
+                return new EmptyResult { };
+            }
+
+            var tokenReq = new
+            {
+                token = Request.Form["token"],
+                nonce = 16.GenerateHexCode(),
+            };
+
+            dynamic result;
+            using (WebClient client = new WebClient())
+            {
+                client.Encoding = Encoding.UTF8;
+                client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                result = JObject.Parse(client.UploadString(AppSettings.Default.GovCarrierVerrificationUrl, tokenReq.JsonStringify()));
+                Logger.Debug($"GOV result: {result}");
+            }
+
+            if (result.token_flag == "Y" && result.nonce == tokenReq.nonce)
+            {
+                result.token = tokenReq.token;
+                return View("~/Views/IndividualProcess/ArrangeCarrierNo.cshtml", result);
+            }
+            else
+            {
+                return View("~/Views/IndividualProcess/InvalidGovToken.cshtml", result);
+            }
+
+        }
+
+        public ActionResult ValidateUserCarrier(LoginViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Shared/ReportInputError.cshtml");
+            }
+
+            var item = UserProfileFactory.CreateInstance(viewModel.PID, viewModel.Password)?.Profile;
+            if (item == null)
+            {
+                ModelState.AddModelError("PID", "登入失敗!!");
+                return View("~/Views/Shared/ReportInputError.cshtml");
+            }
+
+            item = item.LoadInstance(models);
+            var carrier = item.InvoiceUserCarrier.FirstOrDefault();
+            if (carrier == null)
+            {
+                ModelState.AddModelError("PID", "會員未申請載具!!");
+                return View("~/Views/Shared/ReportInputError.cshtml");
+            }
+
+            viewModel.CardNo1 = Convert.ToBase64String(Encoding.UTF8.GetBytes(carrier.CarrierNo));
+            viewModel.CardNo2 = Convert.ToBase64String(Encoding.UTF8.GetBytes(carrier.CarrierNo2));
+            viewModel.CardType = Convert.ToBase64String(Encoding.UTF8.GetBytes(Settings.Default.DefaultUserCarrierType));
+
+            if (viewModel.Token != null)
+            {
+                StringBuilder postData = new StringBuilder();
+                postData.Append("card_ban=").Append(AppSettings.Default.InvoiceCarrierProviderID)
+                    .Append("&card_no1=").Append(carrier.CarrierNo)
+                    .Append("&card_no2=").Append(carrier.CarrierNo2)
+                    .Append("&card_type=").Append(Settings.Default.DefaultUserCarrierType)
+                    .Append("&token=").Append(viewModel.Token);
+
+                using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(AppSettings.Default.GovApiKeyBase64)))
+                {
+                    var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(postData.ToString()));
+                    var signature = Convert.ToBase64String(computeHash);
+                    postData.Append("&signature=").Append(signature);
+                    viewModel.Signature = signature;
+                    Logger.Debug($"{postData}:{signature}");
+                }
+
+                return View("~/Views/IndividualProcess/ApplyUserCarrier.cshtml", carrier);
+
+            }
+            else
+            {
+                viewModel.Token = item.UID.EncryptKey();
+                return View("~/Views/IndividualProcess/ApplyUserCarrierFromLocal.cshtml", carrier);
+            }
+        }
+
+        public ActionResult ValidateUserToken(LoginViewModel viewModel)
+        {
+            Request.SaveAs(Path.Combine(Logger.LogDailyPath, $"ValidateUserToken-{DateTime.Now.Ticks}.txt"), true);
+
+            ViewBag.ViewModel = viewModel;
+            viewModel.Token = viewModel.Token.GetEfficientString();
+            if (viewModel.Token != null)
+            {
+                int uid = viewModel.Token.DecryptKeyValue();
+                if (models.GetTable<UserProfile>().Any(u => u.UID == uid))
+                {
+                    return Content("Y");
+                }
+            }
+
+            return Content("N");
+        }
+
+        protected override void HandleUnknownAction(string actionName)
+        {
+            if (!String.IsNullOrEmpty(actionName))
+            {
+                this.View(actionName).ExecuteResult(this.ControllerContext);
+            }
+        }
 
     }
 }

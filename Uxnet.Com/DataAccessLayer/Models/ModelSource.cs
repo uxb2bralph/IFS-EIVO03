@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccessLayer.basis;
 
-namespace Uxnet.Com.DataAccessLayer.Models
+namespace DataAccessLayer.Models
 {
     public class ModelSource<T, TEntity> : GenericManager<T, TEntity>
         where T : DataContext, new()

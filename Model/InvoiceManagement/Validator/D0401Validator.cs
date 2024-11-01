@@ -151,7 +151,11 @@ namespace Model.InvoiceManagement.Validator
                     String invNo, trackCode;
                     trackCode = i.OriginalInvoiceNumber.Substring(0, 2);
                     invNo = i.OriginalInvoiceNumber.Substring(2);
-                    originalInvoice = invTable.Where(n => n.TrackCode == trackCode && n.No == invNo).FirstOrDefault();
+                    originalInvoice = invTable
+                        .Where(n => n.SellerID == _seller.CompanyID)
+                        .Where(n => n.TrackCode == trackCode)
+                        .Where(n => n.No == invNo)
+                        .FirstOrDefault();
                 }
 
                 if (originalInvoice == null)

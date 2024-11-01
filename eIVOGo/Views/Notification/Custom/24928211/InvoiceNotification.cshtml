@@ -1,0 +1,38 @@
+﻿
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+    Layout = "~/Views/Notification/Custom/InvoiceNotificationTemplate.cshtml";
+    ModelSource<InvoiceItem> models;
+    InvoiceItem _model;
+    RenderStyleViewModel _viewModel;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (InvoiceItem)this.Model;
+    _viewModel = ViewBag.ViewModel as RenderStyleViewModel;
+    if (_viewModel == null)
+    {
+        _viewModel = new RenderStyleViewModel
+        {
+
+        };
+        ViewBag.ViewModel = _viewModel;
+    }
+}
+@{
+    Html.RenderPartial("~/Views/Notification/Custom/24928211/C0401.cshtml", _model);
+}

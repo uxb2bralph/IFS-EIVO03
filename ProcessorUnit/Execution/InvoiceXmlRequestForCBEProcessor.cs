@@ -16,15 +16,16 @@ using System.Xml;
 using Model.Schema.TXN;
 using Business.Helper.InvoiceProcessor;
 using ProcessorUnit.Helper;
+using Uxnet.ToolAdapter.Properties;
 
 namespace ProcessorUnit.Execution
 {
-    public class InvoiceXmlRequestForCBEProcessor : ExecutorForever
+    public class InvoiceXmlRequestForCBEProcessor : ProcessRequestExecutorForever
     {
         public InvoiceXmlRequestForCBEProcessor()
         {
             appliedProcessType = Naming.InvoiceProcessType.C0401_Xml_CBE;
-            processRequest = (uploadData, requestItem) => 
+            processRequest = (uploadData, requestItem) =>
             {
                 Root result = this.CreateMessageToken();
                 using (InvoiceManagerForCBE manager = new InvoiceManagerForCBE())
@@ -61,7 +62,7 @@ namespace ProcessorUnit.Execution
         {
             ProcessRequest requestItem = queueItem.ProcessRequest;
             String requestFile = requestItem.RequestPath.StoreTargetPath();
-            if(File.Exists(requestFile))
+            if (File.Exists(requestFile))
             {
                 Organization agent = requestItem.Organization;
                 requestItem.ProcessStart = DateTime.Now;
@@ -74,7 +75,7 @@ namespace ProcessorUnit.Execution
 
                 if (SettingsHelper.Instance.ResponsePath != null)
                 {
-                    responsePath = responsePath.Replace(Uxnet.Com.Properties.AppSettings.AppRoot, SettingsHelper.Instance.ResponsePath);
+                    responsePath = responsePath.Replace(AppSettingsBase.AppRoot, SettingsHelper.Instance.ResponsePath);
                 }
 
                 result.Save(responsePath);

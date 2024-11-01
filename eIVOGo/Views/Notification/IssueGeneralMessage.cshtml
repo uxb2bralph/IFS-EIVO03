@@ -1,0 +1,61 @@
+
+
+@using System.Linq
+@using System.IO
+@using System.Linq.Expressions
+
+@using Newtonsoft.Json
+@using eIVOGo.Controllers
+@using eIVOGo.Helper
+@using eIVOGo.Models
+@using eIVOGo.Models.ViewModel
+@using Model.Models.ViewModel
+@using eIVOGo.Module.Common
+@using Model.DataEntity
+@using Model.Helper
+@using Model.Locale
+@using Utility
+@using Uxnet.Web.WebUI
+@{
+
+    ModelSource<InvoiceItem> models;
+    Organization _model;
+    MailMessageViewModel _viewModel;
+
+    models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
+    _model = (Organization)this.Model;
+    _viewModel = (MailMessageViewModel)ViewBag.ViewModel;
+}
+
+@if (_viewModel.ForTest == true)
+{
+    Html.RenderPartial("~/Views/Notification/Module/GeneralMessage.cshtml", _model);
+}
+else
+{
+    String body = Html.Partial("~/Views/Notification/Module/GeneralMessage.cshtml").ToString();
+    var smtpSettings = _model.CustomSmtpHost.Where(s => s.Status == (int)CustomSmtpHost.StatusType.Enabled).FirstOrDefault();
+
+    String mailTo = _viewModel.MailTo.GetEfficientString();
+    if (mailTo == null)
+    {
+        var mailing = models.GetUserListByCompanyID(_model.CompanyID)
+                .Select(u => u.EMail).ToList();
+        mailing.Add(_viewModel.MailTo.GetEfficientString());
+        mailTo = String.Join(",",
+                mailing.Where(m => m != null));
+
+    }
+
+    if (!String.IsNullOrEmpty(mailTo))
+    {
+        body.SendMailMessage(mailTo, _viewModel.Subject, smtpSettings);
+    }
+
+    Response.Clear();
+    Response.ContentType = "application/json";
+    Response.Write((new { result = true }).JsonStringify());
+    Response.Flush();
+    Response.End();
+}
+

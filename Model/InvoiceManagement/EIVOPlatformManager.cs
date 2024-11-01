@@ -236,7 +236,7 @@ namespace Model.InvoiceManagement
                                 //else
                                 {
                                     fileName = Path.Combine(Settings.Default.A0401Outbound, $"A0401-{DateTime.Now:yyyyMMddHHmmssf}-{item.InvoiceItem.TrackCode}{item.InvoiceItem.No}.xml");
-                                    item.InvoiceItem.CreateA0401().ConvertToXml().Save(fileName);
+                                    item.InvoiceItem.CreateB2BInvoiceMIG().ConvertToXml().Save(fileName);
                                 }
                                 break;
                             case Naming.DocumentTypeDefinition.E_Allowance:
@@ -248,16 +248,16 @@ namespace Model.InvoiceManagement
                                 //else
                                 {
                                     fileName = Path.Combine(Settings.Default.B0401Outbound, $"B0401-{DateTime.Now:yyyyMMddHHmmssf}-{item.InvoiceAllowance.AllowanceNumber}.xml");
-                                    item.InvoiceAllowance.CreateB0401().ConvertToXml().Save(fileName);
+                                    item.InvoiceAllowance.CreateB2BAllowanceMIG().ConvertToXml().Save(fileName);
                                 }
                                 break;
                             case Naming.DocumentTypeDefinition.E_InvoiceCancellation:
                                 fileName = Path.Combine(Settings.Default.A0501Outbound, String.Format("A0501-{0:yyyyMMddHHmmssf}-{1:00000}.xml", DateTime.Now, cancellationCounter++));
-                                item.DerivedDocument.ParentDocument.InvoiceItem.CreateA0501().ConvertToXml().Save(fileName);
+                                item.DerivedDocument.ParentDocument.InvoiceItem.CreateB2BInvoiceCancellationMIG().ConvertToXml().Save(fileName);
                                 break;
                             case Naming.DocumentTypeDefinition.E_AllowanceCancellation:
                                 fileName = Path.Combine(Settings.Default.B0501Outbound, String.Format("B0501-{0:yyyyMMddHHmmssf}-{1:00000}.xml", DateTime.Now, allowanceCancellationCounter++));
-                                item.DerivedDocument.ParentDocument.InvoiceAllowance.CreateB0501().ConvertToXml().Save(fileName);
+                                item.DerivedDocument.ParentDocument.InvoiceAllowance.CreateB2BAllowanceCancellationMIG().ConvertToXml().Save(fileName);
                                 break;
                         }
 

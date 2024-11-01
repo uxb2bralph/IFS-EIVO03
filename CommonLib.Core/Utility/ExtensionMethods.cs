@@ -6,26 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CommonLib.Core.Helper;
-using CommonLib.PlugInAdapter;
 using Microsoft.AspNetCore.Http;
 
 namespace CommonLib.Core.Utility
 {
     public static class ExtensionMethods
     {
-        public static void ConvertHtmlToPDF(this String htmlFile, String pdfFile, double timeOutInMinute, String[] args = null)
+        public static void ConvertHtmlToPDF(this String htmlFile, String pdfFile, double timeOutInMinute)
         {
             lock (typeof(ExtensionMethods))
             {
-                var util = PlugInHelper.GetPdfUtility();
-                if (util is IPdfUtility2)
-                {
-                    ((IPdfUtility2)util).ConvertHtmlToPDF(htmlFile, pdfFile, timeOutInMinute, args);
-                }
-                else
-                {
-                    util.ConvertHtmlToPDF(htmlFile, pdfFile, timeOutInMinute);
-                }
+                PlugInHelper.GetPdfUtility().ConvertHtmlToPDF(htmlFile, pdfFile, timeOutInMinute);
             }
         }
 
@@ -76,11 +67,11 @@ namespace CommonLib.Core.Utility
         {
             Request.Body.Position = 0;
             MemoryStream fs = new MemoryStream();
-            await Request.Body.CopyToAsync(fs);
-            fs.Position = 0;
-            Request.Body.Position = 0;
-            return fs;
 
+            await Request.Body.CopyToAsync(fs);
+            Request.Body.Position = 0;
+            fs.Seek(0, SeekOrigin.Begin);
+            return fs;
         }
 
         public static async Task<String> GetRequestBodyAsync(this HttpRequest Request)

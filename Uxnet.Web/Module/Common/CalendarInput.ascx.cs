@@ -36,7 +36,7 @@ namespace Uxnet.Web.Module.Common
                     txtDate.Text = getDateTimeString();
                 }
             }
-            imgCalendar.Attributes.Add("onclick", String.Format("javascript:calendar(document.all('{0}'));", txtDate.ClientID));
+            imgCalendar.Attributes.Add("onclick", String.Format("javascript:calendar('{0}');", txtDate.ClientID));
         }
 
         protected virtual void parseInputDateTime(String dateTimeStr)
@@ -150,14 +150,17 @@ namespace Uxnet.Web.Module.Common
 
             StringBuilder sb = new StringBuilder();
 
+            //sb.Append(@"function calendar(objDate)  { 
+            //               var val;");
+            //sb.Append(String.Format("val = window.showModalDialog('{0}','','dialogwidth=150pt;dialogheight=170pt;status=no;help=no;');", getCalendarUrl()));
+            //sb.Append(@"if (val  != -1 && val  != null) {  
+            //                  objDate.value = val;");
+            //sb.Append(postBackScript);
+            //sb.Append(@"
+            //               } 
+            //            }");
             sb.Append(@"function calendar(objDate)  { 
-                           var val;");
-            sb.Append(String.Format("val = window.showModalDialog('{0}','','dialogwidth=150pt;dialogheight=170pt;status=no;help=no;');", getCalendarUrl()));
-            sb.Append(@"if (val  != -1 && val  != null) {  
-                              objDate.value = val;");
-            sb.Append(postBackScript);
-            sb.Append(@"
-                           } 
+                           $('#' + objDate).datepicker('show');
                         }");
             return sb;
         }

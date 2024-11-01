@@ -1,11 +1,10 @@
 
-
-
 @using eIVOGo.Helper
 @using eIVOGo.Models
 @using eIVOGo.Controllers
 @using Model.DataEntity
 @{
+    Layout = "~/Views/Template/ContentPage.cshtml";
 
     ModelSource<InvoiceItem> models;
     InvoiceItem _model;
@@ -14,12 +13,14 @@
     _model = (InvoiceItem)this.Model;
 
 }
-@section headContent {
+@section headContent
+{
 
 }
-@section dataContent {
-    @{ Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "已開立發票內容檢視");}
-
-    @{ Html.RenderPartial("~/Views/DataView/Module/Invoice.cshtml", _model);}
-
+@section formContent
+{
+    @{
+        Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "已開立發票內容檢視");
+        Html.RenderPartial("~/Views/DataView/Module/Invoice.cshtml", _model);
+    }
 }

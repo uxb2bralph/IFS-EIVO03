@@ -30,7 +30,7 @@
 @if (_model.InvoiceAllowanceSeller.Organization.OrganizationExtension?.CustomNotification != null)
 {
     <text>
-        @Html.Raw(_model.InvoiceAllowanceSeller.Organization.OrganizationExtension?.CustomNotification)
+        @Html.Raw(HttpUtility.HtmlDecode(_model.InvoiceAllowanceSeller.Organization.OrganizationExtension?.CustomNotification))
     </text>
 }
 else

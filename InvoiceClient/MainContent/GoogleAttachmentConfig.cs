@@ -73,5 +73,9 @@ namespace InvoiceClient.MainContent
         {
             get { return "Attached PDF in Zip"; }
         }
+        public void ReportStatus()
+        {
+
+        }
     }
 }

@@ -19,6 +19,7 @@
 
     models = ((SampleController<InvoiceItem>)ViewContext.Controller).DataSource;
     _viewModel = (InquireInvoiceViewModel)ViewBag.ViewModel;
+    _viewModel.UrlAction = Url.Action("Inquire2023", "InvoiceProcess");
 
 }
 <!--交易畫面標題-->
@@ -30,6 +31,7 @@
         <tr>
             <th colspan="2" class="Head_style_a">
                 查詢條件
+                <input type="hidden" name="ResultAction" value="@(_viewModel.ResultAction ?? "Incoming")" />
             </th>
         </tr>
         @{ Html.RenderPartial("~/Views/InquireInvoice/ByInvoiceDate.cshtml");
@@ -39,14 +41,6 @@
             Html.RenderPartial("~/Views/InquireInvoice/ByCarrierType.cshtml");
             Html.RenderPartial("~/Views/InquireInvoice/ByCarrierNo.cshtml");}
 
-        <tr>
-            <th>
-                每頁資料筆數
-            </th>
-            <td class="tdleft">
-                <input name="pageSize" type="text" value="@(Request["pageSize"] ?? Uxnet.Web.Properties.Settings.Default.PageSize.ToString())" />
-            </td>
-        </tr>
     </table>
     <!--表格 結束-->
 </div>
@@ -57,7 +51,7 @@
     <tbody>
         <tr>
             <td class="Bargain_btn">
-                <button type="button" onclick="uiInvoiceQuery.initQuery = true;uiInvoiceQuery.inquire();">查詢</button>
+                <button type="button" onclick="$inquiryAgent.initQuery = true; $inquiryAgent.inquire();">查詢</button>
             </td>
         </tr>
     </tbody>

@@ -111,7 +111,8 @@ namespace Model.InvoiceManagement
                             PrintMark = invItem.PrintMark,
                             InvoiceBuyer = new InvoiceBuyer
                             {
-                                Name = invItem.BuyerId == "0000000000" ? invItem.BuyerName.CheckB2CMIGName() : invItem.BuyerName,
+                                Name = invItem.BuyerId == "0000000000" ? invItem.BuyerName.CheckB2CMIGName() 
+                                                            : invItem.BuyerName.GetEfficientString() ?? invItem.BuyerId,
                                 ReceiptNo = invItem.BuyerId,
                                 BuyerMark = invItem.BuyerMark,
                                 CustomerName = invItem.BuyerName

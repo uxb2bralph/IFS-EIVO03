@@ -34,6 +34,8 @@ using Uxnet.Com.Helper;
 using Model.Helper;
 using eIVOGo.Helper.Security.Authorization;
 using eIVOGo.Helper.DataQuery;
+using DataAccessLayer;
+using System.Xml;
 
 namespace eIVOGo.Controllers.TrackCodeNo
 {
@@ -61,7 +63,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
         public ActionResult InquireVacantNo(InquireNoIntervalViewModel viewModel)
         {
             var profile = HttpContext.GetUser();
-            
+
             ViewBag.ViewModel = viewModel;
 
             //if (!viewModel.SellerID.HasValue)
@@ -175,7 +177,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
 
                         List<DetailsBranchTrackBlankItem> details = new List<DetailsBranchTrackBlankItem>();
                         var detailItems = item;
-                        foreach(var blank in detailItems)
+                        foreach (var blank in detailItems)
                         {
                             details.Add(new DetailsBranchTrackBlankItem
                             {
@@ -191,7 +193,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
                         {
                             blankItem.ConvertToXml().Save(outStream);
                         }
-                        
+
                     }
                 }
             }
@@ -359,7 +361,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
         public ActionResult EditNoInterval(InvoiceNoIntervalViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            if(viewModel.KeyID!=null)
+            if (viewModel.KeyID != null)
             {
                 viewModel.IntervalID = viewModel.DecryptKeyValue();
             }
@@ -398,8 +400,8 @@ namespace eIVOGo.Controllers.TrackCodeNo
 
                 models.ExecuteCommand("delete InvoiceNoInterval where IntervalID = {0}", item.IntervalID);
                 return Json(new { result = true }, JsonRequestBehavior.AllowGet);
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logger.Error(ex);
                 return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
@@ -459,7 +461,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
             if (item == null)
                 return result;
 
-            if(!viewModel.Parts.HasValue || viewModel.Parts<=0)
+            if (!viewModel.Parts.HasValue || viewModel.Parts <= 0)
             {
                 ModelState.AddModelError("Parts", "請輸入均分本數!!");
             }
@@ -577,7 +579,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
 
             if (item == null)
             {
-                return View("~/Views/Shared/AlertMessage.cshtml",model:"配號區間資料錯誤!!");
+                return View("~/Views/Shared/AlertMessage.cshtml", model: "配號區間資料錯誤!!");
             }
 
             return View("~/Views/InvoiceNo/Module/EditPOSBooklets.cshtml", item);
@@ -617,7 +619,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
                     }
 
                     items = new List<UploadInvoiceTrackCodeModel>();
-                    foreach(DataRow r in ds.Tables[0].Rows)
+                    foreach (DataRow r in ds.Tables[0].Rows)
                     {
                         UploadInvoiceTrackCodeModel item = new UploadInvoiceTrackCodeModel { };
                         try
@@ -637,33 +639,90 @@ namespace eIVOGo.Controllers.TrackCodeNo
                     }
                 }
 
-                var profile = HttpContext.GetUser();
+                ValidateUploadData(items);
 
-                foreach (var viewModel in items.Where(i => i.Message == null))
+                return View("~/Views/InvoiceNo/Module/PreviewInvoiceTrackCode.cshtml", items);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        private void ValidateUploadData(List<UploadInvoiceTrackCodeModel> items)
+        {
+            var profile = HttpContext.GetUser();
+
+            foreach (var viewModel in items.Where(i => i.Message == null))
+            {
+                ModelState.Clear();
+
+                if (!profile.IsSystemAdmin())
                 {
-                    ModelState.Clear();
+                    viewModel.SellerID = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == profile.CurrentUserRole.OrganizationCategory.CompanyID
+                                    && a.InvoiceIssuer.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault()?.IssuerID;
+                }
+                else
+                {
+                    viewModel.SellerID = models.GetTable<Organization>().Where(o => o.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault()?.CompanyID;
+                }
 
-                    if (!profile.IsSystemAdmin())
+                var year = viewModel.Year + 1911;
+                viewModel.TrackID = models.GetTable<InvoiceTrackCode>().Where(t => t.Year == year && t.PeriodNo == viewModel.PeriodNo && t.TrackCode == viewModel.TrackCode)
+                        .FirstOrDefault()?.TrackID;
+
+                checkInput(viewModel, null);
+
+                if (!ModelState.IsValid)
+                {
+                    viewModel.Message = ModelState.ErrorMessage();
+                }
+            }
+        }
+
+        public ActionResult UploadToPreviewE0501(HttpPostedFileBase theFile)
+        {
+            if (!(theFile?.ContentLength > 0))
+            {
+                return Json(new { result = false, message = "未選取檔案或檔案上傳失敗" }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                var file = theFile;
+                String fileName = Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}_{Path.GetFileName(file.FileName)}");
+                file.SaveAs(fileName);
+
+                List<UploadInvoiceTrackCodeModel> items= new List<UploadInvoiceTrackCodeModel>();
+                XmlDocument doc = new XmlDocument();
+                doc.Load(fileName);
+
+                if (doc.DocumentElement?["InvoicePack"]?["InvoiceAssignNo"] != null)
+                {
+                    foreach (XmlElement data in doc.DocumentElement["InvoicePack"].GetElementsByTagName("InvoiceAssignNo"))
                     {
-                        viewModel.SellerID = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == profile.CurrentUserRole.OrganizationCategory.CompanyID
-                                        && a.InvoiceIssuer.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault()?.IssuerID;
-                    }
-                    else
-                    {
-                        viewModel.SellerID = models.GetTable<Organization>().Where(o => o.ReceiptNo == viewModel.ReceiptNo).FirstOrDefault()?.CompanyID;
-                    }
-
-                    var year = viewModel.Year + 1911;
-                    viewModel.TrackID = models.GetTable<InvoiceTrackCode>().Where(t => t.Year == year && t.PeriodNo == viewModel.PeriodNo && t.TrackCode == viewModel.TrackCode)
-                            .FirstOrDefault()?.TrackID;
-
-                    checkInput(viewModel, null);
-
-                    if(!ModelState.IsValid)
-                    {
-                        viewModel.Message = ModelState.ErrorMessage();
+                        UploadInvoiceTrackCodeModel item = new UploadInvoiceTrackCodeModel { };
+                        try
+                        {
+                            item.ReceiptNo = data["Ban"].InnerText;
+                            item.TrackCode = data["InvoiceTrack"].InnerText;
+                            int yearNo = int.Parse(data["YearMonth"].InnerText);
+                            item.Year = (short)(yearNo/100);
+                            item.PeriodNo = (yearNo % 10) / 2;
+                            item.StartNo = int.Parse(data["InvoiceBeginNo"].InnerText);
+                            item.EndNo = int.Parse(data["InvoiceEndNo"].InnerText);
+                        }
+                        catch (Exception ex)
+                        {
+                            item.Message = ex.Message;
+                        }
+                        items.Add(item);
                     }
                 }
+
+                ValidateUploadData(items);
 
                 return View("~/Views/InvoiceNo/Module/PreviewInvoiceTrackCode.cshtml", items);
 
@@ -767,7 +826,7 @@ namespace eIVOGo.Controllers.TrackCodeNo
                     }
 
                     var year = viewModel.Year + 1911;
-                    viewModel.TrackID = models.GetTable<InvoiceTrackCode>().Where(t => t.Year == year && t.PeriodNo == viewModel.PeriodNo && t.TrackCode==viewModel.TrackCode)
+                    viewModel.TrackID = models.GetTable<InvoiceTrackCode>().Where(t => t.Year == year && t.PeriodNo == viewModel.PeriodNo && t.TrackCode == viewModel.TrackCode)
                             .FirstOrDefault()?.TrackID;
 
                     checkInput(viewModel, null);
@@ -802,11 +861,11 @@ namespace eIVOGo.Controllers.TrackCodeNo
                     .Select(k => JsonConvert.DeserializeObject<UploadInvoiceTrackCodeModel>(k.DecryptData()))
                     .ToList();
 
-                foreach(var item in items)
+                foreach (var item in items)
                 {
                     ModelState.Clear();
                     CommitItem(item);
-                    if(!ModelState.IsValid)
+                    if (!ModelState.IsValid)
                     {
                         item.Message = ModelState.ErrorMessage();
                     }

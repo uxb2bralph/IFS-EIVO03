@@ -65,7 +65,7 @@ namespace Model.InvoiceManagement.zhTW
                 return new Exception("單據號碼錯誤，TAG:< DataNumber />");
             }
 
-            if (invItem.DataNumber.Length > 60)
+            if (invItem.DataNumber?.Length > 60)
             {
                 return new Exception(String.Format("單據號碼資料長度最長為60碼；傳送資料:{0}，TAG:< DataNumber />", invItem.DataNumber));
             }

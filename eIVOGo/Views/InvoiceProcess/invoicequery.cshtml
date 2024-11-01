@@ -47,7 +47,8 @@
             </th>
             <td class="tdleft">
                 <input name="pageSize" type="text" value="@(Request["pageSize"] ?? Uxnet.Web.Properties.Settings.Default.PageSize.ToString())" />，
-                <input name="CurrencySummary" value="True" type="checkbox" /> 顯示幣別統計
+                <input name="CurrencySummary" value="True" type="checkbox" /> 顯示幣別統計，
+                <input name="MIG" value="True" type="checkbox" /> 顯示大平台處理狀態(C:完成,E:失敗,P:處理中)
             </td>
         </tr>
     </table>

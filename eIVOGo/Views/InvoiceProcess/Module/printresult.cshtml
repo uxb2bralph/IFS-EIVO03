@@ -15,7 +15,6 @@
 @using Model.Locale
 @using Utility
 @using Business.Helper
-@using Model.Helper
 @using Uxnet.Web.WebUI
 @{
 
@@ -26,32 +25,22 @@
     _viewModel.PrintCuttingLine = true;
     _viewModel.CreateNew = true;
     _viewModel.UseCustomView = true;
+    _viewModel.IsPDF = true;
 }
 <div>
     <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401
             ? "PrintA0401AsPDF"
             : "PrintC0401AsPDF","DataView",_viewModel))" target="_blank">列印資料下載(PDF合併)</a>
-    @{
-        var viewModel = new
-        {
-            _viewModel.CreateNew,
-            _viewModel.KeyID,
-            _viewModel.NameOnly,
-            _viewModel.PaperStyle,
-            _viewModel.PrintBack,
-            _viewModel.PrintBuyerAddr,
-            _viewModel.PrintCuttingLine,
-            _viewModel.ProcessType,
-            UseCustomView = true,
-        };
+    <a href='javascript:$("").launchDownload("@(Url.Action("ZipInvoicePDF","DataView"))", @Html.Raw(_viewModel.JsonStringify()), "report", true);'>列印資料下載(ZIP)</a>
+    <br />
+    <a href='javascript:uiInvoiceQuery.submitTask(@Html.Raw(_viewModel.JsonStringify()));'>列印資料(ZIP)提交工作項</a>
+    <br />
+    @{ 
+        _viewModel.IsPDF = false;
     }
-    <a href='javascript:$("").launchDownload("@(Url.Action("ZipInvoicePDF","DataView"))", @(JsonConvert.SerializeObject(viewModel)), "report", true);'>列印資料下載(ZIP)</a>
-    <br />
-    <a href='javascript:uiInvoiceQuery.submitTask(@Html.Raw(viewModel.JsonStringify()));'>列印資料(ZIP)提交工作項</a>
-    <br />
     <a href="@(Url.Action(_viewModel.ProcessType == Naming.InvoiceProcessType.A0401
             ? "PrintA0401"
-            : "PrintC0401","DataView",viewModel))" target="_blank">網頁列印</a>
+            : "PrintC0401","DataView",_viewModel))" target="_blank">網頁列印</a>
     @if (_viewModel.PrintBack == true)
     {
         <br />

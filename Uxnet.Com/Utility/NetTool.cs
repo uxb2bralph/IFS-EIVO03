@@ -2,10 +2,12 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Xml;
 
 using Uxnet.Com.Properties;
@@ -15,15 +17,8 @@ namespace Utility
     /// <summary>
     /// NetTool 的摘要描述。
     /// </summary>
-    public class NetTool
+    public static class NetTool
     {
-        private NetTool()
-        {
-            //
-            // TODO: 在此加入建構函式的程式碼
-            //
-        }
-
         public static HttpWebResponse GetUrlResponse(string url)
         {
             HttpWebRequest wr = (HttpWebRequest)WebRequest.Create(url);
@@ -247,6 +242,13 @@ namespace Utility
             }
 
             return true;
+        }
+        public static String GetString(this WebResponse response, Encoding encoding)
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream(), encoding))
+            {
+                return reader.ReadToEnd();
+            }
         }
     }
 }

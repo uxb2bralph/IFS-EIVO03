@@ -136,8 +136,15 @@
         </div>
         <div class="listfield">
             <div class="content_box">
+                @(_model.Organization.CompanyName)以網路銷售電子勞務予中華民國境內個人買受人，自2019年1月起開立雲端發票，為方便您查詢雲端發票及保障兌獎權益，請使用「財政部統一發票兌獎APP」或至財政部電子發票整合服務平台將交易時留存之E-mail載具歸戶到手機條碼(網址:<a href="https://www.einvoice.nat.gov.tw/">https://www.einvoice.nat.gov.tw/</a>),並設定領獎金融帳戶,中獎獎金自動匯入。
+                由財政部提供查詢發票、自動對獎及中獎主動通知服務。
+            </div>
+            @*<div class="content_box">
                 @(_model.Organization.CompanyName)以網路銷售電子勞務予中華民國境內個人買受人，自2019年1月起開立雲端發票，為方便您查詢雲端發票及兌領統一發票中獎獎金，請使用「財政部統一發票兌獎APP」或「財政部電子發票整合服務平台」【<a href="https://einvoice.nat.gov.tw">https://einvoice.nat.gov.tw</a>】，將連結雲端發票之載具(即消費者之電子郵件信箱)歸戶至手機條碼，由財政部提供查詢發票、自動對獎及中獎主動通知服務。
             </div>
+            <div class="content_box">
+                為保障您兌獎之權益，請至財政部電子發票整合服務平台將交易時留存之E-mail載具歸戶到手機條碼(網址:<a href="https://www.einvoice.nat.gov.tw/">https://www.einvoice.nat.gov.tw/</a>)，並設定領獎金融帳戶，中獎獎金自動匯入。
+            </div>*@
         </div>
     </div>
     if (_viewModel?.PrintBack == true || (_productItem != null && _productItem.Length > _FirstCheckCount))

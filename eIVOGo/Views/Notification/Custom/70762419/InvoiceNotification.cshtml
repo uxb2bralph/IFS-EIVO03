@@ -246,7 +246,7 @@
         <br />*@
         @if (_model.Organization.OrganizationExtension?.CustomNotification != null)
         {
-            Write(new HtmlString(_model.Organization.OrganizationExtension?.CustomNotification));
+            Write(new HtmlString(HttpUtility.HtmlDecode(_model.Organization.OrganizationExtension?.CustomNotification)));
             <br />
         }
         網際優勢－電子發票服務平台感謝您。

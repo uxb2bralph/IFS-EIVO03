@@ -25,6 +25,7 @@
 
 <div class="border_gray" id="@(_viewID)">
     <label>下載資料準備中，您可以繼續等待，或稍後至工作清單查詢下載。</label>
+    <label class="progress"></label>
     <a href="#" style="display:none;" onclick="$('').launchDownload('@(Url.Action("DownloadResource","DataExchange"))', { 'keyID': '@Html.Raw((new { _viewModel.FileDownloadName,_viewModel.FileName,_viewModel.ContentType }).JsonStringify().EncryptData())' },'_blank');">資料下載</a>
     <script>
         debugger;
@@ -44,12 +45,15 @@
                             $('#@(_viewID) a').remove();
                             $('div').text(data.message)
                                 .appendTo($('#@(_viewID)'));
-                        } else if (turn >= 360) {
+                        } @*else if (turn >= 360) {
                             hideLoading();
                             $('#@(_viewID) a').remove();
                             $('div').text('下載錯誤...')
                                 .appendTo($('#@(_viewID)'));
-                        } else {
+                        }*@ else {
+                            if (data.progressCount > 0 && data.totalCount > 0) {
+                                $('#@(_viewID) label.progress').text(data.progressCount + '/' + data.totalCount);
+                            }
                             turn++;
                             setTimeout(checkResource, 5000);
                         }

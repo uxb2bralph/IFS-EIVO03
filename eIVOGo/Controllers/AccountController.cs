@@ -65,10 +65,16 @@ namespace eIVOGo.Controllers
 
             LoginHandler login = new LoginHandler();
             String msg;
-            if (!login.ProcessLogin(viewModel.PID, viewModel.Password, out msg))
+            UserProfileMember member;
+            if (!login.ProcessLogin(viewModel.PID, viewModel.Password, out msg,out member))
             {
                 ModelState.AddModelError("PID", msg);
                 return View("~/Views/Account/CbsLogin.cshtml");
+            }
+
+            if (member.Profile.Expiration < DateTime.Today)
+            {
+                return View("~/Views/Account/ChangePassword.cshtml", member.Profile);
             }
 
             viewModel.ReturnUrl = viewModel.ReturnUrl.GetEfficientString();
@@ -485,6 +491,35 @@ namespace eIVOGo.Controllers
         {
             return View("~/Views/Shared/Error.cshtml");
         }
+
+        public ActionResult CommitPassword(UserProfileViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            var profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return View("~/Views/Shared/AlertMessageDialog.cshtml", "資料錯誤，請重新登入!!");
+            }
+
+            UserProfile item = profile.Profile.LoadInstance(models);
+            viewModel.PID = item?.PID;
+
+            viewModel.UserProfileValueCheck(profile, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/Shared/ReportInputError.cshtml");
+            }
+
+            item.UpdatePassword(viewModel);
+            models.SubmitChanges();
+
+            return JavaScript($"alert('密碼變更完成!!'); window.location.href = '{VirtualPathUtility.ToAbsolute("~/Home/MainPage")}';");
+
+        }
+
 
     }
 }

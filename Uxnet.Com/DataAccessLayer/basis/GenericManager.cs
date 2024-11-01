@@ -213,10 +213,7 @@ namespace DataAccessLayer.basis
             return _db.GetCommand(query);
         }
 
-        public LayerBase CreateDALC()
-        {
-            return new LayerBase(_db.Connection);
-        }
+        public LayerBase<T> CreateDALC() => new LayerBase<T>(this);
 
         public IEnumerable ExecuteQuery(Type elementType, string query, params Object[] parameters)
         {

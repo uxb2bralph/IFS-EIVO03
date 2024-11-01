@@ -51,7 +51,7 @@ namespace eIVOGo.Controllers
                 var buyerDetails = Request.Files["InvoiceBuyer"];
                 if (buyerDetails != null)
                 {
-                    using(XLWorkbook xlwb = new XLWorkbook(buyerDetails.InputStream))
+                    using (XLWorkbook xlwb = new XLWorkbook(buyerDetails.InputStream))
                     {
                         InvoiceBuyerExchange exchange = new InvoiceBuyerExchange();
                         switch ((Naming.RoleID)profile.CurrentUserRole.RoleID)
@@ -84,7 +84,7 @@ namespace eIVOGo.Controllers
                 }
                 ViewBag.AlertMessage = "檔案錯誤!!";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Error(ex);
                 ViewBag.AlertMessage = ex.ToString();
@@ -95,7 +95,7 @@ namespace eIVOGo.Controllers
         public ActionResult UpdateBuyerInfo(bool? issueNotification)
         {
             ActionResult result = UpdateBuyer(issueNotification);
-            if(result is FilePathResult)
+            if (result is FilePathResult)
             {
                 return View("~/Views/DataExchange/Module/UpdateBuyerInfo.cshtml", result);
             }
@@ -164,7 +164,7 @@ namespace eIVOGo.Controllers
 
             ViewBag.ViewModel = viewModel;
 
-            if (System.IO.File.Exists(viewModel.FileName))
+            if (viewModel.FileName.CanReadFile())
             {
                 return File(viewModel.FileName,
                     viewModel.ContentType ?? "application/octet-stream",
@@ -185,7 +185,7 @@ namespace eIVOGo.Controllers
 
             ViewBag.ViewModel = viewModel;
 
-            if (System.IO.File.Exists(viewModel.FileName))
+            if (viewModel.FileName.CanReadFile())
             {
                 return Json(new { result = true, viewModel.KeyID }, JsonRequestBehavior.AllowGet);
             }
@@ -199,7 +199,7 @@ namespace eIVOGo.Controllers
                         return Json(new { result = true, KeyID = viewModel.JsonStringify().EncryptData() }, JsonRequestBehavior.AllowGet);
                     }
 
-                    return Json(new { result = false, KeyID = viewModel.JsonStringify().EncryptData(), message = taskItem.ExceptionLog?.DataContent }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false, KeyID = viewModel.JsonStringify().EncryptData(), message = taskItem.ExceptionLog?.DataContent, totalCount = taskItem.TotalCount, progressCount = taskItem.ProgressCount }, JsonRequestBehavior.AllowGet);
 
                 }
             }
@@ -414,7 +414,7 @@ namespace eIVOGo.Controllers
                 dataTable.InsertOnSubmit(dataItem);
             }
 
-            if(viewModel.DataItem!= null) 
+            if (viewModel.DataItem != null)
             {
                 foreach (DataTableColumn field in viewModel.DataItem)
                 {
@@ -444,9 +444,9 @@ namespace eIVOGo.Controllers
             ViewBag.TableType = type;
             ITable dataTable = ViewBag.DataTable = models.DataContext.GetTable(type);
 
-            if(viewModel.KeyItems!= null) 
+            if (viewModel.KeyItems != null)
             {
-                foreach(var keyItem in viewModel.KeyItems) 
+                foreach (var keyItem in viewModel.KeyItems)
                 {
                     DataTableColumn[] keyData = JsonConvert.DeserializeObject<DataTableColumn[]>(keyItem.DecryptData());
                     dynamic item = BuildQuery(keyData, type, (IQueryable)dataTable).FirstOrDefault();

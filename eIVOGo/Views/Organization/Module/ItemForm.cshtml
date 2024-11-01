@@ -95,6 +95,14 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>
+                        營業人店號／別名
+                    </th>
+                    <td>
+                        <input type="text" class="form-control" maxlength="16" name="CustomerNo" value='@(_viewModel.CustomerNo)' />
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="4" class="Head_style_a">
                         聯絡方式
                     </td>
@@ -167,10 +175,10 @@
                 </tr>
                 <tr>
                     <th>
-                        設定使用發票列印
+                        <input type="checkbox" value="@($"{true}")" name="SetToPrintInvoice" @(_viewModel.SetToPrintInvoice == true ? "checked" : null) />營業人客製化列印
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="SetToPrintInvoice" @(_viewModel.SetToPrintInvoice == true ? "checked" : null) />設定使用發票列印
+                        <input type="checkbox" value="DisableC0401Template" name="Settings" checked="@(_viewModel.DisableC0401Template)" />停手C0401系統樣板
                     </td>
                     <th>
                         發票列印樣式<br />
@@ -207,9 +215,12 @@
                     <td>
                         <input type="checkbox" value="@($"{true}")" name="DownloadDataNumber" @(_viewModel.DownloadDataNumber == true ? "checked" : null) />使用傳送企業發票對應資料
                     </td>
-                    <td colspan="2">
-                        <input type="checkbox" value="@($"{true}")" name="InvoiceNotUploadedAlert" @(_viewModel.InvoiceNotUploadedAlert == true ? "checked" : null) />未上傳發票時通知
-                    </td>
+                    <th>
+                        <input type="checkbox" value="ForcedAuditNo" name="Settings" checked="@(_viewModel.ForcedAuditNo)" />單據號碼強制唯一
+                    </th>
+                    <th>
+                        <input type="checkbox" value="IgnoreDuplicatedNo" name="Settings" checked="@(_viewModel.IgnoreDuplicatedNo)" />傳輸開立忽略檢核發票號碼重複
+                    </th>
                 </tr>
                 <tr>
                     <th>
@@ -248,16 +259,16 @@
                 </tr>
                 <tr>
                     <th>
-                        設定接收B2B發票(PDF檔)
+                        <input type="checkbox" value="@($"{true}")" name="SubscribeB2BInvoicePDF" @(_viewModel.SubscribeB2BInvoicePDF == true ? "checked" : null) /> 設定接收B2B發票(PDF檔)
                     </th>
-                    <td>
-                        <input type="checkbox" value="@($"{true}")" name="SubscribeB2BInvoicePDF" @(_viewModel.SubscribeB2BInvoicePDF == true ? "checked" : null) />是
-                    </td>
                     <th>
-                        開立發票字軌號碼檢核
+                        <input type="checkbox" value="@($"{true}")" name="EnableTrackCodeInvoiceNoValidation" @(_viewModel.EnableTrackCodeInvoiceNoValidation == true ? "checked" : null) /> 開立發票字軌號碼檢核
+                    </th>
+                    <th>
+                        <input type="checkbox" value="HybridB2B" name="Settings" checked="@(_viewModel.HybridB2B)" />以A0401開立B2B發票
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="EnableTrackCodeInvoiceNoValidation" @(_viewModel.EnableTrackCodeInvoiceNoValidation == true ? "checked" : null) />是
+                        <input type="checkbox" value="InvoiceExchange" name="Settings" checked="@(_viewModel.InvoiceExchange)" />啟用發票交換
                     </td>
                 </tr>
                 <tr>
@@ -412,14 +423,15 @@
                 </tr>
                 <tr>
                     <th>
-                        簡訊通知
+                        <input type="checkbox" value="@($"{true}")" name="SetToNotifyCounterpartBySMS" @(_viewModel.SetToNotifyCounterpartBySMS == true ? "checked" : null) />使用簡訊通知買受人
+                    </th>
+                    <th>
+                        <input type="checkbox" value="@($"{true}")" name="UseB2BStandalone" @(_viewModel.UseB2BStandalone == true ? "checked" : null) />B2B發票開立通知以鏈結取代附件
+                    </th>
+                    <th>
+                        <input type="checkbox" value="@((int)Naming.InvoiceNoticeStatus.GetDailyReport)" name="NoticeStatus" checked="@(_viewModel.NoticeSetting.HasValue && ((_viewModel.NoticeSetting.Value & Naming.InvoiceNoticeStatus.GetDailyReport) > 0))" />寄送每日報表
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="SetToNotifyCounterpartBySMS" @(_viewModel.SetToNotifyCounterpartBySMS == true ? "checked" : null) />使用簡訊通知買受人
-                    </td>
-                    <th>B2B發票開立通知以鏈結取代附件</th>
-                    <td>
-                        <input type="checkbox" value="@($"{true}")" name="UseB2BStandalone" @(_viewModel.UseB2BStandalone == true ? "checked" : null) />是
                     </td>
                 </tr>
                 <tr>

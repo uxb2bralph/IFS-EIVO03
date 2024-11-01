@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
 
 using InvoiceClient.Helper;
 using InvoiceClient.Properties;
 using InvoiceClient.WS_Invoice;
+using Model.InvoiceManagement.Validator;
 using Model.Resource;
 using Model.Schema.EIVO;
 using Model.Schema.EIVO.B2B;
@@ -106,6 +108,11 @@ namespace InvoiceClient.Agent.POSHelper
             return result;
         }
 
+        protected override XmlDocument prepareInvoiceDocument(string invoiceFile)
+        {
+            invoiceFile.ReviseXmlContent();
+            return base.prepareInvoiceDocument(invoiceFile);
+        }
 
         protected override Root processUpload(WS_Invoice.eInvoiceService invSvc, XmlDocument docInv)
         {
@@ -125,19 +132,24 @@ namespace InvoiceClient.Agent.POSHelper
                     {
                         var invItem = item.Invoice[idx];
 
-                        if (invItem.SellerId != Settings.Default.SellerReceiptNo)
+                        if (POSReady.Settings.SellerReceiptNo == null)
                         {
-                            result.Add(idx, new Exception(String.Format(MessageResources.InvalidSellerOrAgent, invItem.SellerId, Settings.Default.SellerReceiptNo)));
+                            result.Add(idx, new Exception("Seller Id for allocating invoice no not ready."));
+                            continue;
+                        }
+                        else if (invItem.SellerId != POSReady.Settings.SellerReceiptNo)
+                        {
+                            result.Add(idx, new Exception(String.Format(MessageResources.InvalidSellerOrAgent, invItem.SellerId, POSReady.Settings.SellerReceiptNo)));
                             continue;
                         }
 
                         invItem.BuyerId = invItem.BuyerId.GetEfficientString();
-                        if(invItem.BuyerId==null)
+                        if (invItem.BuyerId == null)
                         {
                             invItem.BuyerId = "0000000000";
                         }
 
-                        InvoiceIssue issue = InvoiceNoInspector.ConsumeInvoiceNo();
+                        InvoiceIssue issue = InvoiceNoInspector.ConsumeInvoiceNo(invoiceDate);
 
                         if (issue != null)
                         {
@@ -147,6 +159,12 @@ namespace InvoiceClient.Agent.POSHelper
                                 if (invItem.RandomNumber == null)
                                 {
                                     invItem.RandomNumber = issue.random;
+                                }
+
+                                invItem.CarrierId1 = invItem.CarrierId1.GetEfficientString();
+                                if (invItem.CarrierId1?.Length == 8 && InvoiceRootInvoiceValidator.__MatchCellPhoneBarcode.IsMatch(invItem.CarrierId1))
+                                {
+                                    invItem.CarrierType = InvoiceRootInvoiceValidator.__CELLPHONE_BARCODE;
                                 }
                             }
                             else

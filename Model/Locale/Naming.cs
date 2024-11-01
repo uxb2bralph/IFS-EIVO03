@@ -21,7 +21,7 @@ namespace Model.Locale
             COMP_E_INVOICE_B2C_SELLER = 15,	            //	2	賣方	     sketch_seller.gif
             COMP_E_INVOICE_B2C_BUYER = 16,	            //	3	買方	     sketch_buyer.gif
             COMP_E_INVOICE_GOOGLE_TW = 17,              //  4   GoogleTaiwan
-            COMP_ENTERPRISE_GROUP   =   18,
+            COMP_ENTERPRISE_GROUP = 18,
             COMP_VIRTUAL_CHANNEL = 19,
             COMP_INVOICE_AGENT = 20,                    //  5   發票開立代理
             COMP_E_INVOICE_B2B_SELLER = 21,	        //	B2B 賣　　　方
@@ -147,7 +147,7 @@ namespace Model.Locale
             下載大平台作廢折讓 = 9,
             UXGW上傳資料 = 10,
             授權資料下載 = 11,
-            接收發票=12,
+            接收發票 = 12,
             接收折讓單 = 13,
             接收作廢發票 = 14,
             接收作廢折讓單 = 15,
@@ -175,7 +175,7 @@ namespace Model.Locale
             註銷作廢折讓單 = 37,
             註銷收據 = 38,
             UXGW自動開立 = 39,
-            UXGW下載資料    = 40,
+            UXGW下載資料 = 40,
             UXGW上傳發票退回 = 41,
             UXGW上傳發票註銷 = 42,
             UXGW上傳折讓單退回 = 43,
@@ -311,6 +311,9 @@ namespace Model.Locale
             文件準備中 = 1318,
             回傳MIG = 1319,
             已註銷 = 1320,
+            MIG_C = 1321,
+            MIG_E = 1322,
+            MIG_P = 1323,
         }
 
         public enum NotificationIndication
@@ -339,16 +342,16 @@ namespace Model.Locale
         }
 
         public enum InvoiceCenterBusinessType
-        { 
-            銷項  =   1,
-            進項  =   2
+        {
+            銷項 = 1,
+            進項 = 2
         }
 
         public enum CounterpartBusinessQueryType
         {
             //銷項 = 1,
             進項 = 2
-        }        
+        }
 
         public enum InvoiceCenterBusinessQueryType
         {
@@ -472,7 +475,8 @@ namespace Model.Locale
         public enum VoidActionMode
         {
             註銷重開 = 0,
-            註銷作廢 = 1
+            註銷作廢 = 1,
+            索取紙本= 2,
         }
 
         public enum InvoiceProcessType
@@ -533,6 +537,7 @@ namespace Model.Locale
             CancellingAllowance = 0x10,
             UseCustomStyle = 0x20,
             UseCBEStyle = 0x40,
+            GetDailyReport = 0x80,
         }
 
         public enum FieldDisplayType
@@ -556,10 +561,10 @@ namespace Model.Locale
         public enum GovTurnkeyTransaction
         {
             I = 1,  //:(Information) 準備產出MIG傳輸至TurnKey
-            P ,     //:(Passive) 已產出MIG由TurnKey處理中
-            C ,     //:(Committed) TurnKey已將MIG傳送至大平台，小平台已回收MIG備份檔
-            E ,     //:(Error) TurnKey退回MIG
+            P,     //:(Passive) 已產出MIG由TurnKey處理中
+            C,     //:(Committed) TurnKey已將MIG傳送至大平台，小平台已回收MIG備份檔
+            E,     //:(Error) TurnKey退回MIG
         }
 
-}
+    }
 }

@@ -50,7 +50,7 @@ namespace Utility
                                     'W', 'X', 'Y'};
         public static char[] NUMERIC_STRING = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
 
-
+        public const string HEX_NUMBER = "0123456789ABCDEF";
         public static bool IsSignificantString(object obj)
         {
             if (obj != null && (obj is string))
@@ -85,8 +85,19 @@ namespace Utility
         {
             if (file != null)
             {
-                string fileName = System.Guid.NewGuid().ToString() + ext;
-                file.SaveAs(storePath + "\\" + fileName);
+                string fileName = $"{System.Guid.NewGuid()}{ext}";
+                file.SaveAs(Path.Combine(storePath, fileName));
+                return fileName;
+            }
+            return null;
+        }
+
+        public static string SaveUploadFile(HttpPostedFileBase file, string storePath, string ext)
+        {
+            if (file != null)
+            {
+                string fileName = $"{System.Guid.NewGuid()}{ext}";
+                file.SaveAs(Path.Combine(storePath, fileName));
                 return fileName;
             }
             return null;
@@ -563,6 +574,20 @@ namespace Utility
                 sCode[n] = NUMERIC_STRING[oRnd.Next(NUMERIC_STRING.Length)];
             }
             return new String(sCode);
+        }
+
+        public static String GenerateHexCode(this int length)
+        {
+            StringBuilder sb = new StringBuilder(length);
+            Random random = new Random();
+
+            for (int i = 0; i < length; i++)
+            {
+                int index = random.Next(HEX_NUMBER.Length);
+                sb.Append(HEX_NUMBER[index]);
+            }
+
+            return sb.ToString();
         }
 
 

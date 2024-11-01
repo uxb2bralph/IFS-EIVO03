@@ -30,8 +30,7 @@ using Model.Locale;
 using Model.Security.MembershipManagement;
 using Utility;
 using ModelExtension.Helper;
-using System.Windows.Controls;
-using static Model.Locale.Naming;
+using System.Net.Mail;
 
 namespace eIVOGo.Controllers
 {
@@ -116,7 +115,7 @@ namespace eIVOGo.Controllers
         public ActionResult ActivateUser(UserProfileViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            if(viewModel.KeyID!=null)
+            if (viewModel.KeyID != null)
             {
                 viewModel.UID = viewModel.DecryptKeyValue();
             }
@@ -161,6 +160,18 @@ namespace eIVOGo.Controllers
 
             return View("~/Views/Notification/IssueC0401.cshtml", item);
         }
+
+        public ActionResult IssueC0701(DocumentQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)IssueA0401(viewModel);
+            InvoiceItem item = result.Model as InvoiceItem;
+
+            if (item == null)
+                return result;
+
+            return View("~/Views/Notification/IssueC0701.cshtml", item);
+        }
+
 
         public ActionResult IssueWinningInvoice(DocumentQueryViewModel viewModel)
         {
@@ -257,14 +268,14 @@ namespace eIVOGo.Controllers
                 ModelState.AddModelError("SellerID", "未指定營業人!!");
             }
 
-            viewModel.SellerID = item.CompanyID;
-
             if (!ModelState.IsValid)
             {
                 return Json(new { result = false, message = ModelState.ErrorMessage() }, JsonRequestBehavior.AllowGet);
             }
 
-            if(!viewModel.DateFrom.HasValue)
+            viewModel.SellerID = item.CompanyID;
+
+            if (!viewModel.DateFrom.HasValue)
             {
                 viewModel.DateFrom = DateTime.Today.AddDays(-1);
             }
@@ -275,6 +286,45 @@ namespace eIVOGo.Controllers
             }
 
             return View("~/Views/Notification/SendDailyReport.cshtml", item);
+
+        }
+
+        public ActionResult SendMessage(MailMessageViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            return View("~/Views/Notification/SendMessage.cshtml");
+        }
+
+        public ActionResult CommitMessage(MailMessageViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.CompanyID = viewModel.DecryptKeyValue();
+            }
+
+            Organization item = models.GetTable<Organization>().Where(c => c.CompanyID == viewModel.CompanyID)
+                .FirstOrDefault();
+
+            if (item == null)
+            {
+                ModelState.AddModelError("CompanyID", "未指定營業人!!");
+            }
+
+            viewModel.Subject = viewModel.Subject.GetEfficientString();
+            if (viewModel.Subject == null)
+            {
+                ModelState.AddModelError("Subject", "請輸入信件主旨!!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Shared/ReportInputError.cshtml");
+                //return Json(new { result = false, message = ModelState.ErrorMessage() }, JsonRequestBehavior.AllowGet);
+            }
+
+            return View("~/Views/Notification/IssueGeneralMessage.cshtml", item);
 
         }
 
@@ -328,83 +378,7 @@ namespace eIVOGo.Controllers
             return View("~/Views/Notification/NotifyLowerInvoiceNoStock.cshtml", item);
         }
 
-        public ActionResult NotifyInvoiceNotUpload(OrganizationViewModel viewModel)
-        {
-            ViewBag.ViewModel = viewModel;
 
-            if (viewModel.KeyID != null)
-            {
-                viewModel.CompanyID = viewModel.DecryptKeyValue();
-            }
-
-            Organization item = models.GetTable<Organization>()
-                    .Where(o => o.CompanyID == viewModel.CompanyID)
-                    .FirstOrDefault();
-
-            if (viewModel == null)
-            {
-                return View("~/Views/Shared/AlertMessage.cshtml", model: "資料錯誤!!");
-            }
-
-            return View("~/Views/Notification/NotifyInvoiceNotUpload.cshtml", item);
-            
-        }
-        public FileContentResult NotifyInvoiceNotUploadList(int? id)
-        {
-            //DateTime dt1 = DateTime.Now;
-            if (id == 0) return null;
-            int yyyy = int.Parse(id.ToString().Substring(0, 4));
-            int mm = int.Parse(id.ToString().Substring(4, 2));
-            int dd = int.Parse(id.ToString().Substring(6, 2));
-            using (InvoiceManager mgr = new InvoiceManager())
-            {
-                DateTime checkDate = DateTime.Parse($"{yyyy}/{mm}/{dd}");
-
-                var eligibleInvoiceCountZeroSellers
-                    = InvoiceNotUploadNotification
-                        .GetInvoiceUploadZeroWeatherSettingAlertOrNotList   (
-                        mgr,
-                        checkDate);
-
-                var eligibleInvoiceCountZeroSellersOrgs = 
-                    mgr.GetTable<Organization>()
-                    .Where(x => eligibleInvoiceCountZeroSellers.Contains(x.CompanyID))
-                    .Select(y=> new { 
-                        SellerId = y.ReceiptNo,
-                        SellerName = y.CompanyName,
-                        CompanyId = y.CompanyID,
-                        SellerStatus = y.OrganizationStatus.CurrentLevel
-                    }).ToList();
-
-                //DateTime dt2 = DateTime.Now;
-                //Logger.Info($"TotalSeconds={(dt2 - dt1).TotalSeconds}");
-                ClosedXML.Excel.XLWorkbook excel;
-                using (DataSet ds = new DataSet())
-                {
-                    DataTable table = new DataTable($"未上傳發票{id}列表");
-                    table.Columns.Add("統一編號");
-                    table.Columns.Add("公司名稱");
-                    table.Columns.Add("公司代碼");
-                    foreach (var org in eligibleInvoiceCountZeroSellersOrgs)
-                    {
-                        var r = table.NewRow();
-                        r[0] = org.SellerId;
-                        r[1] = org.SellerName;
-                        r[2] = org.CompanyId;
-                        table.Rows.Add(r);
-                    }
-
-                    ds.Tables.Add(table);
-                    excel = ds.ConvertToExcel();
-
-                }
-
-                using (var ms = new MemoryStream())
-                {
-                    excel.SaveAs(ms);
-                    return File(ms.ToArray(), "application/octet-stream", $"未上傳發票{id}列表.xlsx");
-                }
-            }
-        }
     }
+
 }
