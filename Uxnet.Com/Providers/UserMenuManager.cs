@@ -68,6 +68,11 @@ namespace Uxnet.Com.Providers
             }
         }
 
+        public void ClearCache()
+        {
+            _cachedMenu.Clear();
+        }
+
         public String StoredPath
         {
             get

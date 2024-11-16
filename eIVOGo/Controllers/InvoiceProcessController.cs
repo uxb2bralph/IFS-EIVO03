@@ -1217,100 +1217,128 @@ namespace eIVOGo.Controllers
 
         }
 
+        //private void doVoidInvoice(IEnumerable<InvoiceItem> items, Naming.VoidActionMode? mode)
+        //{
+        //    Model.Properties.Settings.Default.C0701Outbound.CheckStoredPath();
+
+        //    foreach (var item in items)
+        //    {
+        //        item.CreateVoidInvoiceMIG().ConvertToXml().Save(Path.Combine(Model.Properties.Settings.Default.C0701Outbound, "INV0701_" + item.TrackCode + item.No + ".xml"));
+        //    }
+
+        //    if (mode == Naming.VoidActionMode.註銷作廢 
+        //        || mode == Naming.VoidActionMode.索取紙本)
+        //    {
+        //        String storedPath = Path.Combine(Logger.LogPath, "C0401(Outbound)").CheckStoredPath();
+        //        var profile = HttpContext.GetUser();
+        //        foreach (var item in items)
+        //        {
+        //            if (mode == Naming.VoidActionMode.索取紙本
+        //                && item.InvoiceCancellation == null)
+        //            {
+        //                item.PrintMark = "Y";
+        //                models.DeleteAnyOnSubmit<InvoiceCarrier>(c => c.InvoiceID == item.InvoiceID);
+        //                models.SubmitChanges();
+        //            }
+
+        //            var c0401 = item.CreateInvoiceMIG().ConvertToXml();
+        //            c0401.Save(Path.Combine(storedPath, $"INV0401_{item.TrackCode}{item.No}_{DateTime.Now.Ticks}.xml"));
+
+        //            models.GetTable<ExceptionLog>().InsertOnSubmit(new ExceptionLog
+        //            {
+        //                DataContent = c0401.OuterXml,
+        //                CompanyID = item.SellerID,
+        //                LogTime = DateTime.Now,
+        //                TypeID = (int)Naming.DocumentTypeDefinition.E_InvoiceVoid,
+        //                Message = $"發票註銷({item.TrackCode}{item.No}),UID:{profile?.UID},PID:{profile?.PID}"
+        //            });
+        //            models.SubmitChanges();
+
+        //            if (mode == Naming.VoidActionMode.註銷作廢)
+        //            {
+        //                models.ExecuteCommand(@"DELETE FROM CDS_Document
+        //                FROM    DerivedDocument INNER JOIN
+        //                        CDS_Document ON DerivedDocument.DocID = CDS_Document.DocID
+        //                WHERE   (DerivedDocument.SourceID = {0})", item.InvoiceID);
+        //                models.DeleteAny<InvoiceCancellation>(d => d.InvoiceID == item.InvoiceID);
+        //            }
+        //        }
+
+        //        ThreadPool.QueueUserWorkItem(t =>
+        //        {
+        //            Thread.Sleep(10 * 60000);
+        //            String[] files = Directory.GetFiles(storedPath);
+        //            if (files != null && files.Length > 0)
+        //            {
+        //                Model.Properties.Settings.Default.C0401Outbound.CheckStoredPath();
+
+        //                foreach (var f in files)
+        //                {
+        //                    try
+        //                    {
+        //                        System.IO.File.Move(f, Path.Combine(Model.Properties.Settings.Default.C0401Outbound, Path.GetFileName(f)));
+        //                    }
+        //                    catch (Exception ex)
+        //                    {
+        //                        Logger.Error(ex);
+        //                    }
+        //                }
+        //            }
+        //        });
+        //    }
+        //    else if (mode == Naming.VoidActionMode.註銷重開)
+        //    {
+        //        var profile = HttpContext.GetUser();
+        //        String storedPath = Path.Combine(Logger.LogPath, "Archive").CheckStoredPath();
+        //        foreach (var item in items)
+        //        {
+        //            var c0401 = item.CreateInvoiceMIG().ConvertToXml();
+        //            c0401.Save(Path.Combine(storedPath, $"INV0401_{item.TrackCode}{item.No}_{DateTime.Now.Ticks}.xml"));
+
+        //            models.GetTable<ExceptionLog>().InsertOnSubmit(new ExceptionLog
+        //            {
+        //                DataContent = c0401.OuterXml,
+        //                CompanyID = item.SellerID,
+        //                LogTime = DateTime.Now,
+        //                TypeID = (int)Naming.DocumentTypeDefinition.E_InvoiceVoid,
+        //                Message = $"發票註銷({item.TrackCode}{item.No}),UID:{profile?.UID},PID:{profile?.PID}"
+        //            });
+        //            models.SubmitChanges();
+
+        //            models.ExecuteCommand(@"DELETE FROM CDS_Document
+        //                FROM    DerivedDocument INNER JOIN
+        //                        CDS_Document ON DerivedDocument.DocID = CDS_Document.DocID
+        //                WHERE   (DerivedDocument.SourceID = {0})", item.InvoiceID);
+        //            models.ExecuteCommand("delete CDS_Document where DocID={0}", item.InvoiceID);
+        //        }
+        //    }
+        //}
+
         private void doVoidInvoice(IEnumerable<InvoiceItem> items, Naming.VoidActionMode? mode)
         {
             Model.Properties.Settings.Default.C0701Outbound.CheckStoredPath();
 
             foreach (var item in items)
             {
-                item.CreateVoidInvoiceMIG().ConvertToXml().Save(Path.Combine(Model.Properties.Settings.Default.C0701Outbound, "INV0701_" + item.TrackCode + item.No + ".xml"));
-            }
-
-            if (mode == Naming.VoidActionMode.註銷作廢 
-                || mode == Naming.VoidActionMode.索取紙本)
-            {
-                String storedPath = Path.Combine(Logger.LogPath, "C0401(Outbound)").CheckStoredPath();
-                var profile = HttpContext.GetUser();
-                foreach (var item in items)
+                lock(typeof(InvoiceProcessController))
                 {
-                    if (mode == Naming.VoidActionMode.索取紙本
-                        && item.InvoiceCancellation == null)
+                    var request = item.CDS_Document.VoidInvoiceRequest;
+                    if (request == null)
                     {
-                        item.PrintMark = "Y";
-                        models.DeleteAnyOnSubmit<InvoiceCarrier>(c => c.InvoiceID == item.InvoiceID);
-                        models.SubmitChanges();
-                    }
-
-                    var c0401 = item.CreateInvoiceMIG().ConvertToXml();
-                    c0401.Save(Path.Combine(storedPath, $"INV0401_{item.TrackCode}{item.No}_{DateTime.Now.Ticks}.xml"));
-
-                    models.GetTable<ExceptionLog>().InsertOnSubmit(new ExceptionLog
-                    {
-                        DataContent = c0401.OuterXml,
-                        CompanyID = item.SellerID,
-                        LogTime = DateTime.Now,
-                        TypeID = (int)Naming.DocumentTypeDefinition.E_InvoiceVoid,
-                        Message = $"發票註銷({item.TrackCode}{item.No}),UID:{profile?.UID},PID:{profile?.PID}"
-                    });
-                    models.SubmitChanges();
-
-                    if (mode == Naming.VoidActionMode.註銷作廢)
-                    {
-                        models.ExecuteCommand(@"DELETE FROM CDS_Document
-                        FROM    DerivedDocument INNER JOIN
-                                CDS_Document ON DerivedDocument.DocID = CDS_Document.DocID
-                        WHERE   (DerivedDocument.SourceID = {0})", item.InvoiceID);
-                        models.DeleteAny<InvoiceCancellation>(d => d.InvoiceID == item.InvoiceID);
-                    }
-                }
-
-                ThreadPool.QueueUserWorkItem(t =>
-                {
-                    Thread.Sleep(10 * 60000);
-                    String[] files = Directory.GetFiles(storedPath);
-                    if (files != null && files.Length > 0)
-                    {
-                        Model.Properties.Settings.Default.C0401Outbound.CheckStoredPath();
-
-                        foreach (var f in files)
+                        request = new VoidInvoiceRequest
                         {
-                            try
-                            {
-                                System.IO.File.Move(f, Path.Combine(Model.Properties.Settings.Default.C0401Outbound, Path.GetFileName(f)));
-                            }
-                            catch (Exception ex)
-                            {
-                                Logger.Error(ex);
-                            }
-                        }
+                        };
+                        item.CDS_Document.VoidInvoiceRequest = request;
                     }
-                });
-            }
-            else if (mode == Naming.VoidActionMode.註銷重開)
-            {
-                var profile = HttpContext.GetUser();
-                String storedPath = Path.Combine(Logger.LogPath, "Archive").CheckStoredPath();
-                foreach (var item in items)
-                {
-                    var c0401 = item.CreateInvoiceMIG().ConvertToXml();
-                    c0401.Save(Path.Combine(storedPath, $"INV0401_{item.TrackCode}{item.No}_{DateTime.Now.Ticks}.xml"));
 
-                    models.GetTable<ExceptionLog>().InsertOnSubmit(new ExceptionLog
-                    {
-                        DataContent = c0401.OuterXml,
-                        CompanyID = item.SellerID,
-                        LogTime = DateTime.Now,
-                        TypeID = (int)Naming.DocumentTypeDefinition.E_InvoiceVoid,
-                        Message = $"發票註銷({item.TrackCode}{item.No}),UID:{profile?.UID},PID:{profile?.PID}"
-                    });
+                    request.VoidDate = DateTime.Now;
+                    request.Reason = mode.HasValue ? $"{mode}" : "註銷重開";
+                    request.RequestType = (int?)mode;
+                    request.CommitDate = null;
                     models.SubmitChanges();
-
-                    models.ExecuteCommand(@"DELETE FROM CDS_Document
-                        FROM    DerivedDocument INNER JOIN
-                                CDS_Document ON DerivedDocument.DocID = CDS_Document.DocID
-                        WHERE   (DerivedDocument.SourceID = {0})", item.InvoiceID);
-                    models.ExecuteCommand("delete CDS_Document where DocID={0}", item.InvoiceID);
                 }
+
+                item.CreateVoidInvoiceMIG().ConvertToXml().Save(Path.Combine(Model.Properties.Settings.Default.C0701Outbound, "INV0701_" + item.TrackCode + item.No + ".xml"));
             }
         }
 

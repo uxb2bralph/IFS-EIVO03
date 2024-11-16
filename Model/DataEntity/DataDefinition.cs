@@ -109,6 +109,9 @@ namespace Model.DataEntity
     public class OrganizationCustomSettingsModel
     {
         public String C0401POSView { get; set; }
+        public Naming.Truth? DisableE0501AutoUpdate { get; set; }
+        public Naming.Truth? E0501InitialLock { get; set; }
+        public int? E0501ReservedBooklets { get; set; }
     }
 
     public partial class CategoryDefinition
@@ -167,5 +170,25 @@ namespace Model.DataEntity
             AllowanceNumber?.Length > 16
                 ? $"{InvoiceAllowanceDetails.FirstOrDefault()?.InvoiceAllowanceItem.InvoiceNo}{AllowanceID % 1000000:000000}"
                 : AllowanceNumber;
+    }
+
+    public partial class InvoiceDetail
+    {
+        [DataMember(IsRequired = false)]
+        public InvoiceProduct Product { get => this.InvoiceProduct; set => this.InvoiceProduct = value; }
+    }
+
+    public partial class InvoiceSeller
+    {
+        [DataMember(IsRequired = false)]
+        public Organization Institution { get => this.Organization; set => this.Organization = value; }  
+
+    }
+
+    public partial class InvoiceBuyer
+    {
+        [DataMember(IsRequired = false)]
+        public Organization Institution { get => this.Organization; set => this.Organization = value; }
+
     }
 }

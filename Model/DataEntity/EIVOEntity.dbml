@@ -172,6 +172,7 @@
       <Association Name="CDS_Document_CustomerDefined" Member="CustomerDefined" ThisKey="DocID" OtherKey="DocID" Type="CustomerDefined" Cardinality="One" />
       <Association Name="CDS_Document_C0401DispatchQueue" Member="C0401DispatchQueue" ThisKey="DocID" OtherKey="DocID" Type="C0401DispatchQueue" />
       <Association Name="CDS_Document_DataProcessLog" Member="DataProcessLog" ThisKey="DocID" OtherKey="DocID" Type="DataProcessLog" />
+      <Association Name="CDS_Document_VoidInvoiceRequest" Member="VoidInvoiceRequest" ThisKey="DocID" OtherKey="DocID" Type="VoidInvoiceRequest" Cardinality="One" />
       <Association Name="DocumentType_CDS_Document" Member="DocumentType" ThisKey="DocType" OtherKey="TypeID" Type="DocumentType" IsForeignKey="true" />
       <Association Name="LevelExpression_CDS_Document" Member="LevelExpression" ThisKey="CurrentStep" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
     </Type>
@@ -1940,6 +1941,17 @@
       <Column Name="EnterpriseName" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
       <Association Name="MasterOrganization_MasterBranch" Member="MasterBranches" ThisKey="MasterID" OtherKey="MasterID" Type="MasterBranch" />
       <Association Name="Organization_MasterOrganization" Member="Organization" ThisKey="MasterID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.VoidInvoiceRequest" Member="VoidInvoiceRequest">
+    <Type Name="VoidInvoiceRequest">
+      <Column Name="DocID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="VoidDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Reason" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="RequestType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="InvoiceContent" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+		<Column Name="CommitDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+		<Association Name="CDS_Document_VoidInvoiceRequest" Member="CDS_Document" ThisKey="DocID" OtherKey="DocID" Type="CDS_Document" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.MatchDocumentAttachment" Method="MatchDocumentAttachment">

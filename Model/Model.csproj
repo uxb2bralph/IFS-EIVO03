@@ -52,6 +52,7 @@
       <HintPath>bin\Debug\QREncrypter.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Linq.Dynamic.Core, Version=1.3.1.0, Culture=neutral, PublicKeyToken=0f07ec44de6ac832, processorArchitecture=MSIL">
@@ -60,7 +61,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -93,7 +94,6 @@
     <Compile Include="Helper\ERPInvoiceParser.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Helper\AuthExtensions.cs" />
-    <Compile Include="Helper\InvoiceNotUploadNotification.cs" />
     <Compile Include="Helper\InvoiceNoSafetyStockNotification.cs" />
     <Compile Include="InvoiceManagement\FullAllowanceDataSetManager.cs" />
     <Compile Include="InvoiceManagement\AttachmentManager.cs" />
@@ -313,12 +313,6 @@
     <Compile Include="Schema\TurnKey\A0601.cs">
       <DependentUpon>A0601.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Schema\TurnKey\A1101.cs">
-      <DependentUpon>A1101.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Schema\TurnKey\A1401.cs">
-      <DependentUpon>A1401.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Schema\TurnKey\B0101.cs">
       <DependentUpon>B0101.xsd</DependentUpon>
     </Compile>
@@ -337,12 +331,7 @@
     <Compile Include="Schema\TurnKey\B0501.cs">
       <DependentUpon>B0501.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Schema\TurnKey\B1101.cs">
-      <DependentUpon>B1101.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Schema\TurnKey\B1401.cs">
-      <DependentUpon>B1401.xsd</DependentUpon>
-    </Compile>
+    <Compile Include="Schema\TurnKey\F0401\F0401Extensions.cs" />
     <Compile Include="Schema\TurnKey\C0501\C0501Extensions.cs" />
     <Compile Include="Schema\TurnKey\C0401.cs">
       <DependentUpon>C0401.xsd</DependentUpon>
@@ -377,7 +366,6 @@
     <Compile Include="Schema\TurnKey\F0401.cs">
       <DependentUpon>F0401.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Schema\TurnKey\F0401\F0401Extensions.cs" />
     <Compile Include="Schema\TurnKey\F0501.cs">
       <DependentUpon>F0501.xsd</DependentUpon>
     </Compile>
@@ -582,12 +570,6 @@
     <None Include="Schema\TurnKey\A0601.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Schema\TurnKey\A1101.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Schema\TurnKey\A1401.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Schema\TurnKey\B0101.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -604,12 +586,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Schema\TurnKey\B0501.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Schema\TurnKey\B1101.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Schema\TurnKey\B1401.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Schema\TurnKey\C0401.xsd">

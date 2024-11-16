@@ -27,6 +27,11 @@ namespace Model.Properties
             get => _default;
         }
 
+        public static void Reload()
+        {
+            Reload<AppSettings>(ref _default, typeof(AppSettings).Namespace);
+        }
+
         public String StoreRoot { get; set; } = "WebStore";
         public String AttachmentTempStore { get; set; } = "TempAttachment";
         public String EINVTurnkeyRoot { get; set; } = "C:\\EINVTurnkey";

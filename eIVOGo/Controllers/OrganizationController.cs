@@ -582,6 +582,13 @@ namespace eIVOGo.Controllers
             return View("~/Views/Organization/Module/CustomSmtp.cshtml", item);
         }
 
+        protected override void HandleUnknownAction(string actionName)
+        {
+            if (!String.IsNullOrEmpty(actionName))
+            {
+                this.View(actionName).ExecuteResult(this.ControllerContext);
+            }
+        }
 
     }
 }

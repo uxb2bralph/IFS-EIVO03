@@ -22,7 +22,6 @@ using Model.Locale;
 using Model.Security.MembershipManagement;
 using Utility;
 using Uxnet.Web.Controllers;
-using Uxnet.Web.WebUI;
 
 namespace eIVOGo.Helper
 {
@@ -31,6 +30,34 @@ namespace eIVOGo.Helper
         public static GenericManager<EIVOEntityDataContext> DataSource(this ControllerBase controller)
         {
             return ((SampleController<EIVOEntityDataContext>)controller).DataSourceBase;
+        }
+
+        public static void RenderJsonResult(this ViewUserControl control, object data)
+        {
+            JsonResult result = new JsonResult()
+            {
+                ContentType = "application/json",
+                Data = data,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+            };
+            result.ExecuteResult(control.ViewContext.Controller.ControllerContext);
+            control.Response.End();
+        }
+
+        public static void RenderJsonResult(this HttpResponse response, object data)
+        {
+            response.Clear();
+            response.ContentType = "application/json";
+            response.Write(data.JsonStringify());
+            response.End();
+        }
+
+        public static void RenderJsonResult(this HttpResponseBase response, object data)
+        {
+            response.Clear();
+            response.ContentType = "application/json";
+            response.Write(data.JsonStringify());
+            response.End();
         }
     }
 }

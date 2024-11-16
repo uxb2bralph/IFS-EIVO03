@@ -243,7 +243,8 @@ namespace Utility
 
         public static String GetXml<T>(this T entData)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            //XmlSerializer serializer = new XmlSerializer(typeof(T));
+            XmlSerializer serializer = new XmlSerializer(entData.GetType());
             StringBuilder sb = new StringBuilder();
             using (StringWriter sw = new StringWriter(sb))
             {
@@ -1080,6 +1081,7 @@ namespace Utility
             {
                 util.ConvertHtmlToPDF(htmlFile, pdfFile, timeOutInMinute);
             }
+            Logger.Debug($"PDF From: {htmlFile}, to: {pdfFile}");
         }
 
         public static String InsteadOfNullOrEmpty(this String source, String replacement)

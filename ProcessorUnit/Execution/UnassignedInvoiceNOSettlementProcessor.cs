@@ -45,7 +45,7 @@ namespace ProcessorUnit.Execution
 
                         if (viewModel.BranchRelation == true)
                         {
-                            var agency = models.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == viewModel.SellerID);
+                            var agency = manager.GetTable<InvoiceIssuerAgent>().Where(a => a.AgentID == viewModel.SellerID);
                             items = items.Where(c => agency.Any(a => a.IssuerID == c));
 
                             foreach (var orgItem in items)

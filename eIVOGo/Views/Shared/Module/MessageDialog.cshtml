@@ -7,6 +7,7 @@
 @using eIVOGo.Helper
 @using Model.Models.ViewModel
 @using eIVOGo.Models.ViewModel
+@using Newtonsoft.Json.Linq
 @{
 
     ModelStateDictionary _modelState;
@@ -18,6 +19,7 @@
     _model = this.Model as QueryViewModel ?? ViewBag.ViewModel as QueryViewModel;
 
     String _dialogID = "message" + DateTime.Now.Ticks;
+    JObject options = ViewBag.DialogOptions as JObject;
 
 }
 
@@ -28,7 +30,7 @@
     <script>
         $('#@(_dialogID)').dialog({
             //autoOpen: false,
-            width: 'auto',
+            width: '@(options?["Width"]?.ToString() ?? "auto")',
             resizable: true,
             //modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-clock-o'></i> @(_model?.ActionTitle ?? "訊息")</h4></div>",

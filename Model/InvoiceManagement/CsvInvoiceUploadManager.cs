@@ -337,7 +337,7 @@ namespace Model.InvoiceManagement
 
             decimal costAmt;
             decimal unitCost;
-            int piece;
+            decimal piece;
 
             if (!decimal.TryParse(column[(int)FieldIndex.金額], NumberStyles.Any, CultureInfo.CurrentCulture, out costAmt))
             {
@@ -349,7 +349,7 @@ namespace Model.InvoiceManagement
                 item.Status = String.Join("、", item.Status, "單價錯誤");
                 _bResult = false;
             }
-            if (!int.TryParse(column[(int)FieldIndex.數量], NumberStyles.Any, CultureInfo.CurrentCulture, out piece))
+            if (!decimal.TryParse(column[(int)FieldIndex.數量], NumberStyles.Any, CultureInfo.CurrentCulture, out piece))
             {
                 item.Status = String.Join("、", item.Status, "數量錯誤");
                 _bResult = false;

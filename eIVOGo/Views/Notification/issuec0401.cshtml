@@ -94,7 +94,16 @@ else if (_viewModel.ForceTodo == true || _model.Organization.OrganizationStatus.
             {
                 File.Delete(pdfFile);
             }
-            File.Move(fileName, pdfFile);
+            //File.Move(fileName, pdfFile);
+            File.Copy(fileName, pdfFile, true);
+            try
+            {
+                File.Delete(fileName);
+            }
+            catch(Exception ex)
+            {
+                Logger.Error(ex);
+            }
             //models.PrepareToDownload(_model, false);
 
             if (_viewModel.AppendAttachment == true)

@@ -133,7 +133,7 @@
     <Compile Include="Execution\AutoUpdater.cs" />
     <Compile Include="Execution\FullAllowanceExcelRequestProcessor.cs" />
     <Compile Include="Execution\ExecutorForeverBase.cs" />
-    <Compile Include="Execution\ExecutorForever.cs" />
+    <Compile Include="Execution\ProcessRequestExecutorForever.cs" />
     <Compile Include="Execution\InvoiceExcelRequestForIssuerA0401Processor.cs" />
     <Compile Include="Execution\InvoiceExcelRequestForIssuerProcessor.cs" />
     <Compile Include="Execution\InvoiceExcelRequestForVACProcessor.cs" />
@@ -180,6 +180,10 @@
     <ProjectReference Include="..\Uxnet.Com\Uxnet.Com.csproj">
       <Project>{72edd90c-e7fe-44f4-8b9b-c9512f02d547}</Project>
       <Name>Uxnet.Com</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Uxnet.ToolAdapter\Uxnet.ToolAdapter.csproj">
+      <Project>{b3ae4afa-632c-493a-ac5a-9e6b7f9a2b30}</Project>
+      <Name>Uxnet.ToolAdapter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

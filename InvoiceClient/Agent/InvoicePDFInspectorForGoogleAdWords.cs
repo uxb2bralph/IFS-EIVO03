@@ -15,6 +15,10 @@ using InvoiceClient.TransferManagement;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Model.Locale;
+using Model.InvoiceManagement;
+using Model.DataEntity;
+using Model.Helper;
+using System.Web;
 
 namespace InvoiceClient.Agent
 {
@@ -30,8 +34,8 @@ namespace InvoiceClient.Agent
 
         public override String GetSaleInvoices(int? index = null)
         {
-            var ret1 = retrieveFiles(index, Naming.ChannelIDType.ForGoogleOnLine);
-            var ret2 = retrieveFiles(index,Naming.ChannelIDType.ForGoogleTerms);
+            var ret1 = retrieveFiles2024(index, Naming.ChannelIDType.ForGoogleOnLine);
+            var ret2 = retrieveFiles2024(index,Naming.ChannelIDType.ForGoogleTerms);
             return ret1 ?? ret2;
         }
 
@@ -48,7 +52,7 @@ namespace InvoiceClient.Agent
                     token.Request.channelID = (int)channelID;
                 }
                 String storedPath = Settings.Default.DownloadDataInAbsolutePath ? Settings.Default.DownloadSaleInvoiceFolder : Path.Combine(Settings.Default.InvoiceTxnPath, Settings.Default.DownloadSaleInvoiceFolder);
-                ValueValidity.CheckAndCreatePath(storedPath);
+                storedPath.CheckStoredPath();
                 //storedPath = ValueValidity.GetDateStylePath(storedPath);
 
                 String tmpPath = Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}");
@@ -118,6 +122,121 @@ namespace InvoiceClient.Agent
             }
 
             return null;
+        }
+
+        private string retrieveFiles2024(int? index, Naming.ChannelIDType? channelID = null)
+        {
+            try
+            {
+                InvoiceManager models = new InvoiceManager();
+                ///憑證資料檢查
+                ///
+                var token = models.GetTable<OrganizationToken>().Where(t => t.Thumbprint == AppSigner.SignerCertificate.Thumbprint).FirstOrDefault();
+                if (token != null)//&& token.Organization.OrganizationStatus.EntrustToPrint == true
+                {
+                    String tmpPath = Path.Combine(Logger.LogDailyPath, $"{DateTime.Now.Ticks}");
+                    String storedPath = Settings.Default.DownloadDataInAbsolutePath ? Settings.Default.DownloadSaleInvoiceFolder : Path.Combine(Settings.Default.InvoiceTxnPath, Settings.Default.DownloadSaleInvoiceFolder);
+                    storedPath.CheckStoredPath();
+
+                    IQueryable<InvoiceItem> queryItems = BuildQueryItems(models, token, channelID);
+
+                    int count = 0;
+                    InvoiceItem item = queryItems.FirstOrDefault();
+                    if (item != null)
+                    {
+                        tmpPath.CheckStoredPath();
+                    }
+                    while (item != null)
+                    {
+                        if (models.ExecuteCommand("delete DocumentSubscriptionQueue where DocID = {0}", item.InvoiceID) > 0)
+                        {
+                            String pdfFile = Path.Combine(tmpPath,
+                                $"{_prefix_name}{item.InvoicePurchaseOrder.OrderNo}_{item.TrackCode}{item.No}.pdf");
+
+                            String invoiceUrl = String.Format(AppSettings.Default.InvoiceViewUrlPattern, item.InvoiceID);
+
+                            var args = $"{pdfFile} \"{invoiceUrl}\"";
+
+                            Logger.Info($"Create PDF:{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CreatPDF.bat")} {args}");
+                            "CreatePDF.bat".RunBatch(args);
+
+                            models.ExecuteCommand(@"INSERT INTO [proc].DataProcessLog
+                                                            (DocID, LogDate, Status, StepID)
+                                                            VALUES          ({0},{1},{2},{3})",
+                                    item.InvoiceID, DateTime.Now, (int)Naming.DataProcessStatus.Done,
+                                    (int)Naming.InvoiceStepDefinition.PDF待傳輸);
+
+                            count++;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                        if (count >= 1024)
+                        {
+                            count = 0;
+                            models.Dispose();
+                            models = new InvoiceManager();
+                            queryItems = BuildQueryItems(models, token, channelID);
+                        }
+                        item = queryItems.FirstOrDefault();
+                    }
+
+                    models.Dispose();
+
+                    if (Directory.Exists(tmpPath))
+                    {
+                        String args = String.Format("{0}{1:yyyyMMddHHmmssffff}-{4:0000}-AdWords{5} \"{2}\" \"{3}\"",
+                            _prefix_name,
+                            DateTime.Now,
+                            tmpPath,
+                            storedPath, index ?? 0,
+                            channelID == Naming.ChannelIDType.ForGoogleOnLine
+                            ? "-Online"
+                            : channelID == Naming.ChannelIDType.ForGoogleTerms
+                                ? "-Terms"
+                                : null);
+
+                        Logger.Info($"zip PDF:{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ZipPDF.bat")} {args}");
+                        "ZipPDF.bat".RunBatch(args);
+
+                        return storedPath;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+            return null;
+        }
+
+        protected override void fetchPDF(string pdfFile, string url)
+        {
+            url = $"{url}&html={true}";
+            url.ConvertHtmlToPDF(pdfFile, 1);
+        }
+
+        private static IQueryable<InvoiceItem> BuildQueryItems(InvoiceManager models, OrganizationToken token, Naming.ChannelIDType? channelID)
+        {
+            IQueryable<CDS_Document> docItems = models.GetTable<CDS_Document>();
+            if (Settings.Default.ClientID?.Length > 0)
+            {
+                docItems = docItems.Join(models.GetTable<DocumentOwner>().Where(o => o.ClientID == Settings.Default.ClientID), d => d.DocID, o => o.DocID, (d, o) => d);
+            }
+
+            if (channelID.HasValue)
+            {
+                docItems = docItems.Where(d => d.ChannelID == (int)channelID);
+            }
+
+            var items = models.GetTable<DocumentSubscriptionQueue>()
+                .Join(docItems, s => s.DocID, d => d.DocID, (s, d) => d)
+                //.Where(d => d.DocumentOwner.ClientID == clientID)
+                .Join(models.GetTable<InvoiceItem>(), d => d.DocID, i => i.InvoiceID, (d, i) => i);
+            IQueryable<InvoiceItem> queryItems = items.Where(i => i.SellerID == token.CompanyID);
+            return queryItems;
         }
 
         public override Type UIConfigType

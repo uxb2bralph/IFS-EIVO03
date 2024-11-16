@@ -35,6 +35,7 @@ using Newtonsoft.Json;
 using ModelExtension.Notification;
 using eIVOGo.Module.Common;
 using ModelExtension.Service;
+using Uxnet.Web.Helper;
 
 namespace eIVOGo.Published
 {
@@ -418,16 +419,20 @@ namespace eIVOGo.Published
             {
                 try
                 {
-                    using (WebClient client = new WebClient())
-                    {
-                        client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                        client.Encoding = Encoding.UTF8;
+                    String contentUrl = $"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/DataView/ShowInvoice")}?{viewModel.ToQueryString()}";
+                    String pdf = Path.Combine(Logger.LogDailyPath, $"{Guid.NewGuid()}.pdf");
+                    contentUrl.ConvertHtmlToPDF(pdf, HttpContext.Current?.Session.Timeout ?? 20);
+                    return pdf;
+                    //using (WebClient client = new WebClient())
+                    //{
+                    //    client.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    //    client.Encoding = Encoding.UTF8;
 
-                        viewModel.NameOnly = true;
-                        String result = client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/DataView/PrintSingleInvoiceAsPDF")}",
-                            viewModel.JsonStringify());
-                        return result;
-                    }
+                    //    viewModel.NameOnly = true;
+                    //    String result = client.UploadString($"{Uxnet.Web.Properties.Settings.Default.HostUrl}{VirtualPathUtility.ToAbsolute("~/DataView/PrintSingleInvoiceAsPDF")}",
+                    //        viewModel.JsonStringify());
+                    //    return result;
+                    //}
                 }
                 catch (Exception ex)
                 {

@@ -195,7 +195,7 @@ namespace Utility
 
         #region MoneyShow
 
-        public static string MoneyShow(object numValue)
+        public static string MoneyShow(this object numValue)
         {
             string strMoney = Convert.ToInt64(numValue).ToString();
             if (strMoney.Length > 15) return strMoney; //百兆以上不處理

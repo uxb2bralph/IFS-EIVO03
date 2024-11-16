@@ -57,7 +57,8 @@ namespace eIVOGo.Controllers.Handler
         public ActionResult ReloadSettings()
         {
             AppSettings.Reload();
-            return Content(AppSettings.Default.JsonStringify(), "application/json");
+            Model.Properties.AppSettings.Reload();
+            return Content(AppSettings.AllSettings.JsonStringify(), "application/json");
         }
 
         public ActionResult SaveSettings()

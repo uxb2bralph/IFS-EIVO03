@@ -532,6 +532,8 @@ namespace Model.Models.ViewModel
         public CategoryDefinition.CategoryEnum? CategoryID { get; set; }
         public int? AgentID { get; set; }
         public bool? BranchRelation { get; set; }
+        public OrganizationCustomSettingsModel CustomSettings { get; set; }
+
     }
 
     public class MailMessageViewModel : QueryViewModel

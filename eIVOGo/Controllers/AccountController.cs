@@ -65,8 +65,7 @@ namespace eIVOGo.Controllers
 
             LoginHandler login = new LoginHandler();
             String msg;
-            UserProfileMember member;
-            if (!login.ProcessLogin(viewModel.PID, viewModel.Password, out msg,out member))
+            if (!login.ProcessLogin(viewModel.PID, viewModel.Password, out msg,out UserProfileMember member))
             {
                 ModelState.AddModelError("PID", msg);
                 return View("~/Views/Account/CbsLogin.cshtml");

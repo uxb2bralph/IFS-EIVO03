@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using DataAccessLayer.basis;
 using Model.Locale;
+using Utility;
 
 namespace Model.DataEntity
 {
@@ -437,6 +438,20 @@ namespace Model.DataEntity
             //    }
             //}
             //return false;
+        }
+        public static string GetJsonString(this InvoiceItem item)
+        {
+            Object val = item.InvoiceAmountType;
+            val = item.InvoiceBuyer;
+            val = item.InvoiceCarrier;
+            val = item.InvoiceDetails.SelectMany(d => d.InvoiceProduct.InvoiceProductItem).ToList();
+            val = item.InvoiceDonation;
+            val = item.InvoicePurchaseOrder;
+            val = item.InvoiceSeller;
+            val = item.InvoiceWinningNumber;
+
+            var json = item.JsonStringify();
+            return json;
         }
     }
 

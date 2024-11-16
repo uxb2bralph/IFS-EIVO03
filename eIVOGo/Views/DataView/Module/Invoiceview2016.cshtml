@@ -55,7 +55,7 @@
         }
         else
         {
-            _totalAmtChar = ((int)_model.InvoiceAmountType.TotalAmount.Value).GetChineseNumberSeries(8);
+            _totalAmtChar = ((int?)_model.InvoiceAmountType.TotalAmount ?? 0).GetChineseNumberSeries(8);
         }
 
     }

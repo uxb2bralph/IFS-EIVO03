@@ -30,7 +30,7 @@
             <div class="allowances__cutfield">
                 @if (_model.InvoiceAllowanceSeller.Organization.LogoURL != null)
                 {
-                    <img id="allowances__logo"
+                    <img class="allowances__logo"
                          src='@(eIVOGo.Properties.Settings.Default.WebApDomain + VirtualPathUtility.ToAbsolute("~/" + _model.InvoiceAllowanceSeller.Organization.LogoURL))' />
                 }
                 else

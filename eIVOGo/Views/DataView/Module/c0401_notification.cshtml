@@ -99,7 +99,7 @@
                             }
                             @if (_productItem != null && _productItem.Length <= _FirstCheckCount)
                             {
-                                <div class="content_box">
+                                <div class="content_box" style="width:100%;">
                                     <p style="border-top: 1px dotted #808080;">
                                         <span style="font-size: 12pt; font-weight: bold;">
                                             總計：@(_model.InvoiceDetails.Count)項&nbsp;&nbsp;
@@ -138,7 +138,7 @@
                 ● 統一發票給獎辦法第11條規定，發票金額為零，不能兌換。
             </div><br />
             <div class="content_box">
-                ● 本公司依據財政部「電子發票實施作業要點」使用雲端發票，您的發票明細資料將上傳至財政部<a href="https://www.einvoice.nat.gov.tw/APCONSUMER/BTC601W/">電子發票整合服務平台</a>，無論是個人載具發票或是會員載具託管發票，將不再另行寄送紙本發票。若會員載具託管發票中獎，本公司將依法於開獎日翌日起10日內以電子郵件通知發票中獎訊息，並提供電子發票證明聯紙本作為兌獎憑證。您可於發票開立48小時後，至財政部<a href="https://www.einvoice.nat.gov.tw/APCONSUMER/BTC601W/">電子發票整合服務平台</a>進行發票資料查詢。
+                ● 本公司依據財政部「電子發票實施作業要點」使用雲端發票，您的發票明細資料將上傳至財政部<a href="https://www.einvoice.nat.gov.tw/portal/btc/audit">電子發票整合服務平台</a>，無論是個人載具發票或是會員載具託管發票，將不再另行寄送紙本發票。若會員載具託管發票中獎，本公司將依法於開獎日翌日起10日內以電子郵件通知發票中獎訊息，並提供電子發票證明聯紙本作為兌獎憑證。您可於發票開立48小時後，至財政部<a href="https://www.einvoice.nat.gov.tw/portal/btc/audit">電子發票整合服務平台</a>進行發票資料查詢。
             </div>
             @*<div class="content_box">
             @(_model.Organization.CompanyName)以網路銷售電子勞務予中華民國境內個人買受人，自2019年1月起開立雲端發票，為方便您查詢雲端發票及兌領統一發票中獎獎金，請使用「財政部統一發票兌獎APP」或「財政部電子發票整合服務平台」【<a href="https://einvoice.nat.gov.tw">https://einvoice.nat.gov.tw</a>】，將連結雲端發票之載具(即消費者之電子郵件信箱)歸戶至手機條碼，由財政部提供查詢發票、自動對獎及中獎主動通知服務。
@@ -164,7 +164,7 @@
                 }
                 @if (_productItem.Length > _FirstCheckCount && _productItem.Length <= _SecondCheckCount)
                 {
-                    <div class="content_box">
+                    <div class="content_box" style="width:100%;">
                         <p style="border-top: 1px dotted #808080;">
                             <span style="font-size: 12pt; font-weight: bold;">總計：@(_model.InvoiceDetails.Count)項&nbsp;&nbsp;金額：@(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TotalAmount))</span><br />
                             課稅別：@(_model.InvoiceAmountType.TaxTypeString)&nbsp;&nbsp;
@@ -203,7 +203,7 @@
                         <p class="totalPrice">@(String.Format("{0:##,###,###,##0.##}", item.CostAmount))</p>
                     </div>
                 }
-                <div class="content_box">
+                <div class="content_box" style="width:100%;">
                     <p style="border-top: 1px dotted #808080;">
                         <span style="font-size: 12pt; font-weight: bold;">總計：@(_model.InvoiceDetails.Count)項&nbsp;&nbsp;金額：@(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TotalAmount))</span><br />
                         課稅別：@(_model.InvoiceAmountType.TaxTypeString)&nbsp;&nbsp;

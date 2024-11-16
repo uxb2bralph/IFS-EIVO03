@@ -263,7 +263,7 @@
                             <p class="totalPrice">@(String.Format("{0:##,###,###,##0.##}", item.CostAmount))</p>
                         </div>
                     }
-                    <div class="content_box">
+                    <div class="content_box" style="width:100%;">
                         <p style="border-top: 1px dotted #808080;">
                             <span style="font-size: 12pt; font-weight: bold;">總計：@(_model.InvoiceDetails.Count)項&nbsp;&nbsp;金額：@(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TotalAmount))</span><br />
                             課稅別：@(_model.InvoiceAmountType.TaxTypeString)&nbsp;&nbsp;
@@ -280,6 +280,7 @@
                                     稅額：@(String.Format("{0:##,###,###,##0.##} ", _model.InvoiceBuyer.BuyerMark == 3 || _model.InvoiceBuyer.BuyerMark == 4 ? 0 : _model.InvoiceAmountType.TaxAmount)) &nbsp;&nbsp;
                                 </text>
                             }
+                            <br />
                             備註：@(String.Join(";", _model.InvoiceDetails.Select(d => d.InvoiceProduct.InvoiceProductItem.FirstOrDefault().Remark)).Replace("\r\n","<br/>").Replace("\n","<br/>"))<br />
                             退貨請憑電子發票證明聯辦理
                         </p>

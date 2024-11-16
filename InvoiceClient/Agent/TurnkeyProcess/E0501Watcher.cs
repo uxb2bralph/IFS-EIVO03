@@ -78,9 +78,11 @@ namespace InvoiceClient.Agent.TurnkeyProcess
             }
         }
 
-        public void CommitItem(ModelSource models, InvoiceNoIntervalViewModel viewModel)
+        public void CommitItem(ModelSource models, InvoiceNoIntervalViewModel viewModel, Organization seller)
         {
             InvoiceNoInterval model = null;
+            if (seller.OrganizationCustomSetting?.Settings.DisableE0501AutoUpdate == Naming.Truth.True)
+                return;
 
             var codeAssignment = models.GetTable<InvoiceTrackCodeAssignment>().Where(t => t.SellerID == viewModel.SellerID && t.TrackID == viewModel.TrackID).FirstOrDefault();
             if (codeAssignment == null)
@@ -94,14 +96,32 @@ namespace InvoiceClient.Agent.TurnkeyProcess
                 models.GetTable<InvoiceTrackCodeAssignment>().InsertOnSubmit(codeAssignment);
             }
 
-            model = new InvoiceNoInterval 
+            model = new InvoiceNoInterval
             {
-                LockID = 1,
+                LockID = seller.OrganizationCustomSetting?.Settings.E0501InitialLock == Naming.Truth.False ? (int?)null : 1,
             };
             codeAssignment.InvoiceNoInterval.Add(model);
 
             model.StartNo = viewModel.StartNo.Value;
-            model.EndNo = viewModel.EndNo.Value;
+            if (seller.OrganizationCustomSetting?.Settings.E0501ReservedBooklets > 0)
+            {
+                if ((viewModel.EndNo - viewModel.StartNo + 1) / 50 > seller.OrganizationCustomSetting?.Settings.E0501ReservedBooklets)
+                {
+                    var reservedInterval = new InvoiceNoInterval
+                    {
+                        LockID = 1,
+                        EndNo = viewModel.EndNo.Value,
+                    };
+                    codeAssignment.InvoiceNoInterval.Add(reservedInterval);
+
+                    reservedInterval.StartNo = viewModel.StartNo.Value + seller.OrganizationCustomSetting.Settings.E0501ReservedBooklets.Value * 50;
+                    model.EndNo = reservedInterval.StartNo - 1;
+                }
+            }
+            else
+            {
+                model.EndNo = viewModel.EndNo.Value;
+            }
 
             models.SubmitChanges();
         }
@@ -149,21 +169,26 @@ namespace InvoiceClient.Agent.TurnkeyProcess
                                 item.PeriodNo = (yearNo % 100) / 2;
                                 item.StartNo = int.Parse(data["InvoiceBeginNo"].InnerText);
                                 item.EndNo = int.Parse(data["InvoiceEndNo"].InnerText);
-                                item.SellerID = models.GetTable<Organization>().Where(o => o.ReceiptNo == item.ReceiptNo).FirstOrDefault()?.CompanyID;
 
-                                ModelState.Clear();
-                                CheckInput(models, item);
+                                var seller = models.GetTable<Organization>().Where(o => o.ReceiptNo == item.ReceiptNo).FirstOrDefault();
+                                if (seller != null)
+                                {
+                                    item.SellerID = seller.CompanyID;
+                                    ModelState.Clear();
+                                    CheckInput(models, item);
 
-                                if (ModelState.IsValid)
-                                {
-                                    CommitItem(models, item);
+                                    if (ModelState.IsValid)
+                                    {
+                                        CommitItem(models, item, seller);
+                                    }
+                                    else
+                                    {
+                                        String warning = $"{data.OuterXml}\r\n{ModelState.ErrorMessage()}";
+                                        Logger.Warn(warning);
+                                        $"E0501({backupPath}):\r\n{warning}".PushToLineNotify();
+                                    }
                                 }
-                                else
-                                {
-                                    String warning = $"{data.OuterXml}\r\n{ModelState.ErrorMessage()}";
-                                    Logger.Warn(warning);
-                                    $"E0501({backupPath}):\r\n{warning}".PushToLineNotify();
-                                }
+
                             }
                             catch (Exception ex)
                             {

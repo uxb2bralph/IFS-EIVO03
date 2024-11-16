@@ -11,6 +11,7 @@ using Model.Locale;
 using Model.Models.ViewModel;
 using DataAccessLayer;
 using Utility;
+using System.IO;
 
 namespace Model.Helper
 {
@@ -804,6 +805,34 @@ namespace Model.Helper
                         }
                         break;
 
+                    case "C0701":
+                    case "F0701":
+                        if (no?.Length == 10)
+                        {
+                            var invoice = models.GetTable<InvoiceItem>()
+                                    .Where(i => i.TrackCode == no.Substring(0, 2))
+                                    .Where(i => i.No == no.Substring(2))
+                                    .OrderByDescending(i => i.InvoiceID)
+                                    .FirstOrDefault();
+
+                            if (invoice != null)
+                            {
+                                var request = invoice.CDS_Document.VoidInvoiceRequest;
+                                if (request != null)
+                                {
+                                    request.CommitDate = DateTime.Now;
+                                    models.SubmitChanges();
+
+                                    if (code == "C")
+                                    {
+                                        models.CommitVoidInvoiceRequest(request);
+                                    }
+                                }
+                                return invoice.InvoiceID;
+                            }
+                        }
+                        break;
+
                     case "A0501":
                     case "C0501":
                     case "F0501":
@@ -895,5 +924,62 @@ namespace Model.Helper
             return null;
         }
 
+        private static void CommitVoidInvoiceRequest(this GenericManager<EIVOEntityDataContext> models, VoidInvoiceRequest request)
+        {
+            var item = request.CDS_Document.InvoiceItem;
+            request.InvoiceContent = item.GetJsonString();
+
+            var c0401 = item.CreateInvoiceMIG().ConvertToXml();
+            models.GetTable<ExceptionLog>().InsertOnSubmit(new ExceptionLog
+            {
+                DataContent = c0401.OuterXml,
+                CompanyID = item.SellerID,
+                LogTime = DateTime.Now,
+                TypeID = (int)Naming.DocumentTypeDefinition.E_InvoiceVoid,
+                Message = $"發票註銷({item.TrackCode}{item.No})"
+            });
+
+            models.SubmitChanges();
+
+            Naming.VoidActionMode? mode = (Naming.VoidActionMode?)request.RequestType;
+            if (mode == Naming.VoidActionMode.註銷作廢
+                || mode == Naming.VoidActionMode.索取紙本)
+            {
+                if (mode == Naming.VoidActionMode.索取紙本
+                    && item.InvoiceCancellation == null)
+                {
+                    item.PrintMark = "Y";
+                    models.DeleteAnyOnSubmit<InvoiceCarrier>(c => c.InvoiceID == item.InvoiceID);
+                    models.SubmitChanges();
+                }
+
+                C0401Handler.PushStepQueueOnSubmit(models, request.CDS_Document, Naming.InvoiceStepDefinition.已開立);
+
+                models.SubmitChanges();
+
+                if (mode == Naming.VoidActionMode.註銷作廢)
+                {
+                    models.ExecuteCommand(@"DELETE FROM CDS_Document
+                        FROM    DerivedDocument INNER JOIN
+                                CDS_Document ON DerivedDocument.DocID = CDS_Document.DocID
+                        WHERE   (DerivedDocument.SourceID = {0})", item.InvoiceID);
+                    models.DeleteAny<InvoiceCancellation>(d => d.InvoiceID == item.InvoiceID);
+                }
+            }
+            else if (mode == Naming.VoidActionMode.註銷重開)
+            {
+                String storedPath = Path.Combine(Logger.LogPath, "Archive").CheckStoredPath();
+                c0401.Save(Path.Combine(storedPath, $"INV0401_{item.TrackCode}{item.No}_{DateTime.Now.Ticks}.xml"));
+
+                request.CDS_Document.DocType = (int)Naming.DocumentTypeDefinition.E_InvoiceVoid;
+                models.SubmitChanges();
+
+                models.ExecuteCommand(@"DELETE FROM CDS_Document
+                        FROM    DerivedDocument INNER JOIN
+                                CDS_Document ON DerivedDocument.DocID = CDS_Document.DocID
+                        WHERE   (DerivedDocument.SourceID = {0})", item.InvoiceID);
+                models.ExecuteCommand("delete InvoiceItem where InvoiceID={0}", item.InvoiceID);
+            }
+        }
     }
 }

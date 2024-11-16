@@ -188,6 +188,10 @@ namespace eIVOGo.Helper
                     {
                         using (TrackNoManager mgr = new TrackNoManager(models, seller.CompanyID))
                         {
+                            if(viewModel.InvoiceDate.HasValue)
+                            {
+                                mgr.ApplyInvoiceDate(viewModel.InvoiceDate.Value);
+                            }
                             for (int i = 0; i < viewModel.quantity; i++)
                             {
                                 var item = mgr.AllocateInvoiceNo();

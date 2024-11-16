@@ -8,6 +8,7 @@
 @using eIVOGo.Models.ViewModel
 @using Model.Models.ViewModel
 @using Model.DataEntity
+@using Model.Helper
 @using eIVOGo.Controllers
 @{
 
@@ -98,8 +99,22 @@
                     <th>
                         營業人店號／別名
                     </th>
-                    <td>
+                    <td colspan="2">
                         <input type="text" class="form-control" maxlength="16" name="CustomerNo" value='@(_viewModel.CustomerNo)' />
+                    </td>
+                    <td>
+                        @if (_model != null)
+                        {
+                            <button type="button" class="btn" onclick="applyE0501();">E0501取號設定</button>
+                            <script>
+                                function applyE0501() {
+                                    doPost('@Html.Raw(Url.Action("ApplyE0501Settings", "Organization"))', { 'KeyID': '@Html.Raw(_model.CompanyID.EncryptKey())' }, function (data) {
+                                        var $data = $(data);
+                                        $('body').append($data);
+                                    });
+                                }
+                            </script>
+                        }
                     </td>
                 </tr>
                 <tr>
@@ -178,7 +193,7 @@
                         <input type="checkbox" value="@($"{true}")" name="SetToPrintInvoice" @(_viewModel.SetToPrintInvoice == true ? "checked" : null) />營業人客製化列印
                     </th>
                     <td>
-                        <input type="checkbox" value="DisableC0401Template" name="Settings" checked="@(_viewModel.DisableC0401Template)" />停手C0401系統樣板
+                        <input type="checkbox" value="DisableC0401Template" name="Settings" checked="@(_viewModel.DisableC0401Template)" />停用C0401系統樣板
                     </td>
                     <th>
                         發票列印樣式<br />
@@ -316,13 +331,13 @@
                 </tr>
                 <tr>
                     <th>
-                        設定接收MIG
+                        <input type="checkbox" value="@($"{true}")" name="DownloadDispatch" @(_viewModel.DownloadDispatch == true ? "checked" : null) /> 設定接收MIG
                     </th>
                     <td>
-                        <input type="checkbox" value="@($"{true}")" name="DownloadDispatch" @(_viewModel.DownloadDispatch == true ? "checked" : null) />是
+                        <input type="checkbox" value="SendAllowanceMIGManually" name="Settings" checked="@(_viewModel.SendAllowanceMIGManually)" /> 手動傳送折讓單MIG
                     </td>
                     <td colspan="2">
-                        <input type="checkbox" value="SendAllowanceMIGManually" name="Settings" checked="@(_viewModel.SendAllowanceMIGManually)" />手動傳送折讓單MIG
+                        <input type="checkbox" value="InvoiceNotUploadedAlert" name="Settings" checked="@(_viewModel.InvoiceNotUploadedAlert)" /> 通知發票未傳送
                     </td>
                 </tr>
                 @*<tr>

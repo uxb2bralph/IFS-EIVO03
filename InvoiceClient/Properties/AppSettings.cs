@@ -39,6 +39,6 @@ namespace InvoiceClient.Properties
         public ServiceInfo @ServiceInfo { get; set; }
         public bool InstalledService { get; set; } = false;
         public bool UseMainForm { get; set; }= true;
-
+        public String InvoiceViewUrlPattern { get; set; } = "http://localhost:1183/DataView/ShowInvoice?PrintCuttingLine=True&PaperStyle=A4&UseCustomView=True&ProcessType=C0401&DocID={0}";
     }
 }

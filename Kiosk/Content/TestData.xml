@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<InvoiceRoot xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Invoice>
+    <InvoiceNumber>FA03823574</InvoiceNumber>
+    <InvoiceDate>20221012</InvoiceDate>
+    <InvoiceTime>10:15:51</InvoiceTime>
+    <DataNumber>A2958270</DataNumber>
+    <SellerId>43460094</SellerId>
+    <BuyerName>王大明</BuyerName>
+    <BuyerId>0000000000</BuyerId>
+    <BuyerMark xsi:nil="true" />
+    <InvoiceType>07</InvoiceType>
+    <DonateMark>0</DonateMark>
+    <PrintMark>Y</PrintMark>
+    <RandomNumber>3574</RandomNumber>
+    <InvoiceItem>
+      <Description>衣 飾 ( 件 )</Description>
+      <Quantity>1.0000000</Quantity>
+      <UnitPrice>1246.0000000</UnitPrice>
+      <Amount>1246.0000000</Amount>
+      <SequenceNumber>1</SequenceNumber>
+    </InvoiceItem>
+    <SalesAmount>1246</SalesAmount>
+    <FreeTaxSalesAmount>0</FreeTaxSalesAmount>
+    <ZeroTaxSalesAmount>0</ZeroTaxSalesAmount>
+    <TaxType>1</TaxType>
+    <TaxRate>5</TaxRate>
+    <TaxAmount>0</TaxAmount>
+    <TotalAmount>1246</TotalAmount>
+    <CustomerID>32521000</CustomerID>
+    <Address>台北市中正區南海路20號6樓</Address>
+    <MainRemark>T7 32521000 / A2958270        明細如進貨單</MainRemark>
+    <Contact>
+      <Address>台北市中正區南海路20號6樓</Address>
+    </Contact>
+    <BondedAreaConfirm xsi:nil="true" />
+  </Invoice>
+</InvoiceRoot>

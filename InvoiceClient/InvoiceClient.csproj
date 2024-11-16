@@ -85,7 +85,13 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.Bson.1.0.2\lib\net45\Newtonsoft.Json.Bson.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
@@ -93,15 +99,43 @@
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.6.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Cors, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.3.0\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.3.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.3.0\lib\net45\System.Web.Http.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.3.0\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
@@ -157,9 +191,14 @@
     <Compile Include="Agent\MIGHelper\A0501Watcher.cs" />
     <Compile Include="Agent\MIGHelper\C0501Watcher.cs" />
     <Compile Include="Agent\MIGHelper\C0401Watcher.cs" />
+    <Compile Include="Agent\POSHelper\AllowanceProcessWatcher.cs" />
+    <Compile Include="Agent\POSHelper\ReprintReceiptWatcher.cs" />
     <Compile Include="Agent\POSHelper\POSAllowanceWatcher.cs" />
     <Compile Include="Agent\POSHelper\POSPrintWatcher.cs" />
     <Compile Include="Agent\POSHelper\PreparedAllowanceWatcher.cs" />
+    <Compile Include="Agent\POSHelper\InvoiceProcessWatcher.cs" />
+    <Compile Include="Agent\POSHelper\ReprintAllowanceWatcher.cs" />
+    <Compile Include="Agent\POSHelper\ReprintInvoiceWatcher.cs" />
     <Compile Include="Agent\POSHelper\PreparedInvoiceWatcher.cs" />
     <Compile Include="Agent\POSHelper\InvoicePrintWatcher.cs" />
     <Compile Include="Agent\POSHelper\POSReady.cs" />
@@ -169,11 +208,28 @@
     <Compile Include="Agent\ProcessTaskResponseInspector.cs" />
     <Compile Include="Agent\ExcelResponseInspector.cs" />
     <Compile Include="Agent\AttachmentWatcher.cs" />
+    <Compile Include="Agent\RuntimeHelper\RunBatchWatcher.cs" />
+    <Compile Include="Agent\RuntimeHelper\AutoUpdateWatcher.cs" />
     <Compile Include="Agent\TurnkeyCSVHelper\ERPAllowanceWatcher.cs" />
     <Compile Include="Agent\TurnkeyCSVHelper\ERPAllowanceCancellationWatcher.cs" />
     <Compile Include="Agent\TurnkeyCSVHelper\ERPInvoiceCancellationWatcher.cs" />
     <Compile Include="Agent\TurnkeyCSVHelper\ERPInvoiceWatcher.cs" />
     <Compile Include="Agent\TurnkeyCSVHelper\TurnkeyCSVTransferManager.cs" />
+    <Compile Include="Agent\TurnkeyProcess\E0501Watcher.cs" />
+    <Compile Include="Agent\TurnkeyProcess\C0501FailedResultWatcher.cs" />
+    <Compile Include="Agent\TurnkeyProcess\C0501ResultWatcher.cs" />
+    <Compile Include="Agent\TurnkeyProcess\D0501FailedResultWatcher.cs" />
+    <Compile Include="Agent\TurnkeyProcess\D0501ResultWatcher.cs" />
+    <Compile Include="Agent\TurnkeyProcess\D0401FailedResultWatcher.cs" />
+    <Compile Include="Agent\TurnkeyProcess\D0401ResultWatcher.cs" />
+    <Compile Include="Agent\TurnkeyProcess\C0401FailedResultWatcher.cs" />
+    <Compile Include="Agent\TurnkeyProcess\C0401ResultWatcher.cs" />
+    <Compile Include="Agent\TurnkeyProcess\TurnkeyProcessResultSettings.cs" />
+    <Compile Include="Agent\TurnkeyProcess\TurnkeyProcessTransferManager.cs" />
+    <Compile Include="Agent\TurnkeyProcess\SummaryResult.cs">
+      <DependentUpon>SummaryResult.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Agent\TurnkeyProcess\SummaryResultWatcher.cs" />
     <Compile Include="Agent\XlsxFullAllowanceWatcher.cs" />
     <Compile Include="Agent\XlsxDelayedInvoiceWatcher.cs" />
     <Compile Include="Agent\XmlProcessRequestWatcher.cs" />
@@ -359,6 +415,7 @@
     <Compile Include="ProjectInstaller.Designer.cs">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\AppSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TransferManagement\B2BInvoiceTransferManager.cs" />
@@ -401,6 +458,9 @@
     <EmbeddedResource Include="MainContent\CBEXmlInvoiceCenterConfig.resx">
       <DependentUpon>CBEXmlInvoiceCenterConfig.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainContent\POSChannelConfig.resx">
+      <DependentUpon>POSChannelConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainContent\XlsxInvoiceCenterConfig.resx">
       <DependentUpon>XlsxInvoiceCenterConfig.cs</DependentUpon>
@@ -452,6 +512,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Agent\TurnkeyProcess\SummaryResult.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="app%28DoubleClick%29.config" />
     <None Include="app%28Google%29.config">
       <SubType>Designer</SubType>
@@ -461,6 +524,9 @@
     </None>
     <None Include="app.manifest">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="CreatePDF.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
     <None Include="pgp_decrypt.bat" />
@@ -483,6 +549,9 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="ZipAllowancePDF.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Init.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ZipPDF.bat">
@@ -520,6 +589,14 @@
       <Project>{794db004-9ce8-441e-aab3-1f22df2e19a5}</Project>
       <Name>DataConstructor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\JobHelper\JobHelper.csproj">
+      <Project>{2cc83f27-2955-4744-b22c-aadc2df7e1fc}</Project>
+      <Name>JobHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelExtension\ModelExtension.csproj">
+      <Project>{772bdeaa-bfa0-4bf8-bc1e-a841c3d7daff}</Project>
+      <Name>ModelExtension</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{2f1547b6-2dd4-4a57-a40f-258103591603}</Project>
       <Name>Model</Name>
@@ -527,6 +604,10 @@
     <ProjectReference Include="..\Uxnet.Com\Uxnet.Com.csproj">
       <Project>{72edd90c-e7fe-44f4-8b9b-c9512f02d547}</Project>
       <Name>Uxnet.Com</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Uxnet.ToolAdapter\Uxnet.ToolAdapter.csproj">
+      <Project>{b3ae4afa-632c-493a-ac5a-9e6b7f9a2b30}</Project>
+      <Name>Uxnet.ToolAdapter</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

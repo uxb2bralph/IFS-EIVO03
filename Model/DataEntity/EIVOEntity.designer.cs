@@ -526,6 +526,9 @@ namespace Model.DataEntity
     partial void InsertMasterOrganization(MasterOrganization instance);
     partial void UpdateMasterOrganization(MasterOrganization instance);
     partial void DeleteMasterOrganization(MasterOrganization instance);
+    partial void InsertVoidInvoiceRequest(VoidInvoiceRequest instance);
+    partial void UpdateVoidInvoiceRequest(VoidInvoiceRequest instance);
+    partial void DeleteVoidInvoiceRequest(VoidInvoiceRequest instance);
     #endregion
 		
 		public EIVOEntityDataContext() : 
@@ -1883,6 +1886,14 @@ namespace Model.DataEntity
 			get
 			{
 				return this.GetTable<MasterOrganization>();
+			}
+		}
+		
+		public System.Data.Linq.Table<VoidInvoiceRequest> VoidInvoiceRequest
+		{
+			get
+			{
+				return this.GetTable<VoidInvoiceRequest>();
 			}
 		}
 		
@@ -5361,6 +5372,8 @@ namespace Model.DataEntity
 		
 		private EntitySet<DataProcessLog> _DataProcessLog;
 		
+		private EntityRef<VoidInvoiceRequest> _VoidInvoiceRequest;
+		
 		private EntityRef<DocumentType> _DocumentType;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -6622,6 +6635,41 @@ namespace Model.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_VoidInvoiceRequest", Storage="_VoidInvoiceRequest", ThisKey="DocID", OtherKey="DocID", IsUnique=true, IsForeignKey=false)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=53, EmitDefaultValue=false)]
+		public VoidInvoiceRequest VoidInvoiceRequest
+		{
+			get
+			{
+				if ((this.serializing 
+							&& (this._VoidInvoiceRequest.HasLoadedOrAssignedValue == false)))
+				{
+					return null;
+				}
+				return this._VoidInvoiceRequest.Entity;
+			}
+			set
+			{
+				VoidInvoiceRequest previousValue = this._VoidInvoiceRequest.Entity;
+				if (((previousValue != value) 
+							|| (this._VoidInvoiceRequest.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._VoidInvoiceRequest.Entity = null;
+						previousValue.CDS_Document = null;
+					}
+					this._VoidInvoiceRequest.Entity = value;
+					if ((value != null))
+					{
+						value.CDS_Document = this;
+					}
+					this.SendPropertyChanged("VoidInvoiceRequest");
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="DocumentType_CDS_Document", Storage="_DocumentType", ThisKey="DocType", OtherKey="TypeID", IsForeignKey=true)]
 		public DocumentType DocumentType
 		{
@@ -7142,6 +7190,7 @@ namespace Model.DataEntity
 			this._CustomerDefined = default(EntityRef<CustomerDefined>);
 			this._C0401DispatchQueue = new EntitySet<C0401DispatchQueue>(new Action<C0401DispatchQueue>(this.attach_C0401DispatchQueue), new Action<C0401DispatchQueue>(this.detach_C0401DispatchQueue));
 			this._DataProcessLog = new EntitySet<DataProcessLog>(new Action<DataProcessLog>(this.attach_DataProcessLog), new Action<DataProcessLog>(this.detach_DataProcessLog));
+			this._VoidInvoiceRequest = default(EntityRef<VoidInvoiceRequest>);
 			this._DocumentType = default(EntityRef<DocumentType>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			OnCreated();
@@ -17668,7 +17717,7 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MainMenu", DbType="Xml", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MainMenu", DbType="Xml", UpdateCheck=UpdateCheck.Never)]
 		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
 		public System.Xml.Linq.XElement MainMenu
 		{
@@ -28786,7 +28835,7 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExtraRemark", DbType="Xml", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExtraRemark", DbType="Xml", UpdateCheck=UpdateCheck.Never)]
 		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
 		public System.Xml.Linq.XElement ExtraRemark
 		{
@@ -33321,7 +33370,7 @@ namespace Model.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExtraRemark", DbType="Xml", CanBeNull=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExtraRemark", DbType="Xml", UpdateCheck=UpdateCheck.Never)]
 		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
 		public System.Xml.Linq.XElement ExtraRemark
 		{
@@ -49177,6 +49226,248 @@ namespace Model.DataEntity
 		public void OnSerialized(StreamingContext context)
 		{
 			this.serializing = false;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.VoidInvoiceRequest")]
+	[global::System.Runtime.Serialization.DataContractAttribute()]
+	public partial class VoidInvoiceRequest : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _DocID;
+		
+		private System.DateTime _VoidDate;
+		
+		private string _Reason;
+		
+		private System.Nullable<int> _RequestType;
+		
+		private string _InvoiceContent;
+		
+		private System.Nullable<System.DateTime> _CommitDate;
+		
+		private EntityRef<CDS_Document> _CDS_Document;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnDocIDChanging(int value);
+    partial void OnDocIDChanged();
+    partial void OnVoidDateChanging(System.DateTime value);
+    partial void OnVoidDateChanged();
+    partial void OnReasonChanging(string value);
+    partial void OnReasonChanged();
+    partial void OnRequestTypeChanging(System.Nullable<int> value);
+    partial void OnRequestTypeChanged();
+    partial void OnInvoiceContentChanging(string value);
+    partial void OnInvoiceContentChanged();
+    partial void OnCommitDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCommitDateChanged();
+    #endregion
+		
+		public VoidInvoiceRequest()
+		{
+			this.Initialize();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+		public int DocID
+		{
+			get
+			{
+				return this._DocID;
+			}
+			set
+			{
+				if ((this._DocID != value))
+				{
+					if (this._CDS_Document.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDocIDChanging(value);
+					this.SendPropertyChanging();
+					this._DocID = value;
+					this.SendPropertyChanged("DocID");
+					this.OnDocIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VoidDate", DbType="DateTime NOT NULL")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+		public System.DateTime VoidDate
+		{
+			get
+			{
+				return this._VoidDate;
+			}
+			set
+			{
+				if ((this._VoidDate != value))
+				{
+					this.OnVoidDateChanging(value);
+					this.SendPropertyChanging();
+					this._VoidDate = value;
+					this.SendPropertyChanged("VoidDate");
+					this.OnVoidDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Reason", DbType="NVarChar(64)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+		public string Reason
+		{
+			get
+			{
+				return this._Reason;
+			}
+			set
+			{
+				if ((this._Reason != value))
+				{
+					this.OnReasonChanging(value);
+					this.SendPropertyChanging();
+					this._Reason = value;
+					this.SendPropertyChanged("Reason");
+					this.OnReasonChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RequestType", DbType="Int")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+		public System.Nullable<int> RequestType
+		{
+			get
+			{
+				return this._RequestType;
+			}
+			set
+			{
+				if ((this._RequestType != value))
+				{
+					this.OnRequestTypeChanging(value);
+					this.SendPropertyChanging();
+					this._RequestType = value;
+					this.SendPropertyChanged("RequestType");
+					this.OnRequestTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvoiceContent", DbType="NVarChar(MAX)")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=5)]
+		public string InvoiceContent
+		{
+			get
+			{
+				return this._InvoiceContent;
+			}
+			set
+			{
+				if ((this._InvoiceContent != value))
+				{
+					this.OnInvoiceContentChanging(value);
+					this.SendPropertyChanging();
+					this._InvoiceContent = value;
+					this.SendPropertyChanged("InvoiceContent");
+					this.OnInvoiceContentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CommitDate", DbType="DateTime")]
+		[global::System.Runtime.Serialization.DataMemberAttribute(Order=6)]
+		public System.Nullable<System.DateTime> CommitDate
+		{
+			get
+			{
+				return this._CommitDate;
+			}
+			set
+			{
+				if ((this._CommitDate != value))
+				{
+					this.OnCommitDateChanging(value);
+					this.SendPropertyChanging();
+					this._CommitDate = value;
+					this.SendPropertyChanged("CommitDate");
+					this.OnCommitDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CDS_Document_VoidInvoiceRequest", Storage="_CDS_Document", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public CDS_Document CDS_Document
+		{
+			get
+			{
+				return this._CDS_Document.Entity;
+			}
+			set
+			{
+				CDS_Document previousValue = this._CDS_Document.Entity;
+				if (((previousValue != value) 
+							|| (this._CDS_Document.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CDS_Document.Entity = null;
+						previousValue.VoidInvoiceRequest = null;
+					}
+					this._CDS_Document.Entity = value;
+					if ((value != null))
+					{
+						value.VoidInvoiceRequest = this;
+						this._DocID = value.DocID;
+					}
+					else
+					{
+						this._DocID = default(int);
+					}
+					this.SendPropertyChanged("CDS_Document");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void Initialize()
+		{
+			this._CDS_Document = default(EntityRef<CDS_Document>);
+			OnCreated();
+		}
+		
+		[global::System.Runtime.Serialization.OnDeserializingAttribute()]
+		[global::System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)]
+		public void OnDeserializing(StreamingContext context)
+		{
+			this.Initialize();
 		}
 	}
 	

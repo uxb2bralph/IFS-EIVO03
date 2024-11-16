@@ -26,9 +26,16 @@ namespace JobHelper.Tasks
                     {
                         Process = () =>
                         {
-                            foreach(var conn in AppSettings.Default.ActiveEIVODBConnection)
+                            if(AppSettings.Default.ActiveEIVODBConnection?.Length>0)
                             {
-                                DoCheckTurnkeyLog(conn);
+                                foreach (var conn in AppSettings.Default.ActiveEIVODBConnection)
+                                {
+                                    DoCheckTurnkeyLog(conn);
+                                }
+                            }
+                            else
+                            {
+                                DoCheckTurnkeyLog(global::Model.Properties.Settings.Default.eInvoiceConnectionString);
                             }
                         },
                         PeriodInMinutes = 5,

@@ -31,7 +31,7 @@
 {
     Html.RenderPartial("~/Views/SiteAction/FunctionTitleBar.cshtml", "查詢結果");
 
-    <div class="container border_gray query_result">
+    <div class="container border_gray query_result" style="min-height: 480px;">
         @{
             var recordCount = _viewModel.RecordCount;
         }

@@ -566,5 +566,11 @@ namespace Model.Locale
             E,     //:(Error) TurnKey°h¦^MIG
         }
 
+        public enum Truth
+        { 
+            False = 0,
+            True = 1,
+        }
+
     }
 }

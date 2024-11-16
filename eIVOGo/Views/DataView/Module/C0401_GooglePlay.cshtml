@@ -103,7 +103,7 @@
                             }
                             @if (_productItem != null && _productItem.Length <= _FirstCheckCount)
                             {
-                                <div class="content_box">
+                                <div class="content_box" style="width:100%;">
                                     <p style="border-top: 1px dotted #808080;">
                                         <span style="font-size: 12pt; font-weight: bold;">
                                             總計：@(_model.InvoiceDetails.Count)項&nbsp;&nbsp;
@@ -159,7 +159,7 @@
                 }
                 @if (_productItem.Length > _FirstCheckCount && _productItem.Length <= _SecondCheckCount)
                 {
-                    <div class="content_box">
+                    <div class="content_box" style="width:100%;">
                         <p style="border-top: 1px dotted #808080;">
                             <span style="font-size: 12pt; font-weight: bold;">總計：@(_model.InvoiceDetails.Count)項&nbsp;&nbsp;金額：@(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TotalAmount))</span><br />
                             課稅別：@(_model.InvoiceAmountType.TaxTypeString)&nbsp;&nbsp;
@@ -198,7 +198,7 @@
                         <p class="totalPrice">@(String.Format("{0:##,###,###,##0.##}", item.CostAmount))</p>
                     </div>
                 }
-                <div class="content_box">
+                <div class="content_box" style="width:100%;">
                     <p style="border-top: 1px dotted #808080;">
                         <span style="font-size: 12pt; font-weight: bold;">總計：@(_model.InvoiceDetails.Count)項&nbsp;&nbsp;金額：@(String.Format("{0:##,###,###,##0.##}", _model.InvoiceAmountType.TotalAmount))</span><br />
                         課稅別：@(_model.InvoiceAmountType.TaxTypeString)&nbsp;&nbsp;

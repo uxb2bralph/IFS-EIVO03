@@ -11,10 +11,11 @@ using System.Web.UI.HtmlControls;
 using System.Xml;
 
 using Uxnet.Com.Providers;
+using System.Web.Mvc;
 
 namespace Uxnet.Web.Module.SiteAction
 {
-    public partial class SiteMenuBar : System.Web.UI.UserControl
+    public partial class SiteMenuBar : ViewUserControl
     {
         private bool _authorized = false;
         private XmlDocument _menuDoc;

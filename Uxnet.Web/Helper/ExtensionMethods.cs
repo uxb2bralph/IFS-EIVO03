@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Reflection;
 using System.Text;
 using System.Web;
 using Utility;
@@ -69,6 +70,17 @@ namespace Uxnet.Web.Helper
             message.Body = doc.DocumentNode.OuterHtml;
             
         }
-    
+
+        public static string ToQueryString(this object obj)
+        {
+            if (obj == null)
+                return string.Empty;
+
+            var properties = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p => p.GetValue(obj, null) != null)
+                .Select(p => $"{HttpUtility.UrlEncode(p.Name)}={HttpUtility.UrlEncode(p.GetValue(obj, null).ToString())}");
+
+            return string.Join("&", properties);
+        }
     }
 }

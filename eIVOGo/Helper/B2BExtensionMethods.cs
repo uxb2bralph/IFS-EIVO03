@@ -16,6 +16,8 @@ using eIVOGo.Properties;
 using Model.InvoiceManagement;
 using System.Net;
 using System.Text;
+using Model.Models.ViewModel;
+using ModelExtension.Service;
 
 namespace eIVOGo.Helper
 {
@@ -219,28 +221,60 @@ namespace eIVOGo.Helper
         public static String CreatePdfFile(this InvoiceItem item,bool alwaysCreateNew = true)
         {
 
-            String fileName = TempForReceivePDF.GetDateStylePath(item.InvoiceDate.Value) + "\\" + item.TrackCode + item.No + ".pdf";
+            String fileName = Path.Combine(TempForReceivePDF.GetDateStylePath(item.InvoiceDate.Value), $"{item.TrackCode}{item.No}.pdf");
 
             if (alwaysCreateNew || !File.Exists(fileName))
             {
-
-                using (WebClient client = new WebClient())
+                RenderStyleViewModel viewModel = new RenderStyleViewModel
                 {
-                    client.Encoding = Encoding.UTF8;
-                    String tempPDF = client.DownloadString(String.Format("{0}{1}?id={2}&nameOnly=true&processType=A0401",
-                                            Uxnet.Web.Properties.Settings.Default.HostUrl,
-                                            VirtualPathUtility.ToAbsolute("~/DataView/PrintSingleInvoiceAsPDF"),
-                                            item.InvoiceID));
+                    DocID = item.InvoiceID,
+                    ProcessType = Naming.InvoiceProcessType.A0401,
+                    PaperStyle = "A4",
+                };
 
-                    if (File.Exists(fileName))
-                    {
-                        File.Delete(fileName);
-                    }
+                String tempPDF = PdfDocumentGenerator.CreateInvoicePdf(viewModel);
 
-                    //Logger.Debug($"move file: {tempPDF} -> {fileName}");
-
-                    File.Move(tempPDF, fileName);
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
                 }
+
+                File.Copy(tempPDF, fileName, true);
+                try
+                {
+                    File.Delete(tempPDF);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
+
+                //using (WebClient client = new WebClient())
+                //{
+                //    client.Encoding = Encoding.UTF8;
+                //    String tempPDF = client.DownloadString(String.Format("{0}{1}?id={2}&nameOnly=true&processType=A0401",
+                //                            Uxnet.Web.Properties.Settings.Default.HostUrl,
+                //                            VirtualPathUtility.ToAbsolute("~/DataView/PrintSingleInvoiceAsPDF"),
+                //                            item.InvoiceID));
+
+                //    if (File.Exists(fileName))
+                //    {
+                //        File.Delete(fileName);
+                //    }
+
+                //    //Logger.Debug($"move file: {tempPDF} -> {fileName}");
+
+                //    //File.Move(tempPDF, fileName);
+                //    File.Copy(tempPDF, fileName, true);
+                //    try
+                //    {
+                //        File.Delete(tempPDF);
+                //    }
+                //    catch(Exception ex)
+                //    {
+                //        Logger.Error(ex);
+                //    }
+                //}
             }
 
             return fileName;

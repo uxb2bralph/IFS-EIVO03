@@ -92,15 +92,28 @@
     "AttachmentTempStore": "TempAttachment",
     "EINVTurnkeyRoot": "C:\\EINVTurnkey",
     "SystemKeyName": "SystemKey.new.json",
-    "UseMIG40": false
+    "UseMIG40": true
   },
   "ExternalPdfWrapper": {
     "Command": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-    "ConvertPattern": "--headless --no-pdf-header-footer --print-to-pdf={0} {1}",
+    "ConvertPattern": "--headless=old --no-pdf-header-footer --print-to-pdf={0} {1}",
     "Args": null
   },
   "ModelExtension.Properties": {
     "LineToken": "Hp41egh8G3O4rDKXL3TxwrB4gWtuGh87ZNfYTxdr1Ls",
     "LineNotify": "https://notify-api.line.me/api/notify"
+  },
+  "JobHelper.Properties": {
+    "CommandDecryptGPG": "call pgp_decrypt.bat {0} {1}",
+    "Workspace": "C:\\Project\\GitHub\\IFS-EIVO03\\eIVOGo\\Workspace",
+    "ResponseReady": "C:\\Project\\GitHub\\IFS-EIVO03\\eIVOGo\\ResponseReady",
+    "InvoiceTransactionRoot": "C:\\Users\\10090557\\sftp",
+    "RequestType": [
+      "SellerInvoice",
+      "CancelInvoice",
+      "Allowance"
+    ],
+    "CommandEncryptGPG": "call pgp_encrypt.bat {0} {1}",
+    "ActiveEIVODBConnection": []
   }
 }
